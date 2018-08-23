@@ -1,0 +1,52 @@
+<ion-header transparent no-border>
+  <ion-navbar transparent>
+    <ion-title>
+      <p ion-text color="white">Wallet Address</p>
+    </ion-title>
+
+    <ion-buttons end>
+      <button ion-button icon-only color="dark" (click)="presentEditPopover($event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding class="colored-background">
+
+  <ion-row padding>
+    <ion-col>
+      <ion-avatar item-start>
+        <identicon [address]="wallet.receivingPublicAddress"></identicon>
+        <img class="sub-avatar" [src]="'assets/symbols/' + wallet.coinProtocol.symbol.toLowerCase() + '.svg'">
+      </ion-avatar>
+    </ion-col>
+    <ion-col>
+      <h2>{{ wallet.coinProtocol.name }} {{ wallet.coinProtocol.symbol }}</h2>
+      <p>
+        Address:<br>
+        <span class="selectable typography--mono">{{ wallet.receivingPublicAddress }}</span>
+      </p>
+      <p>
+        Derivation Path:<br>
+        <span class="selectable typography--mono">{{ wallet.derivationPath }}</span>
+      </p>
+    </ion-col>
+  </ion-row>
+
+  <ion-row justify-content-center padding-bottom>
+    <qrcode [qrdata]="wallet.receivingPublicAddress" backgroundAlpha="0" foreground="white" [size]="240"></qrcode>
+  </ion-row>
+
+</ion-content>
+
+<ion-footer no-border>
+  <ion-item no-lines transparent>
+    <button default ion-button color="light" (click)="share()" round item-right>
+      Sync
+    </button>
+    <button default ion-button color="primary" (click)="done()" round item-right>
+      Done
+    </button>
+  </ion-item>
+</ion-footer>

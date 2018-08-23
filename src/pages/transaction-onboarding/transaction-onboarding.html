@@ -1,0 +1,34 @@
+<ion-header transparent no-border>
+  <ion-navbar transparent>
+    <ion-row align-items-center>
+      <ion-col col-10>
+        <ion-title><p ion-text color="white">Signed Transaction</p></ion-title>
+      </ion-col>
+    </ion-row>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding class="colored-background">
+
+  <ion-row padding-horizontal>
+    <h3>Scan Signed Transaction</h3>
+    <p>Scan the signed transaction QR code  in the next step with your broadcaster app.</p>
+  </ion-row>
+
+  <ion-row>
+    <img src="./assets/img/scan_confirmation_onboarding.svg"/>
+  </ion-row>
+
+</ion-content>
+
+<ion-footer no-border>
+  <ion-item no-lines transparent>
+    <!-- TODO: hide the next time if clicked -->
+    <button default ion-button [color]="hideNextTime ? 'success': 'white'" clear item-left (click)="hideDisclaimer()" [disabled]="hideNextTime"> 
+      DON'T SHOW AGAIN
+    </button>
+    <button default ion-button color="primary" (click)="goToTransactionSignedPage()" round item-right icon-left>
+      Next Step
+    </button>
+  </ion-item>
+</ion-footer>

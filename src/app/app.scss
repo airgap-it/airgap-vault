@@ -1,0 +1,146 @@
+// http://ionicframework.com/docs/theming/
+
+// App Global Sass
+// --------------------------------------------------
+// Put style rules here that you want to apply globally. These
+// styles are for the entire app and not just one component.
+// Additionally, this file can be also used as an entry point
+// to import other Sass files to be included in the output CSS.
+//
+// Shared Sass variables, which can be used to adjust Ionic's
+// default Sass variables, belong in "theme/variables.scss".
+//
+// To declare rules for a specific mode, create a child rule
+// for the .md, .ios, or .wp mode classes. The mode class is
+// automatically applied to the <body> element in the app.
+
+.colored-background {
+  color: color($colors, white);
+  background: color($colors, secondary);
+
+  p, h1, h2, h3, .select-text {
+    color: color($colors, white);
+  }
+}
+
+.background--color__gradient {
+  background: linear-gradient(#6F53A1, color($colors, secondary, base));
+}
+
+.item {
+  background-color: transparent;
+}
+
+/* List styling */
+ul {
+  list-style: none;
+  li:before {
+    content: "\00AC";
+    padding-right: 4px;
+  }
+}
+
+/* Secret typography styling */
+.secret--typography {
+  line-height: 32px;
+  font-size: 16px;
+  text-transform: lowercase;
+  font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
+  font-style: normal;
+  font-weight: 600;
+}
+
+/* small button for secrets with less padding */
+verify-key {
+  .button-round-md, .button-round-ios {
+    padding: 0 1.5rem;
+  }
+}
+
+/* font weight - medium */
+.font--weight__med {
+  font-weight: 500;
+}
+
+.typography--mono {
+  font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
+  font-weight: 600;
+  font-size: 1.4rem;
+  word-wrap: break-word;
+}
+
+ion-input, ion-textarea {
+  color: white;
+
+  textarea {
+    border: 1px solid color($colors, secondary);
+    padding: 10px;
+  }
+}
+
+.button--rounded {
+  width: 48px;
+  height: 48px;
+}
+
+.transparent-bg {
+  background-color: transparent !important;
+
+  .ion-app, ion-content, ion-app.md, ion-app.ios, ion-app, .colored-background {
+    background-color: transparent !important;
+    color: white;
+  }
+}
+
+// back btn
+ion-icon, .toolbar-title {
+  color: white;
+}
+
+.fab-action {
+  position: absolute;
+  bottom: 64px;
+  z-index: 10;
+  right: 12px;
+}
+
+qrcode {
+  padding: 20px;
+  background-color: white;
+}
+
+/** Alert Dialogs **/
+.alert-title {
+  color: color($colors, dark)
+}
+
+/** Empty **/
+.empty-list {
+  ion-icon {
+    font-size: 8rem;
+  }
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  font-weight: 100;
+  font-size: 1.4rem;
+  height: 100%;
+}
+
+.hide-tabbar {
+  .show-tabbar {
+    opacity: 0;
+  }
+}
+
+html, body, ion-app, div.nav-decor, .ion-content, .app-root {
+  background-color: transparent !important;
+}
+
+.nav-decor, ion-app {
+  background-color: transparent !important;
+}
+

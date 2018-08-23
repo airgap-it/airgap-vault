@@ -1,0 +1,18 @@
+page-transaction-signed {
+  qrcode {
+    width: 340px;
+    height: 340px;
+  }
+  ion-icon{
+    color: white;
+  }
+  hexagon-icon {
+    .hexagon--background {
+      width:32px;
+      height:32px;
+    }
+    h3 {
+      font-size: 12px;
+    }
+  }
+}

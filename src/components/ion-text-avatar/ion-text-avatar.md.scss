@@ -1,0 +1,25 @@
+$ion-text-avatar-md-background-color: color($colors-md, primary) !default;
+$ion-text-avatar-md-text-color:       color-contrast($colors-md, $ion-text-avatar-md-background-color) !default;
+
+.ion-text-avatar-md {
+    color: $ion-text-avatar-md-text-color;
+    background: $ion-text-avatar-md-background-color;
+}
+
+.item-md ion-avatar ion-text-avatar {
+    @include border-radius($item-md-avatar-border-radius);
+
+    overflow: hidden;
+
+    width: $item-md-avatar-size;
+    height: $item-md-avatar-size;
+}
+
+@each $color-name, $color-base, $color-contrast in get-colors($colors-md) {
+
+    .ion-text-avatar-md-#{$color-name} {
+        color: $color-contrast;
+        background-color: $color-base;
+    }
+
+}

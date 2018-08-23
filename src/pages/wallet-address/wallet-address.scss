@@ -1,0 +1,25 @@
+page-wallet-address {
+  ion-avatar {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  img.sub-avatar {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    height: auto;
+    width: 50%;
+  }
+}
+
+.selectable {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}

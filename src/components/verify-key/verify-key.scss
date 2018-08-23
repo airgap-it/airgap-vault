@@ -1,0 +1,25 @@
+verify-key {
+  .secret--container {
+    height: calc( 100% / 2 - 36px);
+  }
+
+  .secret--container__inner {
+    align-content: start;
+    padding: 0 4px;
+  }
+
+  hr {
+    border: 2px dashed color($colors, primary);
+    border-style: none none dashed;
+    color: color($colors, primary);
+    margin: 8px 0;
+  }
+
+  .xtra-small {
+    button {
+      @extend .secret--typography;
+      font-size: 0.8em;
+      padding: 0 1rem;
+    }
+  }
+}

@@ -1,0 +1,14 @@
+<ion-row class="secret--container" align-items-center>
+  <ion-row justify-content-center class="secret--container__inner" [class.xtra-small]="sortedWords.length > 10">
+    <button *ngFor="let word of currentWords" color="secondary-light" (click)="removeWord(word)" ion-button round small>{{word.word}}</button>
+  </ion-row>
+</ion-row>
+<hr />
+<ion-row class="secret--container" align-items-center>
+  <ion-row class="secret--container__inner" justify-content-center>
+    <span *ngFor="let word of sortedWords" [class.xtra-small]="sortedWords.length > 10">
+      <button *ngIf="word.selected" (click)="useWord(word)" color="secondary-light" ion-button round outline disabled small>{{word.word}}</button>
+      <button *ngIf="!word.selected" (click)="useWord(word)" color="secondary-light" ion-button round small>{{word.word}}</button>
+    </span>
+  </ion-row>
+</ion-row>

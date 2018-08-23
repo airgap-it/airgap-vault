@@ -1,0 +1,33 @@
+<ion-header transparent no-border>
+  <ion-navbar transparent>
+    <ion-title>
+      <p ion-text color="white">Confirm Transaction</p>
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding class="colored-background">
+
+  <div *ngIf="transaction && wallet">
+    <p>You are about to send:</p>
+
+    <from-to [transaction]="transaction" [wallet]="wallet"></from-to>
+
+    <ion-list margin-top>
+      <ion-item no-lines *ngFor="let parameter of transaction.information">
+        <h2>{{parameter.label}}</h2>
+        <h3>{{parameter.value}}</h3>
+      </ion-item>
+    </ion-list>
+  </div>
+
+</ion-content>
+
+<ion-footer no-border>
+  <ion-item no-lines transparent>
+    <button default ion-button color="primary" (click)="goToTransactionOnboardingPage()" round item-right icon-left>
+      <ion-icon md-name="check"></ion-icon>
+      Sign Transaction
+    </button>
+  </ion-item>
+</ion-footer>
