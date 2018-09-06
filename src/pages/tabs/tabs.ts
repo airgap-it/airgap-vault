@@ -1,8 +1,8 @@
 import { Component } from '@angular/core'
 import { IonicPage } from 'ionic-angular'
-import { TabSecretsPage } from '../tab-secrets/tab-secrets'
 import { TabScanPage } from '../tab-scan/tab-scan'
 import { TabWalletsPage } from '../tab-wallets/tab-wallets'
+import { TabSecretsPage } from '../tab-secrets/tab-secrets'
 
 @IonicPage()
 @Component({
@@ -11,8 +11,8 @@ import { TabWalletsPage } from '../tab-wallets/tab-wallets'
 })
 export class TabsPage {
 
-  tabSecrets = TabSecretsPage
   tabWallets = TabWalletsPage
   tabScan = TabScanPage
+  tabSecrets = TabSecretsPage
 
 }
