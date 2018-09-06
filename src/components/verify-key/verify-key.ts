@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 
-/**
- * Generated class for the VerifyKeyComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
+interface Word {
+  word: string,
+  originalIndex: number,
+  selected: boolean,
+  index?: number
+}
 
 @Component({
   selector: 'verify-key',
@@ -20,9 +20,9 @@ export class VerifyKeyComponent implements OnInit {
   @Output()
   onCompleted = new EventEmitter<boolean>()
 
-  private splittedSecret = []
-  private currentWords = []
-  private sortedWords = []
+  private splittedSecret: Word[] = []
+  private currentWords: Word[] = []
+  private sortedWords: Word[] = []
 
   ngOnInit(): void {
     this.splittedSecret = this.secret.toLowerCase().split(' ').map((word, i) => {
@@ -33,7 +33,7 @@ export class VerifyKeyComponent implements OnInit {
       }
     })
 
-    this.sortedWords = this.sortSecret(this.splittedSecret)
+    this.sortedWords = this.sortSecretAlphabetically(this.splittedSecret)
 
     for (let i = 0; i < this.sortedWords.length; i++) {
       this.sortedWords[i].index = i
@@ -42,8 +42,8 @@ export class VerifyKeyComponent implements OnInit {
     this.reset()
   }
 
-  sortSecret(secret: { word: string, originlIndex: number, selected: boolean }[]): { word: string, originlIndex: number, selected: boolean }[] {
-    return secret.sort((a: { word: string, originlIndex: number, selected: boolean }, b: { word: string, originlIndex: number, selected: boolean }) => {
+  sortSecretAlphabetically(secret: Word[]): Word[] {
+    return secret.sort((a: Word, b: Word) => {
       return a.word >= b.word ? 1 : -1
     })
   }
@@ -71,12 +71,6 @@ export class VerifyKeyComponent implements OnInit {
   }
 
   isCorrect() {
-    for (let i = 0; i < this.currentWords.length; i++) {
-      if (this.currentWords[i].originalIndex !== i) {
-        return false
-      }
-    }
-    return true
+    return this.currentWords.map(w => w.word).join(' ').trim() === this.secret.trim()
   }
-
 }
