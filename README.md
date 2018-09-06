@@ -1,5 +1,7 @@
 # Secure Mobile Offline Keystore and Signer
 
+![pipeline status](https://gitlab.papers.tech/papers/airgap/airgap-vault/badges/master/pipeline.svg)
+
 An open source mobile app used to store secrets and sign transactions securely.
 
 ## Introduction
