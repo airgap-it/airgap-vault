@@ -35,7 +35,13 @@
 
 </ion-content>
 
-<button id="btn-add-wallet" class="fab-action" default ion-button color="secondary" (click)="addWallet()" round item-right icon-left>
-  <ion-icon name="add"></ion-icon>
-  Add Wallet
-</button>
+<ion-footer no-border>
+  <ion-toolbar padding transparent>
+    <ion-row justify-content-end>
+      <button id="btn-add-wallet" default ion-button color="secondary" (click)="addWallet()" round item-right icon-left>
+        <ion-icon name="add"></ion-icon>
+        Add Wallet
+      </button>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>

@@ -59,9 +59,11 @@
 </ion-content>
 
 <ion-footer no-border>
-  <ion-item no-lines transparent>
-    <button id="btn-add-coins" default ion-button color="primary" round item-right (click)="addWallet()">
-      Next
-    </button>
-  </ion-item>
+  <ion-toolbar padding transparent>
+    <ion-row justify-content-end>
+      <button id="btn-add-coins" default ion-button color="primary" round item-right (click)="addWallet()">
+        Next
+      </button>
+    </ion-row>
+  </ion-toolbar>
 </ion-footer>

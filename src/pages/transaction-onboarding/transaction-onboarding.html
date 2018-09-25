@@ -22,13 +22,14 @@
 </ion-content>
 
 <ion-footer no-border>
-  <ion-item no-lines transparent>
-    <!-- TODO: hide the next time if clicked -->
-    <button default ion-button [color]="hideNextTime ? 'success': 'white'" clear item-left (click)="hideDisclaimer()" [disabled]="hideNextTime"> 
-      DON'T SHOW AGAIN
-    </button>
-    <button default ion-button color="primary" (click)="goToTransactionSignedPage()" round item-right icon-left>
-      Next Step
-    </button>
-  </ion-item>
+  <ion-toolbar padding transparent>
+    <ion-row justify-content-end>
+      <button default ion-button [color]="hideNextTime ? 'success': 'white'" clear item-left (click)="hideDisclaimer()" [disabled]="hideNextTime"> 
+        DON'T SHOW AGAIN
+      </button>
+      <button default ion-button color="primary" (click)="goToTransactionSignedPage()" round item-right icon-left>
+        Next Step
+      </button>
+    </ion-row>
+  </ion-toolbar>
 </ion-footer>

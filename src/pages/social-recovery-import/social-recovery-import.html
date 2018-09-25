@@ -31,10 +31,12 @@
 
 </ion-content>
 
-<ion-footer no-border>
-  <ion-item no-lines transparent *ngIf="socialRecoveryForm">
-    <button default ion-button color="primary" (click)="recover()" round item-right [disabled]="!socialRecoveryForm.valid">
-      Recover
-    </button>
-  </ion-item>
+<ion-footer no-border *ngIf="socialRecoveryForm">
+  <ion-toolbar padding transparent>
+    <ion-row justify-content-end>
+      <button default ion-button color="primary" (click)="recover()" round item-right [disabled]="!socialRecoveryForm.valid">
+        Recover
+      </button>
+    </ion-row>
+  </ion-toolbar>
 </ion-footer>

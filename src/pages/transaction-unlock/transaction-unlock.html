@@ -19,10 +19,12 @@
 </ion-content>
 
 <ion-footer no-border>
-  <ion-item no-lines transparent>
-    <button default ion-button color="primary" (click)="goToTransactionOnboardingPage()" round item-right icon-left>
-      <ion-icon md-name="lock_open"></ion-icon>
-      Unlock
-    </button>
-  </ion-item>
+  <ion-toolbar padding transparent>
+    <ion-row justify-content-end>
+      <button default ion-button color="primary" (click)="goToTransactionOnboardingPage()" round item-right icon-left>
+        <ion-icon md-name="lock_open"></ion-icon>
+        Unlock
+      </button>
+    </ion-row>
+  </ion-toolbar>
 </ion-footer>
