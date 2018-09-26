@@ -6,6 +6,7 @@ import { WalletSelectCoinsPage } from '../wallet-select-coins/wallet-select-coin
 import { Secret } from '../../models/secret'
 import { AirGapWallet } from 'airgap-coin-lib'
 import { BehaviorSubject } from 'rxjs/BehaviorSubject'
+import { SecretCreatePage } from '../secret-create/secret-create'
 
 /**
  * Generated class for the TabWalletsPage page.
@@ -28,6 +29,15 @@ export class TabWalletsPage {
 
   constructor(public navController: NavController, public navParams: NavParams, private secretsProvider: SecretsProvider) {
 
+  }
+
+  ionViewWillEnter() {
+    let secrets = this.secretsProvider.currentSecretsList.asObservable()
+    secrets.subscribe(list => {
+      if (list.length === 0 && this.secretsProvider.storageRead) {
+        this.navController.push(SecretCreatePage)
+      }
+    })
   }
 
   ionViewDidEnter() {
