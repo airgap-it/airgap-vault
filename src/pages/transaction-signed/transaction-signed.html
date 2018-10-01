@@ -25,13 +25,16 @@
   </ion-row>
 
 </ion-content>
+
 <ion-footer no-border>
-  <ion-item no-lines transparent>
-    <a default ion-button color="light" (click)="sameDeviceBroadcast()" round item-right>
-      Same-Device-Broadcast
-    </a>
-    <button default ion-button color="primary" (click)="done()" round item-right>
-      Done
-    </button>
-  </ion-item>
+  <ion-toolbar padding transparent>
+    <ion-row justify-content-end>
+      <button default ion-button color="light" (click)="sameDeviceBroadcast()" round item-right>
+        Same-Device-Broadcast
+      </button>
+      <button default ion-button color="primary" (click)="done()" round item-right>
+        Done
+      </button>
+    </ion-row>
+  </ion-toolbar>
 </ion-footer>

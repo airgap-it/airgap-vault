@@ -18,9 +18,11 @@
 </ion-content>
 
 <ion-footer no-border>
-  <ion-item no-lines transparent>
-    <button default (click)="handler()" ion-button color="primary" round item-right>
-      {{ buttonText }}
-    </button>
-  </ion-item>
+  <ion-toolbar padding transparent>
+    <ion-row justify-content-end>
+      <button default (click)="handler()" ion-button color="primary" round item-right>
+        {{ buttonText }}
+      </button>
+    </ion-row>
+  </ion-toolbar>
 </ion-footer>
