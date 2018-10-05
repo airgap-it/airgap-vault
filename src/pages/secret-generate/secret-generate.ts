@@ -118,10 +118,6 @@ export class SecretGeneratePage {
     }
   }
 
-  ionViewWillLeave() {
-    this.uninjectCSS()
-  }
-
   ionViewDidLeave() {
     this.cameraService.viewDidLeave()
     this.uninjectCSS()
