@@ -75,13 +75,12 @@ export class WarningsModalPage {
     }
 
     if (this.errorType === Warning.INITIAL_DISCLAIMER) {
-      this.title = 'Using Airgap'
+      this.title = 'AirGap Disclaimer'
       this.description =
       `
         <p>
-        AirGap is currently BETA Software. While we use AirGap ourselves every day, please be advised that there might still be bugs lingering around.
+        You as the user hereby accept and acknowledge this protocol and all the information provided within to the fullest extent. You as the user confirm that the content this document has been reviewed, tested and understood on their own behalf.
         </p>
-
         <p>
         To the fullest extent permitted by applicable law:
         <ul>
@@ -89,11 +88,6 @@ export class WarningsModalPage {
           <li>Papers GmbH disclaims any and all direct and indirect liability for damage occurring under, or in connection with, this Protocol, especially, but not limited to loss of, or damage to, data, lost profit, compromised / hacked product or system, and or stolen / missing monetary funds.</li>
         </ul>
         </p>
-
-        <p>
-        You as the user hereby accept and acknowledge this protocol and all the information provided within to the fullest extent. You as the user confirm that the content this document has been reviewed, tested and understood on their own behalf.
-        </p>
-
         <p>
         You understand the risks involved in this software, including but no limited to losing your secret, thus private keys and access to your funds.
         </p>
