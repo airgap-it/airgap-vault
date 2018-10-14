@@ -49,7 +49,7 @@ export class EntropyService {
           } catch (error) {
             console.warn(error)
           }
-          this.entropyUpdateObserver.next(void 0)
+          if (this.entropyUpdateObserver) { this.entropyUpdateObserver.next(void 0) }
         })
         this.entropySubscriptions.push(entropySubscription)
         return

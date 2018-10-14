@@ -8,4 +8,5 @@
 
 <ion-content no-bounce class="transparent-bg">
   <p ion-text color="white" padding no-margin text-center>Scan a QR Code from AirGap Wallet</p>
+  <video *ngIf="isBrowser" #videoElement style="width:100%; height: 100%"></video>
 </ion-content>

@@ -24,7 +24,7 @@ export class CameraNativeService implements IEntropyGenerator {
   private renderer: Renderer2
 
   @ViewChild('cameraCanvas') public cameraCanvas: ElementRef
-  canvasElement = HTMLCanvasElement
+  canvasElement: HTMLCanvasElement
 
   private collectedEntropyPercentage: number = 0
 
@@ -203,4 +203,7 @@ export class CameraNativeService implements IEntropyGenerator {
     return this.collectedEntropyPercentage / 10
   }
 
+  setVideoElement(element): void {
+    console.log('only used in browser', element)
+  }
 }

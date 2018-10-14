@@ -1,4 +1,4 @@
-import { Component, RendererFactory2 } from '@angular/core'
+import { ElementRef, Component, RendererFactory2, ViewChild } from '@angular/core'
 import { AlertController, IonicPage, NavController, Platform } from 'ionic-angular'
 import { Transaction } from '../../models/transaction.model'
 import { ScannerProvider } from '../../providers/scanner/scanner'
@@ -7,6 +7,8 @@ import { AndroidPermissions } from '@ionic-native/android-permissions'
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import { SchemeRoutingProvider } from '../../providers/scheme-routing/scheme-routing'
 
+declare let Instascan
+
 @IonicPage()
 @Component({
   selector: 'page-tab-scan',
@@ -14,16 +16,36 @@ import { SchemeRoutingProvider } from '../../providers/scheme-routing/scheme-rou
 })
 export class TabScanPage {
 
+  @ViewChild('videoElement') videoElement: ElementRef
+
+  public isBrowser = false
+
   private renderer
 
+  private webscanner: any
+  private selectedCamera
+
   constructor(private schemeRouting: SchemeRoutingProvider, private alertCtrl: AlertController, private androidPermissions: AndroidPermissions, private rendererFactory: RendererFactory2, private navController: NavController, private platform: Platform, private secretsProvider: SecretsProvider, private transactionProvider: TransactionsProvider, private scanner: ScannerProvider) {
+    this.isBrowser = !this.platform.is('cordova')
     this.renderer = this.rendererFactory.createRenderer(null, null)
   }
 
-  ionViewWillEnter() {
-    this.renderer.addClass(document.body, 'transparent-bg')
+  ngAfterViewInit() {
+    if (!this.platform.is('cordova')) {
+      this.webscanner = new Instascan.Scanner({ video: this.videoElement.nativeElement })
+      this.webscanner.addListener('scan', (content) => {
+        console.log(content)
+        this.checkScan(content)
+      })
+    }
+  }
 
-    this.platform.ready()
+  ionViewWillEnter() {
+    if (this.platform.is('cordova')) {
+
+      this.renderer.addClass(document.body, 'transparent-bg')
+
+      this.platform.ready()
       .then(result => {
         return this.checkPermissions()
       })
@@ -40,6 +62,22 @@ export class TabScanPage {
         console.warn('permissions missing')
         console.warn(error)
       })
+    }
+  }
+
+  ionViewDidEnter() {
+    if (!this.platform.is('cordova')) {
+      Instascan.Camera.getCameras().then((cameras) => {
+        if (cameras.length > 0) {
+          this.selectedCamera = cameras[0]
+          this.webscanner.start(this.selectedCamera)
+        } else {
+          console.error('No cameras found.')
+        }
+      }).catch((e) => {
+        console.error(e)
+      })
+    }
   }
 
   checkPermissions() {
@@ -47,18 +85,26 @@ export class TabScanPage {
   }
 
   ionViewWillLeave() {
-    this.scanner.destroy()
-    this.renderer.removeClass(document.body, 'transparent-bg')
+    if (this.platform.is('cordova')) {
+      this.scanner.destroy()
+      this.renderer.removeClass(document.body, 'transparent-bg')
+    } else {
+      this.webscanner.stop()
+    }
   }
 
   public startScan() {
-    this.scanner.show()
-    this.scanner.scan(text => {
-      this.checkScan(text)
-    }, error => {
-      console.warn(error)
-      this.startScan()
-    })
+    if (this.platform.is('cordova')) {
+      this.scanner.show()
+      this.scanner.scan(text => {
+        this.checkScan(text)
+      }, error => {
+        console.warn(error)
+        this.startScan()
+      })
+    } else {
+    // We don't need to do anything in the browser becasuse it keeps scanning
+    }
   }
 
   async checkScan(data: string) {
