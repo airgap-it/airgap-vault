@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core'
 import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
 import { Observable } from 'rxjs'
 
-const webWorker = new Worker('./assets/workers/audioEntropyWorker.js')
+let workerBlob = require('../../assets/workers/entropyCalculatorWorker.js')
+let blobURL = window.URL.createObjectURL(workerBlob)
+let webWorker = new Worker(blobURL)
 
 @Injectable()
 export class AudioBrowserService implements IEntropyGenerator {

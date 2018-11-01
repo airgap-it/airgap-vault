@@ -4,7 +4,9 @@ import { sha3_256 } from 'js-sha3'
 import { Observable, Subscription } from 'rxjs'
 import { Observer } from 'rxjs/Observer'
 
-const hashWorker = new Worker('./assets/workers/hashWorker.js')
+let workerBlob = require('../../assets/workers/hashWorker.js')
+let blobURL = window.URL.createObjectURL(workerBlob)
+let hashWorker = new Worker(blobURL)
 
 @Injectable()
 export class EntropyService {
