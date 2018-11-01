@@ -4,7 +4,9 @@ import { Platform } from 'ionic-angular'
 import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
 import { Observable } from 'rxjs'
 
-const entropyCalculatorWorker = new Worker('./assets/workers/entropyCalculatorWorker.js')
+const workerJS = require('../../assets/workers/entropyCalculatorWorker.js')
+const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
+const entropyCalculatorWorker = new Worker(blobURL)
 
 @Injectable()
 export class CameraNativeService implements IEntropyGenerator {

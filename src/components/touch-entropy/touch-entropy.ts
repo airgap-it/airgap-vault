@@ -2,14 +2,10 @@ import { Component, Input, NgZone, OnInit, Renderer2, ViewChild } from '@angular
 import { Entropy, IEntropyGenerator } from '../../providers/entropy/IEntropyGenerator'
 import { Observable } from 'rxjs'
 
-const entropyCalculatorWorker = new Worker('./assets/workers/entropyCalculatorWorker.js')
+const workerJS = require('../../assets/workers/entropyCalculatorWorker.js')
+const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
+const entropyCalculatorWorker = new Worker(blobURL)
 
-/**
- * Generated class for the TouchEntropyComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
 @Component({
   selector: 'touch-entropy',
   templateUrl: 'touch-entropy.html'
