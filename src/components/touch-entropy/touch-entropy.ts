@@ -2,7 +2,7 @@ import { Component, Input, NgZone, OnInit, Renderer2, ViewChild } from '@angular
 import { Entropy, IEntropyGenerator } from '../../providers/entropy/IEntropyGenerator'
 import { Observable } from 'rxjs'
 
-const workerJS = require('../../assets/workers/entropyCalculatorWorker.js')
+import workerJS from '../../assets/workers/entropyCalculatorWorker'
 const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
 const entropyCalculatorWorker = new Worker(blobURL)
 

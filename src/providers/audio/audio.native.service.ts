@@ -5,7 +5,7 @@ import { Observable } from 'rxjs'
 
 declare var window: any
 
-const workerJS = require('../../assets/workers/entropyCalculatorWorker.js')
+import workerJS from '../../assets/workers/entropyCalculatorWorker'
 const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
 const entropyCalculatorWorker = new Worker(blobURL)
 

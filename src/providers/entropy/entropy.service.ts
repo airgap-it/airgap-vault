@@ -4,7 +4,7 @@ import { sha3_256 } from 'js-sha3'
 import { Observable, Subscription } from 'rxjs'
 import { Observer } from 'rxjs/Observer'
 
-const workerJS = require('../../assets/workers/hashWorker.js')
+import workerJS from '../../assets/workers/hashWorker'
 const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
 const hashWorker = new Worker(blobURL)
 

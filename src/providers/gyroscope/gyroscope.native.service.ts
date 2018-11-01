@@ -5,7 +5,7 @@ import { DeviceMotion, DeviceMotionAccelerationData } from '@ionic-native/device
 import { GyroscopeService } from './gyroscope.factory'
 import { Observable, Subscription } from 'rxjs'
 
-const workerJS = require('../../assets/workers/entropyCalculatorWorker.js')
+import workerJS from '../../assets/workers/entropyCalculatorWorker'
 const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
 const entropyCalculatorWorker = new Worker(blobURL)
 
