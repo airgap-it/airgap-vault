@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core'
 import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
 import { Observable } from 'rxjs'
 
-let workerBlob = require('../../assets/workers/entropyCalculatorWorker.js')
-let blobURL = window.URL.createObjectURL(workerBlob)
-let webWorker = new Worker(blobURL)
+const workerJS = require('../../assets/workers/entropyCalculatorWorker.js')
+const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
+const entropyCalculatorWorker = new Worker(blobURL)
 
 @Injectable()
 export class AudioBrowserService implements IEntropyGenerator {
@@ -26,12 +26,12 @@ export class AudioBrowserService implements IEntropyGenerator {
         const data = (event as any).inputBuffer.getChannelData(0)
         const buffer1 = this.arrayBufferFromIntArray(data)
 
-        webWorker.onmessage = (event) => {
+        entropyCalculatorWorker.onmessage = (event) => {
           this.collectedEntropyPercentage += event.data.entropyHex
           observer.next({ entropy: buffer1 })
         }
 
-        webWorker.postMessage({ entropyBuffer: buffer1 }, [buffer1])
+        entropyCalculatorWorker.postMessage({ entropyBuffer: buffer1 }, [buffer1])
 
         observer.next(data)
       }

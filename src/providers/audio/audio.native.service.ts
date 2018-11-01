@@ -5,9 +5,9 @@ import { Observable } from 'rxjs'
 
 declare var window: any
 
-let workerBlob = require('../../assets/workers/entropyCalculatorWorker.js')
-let blobURL = window.URL.createObjectURL(workerBlob)
-let entropyCalculatorWorker = new Worker(blobURL)
+const workerJS = require('../../assets/workers/entropyCalculatorWorker.js')
+const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
+const entropyCalculatorWorker = new Worker(blobURL)
 
 @Injectable()
 export class AudioNativeService implements IEntropyGenerator {
