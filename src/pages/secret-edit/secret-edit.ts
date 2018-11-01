@@ -4,6 +4,7 @@ import { Secret } from '../../models/secret'
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import { SocialRecoverySetupPage } from '../social-recovery-setup/social-recovery-setup'
 import { SecretEditPopoverComponent } from './secret-edit-popover/secret-edit-popover.component'
+import { WalletSelectCoinsPage } from '../wallet-select-coins/wallet-select-coins'
 
 /**
  * Generated class for the SecretEditPage page.
@@ -29,13 +30,16 @@ export class SecretEditPage {
   }
 
   confirm() {
-    this.secretsProvider.addOrUpdateSecret(this.secret).then(() => {
-      this.dismiss()
+    this.secretsProvider.addOrUpdateSecret(this.secret).then(async () => {
+      await this.dismiss()
+      if (this.isGenerating) {
+        this.navController.push(WalletSelectCoinsPage)
+      }
     })
   }
 
   dismiss() {
-    this.navController.popToRoot()
+    return this.navController.popToRoot()
   }
 
   goToSocialRecoverySetup() {
