@@ -1,0 +1,23 @@
+<ion-header transparent no-border>
+  <ion-navbar transparent>
+    <ion-row align-items-center>
+      <ion-col col-10>
+        <ion-title>
+          <p ion-text color="white">Signed Message</p>
+        </ion-title>
+      </ion-col>
+    </ion-row>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding class="colored-background">
+
+  <ion-row justify-content-center padding-top>
+    <p>Signature for message: <b>"{{message}}"</b></p>
+  </ion-row>
+
+  <ion-row justify-content-center padding-top>
+    <qrcode *ngIf="signed" [level]="'L'" [qrdata]="signed" backgroundAlpha="1" foreground="black" [size]="300"></qrcode>
+  </ion-row>
+
+</ion-content>

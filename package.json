@@ -32,6 +32,7 @@
     "@angular/http": "5.0.1",
     "@angular/platform-browser": "5.0.1",
     "@angular/platform-browser-dynamic": "5.0.1",
+    "@cityofzion/neon-js": "^4.1.1",
     "@ionic-native/android-permissions": "^4.6.0",
     "@ionic-native/camera-preview": "^4.5.2",
     "@ionic-native/core": "^4.4.0",
