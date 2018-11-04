@@ -132,9 +132,9 @@
     <plugin name="com.lampa.startapp" spec="^6.1.6" />
     <plugin name="cordova-plugin-jailbreak-detection" spec="git+https://github.com/leecrossley/cordova-plugin-jailbreak-detection.git" />
     <plugin name="cordova-plugin-add-swift-support" spec="~1.7.2" />
-    <plugin name="cordova-plugin-queries-schemes" spec="https://github.com/rjhilgefort/cordova-plugin-queries-schemes.git" />
+    <plugin name="cordova-plugin-queries-schemes" spec="git+https://github.com/rjhilgefort/cordova-plugin-queries-schemes.git" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.1.3" />
-    <plugin name="cordova-plugin-airgap-webview" spec="https://github.com/airgap-it/cordova-plugin-airgap-webview" />
+    <plugin name="cordova-plugin-airgap-webview" spec="git+https://github.com/airgap-it/cordova-plugin-airgap-webview.git" />
     <engine name="android" spec="7.1.0" />
     <engine name="ios" spec="4.5.5" />
 </widget>

@@ -22,17 +22,23 @@
 
 <ion-content *ngIf="wallets" padding>
 
-  <ion-list  *ngFor="let wallet of wallets| async | filterWallets: { symbol: symbolFilter }">
-      <wallet-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></wallet-item>
+  <ion-list *ngFor="let wallet of wallets| async | filterWallets: { symbol: symbolFilter }">
+    <wallet-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></wallet-item>
   </ion-list>
 
   <div class="empty-list" *ngIf="wallets && (wallets | async | filterWallets: { symbol: symbolFilter }).length === 0">
-      <ion-icon md-name="account_balance_wallet" color="primary"></ion-icon>
-      <p>
-          You have not added any wallets yet.
-      </p>
+    <ion-icon md-name="account_balance_wallet" color="primary"></ion-icon>
+    <p>
+      You have not added any wallets yet.
+    </p>
   </div>
 
+  <ion-fab bottom left>
+    <button id="btn-add-wallet" default ion-button color="secondary" (click)="signMessage()" round icon-left>
+      <ion-icon name="add"></ion-icon>
+      Sign Message
+    </button>
+  </ion-fab>
   <ion-fab bottom right>
     <button id="btn-add-wallet" default ion-button color="secondary" (click)="addWallet()" round icon-left>
       <ion-icon name="add"></ion-icon>

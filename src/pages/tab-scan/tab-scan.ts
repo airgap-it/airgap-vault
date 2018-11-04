@@ -12,6 +12,7 @@ import { TransactionsProvider } from '../../providers/transactions/transactions'
 import { AndroidPermissions } from '@ionic-native/android-permissions'
 import { AirGapSchemeProvider } from '../../providers/scheme/scheme.service'
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
+import { SignMessageRequestPage } from '../sign-message-request/sign-message-request'
 
 /**
  * Generated class for the TabScanPage page.
@@ -95,7 +96,9 @@ export class TabScanPage {
   checkScan(data: string) {
     if (this.isAirGapTx(data)) {
       if (data.startsWith('airgap-vault://message')) {
-        this.navController.push(SignMessageRequestPage, { data: data })
+        let base64 = data.substr('airgap-vault://message?data='.length)
+        let { message } = JSON.parse(atob(base64))
+        this.navController.push(SignMessageRequestPage, { message: message })
         return
       }
       return this.transactionScanned(this.schemeService.extractAirGapTx(data))

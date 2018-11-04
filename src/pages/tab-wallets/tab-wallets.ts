@@ -7,6 +7,7 @@ import { Secret } from '../../models/secret'
 import { AirGapWallet } from 'airgap-coin-lib'
 import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 import { SecretCreatePage } from '../secret-create/secret-create'
+import { SignMessageRequestPage } from '../sign-message-request/sign-message-request'
 
 /**
  * Generated class for the TabWalletsPage page.
@@ -21,15 +22,16 @@ import { SecretCreatePage } from '../secret-create/secret-create'
   templateUrl: 'tab-wallets.html'
 })
 export class TabWalletsPage {
-
   symbolFilter: string
   activeSecret: Secret
 
   public wallets = new BehaviorSubject<AirGapWallet[]>([])
 
-  constructor(public navController: NavController, public navParams: NavParams, private secretsProvider: SecretsProvider) {
-
-  }
+  constructor(
+    public navController: NavController,
+    public navParams: NavParams,
+    private secretsProvider: SecretsProvider
+  ) {}
 
   ionViewWillEnter() {
     let secrets = this.secretsProvider.currentSecretsList.asObservable()
@@ -68,5 +70,9 @@ export class TabWalletsPage {
 
   addWallet() {
     this.navController.push(WalletSelectCoinsPage)
+  }
+
+  signMessage() {
+    this.navController.push(SignMessageRequestPage, { message: 'test' })
   }
 }
