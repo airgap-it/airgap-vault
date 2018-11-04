@@ -73,6 +73,6 @@ export class TabWalletsPage {
   }
 
   signMessage() {
-    this.navController.push(SignMessageRequestPage, { message: 'test' })
+    this.navController.push(SignMessageRequestPage, { message: 'challenge' })
   }
 }

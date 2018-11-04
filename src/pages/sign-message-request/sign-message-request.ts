@@ -11,9 +11,9 @@ import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import * as Neon from '@cityofzion/neon-js'
 
 enum NeoIdentity {
-  StackOverflow = 'stackoverflow',
   Swisscom = 'swisscom',
-  Magic = 'magic'
+  Hackathon = 'hackathon',
+  Stackoverflow = 'stackoverflow'
 }
 
 @IonicPage()
@@ -60,17 +60,17 @@ export class SignMessageRequestPage {
       .then(entropy => {
         let privateKeyWIFs = []
 
-        if (this.selectedKeys.indexOf(NeoIdentity.StackOverflow) >= 0) {
-          privateKeyWIFs.push(
-            'L2qkBc4ogTZERR4Watg4QoQq37w8fxrVZkYrPk7ZZSoRUZsr9yML'
-          )
-        }
         if (this.selectedKeys.indexOf(NeoIdentity.Swisscom) >= 0) {
           privateKeyWIFs.push(
             'KysNqEuLb3wmZJ6PsxbA9Bh6ewTybEda4dEiN9X7X48dJPkLWZ5a'
           )
         }
-        if (this.selectedKeys.indexOf(NeoIdentity.Magic) >= 0) {
+        if (this.selectedKeys.indexOf(NeoIdentity.Hackathon) >= 0) {
+          privateKeyWIFs.push(
+            'L2qkBc4ogTZERR4Watg4QoQq37w8fxrVZkYrPk7ZZSoRUZsr9yML'
+          )
+        }
+        if (this.selectedKeys.indexOf(NeoIdentity.Stackoverflow) >= 0) {
           privateKeyWIFs.push(
             'L1HKLWratxFhX94XSn98JEULQYKGhRycf4nREe3Cs8EPQStF5u9E'
           )
@@ -102,17 +102,17 @@ export class SignMessageRequestPage {
         this.ngZone.run(() => {
           let publickeys = []
 
-          if (this.selectedKeys.indexOf(NeoIdentity.StackOverflow) >= 0) {
-            publickeys.push(
-              '02963fc761eb7135c4593bfc6a0af96d8588b70d8f6ef3af8549181e57772181f5'
-            )
-          }
           if (this.selectedKeys.indexOf(NeoIdentity.Swisscom) >= 0) {
             publickeys.push(
               '03c663ba46afa8349f020eb9e8f9e1dc1c8e877b9d239e139af699049126e0f321'
             )
           }
-          if (this.selectedKeys.indexOf(NeoIdentity.Magic) >= 0) {
+          if (this.selectedKeys.indexOf(NeoIdentity.Hackathon) >= 0) {
+            publickeys.push(
+              '02963fc761eb7135c4593bfc6a0af96d8588b70d8f6ef3af8549181e57772181f5'
+            )
+          }
+          if (this.selectedKeys.indexOf(NeoIdentity.Stackoverflow) >= 0) {
             publickeys.push(
               '02c1a9b2d0580902a6c2d09a8febd0a7a13518a9a61d08183f09ff929b66ac7c26'
             )
@@ -142,14 +142,12 @@ export class SignMessageRequestPage {
   }
 
   showCheckboxAlert() {
-    let alert = this.alertController.create()
-    alert.setTitle('NEO Identities')
-
-    alert.addInput({
-      type: 'checkbox',
-      label: 'Stackoverflow',
-      value: NeoIdentity.StackOverflow
+    let alert = this.alertController.create({
+      cssClass: 'neo-text-center'
     })
+    alert.setTitle(
+      '<img height="100" width="100" src="assets/symbols/neo.svg"></br>NEO Identities'
+    )
 
     alert.addInput({
       type: 'checkbox',
@@ -160,7 +158,13 @@ export class SignMessageRequestPage {
     alert.addInput({
       type: 'checkbox',
       label: 'Magic The Gathering Expert',
-      value: NeoIdentity.Magic
+      value: NeoIdentity.Hackathon
+    })
+
+    alert.addInput({
+      type: 'checkbox',
+      label: 'Stackoverflow',
+      value: NeoIdentity.Stackoverflow
     })
 
     alert.addButton({

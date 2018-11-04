@@ -12,7 +12,11 @@
 
 <ion-content padding class="colored-background">
 
-  <ion-row justify-content-center padding-top>
+  <ion-row *ngIf="signed" justify-content-center padding-top>
+    <img width="150" height="150" src="assets/symbols/neo.svg">
+  </ion-row>
+
+  <ion-row *ngIf="signed" justify-content-center padding-top>
     <p>Signature for message: <b>"{{message}}"</b></p>
   </ion-row>
 
