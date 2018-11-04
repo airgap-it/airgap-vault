@@ -157,7 +157,7 @@ export class SignMessageRequestPage {
 
     alert.addInput({
       type: 'checkbox',
-      label: 'Magic The Gathering Expert',
+      label: 'Hackathon participant',
       value: NeoIdentity.Hackathon
     })
 
