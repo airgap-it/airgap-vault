@@ -4,8 +4,8 @@ import { StatusBar } from '@ionic-native/status-bar'
 import { SplashScreen } from '@ionic-native/splash-screen'
 import { TabsPage } from '../pages/tabs/tabs'
 import { Deeplinks } from '@ionic-native/deeplinks'
-import { TransactionDetailPage } from '../pages/transaction-detail/transaction-detail'
 import { StartupChecksProvider } from '../providers/startup-checks/startup-checks.provider'
+import { SchemeRoutingProvider } from '../providers/scheme-routing/scheme-routing'
 
 @Component({
   templateUrl: 'app.html'
@@ -19,10 +19,11 @@ export class MyApp {
 
   constructor(
     private platform: Platform,
-    statusBar: StatusBar,
-    splashScreen: SplashScreen,
+    private statusBar: StatusBar,
+    private splashScreen: SplashScreen,
     private deepLinks: Deeplinks,
-    private startupChecks: StartupChecksProvider
+    private startupChecks: StartupChecksProvider,
+    private schemeRoutingProvider: SchemeRoutingProvider
   ) {
 
     this.platform.ready().then(() => {
@@ -48,11 +49,12 @@ export class MyApp {
   ngAfterViewInit() {
     this.platform.ready().then(() => {
       this.deepLinks.routeWithNavController(this.nav, {
-        '/sign': TransactionDetailPage
+        '/': undefined
       }).subscribe((match) => {
         // match.$route - the route we matched, which is the matched entry from the arguments to route()
         // match.$args - the args passed in the link
         // match.$link - the full link data
+        this.schemeRoutingProvider.handleNewSyncRequest(match.$link.url)
         console.log('Successfully matched route', match)
       }, (nomatch) => {
         // nomatch.$link - the full link data

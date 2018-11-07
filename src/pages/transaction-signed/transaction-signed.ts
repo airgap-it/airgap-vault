@@ -3,16 +3,9 @@ import { IonicPage, LoadingController, NavController, NavParams, Platform } from
 import { Transaction } from '../../models/transaction.model'
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import bip39 from 'bip39'
-import { AirGapWallet, SyncProtocolUtils, DeserializedSyncProtocol, SignedTransaction, EncodedType, IAirGapWallet } from 'airgap-coin-lib'
+import { AirGapWallet, SyncProtocolUtils, DeserializedSyncProtocol, SignedTransaction, EncodedType, IAirGapWallet, UnsignedTransaction, IAirGapTransaction } from 'airgap-coin-lib'
 
 declare var window: any
-
-/**
- * Generated class for the TransactionSignedPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 enum TransactionQRType {
   SignedAirGap = 0,
@@ -29,17 +22,22 @@ export class TransactionSignedPage {
   signed?: string
   broadcastUrl?: string
 
-  transaction: Transaction
+  transaction: UnsignedTransaction
+  airGapTx: IAirGapTransaction
   wallet: AirGapWallet
 
   qrType: TransactionQRType = 0
 
   constructor(public loadingCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams, private secretProvider: SecretsProvider, private ngZone: NgZone, private platform: Platform) {
+    console.log('constructor')
     this.transaction = this.navParams.get('transaction')
     this.wallet = this.navParams.get('wallet')
+
+    this.airGapTx = this.wallet.coinProtocol.getTransactionDetails(this.transaction)
   }
 
   async ionViewWillEnter() {
+    console.log('will enter')
     let loading = this.loadingCtrl.create({
       content: 'Signing...'
     })
@@ -47,6 +45,7 @@ export class TransactionSignedPage {
     loading.present()
 
     const signed = await this.signTransaction(this.transaction, this.wallet)
+    console.log('signed', signed)
     this.broadcastUrl = await this.generateBroadcastUrl(this.wallet, signed)
 
     this.ngZone.run(() => {
@@ -55,8 +54,10 @@ export class TransactionSignedPage {
     loading.dismiss()
   }
 
-  signTransaction(transaction: Transaction, wallet: AirGapWallet): Promise<string> {
+  signTransaction(transaction: UnsignedTransaction, wallet: AirGapWallet): Promise<string> {
     const secret = this.secretProvider.findByPublicKey(wallet.publicKey)
+
+    console.log('signing, found transaction', secret)
 
     // we should handle this case here as well
     if (!secret) {
@@ -64,13 +65,16 @@ export class TransactionSignedPage {
     }
 
     return this.secretProvider.retrieveEntropyForSecret(secret).then(entropy => {
+      console.log('have secret')
       let seed = bip39.mnemonicToSeedHex(bip39.entropyToMnemonic(entropy))
+      console.log('have seed')
       if (wallet.isExtendedPublicKey) {
         const extendedPrivateKey = wallet.coinProtocol.getExtendedPrivateKeyFromHexSecret(seed, wallet.derivationPath)
-        return wallet.coinProtocol.signWithExtendedPrivateKey(extendedPrivateKey, transaction.payload)
+        return wallet.coinProtocol.signWithExtendedPrivateKey(extendedPrivateKey, transaction.transaction)
       } else {
+        console.log('getting pk', transaction)
         const privateKey = wallet.coinProtocol.getPrivateKeyFromHexSecret(seed, wallet.derivationPath)
-        return wallet.coinProtocol.signWithPrivateKey(privateKey, transaction.payload)
+        return wallet.coinProtocol.signWithPrivateKey(privateKey, transaction.transaction)
       }
     })
   }
@@ -84,7 +88,7 @@ export class TransactionSignedPage {
     const deserializedTxSigningRequest: DeserializedSyncProtocol = {
       version: 1,
       protocol: this.wallet.protocolIdentifier,
-      type: EncodedType.UNSIGNED_TRANSACTION,
+      type: EncodedType.SIGNED_TRANSACTION,
       payload: {
         publicKey: wallet.publicKey,
         transaction: signedTx
@@ -93,7 +97,7 @@ export class TransactionSignedPage {
 
     const serializedTx = await syncProtocol.serialize(deserializedTxSigningRequest)
 
-    return 'airgap-wallet://d?=' + serializedTx
+    return 'airgap-wallet://?d=' + serializedTx
 
     /*
     const data = JSON.stringify({

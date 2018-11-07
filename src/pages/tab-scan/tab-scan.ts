@@ -1,19 +1,12 @@
 import { Component, RendererFactory2 } from '@angular/core'
 import { AlertController, IonicPage, NavController, Platform } from 'ionic-angular'
-import { TransactionDetailPage } from '../transaction-detail/transaction-detail'
 import { Transaction } from '../../models/transaction.model'
 import { ScannerProvider } from '../../providers/scanner/scanner'
 import { TransactionsProvider } from '../../providers/transactions/transactions'
 import { AndroidPermissions } from '@ionic-native/android-permissions'
 import { AirGapSchemeProvider } from '../../providers/scheme/scheme.service'
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
-
-/**
- * Generated class for the TabScanPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { SchemeRoutingProvider } from '../../providers/scheme-routing/scheme-routing'
 
 @IonicPage()
 @Component({
@@ -24,7 +17,7 @@ export class TabScanPage {
 
   private renderer
 
-  constructor(private schemeService: AirGapSchemeProvider, private alertCtrl: AlertController, private androidPermissions: AndroidPermissions, private rendererFactory: RendererFactory2, private navController: NavController, private platform: Platform, private secretsProvider: SecretsProvider, private transactionProvider: TransactionsProvider, private scanner: ScannerProvider) {
+  constructor(private schemeService: AirGapSchemeProvider, private schemeRouting: SchemeRoutingProvider, private alertCtrl: AlertController, private androidPermissions: AndroidPermissions, private rendererFactory: RendererFactory2, private navController: NavController, private platform: Platform, private secretsProvider: SecretsProvider, private transactionProvider: TransactionsProvider, private scanner: ScannerProvider) {
     this.renderer = this.rendererFactory.createRenderer(null, null)
   }
 
@@ -69,12 +62,15 @@ export class TabScanPage {
     })
   }
 
-  checkScan(data: string) {
+  async checkScan(data: string) {
     if (this.isAirGapTx(data)) {
-      return this.transactionScanned(this.schemeService.extractAirGapTx(data))
+
+      return this.schemeRouting.handleNewSyncRequest(data, () => {
+        this.startScan()
+      })
     } else {
       this.extractRawTx(data).then(tx => {
-        this.transactionScanned(tx)
+        // this.transactionScanned(tx)
       }).catch(error => {
         console.warn(error)
         let alert = this.alertCtrl.create({
@@ -94,31 +90,6 @@ export class TabScanPage {
         alert.present()
       })
     }
-  }
-
-  transactionScanned(transaction: Transaction) {
-    const correctWallet = this.secretsProvider.findWalletByPublicKeyAndProtocolIdentifier(transaction.publicKey, transaction.protocolIdentifier)
-
-    if (!correctWallet) {
-      let alert = this.alertCtrl.create({
-        title: 'No secret found',
-        message: 'You do not have any compatible wallet for this public key in AirGap. Please import your secret and create the corresponding wallet to sign this transaction',
-        enableBackdropDismiss: false,
-        buttons: [
-          {
-            text: 'Okay!',
-            role: 'cancel',
-            handler: () => {
-              this.startScan()
-            }
-          }
-        ]
-      })
-      alert.present()
-    } else {
-      this.navController.push(TransactionDetailPage, { transaction: transaction, wallet: correctWallet })
-    }
-
   }
 
   isAirGapTx(qr: string): boolean {
@@ -170,6 +141,7 @@ export class TabScanPage {
   }
 
   simulateAirGapTx() {
+    /*
     this.transactionScanned(this.schemeService.extractAirGapTx(
       'airgap-vault://sign?data=' + btoa(JSON.stringify({
         'protocolIdentifier': 'eth',
@@ -186,6 +158,7 @@ export class TabScanPage {
         }
       }))
     ))
+    */
   }
 
   simulateTx() {
@@ -202,7 +175,7 @@ export class TabScanPage {
         }
       )
     ).then(tx => {
-      this.transactionScanned(tx)
+      // this.transactionScanned(tx)
     })
   }
 }

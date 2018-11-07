@@ -12,11 +12,11 @@
 
 <ion-content padding class="colored-background">
 
-  <from-to [transaction]="transaction" [wallet]="wallet" padding-bottom></from-to>
+  <from-to [transaction]="airGapTx" [wallet]="wallet" padding-bottom></from-to>
 
   <ion-row justify-content-center padding-top>
     <qrcode *ngIf="broadcastUrl && qrType === 0" [level]="'L'" [qrdata]="broadcastUrl" backgroundAlpha="1" foreground="black" [size]="300"></qrcode>
-    <qrcode *ngIf="signed && qrType === 1" [level]="'L'" [qrdata]="signed" backgroundAlpha="1" foreground="black" [size]="300"></qrcode>
+    <qrcode *ngIf="signedTxQr && qrType === 1" [level]="'L'" [qrdata]="signedTxQr" backgroundAlpha="1" foreground="black" [size]="300"></qrcode>
   </ion-row>
 
   <ion-row padding>

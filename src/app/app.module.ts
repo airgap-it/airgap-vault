@@ -30,6 +30,7 @@ import { IonicStorageModule } from '@ionic/storage'
 import { DeviceMotion } from '@ionic-native/device-motion'
 import { AirGapSchemeProvider } from '../providers/scheme/scheme.service'
 import { StartupChecksProvider } from '../providers/startup-checks/startup-checks.provider';
+import { SchemeRoutingProvider } from '../providers/scheme-routing/scheme-routing';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -99,7 +100,8 @@ export function HttpLoaderFactory(http: HttpClient) {
       deps: [Platform, DeviceMotion]
     },
     DeviceProvider,
-    AirGapSchemeProvider
+    AirGapSchemeProvider,
+    SchemeRoutingProvider
   ]
 })
 export class AppModule {

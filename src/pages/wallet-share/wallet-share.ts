@@ -4,13 +4,6 @@ import { AirGapWallet, SyncProtocolUtils, DeserializedSyncProtocol, SyncWalletRe
 
 declare var window: any
 
-/**
- * Generated class for the WalletSharePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-wallet-share',
@@ -51,7 +44,7 @@ export class WalletSharePage {
 
     const serializedTx = await syncProtocol.serialize(deserializedTxSigningRequest)
 
-    return 'airgap-wallet://d?=' + serializedTx
+    return 'airgap-wallet://?d=' + serializedTx
   }
 
   async sameDeviceSync() {
