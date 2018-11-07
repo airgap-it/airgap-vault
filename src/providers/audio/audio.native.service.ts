@@ -39,31 +39,25 @@ export class AudioNativeService implements IEntropyGenerator {
 
   start(): Promise<void> {
     this.collectedEntropyPercentage = 0
-    return new Promise((resolve, reject) => {
-      this.platform.ready().then(() => {
+    return this.platform.ready().then(() => {
 
-        window.audioinput.start({
-          bufferSize: this.ENTROPY_SIZE
-        })
-
-        setTimeout(() => {
-          window.addEventListener('audioinput', this.handler)
-        }, 1000)
-
-        console.log('audioinput created.')
-
-        resolve()
+      window.audioinput.start({
+        bufferSize: this.ENTROPY_SIZE
       })
+
+      setTimeout(() => {
+        window.addEventListener('audioinput', this.handler)
+      }, 1000)
+
+      console.log('audioinput created.')
     })
   }
 
   stop(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      console.log('removed audioinput listener')
-      window.audioinput.stop()
-      window.removeEventListener('audioinput', this.handler)
-      resolve()
-    })
+    console.log('removed audioinput listener')
+    window.audioinput.stop()
+    window.removeEventListener('audioinput', this.handler)
+    return Promise.resolve()
   }
 
   getEntropyUpdateObservable(): Observable<Entropy> {
