@@ -19,7 +19,7 @@ enum TransactionQRType {
 })
 export class TransactionSignedPage {
 
-  signed?: string
+  signedTxQr?: string
   broadcastUrl?: string
 
   transaction: UnsignedTransaction
@@ -29,27 +29,24 @@ export class TransactionSignedPage {
   qrType: TransactionQRType = 0
 
   constructor(public loadingCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams, private secretProvider: SecretsProvider, private ngZone: NgZone, private platform: Platform) {
-    console.log('constructor')
+    console.log('')
     this.transaction = this.navParams.get('transaction')
     this.wallet = this.navParams.get('wallet')
-
     this.airGapTx = this.wallet.coinProtocol.getTransactionDetails(this.transaction)
   }
 
   async ionViewWillEnter() {
-    console.log('will enter')
     let loading = this.loadingCtrl.create({
       content: 'Signing...'
     })
 
     loading.present()
 
-    const signed = await this.signTransaction(this.transaction, this.wallet)
-    console.log('signed', signed)
-    this.broadcastUrl = await this.generateBroadcastUrl(this.wallet, signed)
+    const signedTx = await this.signTransaction(this.transaction, this.wallet)
+    this.broadcastUrl = await this.generateBroadcastUrl(this.wallet, signedTx)
 
     this.ngZone.run(() => {
-      this.signed = signed
+      this.signedTxQr = signedTx
     })
     loading.dismiss()
   }
@@ -57,22 +54,17 @@ export class TransactionSignedPage {
   signTransaction(transaction: UnsignedTransaction, wallet: AirGapWallet): Promise<string> {
     const secret = this.secretProvider.findByPublicKey(wallet.publicKey)
 
-    console.log('signing, found transaction', secret)
-
     // we should handle this case here as well
     if (!secret) {
       console.warn('no secret found to this public key')
     }
 
     return this.secretProvider.retrieveEntropyForSecret(secret).then(entropy => {
-      console.log('have secret')
       let seed = bip39.mnemonicToSeedHex(bip39.entropyToMnemonic(entropy))
-      console.log('have seed')
       if (wallet.isExtendedPublicKey) {
         const extendedPrivateKey = wallet.coinProtocol.getExtendedPrivateKeyFromHexSecret(seed, wallet.derivationPath)
         return wallet.coinProtocol.signWithExtendedPrivateKey(extendedPrivateKey, transaction.transaction)
       } else {
-        console.log('getting pk', transaction)
         const privateKey = wallet.coinProtocol.getPrivateKeyFromHexSecret(seed, wallet.derivationPath)
         return wallet.coinProtocol.signWithPrivateKey(privateKey, transaction.transaction)
       }
