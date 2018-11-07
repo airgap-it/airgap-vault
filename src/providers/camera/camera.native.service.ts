@@ -69,10 +69,8 @@ export class CameraNativeService implements IEntropyGenerator {
   start(): Promise<void> {
     this.disabled = false
     this.collectedEntropyPercentage = 0
-    return new Promise((resolve, reject) => {
-      this.platform.ready().then(() => {
-        resolve(this.initCamera())
-      })
+    return this.platform.ready().then(() => {
+      return this.initCamera()
     })
   }
 
@@ -151,25 +149,22 @@ export class CameraNativeService implements IEntropyGenerator {
     // if it is called while taking a photo
     if (this.cameraIsTakingPhoto) {
       this.uninjectCSS()
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          console.log('CAMERA IS TAKING PHOTO, DELAYING')
-          return this.stop()
-        }, 200)
-      })
+      setTimeout(() => {
+        console.log('CAMERA IS TAKING PHOTO, DELAYING')
+        this.stop()
+      }, 200)
+      return new Promise(() => {})
     }
     this.uninjectCSS()
     if (this.cameraInterval) {
       clearInterval(this.cameraInterval)
     }
-    return new Promise((resolve, reject) => {
-      this.cameraPreview.stopCamera().then(() => {
-        this.cameraIsRunning = false
-        console.log('camera stopped.')
-      }, error => {
-        console.log('camera could not be stopped.')
-        reject(error)
-      })
+    return this.cameraPreview.stopCamera().then(() => {
+      this.cameraIsRunning = false
+      console.log('camera stopped.')
+    }, error => {
+      console.log('camera could not be stopped.')
+      return Promise.reject(error)
     })
   }
 

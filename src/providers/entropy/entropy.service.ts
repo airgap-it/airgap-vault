@@ -60,26 +60,22 @@ export class EntropyService {
 
   stopEntropyCollection(): Promise<void> {
     let promises = []
-    return new Promise((resolve, reject) => {
-      // clear collection interval
-      for (let i = 0; i < this.entropySubscriptions.length; i++) {
-        this.entropySubscriptions[i].unsubscribe()
-      }
+    // clear collection interval
+    for (let i = 0; i < this.entropySubscriptions.length; i++) {
+      this.entropySubscriptions[i].unsubscribe()
+    }
 
-      this.entropySubscriptions = []
+    this.entropySubscriptions = []
 
-      // stop entropy sources
-      for (let i = 0; i < this.entropyGenerators.length; i++) {
-        console.log('stopping entropy source...')
-        promises.push(this.entropyGenerators[i].stop())
-      }
+    // stop entropy sources
+    for (let i = 0; i < this.entropyGenerators.length; i++) {
+      console.log('stopping entropy source...')
+      promises.push(this.entropyGenerators[i].stop())
+    }
 
-      this.entropyGenerators = []
+    this.entropyGenerators = []
 
-      Promise.all(promises).then(() => {
-        resolve()
-      })
-    })
+    return Promise.all(promises).then(() => {})
   }
 
   getEntropyAsHex(): Promise<string> {

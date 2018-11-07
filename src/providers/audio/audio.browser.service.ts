@@ -63,11 +63,9 @@ export class AudioBrowserService implements IEntropyGenerator {
   }
 
   stop(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.microphoneStreamSource.disconnect()
-      this.scriptProcessor.disconnect()
-      resolve()
-    })
+    this.microphoneStreamSource.disconnect()
+    this.scriptProcessor.disconnect()
+    return Promise.resolve()
   }
 
   getEntropyUpdateObservable(): Observable<Entropy> {

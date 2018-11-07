@@ -24,21 +24,18 @@ export class GyroscopeNativeService implements GyroscopeService, IEntropyGenerat
 
   public start(): Promise<void> {
     this.collectedEntropyPercentage = 0
-    return new Promise((resolve, reject) => {
-      this.platform.ready().then(() => {
-        this.entropyObservable = new Observable(observer => {
-          this.gyroSubscription = this.deviceMotion.watchAcceleration({ frequency: 500 }).subscribe((acceleration: DeviceMotionAccelerationData) => {
-            const entropyBuffer = this.arrayBufferFromIntArray([acceleration.x, acceleration.y, acceleration.z])
-            entropyCalculatorWorker.onmessage = (event) => {
-              this.collectedEntropyPercentage += event.data.entropyMeasure
-              observer.next({
-                entropyHex: event.data.entropyHex
-              })
-            }
-            entropyCalculatorWorker.postMessage({ entropyBuffer: entropyBuffer }, [entropyBuffer])
-          })
+    return this.platform.ready().then(() => {
+      this.entropyObservable = new Observable(observer => {
+        this.gyroSubscription = this.deviceMotion.watchAcceleration({ frequency: 500 }).subscribe((acceleration: DeviceMotionAccelerationData) => {
+          const entropyBuffer = this.arrayBufferFromIntArray([acceleration.x, acceleration.y, acceleration.z])
+          entropyCalculatorWorker.onmessage = (event) => {
+            this.collectedEntropyPercentage += event.data.entropyMeasure
+            observer.next({
+              entropyHex: event.data.entropyHex
+            })
+          }
+          entropyCalculatorWorker.postMessage({ entropyBuffer: entropyBuffer }, [entropyBuffer])
         })
-        resolve()
       })
     })
   }
