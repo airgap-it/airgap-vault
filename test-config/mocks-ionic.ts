@@ -1,5 +1,7 @@
 import { StatusBar } from '@ionic-native/status-bar'
 import { SplashScreen } from '@ionic-native/splash-screen'
+import { AlertController, Alert } from 'ionic-angular';
+import { AlertInputOptions, AlertOptions } from 'ionic-angular/umd/components/alert/alert-options';
 
 export class DeviceProviderMock {
 
