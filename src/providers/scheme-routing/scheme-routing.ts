@@ -11,6 +11,7 @@ import { TransactionDetailPage } from '../../pages/transaction-detail/transactio
 
 @Injectable()
 export class SchemeRoutingProvider {
+  private navController: NavController
   private syncSchemeHandlers: {
     [key in EncodedType]: (
       deserializedSync: DeserializedSyncProtocol,
@@ -33,11 +34,12 @@ export class SchemeRoutingProvider {
 
   }
 
-  private getNavController() {
-    return this.app.getActiveNav()
-  }
-
-  async handleNewSyncRequest(rawString: string, scanAgainCallback: Function = () => { /* */ }) {
+  async handleNewSyncRequest(
+    navCtrl: NavController,
+    rawString: string,
+    scanAgainCallback: Function = () => { /* */ }
+  ) {
+    this.navController = navCtrl
     const syncProtocol = new SyncProtocolUtils()
 
     let url = new URL(rawString)
@@ -89,9 +91,8 @@ export class SchemeRoutingProvider {
         [cancelButton]
       )
     } else {
-      const navController = this.getNavController()
-      if (navController) {
-        navController.push(TransactionDetailPage, {
+      if (this.navController) {
+        this.navController.push(TransactionDetailPage, {
           transaction: unsignedTransaction,
           wallet: correctWallet
         })

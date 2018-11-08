@@ -65,7 +65,7 @@ export class TabScanPage {
   async checkScan(data: string) {
     if (this.isAirGapTx(data)) {
 
-      return this.schemeRouting.handleNewSyncRequest(data, () => {
+      return this.schemeRouting.handleNewSyncRequest(this.navController, data, () => {
         this.startScan()
       })
     } else {

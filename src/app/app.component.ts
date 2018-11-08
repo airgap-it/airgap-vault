@@ -28,9 +28,9 @@ export class MyApp {
 
     this.platform.ready().then(() => {
       if (platform.is('cordova')) {
-        statusBar.styleLightContent()
-        statusBar.backgroundColorByHexString('#311B58')
-        splashScreen.hide()
+        this.statusBar.styleLightContent()
+        this.statusBar.backgroundColorByHexString('#311B58')
+        this.splashScreen.hide()
       }
 
       this.initChecks()
@@ -48,13 +48,13 @@ export class MyApp {
 
   ngAfterViewInit() {
     this.platform.ready().then(() => {
-      this.deepLinks.routeWithNavController(this.nav, {
+      this.deepLinks.route({
         '/': undefined
       }).subscribe((match) => {
         // match.$route - the route we matched, which is the matched entry from the arguments to route()
         // match.$args - the args passed in the link
         // match.$link - the full link data
-        this.schemeRoutingProvider.handleNewSyncRequest(match.$link.url)
+        this.schemeRoutingProvider.handleNewSyncRequest(this.nav, match.$link.url)
         console.log('Successfully matched route', match)
       }, (nomatch) => {
         // nomatch.$link - the full link data
