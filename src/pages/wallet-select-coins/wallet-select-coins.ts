@@ -4,13 +4,6 @@ import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import { AirGapWallet, ICoinProtocol, supportedProtocols } from 'airgap-coin-lib'
 import bip39 from 'bip39'
 
-/**
- * Generated class for the WalletSelectCoinsPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-wallet-select-coins',
@@ -22,6 +15,7 @@ export class WalletSelectCoinsPage {
   customDerivationPath: string
   coinProtocols: ICoinProtocol[]
   isHDWallet: boolean = false
+  isAdvancedMode: boolean = false
 
   constructor(public loadingCtrl: LoadingController, public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, private secretsProvider: SecretsProvider) {
     this.coinProtocols = supportedProtocols()
@@ -62,23 +56,33 @@ export class WalletSelectCoinsPage {
           this.navCtrl.popToRoot()
         })
       } else {
-        let alert = this.alertCtrl.create({
-          title: 'Wallet already exists',
-          message: 'You already have added this specific wallet. Please change its derivation path to add another address (advanced mode).',
-          enableBackdropDismiss: false,
-          buttons: [
-            {
-              text: 'Okay!',
-              role: 'cancel'
-            }
-          ]
-        })
-        alert.present()
+        this.showAlert(
+          'Wallet already exists',
+          'You already have added this specific wallet. Please change its derivation path to add another address (advanced mode).'
+        )
       }
       loading.dismiss()
     }).catch(err => {
-      console.error(err)
+      this.showAlert(
+        'Error',
+        err
+      )
       loading.dismiss()
     })
+  }
+
+  showAlert(title: string, message: string) {
+    let alert = this.alertCtrl.create({
+      title,
+      message,
+      enableBackdropDismiss: false,
+      buttons: [
+        {
+          text: 'Okay!',
+          role: 'cancel'
+        }
+      ]
+    })
+    alert.present()
   }
 }
