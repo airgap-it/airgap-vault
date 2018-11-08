@@ -1,6 +1,5 @@
 import { Component, NgZone } from '@angular/core'
 import { IonicPage, LoadingController, NavController, NavParams, Platform } from 'ionic-angular'
-import { Transaction } from '../../models/transaction.model'
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import bip39 from 'bip39'
 import { AirGapWallet, SyncProtocolUtils, DeserializedSyncProtocol, SignedTransaction, EncodedType, IAirGapWallet, UnsignedTransaction, IAirGapTransaction } from 'airgap-coin-lib'
@@ -29,7 +28,6 @@ export class TransactionSignedPage {
   qrType: TransactionQRType = 0
 
   constructor(public loadingCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams, private secretProvider: SecretsProvider, private ngZone: NgZone, private platform: Platform) {
-    console.log('')
     this.transaction = this.navParams.get('transaction')
     this.wallet = this.navParams.get('wallet')
     this.airGapTx = this.wallet.coinProtocol.getTransactionDetails(this.transaction)

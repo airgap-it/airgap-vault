@@ -118,13 +118,14 @@ export class SchemeRoutingProvider {
     )
   }
 
-  private async showAlert(title: string, message: string, buttons: AlertButton[]) {
+  async showAlert(title: string, message: string, buttons: AlertButton[]) {
     let alert = this.alertController.create({
       title,
       message,
       enableBackdropDismiss: false,
       buttons
     })
-    alert.present()
+    console.log(alert)
+    await alert.present()
   }
 }
