@@ -1,12 +1,17 @@
 import { Component } from '@angular/core'
-import { AlertController, NavParams, ViewController } from 'ionic-angular'
+import { AlertController, NavParams, ToastController, ViewController } from 'ionic-angular'
 import { SecretsProvider } from '../../../providers/secrets/secrets.provider'
 import { AirGapWallet } from 'airgap-coin-lib'
+import { Clipboard } from '@ionic-native/clipboard'
 
 @Component({
   template: `
     <ion-list no-lines no-detail>
       <ion-list-header>Wallet Settings</ion-list-header>
+      <button ion-item detail-none (click)='copyAddressToClipboard()'>
+        <ion-icon name='clipboard' color='dark' item-end></ion-icon>
+        Copy address
+      </button>
       <button ion-item detail-none (click)='delete()'>
         <ion-icon name='trash' color='dark' item-end></ion-icon>
         Delete
@@ -20,9 +25,22 @@ export class WalletEditPopoverComponent {
   private wallet: AirGapWallet
   private onDelete: Function
 
-  constructor(private alertCtrl: AlertController, private navParams: NavParams, private secretsProvider: SecretsProvider, private viewCtrl: ViewController) {
+  constructor(private alertCtrl: AlertController, private clipboard: Clipboard, private toastController: ToastController, private navParams: NavParams, private secretsProvider: SecretsProvider, private viewCtrl: ViewController) {
     this.wallet = this.navParams.get('wallet')
     this.onDelete = this.navParams.get('onDelete')
+  }
+
+  async copyAddressToClipboard() {
+    await this.clipboard.copy(this.wallet.receivingPublicAddress)
+    let toast = this.toastController.create({
+      message: 'Address was copied to your clipboard',
+      duration: 2000,
+      position: 'top',
+      showCloseButton: true,
+      closeButtonText: 'Ok'
+    })
+    await toast.present()
+    await this.viewCtrl.dismiss()
   }
 
   delete() {

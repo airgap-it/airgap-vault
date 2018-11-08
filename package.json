@@ -35,6 +35,7 @@
     "@download/blockies": "^1.0.3",
     "@ionic-native/android-permissions": "^4.6.0",
     "@ionic-native/camera-preview": "^4.5.2",
+    "@ionic-native/clipboard": "^4.17.0",
     "@ionic-native/core": "^4.4.0",
     "@ionic-native/deeplinks": "^4.7.0",
     "@ionic-native/device-motion": "^4.4.0",
@@ -54,6 +55,7 @@
     "com.lampa.startapp": "^6.1.6",
     "cordova-android": "7.1.0",
     "cordova-android-support-gradle-release": "^1.2.0",
+    "cordova-clipboard": "1.2.1",
     "cordova-ios": "4.5.5",
     "cordova-plugin-add-swift-support": "~1.7.2",
     "cordova-plugin-airgap-secure-storage": "github:airgap-it/cordova-plugin-airgap-secure-storage#8cd36ca90df8f3edf796300f08735f721e6a274f",
@@ -168,7 +170,8 @@
       "cordova-plugin-add-swift-support": {},
       "cordova-plugin-queries-schemes": {},
       "cordova-plugin-ionic-keyboard": {},
-      "cordova-plugin-airgap-webview": {}
+      "cordova-plugin-airgap-webview": {},
+      "cordova-clipboard": {}
     }
   },
   "config": {

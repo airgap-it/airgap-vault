@@ -25,7 +25,7 @@
       <h2>{{ wallet.coinProtocol.name }} {{ wallet.coinProtocol.symbol }}</h2>
       <p>
         Address:<br>
-        <span class="selectable typography--mono">{{ wallet.receivingPublicAddress }}</span>
+        <span class="selectable typography--mono" (click)="copyAddressToClipboard()">{{ wallet.receivingPublicAddress }}</span>
       </p>
       <p>
         Derivation Path:<br>
@@ -34,7 +34,7 @@
     </ion-col>
   </ion-row>
 
-  <ion-row justify-content-center padding-bottom>
+  <ion-row (click)="copyAddressToClipboard()" justify-content-center padding-bottom>
     <qrcode [qrdata]="wallet.receivingPublicAddress" backgroundAlpha="0" foreground="white" [size]="240"></qrcode>
   </ion-row>
 

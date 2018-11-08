@@ -41,7 +41,7 @@ export class TransactionSignedPage {
     loading.present()
 
     const signedTx = await this.signTransaction(this.transaction, this.wallet)
-    this.broadcastUrl = await this.generateBroadcastUrl(this.wallet, signedTx)
+    this.broadcastUrl = await this.generateBroadcastUrl(this.wallet, signedTx, this.transaction.callback)
 
     this.ngZone.run(() => {
       this.signedTxQr = signedTx
@@ -73,7 +73,7 @@ export class TransactionSignedPage {
     this.qrType = this.qrType === TransactionQRType.SignedAirGap ? TransactionQRType.SignedRaw : TransactionQRType.SignedAirGap
   }
 
-  async generateBroadcastUrl(wallet: AirGapWallet, signedTx: string): Promise<string> {
+  async generateBroadcastUrl(wallet: AirGapWallet, signedTx: string, callbackURL: string): Promise<string> {
     const syncProtocol = new SyncProtocolUtils()
     const deserializedTxSigningRequest: DeserializedSyncProtocol = {
       version: 1,
@@ -87,7 +87,7 @@ export class TransactionSignedPage {
 
     const serializedTx = await syncProtocol.serialize(deserializedTxSigningRequest)
 
-    return 'airgap-wallet://?d=' + serializedTx
+    return (callbackURL || 'airgap-wallet://?d=') + serializedTx
 
     /*
     const data = JSON.stringify({
