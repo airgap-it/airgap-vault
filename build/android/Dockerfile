@@ -64,6 +64,9 @@ COPY . /app
 ARG BUILD_NR
 RUN sed -i -e "s/android-versionCode=\"1\"/android-versionCode=\"$BUILD_NR\"/g" config.xml
 
+# disable aot-build
+RUN sed -i "s/context.isProd || hasArg('--aot')/\!context.isProd || hasArg('--aot')/g" ./node_modules/@ionic/app-scripts/dist/util/config.js
+
 # build apk
 RUN ionic cordova build android --prod --release --no-interactive
 
