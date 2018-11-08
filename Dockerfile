@@ -17,6 +17,9 @@ RUN apt-get update && apt-get install -y wget --no-install-recommends \
     && apt-get purge --auto-remove -y curl \
     && rm -rf /src/*.deb
 
+# install npm
+RUN npm install -g npm@5.7.0
+
 # create app directory
 RUN mkdir /app
 WORKDIR /app
@@ -46,6 +49,9 @@ COPY . /app
 
 # set to production
 RUN export NODE_ENV=production
+
+# disable aot-build
+RUN sed -i "s/context.isProd || hasArg('--aot')/\!context.isProd || hasArg('--aot')/g" ./node_modules/@ionic/app-scripts/dist/util/config.js
 
 # build
 RUN npm run build
