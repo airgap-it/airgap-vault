@@ -16,7 +16,7 @@ RUN mkdir /app
 WORKDIR /app
 
 # install npm 5.7.0 to fix https://github.com/npm/npm/issues/19356
-RUN npm install -g npm@5.7.0
+RUN npm install -g npm@5.6.0
 
 # install ionic
 RUN npm install -g ionic@3.20.0
