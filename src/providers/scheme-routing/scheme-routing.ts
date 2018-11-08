@@ -125,7 +125,6 @@ export class SchemeRoutingProvider {
       enableBackdropDismiss: false,
       buttons
     })
-    console.log(alert)
     await alert.present()
   }
 }
