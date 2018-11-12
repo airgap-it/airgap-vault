@@ -40,14 +40,13 @@ export class TouchEntropyComponent implements OnInit, IEntropyGenerator {
 
   constructor(private ngZone: NgZone, private renderer: Renderer2) {
     this.entropyObservable = Observable.create(observer => {
+      entropyCalculatorWorker.onmessage = (event) => {
+        this.collectedEntropyPercentage += event.data.entropyMeasure
+        observer.next({ entropyHex: event.data.entropyHex })
+      }
+
       this.handler = (entropy) => {
         const buffer1 = this.arrayBufferFromIntArray(entropy)
-
-        entropyCalculatorWorker.onmessage = (event) => {
-          this.collectedEntropyPercentage += event.data.entropyMeasure
-          observer.next({ entropyHex: event.data.entropyHex })
-        }
-
         entropyCalculatorWorker.postMessage({ entropyBuffer: buffer1 }, [buffer1])
       }
     })

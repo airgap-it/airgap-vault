@@ -45,6 +45,7 @@ export class AudioBrowserService implements IEntropyGenerator {
   }
 
   start(): Promise<void> {
+    this.collectedEntropyPercentage = 0
     return new Promise((resolve, reject) => {
       navigator.getUserMedia({ video: false, audio: true }, (stream) => {
         const audioContext = new AudioContext()

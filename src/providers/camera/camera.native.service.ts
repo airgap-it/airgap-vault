@@ -38,13 +38,13 @@ export class CameraNativeService implements IEntropyGenerator {
   constructor(private platform: Platform, private cameraPreview: CameraPreview, private rendererFactory: RendererFactory2, private ngZone: NgZone) {
     this.renderer = rendererFactory.createRenderer(null, null)
     this.entropyObservable = Observable.create(observer => {
+      entropyCalculatorWorker.onmessage = (event) => {
+        this.collectedEntropyPercentage += event.data.entropyMeasure
+        observer.next({ entropyHex: event.data.entropyHex })
+      }
+
       this.handler = (base64ImagePayload) => {
         const buffer1 = this.arrayBufferFromBase64(base64ImagePayload)
-
-        entropyCalculatorWorker.onmessage = (event) => {
-          this.collectedEntropyPercentage += event.data.entropyMeasure
-          observer.next({ entropyHex: event.data.entropyHex })
-        }
 
         entropyCalculatorWorker.postMessage({
           entropyBuffer: buffer1

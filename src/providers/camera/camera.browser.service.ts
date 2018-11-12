@@ -4,7 +4,9 @@ import { Platform } from 'ionic-angular'
 import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
 import { Observable } from 'rxjs'
 
-const entropyCalculatorWorker = new Worker('./assets/workers/entropyCalculatorWorker.js')
+import workerJS from '../../assets/workers/entropyCalculatorWorker'
+const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
+const entropyCalculatorWorker = new Worker(blobURL)
 
 @Injectable()
 export class CameraBrowserService implements IEntropyGenerator {
@@ -61,6 +63,7 @@ export class CameraBrowserService implements IEntropyGenerator {
   }
 
   start(): Promise<void> {
+    this.collectedEntropyPercentage = 0
     return Promise.resolve()
   }
 
