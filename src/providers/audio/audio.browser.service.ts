@@ -91,7 +91,7 @@ export class AudioBrowserService implements IEntropyGenerator {
   }
 
   getCollectedEntropyPercentage(): number {
-    return this.collectedEntropyPercentage
+    return this.collectedEntropyPercentage / 200
   }
 
 }

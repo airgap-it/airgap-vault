@@ -6,8 +6,7 @@ import { TransactionsProvider } from '../../providers/transactions/transactions'
 import { AndroidPermissions } from '@ionic-native/android-permissions'
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import { SchemeRoutingProvider } from '../../providers/scheme-routing/scheme-routing'
-
-declare let Instascan
+import { ZXingScannerComponent } from '@zxing/ngx-scanner'
 
 @IonicPage()
 @Component({
@@ -16,11 +15,16 @@ declare let Instascan
 })
 export class TabScanPage {
 
-  @ViewChild('videoElement') videoElement: ElementRef
+  @ViewChild('scanner')
+  zxingScanner: ZXingScannerComponent
+  availableDevices: MediaDeviceInfo[]
+  selectedDevice: MediaDeviceInfo
+  scannerEnabled = true
 
   public isBrowser = false
 
   private renderer
+  hasCameras = false
 
   private webscanner: any
   private selectedCamera
@@ -28,16 +32,6 @@ export class TabScanPage {
   constructor(private schemeRouting: SchemeRoutingProvider, private alertCtrl: AlertController, private androidPermissions: AndroidPermissions, private rendererFactory: RendererFactory2, private navController: NavController, private platform: Platform, private secretsProvider: SecretsProvider, private transactionProvider: TransactionsProvider, private scanner: ScannerProvider) {
     this.isBrowser = !this.platform.is('cordova')
     this.renderer = this.rendererFactory.createRenderer(null, null)
-  }
-
-  ngAfterViewInit() {
-    if (!this.platform.is('cordova')) {
-      this.webscanner = new Instascan.Scanner({ video: this.videoElement.nativeElement })
-      this.webscanner.addListener('scan', (content) => {
-        console.log(content)
-        this.checkScan(content)
-      })
-    }
   }
 
   ionViewWillEnter() {
@@ -67,15 +61,16 @@ export class TabScanPage {
 
   ionViewDidEnter() {
     if (!this.platform.is('cordova')) {
-      Instascan.Camera.getCameras().then((cameras) => {
-        if (cameras.length > 0) {
-          this.selectedCamera = cameras[0]
-          this.webscanner.start(this.selectedCamera)
-        } else {
-          console.error('No cameras found.')
-        }
-      }).catch((e) => {
-        console.error(e)
+      this.zxingScanner.camerasNotFound.subscribe((devices: MediaDeviceInfo[]) => {
+        console.error('An error has occurred when trying to enumerate your video-stream-enabled devices.')
+      })
+      if (this.selectedDevice) { // Not the first time that we open scanner
+        this.zxingScanner.startScan(this.selectedDevice)
+      }
+      this.zxingScanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
+        this.hasCameras = true
+        this.availableDevices = devices
+        this.selectedDevice = devices[0]
       })
     }
   }
@@ -89,7 +84,7 @@ export class TabScanPage {
       this.scanner.destroy()
       this.renderer.removeClass(document.body, 'transparent-bg')
     } else {
-      this.webscanner.stop()
+      this.zxingScanner.resetCodeReader()
     }
   }
 
@@ -103,7 +98,7 @@ export class TabScanPage {
         this.startScan()
       })
     } else {
-    // We don't need to do anything in the browser becasuse it keeps scanning
+    // We don't need to do anything in the browser because it keeps scanning
     }
   }
 
