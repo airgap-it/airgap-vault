@@ -4,7 +4,6 @@ import { Transaction } from '../../models/transaction.model'
 import { ScannerProvider } from '../../providers/scanner/scanner'
 import { TransactionsProvider } from '../../providers/transactions/transactions'
 import { AndroidPermissions } from '@ionic-native/android-permissions'
-import { AirGapSchemeProvider } from '../../providers/scheme/scheme.service'
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import { SchemeRoutingProvider } from '../../providers/scheme-routing/scheme-routing'
 
@@ -17,7 +16,7 @@ export class TabScanPage {
 
   private renderer
 
-  constructor(private schemeService: AirGapSchemeProvider, private schemeRouting: SchemeRoutingProvider, private alertCtrl: AlertController, private androidPermissions: AndroidPermissions, private rendererFactory: RendererFactory2, private navController: NavController, private platform: Platform, private secretsProvider: SecretsProvider, private transactionProvider: TransactionsProvider, private scanner: ScannerProvider) {
+  constructor(private schemeRouting: SchemeRoutingProvider, private alertCtrl: AlertController, private androidPermissions: AndroidPermissions, private rendererFactory: RendererFactory2, private navController: NavController, private platform: Platform, private secretsProvider: SecretsProvider, private transactionProvider: TransactionsProvider, private scanner: ScannerProvider) {
     this.renderer = this.rendererFactory.createRenderer(null, null)
   }
 

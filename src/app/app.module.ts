@@ -29,7 +29,6 @@ import { PagesModule } from '../pages/pages.module'
 import { ScannerProvider } from '../providers/scanner/scanner'
 import { IonicStorageModule } from '@ionic/storage'
 import { DeviceMotion } from '@ionic-native/device-motion'
-import { AirGapSchemeProvider } from '../providers/scheme/scheme.service'
 import { StartupChecksProvider } from '../providers/startup-checks/startup-checks.provider'
 import { SchemeRoutingProvider } from '../providers/scheme-routing/scheme-routing'
 import { ClipboardBrowserProvider } from '../providers/clipboard-browser/clipboard-browser'
@@ -107,7 +106,6 @@ export function HttpLoaderFactory(http: HttpClient) {
       deps: [Platform]
     },
     DeviceProvider,
-    AirGapSchemeProvider,
     SchemeRoutingProvider
   ]
 })

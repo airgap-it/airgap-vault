@@ -3,7 +3,6 @@ import { IonicPageModule, Platform } from 'ionic-angular'
 import { TabScanPage } from './tab-scan'
 import { ComponentsModule } from '../../components/components.module'
 import { ScannerProvider } from '../../providers/scanner/scanner'
-import { AirGapSchemeProvider } from '../../providers/scheme/scheme.service'
 
 @NgModule({
   declarations: [
@@ -15,8 +14,7 @@ import { AirGapSchemeProvider } from '../../providers/scheme/scheme.service'
   ],
   providers: [
     ScannerProvider,
-    Platform,
-    AirGapSchemeProvider
+    Platform
   ],
   entryComponents: [
     TabScanPage

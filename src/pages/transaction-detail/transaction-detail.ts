@@ -1,12 +1,9 @@
 import { Component } from '@angular/core'
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular'
-import { Transaction } from '../../models/transaction.model'
+import { IonicPage, NavController, NavParams } from 'ionic-angular'
 import { TransactionSignedPage } from '../transaction-signed/transaction-signed'
 import { TransactionOnboardingPage } from '../transaction-onboarding/transaction-onboarding'
 import { Storage } from '@ionic/storage'
-import { AirGapSchemeProvider } from '../../providers/scheme/scheme.service'
 import { AirGapWallet, UnsignedTransaction, IAirGapTransaction } from 'airgap-coin-lib'
-import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 
 @IonicPage()
 @Component({
@@ -19,7 +16,7 @@ export class TransactionDetailPage {
   public wallet: AirGapWallet
   public airGapTx: IAirGapTransaction
 
-  constructor(private alertController: AlertController, private schemeService: AirGapSchemeProvider, private secretsProvider: SecretsProvider, public navController: NavController, public navParams: NavParams, private storage: Storage) {}
+  constructor(public navController: NavController, public navParams: NavParams, private storage: Storage) {}
 
   ionViewWillEnter() {
     this.transaction = this.navParams.get('transaction')
