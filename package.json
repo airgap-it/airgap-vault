@@ -46,7 +46,7 @@
     "@ionic/storage": "^2.1.3",
     "@ngx-translate/core": "^8.0.0",
     "@ngx-translate/http-loader": "^2.0.0",
-    "airgap-coin-lib": "git+ssh://git@gitlab.papers.tech:10022/papers/airgap/airgap-coin-lib.git#a545157f5987dcf166a87aecf6421a70e74346fd",
+    "airgap-coin-lib": "github:airgap-it/airgap-coin-lib#7cac694f44753f3d148eb7ab8600242eaa7ce06e",
     "angular2-template-loader": "^0.6.2",
     "angular2-uuid": "^1.1.1",
     "angularx-qrcode": "^1.1.7",
