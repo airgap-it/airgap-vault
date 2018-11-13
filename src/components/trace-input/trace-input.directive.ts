@@ -5,7 +5,6 @@ import { Directive, ElementRef, NgZone, OnInit, Renderer2 } from '@angular/core'
   inputs: ['running: traceEnabled']
 })
 export class TraceInputDirective implements OnInit {
-
   private canvas: HTMLCanvasElement
   private context: CanvasRenderingContext2D
 
@@ -20,33 +19,33 @@ export class TraceInputDirective implements OnInit {
   }
 
   ngOnInit() {
-    this.renderer.listen(this.canvas, 'mousedown', (e) => {
+    this.renderer.listen(this.canvas, 'mousedown', e => {
       this.lastPos = this.getMousePosition(this.canvas, e)
       this.isDrawing = true
       this.startDrawing()
     })
 
-    this.renderer.listen(this.canvas, 'touchstart', (e) => {
+    this.renderer.listen(this.canvas, 'touchstart', e => {
       this.lastPos = this.getTouchPosition(this.canvas, e)
       this.isDrawing = true
       this.startDrawing()
     })
 
-    this.renderer.listen(this.canvas, 'mouseup', (e) => {
+    this.renderer.listen(this.canvas, 'mouseup', e => {
       this.lastPos = this.getMousePosition(this.canvas, e)
       this.isDrawing = false
     })
 
-    this.renderer.listen(this.canvas, 'touchend', (e) => {
+    this.renderer.listen(this.canvas, 'touchend', e => {
       this.lastPos = this.getTouchPosition(this.canvas, e)
       this.isDrawing = false
     })
 
-    this.renderer.listen(this.canvas, 'mousemove', (e) => {
+    this.renderer.listen(this.canvas, 'mousemove', e => {
       this.mousePos = this.getMousePosition(this.canvas, e)
     })
 
-    this.renderer.listen(this.canvas, 'touchmove', (e) => {
+    this.renderer.listen(this.canvas, 'touchmove', e => {
       this.mousePos = this.getTouchPosition(this.canvas, e)
     })
   }
@@ -92,5 +91,4 @@ export class TraceInputDirective implements OnInit {
     this.lastPos = this.mousePos
     this.startDrawing()
   }
-
 }

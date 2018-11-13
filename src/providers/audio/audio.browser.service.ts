@@ -8,7 +8,6 @@ const entropyCalculatorWorker = new Worker(blobURL)
 
 @Injectable()
 export class AudioBrowserService implements IEntropyGenerator {
-
   private ENTROPY_SIZE = 4096
 
   private handler
@@ -22,13 +21,13 @@ export class AudioBrowserService implements IEntropyGenerator {
 
   constructor() {
     this.entropyObservable = Observable.create(observer => {
-      entropyCalculatorWorker.onmessage = (event) => {
+      entropyCalculatorWorker.onmessage = event => {
         this.collectedEntropyPercentage += event.data.entropyMeasure
         observer.next({
           entropyHex: event.data.entropyHex
         })
       }
-      this.handler = (event) => {
+      this.handler = event => {
         const data = event.inputBuffer.getChannelData(0)
         let buffer1 = this.arrayBufferFromIntArray(data)
         entropyCalculatorWorker.postMessage({ entropyBuffer: buffer1 }, [buffer1])
@@ -36,30 +35,33 @@ export class AudioBrowserService implements IEntropyGenerator {
     })
 
     // polyfill getUserMedia
-    navigator.getUserMedia = (
+    navigator.getUserMedia =
       (navigator as any).getUserMedia ||
       (navigator as any).webkitGetUserMedia ||
       (navigator as any).mozGetUserMedia ||
       (navigator as any).msGetUserMedia
-    )
   }
 
   start(): Promise<void> {
     this.collectedEntropyPercentage = 0
     return new Promise((resolve, reject) => {
-      navigator.getUserMedia({ video: false, audio: true }, (stream) => {
-        const audioContext = new AudioContext()
-        const microphoneStreamSource = audioContext.createMediaStreamSource(stream)
-        const scriptProcessor = audioContext.createScriptProcessor(this.ENTROPY_SIZE, 1, 1)
-        scriptProcessor.onaudioprocess = (event) => {
-          this.handler(event)
+      navigator.getUserMedia(
+        { video: false, audio: true },
+        stream => {
+          const audioContext = new AudioContext()
+          const microphoneStreamSource = audioContext.createMediaStreamSource(stream)
+          const scriptProcessor = audioContext.createScriptProcessor(this.ENTROPY_SIZE, 1, 1)
+          scriptProcessor.onaudioprocess = event => {
+            this.handler(event)
+          }
+          microphoneStreamSource.connect(scriptProcessor)
+          scriptProcessor.connect(audioContext.destination)
+          resolve()
+        },
+        () => {
+          reject()
         }
-        microphoneStreamSource.connect(scriptProcessor)
-        scriptProcessor.connect(audioContext.destination)
-        resolve()
-      }, () => {
-        reject()
-      })
+      )
     })
   }
 
@@ -94,5 +96,4 @@ export class AudioBrowserService implements IEntropyGenerator {
   getCollectedEntropyPercentage(): number {
     return this.collectedEntropyPercentage / 200
   }
-
 }

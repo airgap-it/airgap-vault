@@ -3,21 +3,12 @@ import { IonicPage, NavParams, Platform, ViewController } from 'ionic-angular'
 import { SecureStorageService } from '../../providers/storage/secure-storage'
 import { Storage } from '@ionic/storage'
 
-/**
- * Generated class for the WarningsModalPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-warnings-modal',
   templateUrl: 'warnings-modal.html'
 })
-
 export class WarningsModalPage {
-
   private errorType: Warning
 
   private title: string
@@ -39,7 +30,8 @@ export class WarningsModalPage {
   ngAfterViewInit() {
     if (this.errorType === Warning.ROOT) {
       this.title = 'Your device is rooted'
-      this.description = 'It seems like you have rooted your device. While we think this is neat, it weakens the security of your device significantly and we multiple mechanisms of AirGap can be circumvented by other apps. Therefore, AirGap is not able to run on this device.'
+      this.description =
+        'It seems like you have rooted your device. While we think this is neat, it weakens the security of your device significantly and we multiple mechanisms of AirGap can be circumvented by other apps. Therefore, AirGap is not able to run on this device.'
       this.imageUrl = './assets/img/root_detection.svg'
       this.handler = () => {
         this.platform.exitApp()
@@ -48,7 +40,8 @@ export class WarningsModalPage {
 
     if (this.errorType === Warning.SCREENSHOT) {
       this.title = 'Screenshot detected'
-      this.description = 'Looks like you just took a screenshot. Make sure that you never take a screenshot you might expose your secret key.'
+      this.description =
+        'Looks like you just took a screenshot. Make sure that you never take a screenshot you might expose your secret key.'
       this.imageUrl = './assets/img/screenshot_detected.svg'
       this.handler = () => {
         this.platform.exitApp()
@@ -57,7 +50,8 @@ export class WarningsModalPage {
 
     if (this.errorType === Warning.SECURE_STORAGE) {
       this.title = 'Device Unsecure'
-      this.description = 'Your lockscreen needs to be setup in order to properly encrypt and protect your secrets. After securing your device, please close and restart AirGap.'
+      this.description =
+        'Your lockscreen needs to be setup in order to properly encrypt and protect your secrets. After securing your device, please close and restart AirGap.'
       this.imageUrl = './assets/img/screenshot_detected.svg'
       this.buttonText = 'Secure Device'
       this.handler = () => {
@@ -67,7 +61,8 @@ export class WarningsModalPage {
 
     if (this.errorType === Warning.NETWORK) {
       this.title = 'Network Connection detected'
-      this.description = 'Looks like you have connected this device to a network. The AirGap App has no network priviledges but it is best to disconnect the device entierly from any network.'
+      this.description =
+        'Looks like you have connected this device to a network. The AirGap App has no network priviledges but it is best to disconnect the device entierly from any network.'
       this.imageUrl = './assets/img/network_connection.svg'
       this.handler = () => {
         this.platform.exitApp()
@@ -76,8 +71,7 @@ export class WarningsModalPage {
 
     if (this.errorType === Warning.INITIAL_DISCLAIMER) {
       this.title = 'AirGap Disclaimer'
-      this.description =
-      `
+      this.description = `
         <p>
         You as the user hereby accept and acknowledge this protocol and all the information provided within to the fullest extent. You as the user confirm that the content this document has been reviewed, tested and understood on their own behalf.
         </p>
@@ -102,7 +96,6 @@ export class WarningsModalPage {
       }
     }
   }
-
 }
 
 export enum Warning {

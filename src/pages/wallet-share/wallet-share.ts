@@ -10,7 +10,6 @@ declare var window: any
   templateUrl: 'wallet-share.html'
 })
 export class WalletSharePage {
-
   private wallet: AirGapWallet
   private walletShareUrl: string
 
@@ -60,10 +59,13 @@ export class WalletSharePage {
       sApp = window.startApp.set(this.walletShareUrl)
     }
 
-    sApp.start(() => {
-      console.log('OK')
-    }, () => {
-      alert('Oops. Something went wrong here. Do you have AirGap Wallet installed on the same Device?')
-    })
+    sApp.start(
+      () => {
+        console.log('OK')
+      },
+      () => {
+        alert('Oops. Something went wrong here. Do you have AirGap Wallet installed on the same Device?')
+      }
+    )
   }
 }

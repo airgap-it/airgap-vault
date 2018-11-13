@@ -6,17 +6,8 @@ import { QRCodeModule } from 'angularx-qrcode'
 import { MaterialIconsModule } from 'ionic2-material-icons'
 
 @NgModule({
-  declarations: [
-    WalletSharePage
-  ],
-  imports: [
-    ComponentsModule,
-    QRCodeModule,
-    MaterialIconsModule,
-    IonicPageModule.forChild(WalletSharePage)
-  ],
-  entryComponents: [
-    WalletSharePage
-  ]
+  declarations: [WalletSharePage],
+  imports: [ComponentsModule, QRCodeModule, MaterialIconsModule, IonicPageModule.forChild(WalletSharePage)],
+  entryComponents: [WalletSharePage]
 })
 export class WalletSharePageModule {}

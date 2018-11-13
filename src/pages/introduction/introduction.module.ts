@@ -4,19 +4,9 @@ import { IntroductionPage } from './introduction'
 import { IonicStorageModule } from '@ionic/storage'
 
 @NgModule({
-  declarations: [
-    IntroductionPage
-  ],
-  imports: [
-    IonicStorageModule,
-    IonicPageModule.forChild(IntroductionPage)
-  ],
-  providers: [
-    Platform
-  ],
-  entryComponents: [
-    IntroductionPage
-  ]
+  declarations: [IntroductionPage],
+  imports: [IonicStorageModule, IonicPageModule.forChild(IntroductionPage)],
+  providers: [Platform],
+  entryComponents: [IntroductionPage]
 })
-
 export class IntroductionPageModule {}

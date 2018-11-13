@@ -11,7 +11,6 @@ import { AirGapWallet } from 'airgap-coin-lib'
   templateUrl: 'transaction-onboarding.html'
 })
 export class TransactionOnboardingPage {
-
   private transaction: Transaction
   private wallet: AirGapWallet
   private hideNextTime = false
@@ -29,5 +28,4 @@ export class TransactionOnboardingPage {
   public goToTransactionSignedPage() {
     this.navController.push(TransactionSignedPage, { transaction: this.transaction, wallet: this.wallet })
   }
-
 }

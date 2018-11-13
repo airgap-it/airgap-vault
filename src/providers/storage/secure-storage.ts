@@ -20,7 +20,6 @@ export interface SecureStorage {
 
 @Injectable()
 export class SecureStorageService {
-
   private create(alias: string, isParanoia: boolean): CordovaSecureStorage {
     return new window.SecureStorage(alias, isParanoia)
   }
@@ -40,33 +39,35 @@ export class SecureStorageService {
   get(alias: string, isParanoia: boolean): Promise<SecureStorage> {
     let secureStorage = this.create(alias, isParanoia)
     return new Promise<SecureStorage>((resolve, reject) => {
-      secureStorage.init(() => {
-        resolve({
-          init: function() {
-            return new Promise<void>((resolve, reject) => {
-              secureStorage.init(resolve, reject)
-            })
-          },
-          setItem: function (key, value) {
-            return new Promise<void>((resolve, reject) => {
-              secureStorage.setItem(key, value, resolve, reject)
-            })
-          },
-          getItem: function(key) {
-            return new Promise<any>((resolve, reject) => {
-              secureStorage.getItem(key, resolve, reject)
-            })
-          },
-          removeItem: function(key) {
-            return new Promise<void>((resolve, reject) => {
-              secureStorage.removeItem(key, resolve, reject)
-            })
-          }
-        })
-      }, (err) => {
-        reject(err)
-      })
+      secureStorage.init(
+        () => {
+          resolve({
+            init: function() {
+              return new Promise<void>((resolve, reject) => {
+                secureStorage.init(resolve, reject)
+              })
+            },
+            setItem: function(key, value) {
+              return new Promise<void>((resolve, reject) => {
+                secureStorage.setItem(key, value, resolve, reject)
+              })
+            },
+            getItem: function(key) {
+              return new Promise<any>((resolve, reject) => {
+                secureStorage.getItem(key, resolve, reject)
+              })
+            },
+            removeItem: function(key) {
+              return new Promise<void>((resolve, reject) => {
+                secureStorage.removeItem(key, resolve, reject)
+              })
+            }
+          })
+        },
+        err => {
+          reject(err)
+        }
+      )
     })
   }
-
 }

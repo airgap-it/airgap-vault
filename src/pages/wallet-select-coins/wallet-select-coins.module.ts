@@ -4,12 +4,7 @@ import { WalletSelectCoinsPage } from './wallet-select-coins'
 import { ComponentsModule } from '../../components/components.module'
 
 @NgModule({
-  declarations: [
-    WalletSelectCoinsPage
-  ],
-  imports: [
-    ComponentsModule,
-    IonicPageModule.forChild(WalletSelectCoinsPage)
-  ]
+  declarations: [WalletSelectCoinsPage],
+  imports: [ComponentsModule, IonicPageModule.forChild(WalletSelectCoinsPage)]
 })
 export class WalletSelectCoinsPageModule {}

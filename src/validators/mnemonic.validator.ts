@@ -2,13 +2,12 @@ import { FormControl } from '@angular/forms'
 import * as bip39 from 'bip39'
 
 export class MnemonicValidator {
-
   static checkMnemonic(mnemonic, wordlist) {
     const words = mnemonic.trim().split(' ')
 
     if (words.length % 3 !== 0) throw new Error('invalid mnemonic')
 
-    words.map(function (word) {
+    words.map((word) => {
       const index = wordlist.indexOf(word)
       if (index === -1) throw new Error('invalid mnemonic')
     })
@@ -35,5 +34,4 @@ export class MnemonicValidator {
 
     return null
   }
-
 }

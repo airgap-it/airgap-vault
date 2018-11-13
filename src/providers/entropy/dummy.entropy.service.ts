@@ -4,7 +4,6 @@ import { Observable } from 'rxjs'
 
 @Injectable()
 export class DummyEntropyService implements IEntropyGenerator {
-
   start(): Promise<void> {
     return Promise.resolve()
   }
@@ -24,5 +23,4 @@ export class DummyEntropyService implements IEntropyGenerator {
   getCollectedEntropyPercentage(): number {
     return 100
   }
-
 }

@@ -11,7 +11,6 @@ const entropyCalculatorWorker = new Worker(blobURL)
 
 @Injectable()
 export class AudioNativeService implements IEntropyGenerator {
-
   private ENTROPY_SIZE = 4096
 
   private collectedEntropyPercentage: number = 0
@@ -21,17 +20,20 @@ export class AudioNativeService implements IEntropyGenerator {
 
   constructor(private platform: Platform) {
     this.entropyObservable = Observable.create(observer => {
-      entropyCalculatorWorker.onmessage = (event) => {
+      entropyCalculatorWorker.onmessage = event => {
         this.collectedEntropyPercentage += event.data.entropyMeasure
         observer.next({
           entropyHex: event.data.entropyHex
         })
       }
-      this.handler = (audioStream) => {
+      this.handler = audioStream => {
         const buffer1 = this.arrayBufferFromIntArray(audioStream.data)
-        entropyCalculatorWorker.postMessage({
-          entropyBuffer: buffer1
-        }, [buffer1])
+        entropyCalculatorWorker.postMessage(
+          {
+            entropyBuffer: buffer1
+          },
+          [buffer1]
+        )
       }
     })
   }
@@ -40,7 +42,6 @@ export class AudioNativeService implements IEntropyGenerator {
     this.collectedEntropyPercentage = 0
     return new Promise((resolve, reject) => {
       this.platform.ready().then(() => {
-
         window.audioinput.start({
           bufferSize: this.ENTROPY_SIZE
         })
@@ -83,5 +84,4 @@ export class AudioNativeService implements IEntropyGenerator {
   getCollectedEntropyPercentage(): number {
     return this.collectedEntropyPercentage / 200
   }
-
 }

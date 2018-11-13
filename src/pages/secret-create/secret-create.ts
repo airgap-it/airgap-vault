@@ -11,10 +11,7 @@ import { SecretsProvider } from '../../providers/secrets/secrets.provider'
   templateUrl: 'secret-create.html'
 })
 export class SecretCreatePage {
-
-  constructor(private navController: NavController, private secretsProvider: SecretsProvider) {
-
-  }
+  constructor(private navController: NavController, private secretsProvider: SecretsProvider) {}
 
   public isRoot(): boolean {
     return this.secretsProvider.currentSecretsList.getValue().length === 0
@@ -35,5 +32,4 @@ export class SecretCreatePage {
   public close() {
     this.navController.popToRoot()
   }
-
 }

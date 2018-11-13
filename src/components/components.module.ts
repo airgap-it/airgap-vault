@@ -34,11 +34,7 @@ import { AmountConverterPipe } from './pipes/amount-converter.pipe'
     FeeConverterPipe,
     AmountConverterPipe
   ],
-  imports: [
-    IonicModule,
-    BrowserModule,
-    MaterialIconsModule
-  ],
+  imports: [IonicModule, BrowserModule, MaterialIconsModule],
   exports: [
     EntropyProgressComponent,
     TouchEntropyComponent,
@@ -55,5 +51,4 @@ import { AmountConverterPipe } from './pipes/amount-converter.pipe'
     AmountConverterPipe
   ]
 })
-
-export class ComponentsModule { }
+export class ComponentsModule {}

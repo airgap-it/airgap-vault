@@ -3,7 +3,6 @@ import { IAirGapTransaction } from 'airgap-coin-lib'
 import BigNumber from 'bignumber.js'
 
 export class Transaction implements IAirGapTransaction {
-
   amount: BigNumber
   blockHeight: string
   data: string
@@ -20,5 +19,4 @@ export class Transaction implements IAirGapTransaction {
 
   payload: string
   publicKey: string
-
 }

@@ -2,7 +2,16 @@ import { Component, NgZone } from '@angular/core'
 import { IonicPage, LoadingController, NavController, NavParams, Platform } from 'ionic-angular'
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import bip39 from 'bip39'
-import { AirGapWallet, SyncProtocolUtils, DeserializedSyncProtocol, SignedTransaction, EncodedType, IAirGapWallet, UnsignedTransaction, IAirGapTransaction } from 'airgap-coin-lib'
+import {
+  AirGapWallet,
+  SyncProtocolUtils,
+  DeserializedSyncProtocol,
+  SignedTransaction,
+  EncodedType,
+  IAirGapWallet,
+  UnsignedTransaction,
+  IAirGapTransaction
+} from 'airgap-coin-lib'
 
 declare var window: any
 
@@ -17,7 +26,6 @@ enum TransactionQRType {
   templateUrl: 'transaction-signed.html'
 })
 export class TransactionSignedPage {
-
   signedTxQr?: string
   broadcastUrl?: string
 
@@ -27,7 +35,14 @@ export class TransactionSignedPage {
 
   qrType: TransactionQRType = 0
 
-  constructor(public loadingCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams, private secretProvider: SecretsProvider, private ngZone: NgZone, private platform: Platform) {
+  constructor(
+    public loadingCtrl: LoadingController,
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private secretProvider: SecretsProvider,
+    private ngZone: NgZone,
+    private platform: Platform
+  ) {
     this.transaction = this.navParams.get('transaction')
     this.wallet = this.navParams.get('wallet')
     this.airGapTx = this.wallet.coinProtocol.getTransactionDetails(this.transaction)
@@ -120,16 +135,18 @@ export class TransactionSignedPage {
       sApp = window.startApp.set(this.broadcastUrl)
     }
 
-    sApp.start(() => {
-      console.log('OK')
-    }, (error) => {
-      console.warn(error)
-      alert('Oops. Something went wrong here. Do you have AirGap Wallet installed on the same Device?')
-    })
+    sApp.start(
+      () => {
+        console.log('OK')
+      },
+      error => {
+        console.warn(error)
+        alert('Oops. Something went wrong here. Do you have AirGap Wallet installed on the same Device?')
+      }
+    )
   }
 
   done() {
     this.navCtrl.popToRoot()
   }
-
 }

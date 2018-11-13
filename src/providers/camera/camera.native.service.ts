@@ -10,7 +10,6 @@ const entropyCalculatorWorker = new Worker(blobURL)
 
 @Injectable()
 export class CameraNativeService implements IEntropyGenerator {
-
   private disabled = false
 
   private cameraIsRunning = false // Prevent multiple start/stops of camera
@@ -35,20 +34,28 @@ export class CameraNativeService implements IEntropyGenerator {
 
   private cameraOptions: any
 
-  constructor(private platform: Platform, private cameraPreview: CameraPreview, private rendererFactory: RendererFactory2, private ngZone: NgZone) {
+  constructor(
+    private platform: Platform,
+    private cameraPreview: CameraPreview,
+    private rendererFactory: RendererFactory2,
+    private ngZone: NgZone
+  ) {
     this.renderer = rendererFactory.createRenderer(null, null)
     this.entropyObservable = Observable.create(observer => {
-      entropyCalculatorWorker.onmessage = (event) => {
+      entropyCalculatorWorker.onmessage = event => {
         this.collectedEntropyPercentage += event.data.entropyMeasure
         observer.next({ entropyHex: event.data.entropyHex })
       }
 
-      this.handler = (base64ImagePayload) => {
+      this.handler = base64ImagePayload => {
         const buffer1 = this.arrayBufferFromBase64(base64ImagePayload)
 
-        entropyCalculatorWorker.postMessage({
-          entropyBuffer: buffer1
-        }, [buffer1])
+        entropyCalculatorWorker.postMessage(
+          {
+            entropyBuffer: buffer1
+          },
+          [buffer1]
+        )
       }
     })
   }
@@ -80,64 +87,78 @@ export class CameraNativeService implements IEntropyGenerator {
     console.log('initCamera')
 
     return new Promise((resolve, reject) => {
-      this.cameraPreview.startCamera(Object.assign({
-        x: 0,
-        y: 0,
-        width: window.screen.width,
-        height: window.screen.height,
-        toBack: true,
-        tapPhoto: false,
-        previewDrag: false,
-        disableExifHeaderStripping: true
-      } as any, this.cameraOptions)).then(() => {
-        this.cameraIsRunning = true
-        if (this.platform.is('ios')) {
-          return this.cameraPreview.setFlashMode('off')
-        }
-        return Promise.resolve()
-      }).then(() => {
-        if (this.disabled) {
-          console.log('not starting, disabled')
-          if (this.cameraIsRunning) {
-            this.stop()
+      this.cameraPreview
+        .startCamera(
+          Object.assign(
+            {
+              x: 0,
+              y: 0,
+              width: window.screen.width,
+              height: window.screen.height,
+              toBack: true,
+              tapPhoto: false,
+              previewDrag: false,
+              disableExifHeaderStripping: true
+            } as any,
+            this.cameraOptions
+          )
+        )
+        .then(() => {
+          this.cameraIsRunning = true
+          if (this.platform.is('ios')) {
+            return this.cameraPreview.setFlashMode('off')
           }
-          return
-        }
-        console.log('camera started.')
-
-        // inject css now
-        this.injectCSS()
-
-        // start camera interval
-        this.cameraInterval = window.setInterval(() => {
-          this.cameraIsTakingPhoto = true
-          this.cameraPreview.takePicture({
-            width: this.VIDEO_SIZE,
-            height: this.VIDEO_SIZE,
-            quality: this.VIDEO_QUALITY
-          }).then(result => {
-            this.cameraIsTakingPhoto = false
-            if (this.handler) {
-              this.handler(result)
-            }
-          }).catch(err => {
-            if (err === 'Camera not started') {
-              if (this.cameraInterval) {
-                clearInterval(this.cameraInterval)
+          return Promise.resolve()
+        })
+        .then(
+          () => {
+            if (this.disabled) {
+              console.log('not starting, disabled')
+              if (this.cameraIsRunning) {
+                this.stop()
               }
+              return
             }
-          })
-        }, this.VIDEO_FREQUENCY)
+            console.log('camera started.')
 
-        resolve()
-      }, error => {
-        console.warn('startCamera error: ', error)
-        if (error === 'Camera already started!') {
-          this.stop().then(() => {
-            return this.initCamera()
-          })
-        }
-      })
+            // inject css now
+            this.injectCSS()
+
+            // start camera interval
+            this.cameraInterval = window.setInterval(() => {
+              this.cameraIsTakingPhoto = true
+              this.cameraPreview
+                .takePicture({
+                  width: this.VIDEO_SIZE,
+                  height: this.VIDEO_SIZE,
+                  quality: this.VIDEO_QUALITY
+                })
+                .then(result => {
+                  this.cameraIsTakingPhoto = false
+                  if (this.handler) {
+                    this.handler(result)
+                  }
+                })
+                .catch(err => {
+                  if (err === 'Camera not started') {
+                    if (this.cameraInterval) {
+                      clearInterval(this.cameraInterval)
+                    }
+                  }
+                })
+            }, this.VIDEO_FREQUENCY)
+
+            resolve()
+          },
+          error => {
+            console.warn('startCamera error: ', error)
+            if (error === 'Camera already started!') {
+              this.stop().then(() => {
+                return this.initCamera()
+              })
+            }
+          }
+        )
     })
   }
 
@@ -163,13 +184,16 @@ export class CameraNativeService implements IEntropyGenerator {
       clearInterval(this.cameraInterval)
     }
     return new Promise((resolve, reject) => {
-      this.cameraPreview.stopCamera().then(() => {
-        this.cameraIsRunning = false
-        console.log('camera stopped.')
-      }, error => {
-        console.log('camera could not be stopped.')
-        reject(error)
-      })
+      this.cameraPreview.stopCamera().then(
+        () => {
+          this.cameraIsRunning = false
+          console.log('camera stopped.')
+        },
+        error => {
+          console.log('camera could not be stopped.')
+          reject(error)
+        }
+      )
     })
   }
 

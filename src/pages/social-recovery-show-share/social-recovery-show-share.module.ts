@@ -4,15 +4,8 @@ import { SocialRecoveryShowSharePage } from './social-recovery-show-share'
 import { ComponentsModule } from '../../components/components.module'
 
 @NgModule({
-  declarations: [
-    SocialRecoveryShowSharePage
-  ],
-  imports: [
-    ComponentsModule,
-    IonicPageModule.forChild(SocialRecoveryShowSharePage)
-  ],
-  entryComponents: [
-    SocialRecoveryShowSharePage
-  ]
+  declarations: [SocialRecoveryShowSharePage],
+  imports: [ComponentsModule, IonicPageModule.forChild(SocialRecoveryShowSharePage)],
+  entryComponents: [SocialRecoveryShowSharePage]
 })
 export class SocialRecoveryShowSharePageModule {}

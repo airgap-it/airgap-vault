@@ -6,17 +6,8 @@ import { ComponentsModule } from '../../components/components.module'
 import { IonicStorageModule } from '@ionic/storage'
 
 @NgModule({
-  declarations: [
-    TransactionOnboardingPage
-  ],
-  imports: [
-    ComponentsModule,
-    TransactionSignedPageModule,
-    IonicStorageModule,
-    IonicPageModule.forChild(TransactionOnboardingPage)
-  ],
-  entryComponents: [
-    TransactionOnboardingPage
-  ]
+  declarations: [TransactionOnboardingPage],
+  imports: [ComponentsModule, TransactionSignedPageModule, IonicStorageModule, IonicPageModule.forChild(TransactionOnboardingPage)],
+  entryComponents: [TransactionOnboardingPage]
 })
 export class TransactionOnboardingPageModule {}

@@ -4,7 +4,6 @@ import { AirGapWallet } from 'airgap-coin-lib'
 
 @Injectable()
 export class TransactionsProvider {
-
   constructFromPayload(txObj: any, wallet: AirGapWallet): Transaction {
     const tx = new Transaction()
     tx.publicKey = wallet.publicKey
@@ -20,5 +19,4 @@ export class TransactionsProvider {
 
     return tx
   }
-
 }

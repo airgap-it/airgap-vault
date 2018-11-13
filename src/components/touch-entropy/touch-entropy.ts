@@ -10,9 +10,7 @@ const entropyCalculatorWorker = new Worker(blobURL)
   selector: 'touch-entropy',
   templateUrl: 'touch-entropy.html'
 })
-
 export class TouchEntropyComponent implements OnInit, IEntropyGenerator {
-
   @Input()
   cursorSize = 2
 
@@ -40,12 +38,12 @@ export class TouchEntropyComponent implements OnInit, IEntropyGenerator {
 
   constructor(private ngZone: NgZone, private renderer: Renderer2) {
     this.entropyObservable = Observable.create(observer => {
-      entropyCalculatorWorker.onmessage = (event) => {
+      entropyCalculatorWorker.onmessage = event => {
         this.collectedEntropyPercentage += event.data.entropyMeasure
         observer.next({ entropyHex: event.data.entropyHex })
       }
 
-      this.handler = (entropy) => {
+      this.handler = entropy => {
         const buffer1 = this.arrayBufferFromIntArray(entropy)
         entropyCalculatorWorker.postMessage({ entropyBuffer: buffer1 }, [buffer1])
       }
@@ -71,27 +69,27 @@ export class TouchEntropyComponent implements OnInit, IEntropyGenerator {
   start(): Promise<void> {
     this.collectedEntropyPercentage = 0
     return new Promise((resolve, reject) => {
-      this.renderer.listen(this.canvas, 'mousedown', (e) => {
+      this.renderer.listen(this.canvas, 'mousedown', e => {
         this.isDrawing = true
       })
 
-      this.renderer.listen(this.canvas, 'touchstart', (e) => {
+      this.renderer.listen(this.canvas, 'touchstart', e => {
         this.isDrawing = true
       })
 
-      this.renderer.listen(this.canvas, 'mouseup', (e) => {
+      this.renderer.listen(this.canvas, 'mouseup', e => {
         this.isDrawing = false
       })
 
-      this.renderer.listen(this.canvas, 'touchend', (e) => {
+      this.renderer.listen(this.canvas, 'touchend', e => {
         this.isDrawing = false
       })
 
-      this.renderer.listen(this.canvas, 'mousemove', (e) => {
+      this.renderer.listen(this.canvas, 'mousemove', e => {
         if (this.isDrawing) this.collectEntropy(e)
       })
 
-      this.renderer.listen(this.canvas, 'touchmove', (e) => {
+      this.renderer.listen(this.canvas, 'touchmove', e => {
         if (this.isDrawing) this.collectEntropy(e)
       })
 
@@ -110,11 +108,14 @@ export class TouchEntropyComponent implements OnInit, IEntropyGenerator {
     let x = e.clientX || e.touches[0].clientX
     let y = e.clientY || e.touches[0].clientY
 
-    let currX = Math.ceil((x - this.rectangle.left) / (this.rectangle.right - this.rectangle.left) * this.canvas.width)
-    let currY = Math.ceil((y - this.rectangle.top) / (this.rectangle.bottom - this.rectangle.top) * this.canvas.height) - 56
+    let currX = Math.ceil(((x - this.rectangle.left) / (this.rectangle.right - this.rectangle.left)) * this.canvas.width)
+    let currY = Math.ceil(((y - this.rectangle.top) / (this.rectangle.bottom - this.rectangle.top)) * this.canvas.height) - 56
 
     if (this.getRandomIntInclusive(0, 100) <= this.randomFactorInPercent) {
-      let timeStampInMs = window.performance && window.performance.now && window.performance.timing && window.performance.timing.navigationStart ? window.performance.now() + window.performance.timing.navigationStart : Date.now()
+      let timeStampInMs =
+        window.performance && window.performance.now && window.performance.timing && window.performance.timing.navigationStart
+          ? window.performance.now() + window.performance.timing.navigationStart
+          : Date.now()
 
       if (this.handler) {
         this.handler([currX, currY, timeStampInMs])
@@ -156,5 +157,4 @@ export class TouchEntropyComponent implements OnInit, IEntropyGenerator {
   getCollectedEntropyPercentage(): number {
     return this.collectedEntropyPercentage / 10
   }
-
 }

@@ -10,7 +10,6 @@ const entropyCalculatorWorker = new Worker(blobURL)
 
 @Injectable()
 export class CameraBrowserService implements IEntropyGenerator {
-
   private disabled = false
 
   private cameraIsRunning = false // Prevent multiple start/stops of camera
@@ -38,18 +37,26 @@ export class CameraBrowserService implements IEntropyGenerator {
   private videoElement: any
   private videoStream: any
 
-  constructor(private platform: Platform, private cameraPreview: CameraPreview, private rendererFactory: RendererFactory2, private ngZone: NgZone) {
+  constructor(
+    private platform: Platform,
+    private cameraPreview: CameraPreview,
+    private rendererFactory: RendererFactory2,
+    private ngZone: NgZone
+  ) {
     this.renderer = rendererFactory.createRenderer(null, null)
     this.entropyObservable = Observable.create(observer => {
-      entropyCalculatorWorker.onmessage = (event) => {
+      entropyCalculatorWorker.onmessage = event => {
         this.collectedEntropyPercentage += event.data.entropyMeasure
         observer.next({ entropyHex: event.data.entropyHex })
       }
-      this.handler = (buffer1) => {
+      this.handler = buffer1 => {
         const uintArray = this.arrayBufferFromUint8Array(buffer1)
-        entropyCalculatorWorker.postMessage({
-          entropyBuffer: uintArray
-        }, [uintArray])
+        entropyCalculatorWorker.postMessage(
+          {
+            entropyBuffer: uintArray
+          },
+          [uintArray]
+        )
       }
     })
   }
@@ -78,8 +85,12 @@ export class CameraBrowserService implements IEntropyGenerator {
     }
 
     try {
-      this.videoStream.getTracks().forEach(function (track) { track.stop() })
-    } catch (e) { console.error(e) }
+      this.videoStream.getTracks().forEach(function(track) {
+        track.stop()
+      })
+    } catch (e) {
+      console.error(e)
+    }
     return Promise.resolve()
   }
 
@@ -110,14 +121,19 @@ export class CameraBrowserService implements IEntropyGenerator {
     this.videoElement = element
     const video = this.videoElement.nativeElement
 
-    navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
-      this.videoStream = stream
-      video.src = window.URL.createObjectURL(stream)
-      video.play()
-    }).catch(console.error)
+    navigator.mediaDevices
+      .getUserMedia(constraints)
+      .then(stream => {
+        this.videoStream = stream
+        video.src = window.URL.createObjectURL(stream)
+        video.play()
+      })
+      .catch(console.error)
 
     this.cameraInterval = window.setInterval(() => {
-      if (video.videoWidth === 0) { return }
+      if (video.videoWidth === 0) {
+        return
+      }
       let canvas = document.createElement('canvas')
 
       let context = canvas.getContext('2d')
@@ -126,6 +142,5 @@ export class CameraBrowserService implements IEntropyGenerator {
       let buffer = context.getImageData(0, 0, video.videoWidth, video.videoHeight).data
       this.handler(buffer)
     }, this.VIDEO_FREQUENCY / 5)
-
   }
 }

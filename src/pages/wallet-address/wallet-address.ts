@@ -11,10 +11,15 @@ import { Clipboard } from '@ionic-native/clipboard'
   templateUrl: 'wallet-address.html'
 })
 export class WalletAddressPage {
-
   private wallet: AirGapWallet
 
-  constructor(private popoverCtrl: PopoverController, private toastController: ToastController, private clipboard: Clipboard, private navController: NavController, private navParams: NavParams) {
+  constructor(
+    private popoverCtrl: PopoverController,
+    private toastController: ToastController,
+    private clipboard: Clipboard,
+    private navController: NavController,
+    private navParams: NavParams
+  ) {
     this.wallet = this.navParams.get('wallet')
   }
 

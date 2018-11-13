@@ -13,7 +13,10 @@ export class FilterWalletsPipe implements PipeTransform {
     if (!args.symbol) {
       return items
     } else {
-      return items.filter(wallet => (wallet.coinProtocol.symbol.toLowerCase().includes(args.symbol) || wallet.coinProtocol.name.toLowerCase().includes(args.symbol)))
+      return items.filter(
+        wallet =>
+          wallet.coinProtocol.symbol.toLowerCase().includes(args.symbol) || wallet.coinProtocol.name.toLowerCase().includes(args.symbol)
+      )
     }
   }
 }

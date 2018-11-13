@@ -6,16 +6,9 @@ import { SecureStorageFactory } from '../../providers/storage/secure-storage.fac
 import { IonicStorageModule } from '@ionic/storage'
 
 @NgModule({
-  declarations: [
-    WarningsModalPage
-  ],
-  imports: [
-    IonicPageModule.forChild(WarningsModalPage),
-    IonicStorageModule
-  ],
-  entryComponents: [
-    WarningsModalPage
-  ],
+  declarations: [WarningsModalPage],
+  imports: [IonicPageModule.forChild(WarningsModalPage), IonicStorageModule],
+  entryComponents: [WarningsModalPage],
   providers: [
     Platform,
     {

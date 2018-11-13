@@ -11,7 +11,6 @@ import { AirGapWallet, UnsignedTransaction, IAirGapTransaction } from 'airgap-co
   templateUrl: 'transaction-detail.html'
 })
 export class TransactionDetailPage {
-
   public transaction: UnsignedTransaction
   public wallet: AirGapWallet
   public airGapTx: IAirGapTransaction
@@ -33,5 +32,4 @@ export class TransactionDetailPage {
       }
     })
   }
-
 }

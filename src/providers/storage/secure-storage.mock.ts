@@ -3,7 +3,6 @@ import { SecureStorage } from './secure-storage'
 
 @Injectable()
 export class SecureStorageServiceMock {
-
   isSecure = 1
 
   constructor() {
@@ -61,5 +60,4 @@ export class SecureStorageServiceMock {
       })
     })
   }
-
 }

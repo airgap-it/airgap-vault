@@ -10,7 +10,6 @@ const hashWorker = new Worker(blobURL)
 
 @Injectable()
 export class EntropyService {
-
   ENTROPY_SIZE = 4096
 
   entropyGenerators: IEntropyGenerator[] = []
@@ -41,19 +40,23 @@ export class EntropyService {
     hashWorker.postMessage({ call: 'init', secureRandom: Array.from(secureRandomArray) })
 
     for (let generator of this.entropyGenerators) {
-      promises.push(generator.start().then(() => {
-        console.log('generator started')
-        let entropySubscription = generator.getEntropyUpdateObservable().subscribe(result => {
-          try {
-            hashWorker.postMessage({ entropyHex: result.entropyHex, call: 'update' })
-          } catch (error) {
-            console.warn(error)
-          }
-          if (this.entropyUpdateObserver) { this.entropyUpdateObserver.next(void 0) }
+      promises.push(
+        generator.start().then(() => {
+          console.log('generator started')
+          let entropySubscription = generator.getEntropyUpdateObservable().subscribe(result => {
+            try {
+              hashWorker.postMessage({ entropyHex: result.entropyHex, call: 'update' })
+            } catch (error) {
+              console.warn(error)
+            }
+            if (this.entropyUpdateObserver) {
+              this.entropyUpdateObserver.next(void 0)
+            }
+          })
+          this.entropySubscriptions.push(entropySubscription)
+          return
         })
-        this.entropySubscriptions.push(entropySubscription)
-        return
-      }))
+      )
     }
     return Promise.all(promises)
   }
@@ -84,7 +87,7 @@ export class EntropyService {
 
   getEntropyAsHex(): Promise<string> {
     return new Promise((resolve, reject) => {
-      hashWorker.onmessage = (event) => {
+      hashWorker.onmessage = event => {
         const secureRandomArray = new Uint8Array(this.ENTROPY_SIZE)
         window.crypto.getRandomValues(secureRandomArray)
 
@@ -98,5 +101,4 @@ export class EntropyService {
       hashWorker.postMessage({ call: 'digest' })
     })
   }
-
 }

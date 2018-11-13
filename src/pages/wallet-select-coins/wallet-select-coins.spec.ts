@@ -15,7 +15,6 @@ import { IonicStorageModule } from '@ionic/storage'
 import { By } from '@angular/platform-browser'
 
 describe('Wallet-Select-Coin Component', () => {
-
   let fixture: ComponentFixture<WalletSelectCoinsPage>
   let component: WalletSelectCoinsPage
 

@@ -15,7 +15,6 @@ import { StartupChecksProvider } from './startup-checks.provider'
 import { DeviceProvider } from '../device/device'
 
 describe('StartupCheck Provider', () => {
-
   let startupChecksProvider: StartupChecksProvider
   let storageProvider: Storage
   let secureStorage: SecureStorageServiceMock
@@ -55,54 +54,66 @@ describe('StartupCheck Provider', () => {
     expect(startupChecksProvider instanceof StartupChecksProvider).toBe(true)
   })
 
-  it('should should show root modal if device is rooted', async (done) => {
+  it('should should show root modal if device is rooted', async done => {
     deviceProvider.isRooted = 1
 
-    startupChecksProvider.initChecks().then(() => {
-      done()
-    }).catch(consequence => {
-      expect(consequence.name).toBe('rootCheck')
-      done()
-    })
+    startupChecksProvider
+      .initChecks()
+      .then(() => {
+        done()
+      })
+      .catch(consequence => {
+        expect(consequence.name).toBe('rootCheck')
+        done()
+      })
   })
 
-  it('should should show disclaimer modal if the disclaimer has not been accepted yet', async (done) => {
+  it('should should show disclaimer modal if the disclaimer has not been accepted yet', async done => {
     await storageProvider.set('DISCLAIMER_INITIAL', false)
 
-    startupChecksProvider.initChecks().then(() => {
-      expect(true).toEqual(false) // we should not get here
-      done()
-    }).catch(consequence => {
-      expect(consequence.name).toBe('disclaimerAcceptedCheck')
-      done()
-    })
+    startupChecksProvider
+      .initChecks()
+      .then(() => {
+        expect(true).toEqual(false) // we should not get here
+        done()
+      })
+      .catch(consequence => {
+        expect(consequence.name).toBe('disclaimerAcceptedCheck')
+        done()
+      })
   })
 
-  it('should should show the introduction modal if the introduction has not been accepted yet', async (done) => {
+  it('should should show the introduction modal if the introduction has not been accepted yet', async done => {
     await storageProvider.set('INTRODUCTION_INITIAL', false)
 
-    startupChecksProvider.initChecks().then(() => {
-      expect(true).toEqual(false) // we should not get here
-      done()
-    }).catch(consequence => {
-      expect(consequence.name).toBe('introductionAcceptedCheck')
-      done()
-    })
+    startupChecksProvider
+      .initChecks()
+      .then(() => {
+        expect(true).toEqual(false) // we should not get here
+        done()
+      })
+      .catch(consequence => {
+        expect(consequence.name).toBe('introductionAcceptedCheck')
+        done()
+      })
   })
 
-  it('should should show the device security modal if device is not secure', async (done) => {
+  it('should should show the device security modal if device is not secure', async done => {
     secureStorage.isSecure = 0
 
-    startupChecksProvider.initChecks().then(() => {
-      expect(true).toEqual(false) // we should not get here
-      done()
-    }).catch(consequence => {
-      expect(consequence.name).toBe('deviceSecureCheck')
-      done()
-    })
+    startupChecksProvider
+      .initChecks()
+      .then(() => {
+        expect(true).toEqual(false) // we should not get here
+        done()
+      })
+      .catch(consequence => {
+        expect(consequence.name).toBe('deviceSecureCheck')
+        done()
+      })
   })
 
-  it('should resolve is everything is ok', async (done) => {
+  it('should resolve is everything is ok', async done => {
     await storageProvider.set('DISCLAIMER_INITIAL', true)
     await storageProvider.set('INTRODUCTION_INITIAL', true)
     secureStorage.isSecure = 1
@@ -112,5 +123,4 @@ describe('StartupCheck Provider', () => {
       done()
     })
   })
-
 })

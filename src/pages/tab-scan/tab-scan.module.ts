@@ -6,21 +6,9 @@ import { ScannerProvider } from '../../providers/scanner/scanner'
 import { ZXingScannerModule } from '@zxing/ngx-scanner'
 
 @NgModule({
-  declarations: [
-    TabScanPage
-  ],
-  imports: [
-    ComponentsModule,
-    ZXingScannerModule,
-    IonicPageModule.forChild(TabScanPage)
-  ],
-  providers: [
-    ScannerProvider,
-    Platform
-  ],
-  entryComponents: [
-    TabScanPage
-  ]
+  declarations: [TabScanPage],
+  imports: [ComponentsModule, ZXingScannerModule, IonicPageModule.forChild(TabScanPage)],
+  providers: [ScannerProvider, Platform],
+  entryComponents: [TabScanPage]
 })
-
 export class TabScanPageModule {}

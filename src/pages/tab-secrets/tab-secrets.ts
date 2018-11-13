@@ -6,23 +6,21 @@ import { SecretCreatePage } from '../secret-create/secret-create'
 import { SecretEditPage } from '../secret-edit/secret-edit'
 import { Observable } from 'rxjs'
 
-/**
- * Generated class for the TabSecretsPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-tab-secrets',
   templateUrl: 'tab-secrets.html'
 })
 export class TabSecretsPage {
-
   private secrets: Observable<Secret[]>
 
-  constructor(public modalController: ModalController, public navController: NavController, private secretsProvider: SecretsProvider, private alertController: AlertController, private toastController: ToastController) {
+  constructor(
+    public modalController: ModalController,
+    public navController: NavController,
+    private secretsProvider: SecretsProvider,
+    private alertController: AlertController,
+    private toastController: ToastController
+  ) {
     this.secrets = this.secretsProvider.currentSecretsList.asObservable()
   }
 
@@ -43,34 +41,36 @@ export class TabSecretsPage {
   }
 
   deleteSecret(secret: Secret) {
-    this.alertController.create({
-      title: 'Delete ' + secret.label,
-      subTitle: 'Are you sure you want to delete ' + secret.label + '?',
-      buttons: [
-        {
-          text: 'Delete',
-          handler: () => {
-            this.secretsProvider.remove(secret)
+    this.alertController
+      .create({
+        title: 'Delete ' + secret.label,
+        subTitle: 'Are you sure you want to delete ' + secret.label + '?',
+        buttons: [
+          {
+            text: 'Delete',
+            handler: () => {
+              this.secretsProvider.remove(secret)
 
-            let toast = this.toastController.create({
-              message: 'Secret deleted',
-              duration: 5000,
-              showCloseButton: true,
-              closeButtonText: 'Undo'
-            })
+              let toast = this.toastController.create({
+                message: 'Secret deleted',
+                duration: 5000,
+                showCloseButton: true,
+                closeButtonText: 'Undo'
+              })
 
-            toast.onDidDismiss((data, role) => {
-              if (role === 'close') {
-                this.secretsProvider.addOrUpdateSecret(secret)
-              }
-            })
-            toast.present()
+              toast.onDidDismiss((data, role) => {
+                if (role === 'close') {
+                  this.secretsProvider.addOrUpdateSecret(secret)
+                }
+              })
+              toast.present()
+            }
+          },
+          {
+            text: 'Cancel'
           }
-        },
-        {
-          text: 'Cancel'
-        }
-      ]
-    }).present()
+        ]
+      })
+      .present()
   }
 }

@@ -8,24 +8,29 @@ import { Clipboard } from '@ionic-native/clipboard'
   template: `
     <ion-list no-lines no-detail>
       <ion-list-header>Wallet Settings</ion-list-header>
-      <button ion-item detail-none (click)='copyAddressToClipboard()'>
-        <ion-icon name='clipboard' color='dark' item-end></ion-icon>
+      <button ion-item detail-none (click)="copyAddressToClipboard()">
+        <ion-icon name="clipboard" color="dark" item-end></ion-icon>
         Copy address
       </button>
-      <button ion-item detail-none (click)='delete()'>
-        <ion-icon name='trash' color='dark' item-end></ion-icon>
+      <button ion-item detail-none (click)="delete()">
+        <ion-icon name="trash" color="dark" item-end></ion-icon>
         Delete
       </button>
     </ion-list>
   `
 })
-
 export class WalletEditPopoverComponent {
-
   private wallet: AirGapWallet
   private onDelete: Function
 
-  constructor(private alertCtrl: AlertController, private clipboard: Clipboard, private toastController: ToastController, private navParams: NavParams, private secretsProvider: SecretsProvider, private viewCtrl: ViewController) {
+  constructor(
+    private alertCtrl: AlertController,
+    private clipboard: Clipboard,
+    private toastController: ToastController,
+    private navParams: NavParams,
+    private secretsProvider: SecretsProvider,
+    private viewCtrl: ViewController
+  ) {
     this.wallet = this.navParams.get('wallet')
     this.onDelete = this.navParams.get('onDelete')
   }
@@ -71,5 +76,4 @@ export class WalletEditPopoverComponent {
     })
     alert.present()
   }
-
 }

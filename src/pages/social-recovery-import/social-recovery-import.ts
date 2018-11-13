@@ -5,28 +5,18 @@ import { SecretEditPage } from '../secret-edit/secret-edit'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { MnemonicValidator } from '../../validators/mnemonic.validator'
 
-/**
- * Generated class for the SocialRecoverySetupPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-social-recovery-import',
   templateUrl: 'social-recovery-import.html'
 })
 export class SocialRecoveryImportPage {
-
   private numberOfShares: number
   private shares: string[]
 
   socialRecoveryForm: FormGroup
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder) {
-
-  }
+  constructor(public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder) {}
 
   setNumberOfShares(i: number) {
     this.numberOfShares = i
@@ -58,7 +48,8 @@ export class SocialRecoveryImportPage {
   }
 
   getNumberArray(i: number): number[] {
-    return Array(i).fill(0).map((x, i) => i)
+    return Array(i)
+      .fill(0)
+      .map((x, i) => i)
   }
-
 }

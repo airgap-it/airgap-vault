@@ -4,7 +4,6 @@ import bip39 from 'bip39'
 import secretJS from 'secrets.js-grempe'
 
 export class BIP39Signer implements Signer {
-
   readonly checkSumLength = 10
 
   private getOffsetMapping(share: string): any {
@@ -51,7 +50,12 @@ export class BIP39Signer implements Signer {
     const shares = secretJS.share(seed + secretDigester.hex().slice(0, this.checkSumLength), numberOfShares, threshold)
     const calculatedShares = []
     for (let i = 0; i < shares.length; i++) {
-      let paddedShare = shares[i].concat(Array(29).fill(0).map(() => this.getRandomIntInclusive(0, 9)).join(''))
+      let paddedShare = shares[i].concat(
+        Array(29)
+          .fill(0)
+          .map(() => this.getRandomIntInclusive(0, 9))
+          .join('')
+      )
       calculatedShares[i] = bip39.entropyToMnemonic(paddedShare.slice(0, 64)) + ' ' + bip39.entropyToMnemonic(paddedShare.slice(64, 128))
     }
     return calculatedShares
@@ -64,7 +68,10 @@ export class BIP39Signer implements Signer {
       let words = shares[i].split(' ')
       let firstHalf = words.slice(0, 24)
       let secondHalf = words.slice(24, words.length)
-      translatedShares[i] = (bip39.mnemonicToEntropy(firstHalf.join(' ')) + bip39.mnemonicToEntropy(secondHalf.join(' '))).substr(0, offset.offset)
+      translatedShares[i] = (bip39.mnemonicToEntropy(firstHalf.join(' ')) + bip39.mnemonicToEntropy(secondHalf.join(' '))).substr(
+        0,
+        offset.offset
+      )
     }
     const secretDigester = sha3_256.create()
     const combine = secretJS.combine(translatedShares)
@@ -75,9 +82,10 @@ export class BIP39Signer implements Signer {
     let checksum = secretDigester.hex().slice(0, this.checkSumLength)
     let checksum2 = combine.substr(-this.checkSumLength)
     if (checksum !== checksum2) {
-      throw new Error('Checksum error, either the passed shares were generated for different secrets or the amount of shares is below the threshold')
+      throw new Error(
+        'Checksum error, either the passed shares were generated for different secrets or the amount of shares is below the threshold'
+      )
     }
     return bip39.entropyToMnemonic(seed)
   }
-
 }
