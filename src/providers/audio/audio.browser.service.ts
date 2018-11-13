@@ -22,18 +22,16 @@ export class AudioBrowserService implements IEntropyGenerator {
 
   constructor() {
     this.entropyObservable = Observable.create(observer => {
+      entropyCalculatorWorker.onmessage = (event) => {
+        this.collectedEntropyPercentage += event.data.entropyMeasure
+        observer.next({
+          entropyHex: event.data.entropyHex
+        })
+      }
       this.handler = (event) => {
-        const data = (event as any).inputBuffer.getChannelData(0)
-        const buffer1 = this.arrayBufferFromIntArray(data)
-
-        entropyCalculatorWorker.onmessage = (event) => {
-          this.collectedEntropyPercentage += event.data.entropyHex
-          observer.next({ entropy: buffer1 })
-        }
-
+        const data = event.inputBuffer.getChannelData(0)
+        let buffer1 = this.arrayBufferFromIntArray(data)
         entropyCalculatorWorker.postMessage({ entropyBuffer: buffer1 }, [buffer1])
-
-        observer.next(data)
       }
     })
 
@@ -47,14 +45,17 @@ export class AudioBrowserService implements IEntropyGenerator {
   }
 
   start(): Promise<void> {
+    this.collectedEntropyPercentage = 0
     return new Promise((resolve, reject) => {
       navigator.getUserMedia({ video: false, audio: true }, (stream) => {
         const audioContext = new AudioContext()
-        this.microphoneStreamSource = audioContext.createMediaStreamSource(stream)
-        this.scriptProcessor = audioContext.createScriptProcessor(this.ENTROPY_SIZE, 1, 1)
-        this.scriptProcessor.onaudioprocess = this.handler
-        this.microphoneStreamSource.connect(this.scriptProcessor)
-        this.scriptProcessor.connect(audioContext.destination)
+        const microphoneStreamSource = audioContext.createMediaStreamSource(stream)
+        const scriptProcessor = audioContext.createScriptProcessor(this.ENTROPY_SIZE, 1, 1)
+        scriptProcessor.onaudioprocess = (event) => {
+          this.handler(event)
+        }
+        microphoneStreamSource.connect(scriptProcessor)
+        scriptProcessor.connect(audioContext.destination)
         resolve()
       }, () => {
         reject()
@@ -64,8 +65,14 @@ export class AudioBrowserService implements IEntropyGenerator {
 
   stop(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.microphoneStreamSource.disconnect()
-      this.scriptProcessor.disconnect()
+      if (this.microphoneStreamSource) {
+        this.microphoneStreamSource.stop()
+        this.microphoneStreamSource.disconnect()
+      }
+      if (this.scriptProcessor) {
+        this.scriptProcessor.stop()
+        this.scriptProcessor.disconnect()
+      }
       resolve()
     })
   }
@@ -74,19 +81,18 @@ export class AudioBrowserService implements IEntropyGenerator {
     return this.entropyObservable
   }
 
-  private arrayBufferFromIntArray(array: number[]) {
-    const buffer = new ArrayBuffer(array.length * 2)
-    const bufView = new Uint8Array(buffer)
+  private arrayBufferFromIntArray(array: Float32Array) {
+    const buffer = new ArrayBuffer(array.length)
+    const bufView = new Float32Array(buffer)
 
     for (let i = 0; i < array.length; i++) {
-      bufView[i] = Math.abs(array[i] * 10000)
+      bufView[i] = array[i]
     }
-
     return buffer
   }
 
   getCollectedEntropyPercentage(): number {
-    return this.collectedEntropyPercentage
+    return this.collectedEntropyPercentage / 200
   }
 
 }

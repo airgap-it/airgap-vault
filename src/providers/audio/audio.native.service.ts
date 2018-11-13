@@ -21,15 +21,14 @@ export class AudioNativeService implements IEntropyGenerator {
 
   constructor(private platform: Platform) {
     this.entropyObservable = Observable.create(observer => {
+      entropyCalculatorWorker.onmessage = (event) => {
+        this.collectedEntropyPercentage += event.data.entropyMeasure
+        observer.next({
+          entropyHex: event.data.entropyHex
+        })
+      }
       this.handler = (audioStream) => {
         const buffer1 = this.arrayBufferFromIntArray(audioStream.data)
-
-        entropyCalculatorWorker.onmessage = (event) => {
-          this.collectedEntropyPercentage += event.data.entropyMeasure
-          observer.next({
-            entropyHex: event.data.entropyHex
-          })
-        }
         entropyCalculatorWorker.postMessage({
           entropyBuffer: buffer1
         }, [buffer1])

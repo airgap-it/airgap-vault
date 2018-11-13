@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ViewChild, RendererFactory2, Renderer2 } from '@angular/core'
+import { ChangeDetectorRef, Component, ViewChild, RendererFactory2, Renderer2, ElementRef } from '@angular/core'
 import { NavController, Platform } from 'ionic-angular'
 import { SecretRulesPage } from '../secret-rules/secret-rules'
 import { Secret } from '../../models/secret'
@@ -18,7 +18,12 @@ declare var window: any
 
 export class SecretGeneratePage {
 
+  public isBrowser = false
+
   private renderer: Renderer2
+
+  @ViewChild('videoElement')
+  videoElement: ElementRef
 
   @ViewChild('touchEntropy')
   touchEntropy: TouchEntropyComponent
@@ -38,10 +43,14 @@ export class SecretGeneratePage {
     private androidPermissions: AndroidPermissions,
     private rendererFactory: RendererFactory2
   ) {
+    this.isBrowser = !this.platform.is('cordova')
     this.renderer = this.rendererFactory.createRenderer(null, null)
   }
 
   ionViewWillEnter() {
+    if (this.isBrowser) {
+      this.cameraService.setVideoElement(this.videoElement)
+    }
     this.cameraService.viewWillEnter()
     this.injectCSS()
     this.platform.ready()

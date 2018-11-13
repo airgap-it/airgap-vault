@@ -1,4 +1,4 @@
-import { Component, RendererFactory2 } from '@angular/core'
+import { ElementRef, Component, RendererFactory2, ViewChild } from '@angular/core'
 import { AlertController, IonicPage, NavController, Platform } from 'ionic-angular'
 import { Transaction } from '../../models/transaction.model'
 import { ScannerProvider } from '../../providers/scanner/scanner'
@@ -6,6 +6,7 @@ import { TransactionsProvider } from '../../providers/transactions/transactions'
 import { AndroidPermissions } from '@ionic-native/android-permissions'
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import { SchemeRoutingProvider } from '../../providers/scheme-routing/scheme-routing'
+import { ZXingScannerComponent } from '@zxing/ngx-scanner'
 
 @IonicPage()
 @Component({
@@ -14,16 +15,31 @@ import { SchemeRoutingProvider } from '../../providers/scheme-routing/scheme-rou
 })
 export class TabScanPage {
 
+  @ViewChild('scanner')
+  zxingScanner: ZXingScannerComponent
+  availableDevices: MediaDeviceInfo[]
+  selectedDevice: MediaDeviceInfo
+  scannerEnabled = true
+
+  public isBrowser = false
+
   private renderer
+  hasCameras = false
+
+  private webscanner: any
+  private selectedCamera
 
   constructor(private schemeRouting: SchemeRoutingProvider, private alertCtrl: AlertController, private androidPermissions: AndroidPermissions, private rendererFactory: RendererFactory2, private navController: NavController, private platform: Platform, private secretsProvider: SecretsProvider, private transactionProvider: TransactionsProvider, private scanner: ScannerProvider) {
+    this.isBrowser = !this.platform.is('cordova')
     this.renderer = this.rendererFactory.createRenderer(null, null)
   }
 
   ionViewWillEnter() {
-    this.renderer.addClass(document.body, 'transparent-bg')
+    if (this.platform.is('cordova')) {
 
-    this.platform.ready()
+      this.renderer.addClass(document.body, 'transparent-bg')
+
+      this.platform.ready()
       .then(result => {
         return this.checkPermissions()
       })
@@ -40,6 +56,23 @@ export class TabScanPage {
         console.warn('permissions missing')
         console.warn(error)
       })
+    }
+  }
+
+  ionViewDidEnter() {
+    if (!this.platform.is('cordova')) {
+      this.zxingScanner.camerasNotFound.subscribe((devices: MediaDeviceInfo[]) => {
+        console.error('An error has occurred when trying to enumerate your video-stream-enabled devices.')
+      })
+      if (this.selectedDevice) { // Not the first time that we open scanner
+        this.zxingScanner.startScan(this.selectedDevice)
+      }
+      this.zxingScanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
+        this.hasCameras = true
+        this.availableDevices = devices
+        this.selectedDevice = devices[0]
+      })
+    }
   }
 
   checkPermissions() {
@@ -47,18 +80,26 @@ export class TabScanPage {
   }
 
   ionViewWillLeave() {
-    this.scanner.destroy()
-    this.renderer.removeClass(document.body, 'transparent-bg')
+    if (this.platform.is('cordova')) {
+      this.scanner.destroy()
+      this.renderer.removeClass(document.body, 'transparent-bg')
+    } else {
+      this.zxingScanner.resetCodeReader()
+    }
   }
 
   public startScan() {
-    this.scanner.show()
-    this.scanner.scan(text => {
-      this.checkScan(text)
-    }, error => {
-      console.warn(error)
-      this.startScan()
-    })
+    if (this.platform.is('cordova')) {
+      this.scanner.show()
+      this.scanner.scan(text => {
+        this.checkScan(text)
+      }, error => {
+        console.warn(error)
+        this.startScan()
+      })
+    } else {
+    // We don't need to do anything in the browser because it keeps scanning
+    }
   }
 
   async checkScan(data: string) {

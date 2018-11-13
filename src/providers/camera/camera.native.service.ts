@@ -24,7 +24,7 @@ export class CameraNativeService implements IEntropyGenerator {
   private renderer: Renderer2
 
   @ViewChild('cameraCanvas') public cameraCanvas: ElementRef
-  canvasElement = HTMLCanvasElement
+  canvasElement: HTMLCanvasElement
 
   private collectedEntropyPercentage: number = 0
 
@@ -38,13 +38,13 @@ export class CameraNativeService implements IEntropyGenerator {
   constructor(private platform: Platform, private cameraPreview: CameraPreview, private rendererFactory: RendererFactory2, private ngZone: NgZone) {
     this.renderer = rendererFactory.createRenderer(null, null)
     this.entropyObservable = Observable.create(observer => {
+      entropyCalculatorWorker.onmessage = (event) => {
+        this.collectedEntropyPercentage += event.data.entropyMeasure
+        observer.next({ entropyHex: event.data.entropyHex })
+      }
+
       this.handler = (base64ImagePayload) => {
         const buffer1 = this.arrayBufferFromBase64(base64ImagePayload)
-
-        entropyCalculatorWorker.onmessage = (event) => {
-          this.collectedEntropyPercentage += event.data.entropyMeasure
-          observer.next({ entropyHex: event.data.entropyHex })
-        }
 
         entropyCalculatorWorker.postMessage({
           entropyBuffer: buffer1
@@ -203,4 +203,7 @@ export class CameraNativeService implements IEntropyGenerator {
     return this.collectedEntropyPercentage / 10
   }
 
+  setVideoElement(element): void {
+    console.log('only used in browser', element)
+  }
 }

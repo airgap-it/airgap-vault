@@ -1,4 +1,5 @@
 import { Platform } from 'ionic-angular'
+import { CameraBrowserService } from './camera.browser.service'
 import { CameraNativeService } from './camera.native.service'
 import { CameraPreview } from '@ionic-native/camera-preview'
 import { RendererFactory2, NgZone } from '@angular/core'
@@ -9,6 +10,6 @@ export function CameraFactory(platform: Platform, cameraPreview: CameraPreview, 
   if (platform.is('cordova')) {
     return new CameraNativeService(platform, cameraPreview, rendererFactory, ngZone)
   } else {
-    return new DummyEntropyService()
+    return new CameraBrowserService(platform, cameraPreview, rendererFactory, ngZone)
   }
 }
