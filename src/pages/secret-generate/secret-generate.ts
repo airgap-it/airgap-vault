@@ -49,7 +49,6 @@ export class SecretGeneratePage {
 
   ionViewWillEnter() {
     if (this.isBrowser) {
-      console.log(this.videoElement)
       this.cameraService.setVideoElement(this.videoElement)
     }
     this.cameraService.viewWillEnter()
