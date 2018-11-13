@@ -51,7 +51,7 @@ COPY . /app
 RUN export NODE_ENV=production
 
 # disable aot-build
-RUN sed -i "s/context.isProd || hasArg('--aot')/\false || hasArg('--aot')/g" ./node_modules/@ionic/app-scripts/dist/util/config.js
+# RUN sed -i "s/context.isProd || hasArg('--aot')/\false || hasArg('--aot')/g" ./node_modules/@ionic/app-scripts/dist/util/config.js
 
 # build
 RUN npm run build
