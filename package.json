@@ -21,7 +21,8 @@
     "e2e-test-docker": "protractor ./test-config/protractor-docker.conf.js",
     "e2e-test-ci": "protractor ./test-config/protractor-ci.conf.js",
     "e2e-update": "webdriver-manager update --standalone false --gecko false",
-    "e2e-debug": "node --inspect-brk protractor ./test-config/protractor.conf.js"
+    "e2e-debug": "node --inspect-brk protractor ./test-config/protractor.conf.js",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\" \"test/**/*.js\""
   },
   "dependencies": {
     "@angular/common": "5.0.1",
@@ -110,6 +111,8 @@
     "karma-spec-reporter": "0.0.31",
     "karma-webpack": "^2.0.4",
     "null-loader": "^0.1.1",
+    "prettier": "^1.15.2",
+    "pretty-quick": "^1.8.0",
     "protractor": "^5.1.2",
     "protractor-jasmine2-screenshot-reporter": "^0.5.0",
     "puppeteer": "^1.3.0",
@@ -117,8 +120,10 @@
     "ts-loader": "^2.3.7",
     "ts-node": "^3.3.0",
     "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.16.0",
     "tslint-config-standard": "github:papers-ch/tslint-config-standard",
     "typescript": "^2.7.2",
+    "typestrict": "^1.0.1",
     "xcode": "^0.9.3"
   },
   "description": "An Ionic boilerplate",
@@ -181,5 +186,10 @@
     },
     "ionic_copy": "./copy.config.js",
     "ionic_uglifyjs": "./uglifyjs.config.js"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   }
 }
