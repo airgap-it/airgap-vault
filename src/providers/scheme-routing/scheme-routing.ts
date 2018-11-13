@@ -1,11 +1,6 @@
 import { Injectable } from '@angular/core'
 import { AlertController, AlertButton, App, NavController } from 'ionic-angular'
-import {
-  DeserializedSyncProtocol,
-  UnsignedTransaction,
-  SyncProtocolUtils,
-  EncodedType
-} from 'airgap-coin-lib'
+import { DeserializedSyncProtocol, UnsignedTransaction, SyncProtocolUtils, EncodedType } from 'airgap-coin-lib'
 import { SecretsProvider } from '../secrets/secrets.provider'
 import { TransactionDetailPage } from '../../pages/transaction-detail/transaction-detail'
 
@@ -13,31 +8,23 @@ import { TransactionDetailPage } from '../../pages/transaction-detail/transactio
 export class SchemeRoutingProvider {
   private navController: NavController
   private syncSchemeHandlers: {
-    [key in EncodedType]: (
-      deserializedSync: DeserializedSyncProtocol,
-      scanAgainCallback: Function
-    ) => Promise<boolean>
+    [key in EncodedType]: (deserializedSync: DeserializedSyncProtocol, scanAgainCallback: Function) => Promise<boolean>
   }
 
-  constructor(
-    protected app: App,
-    private secretsProvider: SecretsProvider,
-    private alertController: AlertController
-  ) {
+  constructor(protected app: App, private secretsProvider: SecretsProvider, private alertController: AlertController) {
     this.syncSchemeHandlers = {
       [EncodedType.WALLET_SYNC]: this.syncTypeNotSupportedAlert.bind(this),
-      [EncodedType.UNSIGNED_TRANSACTION]: this.handleUnsignedTransaction.bind(
-        this
-      ),
+      [EncodedType.UNSIGNED_TRANSACTION]: this.handleUnsignedTransaction.bind(this),
       [EncodedType.SIGNED_TRANSACTION]: this.syncTypeNotSupportedAlert.bind(this)
     }
-
   }
 
   async handleNewSyncRequest(
     navCtrl: NavController,
     rawString: string,
-    scanAgainCallback: Function = () => { /* */ }
+    scanAgainCallback: Function = () => {
+      /* */
+    }
   ) {
     this.navController = navCtrl
     const syncProtocol = new SyncProtocolUtils()
@@ -54,10 +41,7 @@ export class SchemeRoutingProvider {
 
       if (deserializedSync.type in EncodedType) {
         // Only handle types that we know
-        return this.syncSchemeHandlers[deserializedSync.type](
-          deserializedSync,
-          scanAgainCallback
-        )
+        return this.syncSchemeHandlers[deserializedSync.type](deserializedSync, scanAgainCallback)
       } else {
         return this.syncTypeNotSupportedAlert(deserializedSync, scanAgainCallback)
       }
@@ -66,10 +50,7 @@ export class SchemeRoutingProvider {
     }
   }
 
-  async handleUnsignedTransaction(
-    deserializedSyncProtocol: DeserializedSyncProtocol,
-    scanAgainCallback: Function
-  ) {
+  async handleUnsignedTransaction(deserializedSyncProtocol: DeserializedSyncProtocol, scanAgainCallback: Function) {
     const unsignedTransaction = deserializedSyncProtocol.payload as UnsignedTransaction
 
     const correctWallet = this.secretsProvider.findWalletByPublicKeyAndProtocolIdentifier(
@@ -100,10 +81,7 @@ export class SchemeRoutingProvider {
     }
   }
 
-  private async syncTypeNotSupportedAlert(
-    deserializedSyncProtocol: DeserializedSyncProtocol,
-    scanAgainCallback: Function
-  ) {
+  private async syncTypeNotSupportedAlert(deserializedSyncProtocol: DeserializedSyncProtocol, scanAgainCallback: Function) {
     const cancelButton = {
       text: 'Okay!',
       role: 'cancel',
@@ -111,11 +89,7 @@ export class SchemeRoutingProvider {
         scanAgainCallback()
       }
     }
-    this.showAlert(
-      'Sync type not supported',
-      'Please use another app to scan this QR.',
-      [cancelButton]
-    )
+    this.showAlert('Sync type not supported', 'Please use another app to scan this QR.', [cancelButton])
   }
 
   async showAlert(title: string, message: string, buttons: AlertButton[]) {

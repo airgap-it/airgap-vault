@@ -4,15 +4,8 @@ import { SocialRecoveryValidateSharePage } from './social-recovery-validate-shar
 import { ComponentsModule } from '../../components/components.module'
 
 @NgModule({
-  declarations: [
-    SocialRecoveryValidateSharePage
-  ],
-  imports: [
-    ComponentsModule,
-    IonicPageModule.forChild(SocialRecoveryValidateSharePage)
-  ],
-  entryComponents: [
-    SocialRecoveryValidateSharePage
-  ]
+  declarations: [SocialRecoveryValidateSharePage],
+  imports: [ComponentsModule, IonicPageModule.forChild(SocialRecoveryValidateSharePage)],
+  entryComponents: [SocialRecoveryValidateSharePage]
 })
-export class SocialRecoveryValidateSharePageModule { }
+export class SocialRecoveryValidateSharePageModule {}

@@ -1,7 +1,6 @@
 import { BIP39Signer } from './BIP39Signer'
 
 describe('BIP39: Signer', () => {
-
   const signer = new BIP39Signer()
   // Test with different secret lengths
   const secrets = [
@@ -15,7 +14,8 @@ describe('BIP39: Signer', () => {
   })
 
   it('generates same seed from same entropy', () => {
-    const expectedSecret = 'demise stem detect together legal stand road industry thought casino danger arrow busy kick tide female own ship'
+    const expectedSecret =
+      'demise stem detect together legal stand road industry thought casino danger arrow busy kick tide female own ship'
     const secret = signer.entropyToMnemonic('3a5aa8f1f1d7f7a92ebb99e0e46cdd8651f2f47872a79e18')
     expect(secret).toBe(secret)
   })
@@ -32,9 +32,11 @@ describe('BIP39: Signer', () => {
     expect(restoredSecretFull).toBe(secrets[0])
     expect(restoredSecretExact).toBe(secrets[0])
 
-    expect(function () {
+    expect(function() {
       signer.recoverKey(shares.slice(0, threshold - 1))
-    }).toThrowError('Checksum error, either the passed shares were generated for different secrets or the amount of shares is below the threshold')
+    }).toThrowError(
+      'Checksum error, either the passed shares were generated for different secrets or the amount of shares is below the threshold'
+    )
   })
 
   it('generates correct social recovery keys, 18 words seed', () => {
@@ -49,9 +51,11 @@ describe('BIP39: Signer', () => {
     expect(restoredSecretFull).toBe(secrets[1])
     expect(restoredSecretExact).toBe(secrets[1])
 
-    expect(function () {
+    expect(function() {
       signer.recoverKey(shares.slice(0, threshold - 1))
-    }).toThrowError('Checksum error, either the passed shares were generated for different secrets or the amount of shares is below the threshold')
+    }).toThrowError(
+      'Checksum error, either the passed shares were generated for different secrets or the amount of shares is below the threshold'
+    )
   })
 
   it('generates correct social recovery keys, 12 words seed', () => {
@@ -66,26 +70,27 @@ describe('BIP39: Signer', () => {
     expect(restoredSecretFull).toBe(secrets[2])
     expect(restoredSecretExact).toBe(secrets[2])
 
-    expect(function () {
+    expect(function() {
       signer.recoverKey(shares.slice(0, threshold - 1))
-    }).toThrowError('Checksum error, either the passed shares were generated for different secrets or the amount of shares is below the threshold')
+    }).toThrowError(
+      'Checksum error, either the passed shares were generated for different secrets or the amount of shares is below the threshold'
+    )
   })
 
   it('throw error on wrong threshold configuration', () => {
     let numberOfShares = 5
     let threshold = 6
 
-    expect(function () {
+    expect(function() {
       signer.generateSocialRecover(secrets[0], numberOfShares, threshold)
     }).toThrowError('The threshold needs to be smaller or equal to the number or shares')
   })
 
   it('throw error on wrong numberOfShares configuration', () => {
-
     let numberOfShares = 1
     let threshold = 1
 
-    expect(function () {
+    expect(function() {
       signer.generateSocialRecover(secrets[0], numberOfShares, threshold)
     }).toThrowError('At least two shares are needed')
   })
@@ -94,9 +99,8 @@ describe('BIP39: Signer', () => {
     let numberOfShares = 1
     let threshold = 1
 
-    expect(function () {
+    expect(function() {
       signer.generateSocialRecover(secrets[0], numberOfShares, threshold)
     }).toThrowError('At least two shares are needed')
   })
-
 })

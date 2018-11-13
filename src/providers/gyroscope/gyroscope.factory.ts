@@ -4,8 +4,7 @@ import { IEntropyGenerator } from '../entropy/IEntropyGenerator'
 import { DeviceMotion } from '@ionic-native/device-motion'
 import { DummyEntropyService } from '../entropy/dummy.entropy.service'
 
-export interface GyroscopeService {
-}
+export interface GyroscopeService {}
 
 export function GyroscopeServiceFactory(platform: Platform, deviceMotion: DeviceMotion): IEntropyGenerator {
   if (platform.is('cordova')) {

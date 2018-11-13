@@ -10,9 +10,7 @@ import { TabSecretsPage } from '../tab-secrets/tab-secrets'
   templateUrl: 'tabs.html'
 })
 export class TabsPage {
-
   tabWallets = TabWalletsPage
   tabScan = TabScanPage
   tabSecrets = TabSecretsPage
-
 }

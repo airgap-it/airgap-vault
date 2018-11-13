@@ -3,15 +3,8 @@ import { IonicPageModule } from 'ionic-angular'
 import { SocialRecoverySetupPage } from './social-recovery-setup'
 
 @NgModule({
-  declarations: [
-    SocialRecoverySetupPage
-  ],
-  imports: [
-    IonicPageModule.forChild(SocialRecoverySetupPage)
-  ],
-  entryComponents: [
-    SocialRecoverySetupPage
-  ]
+  declarations: [SocialRecoverySetupPage],
+  imports: [IonicPageModule.forChild(SocialRecoverySetupPage)],
+  entryComponents: [SocialRecoverySetupPage]
 })
-
 export class SocialRecoverySetupPageModule {}

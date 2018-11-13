@@ -10,9 +10,7 @@ import { SchemeRoutingProvider } from '../providers/scheme-routing/scheme-routin
 @Component({
   templateUrl: 'app.html'
 })
-
 export class MyApp {
-
   @ViewChild(Nav) nav: Nav
 
   rootPage: any = null
@@ -25,7 +23,6 @@ export class MyApp {
     private startupChecks: StartupChecksProvider,
     private schemeRoutingProvider: SchemeRoutingProvider
   ) {
-
     this.platform.ready().then(() => {
       if (platform.is('cordova')) {
         this.statusBar.styleLightContent()
@@ -38,28 +35,35 @@ export class MyApp {
   }
 
   initChecks() {
-    this.startupChecks.initChecks().then(() => {
-      this.rootPage = TabsPage
-    }).catch((check) => {
-      check.consequence(this.initChecks.bind(this))
-    })
+    this.startupChecks
+      .initChecks()
+      .then(() => {
+        this.rootPage = TabsPage
+      })
+      .catch(check => {
+        check.consequence(this.initChecks.bind(this))
+      })
   }
 
   ngAfterViewInit() {
     this.platform.ready().then(() => {
-      this.deepLinks.route({
-        '/': undefined
-      }).subscribe((match) => {
-        // match.$route - the route we matched, which is the matched entry from the arguments to route()
-        // match.$args - the args passed in the link
-        // match.$link - the full link data
-        this.schemeRoutingProvider.handleNewSyncRequest(this.nav, match.$link.url)
-        console.log('Successfully matched route', match)
-      }, (nomatch) => {
-        // nomatch.$link - the full link data
-        console.error('Got a deeplink that didn\'t match', nomatch)
-      })
+      this.deepLinks
+        .route({
+          '/': undefined
+        })
+        .subscribe(
+          match => {
+            // match.$route - the route we matched, which is the matched entry from the arguments to route()
+            // match.$args - the args passed in the link
+            // match.$link - the full link data
+            this.schemeRoutingProvider.handleNewSyncRequest(this.nav, match.$link.url)
+            console.log('Successfully matched route', match)
+          },
+          nomatch => {
+            // nomatch.$link - the full link data
+            console.error("Got a deeplink that didn't match", nomatch)
+          }
+        )
     })
   }
-
 }

@@ -17,7 +17,6 @@ import { Storage } from '@ionic/storage'
 import { SecureStorageServiceMock } from '../../providers/storage/secure-storage.mock'
 
 describe('TransactionSigned Page', () => {
-
   const ethWallet = new WalletMock().ethWallet
   const ethTransaction = new WalletMock().ethTransaction
 
@@ -31,11 +30,7 @@ describe('TransactionSigned Page', () => {
     })
     TestBed.configureTestingModule({
       declarations: [TransactionSignedPage],
-      imports: [
-        IonicModule.forRoot(TransactionSignedPage),
-        ComponentsModule,
-        QRCodeModule
-      ],
+      imports: [IonicModule.forRoot(TransactionSignedPage), ComponentsModule, QRCodeModule],
       providers: [
         SecretsProvider,
         { provide: SecureStorageService, useClass: SecureStorageServiceMock },
@@ -49,14 +44,16 @@ describe('TransactionSigned Page', () => {
     })
   }))
 
-  beforeEach((done) => {
+  beforeEach(done => {
     fixture = TestBed.createComponent(TransactionSignedPage)
     component = fixture.componentInstance
     fixture.detectChanges()
 
-    TestBed.get(SecretsProvider).currentSecretsList.asObservable().subscribe(value => {
-      done()
-    })
+    TestBed.get(SecretsProvider)
+      .currentSecretsList.asObservable()
+      .subscribe(value => {
+        done()
+      })
   })
 
   it('should be created', () => {

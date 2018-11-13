@@ -5,20 +5,12 @@ import { SocialRecoveryShowSharePage } from '../social-recovery-show-share/socia
 import { Secret } from '../../models/secret'
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 
-/**
- * Generated class for the SocialRecoveryValidateSharePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-social-recovery-validate-share',
-  templateUrl: 'social-recovery-validate-share.html',
+  templateUrl: 'social-recovery-validate-share.html'
 })
 export class SocialRecoveryValidateSharePage {
-
   @ViewChild('verify')
   verify: VerifyKeyComponent
 
@@ -27,7 +19,12 @@ export class SocialRecoveryValidateSharePage {
   currentShare: number
   secret: Secret
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private toastController: ToastController, private secretsProvider: SecretsProvider) {
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private toastController: ToastController,
+    private secretsProvider: SecretsProvider
+  ) {
     this.secret = navParams.get('secret')
     this.shares = navParams.get('shares')
     this.currentShare = navParams.get('currentShare')
@@ -37,12 +34,11 @@ export class SocialRecoveryValidateSharePage {
     if (isCorrect) {
       this.validated = true
     } else {
-      let toast = this.toastController.create(
-        {
-          message: 'incorrect',
-          showCloseButton: true,
-          closeButtonText: 'Try again'
-        })
+      let toast = this.toastController.create({
+        message: 'incorrect',
+        showCloseButton: true,
+        closeButtonText: 'Try again'
+      })
       toast.onDidDismiss(() => this.verify.reset())
       toast.present()
     }
@@ -66,5 +62,4 @@ export class SocialRecoveryValidateSharePage {
       })
     }
   }
-
 }

@@ -3,7 +3,10 @@ page-wallet-select-coins {
     border-color: color($colors, white);
     background-color: color($colors, secondary);
   }
-  .item.item-md .checkbox-md[item-right], .item.item-md .checkbox-md[item-end], .item.item-ios .checkbox-ios[item-right], .item.item-ios .checkbox-ios[item-end] {
+  .item.item-md .checkbox-md[item-right],
+  .item.item-md .checkbox-md[item-end],
+  .item.item-ios .checkbox-ios[item-right],
+  .item.item-ios .checkbox-ios[item-end] {
     margin-right: 0;
   }
 }

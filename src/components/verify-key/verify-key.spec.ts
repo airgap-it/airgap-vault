@@ -3,16 +3,13 @@ import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { IonicModule } from 'ionic-angular'
 
 describe('Component: VerifyKey', () => {
-
   let component: VerifyKeyComponent
   let fixture: ComponentFixture<VerifyKeyComponent>
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [VerifyKeyComponent],
-      imports: [
-        IonicModule.forRoot(VerifyKeyComponent)
-      ]
+      imports: [IonicModule.forRoot(VerifyKeyComponent)]
     })
 
     // create component and test fixture

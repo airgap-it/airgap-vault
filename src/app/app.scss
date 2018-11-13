@@ -18,13 +18,17 @@
   color: color($colors, white);
   background: color($colors, secondary);
 
-  p, h1, h2, h3, .select-text {
+  p,
+  h1,
+  h2,
+  h3,
+  .select-text {
     color: color($colors, white);
   }
 }
 
 .background--color__gradient {
-  background: linear-gradient(#6F53A1, color($colors, secondary, base));
+  background: linear-gradient(#6f53a1, color($colors, secondary, base));
 }
 
 .item {
@@ -35,7 +39,7 @@
 ul {
   list-style: none;
   li:before {
-    content: "\00AC";
+    content: '\00AC';
     padding-right: 4px;
   }
 }
@@ -45,14 +49,15 @@ ul {
   line-height: 32px;
   font-size: 16px;
   text-transform: lowercase;
-  font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
+  font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
   font-style: normal;
   font-weight: 600;
 }
 
 /* small button for secrets with less padding */
 verify-key {
-  .button-round-md, .button-round-ios {
+  .button-round-md,
+  .button-round-ios {
     padding: 0 1.5rem;
   }
 }
@@ -63,13 +68,14 @@ verify-key {
 }
 
 .typography--mono {
-  font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
+  font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
   font-weight: 600;
   font-size: 1.4rem;
   word-wrap: break-word;
 }
 
-ion-input, ion-textarea {
+ion-input,
+ion-textarea {
   color: white;
 
   textarea {
@@ -86,14 +92,20 @@ ion-input, ion-textarea {
 .transparent-bg {
   background-color: transparent !important;
 
-  .ion-app, ion-content, ion-app.md, ion-app.ios, ion-app, .colored-background {
+  .ion-app,
+  ion-content,
+  ion-app.md,
+  ion-app.ios,
+  ion-app,
+  .colored-background {
     background-color: transparent !important;
     color: white;
   }
 }
 
 // back btn
-ion-icon, .toolbar-title {
+ion-icon,
+.toolbar-title {
   color: white;
 }
 
@@ -111,11 +123,11 @@ qrcode {
 
 /** Alert Dialogs **/
 .alert-title {
-  color: color($colors, dark)
+  color: color($colors, dark);
 }
 
 .alert-message {
-  color: color($colors, dark)
+  color: color($colors, dark);
 }
 
 /** Empty **/
@@ -140,11 +152,16 @@ qrcode {
   }
 }
 
-html, body, ion-app, div.nav-decor, .ion-content, .app-root {
+html,
+body,
+ion-app,
+div.nav-decor,
+.ion-content,
+.app-root {
   background-color: transparent !important;
 }
 
-.nav-decor, ion-app {
+.nav-decor,
+ion-app {
   background-color: transparent !important;
 }
-

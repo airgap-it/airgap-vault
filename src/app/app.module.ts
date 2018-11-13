@@ -39,9 +39,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [
-    MyApp
-  ],
+  declarations: [MyApp],
   imports: [
     BrowserModule,
     MaterialIconsModule,
@@ -64,9 +62,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     })
   ],
   bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp
-  ],
+  entryComponents: [MyApp],
   providers: [
     StatusBar,
     SplashScreen,
@@ -109,5 +105,4 @@ export function HttpLoaderFactory(http: HttpClient) {
     SchemeRoutingProvider
   ]
 })
-export class AppModule {
-}
+export class AppModule {}

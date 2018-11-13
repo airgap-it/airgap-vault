@@ -15,14 +15,8 @@ import { MaterialIconsModule } from 'ionic2-material-icons'
 import { ScannerProvider } from '../../providers/scanner/scanner'
 
 @NgModule({
-  declarations: [
-    SecretGeneratePage
-  ],
-  imports: [
-    ComponentsModule,
-    MaterialIconsModule,
-    IonicPageModule.forChild(SecretGeneratePage)
-  ],
+  declarations: [SecretGeneratePage],
+  imports: [ComponentsModule, MaterialIconsModule, IonicPageModule.forChild(SecretGeneratePage)],
   providers: [
     Gyroscope,
     ScannerProvider,
@@ -48,8 +42,6 @@ import { ScannerProvider } from '../../providers/scanner/scanner'
       deps: [Platform, Gyroscope]
     }
   ],
-  entryComponents: [
-    SecretGeneratePage
-  ]
+  entryComponents: [SecretGeneratePage]
 })
-export class SecretGeneratePageModule { }
+export class SecretGeneratePageModule {}

@@ -8,28 +8,18 @@ import { AirGapWallet } from 'airgap-coin-lib'
 import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 import { SecretCreatePage } from '../secret-create/secret-create'
 
-/**
- * Generated class for the TabWalletsPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-tab-wallets',
   templateUrl: 'tab-wallets.html'
 })
 export class TabWalletsPage {
-
   symbolFilter: string
   activeSecret: Secret
 
   public wallets = new BehaviorSubject<AirGapWallet[]>([])
 
-  constructor(public navController: NavController, public navParams: NavParams, private secretsProvider: SecretsProvider) {
-
-  }
+  constructor(public navController: NavController, public navParams: NavParams, private secretsProvider: SecretsProvider) {}
 
   ionViewWillEnter() {
     let secrets = this.secretsProvider.currentSecretsList.asObservable()

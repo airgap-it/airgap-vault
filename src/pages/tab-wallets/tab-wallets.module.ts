@@ -6,17 +6,8 @@ import { MaterialIconsModule } from 'ionic2-material-icons'
 import { FilterWalletsPipe } from './fillter-wallets.filter'
 
 @NgModule({
-  declarations: [
-    TabWalletsPage,
-    FilterWalletsPipe
-  ],
-  imports: [
-    ComponentsModule,
-    MaterialIconsModule,
-    IonicPageModule.forChild(TabWalletsPage)
-  ],
-  entryComponents: [
-    TabWalletsPage
-  ]
+  declarations: [TabWalletsPage, FilterWalletsPipe],
+  imports: [ComponentsModule, MaterialIconsModule, IonicPageModule.forChild(TabWalletsPage)],
+  entryComponents: [TabWalletsPage]
 })
 export class TabWalletsPageModule {}

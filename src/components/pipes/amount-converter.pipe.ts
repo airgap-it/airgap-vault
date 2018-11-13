@@ -5,9 +5,12 @@ import { getProtocolByIdentifier } from 'airgap-coin-lib'
 @Pipe({
   name: 'amountConverter'
 })
-
 export class AmountConverterPipe implements PipeTransform {
   transform(value: string, args: { protocolIdentifier: string }): any {
-    return new BigNumber(value).shiftedBy(-1 * (getProtocolByIdentifier(args.protocolIdentifier).decimals)).toString() + ' ' + getProtocolByIdentifier(args.protocolIdentifier).symbol.toUpperCase()
+    return (
+      new BigNumber(value).shiftedBy(-1 * getProtocolByIdentifier(args.protocolIdentifier).decimals).toString() +
+      ' ' +
+      getProtocolByIdentifier(args.protocolIdentifier).symbol.toUpperCase()
+    )
   }
 }

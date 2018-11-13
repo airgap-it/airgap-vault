@@ -14,7 +14,6 @@ import { ZXingScannerComponent } from '@zxing/ngx-scanner'
   templateUrl: 'tab-scan.html'
 })
 export class TabScanPage {
-
   @ViewChild('scanner')
   zxingScanner: ZXingScannerComponent
   availableDevices: MediaDeviceInfo[]
@@ -29,33 +28,44 @@ export class TabScanPage {
   private webscanner: any
   private selectedCamera
 
-  constructor(private schemeRouting: SchemeRoutingProvider, private alertCtrl: AlertController, private androidPermissions: AndroidPermissions, private rendererFactory: RendererFactory2, private navController: NavController, private platform: Platform, private secretsProvider: SecretsProvider, private transactionProvider: TransactionsProvider, private scanner: ScannerProvider) {
+  constructor(
+    private schemeRouting: SchemeRoutingProvider,
+    private alertCtrl: AlertController,
+    private androidPermissions: AndroidPermissions,
+    private rendererFactory: RendererFactory2,
+    private navController: NavController,
+    private platform: Platform,
+    private secretsProvider: SecretsProvider,
+    private transactionProvider: TransactionsProvider,
+    private scanner: ScannerProvider
+  ) {
     this.isBrowser = !this.platform.is('cordova')
     this.renderer = this.rendererFactory.createRenderer(null, null)
   }
 
   ionViewWillEnter() {
     if (this.platform.is('cordova')) {
-
       this.renderer.addClass(document.body, 'transparent-bg')
 
-      this.platform.ready()
-      .then(result => {
-        return this.checkPermissions()
-      })
-      .then(permission => {
-        if (!permission.hasPermission) {
-          return this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.CAMERA)
-        }
+      this.platform
+        .ready()
+        .then(result => {
+          return this.checkPermissions()
+        })
+        .then(permission => {
+          if (!permission.hasPermission) {
+            return this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.CAMERA)
+          }
 
-        return Promise.resolve()
-      }).then(result => {
-        this.startScan()
-      })
-      .catch(error => {
-        console.warn('permissions missing')
-        console.warn(error)
-      })
+          return Promise.resolve()
+        })
+        .then(result => {
+          this.startScan()
+        })
+        .catch(error => {
+          console.warn('permissions missing')
+          console.warn(error)
+        })
     }
   }
 
@@ -64,7 +74,8 @@ export class TabScanPage {
       this.zxingScanner.camerasNotFound.subscribe((devices: MediaDeviceInfo[]) => {
         console.error('An error has occurred when trying to enumerate your video-stream-enabled devices.')
       })
-      if (this.selectedDevice) { // Not the first time that we open scanner
+      if (this.selectedDevice) {
+        // Not the first time that we open scanner
         this.zxingScanner.startScan(this.selectedDevice)
       }
       this.zxingScanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
@@ -91,44 +102,48 @@ export class TabScanPage {
   public startScan() {
     if (this.platform.is('cordova')) {
       this.scanner.show()
-      this.scanner.scan(text => {
-        this.checkScan(text)
-      }, error => {
-        console.warn(error)
-        this.startScan()
-      })
+      this.scanner.scan(
+        text => {
+          this.checkScan(text)
+        },
+        error => {
+          console.warn(error)
+          this.startScan()
+        }
+      )
     } else {
-    // We don't need to do anything in the browser because it keeps scanning
+      // We don't need to do anything in the browser because it keeps scanning
     }
   }
 
   async checkScan(data: string) {
     if (this.isAirGapTx(data)) {
-
       return this.schemeRouting.handleNewSyncRequest(this.navController, data, () => {
         this.startScan()
       })
     } else {
-      this.extractRawTx(data).then(tx => {
-        // this.transactionScanned(tx)
-      }).catch(error => {
-        console.warn(error)
-        let alert = this.alertCtrl.create({
-          title: 'Incompatible QR',
-          message: 'This QR is not a raw transaction.',
-          enableBackdropDismiss: false,
-          buttons: [
-            {
-              text: 'Okay!',
-              role: 'cancel',
-              handler: () => {
-                this.startScan()
-              }
-            }
-          ]
+      this.extractRawTx(data)
+        .then(tx => {
+          // this.transactionScanned(tx)
         })
-        alert.present()
-      })
+        .catch(error => {
+          console.warn(error)
+          let alert = this.alertCtrl.create({
+            title: 'Incompatible QR',
+            message: 'This QR is not a raw transaction.',
+            enableBackdropDismiss: false,
+            buttons: [
+              {
+                text: 'Okay!',
+                role: 'cancel',
+                handler: () => {
+                  this.startScan()
+                }
+              }
+            ]
+          })
+          alert.present()
+        })
     }
   }
 
@@ -203,17 +218,15 @@ export class TabScanPage {
 
   simulateTx() {
     this.extractRawTx(
-      JSON.stringify(
-        {
-          'nonce': '0x00',
-          'gasPrice': '0x04a817c800',
-          'gasLimit': '0x5208',
-          'to': '0x7461531f581A662C5dF140FD6eA1317641fFcad2',
-          'value': '0x00',
-          'data': '0x',
-          'chainId': 1
-        }
-      )
+      JSON.stringify({
+        nonce: '0x00',
+        gasPrice: '0x04a817c800',
+        gasLimit: '0x5208',
+        to: '0x7461531f581A662C5dF140FD6eA1317641fFcad2',
+        value: '0x00',
+        data: '0x',
+        chainId: 1
+      })
     ).then(tx => {
       // this.transactionScanned(tx)
     })

@@ -5,20 +5,12 @@ import { SocialRecoveryShowSharePage } from '../social-recovery-show-share/socia
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import * as bip39 from 'bip39'
 
-/**
- * Generated class for the SocialRecoverySetupPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-social-recovery-setup',
-  templateUrl: 'social-recovery-setup.html',
+  templateUrl: 'social-recovery-setup.html'
 })
 export class SocialRecoverySetupPage {
-
   private numberOfShares = 3
   private numberOfRequiredShares = 2
   private secret: Secret
@@ -43,12 +35,14 @@ export class SocialRecoverySetupPage {
   }
 
   next() {
-    this.secretProvider.retrieveEntropyForSecret(this.secret).then(entropy => {
-      const shares = Secret.generateSocialRecover(bip39.entropyToMnemonic(entropy), this.numberOfShares, this.numberOfRequiredShares)
-      this.navCtrl.push(SocialRecoveryShowSharePage, { shares: shares, currentShare: 0, secret: this.secret })
-    }).catch(error => {
-      console.warn(error)
-    })
+    this.secretProvider
+      .retrieveEntropyForSecret(this.secret)
+      .then(entropy => {
+        const shares = Secret.generateSocialRecover(bip39.entropyToMnemonic(entropy), this.numberOfShares, this.numberOfRequiredShares)
+        this.navCtrl.push(SocialRecoveryShowSharePage, { shares: shares, currentShare: 0, secret: this.secret })
+      })
+      .catch(error => {
+        console.warn(error)
+      })
   }
-
 }

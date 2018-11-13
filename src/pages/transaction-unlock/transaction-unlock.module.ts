@@ -4,15 +4,8 @@ import { TransactionUnlockPage } from './transaction-unlock'
 import { ComponentsModule } from '../../components/components.module'
 
 @NgModule({
-  declarations: [
-    TransactionUnlockPage
-  ],
-  imports: [
-    ComponentsModule,
-    IonicPageModule.forChild(TransactionUnlockPage)
-  ],
-  entryComponents: [
-    TransactionUnlockPage
-  ]
+  declarations: [TransactionUnlockPage],
+  imports: [ComponentsModule, IonicPageModule.forChild(TransactionUnlockPage)],
+  entryComponents: [TransactionUnlockPage]
 })
 export class TransactionUnlockPageModule {}

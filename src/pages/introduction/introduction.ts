@@ -9,12 +9,9 @@ declare var cordova: any
   templateUrl: 'introduction.html'
 })
 export class IntroductionPage {
-
   public security: string = 'highest'
 
-  constructor(private viewController: ViewController, private platform: Platform, private storage: Storage) {
-
-  }
+  constructor(private viewController: ViewController, private platform: Platform, private storage: Storage) {}
 
   accept() {
     this.storage.set('INTRODUCTION_INITIAL', true).then(value => {
@@ -43,5 +40,4 @@ export class IntroductionPage {
       window.open(url, '_blank')
     }
   }
-
 }

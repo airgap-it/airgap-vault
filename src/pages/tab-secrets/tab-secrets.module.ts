@@ -5,16 +5,8 @@ import { ComponentsModule } from '../../components/components.module'
 import { MaterialIconsModule } from 'ionic2-material-icons'
 
 @NgModule({
-  declarations: [
-    TabSecretsPage
-  ],
-  imports: [
-    ComponentsModule,
-    MaterialIconsModule,
-    IonicPageModule.forChild(TabSecretsPage)
-  ],
-  entryComponents: [
-    TabSecretsPage
-  ]
+  declarations: [TabSecretsPage],
+  imports: [ComponentsModule, MaterialIconsModule, IonicPageModule.forChild(TabSecretsPage)],
+  entryComponents: [TabSecretsPage]
 })
 export class TabSecretsPageModule {}

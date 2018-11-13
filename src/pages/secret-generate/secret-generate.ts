@@ -15,9 +15,7 @@ declare var window: any
   selector: 'secret-generate',
   templateUrl: 'secret-generate.html'
 })
-
 export class SecretGeneratePage {
-
   public isBrowser = false
 
   private renderer: Renderer2
@@ -53,7 +51,8 @@ export class SecretGeneratePage {
     }
     this.cameraService.viewWillEnter()
     this.injectCSS()
-    this.platform.ready()
+    this.platform
+      .ready()
       .then(result => {
         console.log('checking permissions')
         return this.checkPermissions()
@@ -75,7 +74,8 @@ export class SecretGeneratePage {
         }
 
         return this.androidPermissions.requestPermissions(requests)
-      }).then(result => {
+      })
+      .then(result => {
         console.log(result)
         this.initEntropy()
       })
@@ -122,7 +122,13 @@ export class SecretGeneratePage {
 
   checkEntropy() {
     this.changeDetectorRef.detectChanges()
-    if (Math.min(100, this.audioService.getCollectedEntropyPercentage()) + Math.min(100, this.cameraService.getCollectedEntropyPercentage()) + Math.min(100, this.gyroService.getCollectedEntropyPercentage()) + Math.min(100, this.touchEntropy.getCollectedEntropyPercentage()) >= 400) {
+    if (
+      Math.min(100, this.audioService.getCollectedEntropyPercentage()) +
+        Math.min(100, this.cameraService.getCollectedEntropyPercentage()) +
+        Math.min(100, this.gyroService.getCollectedEntropyPercentage()) +
+        Math.min(100, this.touchEntropy.getCollectedEntropyPercentage()) >=
+      400
+    ) {
       this.entropy.isFull = true
     }
   }

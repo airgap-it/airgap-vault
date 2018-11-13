@@ -61,8 +61,6 @@ import { IntroductionPageModule } from '../pages/introduction/introduction.modul
     QRCodeModule,
     IntroductionPageModule
   ],
-  exports: [
-  ]
+  exports: []
 })
-
-export class PagesModule { }
+export class PagesModule {}

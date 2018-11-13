@@ -4,16 +4,8 @@ import { SecretValidatePage } from './secret-validate'
 import { ComponentsModule } from '../../components/components.module'
 
 @NgModule({
-  declarations: [
-    SecretValidatePage
-  ],
-  imports: [
-    ComponentsModule,
-    IonicPageModule.forChild(SecretValidatePage)
-  ],
-  entryComponents: [
-    SecretValidatePage
-  ]
+  declarations: [SecretValidatePage],
+  imports: [ComponentsModule, IonicPageModule.forChild(SecretValidatePage)],
+  entryComponents: [SecretValidatePage]
 })
-
 export class SecretValidatePageModule {}

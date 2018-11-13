@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 
 interface Word {
-  word: string,
-  originalIndex: number,
-  selected: boolean,
+  word: string
+  originalIndex: number
+  selected: boolean
   index?: number
 }
 
@@ -11,9 +11,7 @@ interface Word {
   selector: 'verify-key',
   templateUrl: 'verify-key.html'
 })
-
 export class VerifyKeyComponent implements OnInit {
-
   @Input()
   secret: string
 
@@ -25,13 +23,16 @@ export class VerifyKeyComponent implements OnInit {
   private sortedWords: Word[] = []
 
   ngOnInit(): void {
-    this.splittedSecret = this.secret.toLowerCase().split(' ').map((word, i) => {
-      return {
-        word: word,
-        originalIndex: i,
-        selected: false
-      }
-    })
+    this.splittedSecret = this.secret
+      .toLowerCase()
+      .split(' ')
+      .map((word, i) => {
+        return {
+          word: word,
+          originalIndex: i,
+          selected: false
+        }
+      })
 
     this.sortedWords = this.sortSecretAlphabetically(this.splittedSecret)
 
@@ -71,6 +72,11 @@ export class VerifyKeyComponent implements OnInit {
   }
 
   isCorrect() {
-    return this.currentWords.map(w => w.word).join(' ').trim() === this.secret.trim()
+    return (
+      this.currentWords
+        .map(w => w.word)
+        .join(' ')
+        .trim() === this.secret.trim()
+    )
   }
 }

@@ -7,19 +7,8 @@ import { MaterialIconsModule } from 'ionic2-material-icons'
 import { WalletEditPopoverComponent } from './wallet-edit-popover/wallet-edit-popover.component'
 
 @NgModule({
-  declarations: [
-    WalletAddressPage,
-    WalletEditPopoverComponent
-  ],
-  imports: [
-    ComponentsModule,
-    QRCodeModule,
-    MaterialIconsModule,
-    IonicPageModule.forChild(WalletAddressPage)
-  ],
-  entryComponents: [
-    WalletAddressPage,
-    WalletEditPopoverComponent
-  ]
+  declarations: [WalletAddressPage, WalletEditPopoverComponent],
+  imports: [ComponentsModule, QRCodeModule, MaterialIconsModule, IonicPageModule.forChild(WalletAddressPage)],
+  entryComponents: [WalletAddressPage, WalletEditPopoverComponent]
 })
 export class WalletAddressPageModule {}

@@ -6,25 +6,21 @@ import { SocialRecoverySetupPage } from '../social-recovery-setup/social-recover
 import { SecretEditPopoverComponent } from './secret-edit-popover/secret-edit-popover.component'
 import { WalletSelectCoinsPage } from '../wallet-select-coins/wallet-select-coins'
 
-/**
- * Generated class for the SecretEditPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-secret-edit',
   templateUrl: 'secret-edit.html'
 })
-
 export class SecretEditPage {
-
   isGenerating: boolean = false
   private secret: Secret
 
-  constructor(public navController: NavController, public popoverCtrl: PopoverController, public navParams: NavParams, private secretsProvider: SecretsProvider) {
+  constructor(
+    public navController: NavController,
+    public popoverCtrl: PopoverController,
+    public navParams: NavParams,
+    private secretsProvider: SecretsProvider
+  ) {
     this.secret = this.navParams.get('secret')
     this.isGenerating = this.navParams.get('isGenerating')
   }
@@ -57,5 +53,4 @@ export class SecretEditPage {
       ev: event
     })
   }
-
 }

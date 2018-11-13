@@ -1,18 +1,11 @@
 import { Component, Input } from '@angular/core'
 import { NavController } from 'ionic-angular'
 
-/**
- * Generated class for the ProgressFooterComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
 @Component({
   selector: 'progress-footer',
   templateUrl: 'progress-footer.html'
 })
 export class ProgressFooterComponent {
-
   @Input()
   progress = 0
 
@@ -43,9 +36,7 @@ export class ProgressFooterComponent {
 
   private progressArray: number[] = []
 
-  constructor(private navController: NavController) {
-
-  }
+  constructor(private navController: NavController) {}
 
   ngOnInit() {
     this.progressArray = new Array(this.maxProgress).fill(0).map((x, i) => i)
@@ -53,5 +44,4 @@ export class ProgressFooterComponent {
       throw new Error('ProgressFooterComponent: No "rightAction" method passed')
     }
   }
-
 }

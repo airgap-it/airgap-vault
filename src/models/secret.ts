@@ -5,7 +5,6 @@ import { AirGapWallet } from 'airgap-coin-lib'
 const signer = new BIP39Signer()
 
 export class Secret {
-
   public id: string = UUID.UUID()
   public label: string
 
@@ -52,5 +51,4 @@ export class Secret {
   static init(obj) {
     return Object.assign(new Secret(null, obj.label), obj)
   }
-
 }
