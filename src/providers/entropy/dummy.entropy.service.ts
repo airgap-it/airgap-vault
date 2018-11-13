@@ -21,6 +21,6 @@ export class DummyEntropyService implements IEntropyGenerator {
   }
 
   getCollectedEntropyPercentage(): number {
-    return 100
+    return 0
   }
 }
