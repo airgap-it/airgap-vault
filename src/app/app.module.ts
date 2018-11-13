@@ -9,6 +9,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
 import { TranslateHttpLoader } from '@ngx-translate/http-loader'
 import { MyApp } from './app.component'
 import { CameraPreview } from '@ionic-native/camera-preview'
+import { Clipboard } from '@ionic-native/clipboard'
 import { AndroidPermissions } from '@ionic-native/android-permissions'
 import { MaterialIconsModule } from 'ionic2-material-icons'
 import { TransactionsProvider } from '../providers/transactions/transactions'
@@ -28,8 +29,9 @@ import { PagesModule } from '../pages/pages.module'
 import { ScannerProvider } from '../providers/scanner/scanner'
 import { IonicStorageModule } from '@ionic/storage'
 import { DeviceMotion } from '@ionic-native/device-motion'
-import { AirGapSchemeProvider } from '../providers/scheme/scheme.service'
-import { StartupChecksProvider } from '../providers/startup-checks/startup-checks.provider';
+import { StartupChecksProvider } from '../providers/startup-checks/startup-checks.provider'
+import { SchemeRoutingProvider } from '../providers/scheme-routing/scheme-routing'
+import { ClipboardBrowserProvider } from '../providers/clipboard-browser/clipboard-browser'
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -98,8 +100,13 @@ export function HttpLoaderFactory(http: HttpClient) {
       useFactory: GyroscopeServiceFactory,
       deps: [Platform, DeviceMotion]
     },
+    {
+      provide: Clipboard,
+      useFactory: (platform: Platform) => (platform.is('cordova') ? new Clipboard() : new ClipboardBrowserProvider()),
+      deps: [Platform]
+    },
     DeviceProvider,
-    AirGapSchemeProvider
+    SchemeRoutingProvider
   ]
 })
 export class AppModule {

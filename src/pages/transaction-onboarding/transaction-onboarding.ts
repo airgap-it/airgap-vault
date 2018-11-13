@@ -5,13 +5,6 @@ import { Transaction } from '../../models/transaction.model'
 import { Storage } from '@ionic/storage'
 import { AirGapWallet } from 'airgap-coin-lib'
 
-/**
- * Generated class for the TransactionOnboardingPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-transaction-onboarding',

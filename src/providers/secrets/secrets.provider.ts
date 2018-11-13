@@ -129,12 +129,16 @@ export class SecretsProvider {
 
   removeWallet(wallet: AirGapWallet): Promise<void> {
     const secret = this.findByPublicKey(wallet.publicKey)
+    if (!secret) { return undefined }
+
     secret.wallets.splice(secret.wallets.findIndex(findWallet => findWallet.publicKey === wallet.publicKey && findWallet.protocolIdentifier === wallet.protocolIdentifier), 1)
     return this.addOrUpdateSecret(secret)
   }
 
   findWalletByPublicKeyAndProtocolIdentifier(pubKey: string, protocolIdentifier: string): AirGapWallet {
-    let secret = this.findByPublicKey(pubKey)
+    const secret = this.findByPublicKey(pubKey)
+    if (!secret) { return undefined }
+
     let foundWallet = secret.wallets.find(wallet => wallet.publicKey === pubKey && wallet.protocolIdentifier === protocolIdentifier)
     if (foundWallet !== undefined) {
       return foundWallet

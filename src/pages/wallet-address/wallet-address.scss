@@ -6,6 +6,11 @@ page-wallet-address {
     justify-content: center;
     align-items: center;
     position: relative;
+
+    img {
+      width: 64px;
+      height: 64px;
+    }
   }
 
   img.sub-avatar {

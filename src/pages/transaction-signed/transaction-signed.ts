@@ -1,18 +1,10 @@
 import { Component, NgZone } from '@angular/core'
 import { IonicPage, LoadingController, NavController, NavParams, Platform } from 'ionic-angular'
-import { Transaction } from '../../models/transaction.model'
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import bip39 from 'bip39'
-import { AirGapWallet } from 'airgap-coin-lib'
+import { AirGapWallet, SyncProtocolUtils, DeserializedSyncProtocol, SignedTransaction, EncodedType, IAirGapWallet, UnsignedTransaction, IAirGapTransaction } from 'airgap-coin-lib'
 
 declare var window: any
-
-/**
- * Generated class for the TransactionSignedPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 enum TransactionQRType {
   SignedAirGap = 0,
@@ -26,9 +18,11 @@ enum TransactionQRType {
 })
 export class TransactionSignedPage {
 
-  signed: string
+  signedTxQr?: string
+  broadcastUrl?: string
 
-  transaction: Transaction
+  transaction: UnsignedTransaction
+  airGapTx: IAirGapTransaction
   wallet: AirGapWallet
 
   qrType: TransactionQRType = 0
@@ -36,24 +30,26 @@ export class TransactionSignedPage {
   constructor(public loadingCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams, private secretProvider: SecretsProvider, private ngZone: NgZone, private platform: Platform) {
     this.transaction = this.navParams.get('transaction')
     this.wallet = this.navParams.get('wallet')
+    this.airGapTx = this.wallet.coinProtocol.getTransactionDetails(this.transaction)
   }
 
-  ionViewWillEnter() {
+  async ionViewWillEnter() {
     let loading = this.loadingCtrl.create({
       content: 'Signing...'
     })
 
     loading.present()
 
-    this.signTransaction(this.transaction, this.wallet).then(signed => {
-      loading.dismiss()
-      this.ngZone.run(() => {
-        this.signed = signed
-      })
+    const signedTx = await this.signTransaction(this.transaction, this.wallet)
+    this.broadcastUrl = await this.generateBroadcastUrl(this.wallet, signedTx, this.transaction)
+
+    this.ngZone.run(() => {
+      this.signedTxQr = signedTx
     })
+    loading.dismiss()
   }
 
-  signTransaction(transaction: Transaction, wallet: AirGapWallet): Promise<string> {
+  signTransaction(transaction: UnsignedTransaction, wallet: AirGapWallet): Promise<string> {
     const secret = this.secretProvider.findByPublicKey(wallet.publicKey)
 
     // we should handle this case here as well
@@ -65,10 +61,10 @@ export class TransactionSignedPage {
       let seed = bip39.mnemonicToSeedHex(bip39.entropyToMnemonic(entropy))
       if (wallet.isExtendedPublicKey) {
         const extendedPrivateKey = wallet.coinProtocol.getExtendedPrivateKeyFromHexSecret(seed, wallet.derivationPath)
-        return wallet.coinProtocol.signWithExtendedPrivateKey(extendedPrivateKey, transaction.payload)
+        return wallet.coinProtocol.signWithExtendedPrivateKey(extendedPrivateKey, transaction.transaction)
       } else {
         const privateKey = wallet.coinProtocol.getPrivateKeyFromHexSecret(seed, wallet.derivationPath)
-        return wallet.coinProtocol.signWithPrivateKey(privateKey, transaction.payload)
+        return wallet.coinProtocol.signWithPrivateKey(privateKey, transaction.transaction)
       }
     })
   }
@@ -77,7 +73,27 @@ export class TransactionSignedPage {
     this.qrType = this.qrType === TransactionQRType.SignedAirGap ? TransactionQRType.SignedRaw : TransactionQRType.SignedAirGap
   }
 
-  broadcastURL(signedTx: string): string {
+  async generateBroadcastUrl(wallet: AirGapWallet, signedTx: string, unsignedTransaction: UnsignedTransaction): Promise<string> {
+    const txDetails = wallet.coinProtocol.getTransactionDetails(unsignedTransaction)
+    const syncProtocol = new SyncProtocolUtils()
+    const deserializedTxSigningRequest: DeserializedSyncProtocol = {
+      version: 1,
+      protocol: this.wallet.protocolIdentifier,
+      type: EncodedType.SIGNED_TRANSACTION,
+      payload: {
+        accountIdentifier: wallet.publicKey.substr(-6),
+        transaction: signedTx,
+        from: txDetails.from,
+        amount: txDetails.amount,
+        fee: txDetails.fee
+      }
+    }
+
+    const serializedTx = await syncProtocol.serialize(deserializedTxSigningRequest)
+
+    return (unsignedTransaction.callback || 'airgap-wallet://?d=') + serializedTx
+
+    /*
     const data = JSON.stringify({
       from: this.transaction.from,
       to: this.transaction.to,
@@ -88,6 +104,7 @@ export class TransactionSignedPage {
     })
 
     return 'airgap-wallet://broadcast?data=' + btoa(data)
+    */
   }
 
   sameDeviceBroadcast() {
@@ -96,11 +113,11 @@ export class TransactionSignedPage {
     if (this.platform.is('android')) {
       sApp = window.startApp.set({
         action: 'ACTION_VIEW',
-        uri: this.broadcastURL(this.signed),
+        uri: this.broadcastUrl,
         flags: ['FLAG_ACTIVITY_NEW_TASK']
       })
     } else if (this.platform.is('ios')) {
-      sApp = window.startApp.set(this.broadcastURL(this.signed))
+      sApp = window.startApp.set(this.broadcastUrl)
     }
 
     sApp.start(() => {

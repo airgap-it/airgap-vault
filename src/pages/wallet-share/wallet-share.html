@@ -9,7 +9,7 @@
 <ion-content padding class="colored-background">
 
   <ion-row justify-content-center padding-bottom>
-    <qrcode [qrdata]="walletShareUrl()" backgroundAlpha="0" foreground="white" [level]="'L'" [size]="300"></qrcode>
+    <qrcode *ngIf="walletShareUrl" [qrdata]="walletShareUrl" backgroundAlpha="0" foreground="white" [level]="'L'" [size]="300"></qrcode>
   </ion-row>
 
   <ion-row>

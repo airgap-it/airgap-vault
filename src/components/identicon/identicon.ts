@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core'
 import { toDataUrl } from 'ethereum-blockies'
+import { createIcon } from '@download/blockies'
 
 /**
  * Generated class for the IdenticonComponent component.
@@ -17,6 +18,10 @@ export class IdenticonComponent {
 
   @Input()
   set address(value: string) {
-    this.identicon = toDataUrl(value.toLowerCase())
+    if (value.startsWith('ak_')) {
+      this.identicon = createIcon({ seed: value }).toDataURL()
+    } else {
+      this.identicon = toDataUrl(value.toLowerCase())
+    }
   }
 }

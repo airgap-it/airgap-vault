@@ -135,6 +135,7 @@
     <plugin name="cordova-plugin-queries-schemes" spec="https://github.com/rjhilgefort/cordova-plugin-queries-schemes.git" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.1.3" />
     <plugin name="cordova-plugin-airgap-webview" spec="https://github.com/airgap-it/cordova-plugin-airgap-webview" />
+    <plugin name="cordova-clipboard" spec="1.2.1" />
     <engine name="android" spec="7.1.0" />
     <engine name="ios" spec="4.5.5" />
 </widget>

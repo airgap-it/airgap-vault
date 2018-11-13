@@ -8,17 +8,10 @@
 
 <ion-content padding class="colored-background">
 
-  <div *ngIf="transaction && wallet">
+  <div *ngIf="airGapTx && wallet">
     <p>You are about to send:</p>
 
-    <from-to [transaction]="transaction" [wallet]="wallet"></from-to>
-
-    <ion-list margin-top>
-      <ion-item no-lines *ngFor="let parameter of transaction.information">
-        <h2>{{parameter.label}}</h2>
-        <h3>{{parameter.value}}</h3>
-      </ion-item>
-    </ion-list>
+    <from-to [transaction]="airGapTx" [wallet]="wallet"></from-to>
   </div>
 
 </ion-content>
