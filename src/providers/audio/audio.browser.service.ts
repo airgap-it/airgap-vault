@@ -58,8 +58,9 @@ export class AudioBrowserService implements IEntropyGenerator {
           scriptProcessor.connect(audioContext.destination)
           resolve()
         },
-        () => {
-          reject()
+        err => {
+          console.log('error in audio.browser.service:', err)
+          resolve()
         }
       )
     })

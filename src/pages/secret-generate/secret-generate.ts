@@ -26,6 +26,14 @@ export class SecretGeneratePage {
   @ViewChild('touchEntropy')
   touchEntropy: TouchEntropyComponent
 
+  public cameraEnabled = true
+  public audioEnabled = true
+  public gyroEnabled = true
+  public touchEnabled = true
+
+  private ENTROPY_STARTUP_TIME = 5
+  private startupTimeWaited = false
+
   entropy = {
     isFull: false
   }
@@ -43,6 +51,19 @@ export class SecretGeneratePage {
   ) {
     this.isBrowser = !this.platform.is('cordova')
     this.renderer = this.rendererFactory.createRenderer(null, null)
+    setTimeout(() => {
+      this.startupTimeWaited = true
+      this.checkEntropySourceStatus()
+    }, this.ENTROPY_STARTUP_TIME * 1000)
+  }
+
+  checkEntropySourceStatus() {
+    if (this.startupTimeWaited) {
+      this.audioEnabled = this.audioService.getCollectedEntropyPercentage() !== 0
+      this.cameraEnabled = this.cameraService.getCollectedEntropyPercentage() !== 0
+      this.gyroEnabled = this.gyroService.getCollectedEntropyPercentage() !== 0
+      // Touch will not be disabled
+    }
   }
 
   ionViewWillEnter() {
@@ -114,20 +135,28 @@ export class SecretGeneratePage {
     this.entropyService.addEntropySource(this.gyroService)
     this.entropyService.addEntropySource(this.touchEntropy)
     this.entropyService.startEntropyCollection().then(() => {
-      this.entropyService.getEntropyUpdateObservable().subscribe(() => {
-        this.checkEntropy()
-      })
+      this.entropyService
+        .getEntropyUpdateObservable()
+        .auditTime(200)
+        .subscribe(() => {
+          this.checkEntropy()
+        })
     })
   }
 
   checkEntropy() {
     this.changeDetectorRef.detectChanges()
+    this.checkEntropySourceStatus()
+
+    const enabledSources = [this.audioEnabled, this.cameraEnabled, this.gyroEnabled, this.touchEnabled]
+    const percentageNeeded = enabledSources.reduce((a, b) => a + (b ? 100 : 0), 0)
+
     if (
       Math.min(100, this.audioService.getCollectedEntropyPercentage()) +
         Math.min(100, this.cameraService.getCollectedEntropyPercentage()) +
         Math.min(100, this.gyroService.getCollectedEntropyPercentage()) +
         Math.min(100, this.touchEntropy.getCollectedEntropyPercentage()) >=
-      400
+      percentageNeeded
     ) {
       this.entropy.isFull = true
     }

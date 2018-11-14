@@ -70,16 +70,45 @@ export class CameraBrowserService implements IEntropyGenerator {
   }
 
   start(): Promise<void> {
-    this.collectedEntropyPercentage = 0
-    return Promise.resolve()
-  }
+    return new Promise((resolve, reject) => {
+      const constraints = {
+        video: true,
+        audio: true
+      }
 
-  private initCamera(): Promise<void> {
-    return Promise.resolve()
+      this.collectedEntropyPercentage = 0
+
+      const video = this.videoElement.nativeElement
+
+      navigator.mediaDevices
+        .getUserMedia(constraints)
+        .then(stream => {
+          this.videoStream = stream
+          video.src = window.URL.createObjectURL(stream)
+          video.play()
+          resolve()
+        })
+        .catch(err => {
+          console.log('error in camera.brower.service', err)
+          resolve()
+        })
+
+      this.cameraInterval = window.setInterval(() => {
+        if (video.videoWidth === 0) {
+          return
+        }
+        let canvas = document.createElement('canvas')
+
+        let context = canvas.getContext('2d')
+
+        context.drawImage(video, 0, 0)
+        let buffer = context.getImageData(0, 0, video.videoWidth, video.videoHeight).data
+        this.handler(buffer)
+      }, this.VIDEO_FREQUENCY / 5)
+    })
   }
 
   stop(): Promise<any> {
-    const video = this.videoElement.nativeElement
     if (this.cameraInterval) {
       clearInterval(this.cameraInterval)
     }
@@ -89,7 +118,7 @@ export class CameraBrowserService implements IEntropyGenerator {
         track.stop()
       })
     } catch (e) {
-      console.error(e)
+      console.log(e)
     }
     return Promise.resolve()
   }
@@ -114,33 +143,6 @@ export class CameraBrowserService implements IEntropyGenerator {
   }
 
   setVideoElement(element) {
-    const constraints = {
-      video: true,
-      audio: true
-    }
     this.videoElement = element
-    const video = this.videoElement.nativeElement
-
-    navigator.mediaDevices
-      .getUserMedia(constraints)
-      .then(stream => {
-        this.videoStream = stream
-        video.src = window.URL.createObjectURL(stream)
-        video.play()
-      })
-      .catch(console.error)
-
-    this.cameraInterval = window.setInterval(() => {
-      if (video.videoWidth === 0) {
-        return
-      }
-      let canvas = document.createElement('canvas')
-
-      let context = canvas.getContext('2d')
-
-      context.drawImage(video, 0, 0)
-      let buffer = context.getImageData(0, 0, video.videoWidth, video.videoHeight).data
-      this.handler(buffer)
-    }, this.VIDEO_FREQUENCY / 5)
   }
 }

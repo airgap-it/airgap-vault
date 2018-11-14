@@ -42,7 +42,6 @@ export class EntropyService {
     for (let generator of this.entropyGenerators) {
       promises.push(
         generator.start().then(() => {
-          console.log('generator started')
           let entropySubscription = generator.getEntropyUpdateObservable().subscribe(result => {
             try {
               hashWorker.postMessage({ entropyHex: result.entropyHex, call: 'update' })
@@ -51,6 +50,8 @@ export class EntropyService {
             }
             if (this.entropyUpdateObserver) {
               this.entropyUpdateObserver.next(void 0)
+            } else {
+              console.warn('entropyUpdateObserver is undefined!')
             }
           })
           this.entropySubscriptions.push(entropySubscription)
