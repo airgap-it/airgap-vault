@@ -1,0 +1,11 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "7VLXNQ52UC.it.airgap.vault",
+        "paths": ["*"]
+      }
+    ]
+  }
+}
