@@ -1,0 +1,31 @@
+<ion-header transparent no-border>
+    <ion-navbar transparent> </ion-navbar>
+  </ion-header>
+  
+  <ion-content class="colored-background" padding no-bounce>
+    <h1>
+      Your secret is accessed with your defined authentication method like
+      <strong ion-text color="primary">fingerprint</strong>,
+      <strong ion-text color="primary">face id</strong> or <strong ion-text color="primary">pin</strong>.
+    </h1>
+  
+    <ion-row justify-content-center padding-vertical>
+      <img src="../assets/img/local_authentication_onboarding.svg" padding-vertical/>
+    </ion-row>
+  
+    <p>
+      Your secret needs to be accessed for wallet creation and transaction signing.
+    </p>
+  </ion-content>
+  
+  <ion-footer no-border>
+    <ion-toolbar padding transparent>
+      <ion-row justify-content-end>
+        <!-- TODO: trigger local auth -->
+        <button default ion-button color="primary" round item-right>
+          Authenticate
+        </button>
+      </ion-row>
+    </ion-toolbar>
+  </ion-footer>
+  
