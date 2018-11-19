@@ -37,5 +37,8 @@ Thumbs.db
 UserInterfaceState.xcuserstate
 e2e-reports/*
 
+build.json
+exportOptions.plist
+
 airgap_cordova_secure_storage_deploy
 airgap_cordova_secure_storage_deploy.pub
