@@ -1,9 +1,8 @@
-import { Signer } from './signer'
 import { sha3_256 } from 'js-sha3'
 import bip39 from 'bip39'
 import secretJS from 'secrets.js-grempe'
 
-export class BIP39Signer implements Signer {
+export class BIP39Signer {
   readonly checkSumLength = 10
 
   private getOffsetMapping(share: string): any {
@@ -32,7 +31,46 @@ export class BIP39Signer implements Signer {
   }
 
   mnemonicToEntropy(mnemonic: string): string {
-    return bip39.mnemonicToEntropy(mnemonic)
+    const usedList = BIP39Signer.determineWordList(mnemonic)
+
+    if (!usedList) {
+      throw Error('non-compatible mnemonic')
+    }
+
+    return bip39.mnemonicToEntropy(mnemonic, usedList)
+  }
+
+  static prepareMnemonic(mnemonic: string): string {
+    return mnemonic.trim().toLowerCase()
+  }
+
+  static validateMnemonic(mnemonic: string): boolean {
+    const preparedMnemonic = BIP39Signer.prepareMnemonic(mnemonic)
+    const wordList = BIP39Signer.determineWordList(preparedMnemonic)
+    return bip39.validateMnemonic(preparedMnemonic, wordList)
+  }
+
+  static determineWordList(mnemonic: string): any[] {
+    for (const list of BIP39Signer.wordLists()) {
+      if (bip39.validateMnemonic(BIP39Signer.prepareMnemonic(mnemonic), list)) {
+        return list
+      }
+    }
+  }
+
+  static wordLists(): any[] {
+    return [
+      bip39.wordlists.english
+      /*
+      bip39.wordlists.chinese_simplified,
+      bip39.wordlists.chinese_traditional,
+      bip39.wordlists.french,
+      bip39.wordlists.italian,
+      bip39.wordlists.japanese,
+      bip39.wordlists.korean,
+      bip39.wordlists.spanish
+      */
+    ]
   }
 
   generateSocialRecover(secret: string, numberOfShares: number, threshold: number): string[] {
