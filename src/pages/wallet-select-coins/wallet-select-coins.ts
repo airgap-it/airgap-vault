@@ -1,8 +1,9 @@
 import { Component } from '@angular/core'
-import { AlertController, IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular'
+import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular'
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
-import { AirGapWallet, ICoinProtocol, supportedProtocols } from 'airgap-coin-lib'
-import bip39 from 'bip39'
+import { ICoinProtocol, supportedProtocols } from 'airgap-coin-lib'
+import { Storage } from '@ionic/storage'
+import { LocalAuthenticationOnboardingPage } from '../local-authentication-onboarding/local-authentication-onboarding'
 
 @IonicPage()
 @Component({
@@ -18,10 +19,10 @@ export class WalletSelectCoinsPage {
 
   constructor(
     public loadingCtrl: LoadingController,
-    public alertCtrl: AlertController,
     public navCtrl: NavController,
     public navParams: NavParams,
-    private secretsProvider: SecretsProvider
+    private secretsProvider: SecretsProvider,
+    private storage: Storage
   ) {
     this.coinProtocols = supportedProtocols()
   }
@@ -45,57 +46,19 @@ export class WalletSelectCoinsPage {
     }
   }
 
-  addWallet() {
-    const loading = this.loadingCtrl.create({
-      content: 'Deriving your wallet...'
-    })
-    loading.present()
-    let secret = this.secretsProvider.getActiveSecret()
-    this.secretsProvider
-      .retrieveEntropyForSecret(secret)
-      .then(entropy => {
-        let seed = bip39.mnemonicToSeedHex(bip39.entropyToMnemonic(entropy))
-        let wallet = new AirGapWallet(
-          this.selectedProtocol.identifier,
-          this.selectedProtocol.getPublicKeyFromHexSecret(seed, this.customDerivationPath),
-          this.isHDWallet,
-          this.customDerivationPath
-        )
-        wallet.addresses = wallet.deriveAddresses(1)
-        if (
-          secret.wallets.find(obj => obj.publicKey === wallet.publicKey && obj.protocolIdentifier === wallet.protocolIdentifier) ===
-          undefined
-        ) {
-          secret.wallets.push(wallet)
-          this.secretsProvider.addOrUpdateSecret(secret).then(() => {
-            this.navCtrl.popToRoot()
-          })
-        } else {
-          this.showAlert(
-            'Wallet already exists',
-            'You already have added this specific wallet. Please change its derivation path to add another address (advanced mode).'
-          )
-        }
-        loading.dismiss()
+  async addWallet() {
+    const value = await this.storage.get('DISCLAIMER_HIDE_LOCAL_AUTH_ONBOARDING')
+    if (!value) {
+      this.navCtrl.push(LocalAuthenticationOnboardingPage, {
+        protocolIdentifier: this.selectedProtocol.identifier,
+        isHDWallet: this.isHDWallet,
+        customDerivationPath: this.customDerivationPath
       })
-      .catch(err => {
-        this.showAlert('Error', err)
-        loading.dismiss()
-      })
-  }
-
-  showAlert(title: string, message: string) {
-    let alert = this.alertCtrl.create({
-      title,
-      message,
-      enableBackdropDismiss: false,
-      buttons: [
-        {
-          text: 'Okay!',
-          role: 'cancel'
-        }
-      ]
-    })
-    alert.present()
+      return
+    }
+    try {
+      await this.secretsProvider.addWallet(this.selectedProtocol.identifier, this.isHDWallet, this.customDerivationPath)
+      await this.navCtrl.popToRoot()
+    } catch (e) {}
   }
 }
