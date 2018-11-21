@@ -28,6 +28,7 @@ import { QRCodeModule } from 'angularx-qrcode'
 import { WalletSharePageModule } from './wallet-share/wallet-share.module'
 import { SocialRecoveryImportPageModule } from './social-recovery-import/social-recovery-import.module'
 import { IntroductionPageModule } from '../pages/introduction/introduction.module'
+import { LocalAuthenticationOnboardingPageModule } from './local-authentication-onboarding/local-authentication-onboarding.module'
 
 @NgModule({
   imports: [
@@ -58,6 +59,7 @@ import { IntroductionPageModule } from '../pages/introduction/introduction.modul
     TransactionUnlockPageModule,
     TransactionOnboardingPageModule,
     WalletSelectCoinsPageModule,
+    LocalAuthenticationOnboardingPageModule,
     QRCodeModule,
     IntroductionPageModule
   ],

@@ -99,6 +99,6 @@ export class SchemeRoutingProvider {
       enableBackdropDismiss: false,
       buttons
     })
-    await alert.present()
+    return alert.present()
   }
 }

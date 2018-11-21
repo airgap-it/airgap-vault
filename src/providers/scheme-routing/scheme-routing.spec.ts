@@ -1,10 +1,17 @@
 import { async, TestBed } from '@angular/core/testing'
-import { NavController, NavParams, Platform, AlertController, App } from 'ionic-angular'
+import { NavController, NavParams, Platform, AlertController, App, LoadingController } from 'ionic-angular'
 import { StatusBar } from '@ionic-native/status-bar'
 import { SplashScreen } from '@ionic-native/splash-screen'
 
-import { PlatformMock, StatusBarMock, SplashScreenMock, NavParamsMock, DeviceProviderMock } from '../../../test-config/mocks-ionic'
-import { NavControllerMock, AlertControllerMock, AppMock } from 'ionic-mocks'
+import {
+  PlatformMock,
+  StatusBarMock,
+  SplashScreenMock,
+  NavParamsMock,
+  DeviceProviderMock,
+  AlertControllerMock
+} from '../../../test-config/mocks-ionic'
+import { NavControllerMock, AppMock, LoadingControllerMock } from 'ionic-mocks'
 import { SchemeRoutingProvider } from './scheme-routing'
 
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
@@ -27,13 +34,11 @@ describe('SchemeRoutingProvider Provider', () => {
         { provide: App, useClass: AppMock },
         {
           provide: AlertController,
-          useValue: jasmine.createSpyObj('AlertController', {
-            create: Promise.resolve(
-              jasmine.createSpyObj('Alert', {
-                present: () => Promise.resolve()
-              })
-            )
-          })
+          useValue: AlertControllerMock
+        },
+        {
+          provide: LoadingController,
+          useClass: LoadingControllerMock
         },
         { provide: SecureStorageService, useClass: SecureStorageServiceMock },
         { provide: Storage, useClass: StorageMock },
@@ -56,10 +61,8 @@ describe('SchemeRoutingProvider Provider', () => {
     expect(schemeRoutingProvider instanceof SchemeRoutingProvider).toBe(true)
   })
 
-  /*
-  it('should should show root modal if device is rooted', async done => {
+  it('should show alert', async done => {
     await schemeRoutingProvider.showAlert('Test', 'Message', [])
     done()
   })
-  */
 })

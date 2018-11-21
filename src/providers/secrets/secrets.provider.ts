@@ -4,8 +4,10 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 
 import { Secret } from '../../models/secret'
 import { SecureStorageService } from '../storage/secure-storage'
-import { AirGapWallet } from 'airgap-coin-lib'
+import { AirGapWallet, getProtocolByIdentifier } from 'airgap-coin-lib'
+import { LoadingController, AlertController } from 'ionic-angular'
 
+import bip39 from 'bip39'
 @Injectable()
 export class SecretsProvider {
   private activeSecret: Secret
@@ -13,7 +15,13 @@ export class SecretsProvider {
   public currentSecretsList = new BehaviorSubject(this.secretsList)
   public storageRead = false
 
-  constructor(private secureStorageService: SecureStorageService, private storage: Storage, private ngZone: NgZone) {
+  constructor(
+    private secureStorageService: SecureStorageService,
+    private storage: Storage,
+    private ngZone: NgZone,
+    private loadingCtrl: LoadingController,
+    private alertCtrl: AlertController
+  ) {
     this.read().then(secrets => {
       this.storageRead = true
       this.secretsList.push(...secrets.map(obj => Secret.init(obj)))
@@ -172,5 +180,63 @@ export class SecretsProvider {
   persist(): Promise<void> {
     this.secretsList.forEach(obj => obj.flushSecret()) // make sure there are no secrets in there
     return this.storage.set('airgap-secret-list', this.secretsList)
+  }
+
+  addWallet(protocolIdentifier: string, isHDWallet: boolean, customDerivationPath: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const loading = this.loadingCtrl.create({
+        content: 'Deriving your wallet...'
+      })
+      loading.present()
+
+      const protocol = getProtocolByIdentifier(protocolIdentifier)
+
+      let secret = this.getActiveSecret()
+      this.retrieveEntropyForSecret(secret)
+        .then(entropy => {
+          let seed = bip39.mnemonicToSeedHex(bip39.entropyToMnemonic(entropy))
+          let wallet = new AirGapWallet(
+            protocol.identifier,
+            protocol.getPublicKeyFromHexSecret(seed, customDerivationPath),
+            isHDWallet,
+            customDerivationPath
+          )
+          wallet.addresses = wallet.deriveAddresses(1)
+          if (
+            secret.wallets.find(obj => obj.publicKey === wallet.publicKey && obj.protocolIdentifier === wallet.protocolIdentifier) ===
+            undefined
+          ) {
+            secret.wallets.push(wallet)
+            resolve(this.addOrUpdateSecret(secret))
+          } else {
+            this.showAlert(
+              'Wallet already exists',
+              'You already have added this specific wallet. Please change its derivation path to add another address (advanced mode).'
+            )
+            reject()
+          }
+          loading.dismiss()
+        })
+        .catch(err => {
+          this.showAlert('Error', err)
+          loading.dismiss()
+          reject()
+        })
+    })
+  }
+
+  showAlert(title: string, message: string) {
+    let alert = this.alertCtrl.create({
+      title,
+      message,
+      enableBackdropDismiss: false,
+      buttons: [
+        {
+          text: 'Okay!',
+          role: 'cancel'
+        }
+      ]
+    })
+    alert.present()
   }
 }
