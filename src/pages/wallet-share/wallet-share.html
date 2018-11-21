@@ -1,34 +1,24 @@
 <ion-header transparent no-border>
   <ion-navbar transparent>
-    <ion-title>
-      <p ion-text color="white">Share Wallet</p>
-    </ion-title>
+    <ion-title> <p ion-text color="white">Sync Wallet</p> </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding class="colored-background">
-
   <ion-row justify-content-center padding-bottom>
     <qrcode *ngIf="walletShareUrl" [qrdata]="walletShareUrl" backgroundAlpha="0" foreground="white" [level]="'L'" [size]="300"></qrcode>
   </ion-row>
 
   <ion-row>
-    <p>
-    This QR includes your <b>extended</b> public key, public address and your type of coin. Do not share it publicly!
-    </p>
+    <p>This QR includes your <b>extended</b> public key, public address and your type of coin. Do not share it publicly!</p>
   </ion-row>
-
 </ion-content>
 
 <ion-footer no-border>
   <ion-toolbar padding transparent>
     <ion-row justify-content-end>
-      <button default ion-button color="light" (click)="sameDeviceSync()" round item-right>
-        Same-Device-Sync
-      </button>
-      <button default ion-button color="primary" (click)="done()" round item-right>
-        Done
-      </button>
+      <button default ion-button color="light" (click)="sameDeviceSync()" round item-right>Same-Device-Sync</button>
+      <button default ion-button color="primary" (click)="done()" round item-right>Done</button>
     </ion-row>
   </ion-toolbar>
 </ion-footer>
