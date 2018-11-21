@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 import { Secret } from '../../models/secret'
 import { SecureStorageService } from '../storage/secure-storage'
 import { AirGapWallet, getProtocolByIdentifier } from 'airgap-coin-lib'
-import { LoadingController, NavController, AlertController } from 'ionic-angular'
+import { LoadingController, AlertController } from 'ionic-angular'
 
 import bip39 from 'bip39'
 @Injectable()

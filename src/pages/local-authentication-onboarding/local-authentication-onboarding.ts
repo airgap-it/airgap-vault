@@ -24,7 +24,7 @@ export class LocalAuthenticationOnboardingPage {
     this.customDerivationPath = this.navParams.get('customDerivationPath')
   }
 
-  async requestPermission() {
+  async authenticate() {
     await this.storage.set('DISCLAIMER_HIDE_LOCAL_AUTH_ONBOARDING', true)
     try {
       await this.secretsProvider.addWallet(this.protocolIdentifier, this.isHDWallet, this.customDerivationPath)

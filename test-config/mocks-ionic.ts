@@ -1,20 +1,21 @@
 import { StatusBar } from '@ionic-native/status-bar'
 import { SplashScreen } from '@ionic-native/splash-screen'
-import { AlertController, Alert } from 'ionic-angular';
-import { AlertInputOptions, AlertOptions } from 'ionic-angular/umd/components/alert/alert-options';
+
+export const AlertControllerMock = jasmine.createSpyObj('AlertController', {
+  create: jasmine.createSpyObj('Alert', {
+    present: () => Promise.resolve()
+  })
+})
 
 export class DeviceProviderMock {
-
   isRooted = 0
 
   checkForRoot() {
     return Promise.resolve(this.isRooted)
   }
-
 }
 
 export class NavParamsMock {
-
   static params = {}
 
   public get(key: string): any {
@@ -31,7 +32,7 @@ export class NavParamsMock {
 
 export class PlatformMock {
   public ready(): Promise<string> {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       resolve('READY')
     })
   }
@@ -41,7 +42,7 @@ export class PlatformMock {
   }
 
   public registerBackButtonAction(fn: Function, priority?: number): Function {
-    return (() => true)
+    return () => true
   }
 
   public hasFocus(ele: HTMLElement): boolean {
@@ -70,7 +71,7 @@ export class PlatformMock {
   }
 
   public registerListener(ele: any, eventName: string, callback: any): Function {
-    return (() => true)
+    return () => true
   }
 
   public win(): Window {
@@ -107,23 +108,22 @@ export class SplashScreenMock extends SplashScreen {
 }
 
 export class NavMock {
-
   public pop(): any {
-    return new Promise(function (resolve: Function): void {
+    return new Promise(function(resolve: Function): void {
       resolve()
     })
   }
 
   public push(): any {
-    return new Promise(function (resolve: Function): void {
+    return new Promise(function(resolve: Function): void {
       resolve()
     })
   }
 
   public getActive(): any {
     return {
-      'instance': {
-        'model': 'something'
+      instance: {
+        model: 'something'
       }
     }
   }
@@ -135,9 +135,6 @@ export class NavMock {
   public registerChildNav(nav: any): void {
     return
   }
-
 }
 
-export class DeepLinkerMock {
-
-}
+export class DeepLinkerMock {}

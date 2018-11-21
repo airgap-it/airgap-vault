@@ -56,9 +56,7 @@ export class WalletSelectCoinsPage {
       })
       return
     }
-    try {
-      await this.secretsProvider.addWallet(this.selectedProtocol.identifier, this.isHDWallet, this.customDerivationPath)
-      await this.navCtrl.popToRoot()
-    } catch (e) {}
+    await this.secretsProvider.addWallet(this.selectedProtocol.identifier, this.isHDWallet, this.customDerivationPath)
+    await this.navCtrl.popToRoot()
   }
 }
