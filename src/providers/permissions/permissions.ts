@@ -84,11 +84,9 @@ export class PermissionsProvider {
     } else if (this.platform.is('ios')) {
       if (permission === PermissionTypes.CAMERA) {
         let permissionStatus = await this.hasCameraPermission()
-        console.log('permission is ', permissionStatus)
         canAskForPermission = !(permissionStatus === PermissionStatus.DENIED)
       } else if (permission === PermissionTypes.MICROPHONE) {
         let permissionStatus = await this.hasMicrophonePermission()
-        console.log('permission is ', permissionStatus)
         canAskForPermission = !(permissionStatus === PermissionStatus.DENIED)
       }
     }
