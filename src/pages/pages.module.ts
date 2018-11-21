@@ -29,6 +29,7 @@ import { WalletSharePageModule } from './wallet-share/wallet-share.module'
 import { SocialRecoveryImportPageModule } from './social-recovery-import/social-recovery-import.module'
 import { IntroductionPageModule } from '../pages/introduction/introduction.module'
 import { LocalAuthenticationOnboardingPageModule } from './local-authentication-onboarding/local-authentication-onboarding.module'
+import { SecretGenerateOnboardingPageModule } from './secret-generate-onboarding/secret-generate-onboarding.module'
 
 @NgModule({
   imports: [
@@ -37,6 +38,7 @@ import { LocalAuthenticationOnboardingPageModule } from './local-authentication-
     MaterialIconsModule,
     ComponentsModule,
     SecretGeneratePageModule,
+    SecretGenerateOnboardingPageModule,
     SecretValidatePageModule,
     SecretCreatePageModule,
     SecretEditPageModule,

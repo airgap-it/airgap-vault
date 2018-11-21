@@ -1,25 +1,19 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the SecretGenerateOnboardingPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { Component } from '@angular/core'
+import { IonicPage, NavController } from 'ionic-angular'
+import { Storage } from '@ionic/storage'
+import { SecretGeneratePage } from '../secret-generate/secret-generate'
+import { PermissionsProvider } from '../../providers/permissions/permissions'
 
 @IonicPage()
 @Component({
   selector: 'page-secret-generate-onboarding',
-  templateUrl: 'secret-generate-onboarding.html',
+  templateUrl: 'secret-generate-onboarding.html'
 })
 export class SecretGenerateOnboardingPage {
+  constructor(public navCtrl: NavController, private storage: Storage, private permissionsProvider: PermissionsProvider) {}
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  async continue() {
+    await this.storage.set('DISCLAIMER_GENERATE_INITIAL', true)
+    this.navCtrl.push(SecretGeneratePage)
   }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad SecretGenerateOnboardingPage');
-  }
-
 }

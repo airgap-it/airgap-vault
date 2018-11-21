@@ -1,65 +1,25 @@
-<!--
-  Generated template for the TabSecretsPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header no-border>
   <ion-navbar color="secondary"> <ion-title>Wallets</ion-title> </ion-navbar>
 
   <div class="colored-background" padding-horizontal>
-    <current-secret
-      [chosenSecret]="activeSecret"
-      (secretChanged)="onSecretChanged($event)"
-    ></current-secret>
+    <current-secret [chosenSecret]="activeSecret" (secretChanged)="onSecretChanged($event)"></current-secret>
   </div>
 
-  <div class="colored-background">
-    <ion-searchbar
-      placeholder="Search Currency"
-      (ionInput)="filterItems($event)"
-    ></ion-searchbar>
-  </div>
+  <div class="colored-background"><ion-searchbar placeholder="Search Currency" (ionInput)="filterItems($event)"></ion-searchbar></div>
 </ion-header>
 
 <ion-content *ngIf="wallets" padding>
-  <ion-list
-    *ngFor="
-      let wallet of (wallets | async | filterWallets: { symbol: symbolFilter })
-    "
-  >
-    <wallet-item
-      [wallet]="wallet"
-      (click)="goToReceiveAddress(wallet)"
-    ></wallet-item>
+  <ion-list *ngFor="let wallet of (wallets | async | filterWallets: { symbol: symbolFilter })">
+    <wallet-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></wallet-item>
   </ion-list>
 
-  <div
-    class="empty-list"
-    *ngIf="
-      wallets &&
-      (wallets | async | filterWallets: { symbol: symbolFilter }).length === 0
-    "
-  >
-    <img src="../assets/img/no-wallet-added-onboarding.svg" />
-    <p>
-      <strong>
-        Create a new wallet by selecting a currency and sync it to AirGap
-        Wallet.
-      </strong>
-    </p>
+  <div class="empty-list" *ngIf="wallets && (wallets | async | filterWallets: { symbol: symbolFilter }).length === 0">
+    <img src="./assets/img/no-wallet-added-onboarding.svg" />
+    <p><strong> Create a new wallet by selecting a currency and sync it to AirGap Wallet. </strong></p>
   </div>
 
   <ion-fab bottom right>
-    <button
-      id="btn-add-wallet"
-      default
-      ion-button
-      color="secondary"
-      (click)="addWallet()"
-      round
-      icon-left
-    >
+    <button id="btn-add-wallet" default ion-button color="secondary" (click)="addWallet()" round icon-left>
       <ion-icon name="add"></ion-icon>
       Add Wallet
     </button>

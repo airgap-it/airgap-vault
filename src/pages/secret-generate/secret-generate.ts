@@ -7,7 +7,7 @@ import { AudioNativeService } from '../../providers/audio/audio.native.service'
 import { EntropyService } from '../../providers/entropy/entropy.service'
 import { GyroscopeNativeService } from '../../providers/gyroscope/gyroscope.native.service'
 import { TouchEntropyComponent } from '../../components/touch-entropy/touch-entropy'
-import { AndroidPermissions } from '@ionic-native/android-permissions'
+import { PermissionsProvider, PermissionTypes } from '../../providers/permissions/permissions'
 
 declare var window: any
 
@@ -46,7 +46,7 @@ export class SecretGeneratePage {
     public audioService: AudioNativeService,
     private platform: Platform,
     private changeDetectorRef: ChangeDetectorRef,
-    private androidPermissions: AndroidPermissions,
+    private permissionsProvider: PermissionsProvider,
     private rendererFactory: RendererFactory2
   ) {
     this.isBrowser = !this.platform.is('cordova')
@@ -66,50 +66,18 @@ export class SecretGeneratePage {
     }
   }
 
-  ionViewWillEnter() {
+  async ionViewWillEnter() {
+    await this.platform.ready()
+
     if (this.isBrowser) {
       this.cameraService.setVideoElement(this.videoElement)
     }
     this.cameraService.viewWillEnter()
     this.injectCSS()
-    this.platform
-      .ready()
-      .then(result => {
-        console.log('checking permissions')
-        return this.checkPermissions()
-      })
-      .then(permissions => {
-        console.log(permissions)
-        let requests = []
 
-        if (!permissions[0].hasPermission) {
-          requests.push(this.androidPermissions.PERMISSION.CAMERA)
-        }
+    await this.permissionsProvider.requestPermissions([PermissionTypes.CAMERA, PermissionTypes.MICROPHONE])
 
-        if (!permissions[1].hasPermission) {
-          requests.push(this.androidPermissions.PERMISSION.RECORD_AUDIO)
-        }
-
-        if (requests.length === 0) {
-          return Promise.resolve()
-        }
-
-        return this.androidPermissions.requestPermissions(requests)
-      })
-      .then(result => {
-        console.log(result)
-        this.initEntropy()
-      })
-      .catch(error => {
-        // we are not on cordova, so permissions do not matter
-        if (error === 'cordova_not_available') {
-          return this.initEntropy()
-        }
-
-        // we got a permission denied, requesting them again
-        console.warn('permissions missing')
-        console.warn(error)
-      })
+    this.initEntropy()
   }
 
   private injectCSS() {
@@ -120,13 +88,6 @@ export class SecretGeneratePage {
   private uninjectCSS() {
     // removes injected css
     this.renderer.removeClass(document.body, 'hide-tabbar')
-  }
-
-  checkPermissions(): Promise<any> {
-    return Promise.all([
-      this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.CAMERA),
-      this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.RECORD_AUDIO)
-    ])
   }
 
   initEntropy() {

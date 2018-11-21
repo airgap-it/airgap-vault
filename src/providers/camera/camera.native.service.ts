@@ -5,6 +5,7 @@ import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
 import { Observable } from 'rxjs'
 
 import workerJS from '../../assets/workers/entropyCalculatorWorker'
+import { PermissionsProvider, PermissionTypes, PermissionStatus } from '../permissions/permissions'
 const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
 const entropyCalculatorWorker = new Worker(blobURL)
 
@@ -38,9 +39,9 @@ export class CameraNativeService implements IEntropyGenerator {
     private platform: Platform,
     private cameraPreview: CameraPreview,
     private rendererFactory: RendererFactory2,
-    private ngZone: NgZone
+    private permissionsProvider: PermissionsProvider
   ) {
-    this.renderer = rendererFactory.createRenderer(null, null)
+    this.renderer = this.rendererFactory.createRenderer(null, null)
     this.entropyObservable = Observable.create(observer => {
       entropyCalculatorWorker.onmessage = event => {
         this.collectedEntropyPercentage += event.data.entropyMeasure
@@ -73,14 +74,16 @@ export class CameraNativeService implements IEntropyGenerator {
     this.disabled = false
   }
 
-  start(): Promise<void> {
+  async start(): Promise<void> {
     this.disabled = false
     this.collectedEntropyPercentage = 0
-    return new Promise((resolve, reject) => {
-      this.platform.ready().then(() => {
-        resolve(this.initCamera())
-      })
-    })
+    await this.platform.ready()
+
+    const permissionStatus = await this.permissionsProvider.hasCameraPermission()
+    if (permissionStatus !== PermissionStatus.GRANTED) {
+      return
+    }
+    return this.initCamera()
   }
 
   private initCamera(): Promise<void> {

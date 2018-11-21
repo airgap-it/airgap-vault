@@ -6,6 +6,7 @@ import { Observable } from 'rxjs'
 declare var window: any
 
 import workerJS from '../../assets/workers/entropyCalculatorWorker'
+import { PermissionsProvider, PermissionStatus } from '../permissions/permissions'
 const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
 const entropyCalculatorWorker = new Worker(blobURL)
 
@@ -18,7 +19,7 @@ export class AudioNativeService implements IEntropyGenerator {
   private handler
   private entropyObservable: Observable<Entropy>
 
-  constructor(private platform: Platform) {
+  constructor(private platform: Platform, private permissionsProvider: PermissionsProvider) {
     this.entropyObservable = Observable.create(observer => {
       entropyCalculatorWorker.onmessage = event => {
         this.collectedEntropyPercentage += event.data.entropyMeasure
@@ -38,23 +39,24 @@ export class AudioNativeService implements IEntropyGenerator {
     })
   }
 
-  start(): Promise<void> {
+  async start(): Promise<void> {
     this.collectedEntropyPercentage = 0
-    return new Promise((resolve, reject) => {
-      this.platform.ready().then(() => {
-        window.audioinput.start({
-          bufferSize: this.ENTROPY_SIZE
-        })
+    await this.platform.ready()
 
-        setTimeout(() => {
-          window.addEventListener('audioinput', this.handler)
-        }, 1000)
+    const permissionStatus = await this.permissionsProvider.hasMicrophonePermission()
+    if (permissionStatus !== PermissionStatus.GRANTED) {
+      return
+    }
 
-        console.log('audioinput created.')
-
-        resolve()
-      })
+    window.audioinput.start({
+      bufferSize: this.ENTROPY_SIZE
     })
+
+    setTimeout(() => {
+      window.addEventListener('audioinput', this.handler)
+    }, 1000)
+
+    console.log('audioinput created.')
   }
 
   stop(): Promise<void> {
