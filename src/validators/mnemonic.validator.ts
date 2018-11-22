@@ -8,7 +8,7 @@ export class MnemonicValidator {
 
     if (words.length % 3 !== 0) throw new Error('invalid mnemonic')
 
-    words.map(word => {
+    words.forEach(word => {
       const index = wordlist.indexOf(word)
       if (index === -1) throw new Error('invalid mnemonic')
     })
