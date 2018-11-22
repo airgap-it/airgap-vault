@@ -1,112 +1,177 @@
 import { VerifyKeyComponent } from './verify-key'
-import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { ComponentFixture, TestBed, async } from '@angular/core/testing'
 import { IonicModule } from 'ionic-angular'
 
 describe('Component: VerifyKey', () => {
   let component: VerifyKeyComponent
   let fixture: ComponentFixture<VerifyKeyComponent>
 
-  beforeEach(() => {
+  const correctMnemonic = 'usage puzzle bottom amused genuine bike brown ripple lend aware symbol genuine neutral tortoise pluck rose brown cliff sing smile appear black occur zero'
+
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [VerifyKeyComponent],
       imports: [IonicModule.forRoot(VerifyKeyComponent)]
+    }).compileComponents().then(() => {
+      fixture = TestBed.createComponent(VerifyKeyComponent)
+      component = fixture.componentInstance
     })
+  }))
 
-    // create component and test fixture
-    fixture = TestBed.createComponent(VerifyKeyComponent)
-
-    // get test component from the fixture
-    component = fixture.componentInstance
-  })
-  /*
-  it('should validate a regular mnemonic', () => {
-    component.secret = 'unhappy bleak gather fragile lab general glory follow sniff hover robot push describe female sense gate smoke include spatial balcony divorce crime output cup'
-    console.log(component.secret)
-
+  it('should validate a regular mnemonic, and emit correct event', async(() => {
+    component.secret = correctMnemonic
     fixture.detectChanges()
     let words = component.secret.split(' ')
+
+    // validate onComplete Event is True
+    component.onContinue.subscribe(event => {
+      expect(event).toBeTruthy()
+    })
 
     words.forEach((word, i) => {
-      component.useWord({ word: word, index: i, originalIndex: i })
+      expect(component.isFull()).toBeFalsy()
+      component.useWord({ word: word })
     })
+
+    expect(component.isFull()).toBeTruthy()
     expect(component.isCorrect()).toBeTruthy()
-  })
+  }))
 
-  it('should validate a mnemonic where the same word appears 2 times', () => {
-    component.secret = 'usage puzzle bottom amused genuine bike brown ripple lend aware symbol genuine neutral tortoise pluck rose brown cliff sing smile appear black occur zero'
+  it('should detect a wrong word in a mnemonic', async(() => {
+    component.secret = correctMnemonic
     fixture.detectChanges()
-    component.ngOnInit()
-    let words = component.secret.split(' ')
+    const words = component.secret.split(' ')
 
-    // Swap 2 words
-    let doubleWord = 'genuine'
-    let firstPosition = words.indexOf(doubleWord)
-    let secondPosition = words.indexOf(doubleWord, firstPosition + 1)
+    // validate onComplete Event is False
+    component.onContinue.subscribe(event => {
+      expect(event).toBeFalsy()
+    })
 
     words.forEach((word, i) => {
-      let originalIndex = i
-      if (i === firstPosition) originalIndex = secondPosition
-      if (i === secondPosition) originalIndex = firstPosition
-      component.useWord({ word: word, index: i, originalIndex: originalIndex })
+      expect(component.isFull()).toBeFalsy()
+      if (i === 5) {
+        component.useWord({ word: 'wrongWord' })
+      } else {
+        component.useWord({ word: word })
+      }
+    })
+
+    expect(component.isFull()).toBeTruthy()
+    expect(component.isCorrect()).toBeFalsy()
+  }))
+
+  it('should validate a mnemonic where the same word appears 2 times', async(() => {
+    component.secret = correctMnemonic
+    fixture.detectChanges()
+    component.ngOnInit()
+    const words = component.secret.split(' ')
+
+    words.forEach((word, i) => {
+      component.useWord({ word: word })
     })
 
     expect(component.isCorrect()).toBeTruthy()
-  })
+  }))
 
-  it('should not validate user input that is too short', () => {
-    component.secret = 'usage puzzle bottom amused genuine bike brown ripple lend aware symbol genuine neutral tortoise pluck rose brown cliff sing smile appear black occur zero'
+  it('should not validate user input that is too short', async(() => {
+    component.secret = correctMnemonic
     fixture.detectChanges()
     component.ngOnInit()
-    let words = component.secret.split(' ')
+    const words = component.secret.split(' ')
 
-    for (let i = 0; i < words.length - 1; i++) {
-      component.useWord({ word: words[i], index: i, originalIndex: i })
+    words.forEach((word, i) => {
+      if (i === words.length - 1) return
+      component.useWord({ word: word })
+    })
+
+    expect(component.isFull()).toBeFalsy()
+    expect(component.isCorrect()).toBeFalsy()
+    component.useWord({ word: words[words.length - 1] })
+    expect(component.isFull()).toBeTruthy()
+    expect(component.isCorrect()).toBeTruthy()
+  }))
+
+  it('should give the correct empty spots', async(() => {
+    component.secret = correctMnemonic
+    fixture.detectChanges()
+    component.ngOnInit()
+    const words = component.secret.split(' ')
+
+    // first empty spot is zero
+    expect(component.emptySpot(component.currentWords)).toEqual(0)
+
+    component.useWord(words[0])
+
+    // next empty spot is one
+    expect(component.emptySpot(component.currentWords)).toEqual(1)
+  }))
+
+  it('should let users select words to correct them', async(() => {
+    component.secret = correctMnemonic
+    fixture.detectChanges()
+    component.ngOnInit()
+    const words = component.secret.split(' ')
+
+    words.forEach((word, i) => {
+      component.useWord({ word: word })
+    })
+
+    // now select a word
+    component.selectWord(5)
+    expect(component.selectedWord).toEqual(5)
+    expect(component.currentWords[5]).toEqual({ word: words[5] })
+  }))
+
+  it('should give users 3 words to choose from', async(() => {
+    component.secret = correctMnemonic
+    component.ngOnInit()
+    fixture.detectChanges()
+
+    let wordSelector = fixture.nativeElement.querySelector('#wordSelector')
+
+    // check if there are three words
+    expect(wordSelector.children.length).toBe(3)
+
+    let foundWord = false
+    for (let i = 0; i < wordSelector.children.length; i++) {
+      if (wordSelector.children.item(i).textContent.trim() === correctMnemonic.split(' ')[0]) {
+        foundWord = true
+      }
     }
-    expect(component.isCorrect()).toBeFalsy()
-    component.useWord({ word: words[words.length - 1], index: 23, originalIndex: 23 })
-    expect(component.isCorrect()).toBeTruthy()
-  })
 
-  it('should not validate user input that is too long', () => {
-    component.secret = 'usage puzzle bottom amused genuine bike brown ripple lend aware symbol genuine neutral tortoise pluck rose brown cliff sing smile appear black occur zero'
-    fixture.detectChanges()
+    // check if one of the words is the correct one
+    expect(foundWord).toBeTruthy()
+  }))
+
+  it('should give users 3 words to choose from if selecting a specific one', async(() => {
+    component.secret = correctMnemonic
     component.ngOnInit()
-    let words = component.secret.split(' ')
-
-    words.forEach((word, i) => {
-      component.useWord({ word: word, index: i, originalIndex: i })
-    })
-    expect(component.isCorrect()).toBeTruthy()
-    component.useWord({ word: 'bacon', index: 0, originalIndex: 0 })
-    expect(component.isCorrect()).toBeFalsy()
-  })
-
-  it('should not validate user input with typo', () => {
-    component.secret = 'usage puzzle bottom amused genuine bike brown ripple lend aware symbol genuine neutral tortoise pluck rose brown cliff sing smile appear black occur zero'
     fixture.detectChanges()
-    component.ngOnInit()
-    let words = component.secret.split(' ')
 
-    words.forEach((word, i) => {
-      let insertWord = word
-      if (i === 0) insertWord = word.substr(0, word.length - 1)
-      component.useWord({ word: insertWord, index: i, originalIndex: i })
+    component.secret.split(' ').forEach((word, i) => {
+      if (i > 10) return
+      component.useWord({ word: word })
     })
-    expect(component.isCorrect()).toBeFalsy()
-  })
 
-  it('should not validate user input with invalid word', () => {
-    component.secret = 'usage puzzle bottom amused genuine bike brown ripple lend aware symbol genuine neutral tortoise pluck rose brown cliff sing smile appear black occur zero'
+    const selectedIndex = 5
+    component.selectWord(selectedIndex)
+
     fixture.detectChanges()
-    component.ngOnInit()
-    let words = component.secret.split(' ')
 
-    words.forEach((word, i) => {
-      let insertWord = word
-      if (i === 0) insertWord = 'guetzli'
-      component.useWord({ word: insertWord, index: i, originalIndex: i })
-    })
-    expect(component.isCorrect()).toBeFalsy()
-  })
-  */
+    let wordSelector = fixture.nativeElement.querySelector('#wordSelector')
+
+    // check if there are three words
+    expect(wordSelector.children.length).toBe(3)
+
+    let foundWord = false
+    for (let i = 0; i < wordSelector.children.length; i++) {
+      if (wordSelector.children.item(i).textContent.trim() === correctMnemonic.split(' ')[selectedIndex]) {
+        foundWord = true
+      }
+    }
+
+    // check if one of the words is the correct one
+    expect(foundWord).toBeTruthy()
+  }))
+
 })

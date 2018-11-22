@@ -51,7 +51,7 @@ describe('SchemeRoutingProvider Provider', () => {
     })
   }))
 
-  beforeEach(async () => {
+  beforeEach(() => {
     schemeRoutingProvider = TestBed.get(SchemeRoutingProvider)
     storageProvider = TestBed.get(Storage)
     secureStorage = TestBed.get(SecureStorageService)
