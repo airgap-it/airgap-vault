@@ -105,7 +105,6 @@
     <plugin name="cordova-android-support-gradle-release" spec="^1.2.0">
         <variable name="ANDROID_SUPPORT_VERSION" value="26.1.0" />
     </plugin>
-    <plugin name="cordova-plugin-android-permissions" spec="^1.0.0" />
     <plugin name="cordova-plugin-camera-preview" spec="git+https://github.com/cordova-plugin-camera-preview/cordova-plugin-camera-preview.git">
         <variable name="ANDROID_SUPPORT_LIBRARY_VERSION" value="26.1.0" />
     </plugin>
@@ -138,6 +137,7 @@
     <plugin name="cordova-plugin-airgap-webview" spec="https://github.com/airgap-it/cordova-plugin-airgap-webview" />
     <plugin name="cordova-clipboard" spec="1.2.1" />
     <plugin name="cordova-plugin-airgap-secure-storage" spec="0.1.5" />
+    <plugin name="cordova.plugins.diagnostic" spec="4.0.10" />
     <engine name="android" spec="7.1.2" />
     <engine name="ios" spec="4.5.5" />
 </widget>

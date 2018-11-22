@@ -1,5 +1,26 @@
 page-tab-scan {
+  .transparent {
+    background: none !important;
+  }
+
   p {
-    background: rgba(color($colors, secondary-light), 0.48);
+    background: rgba(color($colors, secondary-light), 0.5);
+  }
+
+  .row--height__100 {
+    height: 100%;
+    img {
+      height: 45vh;
+    }
+  }
+
+  ion-icon {
+    font-size: 180px;
+    width: 100%;
+    color: color($colors, dark);
+  }
+
+  h3 {
+    color: color($colors, dark);
   }
 }

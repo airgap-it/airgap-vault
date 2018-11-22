@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser'
-import { NgModule, RendererFactory2 } from '@angular/core'
+import { NgModule, RendererFactory2, NgZone } from '@angular/core'
 import { IonicApp, IonicModule, Platform } from 'ionic-angular'
 import { SplashScreen } from '@ionic-native/splash-screen'
 import { StatusBar } from '@ionic-native/status-bar'
@@ -10,7 +10,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader'
 import { MyApp } from './app.component'
 import { CameraPreview } from '@ionic-native/camera-preview'
 import { Clipboard } from '@ionic-native/clipboard'
-import { AndroidPermissions } from '@ionic-native/android-permissions'
+import { Diagnostic } from '@ionic-native/diagnostic'
 import { MaterialIconsModule } from 'ionic2-material-icons'
 import { TransactionsProvider } from '../providers/transactions/transactions'
 import { SecretsProvider } from '../providers/secrets/secrets.provider'
@@ -32,6 +32,7 @@ import { DeviceMotion } from '@ionic-native/device-motion'
 import { StartupChecksProvider } from '../providers/startup-checks/startup-checks.provider'
 import { SchemeRoutingProvider } from '../providers/scheme-routing/scheme-routing'
 import { ClipboardBrowserProvider } from '../providers/clipboard-browser/clipboard-browser'
+import { PermissionsProvider } from '../providers/permissions/permissions'
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -69,7 +70,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     CameraPreview,
     Deeplinks,
     DeviceMotion,
-    AndroidPermissions,
+    Diagnostic,
     HttpClientModule,
     TransactionsProvider,
     SecretsProvider,
@@ -84,12 +85,12 @@ export function HttpLoaderFactory(http: HttpClient) {
     {
       provide: CameraNativeService,
       useFactory: CameraFactory,
-      deps: [Platform, CameraPreview, RendererFactory2]
+      deps: [Platform, CameraPreview, RendererFactory2, NgZone, PermissionsProvider]
     },
     {
       provide: AudioNativeService,
       useFactory: AudioServiceFactory,
-      deps: [Platform]
+      deps: [Platform, PermissionsProvider]
     },
     {
       provide: GyroscopeNativeService,
@@ -102,7 +103,8 @@ export function HttpLoaderFactory(http: HttpClient) {
       deps: [Platform]
     },
     DeviceProvider,
-    SchemeRoutingProvider
+    SchemeRoutingProvider,
+    PermissionsProvider
   ]
 })
 export class AppModule {}

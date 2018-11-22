@@ -1,12 +1,12 @@
-import { ElementRef, Component, RendererFactory2, ViewChild } from '@angular/core'
+import { Component, ViewChild } from '@angular/core'
 import { AlertController, IonicPage, NavController, Platform } from 'ionic-angular'
 import { Transaction } from '../../models/transaction.model'
 import { ScannerProvider } from '../../providers/scanner/scanner'
 import { TransactionsProvider } from '../../providers/transactions/transactions'
-import { AndroidPermissions } from '@ionic-native/android-permissions'
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import { SchemeRoutingProvider } from '../../providers/scheme-routing/scheme-routing'
 import { ZXingScannerComponent } from '@zxing/ngx-scanner'
+import { PermissionsProvider, PermissionTypes, PermissionStatus } from '../../providers/permissions/permissions'
 
 @IonicPage()
 @Component({
@@ -22,55 +22,49 @@ export class TabScanPage {
 
   public isBrowser = false
 
-  private renderer
   hasCameras = false
 
   private webscanner: any
   private selectedCamera
 
+  public hasCameraPermission = false
+
   constructor(
     private schemeRouting: SchemeRoutingProvider,
     private alertCtrl: AlertController,
-    private androidPermissions: AndroidPermissions,
-    private rendererFactory: RendererFactory2,
     private navController: NavController,
     private platform: Platform,
     private secretsProvider: SecretsProvider,
     private transactionProvider: TransactionsProvider,
-    private scanner: ScannerProvider
+    private scanner: ScannerProvider,
+    private permissionsProvider: PermissionsProvider
   ) {
     this.isBrowser = !this.platform.is('cordova')
-    this.renderer = this.rendererFactory.createRenderer(null, null)
   }
 
-  ionViewWillEnter() {
+  async ionViewWillEnter() {
     if (this.platform.is('cordova')) {
-      this.renderer.addClass(document.body, 'transparent-bg')
+      await this.platform.ready()
+      await this.checkCameraPermissionsAndActivate()
+    }
+  }
 
-      this.platform
-        .ready()
-        .then(result => {
-          return this.checkPermissions()
-        })
-        .then(permission => {
-          if (!permission.hasPermission) {
-            return this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.CAMERA)
-          }
+  async requestPermission() {
+    await this.permissionsProvider.userRequestsPermissions([PermissionTypes.CAMERA])
+    await this.checkCameraPermissionsAndActivate()
+  }
 
-          return Promise.resolve()
-        })
-        .then(result => {
-          this.startScan()
-        })
-        .catch(error => {
-          console.warn('permissions missing')
-          console.warn(error)
-        })
+  async checkCameraPermissionsAndActivate() {
+    const permission = await this.permissionsProvider.hasCameraPermission()
+    if (permission === PermissionStatus.GRANTED) {
+      this.hasCameraPermission = true
+      this.startScan()
     }
   }
 
   ionViewDidEnter() {
     if (!this.platform.is('cordova')) {
+      this.hasCameraPermission = true
       this.zxingScanner.camerasNotFound.subscribe((devices: MediaDeviceInfo[]) => {
         console.error('An error has occurred when trying to enumerate your video-stream-enabled devices.')
       })
@@ -86,14 +80,9 @@ export class TabScanPage {
     }
   }
 
-  checkPermissions() {
-    return this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.CAMERA)
-  }
-
   ionViewWillLeave() {
     if (this.platform.is('cordova')) {
       this.scanner.destroy()
-      this.renderer.removeClass(document.body, 'transparent-bg')
     } else {
       this.zxingScanner.resetCodeReader()
     }
@@ -192,43 +181,6 @@ export class TabScanPage {
       })
 
       alert.present()
-    })
-  }
-
-  simulateAirGapTx() {
-    /*
-    this.transactionScanned(this.schemeService.extractAirGapTx(
-      'airgap-vault://sign?data=' + btoa(JSON.stringify({
-        'protocolIdentifier': 'eth',
-        'publicKey': '03c2c5da503a199294e2354425f9571d060a3a5971b4c61fcdccaf035d0fb18e6d',
-        'payload': {
-          'from': '0x7461531f581A662C5dF140FD6eA1317641fFcad2',
-          'nonce': '0x00',
-          'gasPrice': '0x04a817c800',
-          'gasLimit': '0x5208',
-          'to': '0xf5E54317822EBA2568236EFa7b08065eF15C5d42',
-          'value': '0x0de0b6b3a7640000',
-          'data': '0x',
-          'chainId': 1
-        }
-      }))
-    ))
-    */
-  }
-
-  simulateTx() {
-    this.extractRawTx(
-      JSON.stringify({
-        nonce: '0x00',
-        gasPrice: '0x04a817c800',
-        gasLimit: '0x5208',
-        to: '0x7461531f581A662C5dF140FD6eA1317641fFcad2',
-        value: '0x00',
-        data: '0x',
-        chainId: 1
-      })
-    ).then(tx => {
-      // this.transactionScanned(tx)
     })
   }
 }
