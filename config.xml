@@ -45,17 +45,17 @@
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
     </platform>
     <platform name="ios">
-        <config-file parent="NSCameraUsageDescription" target="*-Info.plist">
+        <edit-config file="*-Info.plist" mode="merge" target="NSCameraUsageDescription">
             <string>AirGap uses your camera to scan QR Codes of transactions, and to generate entropy for the secure key generation.</string>
-        </config-file>
-        <config-file parent="NSMicrophoneUsageDescription" target="*-Info.plist">
+        </edit-config>
+        <edit-config file="*-Info.plist" mode="merge" target="NSMicrophoneUsageDescription">
             <string>AirGap uses your microphone to generate entropy for the secure key generation.</string>
-        </config-file>
-        <config-file parent="LSApplicationQueriesSchemes" target="*-Info.plist">
+        </edit-config>
+        <edit-config file="*-Info.plist" mode="merge" target="LSApplicationQueriesSchemes">
             <array>
                 <string>airgap-wallet</string>
             </array>
-        </config-file>
+        </edit-config>
         <edit-config file="*-Info.plist" mode="merge" target="NSFaceIDUsageDescription">
             <string>AirGap uses Face ID to save your keys to the secure storage.</string>
         </edit-config>
