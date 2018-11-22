@@ -5,10 +5,11 @@
 <ion-content no-bounce [class.transparent]="hasCameraPermission">
   <p ion-text color="white" padding no-margin text-center>Scan a QR Code from AirGap Wallet</p>
 
-  <ion-row *ngIf="!hasCameraPermission" (click)="openSettings()" justify-content-center align-items-center class="row--height__100">
+  <ion-row *ngIf="!hasCameraPermission" (click)="requestPermission()" justify-content-center align-items-center class="row--height__100">
     <ion-col text-center>
       <img src="./assets/img/permission_onboarding_camera.svg" />
       <h3 padding-horizontal>In order to scan QR codes, AirGap Vault needs the <span ion-text color="primary">camera permission</span>.</h3>
+      <button ion-button>Grant permission</button>
     </ion-col>
   </ion-row>
 

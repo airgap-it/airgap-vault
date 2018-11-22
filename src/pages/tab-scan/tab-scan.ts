@@ -49,7 +49,7 @@ export class TabScanPage {
     }
   }
 
-  async openSettings() {
+  async requestPermission() {
     await this.permissionsProvider.userRequestsPermissions([PermissionTypes.CAMERA])
     await this.checkCameraPermissionsAndActivate()
   }
@@ -64,6 +64,7 @@ export class TabScanPage {
 
   ionViewDidEnter() {
     if (!this.platform.is('cordova')) {
+      this.hasCameraPermission = true
       this.zxingScanner.camerasNotFound.subscribe((devices: MediaDeviceInfo[]) => {
         console.error('An error has occurred when trying to enumerate your video-stream-enabled devices.')
       })
