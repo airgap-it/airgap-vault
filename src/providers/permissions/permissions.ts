@@ -61,7 +61,7 @@ export class PermissionsProvider {
       canRequestPermission = (await this.canAskForPermission(p)) || canRequestPermission
     }
     if (canRequestPermission) {
-      this.requestPermissions(permissions)
+      await this.requestPermissions(permissions)
     } else {
       this.showSettingsAlert()
     }
