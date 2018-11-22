@@ -20,6 +20,9 @@ RUN apt-get update && apt-get install -y wget --no-install-recommends \
 # install npm
 RUN npm install -g npm@5.6.0
 
+# install static webserver
+RUN npm install -g node-static
+
 # create app directory
 RUN mkdir /app
 WORKDIR /app
@@ -28,33 +31,14 @@ WORKDIR /app
 COPY package.json /app
 COPY package-lock.json /app
 
-# copy deploy keys for pull-access
-RUN mkdir -p /root/.ssh
-
-#COPY airgap_cordova_secure_storage_deploy /root/.ssh/id_rsa
-#COPY airgap_cordova_secure_storage_deploy.pub /root/.ssh/id_rsa.pub
-
-#RUN chmod 700 /root/.ssh/id_rsa
-
-#RUN echo "Host gitlab.papers.tech\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config
-
 # install dependencies
 RUN npm install
-
-# Build fix
-RUN cd node_modules/airgap-coin-lib && npm i && npm run build && cd /app
-
-# install static webserver
-RUN npm install node-static -g
 
 # Bundle app source
 COPY . /app
 
 # set to production
 RUN export NODE_ENV=production
-
-# disable aot-build
-# RUN sed -i "s/context.isProd || hasArg('--aot')/\false || hasArg('--aot')/g" ./node_modules/@ionic/app-scripts/dist/util/config.js
 
 # build
 RUN npm run build
