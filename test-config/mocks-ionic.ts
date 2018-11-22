@@ -13,6 +13,10 @@ export class DeviceProviderMock {
   checkForRoot() {
     return Promise.resolve(this.isRooted)
   }
+
+  checkForElectron() {
+    return false
+  }
 }
 
 export class NavParamsMock {

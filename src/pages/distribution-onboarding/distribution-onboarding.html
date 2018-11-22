@@ -1,0 +1,43 @@
+<ion-content class="colored-background" padding>
+  <ion-slides>
+    <ion-slide>
+      <ion-row padding-vertical text-left>
+        <h1>
+          AirGap Vault Distribution is <strong ion-text color="primary">not persistent</strong>, secrets generated will not be stored and
+          need to be <strong ion-text color="primary">imported again</strong> after a restart.
+        </h1>
+
+        <p>
+          This Distribution is intended to securely generate secret as well as to sign transactions offline, but not for secret storage.
+        </p>
+      </ion-row>
+
+      <ion-footer no-border>
+        <ion-toolbar padding transparent>
+          <ion-row justify-content-end>
+            <button default ion-button color="primary" (click)="next()" round item-right>Next</button>
+          </ion-row>
+        </ion-toolbar>
+      </ion-footer>
+    </ion-slide>
+    <ion-slide>
+      <ion-row padding-vertical text-left>
+        <h1>
+          AirGap Vault Distribution should <strong ion-text color="primary">not</strong> be run on a
+          <strong ion-text color="primary">virtual machine</strong>, if the host has network connectivity even if the connectivity has been
+          turned off temporarily.
+        </h1>
+
+        <p>Make sure that the client is disconnected from any network before you generated a new secret or import an existing one.</p>
+      </ion-row>
+
+      <ion-footer no-border>
+        <ion-toolbar padding transparent>
+          <ion-row justify-content-end>
+            <button default ion-button color="primary" (click)="accept()" round item-right>Understood</button>
+          </ion-row>
+        </ion-toolbar>
+      </ion-footer>
+    </ion-slide>
+  </ion-slides>
+</ion-content>
