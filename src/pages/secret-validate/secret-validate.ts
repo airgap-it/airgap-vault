@@ -20,18 +20,12 @@ export class SecretValidatePage {
     this.secret = this.navParams.get('secret')
   }
 
-  onCompleted(isCorrect: boolean) {
-    if (isCorrect) {
-      this.validated = true
-    } else {
-      let toast = this.toastController.create({
-        message: 'Your secret is not correct',
-        showCloseButton: true,
-        closeButtonText: 'Try again'
-      })
-      // toast.onDidDismiss(() => this.verify.reset()) TODO: Sure we want to reset everything? rather fix the bug where one is missing that we can place it accordingly (first gets filled)
-      toast.present()
-    }
+  onComplete(isCorrect: boolean) {
+    this.validated = isCorrect
+  }
+
+  onContinue() {
+    this.goToSecretEditPage()
   }
 
   goToSecretEditPage() {

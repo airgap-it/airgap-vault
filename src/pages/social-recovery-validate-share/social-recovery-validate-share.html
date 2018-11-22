@@ -6,7 +6,7 @@
 
 <ion-content class="colored-background">
   <p padding-horizontal>Tap each word to match the correct order:</p>
-  <verify-key *ngIf="shares" #verify [secret]="shares[currentShare]" (onCompleted)="onCompleted($event)"></verify-key>
+  <verify-key *ngIf="shares" #verify [secret]="shares[currentShare]" (onComplete)="onComplete($event)" (onContinue)="onContinue($event)"></verify-key>
 </ion-content>
 
 <ion-footer no-border color="primary">

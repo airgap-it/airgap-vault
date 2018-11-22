@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core'
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular'
+import { IonicPage, NavController, NavParams, ToastController, AlertController } from 'ionic-angular'
 import { VerifyKeyComponent } from '../../components/verify-key/verify-key'
 import { SocialRecoveryShowSharePage } from '../social-recovery-show-share/social-recovery-show-share'
 import { Secret } from '../../models/secret'
@@ -22,7 +22,7 @@ export class SocialRecoveryValidateSharePage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private toastController: ToastController,
+    private alertController: AlertController,
     private secretsProvider: SecretsProvider
   ) {
     this.secret = navParams.get('secret')
@@ -30,18 +30,12 @@ export class SocialRecoveryValidateSharePage {
     this.currentShare = navParams.get('currentShare')
   }
 
-  onCompleted(isCorrect: boolean) {
-    if (isCorrect) {
-      this.validated = true
-    } else {
-      let toast = this.toastController.create({
-        message: 'incorrect',
-        showCloseButton: true,
-        closeButtonText: 'Try again'
-      })
-      toast.onDidDismiss(() => this.verify.reset())
-      toast.present()
-    }
+  onComplete(isCorrect: boolean) {
+    this.validated = isCorrect
+  }
+
+  onContinue() {
+    this.next.bind(this)()
   }
 
   back() {

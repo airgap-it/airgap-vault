@@ -35,92 +35,76 @@ describe('StartupCheck Provider', () => {
         { provide: SplashScreen, useClass: SplashScreenMock },
         { provide: Platform, useClass: PlatformMock }
       ]
+    }).compileComponents().then(() => {
+      startupChecksProvider = TestBed.get(StartupChecksProvider)
+      storageProvider = TestBed.get(Storage)
+      deviceProvider = TestBed.get(DeviceProvider)
+      secureStorage = TestBed.get(SecureStorageService)
+
+      secureStorage.isSecure = 1
+      deviceProvider.isRooted = 0
+      storageProvider.set('DISCLAIMER_INITIAL', true)
+      storageProvider.set('INTRODUCTION_INITIAL', true)
     })
   }))
-
-  beforeEach(async () => {
-    startupChecksProvider = TestBed.get(StartupChecksProvider)
-    storageProvider = TestBed.get(Storage)
-    deviceProvider = TestBed.get(DeviceProvider)
-    secureStorage = TestBed.get(SecureStorageService)
-
-    secureStorage.isSecure = 1
-    deviceProvider.isRooted = 0
-    await storageProvider.set('DISCLAIMER_INITIAL', true)
-    await storageProvider.set('INTRODUCTION_INITIAL', true)
-  })
 
   it('should be created', () => {
     expect(startupChecksProvider instanceof StartupChecksProvider).toBe(true)
   })
 
-  it('should should show root modal if device is rooted', async done => {
+  it('should should show root modal if device is rooted', async(() => {
     deviceProvider.isRooted = 1
 
-    startupChecksProvider
-      .initChecks()
-      .then(() => {
-        done()
-      })
-      .catch(consequence => {
-        expect(consequence.name).toBe('rootCheck')
-        done()
-      })
-  })
+    startupChecksProvider.initChecks().catch(consequence => {
+      expect(consequence.name).toBe('rootCheck')
+    })
+  }))
 
-  it('should should show disclaimer modal if the disclaimer has not been accepted yet', async done => {
-    await storageProvider.set('DISCLAIMER_INITIAL', false)
+  it('should should show disclaimer modal if the disclaimer has not been accepted yet', async(() => {
+    storageProvider.set('DISCLAIMER_INITIAL', false)
 
     startupChecksProvider
       .initChecks()
       .then(() => {
         expect(true).toEqual(false) // we should not get here
-        done()
       })
       .catch(consequence => {
         expect(consequence.name).toBe('disclaimerAcceptedCheck')
-        done()
       })
-  })
+  }))
 
-  it('should should show the introduction modal if the introduction has not been accepted yet', async done => {
-    await storageProvider.set('INTRODUCTION_INITIAL', false)
+  it('should should show the introduction modal if the introduction has not been accepted yet', async(() => {
+    storageProvider.set('INTRODUCTION_INITIAL', false)
 
     startupChecksProvider
       .initChecks()
       .then(() => {
         expect(true).toEqual(false) // we should not get here
-        done()
       })
       .catch(consequence => {
         expect(consequence.name).toBe('introductionAcceptedCheck')
-        done()
       })
-  })
+  }))
 
-  it('should should show the device security modal if device is not secure', async done => {
+  it('should should show the device security modal if device is not secure', async(() => {
     secureStorage.isSecure = 0
 
     startupChecksProvider
       .initChecks()
       .then(() => {
         expect(true).toEqual(false) // we should not get here
-        done()
       })
       .catch(consequence => {
         expect(consequence.name).toBe('deviceSecureCheck')
-        done()
       })
-  })
+  }))
 
-  it('should resolve is everything is ok', async done => {
-    await storageProvider.set('DISCLAIMER_INITIAL', true)
-    await storageProvider.set('INTRODUCTION_INITIAL', true)
+  it('should resolve is everything is ok', async(() => {
+    storageProvider.set('DISCLAIMER_INITIAL', true)
+    storageProvider.set('INTRODUCTION_INITIAL', true)
     secureStorage.isSecure = 1
     deviceProvider.isRooted = 0
 
-    startupChecksProvider.initChecks().then(() => {
-      done()
-    })
-  })
+    startupChecksProvider.initChecks()
+  }))
 })

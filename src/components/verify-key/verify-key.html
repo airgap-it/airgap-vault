@@ -1,14 +1,34 @@
-<ion-row class="secret--container" align-items-center>
-  <ion-row justify-content-center class="secret--container__inner" [class.xtra-small]="sortedWords.length > 10">
-    <button *ngFor="let word of currentWords" color="secondary-light" (click)="removeWord(word)" ion-button round small>{{word.word}}</button>
+<ion-row class="secret--container-60" align-items-center>
+  <ion-row justify-content-center class="secret--container__inner">
+    <span *ngFor="let word of splittedSecret; index as i" [class.xtra-small]="splittedSecret.length > 10">
+      <button *ngIf="currentWords[i]" (click)="selectWord(i)" [color]="selectedWord === i ? 'primary' : 'secondary-light'" ion-button round small>{{ currentWords[i].word }}</button>
+      <button *ngIf="!currentWords[i]" (click)="selectEmptySpot()" class="word-placeholder" ion-button round [color]="i === emptySpot(currentWords) ? 'primary' : 'secondary-light'" outline small>{{i + 1}}</button>
+    </span>
   </ion-row>
 </ion-row>
 <hr />
-<ion-row class="secret--container" align-items-center>
-  <ion-row class="secret--container__inner" justify-content-center>
-    <span *ngFor="let word of sortedWords" [class.xtra-small]="sortedWords.length > 10">
-      <button *ngIf="word.selected" (click)="useWord(word)" color="secondary-light" ion-button round outline disabled small>{{word.word}}</button>
-      <button *ngIf="!word.selected" (click)="useWord(word)" color="secondary-light" ion-button round small>{{word.word}}</button>
-    </span>
-  </ion-row>
+<ion-row class="secret--container-40" align-items-center>
+  <ion-col *ngIf="!isCompleted && !isCorrect() && promptedWords.length === 0" id="error" padding-top padding-horizontal>
+    <p>
+      Your secret does not match the generated one. Make sure you've chosen the correct words.
+    </p>
+    <p>
+      To correct mistakes, simply select a wrong word and choose the correct one.
+    </p>
+  </ion-col>  
+
+  <ion-col *ngIf="isCompleted && isCorrect() && promptedWords.length === 0" id="message" padding-top padding-horizontal>
+      <p padding-bottom>
+        You have successfully verified this secret.
+      </p>
+    <button (click)="continue()" color="primary" ion-button block round>Continue</button>
+  </ion-col>  
+
+  <ion-col *ngIf="promptedWords.length > 0" id="wordSelector" padding-top>
+    <ion-row *ngFor="let word of promptedWords" padding-horizontal>
+      <ion-col>
+        <button (click)="useWord(word)" class="button-secret" [color]="isSelectedWord(word) ? 'primary' : 'secondary-light'" ion-button block round>{{word.word}}</button>
+      </ion-col>
+    </ion-row>
+  </ion-col>
 </ion-row>
