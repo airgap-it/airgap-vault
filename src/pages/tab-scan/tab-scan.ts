@@ -55,7 +55,7 @@ export class TabScanPage {
   }
 
   async checkCameraPermissionsAndActivate() {
-    let permission = await this.permissionsProvider.hasCameraPermission()
+    const permission = await this.permissionsProvider.hasCameraPermission()
     if (permission === PermissionStatus.GRANTED) {
       this.hasCameraPermission = true
       this.startScan()

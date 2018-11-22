@@ -19,14 +19,13 @@ export class SecretCreatePage {
     return this.secretsProvider.currentSecretsList.getValue().length === 0
   }
 
-  public goToGenerate() {
-    this.storage.get('DISCLAIMER_GENERATE_INITIAL').then(val => {
-      if (val) {
-        this.navController.push(SecretGeneratePage)
-      } else {
-        this.navController.push(SecretGenerateOnboardingPage)
-      }
-    })
+  public async goToGenerate() {
+    const hasShownDisclaimer = await this.storage.get('DISCLAIMER_GENERATE_INITIAL')
+    if (hasShownDisclaimer) {
+      this.navController.push(SecretGeneratePage)
+    } else {
+      this.navController.push(SecretGenerateOnboardingPage)
+    }
   }
 
   public goToImport() {
