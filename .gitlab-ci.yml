@@ -16,8 +16,6 @@ build_ionic:
   stage: build
   before_script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - echo "$GITLAB_DEPLOY_SSH_KEY" > airgap_cordova_secure_storage_deploy
-    - echo "$GITLAB_DEPLOY_SSH_KEY_PUB" > airgap_cordova_secure_storage_deploy.pub
   script:
     - docker build --cache-from $IMAGE_TAG_LATEST -t $IMAGE_TAG .
     - docker tag $IMAGE_TAG $IMAGE_TAG_CURRENT
@@ -53,8 +51,6 @@ build_android:
     - docker
   before_script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - echo "$GITLAB_DEPLOY_SSH_KEY" > airgap_cordova_secure_storage_deploy
-    - echo "$GITLAB_DEPLOY_SSH_KEY_PUB" > airgap_cordova_secure_storage_deploy.pub
   script:
     - sed -i -e "s/version=\"0.0.0\"/version=\"$VERSION\"/g" config.xml  
     - docker build -f build/android/Dockerfile -t $IMAGE_TAG_ANDROID_CURRENT --build-arg KEYSTORE_PASSWORD="$KEYSTORE_PASSWORD" --build-arg KEYSTORE_ALIAS="$KEYSTORE_ALIAS" --build-arg BUILD_NR="$CI_PIPELINE_ID" .
@@ -72,8 +68,6 @@ build_ios:
   stage: native_build
   when: manual
   before_script:
-    - echo "$GITLAB_DEPLOY_SSH_KEY" > airgap_cordova_secure_storage_deploy
-    - echo "$GITLAB_DEPLOY_SSH_KEY_PUB" > airgap_cordova_secure_storage_deploy.pub
     - echo "$IOS_BUILD_JSON" > build.json
     - echo "$IOS_EXPORT_OPTIONS" > exportOptions.plist   
   script:

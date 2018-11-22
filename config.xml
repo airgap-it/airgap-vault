@@ -106,7 +106,9 @@
         <variable name="ANDROID_SUPPORT_VERSION" value="26.1.0" />
     </plugin>
     <plugin name="cordova-plugin-android-permissions" spec="^1.0.0" />
-    <plugin name="cordova-plugin-camera-preview" spec="git+https://github.com/cordova-plugin-camera-preview/cordova-plugin-camera-preview.git" />
+    <plugin name="cordova-plugin-camera-preview" spec="git+https://github.com/cordova-plugin-camera-preview/cordova-plugin-camera-preview.git">
+        <variable name="ANDROID_SUPPORT_LIBRARY_VERSION" value="26.1.0" />
+    </plugin>
     <plugin name="cordova-plugin-statusbar" spec="^2.4.1" />
     <plugin name="ionic-plugin-deeplinks" spec="^1.0.15">
         <variable name="URL_SCHEME" value="airgap-vault" />
@@ -128,7 +130,6 @@
     </plugin>
     <plugin name="cordova-sqlite-storage" spec="^2.3.2" />
     <plugin name="cordova-plugin-device-motion" spec="^2.0.1" />
-    <plugin name="cordova-plugin-airgap-secure-storage" spec="github:airgap-it/cordova-plugin-airgap-secure-storage#8cd36ca90df8f3edf796300f08735f721e6a274f" />
     <plugin name="com.lampa.startapp" spec="^6.1.6" />
     <plugin name="cordova-plugin-jailbreak-detection" spec="git+https://github.com/leecrossley/cordova-plugin-jailbreak-detection.git" />
     <plugin name="cordova-plugin-add-swift-support" spec="~1.7.2" />
@@ -136,6 +137,7 @@
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.1.3" />
     <plugin name="cordova-plugin-airgap-webview" spec="https://github.com/airgap-it/cordova-plugin-airgap-webview" />
     <plugin name="cordova-clipboard" spec="1.2.1" />
-    <engine name="android" spec="7.1.0" />
+    <plugin name="cordova-plugin-airgap-secure-storage" spec="0.1.5" />
+    <engine name="android" spec="7.1.2" />
     <engine name="ios" spec="4.5.5" />
 </widget>
