@@ -5,6 +5,7 @@ import { DeviceProvider } from '../device/device'
 import { ModalController } from 'ionic-angular'
 import { Storage } from '@ionic/storage'
 import { SecureStorageService } from '../storage/secure-storage'
+import { DistributionOnboardingPage } from '../../pages/distribution-onboarding/distribution-onboarding'
 
 @Injectable()
 export class StartupChecksProvider {
@@ -47,6 +48,20 @@ export class StartupChecksProvider {
         outcome: true,
         consequence: (cb: Function) => {
           this.presentModal(IntroductionPage, {}, cb)
+        }
+      },
+      {
+        name: 'electronCheck',
+        check: () => {
+          return new Promise(async resolve => {
+            const isElectron = await deviceProvider.checkForElectron()
+            const hasShownDisclaimer = await this.storage.get('DISCLAIMER_ELECTRON')
+            resolve(!isElectron || hasShownDisclaimer)
+          })
+        },
+        outcome: true,
+        consequence: (cb: Function) => {
+          this.presentModal(DistributionOnboardingPage, {}, cb)
         }
       }
     ]

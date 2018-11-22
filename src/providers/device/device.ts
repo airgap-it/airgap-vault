@@ -21,4 +21,8 @@ export class DeviceProvider {
       }
     })
   }
+
+  async checkForElectron() {
+    return typeof navigator === 'object' && typeof navigator.userAgent === 'string' && navigator.userAgent.indexOf('Electron') >= 0
+  }
 }

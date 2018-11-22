@@ -30,6 +30,7 @@ import { SocialRecoveryImportPageModule } from './social-recovery-import/social-
 import { IntroductionPageModule } from '../pages/introduction/introduction.module'
 import { LocalAuthenticationOnboardingPageModule } from './local-authentication-onboarding/local-authentication-onboarding.module'
 import { SecretGenerateOnboardingPageModule } from './secret-generate-onboarding/secret-generate-onboarding.module'
+import { DistributionOnboardingPageModule } from './distribution-onboarding/distribution-onboarding.module'
 
 @NgModule({
   imports: [
@@ -62,6 +63,7 @@ import { SecretGenerateOnboardingPageModule } from './secret-generate-onboarding
     TransactionOnboardingPageModule,
     WalletSelectCoinsPageModule,
     LocalAuthenticationOnboardingPageModule,
+    DistributionOnboardingPageModule,
     QRCodeModule,
     IntroductionPageModule
   ],
