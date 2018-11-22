@@ -1,9 +1,10 @@
 {
   "name": "airgap-vault",
   "version": "1.0.0",
-  "author": "Papers.ch",
+  "author": "Papers.ch <contact@papers.ch>",
   "homepage": "https://papers.ch/",
   "private": true,
+  "main": "electron/main.js",
   "scripts": {
     "sonar-scanner": "sonar-scanner",
     "clean": "ionic-app-scripts clean",
@@ -23,7 +24,9 @@
     "e2e-test-ci": "protractor ./test-config/protractor-ci.conf.js",
     "e2e-update": "webdriver-manager update --standalone false --gecko false",
     "e2e-debug": "node --inspect-brk protractor ./test-config/protractor.conf.js",
-    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\" \"test/**/*.js\""
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\" \"test/**/*.js\"",
+    "electron": "electron .",
+    "electron:release": "electron-builder -l --publish=never"
   },
   "dependencies": {
     "@angular/common": "5.0.1",
@@ -101,6 +104,8 @@
     "@types/jasmine": "^2.8.6",
     "@types/node": "^9.4.6",
     "cz-conventional-changelog": "^2.1.0",
+    "electron": "^3.0.10",
+    "electron-builder": "^20.36.2",
     "ionic-mocks": "^1.3.0",
     "istanbul-instrumenter-loader": "^3.0.0",
     "jasmine": "^2.8.0",
@@ -112,6 +117,7 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-spec-reporter": "0.0.31",
     "karma-webpack": "^2.0.4",
+    "node-pre-gyp": "^0.12.0",
     "null-loader": "^0.1.1",
     "prettier": "^1.15.2",
     "pretty-quick": "^1.8.0",
@@ -196,6 +202,18 @@
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged"
+    }
+  },
+  "build": {
+    "linux": {
+      "target": [
+        {
+          "target": "deb",
+          "arch": [
+            "ia32"
+          ]
+        }
+      ]
     }
   }
 }
