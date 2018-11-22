@@ -18,7 +18,7 @@ export class SecretImportPage {
   secretImportForm: FormGroup
 
   constructor(public navController: NavController, private formBuilder: FormBuilder) {
-    let formGroup = {
+    const formGroup = {
       mnemonic: ['', Validators.compose([Validators.required, MnemonicValidator.isValid])]
     }
 
@@ -26,7 +26,7 @@ export class SecretImportPage {
   }
 
   goToSecretCreatePage() {
-    let secret = new Secret(signer.mnemonicToEntropy(this.mnemonic.trim()))
+    const secret = new Secret(signer.mnemonicToEntropy(BIP39Signer.prepareMnemonic(this.mnemonic)))
     this.navController.push(SecretEditPage, { secret: secret, isGenerating: true })
   }
 }
