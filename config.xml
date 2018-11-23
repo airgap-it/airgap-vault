@@ -25,6 +25,7 @@
         <param name="ios-package" value="CDVWKWebViewEngine" />
     </feature>
     <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
+    <preference name="cordova.plugins.diagnostic.modules" value="CAMERA MICROPHONE" />
     <platform name="android">
         <allow-intent href="market:*" />
         <hook src="hooks/remove_permissions.js" type="after_prepare" />
