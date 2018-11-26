@@ -1,9 +1,9 @@
-var webpackConfig = require('./webpack.test.js');
+var webpackConfig = require('./webpack.test.js')
 
 // inject chrome headless using puppeteer
 process.env.CHROME_BIN = require('puppeteer').executablePath()
 
-module.exports = function (config) {
+module.exports = function(config) {
   var _config = {
     basePath: '../',
 
@@ -21,7 +21,7 @@ module.exports = function (config) {
         served: true,
         nocache: false
       },
-      { pattern: 'node_modules/rxjs/**/*', included: false, watched: false },
+      { pattern: 'node_modules/rxjs/**/*', included: false, watched: false }
     ],
 
     proxies: {
@@ -66,7 +66,7 @@ module.exports = function (config) {
       }
     },
     singleRun: false
-  };
+  }
 
-  config.set(_config);
-};
+  config.set(_config)
+}

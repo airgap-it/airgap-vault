@@ -1,8 +1,12 @@
 import { AirGapWallet, UnsignedTransaction } from 'airgap-coin-lib'
 
 class WalletMock {
-
-  ethWallet: AirGapWallet = new AirGapWallet('eth', '03ea568e601e6e949a3e5c60e0f4ee94383e4b083c5ab64b66e70372df008cbbe6', false, 'm/44\'/60\'/0\'/0/0')
+  ethWallet: AirGapWallet = new AirGapWallet(
+    'eth',
+    '03ea568e601e6e949a3e5c60e0f4ee94383e4b083c5ab64b66e70372df008cbbe6',
+    false,
+    "m/44'/60'/0'/0/0"
+  )
   ethTransaction: UnsignedTransaction = {
     callback: '',
     publicKey: '03ea568e601e6e949a3e5c60e0f4ee94383e4b083c5ab64b66e70372df008cbbe6',
@@ -16,7 +20,6 @@ class WalletMock {
       data: '0x'
     }
   }
-
 }
 
 export { WalletMock }

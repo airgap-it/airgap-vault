@@ -2,8 +2,8 @@
 // https://github.com/angular/protractor/blob/master/lib/config.ts
 
 /*global jasmine */
-const SpecReporter = require('jasmine-spec-reporter').SpecReporter;
-const HtmlScreenshotReporter = require('protractor-jasmine2-screenshot-reporter');
+const SpecReporter = require('jasmine-spec-reporter').SpecReporter
+const HtmlScreenshotReporter = require('protractor-jasmine2-screenshot-reporter')
 
 const screenshotReporter = new HtmlScreenshotReporter({
   dest: 'e2e-reports/screenshots',
@@ -12,14 +12,12 @@ const screenshotReporter = new HtmlScreenshotReporter({
 
 exports.config = {
   allScriptsTimeout: 11000,
-  specs: [
-    '../e2e/**/*.e2e-spec.ts'
-  ],
+  specs: ['../e2e/**/*.e2e-spec.ts'],
   capabilities: {
-    'browserName': 'chrome',
+    browserName: 'chrome',
     chromeOptions: {
       prefs: { 'profile.managed_default_content_settings.media_stream': 1 },
-      args: [ '--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream' ]
+      args: ['--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream']
       // args: [ 'no-sandbox', '--headless', '--disable-gpu', '--window-size=375,667' ]
     }
   },
@@ -35,18 +33,18 @@ exports.config = {
   beforeLaunch: function() {
     require('ts-node').register({
       project: 'e2e'
-    });
-    return new Promise(function(resolve){
-      screenshotReporter.beforeLaunch(resolve);
-    });
+    })
+    return new Promise(function(resolve) {
+      screenshotReporter.beforeLaunch(resolve)
+    })
   },
   onPrepare: function() {
-    jasmine.getEnv().addReporter(new SpecReporter());
-    jasmine.getEnv().addReporter(screenshotReporter);
+    jasmine.getEnv().addReporter(new SpecReporter())
+    jasmine.getEnv().addReporter(screenshotReporter)
   },
   afterLaunch: function(exitCode) {
-    return new Promise(function(resolve){
-      screenshotReporter.afterLaunch(resolve.bind(this, exitCode));
-    });
+    return new Promise(function(resolve) {
+      screenshotReporter.afterLaunch(resolve.bind(this, exitCode))
+    })
   }
-};
+}

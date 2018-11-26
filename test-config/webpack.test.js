@@ -1,22 +1,26 @@
-const webpack = require('webpack');
-const path = require('path');
+const webpack = require('webpack')
+const path = require('path')
 
 module.exports = {
   devtool: 'inline-source-map',
 
   resolve: {
     alias: {
-      "@app/env": path.resolve('./src/environments/environment.test.ts')
+      '@app/env': path.resolve('./src/environments/environment.test.ts')
     },
     extensions: ['.ts', '.js']
   },
 
   module: {
-    rules: [{
+    rules: [
+      {
         test: /\.ts$/,
-        loaders: [{
-          loader: 'ts-loader'
-        }, 'angular2-template-loader']
+        loaders: [
+          {
+            loader: 'ts-loader'
+          },
+          'angular2-template-loader'
+        ]
       },
       {
         test: /.+\.ts$/,
@@ -53,8 +57,8 @@ module.exports = {
     net: 'empty',
     tls: 'empty'
   }
-};
+}
 
 function root(localPath) {
-  return path.resolve(__dirname, localPath);
+  return path.resolve(__dirname, localPath)
 }
