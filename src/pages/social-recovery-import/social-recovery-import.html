@@ -1,34 +1,45 @@
 <ion-header transparent no-border>
   <ion-navbar transparent>
-    <ion-title>
-      <p ion-text color="white">Social Recovery</p>
-    </ion-title>
+    <ion-title><p ion-text color="white">Social Recovery</p></ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content class="colored-background" padding>
   <p class="font--weight__med" padding-bottom>
-    In order to recover your secret from your shares, indicate how many shares you have to recover it. Keep in mind, you will
-    only be able to successfully recover your secret if you have enough shares, as chosen in the generation of the social
-    recovery phrases.
+    In order to recover your secret from your shares, indicate how many shares you have to recover it. Keep in mind, you will only be able
+    to successfully recover your secret if you have enough shares, as chosen in the generation of the social recovery phrases.
   </p>
 
   <p class="font--weight__med">Number of Shares for Recovery</p>
 
   <ion-row>
-    <button *ngFor="let i of [2,3,4,5,6]" class="button--rounded" ion-button round color="secondary-light" (click)="setNumberOfShares(i)"
-      [color]="i === numberOfShares? 'primary' : 'secondary-light'">{{i}}</button>
+    <button
+      *ngFor="let i of [2,3,4,5,6]"
+      class="button--rounded"
+      ion-button
+      round
+      color="secondary-light"
+      (click)="setNumberOfShares(i)"
+      [color]="i === numberOfShares? 'primary' : 'secondary-light'"
+    >
+      {{i}}
+    </button>
   </ion-row>
 
   <ion-list *ngIf="shares">
     <form [formGroup]="socialRecoveryForm">
       <ion-item no-lines *ngFor="let i of getNumberArray(numberOfShares)">
         <ion-label color="primary" stacked>Share Number {{ i }}</ion-label>
-        <ion-textarea [formControlName]="'share_' + i" padding-bottom color="white" placeholder="duck goose dinosaur ..." [(ngModel)]="shares[i]"></ion-textarea>
+        <ion-textarea
+          [formControlName]="'share_' + i"
+          padding-bottom
+          color="white"
+          placeholder="duck goose dinosaur ..."
+          [(ngModel)]="shares[i]"
+        ></ion-textarea>
       </ion-item>
     </form>
   </ion-list>
-
 </ion-content>
 
 <ion-footer no-border *ngIf="socialRecoveryForm">

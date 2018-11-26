@@ -1,1 +1,13 @@
 src/assets/
+
+.history/
+.vscode/
+apple/
+build/
+e2e/
+electron/
+hooks/
+node_modules/
+platforms/
+plugins/
+www/

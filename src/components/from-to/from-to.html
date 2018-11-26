@@ -1,22 +1,21 @@
 <div *ngIf="transaction">
-
   <address-row *ngFor="let address of transaction.from" [address]="address"></address-row>
 
   <ion-row align-items-center>
     <ion-col col-3 no-padding>
-      <ion-row justify-content-center>
-        <div class="line"></div>
-      </ion-row>
+      <ion-row justify-content-center><div class="line"></div></ion-row>
     </ion-col>
     <ion-col col-9 padding-bottom>
       <ion-label stacked>AMOUNT</ion-label>
       <div class="typography--mono" item-content>
-        <span class="typography--mono">{{ transaction.amount | amountConverter : { protocolIdentifier: transaction.protocolIdentifier } }}</span>
+        <span class="typography--mono">
+          {{ transaction.amount | amountConverter : { protocolIdentifier: transaction.protocolIdentifier } }}
+        </span>
       </div>
 
       <ion-label stacked>FEE</ion-label>
       <div class="typography--mono" item-content>
-        <span class="typography--mono">{{ transaction.fee | feeConverter : { protocolIdentifier: transaction.protocolIdentifier }  }}</span>
+        <span class="typography--mono">{{ transaction.fee | feeConverter : { protocolIdentifier: transaction.protocolIdentifier } }}</span>
       </div>
     </ion-col>
   </ion-row>

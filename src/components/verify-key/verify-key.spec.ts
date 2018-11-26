@@ -6,16 +6,19 @@ describe('Component: VerifyKey', () => {
   let component: VerifyKeyComponent
   let fixture: ComponentFixture<VerifyKeyComponent>
 
-  const correctMnemonic = 'usage puzzle bottom amused genuine bike brown ripple lend aware symbol genuine neutral tortoise pluck rose brown cliff sing smile appear black occur zero'
+  const correctMnemonic =
+    'usage puzzle bottom amused genuine bike brown ripple lend aware symbol genuine neutral tortoise pluck rose brown cliff sing smile appear black occur zero'
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [VerifyKeyComponent],
       imports: [IonicModule.forRoot(VerifyKeyComponent)]
-    }).compileComponents().then(() => {
-      fixture = TestBed.createComponent(VerifyKeyComponent)
-      component = fixture.componentInstance
     })
+      .compileComponents()
+      .then(() => {
+        fixture = TestBed.createComponent(VerifyKeyComponent)
+        component = fixture.componentInstance
+      })
   }))
 
   it('should validate a regular mnemonic, and emit correct event', async(() => {
@@ -173,5 +176,4 @@ describe('Component: VerifyKey', () => {
     // check if one of the words is the correct one
     expect(foundWord).toBeTruthy()
   }))
-
 })

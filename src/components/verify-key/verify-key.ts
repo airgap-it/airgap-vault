@@ -97,13 +97,13 @@ export class VerifyKeyComponent implements OnInit {
   }
 
   stringToIntHash(str, lowerbound, upperbound) {
-    let result = 0;
+    let result = 0
 
     for (let i = 0; i < str.length; i++) {
-      result = result + str.charCodeAt(i);
+      result = result + str.charCodeAt(i)
     }
 
-    return (result % (upperbound - lowerbound)) + lowerbound;
+    return (result % (upperbound - lowerbound)) + lowerbound
   }
 
   isSelectedWord(word): boolean {
@@ -162,7 +162,7 @@ export class VerifyKeyComponent implements OnInit {
   isCorrect() {
     return (
       this.currentWords
-        .map(w => w ? w.word : '-')
+        .map(w => (w ? w.word : '-'))
         .join(' ')
         .trim() === this.secret.trim()
     )

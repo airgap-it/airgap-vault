@@ -35,17 +35,19 @@ describe('StartupCheck Provider', () => {
         { provide: SplashScreen, useClass: SplashScreenMock },
         { provide: Platform, useClass: PlatformMock }
       ]
-    }).compileComponents().then(() => {
-      startupChecksProvider = TestBed.get(StartupChecksProvider)
-      storageProvider = TestBed.get(Storage)
-      deviceProvider = TestBed.get(DeviceProvider)
-      secureStorage = TestBed.get(SecureStorageService)
-
-      secureStorage.isSecure = 1
-      deviceProvider.isRooted = 0
-      storageProvider.set('DISCLAIMER_INITIAL', true)
-      storageProvider.set('INTRODUCTION_INITIAL', true)
     })
+      .compileComponents()
+      .then(() => {
+        startupChecksProvider = TestBed.get(StartupChecksProvider)
+        storageProvider = TestBed.get(Storage)
+        deviceProvider = TestBed.get(DeviceProvider)
+        secureStorage = TestBed.get(SecureStorageService)
+
+        secureStorage.isSecure = 1
+        deviceProvider.isRooted = 0
+        storageProvider.set('DISCLAIMER_INITIAL', true)
+        storageProvider.set('INTRODUCTION_INITIAL', true)
+      })
   }))
 
   it('should be created', () => {

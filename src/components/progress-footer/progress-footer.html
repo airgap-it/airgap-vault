@@ -8,7 +8,11 @@
     </ion-col>
     <ion-col col-6 no-padding>
       <ion-row justify-content-center align-items-center class="full--height">
-        <ion-icon *ngFor="let n of progressArray" md-name="fiber_manual_record" [color]="progress === n ? 'secondary-light' : 'white'"></ion-icon>
+        <ion-icon
+          *ngFor="let n of progressArray"
+          md-name="fiber_manual_record"
+          [color]="progress === n ? 'secondary-light' : 'white'"
+        ></ion-icon>
       </ion-row>
     </ion-col>
     <ion-col col-3 no-padding>

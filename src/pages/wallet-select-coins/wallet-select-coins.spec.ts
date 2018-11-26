@@ -42,10 +42,12 @@ describe('Wallet-Select-Coin Component', () => {
         { provide: SplashScreen, useClass: SplashScreenMock },
         { provide: Platform, useClass: PlatformMock }
       ]
-    }).compileComponents().then(() => {
-      fixture = TestBed.createComponent(WalletSelectCoinsPage)
-      component = fixture.componentInstance
     })
+      .compileComponents()
+      .then(() => {
+        fixture = TestBed.createComponent(WalletSelectCoinsPage)
+        component = fixture.componentInstance
+      })
   }))
 
   it('should be created', () => {

@@ -1,21 +1,9 @@
 module.exports = {
-
   /**
    * mangle: uglify 2's mangle option
    */
   mangle: {
-    reserved: [
-      'Buffer',
-      'BigInteger',
-      'Point',
-      'ECPubKey',
-      'ECKey',
-      'sha512_asm',
-      'asm',
-      'ECPair',
-      'HDNode',
-      'BigNumber'
-    ]
+    reserved: ['Buffer', 'BigInteger', 'Point', 'ECPubKey', 'ECKey', 'sha512_asm', 'asm', 'ECPair', 'HDNode', 'BigNumber']
   },
 
   /**
@@ -25,4 +13,4 @@ module.exports = {
     toplevel: true,
     pure_getters: true
   }
-};
+}
