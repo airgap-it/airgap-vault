@@ -19,6 +19,9 @@ RUN npm cache verify
 # install ionic
 RUN npm install -g ionic@3.20.0
 
+# install cordova
+RUN npm install -g cordova@8.1.2
+
 # Install app dependencies, using wildcard if package-lock exists
 COPY package.json /app/package.json
 COPY package-lock.json /app/package-lock.json
