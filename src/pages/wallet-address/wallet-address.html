@@ -1,6 +1,6 @@
 <ion-header transparent no-border>
   <ion-navbar transparent>
-    <ion-title> <p ion-text color="white">Wallet Address</p> </ion-title>
+    <ion-title><p ion-text color="white">Wallet Address</p></ion-title>
 
     <ion-buttons end>
       <button ion-button icon-only color="dark" (click)="presentEditPopover($event)"><ion-icon name="more"></ion-icon></button>
@@ -19,11 +19,13 @@
     <ion-col>
       <h2>{{ wallet.coinProtocol.name }} {{ wallet.coinProtocol.symbol }}</h2>
       <p>
-        Address:<br />
+        Address:
+        <br />
         <span class="selectable typography--mono" (click)="copyAddressToClipboard()">{{ wallet.receivingPublicAddress }}</span>
       </p>
       <p>
-        Derivation Path:<br />
+        Derivation Path:
+        <br />
         <span class="selectable typography--mono">{{ wallet.derivationPath }}</span>
       </p>
     </ion-col>

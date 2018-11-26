@@ -2,39 +2,45 @@
   <ion-navbar transparent>
     <ion-row align-items-center>
       <ion-col col-10>
-        <ion-title>
-          <p ion-text color="white">Signed Transaction</p>
-        </ion-title>
+        <ion-title><p ion-text color="white">Signed Transaction</p></ion-title>
       </ion-col>
     </ion-row>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding class="colored-background">
-
   <from-to [transaction]="airGapTx" [wallet]="wallet" padding-bottom></from-to>
 
   <ion-row justify-content-center padding-top>
-    <qrcode *ngIf="broadcastUrl && qrType === 0" [level]="'L'" [qrdata]="broadcastUrl" backgroundAlpha="1" foreground="black" [size]="300"></qrcode>
-    <qrcode *ngIf="signedTxQr && qrType === 1" [level]="'L'" [qrdata]="signedTxQr" backgroundAlpha="1" foreground="black" [size]="300"></qrcode>
+    <qrcode
+      *ngIf="broadcastUrl && qrType === 0"
+      [level]="'L'"
+      [qrdata]="broadcastUrl"
+      backgroundAlpha="1"
+      foreground="black"
+      [size]="300"
+    ></qrcode>
+    <qrcode
+      *ngIf="signedTxQr && qrType === 1"
+      [level]="'L'"
+      [qrdata]="signedTxQr"
+      backgroundAlpha="1"
+      foreground="black"
+      [size]="300"
+    ></qrcode>
   </ion-row>
 
   <ion-row padding>
     <ion-label>Display Raw Transaction</ion-label>
     <ion-toggle (ionChange)="switchQR($event)"></ion-toggle>
   </ion-row>
-
 </ion-content>
 
 <ion-footer no-border>
   <ion-toolbar padding transparent>
     <ion-row justify-content-end>
-      <button default ion-button color="light" (click)="sameDeviceBroadcast()" round item-right>
-        Same-Device-Broadcast
-      </button>
-      <button default ion-button color="primary" (click)="done()" round item-right>
-        Done
-      </button>
+      <button default ion-button color="light" (click)="sameDeviceBroadcast()" round item-right>Same-Device-Broadcast</button>
+      <button default ion-button color="primary" (click)="done()" round item-right>Done</button>
     </ion-row>
   </ion-toolbar>
 </ion-footer>

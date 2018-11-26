@@ -9,27 +9,29 @@
 </ion-header>
 
 <ion-content padding class="colored-background">
-
   <ion-row padding-horizontal>
     <h3>Scan Signed Transaction</h3>
-    <p>Scan the signed transaction QR code  in the next step with your broadcaster app.</p>
+    <p>Scan the signed transaction QR code in the next step with your broadcaster app.</p>
   </ion-row>
 
-  <ion-row>
-    <img src="./assets/img/scan_confirmation_onboarding.svg"/>
-  </ion-row>
-
+  <ion-row><img src="./assets/img/scan_confirmation_onboarding.svg" /></ion-row>
 </ion-content>
 
 <ion-footer no-border>
   <ion-toolbar padding transparent>
     <ion-row justify-content-end>
-      <button default ion-button [color]="hideNextTime ? 'success': 'white'" clear item-left (click)="hideDisclaimer()" [disabled]="hideNextTime"> 
+      <button
+        default
+        ion-button
+        [color]="hideNextTime ? 'success': 'white'"
+        clear
+        item-left
+        (click)="hideDisclaimer()"
+        [disabled]="hideNextTime"
+      >
         DON'T SHOW AGAIN
       </button>
-      <button default ion-button color="primary" (click)="goToTransactionSignedPage()" round item-right icon-left>
-        Next Step
-      </button>
+      <button default ion-button color="primary" (click)="goToTransactionSignedPage()" round item-right icon-left>Next Step</button>
     </ion-row>
   </ion-toolbar>
 </ion-footer>

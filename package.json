@@ -24,7 +24,7 @@
     "e2e-test-ci": "protractor ./test-config/protractor-ci.conf.js",
     "e2e-update": "webdriver-manager update --standalone false --gecko false",
     "e2e-debug": "node --inspect-brk protractor ./test-config/protractor.conf.js",
-    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\" \"test/**/*.js\"",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\" \"src/**/*.html\" \"src/**/*.scss\" \"src/**/*.json\"",
     "electron": "electron .",
     "electron:release": "electron-builder -l --publish=never"
   },

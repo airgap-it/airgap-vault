@@ -1,5 +1,5 @@
 <ion-header no-border>
-  <ion-navbar color="secondary"> <ion-title>Wallets</ion-title> </ion-navbar>
+  <ion-navbar color="secondary"><ion-title>Wallets</ion-title></ion-navbar>
 
   <div class="colored-background" padding-horizontal>
     <current-secret [chosenSecret]="activeSecret" (secretChanged)="onSecretChanged($event)"></current-secret>
@@ -15,7 +15,7 @@
 
   <div class="empty-list" *ngIf="wallets && (wallets | async | filterWallets: { symbol: symbolFilter }).length === 0">
     <img src="./assets/img/no-wallet-added-onboarding.svg" />
-    <p><strong> Create a new wallet by selecting a currency and sync it to AirGap Wallet. </strong></p>
+    <p><strong>Create a new wallet by selecting a currency and sync it to AirGap Wallet.</strong></p>
   </div>
 
   <ion-fab bottom right>

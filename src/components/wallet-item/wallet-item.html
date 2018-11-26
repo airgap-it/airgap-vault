@@ -1,7 +1,7 @@
 <ion-item no-lines detail-push no-padding>
   <ion-avatar item-start>
     <identicon [address]="wallet.receivingPublicAddress"></identicon>
-    <img class="sub-avatar" [src]="'assets/symbols/' + wallet.coinProtocol.symbol.toLowerCase() + '.svg'">
+    <img class="sub-avatar" [src]="'assets/symbols/' + wallet.coinProtocol.symbol.toLowerCase() + '.svg'" />
   </ion-avatar>
   <h2>{{ wallet.coinProtocol.name }} {{ wallet.coinProtocol.symbol }}</h2>
   <p class="typography--mono">{{ wallet.receivingPublicAddress }}</p>

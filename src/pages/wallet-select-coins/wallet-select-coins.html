@@ -5,7 +5,6 @@
 </ion-header>
 
 <ion-content padding class="colored-background">
-
   <!-- Current Secret -->
   <current-secret></current-secret>
 
@@ -14,16 +13,13 @@
       <ion-label color="white" class="font--weight__med">Select Coins To Display</ion-label>
     </ion-list-header>
     <ion-item no-padding *ngFor="let protocol of coinProtocols" no-padding>
-      <ion-avatar item-start>
-        <img [src]="'assets/symbols/' + protocol.symbol.toLowerCase() + '.svg'">
-      </ion-avatar>
+      <ion-avatar item-start><img [src]="'assets/symbols/' + protocol.symbol.toLowerCase() + '.svg'" /></ion-avatar>
       <ion-label color="white">{{ protocol.name }}</ion-label>
       <ion-radio [id]="protocol.identifier" [value]="protocol" no-margin item-right></ion-radio>
     </ion-item>
   </ion-list>
 
   <ion-list no-lines padding-top>
-
     <ion-item id="wallet-type-selector" no-padding *ngIf="selectedProtocol && selectedProtocol.supportsHD">
       <ion-label class="font--weight__med" color="white">Select Wallet Type</ion-label>
       <ion-select [(ngModel)]="isHDWallet" (ngModelChange)="onIsHDWalletChange($event)" color="white">
@@ -44,18 +40,16 @@
     </ion-item>
 
     <!--
-    TODO: all suported wallet types with coresponding derivation path
-    <ion-item no-padding >
-      <ion-label class="font--weight__med" color="white">Imported Wallet from ...</ion-label>
-      <ion-select color="white">
-        <ion-option value="f">Trezor</ion-option>
-        <ion-option value="m">Jaxx</ion-option>
-      </ion-select>
-    </ion-item>
+      TODO: all suported wallet types with coresponding derivation path
+      <ion-item no-padding >
+        <ion-label class="font--weight__med" color="white">Imported Wallet from ...</ion-label>
+        <ion-select color="white">
+          <ion-option value="f">Trezor</ion-option>
+          <ion-option value="m">Jaxx</ion-option>
+        </ion-select>
+      </ion-item>
     -->
-
   </ion-list>
-
 </ion-content>
 
 <ion-footer no-border>
