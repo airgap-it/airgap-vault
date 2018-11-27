@@ -169,3 +169,10 @@ div.nav-decor,
 ion-app {
   background-color: transparent !important;
 }
+
+/* Center content vertically and horizontally */
+.content--align__center-center {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
