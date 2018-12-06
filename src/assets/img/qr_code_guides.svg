@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 21.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="QR-scanner-guides" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+	 y="0px" viewBox="0 0 271 236" style="enable-background:new 0 0 271 236;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;}
+	.st1{fill:none;stroke:#50239F;stroke-width:2;}
+	.st2{fill:#FFFFFF;fill-opacity:0.3;}
+</style>
+<g>
+	<line class="st0" x1="11" y1="111" x2="260" y2="111"/>
+</g>
+<g>
+	<path id="line" class="st1" d="M11,111h249"/>
+</g>
+<path id="top-left" class="st2" d="M28,10h53.1c2.8,0,5-2.2,5-5s-2.2-5-5-5H23c-2.8,0-5,2.2-5,5v58c0,2.8,2.2,5,5,5s5-2.2,5-5V10z"
+	/>
+<path id="bottom-left" class="st2" d="M28,224.7v-53.1c0-2.8-2.2-5-5-5s-5,2.2-5,5v58.1c0,2.8,2.2,5,5,5h58c2.8,0,5-2.2,5-5
+	s-2.2-5-5-5L28,224.7L28,224.7z"/>
+<path id="top-right" class="st2" d="M244,10v53.1c0,2.8,2.2,5,5,5s5-2.2,5-5V5c0-2.8-2.2-5-5-5h-58c-2.8,0-5,2.2-5,5s2.2,5,5,5H244z
+	"/>
+<path id="bottom-right" class="st2" d="M244.1,225.6H191c-2.8,0-5,2.2-5,5s2.2,5,5,5h58.1c2.8,0,5-2.2,5-5v-58c0-2.8-2.2-5-5-5
+	s-5,2.2-5,5V225.6z"/>
+</svg>
