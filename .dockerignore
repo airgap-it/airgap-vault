@@ -25,3 +25,4 @@ UserInterfaceState.xcuserstate
 lintReport.json
 lcov.info
 reports/
+.gitlab-ci.yml
