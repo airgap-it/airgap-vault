@@ -105,6 +105,8 @@ dependency_scanning:
         "registry.gitlab.com/gitlab-org/security-products/dependency-scanning:$SP_VERSION" /code
   artifacts:
     paths: [gl-dependency-scanning-report.json]
+  tags:
+    - docker
 
 qa:
   stage: qa
