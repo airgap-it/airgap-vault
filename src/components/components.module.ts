@@ -14,8 +14,8 @@ import { MaterialIconsModule } from 'ionic2-material-icons'
 import { TraceInputDirective } from './trace-input/trace-input.directive'
 import { ProgressFooterComponent } from './progress-footer/progress-footer'
 import { WalletItemComponent } from './wallet-item/wallet-item'
-import { FeeConverterPipe } from './pipes/fee-converter.pipe'
-import { AmountConverterPipe } from './pipes/amount-converter.pipe'
+import { FeeConverterPipe } from './pipes/fee-converter/fee-converter.pipe'
+import { AmountConverterPipe } from './pipes/amount-converter/amount-converter.pipe'
 import { TranslateModule } from '@ngx-translate/core'
 
 @NgModule({
@@ -52,4 +52,4 @@ import { TranslateModule } from '@ngx-translate/core'
     AmountConverterPipe
   ]
 })
-export class ComponentsModule {}
+export class ComponentsModule { }
