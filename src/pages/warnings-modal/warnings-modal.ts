@@ -2,6 +2,7 @@ import { Component } from '@angular/core'
 import { IonicPage, NavParams, Platform, ViewController } from 'ionic-angular'
 import { SecureStorageService } from '../../providers/storage/secure-storage'
 import { Storage } from '@ionic/storage'
+import { TranslateService } from '@ngx-translate/core'
 
 @IonicPage()
 @Component({
@@ -22,7 +23,8 @@ export class WarningsModalPage {
     private secureStorage: SecureStorageService,
     private platform: Platform,
     private viewCtrl: ViewController,
-    private storage: Storage
+    private storage: Storage,
+    private translateService: TranslateService
   ) {
     this.errorType = navParams.get('errorType')
   }
@@ -70,30 +72,46 @@ export class WarningsModalPage {
     }
 
     if (this.errorType === Warning.INITIAL_DISCLAIMER) {
-      this.title = 'AirGap Disclaimer'
-      this.description = `
-        <p>
-        You as the user hereby accept and acknowledge this protocol and all the information provided within to the fullest extent. You as the user confirm that the content this document has been reviewed, tested and understood on their own behalf.
-        </p>
-        <p>
-        To the fullest extent permitted by applicable law:
-        <ul>
-          <li>All services provided by Papers GmbH, its employees, freelancers or other subcontractors are provided without representation and warranty of any kind</li>
-          <li>Papers GmbH disclaims any and all direct and indirect liability for damage occurring under, or in connection with, this Protocol, especially, but not limited to loss of, or damage to, data, lost profit, compromised / hacked product or system, and or stolen / missing monetary funds.</li>
-        </ul>
-        </p>
-        <p>
-        You understand the risks involved in this software, including but no limited to losing your secret, thus private keys and access to your funds.
-        </p>
-      `
+      this.translateService
+        .get([
+          'warnings-modal.disclaimer.title',
+          'warnings-modal.disclaimer.text',
+          'warnings-modal.disclaimer.disclaimer-list.text',
+          'warnings-modal.disclaimer.disclaimer-list.item-1_text',
+          'warnings-modal.disclaimer.disclaimer-list.item-2_text',
+          'warnings-modal.disclaimer.description',
+          'warnings-modal.disclaimer.understood_label'
+        ])
+        .subscribe(values => {
+          let title = values['warnings-modal.disclaimer.title']
+          let text = values['warnings-modal.disclaimer.text']
+          let list_text = values['warnings-modal.disclaimer.disclaimer-list.text']
+          let list_item1_text = values['warnings-modal.disclaimer.disclaimer-list.item-1_text']
+          let list_item2_text = values['warnings-modal.disclaimer.disclaimer-list.item-2_text']
+          let description_text = values['warnings-modal.disclaimer.description']
+          let label = values['warnings-modal.disclaimer.understood_label']
+          this.title = title
+          this.description =
+            '<p><strong>' +
+            text +
+            '</strong></p><p>' +
+            list_text +
+            '<ul><li>' +
+            list_item1_text +
+            '</li><li>' +
+            list_item2_text +
+            '</li></ul></p><p>' +
+            description_text +
+            '</p>'
 
-      this.imageUrl = null
-      this.buttonText = 'I understand and accept'
-      this.handler = () => {
-        this.storage.set('DISCLAIMER_INITIAL', true).then(() => {
-          this.viewCtrl.dismiss()
+          this.imageUrl = null
+          this.buttonText = label
+          this.handler = () => {
+            this.storage.set('DISCLAIMER_INITIAL', true).then(() => {
+              this.viewCtrl.dismiss()
+            })
+          }
         })
-      }
     }
   }
 }

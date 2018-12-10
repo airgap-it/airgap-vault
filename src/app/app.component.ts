@@ -6,6 +6,7 @@ import { TabsPage } from '../pages/tabs/tabs'
 import { Deeplinks } from '@ionic-native/deeplinks'
 import { StartupChecksProvider } from '../providers/startup-checks/startup-checks.provider'
 import { SchemeRoutingProvider } from '../providers/scheme-routing/scheme-routing'
+import { TranslateService } from '@ngx-translate/core'
 
 @Component({
   templateUrl: 'app.html'
@@ -21,7 +22,8 @@ export class MyApp {
     private splashScreen: SplashScreen,
     private deepLinks: Deeplinks,
     private startupChecks: StartupChecksProvider,
-    private schemeRoutingProvider: SchemeRoutingProvider
+    private schemeRoutingProvider: SchemeRoutingProvider,
+    private translate: TranslateService
   ) {
     this.platform.ready().then(() => {
       if (platform.is('cordova')) {
@@ -29,7 +31,8 @@ export class MyApp {
         this.statusBar.backgroundColorByHexString('#311B58')
         this.splashScreen.hide()
       }
-
+      translate.setDefaultLang('en')
+      translate.use('en')
       this.initChecks()
     })
   }

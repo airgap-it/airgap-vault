@@ -21,7 +21,7 @@
         outline
         small
       >
-        {{i + 1}}
+        {{ i + 1 }}
       </button>
     </span>
   </ion-row>
@@ -29,13 +29,12 @@
 <hr />
 <ion-row class="secret--container-40" align-items-center>
   <ion-col *ngIf="!isCompleted && !isCorrect() && promptedWords.length === 0" id="error" padding-top padding-horizontal>
-    <p>Your secret does not match the generated one. Make sure you've chosen the correct words.</p>
-    <p>To correct mistakes, simply select a wrong word and choose the correct one.</p>
+    <p [innerHTML]="'verify-key.incorrect_text' | translate"></p>
   </ion-col>
 
   <ion-col *ngIf="isCompleted && isCorrect() && promptedWords.length === 0" id="message" padding-top padding-horizontal>
-    <p padding-bottom>You have successfully verified this secret.</p>
-    <button (click)="continue()" color="primary" ion-button block round>Continue</button>
+    <p padding-bottom>{{ 'verify-key.success_text' | translate }}</p>
+    <button (click)="continue()" color="primary" ion-button block round>{{ 'verify-key.continue_label' | translate }}</button>
   </ion-col>
 
   <ion-col *ngIf="promptedWords.length > 0" id="wordSelector" padding-top>
@@ -49,7 +48,7 @@
           block
           round
         >
-          {{word.word}}
+          {{ word.word }}
         </button>
       </ion-col>
     </ion-row>

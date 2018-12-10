@@ -16,6 +16,7 @@ import { ProgressFooterComponent } from './progress-footer/progress-footer'
 import { WalletItemComponent } from './wallet-item/wallet-item'
 import { FeeConverterPipe } from './pipes/fee-converter.pipe'
 import { AmountConverterPipe } from './pipes/amount-converter.pipe'
+import { TranslateModule } from '@ngx-translate/core'
 
 @NgModule({
   declarations: [
@@ -34,7 +35,7 @@ import { AmountConverterPipe } from './pipes/amount-converter.pipe'
     FeeConverterPipe,
     AmountConverterPipe
   ],
-  imports: [IonicModule, BrowserModule, MaterialIconsModule],
+  imports: [IonicModule, BrowserModule, TranslateModule, MaterialIconsModule],
   exports: [
     EntropyProgressComponent,
     TouchEntropyComponent,

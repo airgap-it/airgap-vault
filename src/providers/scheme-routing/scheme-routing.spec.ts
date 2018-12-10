@@ -1,6 +1,7 @@
 import { async, TestBed } from '@angular/core/testing'
 import { NavController, NavParams, Platform, AlertController, App, LoadingController } from 'ionic-angular'
 import { StatusBar } from '@ionic-native/status-bar'
+import 'jasmine'
 import { SplashScreen } from '@ionic-native/splash-screen'
 
 import {

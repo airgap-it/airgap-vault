@@ -1,3 +1,4 @@
+import 'jasmine'
 import { async, TestBed, ComponentFixture } from '@angular/core/testing'
 import { IonicModule, NavController, NavParams, Platform } from 'ionic-angular'
 import { TransactionSignedPage } from './transaction-signed'
@@ -15,6 +16,10 @@ import { WalletMock } from '../../../test-config/wallet-mock'
 import { StorageMock } from '../../../test-config/storage-mock'
 import { Storage } from '@ionic/storage'
 import { SecureStorageServiceMock } from '../../providers/storage/secure-storage.mock'
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core'
+import { HttpLoaderFactory } from '../../app/app.module'
+import { HttpClient } from '@angular/common/http'
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing'
 
 describe('TransactionSigned Page', () => {
   const ethWallet = new WalletMock().ethWallet
@@ -22,6 +27,8 @@ describe('TransactionSigned Page', () => {
 
   let fixture: ComponentFixture<TransactionSignedPage>
   let component: TransactionSignedPage
+  let translate: TranslateService
+  let http: HttpTestingController
 
   beforeEach(async(() => {
     NavParamsMock.setParams({
@@ -30,7 +37,19 @@ describe('TransactionSigned Page', () => {
     })
     TestBed.configureTestingModule({
       declarations: [TransactionSignedPage],
-      imports: [IonicModule.forRoot(TransactionSignedPage), ComponentsModule, QRCodeModule],
+      imports: [
+        IonicModule.forRoot(TransactionSignedPage),
+        ComponentsModule,
+        QRCodeModule,
+        HttpClientTestingModule,
+        TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useFactory: HttpLoaderFactory,
+            deps: [HttpClient]
+          }
+        })
+      ],
       providers: [
         SecretsProvider,
         { provide: SecureStorageService, useClass: SecureStorageServiceMock },
@@ -39,9 +58,10 @@ describe('TransactionSigned Page', () => {
         { provide: NavParams, useClass: NavParamsMock },
         { provide: StatusBar, useClass: StatusBarMock },
         { provide: SplashScreen, useClass: SplashScreenMock },
-        { provide: Platform, useClass: PlatformMock }
+        { provide: Platform, useClass: PlatformMock },
+        TranslateService
       ]
-    })
+    }).compileComponents()
   }))
 
   beforeEach(done => {

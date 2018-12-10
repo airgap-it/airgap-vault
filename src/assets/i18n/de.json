@@ -1,0 +1,340 @@
+{
+  "next": "Weiter",
+
+  "add-wallet":{
+    "alert_deriving": {
+      "text":"Konto wird erstellt..."
+    },
+    "account-exists_alert": {
+      "heading":"Konto existiert bereits",
+      "text":"Dieses Konto wurde bereits hinzugefügt. Bitte ändern Sie den Ableitungspfad um ein neues Konto hinzuzufügen (Fortgeschrittener Modus)."
+    },
+      "okay_label":"Okay"
+  },
+
+  "distribution-onboarding":{
+    "ask-permission": {
+      "heading": "AirGap ist <span class=\"style__strong color__primary\"> nicht persistent</span>, Geheimschlüssel werden nicht abgespeichert und müssen nach einem Neustart <span class=\"style__strong color__primary\">wieder importiert</span> werden.",
+      "text":"Diese Distribution ist angedacht um sicher Geheimschlüssel zu generieren und um offline Transaktionen zu signieren, jedoch nicht um Geheimschlüssel aufzubewahren."      
+    },
+    "no-vm": {
+      "heading": "AirGap Vault Distribution sollte <span class=\"style__strong color__primary\">nicht</span> auf einer <span class=\"style__strong color__primary\">virtuellen Maschine</span> ausgeführt werden, wenn der Host eine Netzwerkverbindung hat, sogar wenn die Netzwerkverbindung vorübergehen deaktiviert wurde.",
+      "text":"Stellen Sie sichher, dass Client von jedem Netzwerk getrennt wurde, before Sie einen Geheimschlüssel generieren oder importieren."
+    },
+    "understood_label":"Verstanden"
+  },
+
+  "local-authentication-onboarding":{
+    "heading": "Auf den Geheimschlüssel wird mit der von Ihnen definierten Authentifizierungsmethode wie <span class=\"style__strong color__primary\">Fingerabdruck</span>,<span class=\"style__strong color__primary\"> Face-ID</span> oder <span class=\"style__strong color__primary\">Geheimzahl</span> zugegriffen.",
+    "text": "Der Geheimschlüssel wird für die Kontoerstellungen sowie zum signieren von Transaktionen benötigt.",
+    "authenticate_label": "Authentifizierung"
+  },
+
+  "secret-generate-onboarding":{
+    "heading": "AirGap wird Sie nach der Berechtigung für die <span class=\"style__strong color__primary\">Kamera</span> und dem <span class=\"style__strong color__primary\">Mikrofon</span> fragen.",
+    "text": "Beide Berechtigungen werden für die zusätzliche Sicherheit bei der Geheimschlüssel Generierung benötigt.",
+    "grant-permission_label": "Berechtigung erteilen"
+  },
+
+  "current-secret":{
+    "label": "Aktives Konto:"
+  },
+
+  "from-to":{
+    "amount_label":"BETRAG",
+    "fee_label":"GEBÜHR"
+  },
+
+  "introduction": {
+    "title": "Der Neue Krypto-Wallet Standard",
+    "highest": {
+      "label": "Höchste Sicherheit",
+      "text": "Mit dem AirGap <b>zwei-Geräte Ansatz</b> wird der sicher Umgang mit Gehimschlüssel zugänglicher.</p>"
+    },
+    "medium": {
+      "label": "Mittlere Sicherheit",
+      "text": "Mit dem AirGap <b>zwei-App Ansatz</b> wird der sicher Umgang mit Gehimschlüssel zugänglicher."
+    },
+    "vault": {
+      "heading": "AirGap Vault",
+      "text": "Der Geheimschlüssel wird generiert und sicher aufbewahrt in der AirGap Vault App. <b>AirGap Vault muss instaliert und mit AirGap Wallet verwendet werden.</b>"  
+    },
+    "wallet": {
+      "heading": "AirGap Wallet",
+      "text": "Die Wallet App kommt nur in Kontakt mit öffentlichen Informationen und ist für die Übermittlung von Transaktionen an die Blockchain zuständig."  
+    },
+    "communication": {
+      "highest_text": "Einweg-Kommunikation mit QR Codes.",
+      "medium_text": "Sichere Kommunikation mit App-Wechsel."
+    },
+    "wallet_install_label": "AirGap Wallet installieren",
+    "continue_label": "Loslegen"
+  },
+
+  "secret-create":{
+    "heading":"AirGap Aufsetzen!",
+    "text":"Möchten Sie einen neuen Geheimschlüssel generieren oder bestehen importieren?",
+    "generate": {
+      "label":"Generieren",
+      "text":"Geheimschlüssel erstellen mit unserem sicheren Prozess, gehen Sie auf Nummer sicher für Ihre Geldmittel."
+    },
+    "import": {
+      "label":"Importieren",
+      "text":"Importieren Sie einen bestehenden Geheimschlüssel in AirGap um sichere Transaktionen durchzuführen."
+    },
+    "social-recovery": {
+      "label":"Soziale Wiederherstellung",
+      "text":"Stellen Sie einen verlorenen Geheimschlüssel aus Anteilen von Ihren sozialen Kontakten wieder her."
+    }
+  },
+
+  "secret-edit":{
+    "title":" Ihren Geheimschlüssel",
+    "text":"Geheimschlüssel benennen und Sicherheistgrad auswählen.",
+    "secret_input_label":"Geheimschlüsselname",
+    "security-level": {
+      "heading":"Sicherheitsgrad",
+      "text":"Geheimschlüssel zusätzlich mit einem Passwort verschlüsseln."
+    },
+    "passcode": {
+      "label":"Passwort",
+      "text":"Passwort für Ihre Kontos setzen."
+    },
+    "secret-recovery": {
+      "heading":"Geheimschlüssel Wiederherstellung",
+      "text":"Sie können die Soziale Wiederherstellung nach der initialen Erstellung einrichten."
+    },
+    "social-recovery": {
+      "label":"Soziale Wiederherstellung",
+      "text": "Generieren Sie eine Anzahl an Anteile um auf Ihre soziale Kontakte aufzuteilen."
+    },
+    "confirm_label":"Bestätigen"
+  },
+
+  "secret-edit-delete-popover":{
+    "title":"Geheimschlüssel Entfernung bestätigen",
+    "text":"Möchten Sie wirklich diesen Geheimschlüssel entfernen? Ohne ein Sicherungskopie kann diesr nicht wiederhergestellt werden!",
+    "cancel_label":"Abbrechen",
+    "delete_label":"Entfernen"
+  },
+
+  "secret-generate":{
+    "heading":"Wir erstellen Ihren Geheimschlüssel.",
+    "text":"Dafür verwenden wir Video, Audio, Berührung und das Kreiselgerät um zusätzliche Entropie zu gewinne.",
+    "description":"Bewegen Sie Ihr Gerät um Bewegung, Ton und Video aufzunehmen bis die Prozentanzeige gefüllt sind.",
+    "continue_label":"Weiter"
+  },
+
+  "secret-import":{
+    "title":"Geheimschlüssel importieren",
+    "text":"Ein bestehender Geheimschlüssel kann in AirGap importiert werden. Tragen Sie die Worte von Ihrem Wiederherstellungs-Satz ein.",
+    "placeholder":"wife pulp island master rally shed assume critic assist derive quick sport intact army mule network barely siege film swallow concert assume protect umbrella",
+    "warning":"Bitte überprüfen Sie die Schreibweise des Wiederherstellungs-Satzes.",
+    "import_label":"Importieren"
+  },
+
+  "secret-rules":{
+    "title":"Aufmerksam durchlesen",
+    "heading":"Befolgen Sie diese Regeln.",
+    "text":"Wir haben Ihnen Ihr Geheimschlüssel generiert, er besteht aus eine Wortabfolge.",
+    "description":"Gehen Sie sicher, das Sie die nachfolgenden Regeln verstanden haben und einhalten werden, diese ermöglichen einen sicheren Zugriff auf Ihre Konten.",
+    "rules-list": {
+      "item-1_text":"Schreiben Sie die Wortabfolge auf ein Stück Papier.",
+      "item-2_text":"Halten Sie die Wortabfolge strikt ein.",
+      "item-3_text":"Überprüfen Sie die Schreibweise jedes Wortes.",
+      "item-4_text":"Bewahren Sie das Stück Papier an einem sicheren Ort auf!",
+      "item-5_text":"Machen Sie unter keinen Umständen ein Bildschirmfoto, Foto oder eine Fotokopie.",
+      "item-6_text":"Laden Sie Ihren Geheimschlüssel niemals in die Cloud."
+    },
+    "understood_label":"Verstanden"
+  },
+
+  "secret-show":{
+    "title":"Wiederherstellungs-Satz",
+    "text":"Schreiben Sie jedes Wort auf ein Stück Papier, bedenken Sie dabei das alle erwähnten Regeln beachtet werden müssen.",
+    "next-step_label":"Nächster Schritt",
+    "too-fast_alert": {
+      "title": "Das war schnell!",
+      "heading": "Besitzen Sie übermenschliche Kräfte?",
+      "text": "Gehen Sie sicher, das Sie alle Regeln befolgt und nichts anderes gemacht haben, als den Geheimschlüssel auf ein Stück Papier zu schreiben.",
+      "wait_label_p1": "Bitte warten Sie mindestens bis ",
+      "wait_label_p2": "Sekunden vorbei sind."
+    }
+  },
+
+  "secret-validate":{
+    "title":"Verifizierung Wiederherstellungs-Satz",
+    "text":"Ordnen Sie die Wörter in der richtigen Reihenfolge, indem Sie das betreffende Wort jeweils anwählen."
+  },
+
+  "verify-key":{
+    "incorrect_text": "Der Geheimschlüssel stimmt nicht mit dem erstellten überein. Gehen Sie sicher, das sie alle Wörter richtig ausgewählt haben. <br /> Wenn Sie einen Fehler gemcaht haben, wählen Sie das falsche Wort aus um danach auf das richtige Wort zu ändern.",
+    "success_text": "Sie haben diesen Geheimschlüssel erfoglreich verifiziert.",
+    "continue_label": "Weiter"
+  },
+
+  "social-recovery-import":{
+    "title":"Soziale Wiederherstellung",
+    "text":"Legen Sie fest, wie viele Anteile benötigt werden um den Geheimschlüssel wiederhersstellen zu können. Bedenken Sie dabei, das der Geheimschlüssel über die soziale Wiederherstellung nur dann möglich ist, wenn mindestens die festgelete Anzahl Anteile vorhanden ist.",
+    "share-recovery": {
+      "heading":"Anzahl Anteile für die Wiederherstellung",
+      "label":"Anteilnummer"
+    },
+    "recover_label":"Wiederherstellen"
+  },
+
+  "social-recovery-setup":{
+    "title":"Soziale Wiederherstellung",
+    "text":"Mit der sozialen Wiederherstellung, können Sie Anteile definieren, welche an vertrauliche soziale Kontakte verteile werden können. Ein verlorener Geheimschlüssel kann wiederhergestellt werden, wenn mindestens die festgelete Anzahl Anteile vorhanden ist.",
+    "secret-shares": {
+      "label": "Wiederherstellungsanteile",
+      "text": "Sie können die Anzahl Anteile welche generiert werden festlegen, sowie die Anzahl welche für eine erfolgreiche Wiederherstellung nötig sind."
+    },
+    "shares-number_label": "Anzahl Anteile",
+    "shares-recovery_label":"Anzahl Anteile für Wiederherstellung",
+    "start":"Start",
+    "back_label":"Zurück",
+    "next_label":"Weiter"
+  },
+
+  "social-recovery-show-share":{
+    "title":"Soziale Wiederherstellung",
+    "secret-shares": {
+      "label_p1": "Wiederherstellungsanteil",
+      "label_p2": "von"
+    },
+    "text":"Schreiben Sie jedes Wort auf Papier, bedenken Sie dabei alle Regeln zu befolgen."
+  },
+
+  "social-recovery-validate-share":{
+    "title":"Soziale Wiederherstellung",
+    "text":"Ordnen Sie die Wörter in der richtigen Reihenfolge, indem Sie das betreffende Wort jeweils anwählen."
+  },
+
+  "tab-scan":{
+    "title":"QR Code Scanner",
+    "text":"QR Code von AirGap Wallet einlesen.",
+    "empty-state_heading": "Un QR Codes einlesen zu können, benötigt AirGap Vault die <span class=\"style__strong color__primary\">Kamera Berechtigung</span>.",
+    "grant-permission_label":"Berechtigung erteilen"
+  },
+
+  "tab-secrets":{
+    "title":"Geheimschlüssel",
+    "add-secret_label":"Geheimschlüssel hinzufügen"
+  },
+
+  "tab-wallets":{
+    "title":"Konten",
+    "search_placeholder":"Währung suchen",
+    "empty-state_text":"Wählen Sie eine Währung um ein neues Konto zu erstellen und mit AirGap Wallet zu synchronisieren.",
+    "add-wallet_label":"Konto hinzufügen",
+    "incompatible-qr_alert": {
+      "title": "ungültiger QR Code",
+      "text": "Dieser QR Code ist keine rohe Transaktion.",
+      "okay_label": "Okay"
+    },
+    "no-secret_alert":{
+      "title": "Kein Geheimschlüssel gefunden",
+      "text": "Es existiert kein kompatibles Konto in AirGap. Bitte importieren Sie den dazugehörigen Geheimschlüssel um diese Transaktion zu signieren.",
+      "okay_label": "Okay"
+    },
+    "raw-tx_alert":{
+      "title": "Konto auswählen",
+      "okay_label": "Okay"
+    }
+  },
+  "tabs": {
+    "wallets": "Konten",
+    "scanner": "Scanner",
+    "secrets": "Geheimschlüssel"
+  },
+
+  "transaction-detail":{
+    "title":"Transaktion bestätigen",
+    "text":"Sie versenden:",
+    "sign-tx_label":"Transaktion signieren"
+  },
+
+  "transaction-onboarding":{
+    "title":"Signierte Transaktion",
+    "heading":"Signierte Transaktion einlesen",
+    "description":"Lesen Sie den signierten Transaktions QR Code ein im nächsten Schritt mit der AirGap Wallet app.",
+    "dont-show_label":"Nicht mehr anzeigen",
+    "next_label":"Nächster Schritt"
+  },
+
+  "transaction-unlock": {
+    "title": "Geheimschlüssel entsperren",
+    "unlock_label": "Entsperren"
+  },
+
+  "transaction-signed":{
+    "title":"Signierte Transaktion",
+    "raw-tx_label":"Rohe Transaktionsdaten anzeigen",
+    "same-device-broadcast_label":"gleiches-Gerät Übermittlung",
+    "done_labe":"Fertig"
+  },
+
+  "touch-entropy":{
+    "text":"Bewegen Sie Ihren Finger auf dem Bildschirm."
+  },
+
+  "wallet-address": {
+    "title": "Konto Addresse",
+    "address_label": "Addresse:",
+    "path_label": "Ableitungspfad:",
+    "sync_label": "Synchronisieren",
+    "done_label": "Fertig",
+    "copy-address_modal": {
+      "text": "Addresse wurde in die Zwischenablage kopiert."
+    }
+  },
+
+  "wallet-edit-delete-popover":{
+    "settings_label": "Kontoeinstellungen",
+    "copy_label": "Adresse kopieren",
+    "account-removal_alert":{
+      "title":"Kontoentfernung bestätigen",
+      "text":"Möchten Sie dieses Konto entfernen? Es kann im Nachhinein wieder mit demselben Ableitungspfad erstellt werden.",
+      "cancel_label":"Abbrechen",
+      "delete_label":"Entfernen"
+    }
+  },
+
+  "wallet-select-coins":{
+    "title":"Konto hinzufügen",
+    "text":"Wählen Sie die gewünschte Währung aus.",
+    "select-type": {
+      "label":"Kontotyp auswählen",
+      "single-address_label":"Einzeladresse Konto",
+      "hd-wallet_label":"HD Wallet"
+    },
+    "advanced_label":"Fortgeschrittener Modus",
+    "custom-path": {
+      "label":"Selbsterstellter Ableitungspfad",
+      "placeholder":"Selbsterstellter Ableitungspfad"
+    },
+    "create_label":"Erstellen"
+  },
+
+  "wallet-share":{
+    "title":"Konto Synchronisieren",
+    "text":"Dieser QR Code beinhaltet den <b>erweiterten</b> öffentlichen Schlüssel, öffentliche Adress und den Währungstyp. Teilen Sie diesen nicht öffentlich.",
+    "same-device_label":"Same-Device-Sync",
+    "done_label":"Done"
+  },
+
+  "warnings-modal":{
+    "disclaimer": {
+      "title": "AirGap Disclaimer",
+      "text": "Sie akzeptieren und bestätigen hiermit diese Bestimmungen sowie all enthaltenen Informationen im vollumfänglichen Ausmass. Sie als der Benutzer bestätigen, das Sie den Inhalt dieses Disclaimers gelesen und verstanden haben.",
+      "disclaimer-list": {
+        "text": "Zum gesetzlichen vollumfänglichen Ausmasses:",
+        "item-1_text": "Alle Dienstleistungen, welche durch Papers GmbH, dessen Angestellten, Freischaffenden oder Unterlieferanten, werden ohne Vertretung und Garantie jegliche Art zur Verfügung getellt.",
+        "item-2_text": "Papers GmbH lehnt jegliche und alle direkten oder indirekten Haftungen ab, welche durch Schaden mit oder in Verbindung mit diesem Protokoll, besonders aber nicht limitiert auf Verlust oder Schaden zu Daten, Verlust von Gewinn, kompromittiertem oder gehacktem Produkt oder System, gestohlenen oder verloreren Geldmittel, ab."
+      },
+      "description": "Sie verstehen alle involvierten Risiken verbunden mit dieser Software, dies beinhaltet ist aber nicht limitiert auf den Verlust des Geheimschlüssels, dem Private Key und somit den Zugang zu Ihren Geldmittel.",
+      "understood_label": "Ich verstehe & akzeptiere"
+    }
+  }
+}

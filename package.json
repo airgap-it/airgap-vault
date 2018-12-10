@@ -27,6 +27,7 @@
     "electron:release": "electron-builder -l --publish=never"
   },
   "dependencies": {
+    "@aeternity/hd-wallet": "github:dschoeni/hd-wallet-js#b216450e56954a6e82ace0aade9474673de5d9d5",
     "@angular/common": "5.0.1",
     "@angular/compiler": "5.0.1",
     "@angular/compiler-cli": "5.0.1",
@@ -85,6 +86,7 @@
     "cordova.plugins.diagnostic": "4.0.10",
     "es6-promise-plugin": "^4.1.1",
     "ethereum-blockies": "git+https://github.com/MyEtherWallet/blockies.git",
+    "har-validator": "^5.1.3",
     "html-loader": "^0.5.1",
     "ionic": "3.9.1",
     "ionic-angular": "3.9.2",
@@ -99,15 +101,15 @@
     "zone.js": "0.8.18"
   },
   "devDependencies": {
-    "@ionic/app-scripts": "3.1.9",
-    "@types/jasmine": "^2.8.6",
+    "@ionic/app-scripts": "^3.2.0",
+    "@types/jasmine": "2.8.9",
     "@types/node": "^9.4.6",
     "cz-conventional-changelog": "^2.1.0",
     "electron": "^3.0.10",
     "electron-builder": "^20.36.2",
     "ionic-mocks": "^1.3.0",
     "istanbul-instrumenter-loader": "^3.0.0",
-    "jasmine": "^2.8.0",
+    "jasmine": "^2.99.0",
     "jasmine-spec-reporter": "^4.2.1",
     "karma": "^1.7.1",
     "karma-chrome-launcher": "^2.2.0",

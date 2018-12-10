@@ -13,10 +13,11 @@ import { SecureStorageFactory } from '../../providers/storage/secure-storage.fac
 import { ComponentsModule } from '../../components/components.module'
 import { MaterialIconsModule } from 'ionic2-material-icons'
 import { ScannerProvider } from '../../providers/scanner/scanner'
+import { TranslateModule } from '@ngx-translate/core'
 
 @NgModule({
   declarations: [SecretGeneratePage],
-  imports: [ComponentsModule, MaterialIconsModule, IonicPageModule.forChild(SecretGeneratePage)],
+  imports: [ComponentsModule, MaterialIconsModule, IonicPageModule.forChild(SecretGeneratePage), TranslateModule],
   providers: [
     Gyroscope,
     ScannerProvider,

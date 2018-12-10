@@ -1,51 +1,52 @@
 <ion-header transparent no-border>
   <ion-navbar transparent>
-    <ion-title><p ion-text color="white">Social Recovery</p></ion-title>
+    <ion-title>
+      <p ion-text color="white">{{ 'social-recovery-setup.title' | translate }}</p>
+    </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content class="colored-background" padding>
-  <p class="font--weight__med" padding-bottom>
-    With Social Recovery you can create secret shares and distribute them to social contacts you trust. You can recover a lost secret if you
-    have a set number of these secret shares.
-  </p>
-  <p class="font--weight__med">Secret Shares</p>
-  <p padding-bottom>
-    You will define the amount of shares you will generate and how many are effectievly needed for a successful recovery of your secret.
-  </p>
-  <p class="font--weight__med">Number of secret shares</p>
+  <p class="font--weight__med" padding-bottom>{{ 'social-recovery-setup.text' | translate }}</p>
+  <p class="font--weight__med">{{ 'social-recovery-setup.secret-shares.label' | translate }}</p>
+  <p padding-bottom>{{ 'social-recovery-setup.secret-shares.text' | translate }}</p>
+  <p class="font--weight__med">{{ 'social-recovery-setup.shares-number_label' | translate }}</p>
   <ion-row padding-bottom>
     <button
-      *ngFor="let i of [2,3,4,5,6]"
+      *ngFor="let i of [2, 3, 4, 5, 6]"
       class="button--rounded"
       ion-button
       round
       color="secondary-light"
       (click)="setNumberOfShares(i)"
-      [color]="i === numberOfShares? 'primary' : 'secondary-light'"
+      [color]="i === numberOfShares ? 'primary' : 'secondary-light'"
     >
-      {{i}}
+      {{ i }}
     </button>
   </ion-row>
-  <p class="font--weight__med">Number of shares needed for recovery</p>
+  <p class="font--weight__med">{{ 'social-recovery-setup.shares-recovery_label' | translate }}</p>
   <ion-row>
     <button
-      *ngFor="let i of [2,3,4,5,6]"
+      *ngFor="let i of [2, 3, 4, 5, 6]"
       class="button--rounded"
       ion-button
       round
       color="secondary-light"
       (click)="setNumberOfRequiredShares(i)"
-      [color]="i === numberOfRequiredShares? 'primary' : 'secondary-light'"
+      [color]="i === numberOfRequiredShares ? 'primary' : 'secondary-light'"
       [disabled]="i > numberOfShares"
     >
-      {{i}}
+      {{ i }}
     </button>
   </ion-row>
 </ion-content>
 
 <ion-footer no-border>
-  <ion-item no-lines transparent><button default ion-button color="primary" (click)="done()" round item-right>Start</button></ion-item>
+  <ion-item no-lines transparent>
+    <button default ion-button color="primary" (click)="done()" round item-right>
+      {{ 'social-recovery-setup.start_label' | translate }}
+    </button>
+  </ion-item>
 </ion-footer>
 
 <ion-footer no-border color="primary">
@@ -55,7 +56,7 @@
         <!-- TODO: navigate back -->
         <button ion-button icon-left clear color="white">
           <ion-icon md-name="chevron_left" (click)="back()"></ion-icon>
-          Back
+          {{ 'social-recovery-setup.back_label' | translate }}
         </button>
       </ion-col>
       <ion-col col-6 no-padding>
@@ -71,7 +72,7 @@
       <ion-col col-3 no-padding>
         <!-- TODO: navigate forward -->
         <button ion-button icon-right clear color="white" (click)="next()">
-          Next
+          {{ 'social-recovery-setup.next_label' | translate }}
           <ion-icon md-name="chevron_right"></ion-icon>
         </button>
       </ion-col>

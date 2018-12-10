@@ -1,6 +1,8 @@
 <ion-header transparent no-border>
   <ion-navbar transparent>
-    <ion-title><p ion-text color="white">Sync Wallet</p></ion-title>
+    <ion-title>
+      <p ion-text color="white">{{ 'wallet-share.title' | translate }}</p>
+    </ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -10,19 +12,18 @@
   </ion-row>
 
   <ion-row>
-    <p>
-      This QR includes your
-      <b>extended</b>
-      public key, public address and your type of coin. Do not share it publicly!
-    </p>
+    <p></p>
+    <p [innerHTML]="'wallet-share.text' | translate"></p>
   </ion-row>
 </ion-content>
 
 <ion-footer no-border>
   <ion-toolbar padding transparent>
     <ion-row justify-content-end>
-      <button default ion-button color="light" (click)="sameDeviceSync()" round item-right>Same-Device-Sync</button>
-      <button default ion-button color="primary" (click)="done()" round item-right>Done</button>
+      <button default ion-button color="light" (click)="sameDeviceSync()" round item-right>
+        {{ 'wallet-share.same-device_label' | translate }}
+      </button>
+      <button default ion-button color="primary" (click)="done()" round item-right>{{ 'wallet-share.done_label' | translate }}</button>
     </ion-row>
   </ion-toolbar>
 </ion-footer>

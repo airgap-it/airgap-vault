@@ -1,3 +1,4 @@
+import 'jasmine'
 import { async, TestBed, ComponentFixture } from '@angular/core/testing'
 import { IonicModule, NavController, NavParams, Platform } from 'ionic-angular'
 import { WalletSelectCoinsPage } from './wallet-select-coins'
@@ -13,10 +14,16 @@ import { SecureStorageService } from '../../providers/storage/secure-storage'
 import { SecureStorageFactory } from '../../providers/storage/secure-storage.factory'
 import { IonicStorageModule } from '@ionic/storage'
 import { By } from '@angular/platform-browser'
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core'
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing'
+import { HttpLoaderFactory } from '../../app/app.module'
+import { HttpClient } from '@angular/common/http'
 
 describe('Wallet-Select-Coin Component', () => {
   let fixture: ComponentFixture<WalletSelectCoinsPage>
   let component: WalletSelectCoinsPage
+  let translate: TranslateService
+  let http: HttpTestingController
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -27,6 +34,14 @@ describe('Wallet-Select-Coin Component', () => {
         IonicStorageModule.forRoot({
           name: '__airgap_storage',
           driverOrder: ['localstorage']
+        }),
+        HttpClientTestingModule,
+        TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useFactory: HttpLoaderFactory,
+            deps: [HttpClient]
+          }
         })
       ],
       providers: [
@@ -40,7 +55,8 @@ describe('Wallet-Select-Coin Component', () => {
         { provide: NavParams, useClass: NavParamsMock },
         { provide: StatusBar, useClass: StatusBarMock },
         { provide: SplashScreen, useClass: SplashScreenMock },
-        { provide: Platform, useClass: PlatformMock }
+        { provide: Platform, useClass: PlatformMock },
+        TranslateService
       ]
     })
       .compileComponents()

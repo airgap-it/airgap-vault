@@ -3,6 +3,7 @@ import { AlertController, IonicPage, NavController, NavParams } from 'ionic-angu
 import { SecretValidatePage } from '../secret-validate/secret-validate'
 import { Secret } from '../../models/secret'
 import { SHOW_SECRET_MIN_TIME_IN_SECONDS } from '../../app/constants'
+import { TranslateService } from '@ngx-translate/core'
 
 @IonicPage()
 @Component({
@@ -13,22 +14,49 @@ export class SecretShowPage {
   private secret: Secret
   startTime = new Date()
 
-  constructor(public navController: NavController, private alertController: AlertController, private navParams: NavParams) {
+  constructor(
+    public navController: NavController,
+    private alertController: AlertController,
+    private navParams: NavParams,
+    private translateService: TranslateService
+  ) {
     this.secret = this.navParams.get('secret')
   }
 
   goToValidateSecret() {
     if (this.startTime.getTime() + SHOW_SECRET_MIN_TIME_IN_SECONDS * 1000 > new Date().getTime()) {
-      this.alertController
-        .create({
-          title: 'That was fast!',
-          message:
-            "Are you sure you are not a super human?<br />Make sure that you followed all the rules and didn't do anything , else then writting your secret on paper.<br />Please wait until at least " +
-            SHOW_SECRET_MIN_TIME_IN_SECONDS +
-            's are over.',
-          buttons: ['Okay']
+      this.translateService
+        .get([
+          'secret-show.too-fast_alert.title',
+          'secret-show.too-fast_alert.heading',
+          'secret-show.too-fast_alert.text',
+          'secret-show.too-fast_alert.wait_label_p1',
+          'secret-show.too-fast_alert.wait_label_p2'
+        ])
+        .subscribe(values => {
+          let title = values['secret-show.too-fast_alert.title']
+          let heading = values['secret-show.too-fast_alert.heading']
+          let text = values['secret-show.too-fast_alert.text']
+          let wait_label_p1 = values['secret-show.too-fast_alert.wait_label_p1']
+          let wait_label_p2 = values['secret-show.too-fast_alert.wait_label_p2']
+
+          this.alertController
+            .create({
+              title: title,
+              message:
+                heading +
+                '<br/>' +
+                text +
+                '<br/>' +
+                wait_label_p1 +
+                '<strong>' +
+                SHOW_SECRET_MIN_TIME_IN_SECONDS +
+                wait_label_p2 +
+                '</strong>',
+              buttons: ['Okay']
+            })
+            .present()
         })
-        .present()
     } else {
       this.navController.push(SecretValidatePage, { secret: this.secret })
     }

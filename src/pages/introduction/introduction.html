@@ -1,77 +1,65 @@
 <ion-header transparent no-border>
-  <ion-navbar hideBackButton transparent><ion-title>The New Crypto Wallet Standard</ion-title></ion-navbar>
+  <ion-navbar hideBackButton transparent>
+    <ion-title>{{ 'introduction.title' | translate }}</ion-title>
+  </ion-navbar>
 </ion-header>
 
 <ion-content padding no-bounce fullscreen class="colored-background">
   <ion-segment [(ngModel)]="security">
-    <ion-segment-button value="highest">Highest Security</ion-segment-button>
-    <ion-segment-button value="medium">Medium Security</ion-segment-button>
+    <ion-segment-button value="highest">{{ 'introduction.highest.label' | translate }}</ion-segment-button>
+    <ion-segment-button value="medium">{{ 'introduction.medium.label' | translate }}</ion-segment-button>
   </ion-segment>
 
   <ng-container *ngIf="security === 'highest'">
-    <ion-row>
-      <p>
-        With the AirGap
-        <b>two device approach</b>
-        secure key handling becomes more accessible.
-      </p>
-    </ion-row>
+    <ion-row><p [innerHTML]="'introduction.highest.text' | translate"></p></ion-row>
 
     <ion-row align-items-center>
       <ion-col col-5><img src="assets/img/AirGap_Onboarding_Vault.svg" /></ion-col>
       <ion-col col-7>
-        <h5>AirGap Vault</h5>
-        <p>
-          The private key is generated and securely stored in the AirGap Vault app.
-          <b>You have to install AirGap Vault to use AirGap Wallet</b>
-        </p>
+        <h5>{{ 'introduction.vault.heading' | translate }}</h5>
+        <p [innerHTML]="'introduction.vault.text' | translate"></p>
       </ion-col>
     </ion-row>
 
     <ion-row padding-vertical align-items-center>
       <ion-col col-5 text-center><img class="connector--img" src="assets/img/qrcode.svg" /></ion-col>
-      <ion-col col-7><strong>One-way communication with QR codes.</strong></ion-col>
+      <ion-col col-7>
+        <strong>{{ 'introduction.communication.highest_text' | translate }}</strong>
+      </ion-col>
     </ion-row>
 
     <ion-row padding-top align-items-center>
       <ion-col col-5><img src="assets/img/AirGap_Onboarding_Wallet.svg" /></ion-col>
       <ion-col col-7>
-        <h5>AirGap Wallet</h5>
-        <p>The wallet application deals only with public information and is responsible for broadcasting transactions to the blockchain.</p>
+        <h5>{{ 'introduction.wallet.heading' | translate }}</h5>
+        <p>{{ 'introduction.wallet.text' | translate }}</p>
       </ion-col>
     </ion-row>
   </ng-container>
 
   <ng-container *ngIf="security === 'medium'">
-    <ion-row>
-      <p>
-        With the AirGap
-        <b>two app approach</b>
-        secure key handling becomes more accessible.
-      </p>
-    </ion-row>
+    <ion-row><p [innerHTML]="'introduction.medium.text' | translate"></p></ion-row>
 
     <ion-row align-items-center>
       <ion-col col-5><img src="assets/img/AirGap_Onboarding_Vault.svg" /></ion-col>
       <ion-col col-7>
-        <h5>AirGap Vault</h5>
-        <p>
-          The private key is generated and securely stored in the AirGap Vault app.
-          <b>You have to install AirGap Vault to use AirGap Wallet</b>
-        </p>
+        <h5>{{ 'introduction.vault.heading' | translate }}</h5>
+        <p [innerHTML]="'introduction.vault.text' | translate"></p>
       </ion-col>
     </ion-row>
 
     <ion-row padding-vertical align-items-center>
       <ion-col col-5 text-center><img class="connector--img" src="assets/img/clone.svg" /></ion-col>
-      <ion-col col-7><strong>Secure communication through app switching.</strong></ion-col>
+      <ion-col col-7>
+        <strong>{{ 'introduction.communication.medium_text' | translate }}</strong>
+      </ion-col>
     </ion-row>
 
     <ion-row padding-top align-items-center>
       <ion-col col-5><img src="assets/img/AirGap_Onboarding_Wallet.svg" /></ion-col>
       <ion-col col-7>
-        <h5>AirGap Wallet</h5>
-        <p>The wallet application deals only with public information and is responsible for broadcasting transactions to the blockchain.</p>
+        <h5>{{ 'introduction.wallet.heading' | translate }}</h5>
+        <p>{{ 'introduction.wallet.text' | translate }}</p>
       </ion-col>
     </ion-row>
   </ng-container>
@@ -80,8 +68,8 @@
 <ion-footer no-border>
   <ion-toolbar padding transparent>
     <ion-row justify-content-end>
-      <button ion-button round color="light" (click)="downloadApp()">Install AirGap Wallet</button>
-      <button ion-button round color="primary" (click)="accept()">Let's Go</button>
+      <button ion-button round color="light" (click)="downloadApp()">{{ 'introduction.wallet_install_label' | translate }}</button>
+      <button ion-button round color="primary" (click)="accept()">{{ 'introduction.continue_label' | translate }}</button>
     </ion-row>
   </ion-toolbar>
 </ion-footer>

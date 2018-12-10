@@ -14,6 +14,14 @@
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
 
+.style__strong {
+  font-weight: bold;
+}
+
+.color__primary {
+  color: color($colors, primary);
+}
+
 .colored-background {
   color: color($colors, white);
   background: color($colors, secondary);
