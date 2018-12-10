@@ -1,3 +1,4 @@
+import 'jasmine'
 import { Injectable } from '@angular/core'
 import { IntroductionPage } from '../../pages/introduction/introduction'
 import { WarningsModalPage, Warning } from '../../pages/warnings-modal/warnings-modal'

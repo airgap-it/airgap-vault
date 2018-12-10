@@ -2,7 +2,9 @@
   <ion-navbar transparent>
     <ion-row align-items-center>
       <ion-col col-10>
-        <ion-title><p ion-text color="white">Unlock Secret</p></ion-title>
+        <ion-title>
+          <p ion-text color="white">{{ 'transaction-unlock.title' | translate }}</p>
+        </ion-title>
       </ion-col>
       <ion-col col-2>
         <!-- TODO: Set selected wallet -->
@@ -19,7 +21,7 @@
     <ion-row justify-content-end>
       <button default ion-button color="primary" (click)="goToTransactionOnboardingPage()" round item-right icon-left>
         <ion-icon md-name="lock_open"></ion-icon>
-        Unlock
+        {{ 'transaction-unlock.unlock_label' | translate }}
       </button>
     </ion-row>
   </ion-toolbar>

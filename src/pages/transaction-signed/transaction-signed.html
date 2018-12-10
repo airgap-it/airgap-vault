@@ -2,7 +2,9 @@
   <ion-navbar transparent>
     <ion-row align-items-center>
       <ion-col col-10>
-        <ion-title><p ion-text color="white">Signed Transaction</p></ion-title>
+        <ion-title>
+          <p ion-text color="white">{{ 'transaction-signed.title' | translate }}</p>
+        </ion-title>
       </ion-col>
     </ion-row>
   </ion-navbar>
@@ -31,7 +33,7 @@
   </ion-row>
 
   <ion-row padding>
-    <ion-label>Display Raw Transaction</ion-label>
+    <ion-label>{{ 'transaction-signed.raw-tx_label' | translate }}</ion-label>
     <ion-toggle (ionChange)="switchQR($event)"></ion-toggle>
   </ion-row>
 </ion-content>
@@ -39,8 +41,12 @@
 <ion-footer no-border>
   <ion-toolbar padding transparent>
     <ion-row justify-content-end>
-      <button default ion-button color="light" (click)="sameDeviceBroadcast()" round item-right>Same-Device-Broadcast</button>
-      <button default ion-button color="primary" (click)="done()" round item-right>Done</button>
+      <button default ion-button color="light" (click)="sameDeviceBroadcast()" round item-right>
+        {{ 'transaction-signed.same-device-broadcast_label' | translate }}
+      </button>
+      <button default ion-button color="primary" (click)="done()" round item-right>
+        {{ 'transaction-signed.done_label' | translate }}
+      </button>
     </ion-row>
   </ion-toolbar>
 </ion-footer>

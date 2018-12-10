@@ -1,11 +1,13 @@
 <ion-header transparent no-border>
   <ion-navbar transparent>
-    <ion-title><p ion-text color="white">Social Recovery</p></ion-title>
+    <ion-title>
+      <p ion-text color="white">{{ 'social-recovery-validate-share.title' | translate }}</p>
+    </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content class="colored-background">
-  <p padding-horizontal>Tap each word to match the correct order:</p>
+  <p padding-horizontal>{{ 'social-recovery-validate-share.text' | translate }}</p>
   <verify-key
     *ngIf="shares"
     #verify

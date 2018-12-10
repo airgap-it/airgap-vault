@@ -1,9 +1,11 @@
 import { Component } from '@angular/core'
 import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular'
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
-import { ICoinProtocol, supportedProtocols } from 'airgap-coin-lib'
 import { Storage } from '@ionic/storage'
 import { LocalAuthenticationOnboardingPage } from '../local-authentication-onboarding/local-authentication-onboarding'
+import { AirGapWallet, ICoinProtocol, supportedProtocols } from 'airgap-coin-lib'
+import { TranslateService } from '@ngx-translate/core'
+import bip39 from 'bip39'
 
 @IonicPage()
 @Component({
@@ -22,7 +24,8 @@ export class WalletSelectCoinsPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     private secretsProvider: SecretsProvider,
-    private storage: Storage
+    private storage: Storage,
+    private translateService: TranslateService
   ) {
     this.coinProtocols = supportedProtocols()
   }

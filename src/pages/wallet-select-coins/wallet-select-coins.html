@@ -1,6 +1,8 @@
 <ion-header transparent no-border>
   <ion-navbar transparent>
-    <ion-title><p ion-text color="white">Add Wallet</p></ion-title>
+    <ion-title>
+      <p ion-text color="white">{{ 'wallet-select-coins.title' | translate }}</p>
+    </ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -10,7 +12,7 @@
 
   <ion-list radio-group [ngModel]="selectedProtocol" (ngModelChange)="onSelectedProtocolChange($event)" no-lines>
     <ion-list-header no-padding no-margin no-lines>
-      <ion-label color="white" class="font--weight__med">Select Coins To Display</ion-label>
+      <ion-label color="white" class="font--weight__med">{{ 'wallet-select-coins.text' | translate }}</ion-label>
     </ion-list-header>
     <ion-item no-padding *ngFor="let protocol of coinProtocols" no-padding>
       <ion-avatar item-start><img [src]="'assets/symbols/' + protocol.symbol.toLowerCase() + '.svg'" /></ion-avatar>
@@ -21,26 +23,30 @@
 
   <ion-list no-lines padding-top>
     <ion-item id="wallet-type-selector" no-padding *ngIf="selectedProtocol && selectedProtocol.supportsHD">
-      <ion-label class="font--weight__med" color="white">Select Wallet Type</ion-label>
+      <ion-label class="font--weight__med" color="white">{{ 'wallet-select-coins.select-type.label' | translate }}</ion-label>
       <ion-select [(ngModel)]="isHDWallet" (ngModelChange)="onIsHDWalletChange($event)" color="white">
-        <ion-option [value]="false">Single Address Wallet</ion-option>
-        <ion-option [value]="true" selected>HD Wallet</ion-option>
+        <ion-option [value]="false">{{ 'wallet-select-coins.select-type.single-address_label' | translate }}</ion-option>
+        <ion-option [value]="true" selected>{{ 'wallet-select-coins.select-type.hd-wallet_label' | translate }}</ion-option>
       </ion-select>
     </ion-item>
 
     <!-- TODO: trigger advanced setting > custom derivation input -->
     <ion-item no-padding>
-      <ion-label class="font--weight__med" color="white">Advanced Mode</ion-label>
+      <ion-label class="font--weight__med" color="white">{{ 'wallet-select-coins.advanced_label' | translate }}</ion-label>
       <ion-toggle [(ngModel)]="isAdvancedMode"></ion-toggle>
     </ion-item>
 
     <ion-item no-padding padding-bottom *ngIf="isAdvancedMode">
-      <ion-label stacked color="primary">Custom Derivation Path</ion-label>
-      <ion-input [(ngModel)]="customDerivationPath" placeholder="Custom Derivation Path" color="white"></ion-input>
+      <ion-label stacked color="primary">{{ 'wallet-select-coins.custom-path.label' | translate }}</ion-label>
+      <ion-input
+        [(ngModel)]="customDerivationPath"
+        placeholder="{{'wallet-select-coins.custom-path.placeholder'|translate}}"
+        color="white"
+      ></ion-input>
     </ion-item>
 
     <!--
-      TODO: all suported wallet types with coresponding derivation path
+      TODO: all supported wallet types with corresponding derivation path
       <ion-item no-padding >
         <ion-label class="font--weight__med" color="white">Imported Wallet from ...</ion-label>
         <ion-select color="white">
@@ -56,7 +62,7 @@
   <ion-toolbar padding transparent>
     <ion-row justify-content-end>
       <button id="btn-add-coins" [disabled]="!selectedProtocol" default ion-button color="primary" round item-right (click)="addWallet()">
-        Next
+        {{ 'wallet-select-coins.create_label' | translate }}
       </button>
     </ion-row>
   </ion-toolbar>

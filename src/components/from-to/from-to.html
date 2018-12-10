@@ -6,16 +6,16 @@
       <ion-row justify-content-center><div class="line"></div></ion-row>
     </ion-col>
     <ion-col col-9 padding-bottom>
-      <ion-label stacked>AMOUNT</ion-label>
+      <ion-label stacked>{{ 'from-to.amount_label' | translate }}</ion-label>
       <div class="typography--mono" item-content>
         <span class="typography--mono">
-          {{ transaction.amount | amountConverter : { protocolIdentifier: transaction.protocolIdentifier } }}
+          {{ transaction.amount | amountConverter: { protocolIdentifier: transaction.protocolIdentifier } }}
         </span>
       </div>
 
-      <ion-label stacked>FEE</ion-label>
+      <ion-label stacked>{{ 'from-to.fee_label' | translate }}</ion-label>
       <div class="typography--mono" item-content>
-        <span class="typography--mono">{{ transaction.fee | feeConverter : { protocolIdentifier: transaction.protocolIdentifier } }}</span>
+        <span class="typography--mono">{{ transaction.fee | feeConverter: { protocolIdentifier: transaction.protocolIdentifier } }}</span>
       </div>
     </ion-col>
   </ion-row>

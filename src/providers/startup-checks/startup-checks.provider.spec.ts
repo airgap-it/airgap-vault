@@ -1,3 +1,4 @@
+import 'jasmine'
 import { async, TestBed } from '@angular/core/testing'
 import { NavController, NavParams, Platform, ModalController } from 'ionic-angular'
 import { StatusBar } from '@ionic-native/status-bar'

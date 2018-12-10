@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y wget --no-install-recommends \
     && rm -rf /src/*.deb
 
 # install npm
-RUN npm install -g npm@5.6.0
+RUN npm install -g npm@6.4.1
 
 # install static webserver
 RUN npm install -g node-static

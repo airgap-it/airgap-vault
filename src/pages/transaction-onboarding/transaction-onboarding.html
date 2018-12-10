@@ -2,7 +2,9 @@
   <ion-navbar transparent>
     <ion-row align-items-center>
       <ion-col col-10>
-        <ion-title><p ion-text color="white">Signed Transaction</p></ion-title>
+        <ion-title>
+          <p ion-text color="white">{{ 'transaction-onboarding.title' | translate }}</p>
+        </ion-title>
       </ion-col>
     </ion-row>
   </ion-navbar>
@@ -10,8 +12,8 @@
 
 <ion-content padding class="colored-background">
   <ion-row padding-horizontal>
-    <h3>Scan Signed Transaction</h3>
-    <p>Scan the signed transaction QR code in the next step with your broadcaster app.</p>
+    <h3>{{ 'transaction-onboarding.heading' | translate }}</h3>
+    <p>{{ 'transaction-onboarding.text' | translate }}</p>
   </ion-row>
 
   <ion-row><img src="./assets/img/scan_confirmation_onboarding.svg" /></ion-row>
@@ -23,15 +25,17 @@
       <button
         default
         ion-button
-        [color]="hideNextTime ? 'success': 'white'"
+        [color]="hideNextTime ? 'success' : 'white'"
         clear
         item-left
         (click)="hideDisclaimer()"
         [disabled]="hideNextTime"
       >
-        DON'T SHOW AGAIN
+        {{ 'transaction-onboarding.dont-show_label' | translate }}
       </button>
-      <button default ion-button color="primary" (click)="goToTransactionSignedPage()" round item-right icon-left>Next Step</button>
+      <button default ion-button color="primary" (click)="goToTransactionSignedPage()" round item-right icon-left>
+        {{ 'transaction-onboarding.next_label' | translate }}
+      </button>
     </ion-row>
   </ion-toolbar>
 </ion-footer>

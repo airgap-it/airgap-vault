@@ -7,6 +7,7 @@ import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import { SchemeRoutingProvider } from '../../providers/scheme-routing/scheme-routing'
 import { ZXingScannerComponent } from '@zxing/ngx-scanner'
 import { PermissionsProvider, PermissionTypes, PermissionStatus } from '../../providers/permissions/permissions'
+import { TranslateService } from '@ngx-translate/core'
 
 @IonicPage()
 @Component({
@@ -37,7 +38,8 @@ export class TabScanPage {
     private secretsProvider: SecretsProvider,
     private transactionProvider: TransactionsProvider,
     private scanner: ScannerProvider,
-    private permissionsProvider: PermissionsProvider
+    private permissionsProvider: PermissionsProvider,
+    private translateService: TranslateService
   ) {
     this.isBrowser = !this.platform.is('cordova')
   }
@@ -117,21 +119,28 @@ export class TabScanPage {
         })
         .catch(error => {
           console.warn(error)
-          let alert = this.alertCtrl.create({
-            title: 'Incompatible QR',
-            message: 'This QR is not a raw transaction.',
-            enableBackdropDismiss: false,
-            buttons: [
-              {
-                text: 'Okay!',
-                role: 'cancel',
-                handler: () => {
-                  this.startScan()
-                }
-              }
-            ]
-          })
-          alert.present()
+          this.translateService
+            .get(['tab-wallets.no-secret_alert.title', 'tab-wallets.no-secret_alert.message', 'tab-wallets.no-secret_alert.text'])
+            .subscribe(values => {
+              let title = values['tab-wallets.no-secret_alert.title']
+              let message = values['tab-wallets.no-secret_alert.message']
+              let text = values['tab-wallets.no-secret_alert.text']
+              let alert = this.alertCtrl.create({
+                title: title,
+                message: message,
+                enableBackdropDismiss: false,
+                buttons: [
+                  {
+                    text: text,
+                    role: 'cancel',
+                    handler: () => {
+                      this.startScan()
+                    }
+                  }
+                ]
+              })
+              alert.present()
+            })
         })
     }
   }
@@ -142,45 +151,47 @@ export class TabScanPage {
 
   extractRawTx(qr: string): Promise<Transaction> {
     return new Promise((resolve, reject) => {
-      let rawTx
+      this.translateService.get(['tab-wallets.raw-tx_alert']).subscribe(values => {
+        let rawTx
 
-      try {
-        rawTx = JSON.parse(qr)
-      } catch (err) {
-        return reject(err)
-      }
-
-      let alert = this.alertCtrl.create()
-      alert.setTitle('Select Wallet')
-
-      const wallets = this.secretsProvider.getWallets()
-
-      for (let wallet of wallets) {
-        alert.addInput({
-          type: 'radio',
-          label: wallet.coinProtocol.name + ' ' + wallet.receivingPublicAddress,
-          value: wallets.indexOf(wallet).toString()
-        })
-      }
-
-      alert.addButton('Cancel')
-      alert.addButton({
-        text: 'Ok',
-        handler: (walletIndex: string) => {
-          const wallet = wallets[parseInt(walletIndex, 10)]
-          rawTx.from = wallet.receivingPublicAddress
-          const payload = rawTx
-
-          try {
-            const tx = this.transactionProvider.constructFromPayload(payload, wallet)
-            resolve(tx)
-          } catch (error) {
-            return reject(error)
-          }
+        try {
+          rawTx = JSON.parse(qr)
+        } catch (err) {
+          return reject(err)
         }
-      })
+        let title = values['tab-wallets.raw-tx_alert.title']
+        let text = values['tab-wallets.raw-tx_alert.okay_label']
+        let alert = this.alertCtrl.create()
+        alert.setTitle(title)
 
-      alert.present()
+        const wallets = this.secretsProvider.getWallets()
+
+        for (let wallet of wallets) {
+          alert.addInput({
+            type: 'radio',
+            label: wallet.coinProtocol.name + ' ' + wallet.receivingPublicAddress,
+            value: wallets.indexOf(wallet).toString()
+          })
+        }
+
+        alert.addButton('Cancel')
+        alert.addButton({
+          text: text,
+          handler: (walletIndex: string) => {
+            const wallet = wallets[parseInt(walletIndex, 10)]
+            rawTx.from = wallet.receivingPublicAddress
+            const payload = rawTx
+
+            try {
+              const tx = this.transactionProvider.constructFromPayload(payload, wallet)
+              resolve(tx)
+            } catch (error) {
+              return reject(error)
+            }
+          }
+        })
+        alert.present()
+      })
     })
   }
 }

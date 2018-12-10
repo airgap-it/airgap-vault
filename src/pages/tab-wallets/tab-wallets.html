@@ -1,11 +1,15 @@
-<ion-header no-border>
-  <ion-navbar color="secondary"><ion-title>Wallets</ion-title></ion-navbar>
+<ion-header no-border class="colored-background">
+  <ion-navbar color="secondary">
+    <ion-title>{{ 'tab-wallets.title' | translate }}</ion-title>
+  </ion-navbar>
 
-  <div class="colored-background" padding-horizontal>
-    <current-secret [chosenSecret]="activeSecret" (secretChanged)="onSecretChanged($event)"></current-secret>
-  </div>
+  <div padding-horizontal><current-secret [chosenSecret]="activeSecret" (secretChanged)="onSecretChanged($event)"></current-secret></div>
 
-  <div class="colored-background"><ion-searchbar placeholder="Search Currency" (ionInput)="filterItems($event)"></ion-searchbar></div>
+  <ion-searchbar
+    class="colored-background"
+    placeholder="{{ 'tab-wallets.search_placeholder' | translate }}"
+    (ionInput)="filterItems($event)"
+  ></ion-searchbar>
 </ion-header>
 
 <ion-content *ngIf="wallets" padding>
@@ -15,13 +19,15 @@
 
   <div class="empty-list" *ngIf="wallets && (wallets | async | filterWallets: { symbol: symbolFilter }).length === 0">
     <img src="./assets/img/no-wallet-added-onboarding.svg" />
-    <p><strong>Create a new wallet by selecting a currency and sync it to AirGap Wallet.</strong></p>
+    <p>
+      <strong>{{ 'tab-wallets.empty-state_text' | translate }}</strong>
+    </p>
   </div>
 
   <ion-fab bottom right>
     <button id="btn-add-wallet" default ion-button color="secondary" (click)="addWallet()" round icon-left>
       <ion-icon name="add"></ion-icon>
-      Add Wallet
+      {{ 'tab-wallets.add-wallet_label' | translate }}
     </button>
   </ion-fab>
 </ion-content>

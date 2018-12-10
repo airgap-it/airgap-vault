@@ -1,6 +1,10 @@
+import 'jasmine'
 import { VerifyKeyComponent } from './verify-key'
 import { ComponentFixture, TestBed, async } from '@angular/core/testing'
 import { IonicModule } from 'ionic-angular'
+import { HttpClient, HttpClientModule } from '@angular/common/http'
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
+import { HttpLoaderFactory } from '../../app/app.module'
 
 describe('Component: VerifyKey', () => {
   let component: VerifyKeyComponent
@@ -12,7 +16,16 @@ describe('Component: VerifyKey', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [VerifyKeyComponent],
-      imports: [IonicModule.forRoot(VerifyKeyComponent)]
+      imports: [
+        IonicModule.forRoot(VerifyKeyComponent),
+        HttpClientModule,
+        TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useFactory: HttpLoaderFactory,
+            deps: [HttpClient]
+          }
+        })]
     })
       .compileComponents()
       .then(() => {
