@@ -13,7 +13,7 @@ export class SecretsProvider {
   private activeSecret: Secret
   private secretsList: Secret[] = []
   public currentSecretsList = new BehaviorSubject(this.secretsList)
-  public storageRead = false
+  public ready: Promise<void>
 
   constructor(
     private secureStorageService: SecureStorageService,
@@ -22,12 +22,11 @@ export class SecretsProvider {
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController
   ) {
-    this.init()
+    this.ready = this.init();
   }
 
-  async init(): Promise<void> {
+  private async init(): Promise<void> {
     const secrets = await this.read()
-    this.storageRead = true
     this.secretsList.push(...secrets.map(obj => Secret.init(obj)))
     this.activeSecret = this.secretsList[0]
     this.currentSecretsList.next(this.secretsList) // we need to force this update, as [] will not be broadcasted again

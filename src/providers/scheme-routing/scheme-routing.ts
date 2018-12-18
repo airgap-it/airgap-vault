@@ -36,9 +36,7 @@ export class SchemeRoutingProvider {
     }
   ) {
     // wait for secrets to be loaded for sure
-    if (!this.secretsProvider.storageRead) {
-      await this.secretsProvider.init()
-    }
+    await this.secretsProvider.ready
 
     this.navController = navCtrl
     const syncProtocol = new SyncProtocolUtils()
