@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core'
-import { toDataUrl } from 'ethereum-blockies'
+import { toDataUrl } from 'myetherwallet-blockies'
 import { createIcon } from '@download/blockies'
 
 @Component({
