@@ -13,7 +13,7 @@ export class SecretsProvider {
   private activeSecret: Secret
   private secretsList: Secret[] = []
   public currentSecretsList = new BehaviorSubject(this.secretsList)
-  public storageRead = false
+  private ready: Promise<void>
 
   constructor(
     private secureStorageService: SecureStorageService,
@@ -22,15 +22,21 @@ export class SecretsProvider {
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController
   ) {
-    this.read().then(secrets => {
-      this.storageRead = true
-      this.secretsList.push(...secrets.map(obj => Secret.init(obj)))
-      this.activeSecret = this.secretsList[0]
-      this.currentSecretsList.next(this.secretsList) // we need to force this update, as [] will not be broadcasted again
-    })
+    this.ready = this.init();
   }
 
-  read(): Promise<Secret[]> {
+  private async init(): Promise<void> {
+    const secrets = await this.read()
+    this.secretsList.push(...secrets.map(obj => Secret.init(obj)))
+    this.activeSecret = this.secretsList[0]
+    this.currentSecretsList.next(this.secretsList) // we need to force this update, as [] will not be broadcasted again
+  }
+
+  public isReady(): Promise<void> {
+    return this.ready
+  }
+  
+  private read(): Promise<Secret[]> {
     return new Promise((resolve, reject) => {
       this.storage
         .get('airgap-secret-list')

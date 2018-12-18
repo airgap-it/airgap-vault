@@ -35,6 +35,9 @@ export class SchemeRoutingProvider {
       /* */
     }
   ) {
+    // wait for secrets to be loaded for sure
+    await this.secretsProvider.isReady()
+
     this.navController = navCtrl
     const syncProtocol = new SyncProtocolUtils()
 
@@ -59,7 +62,7 @@ export class SchemeRoutingProvider {
     }
   }
 
-  async handleUnsignedTransaction(deserializedSyncProtocol: DeserializedSyncProtocol, scanAgainCallback: Function) {
+  private async handleUnsignedTransaction(deserializedSyncProtocol: DeserializedSyncProtocol, scanAgainCallback: Function) {
     const unsignedTransaction = deserializedSyncProtocol.payload as UnsignedTransaction
 
     const correctWallet = this.secretsProvider.findWalletByPublicKeyAndProtocolIdentifier(

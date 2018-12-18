@@ -25,8 +25,9 @@ export class TabSecretsPage {
   }
 
   ionViewWillEnter() {
-    this.secrets.subscribe(list => {
-      if (list.length === 0 && this.secretsProvider.storageRead) {
+    this.secrets.subscribe(async list => {
+      await this.secretsProvider.isReady()
+      if (list.length === 0) {
         this.navController.push(SecretCreatePage)
       }
     })

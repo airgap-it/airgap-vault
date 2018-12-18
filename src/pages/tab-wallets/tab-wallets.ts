@@ -23,8 +23,9 @@ export class TabWalletsPage {
 
   ionViewWillEnter() {
     let secrets = this.secretsProvider.currentSecretsList.asObservable()
-    secrets.subscribe(list => {
-      if (list.length === 0 && this.secretsProvider.storageRead) {
+    secrets.subscribe(async list => {
+      await this.secretsProvider.isReady()
+      if (list.length === 0) {
         this.navController.push(SecretCreatePage)
       }
     })
