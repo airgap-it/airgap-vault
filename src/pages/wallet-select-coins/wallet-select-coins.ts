@@ -1,11 +1,9 @@
 import { Component } from '@angular/core'
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular'
+import { IonicPage, NavController, NavParams, LoadingController, App } from 'ionic-angular'
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import { Storage } from '@ionic/storage'
 import { LocalAuthenticationOnboardingPage } from '../local-authentication-onboarding/local-authentication-onboarding'
-import { AirGapWallet, ICoinProtocol, supportedProtocols } from 'airgap-coin-lib'
-import { TranslateService } from '@ngx-translate/core'
-import bip39 from 'bip39'
+import { ICoinProtocol, supportedProtocols } from 'airgap-coin-lib'
 
 @IonicPage()
 @Component({
@@ -25,7 +23,7 @@ export class WalletSelectCoinsPage {
     public navParams: NavParams,
     private secretsProvider: SecretsProvider,
     private storage: Storage,
-    private translateService: TranslateService
+    private app: App
   ) {
     this.coinProtocols = supportedProtocols()
   }
@@ -61,5 +59,10 @@ export class WalletSelectCoinsPage {
     }
     await this.secretsProvider.addWallet(this.selectedProtocol.identifier, this.isHDWallet, this.customDerivationPath)
     await this.navCtrl.popToRoot()
+
+    // navigate to wallets tab after initial derivation
+    if (this.app.getActiveNavs().length > 0) {
+      ;(this.app.getActiveNavs()[0] as any).parent.select(0)
+    }
   }
 }
