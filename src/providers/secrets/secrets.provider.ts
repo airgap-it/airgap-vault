@@ -13,7 +13,7 @@ export class SecretsProvider {
   private activeSecret: Secret
   private secretsList: Secret[] = []
   public currentSecretsList = new BehaviorSubject(this.secretsList)
-  public ready: Promise<void>
+  private ready: Promise<void>
 
   constructor(
     private secureStorageService: SecureStorageService,
@@ -32,6 +32,10 @@ export class SecretsProvider {
     this.currentSecretsList.next(this.secretsList) // we need to force this update, as [] will not be broadcasted again
   }
 
+  public isReady(): Promise<void> {
+    return this.ready
+  }
+  
   private read(): Promise<Secret[]> {
     return new Promise((resolve, reject) => {
       this.storage
