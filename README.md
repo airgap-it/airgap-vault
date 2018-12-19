@@ -1,24 +1,40 @@
-# Secure Mobile Offline Keystore and Signer
+# AirGap Vault
 
-![pipeline status](https://gitlab.papers.tech/papers/airgap/airgap-vault/badges/master/pipeline.svg)
+<p align="left">
+    <img src="./banner.png" />
+</p>
 
-An open source mobile app used to store secrets and sign transactions securely.
+> Your old smartphone is your new ‘hardware wallet’
 
-## Introduction
+[AirGap](https://airgap.it) is a crypto wallet system, that let's you secure cypto assets with one secret on an offline device. The AirGap Vault application is installed on a is installed on a dedicated or old smartphone that has no connection to any network, thus it is air gapped. The [AirGap Wallet](https://github.com/airgap-it/airgap-wallet) is installed installed on an everyday smartphone.
 
-Together with the Aeternity team we identified the urging need for an easy and secure method to generate crypto currency keys, store them and use them to sign transactions. Having worked with large financial institutions helping them in securing their most sensitive apps, the AirGap team believes to give the crypto community a tool that meets the highest possible standards of mobile security.
+## Description
 
-## Attack Vectors
+AirGap Vault is responsible for secure key generation, for this entropy like audio, video, touch and accelerator are added to the hardware random number generated. The generated secret is saved in the secure enclave of the respective mobile operating system only accessible by biometric authentication. Accounts for multiple protcols can be created and transactions prepared by the AirGap Wallet application without any network connection needed. The mobile application, AirGap Vault is a hybrid application (using the same codebase for Android and iOS which helps with coordinated development). Created using Ionic framework and AirGap's coin-lib to interact with different protocols and a secure storage implementation.
 
-These are the relevant attack vectors we identified and how we mitigate them, feel free to contact us and discuss possible other scenarios:
+<p align="left">
+    <img src="./devices.png" />
+</p>
 
-## App 2 App Communication
+## Download
 
-The security concept behind air gapped systems is to work with 2 physically separated devices, one of which has no connection to the outside world (internet). In our context the component which has no internet connection is this signer app. The two component communicate through URL schemes, these URLs can be simply provided with QR codes.
+- [Google Play](https://play.google.com/store/apps/details?id=it.airgap.vault)
+- [App Store](https://itunes.apple.com/us/app/airgap-vault-secure-secrets/id1417126841?l=de&ls=1&mt=8)
 
-## Key Generation
+## Features
 
-### Entropy Seeder
+- Secure secret generation with added entropy like audio, video, touch and device accelerator
+- Secure storage in the secure enclave of the mobile operating system, accessible only by biometric authenticaiton
+- Secure Communication with AirGap Wallet over URL schemes, QR codes or app switching
+- Create accounts for all supported currencies like Aeternity, Ethereum, Bitcoin etc.
+- Sign transactions created by AirGap Wallet
+
+## Security
+
+The security concept behind air-gapped systems is to work with two physically separated devices, one of which has no connection to the outside world, any network. In the context of AirGap the component which has no internet connection is AirGap Vault. The two components, AirGap Vault and AirGap Wallet, communicate through URL schemes, these URLs can be simply provided with QR codes.
+
+
+### Key Generation
 
 The entropy seeder uses the native secure random functionality provided by the system and concatenates this with the sha3 hash of the additional entropy. The rationale behind this is:
 
@@ -27,7 +43,7 @@ The entropy seeder uses the native secure random functionality provided by the s
 - by reusing the hash of an earlier "round" as a salt we can incorporate the entire collected entropy of the previous round.
 - native secure random cannot be fully trusted because there is no API to check the entropy pool it's using
 
-For more technical people here the algorithm being used for the entropy seeding:
+The algorithm being used for the entropy seeding:
 
 ```
 const ENTROPY_BYTE_SIZE = 256
@@ -49,9 +65,42 @@ function seedEntropy (additionalEntropyArray) {
 }
 ```
 
-## Similar Initiatives
+## Build
 
-- https://github.com/paritytech/parity-signer
-- https://bitkey.io/
-- https://myetherwallet.com/
+First follow the steps below to install the dependencies:
 
+```bash
+$ npm install -g ionic
+$ npm install -g cordova
+$ npm install
+```
+
+Run locally in browser:
+
+```bash
+$ ionic serve
+```
+
+Run on device:
+
+```bash
+$ ionic cordova platform run android
+$ ionic cordova platform run ios
+```
+
+## Testing
+
+To run the unit tests:
+
+```bash
+$ npm test
+```
+
+## Security
+
+If you discover a security vulnerability within this application, please send an e-mail to hi@airgap.it. All security vulnerabilities will be promptly addressed.
+
+## Contributing
+
+- If you find any bugs, submit an [issue](../../issues) or open [pull-request](../../pulls), helping us catch and fix them.
+- Engage with other users and developers on the [AirGap Telegram](https://t.me/AirGap).
