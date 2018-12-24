@@ -14,7 +14,7 @@ export class CurrentSecretComponent {
   secretChanged = new EventEmitter<Secret>()
 
   constructor(private secretsProvider: SecretsProvider) {
-    this.secrets = this.secretsProvider.currentSecretsList.getValue()
+    this.secrets = this.secretsProvider.currentSecretsList.getValue().filter(secret => secret.secretType === 0) // TODO is this the cleanest solution?
     this.currentSecret = this.secrets.indexOf(this.secretsProvider.getActiveSecret())
   }
 

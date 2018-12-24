@@ -8,6 +8,8 @@ import { SchemeRoutingProvider } from '../../providers/scheme-routing/scheme-rou
 import { ZXingScannerComponent } from '@zxing/ngx-scanner'
 import { PermissionsProvider, PermissionTypes, PermissionStatus } from '../../providers/permissions/permissions'
 import { TranslateService } from '@ngx-translate/core'
+import { Secret, SecretType } from '../../models/secret'
+import { TabSecretsPage } from '../tab-secrets/tab-secrets'
 
 @IonicPage()
 @Component({
@@ -112,6 +114,12 @@ export class TabScanPage {
       return this.schemeRouting.handleNewSyncRequest(this.navController, data, () => {
         this.startScan()
       })
+    } else if(this.isOneTimePasswordSecret(data)){
+      let url = new URL(data)
+      const secret = new Secret(Secret.base32tohex(url.searchParams.get('secret')), url.pathname.split('/')[3], false, SecretType.ONE_TIME_PASSWORD_GENERATOR)
+      this.secretsProvider.addOrUpdateSecret(secret).then(async () => {
+        this.navController.push(TabSecretsPage)
+      })
     } else {
       this.extractRawTx(data)
         .then(tx => {
@@ -147,6 +155,10 @@ export class TabScanPage {
 
   isAirGapTx(qr: string): boolean {
     return qr.indexOf('airgap-vault://') !== -1
+  }
+
+  isOneTimePasswordSecret(qr: string): boolean {
+    return qr.indexOf('otpauth://') !== -1
   }
 
   extractRawTx(qr: string): Promise<Transaction> {
