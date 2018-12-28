@@ -42,7 +42,9 @@
 
   "from-to":{
     "amount_label":"数量",
-    "fee_label":"手续费"
+    "fee_label":"手续费",
+    "from_label": "从",
+    "to_label": "到"
   },
 
   "introduction": {
@@ -272,7 +274,7 @@
     "title":"已签名转账",
     "raw-tx_label":"显示原始转账",
     "same-device-broadcast_label":"同设备内广播。",
-    "done_labe":"完成"
+    "done_label":"完成"
   },
 
   "touch-entropy":{

@@ -42,7 +42,9 @@
 
   "from-to":{
     "amount_label":"AMOUNT",
-    "fee_label":"FEE"
+    "fee_label":"FEE",
+    "from_label": "From",
+    "to_label": "To"
   },
 
   "introduction": {
@@ -272,7 +274,7 @@
     "title":"Signed Transaction",
     "raw-tx_label":"Display Raw Transaction",
     "same-device-broadcast_label":"Same Device Broadcast",
-    "done_labe":"Done"
+    "done_label":"Done"
   },
 
   "touch-entropy":{

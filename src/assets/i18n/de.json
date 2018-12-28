@@ -42,7 +42,9 @@
 
   "from-to":{
     "amount_label":"BETRAG",
-    "fee_label":"GEBÜHR"
+    "fee_label":"GEBÜHR",
+    "from_label": "Von",
+    "to_label": "Zu"
   },
 
   "introduction": {
@@ -272,7 +274,7 @@
     "title":"Signierte Transaktion",
     "raw-tx_label":"Rohe Transaktionsdaten anzeigen",
     "same-device-broadcast_label":"gleiches-Gerät Übermittlung",
-    "done_labe":"Fertig"
+    "done_label":"Fertig"
   },
 
   "touch-entropy":{
