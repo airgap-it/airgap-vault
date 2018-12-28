@@ -1,24 +1,26 @@
-<div *ngIf="transaction">
-  <address-row *ngFor="let address of transaction.from" [address]="address"></address-row>
+<ng-container *ngIf="transaction">
+  <address-row *ngFor="let address of transaction.from" [address]="address" label="{{ 'from-to.from_label' | translate }}"></address-row>
 
   <ion-row align-items-center>
     <ion-col col-3 no-padding>
       <ion-row justify-content-center><div class="line"></div></ion-row>
     </ion-col>
     <ion-col col-9 padding-bottom>
-      <ion-label stacked>{{ 'from-to.amount_label' | translate }}</ion-label>
+      <ion-label stacked class="typography--uppercase">{{ 'from-to.amount_label' | translate }}</ion-label>
       <div class="typography--mono" item-content>
         <span class="typography--mono">
           {{ transaction.amount | amountConverter: { protocolIdentifier: transaction.protocolIdentifier } }}
         </span>
       </div>
 
-      <ion-label stacked>{{ 'from-to.fee_label' | translate }}</ion-label>
-      <div class="typography--mono" item-content>
-        <span class="typography--mono">{{ transaction.fee | feeConverter: { protocolIdentifier: transaction.protocolIdentifier } }}</span>
-      </div>
+      <ng-container *ngIf="transaction.fee">
+        <ion-label stacked class="typography--uppercase">{{ 'from-to.fee_label' | translate }}</ion-label>
+        <div class="typography--mono" item-content>
+          <span class="typography--mono">{{ transaction.fee | feeConverter: { protocolIdentifier: transaction.protocolIdentifier } }}</span>
+        </div>
+      </ng-container>
     </ion-col>
   </ion-row>
 
-  <address-row *ngFor="let address of transaction.to" [address]="address"></address-row>
-</div>
+  <address-row *ngFor="let address of transaction.to" [address]="address" label="{{ 'from-to.to_label' | translate }}"></address-row>
+</ng-container>
