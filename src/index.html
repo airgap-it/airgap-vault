@@ -10,6 +10,23 @@
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
 
+    <!-- script-src needs 'unsafe-eval' because of web3 -->
+    <!-- style-src needs 'unsafe-inline' because we have inline css in some components -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+        default-src 'none'; 
+        script-src 'self' 'unsafe-eval';
+        connect-src 'self';
+        child-src 'none';
+        object-src 'none';
+        font-src 'self' data:;
+        img-src 'self' data:;
+        worker-src blob:;
+        style-src 'self' 'unsafe-inline';
+      "
+    />
+
     <link rel="icon" type="image/x-icon" href="assets/icon/favicon.ico" />
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#4e8ef7" />
