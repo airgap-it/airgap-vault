@@ -130,7 +130,7 @@
   "secret-import":{
     "title":"导入现有助记词",
     "text":"您可以将现有助记词导入AirGap。 请填写你的助记词",
-    "placeholder":"wife pulp island master rally shed assume critic assist derive quick sport intact army mule network barely siege film swallow concert assume protect umbrella",
+    "placeholder":"wife pulp island ...",
     "warning":"请再次检查您的助记词拼写",
     "import_label":"确认导入"
   },

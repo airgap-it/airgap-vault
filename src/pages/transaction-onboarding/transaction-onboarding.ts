@@ -11,18 +11,25 @@ import { AirGapWallet } from 'airgap-coin-lib'
   templateUrl: 'transaction-onboarding.html'
 })
 export class TransactionOnboardingPage {
+
   private transaction: Transaction
   private wallet: AirGapWallet
-  private hideNextTime = false
+
+  disclaimerHidden = false
 
   constructor(public navController: NavController, public navParams: NavParams, private storage: Storage) {
     this.transaction = this.navParams.get('transaction')
     this.wallet = this.navParams.get('wallet')
   }
 
+  async ngOnInit() {
+    this.disclaimerHidden = await this.storage.get('DISCLAIMER_HIDE_SIGN_TX')
+  }
+
   public hideDisclaimer() {
-    this.hideNextTime = true
+    this.disclaimerHidden = true
     this.storage.set('DISCLAIMER_HIDE_SIGN_TX', true)
+    this.goToTransactionSignedPage()
   }
 
   public goToTransactionSignedPage() {
