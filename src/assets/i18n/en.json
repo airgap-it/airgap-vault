@@ -12,6 +12,12 @@
       "okay_label":"Okay"
   },
 
+  "about-popover": {
+    "label": "About",
+    "version": "Version:",
+    "code": "Code:"
+  },
+
   "distribution-onboarding":{
     "ask-permission": {
       "heading": "AirGap is <span class=\"style__strong color__primary\"> not persistent</span>, secrets generated will not be stored and need to be <span class=\"style__strong color__primary\">imported again</span> after a restart",
