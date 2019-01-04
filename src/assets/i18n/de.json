@@ -51,11 +51,11 @@
     "title": "Der Neue Krypto-Wallet Standard",
     "highest": {
       "label": "Höchste Sicherheit",
-      "text": "Mit dem AirGap <b>zwei-Geräte Ansatz</b> wird der sicher Umgang mit Gehimschlüssel zugänglicher.</p>"
+      "text": "Mit dem AirGap <b>zwei-Geräte Ansatz</b> wird der sicher Umgang mit Geheimschlüssel zugänglicher."
     },
     "medium": {
       "label": "Mittlere Sicherheit",
-      "text": "Mit dem AirGap <b>zwei-App Ansatz</b> wird der sicher Umgang mit Gehimschlüssel zugänglicher."
+      "text": "Mit dem AirGap <b>zwei-App Ansatz</b> wird der sicher Umgang mit Geheimschlüssel zugänglicher."
     },
     "vault": {
       "heading": "AirGap Vault",
