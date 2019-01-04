@@ -84,7 +84,7 @@ export class CameraBrowserService implements IEntropyGenerator {
         .getUserMedia(constraints)
         .then(stream => {
           this.videoStream = stream
-          video.src = window.URL.createObjectURL(stream)
+          video.srcObject = stream
           video.play()
           resolve()
         })
