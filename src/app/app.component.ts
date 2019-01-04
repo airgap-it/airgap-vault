@@ -26,13 +26,13 @@ export class MyApp {
     private translate: TranslateService
   ) {
     this.platform.ready().then(() => {
-      if (platform.is('cordova')) {
+      if (this.platform.is('cordova')) {
         this.statusBar.styleLightContent()
         this.statusBar.backgroundColorByHexString('#311B58')
         this.splashScreen.hide()
       }
-      translate.setDefaultLang('en')
-      translate.use('en')
+      this.translate.setDefaultLang('en')
+      this.translate.use(translate.getBrowserLang())
       this.initChecks()
     })
   }
