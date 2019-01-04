@@ -25,16 +25,31 @@ export class MyApp {
     private schemeRoutingProvider: SchemeRoutingProvider,
     private translate: TranslateService
   ) {
-    this.platform.ready().then(() => {
-      if (platform.is('cordova')) {
-        this.statusBar.styleLightContent()
-        this.statusBar.backgroundColorByHexString('#311B58')
-        this.splashScreen.hide()
-      }
-      translate.setDefaultLang('en')
-      translate.use('en')
-      this.initChecks()
-    })
+    this.platform
+      .ready()
+      .then(() => {
+        if (this.platform.is('cordova')) {
+          this.statusBar.styleLightContent()
+          this.statusBar.backgroundColorByHexString('#311B58')
+          this.splashScreen.hide()
+        }
+        this.translate.setDefaultLang('en')
+
+        const supportedLanguages = ['en', 'de', 'zh-cn']
+
+        const language = this.translate.getBrowserLang()
+        if (language) {
+          const lowerCaseLanguage = language.toLowerCase()
+          supportedLanguages.forEach(supportedLanguage => {
+            if (supportedLanguage.startsWith(lowerCaseLanguage)) {
+              this.translate.use(supportedLanguage)
+            }
+          })
+        }
+
+        this.initChecks()
+      })
+      .catch(console.error)
   }
 
   initChecks() {

@@ -63,7 +63,7 @@
     },
     "wallet": {
       "heading": "AirGap Wallet",
-      "text": "钱包应用程序仅处理公共信息，并负责向区块链广播交易。“"  
+      "text": "钱包应用程序仅处理公共信息，并负责向区块链广播交易。"  
     },
     "communication": {
       "highest_text": "通过二维码的单向通信",
@@ -123,7 +123,7 @@
   "secret-generate":{
     "heading":"我们正在生成你的助记词",
     "text":"为此，我们需要使用您的视频、音频、触摸和设备移动来确保您的助记词的随机性",
-    "description":"移动您的设备来记录音频、视频和加速，直到所有数值显示100%。“",
+    "description":"移动您的设备来记录音频、视频和加速，直到所有数值显示100%。",
     "continue_label":"下一步"
   },
 
@@ -138,13 +138,13 @@
   "secret-rules":{
     "title":"请完整阅读",
     "heading":"请确认您遵守这些规则",
-    "text":"助记词已产生，他是一系列单词组合。“",
+    "text":"助记词已产生，他是一系列单词组合。",
     "description":"请确保您了解这些规则，以保证您可以始终安全访问您的帐户",
     "rules-list": {
       "item-1_text":"确保你把这些助记词写在一张纸上。",
       "item-2_text":"你必须严格按照助记词顺序",
       "item-3_text":"检查每个单词的拼写",
-      "item-4_text":"请将纸张放在安全的地方。“",
+      "item-4_text":"请将纸张放在安全的地方。",
       "item-5_text":"在任何情况下都不要截屏或拍照，也不要对照片进行扫描",
       "item-6_text":"切勿将助记词上传到云端"
     },
@@ -153,7 +153,7 @@
 
   "secret-show":{
     "title":"这是你的助记词",
-    "text":"在一张纸上写下每个单词，并按照单词顺序。“",
+    "text":"在一张纸上写下每个单词，并按照单词顺序。",
     "next-step_label":"下一步",
     "too-fast_alert": {
       "title": "这太快了！",
@@ -166,11 +166,11 @@
 
   "secret-validate":{
     "title":"验证您的助记词",
-    "text":"选择正确的单词，并匹配助记词的顺序。“"
+    "text":"选择正确的单词，并匹配助记词的顺序。"
   },
 
   "verify-key":{
-    "incorrect_text": "您的助记词与生成的助记词不匹配。 确保您选择了正确的单词。 <br />要纠正错误，只需选择错误的单词然后选择正确的单词即可。“",
+    "incorrect_text": "您的助记词与生成的助记词不匹配。 确保您选择了正确的单词。 <br />要纠正错误，只需选择错误的单词然后选择正确的单词即可。",
     "success_text": "您已成功验证此助记词",
     "continue_label": "下一步"
   },
@@ -228,7 +228,7 @@
   "tab-wallets":{
     "title":"账户",
     "search_placeholder":"搜索数字货币",
-    "empty-state_text":"通过选择数字货币创建一个新帐户并将其同步到AirGap Wallet。“",
+    "empty-state_text":"通过选择数字货币创建一个新帐户并将其同步到AirGap Wallet。",
     "add-wallet_label":"增加新账户",
     "incompatible-qr_alert": {
       "title": "二维码不匹配",

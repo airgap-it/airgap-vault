@@ -11,6 +11,7 @@ import { MyApp } from './app.component'
 import { CameraPreview } from '@ionic-native/camera-preview'
 import { Clipboard } from '@ionic-native/clipboard'
 import { Diagnostic } from '@ionic-native/diagnostic'
+import { AppVersion } from '@ionic-native/app-version'
 import { MaterialIconsModule } from 'ionic2-material-icons'
 import { TransactionsProvider } from '../providers/transactions/transactions'
 import { SecretsProvider } from '../providers/secrets/secrets.provider'
@@ -67,6 +68,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   providers: [
     StatusBar,
     SplashScreen,
+    AppVersion,
     CameraPreview,
     Deeplinks,
     DeviceMotion,

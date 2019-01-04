@@ -1,10 +1,11 @@
 import { Component } from '@angular/core'
-import { AlertController, IonicPage, NavController, ToastController, ModalController } from 'ionic-angular'
+import { AlertController, IonicPage, NavController, ToastController, ModalController, PopoverController } from 'ionic-angular'
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import { Secret } from '../../models/secret'
 import { SecretCreatePage } from '../secret-create/secret-create'
 import { SecretEditPage } from '../secret-edit/secret-edit'
 import { Observable } from 'rxjs'
+import { AboutPopoverComponent } from './about-popover/about-popover.component'
 
 @IonicPage()
 @Component({
@@ -17,6 +18,7 @@ export class TabSecretsPage {
   constructor(
     public modalController: ModalController,
     public navController: NavController,
+    private popoverCtrl: PopoverController,
     private secretsProvider: SecretsProvider,
     private alertController: AlertController,
     private toastController: ToastController
@@ -73,5 +75,12 @@ export class TabSecretsPage {
         ]
       })
       .present()
+  }
+
+  presentAboutPopover(event) {
+    let popover = this.popoverCtrl.create(AboutPopoverComponent)
+    popover.present({
+      ev: event
+    })
   }
 }
