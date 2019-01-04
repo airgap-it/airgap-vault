@@ -13,7 +13,7 @@
 <ion-content padding class="colored-background">
   <ion-row padding-horizontal>
     <h3>{{ 'transaction-onboarding.heading' | translate }}</h3>
-    <p>{{ 'transaction-onboarding.text' | translate }}</p>
+    <p>{{ 'transaction-onboarding.description' | translate }}</p>
   </ion-row>
 
   <ion-row><img src="./assets/img/scan_confirmation_onboarding.svg" /></ion-row>
@@ -25,11 +25,10 @@
       <button
         default
         ion-button
-        [color]="hideNextTime ? 'success' : 'white'"
         clear
         item-left
+        [hidden]="disclaimerHidden"
         (click)="hideDisclaimer()"
-        [disabled]="hideNextTime"
       >
         {{ 'transaction-onboarding.dont-show_label' | translate }}
       </button>

@@ -130,7 +130,7 @@
   "secret-import":{
     "title":"Geheimschlüssel importieren",
     "text":"Ein bestehender Geheimschlüssel kann in AirGap importiert werden. Tragen Sie die Worte von Ihrem Wiederherstellungs-Satz ein.",
-    "placeholder":"wife pulp island master rally shed assume critic assist derive quick sport intact army mule network barely siege film swallow concert assume protect umbrella",
+    "placeholder":"wife pulp island ...",
     "warning":"Bitte überprüfen Sie die Schreibweise des Wiederherstellungs-Satzes.",
     "import_label":"Importieren"
   },
