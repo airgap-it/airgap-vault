@@ -4,13 +4,6 @@
     <description>An awesome Ionic/Cordova app.</description>
     <author email="contact@papers.ch" href="https://papers.ch/">Papers.ch Team</author>
     <content src="index.html" />
-    <access origin="*" />
-    <allow-intent href="http://*/*" />
-    <allow-intent href="https://*/*" />
-    <allow-intent href="tel:*" />
-    <allow-intent href="sms:*" />
-    <allow-intent href="mailto:*" />
-    <allow-intent href="geo:*" />
     <preference name="ScrollEnabled" value="false" />
     <preference name="android-minSdkVersion" value="19" />
     <preference name="BackupWebStorage" value="none" />
@@ -27,7 +20,6 @@
     <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
     <preference name="cordova.plugins.diagnostic.modules" value="CAMERA MICROPHONE" />
     <platform name="android">
-        <allow-intent href="market:*" />
         <hook src="hooks/remove_permissions.js" type="after_prepare" />
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
             <application allowBackup="false" />
@@ -60,8 +52,6 @@
         <edit-config file="*-Info.plist" mode="merge" target="NSFaceIDUsageDescription">
             <string>AirGap uses Face ID to save your keys to the secure storage.</string>
         </edit-config>
-        <allow-intent href="itms:*" />
-        <allow-intent href="itms-apps:*" />
         <allow-intent href="airgap-wallet:*" />
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
         <icon height="114" src="resources/ios/icon/icon@2x.png" width="114" />
@@ -139,5 +129,4 @@
     <plugin name="cordova-plugin-airgap-secure-storage" spec="0.1.5" />
     <plugin name="cordova.plugins.diagnostic" spec="4.0.10" />
     <engine name="android" spec="7.1.2" />
-    <engine name="ios" spec="4.5.5" />
 </widget>
