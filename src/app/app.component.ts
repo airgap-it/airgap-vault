@@ -33,9 +33,15 @@ export class MyApp {
           this.statusBar.backgroundColorByHexString('#311B58')
           this.splashScreen.hide()
         }
-        this.translate.setDefaultLang('en')
-
         const supportedLanguages = ['en', 'de', 'zh-cn']
+
+        for (const lang of supportedLanguages) {
+          // We bundle languages because so we don't have to load it over http
+          // and we don't need to add a CSP rule for it.
+          this.translate.setTranslation(lang, require(`../assets/i18n/${lang}.json`))
+        }
+
+        this.translate.setDefaultLang('en')
 
         const language = this.translate.getBrowserLang()
         if (language) {
