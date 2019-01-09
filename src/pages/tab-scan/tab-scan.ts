@@ -123,8 +123,8 @@ export class TabScanPage {
             .get(['tab-wallets.no-secret_alert.title', 'tab-wallets.no-secret_alert.message', 'tab-wallets.no-secret_alert.text'])
             .subscribe(values => {
               let title = values['tab-wallets.no-secret_alert.title']
-              let message = values['tab-wallets.no-secret_alert.message']
-              let text = values['tab-wallets.no-secret_alert.text']
+              let message = values['tab-wallets.no-secret_alert.text']
+              let text = values['tab-wallets.no-secret_alert.okay_label']
               let alert = this.alertCtrl.create({
                 title: title,
                 message: message,
