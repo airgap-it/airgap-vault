@@ -10,15 +10,17 @@
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
 
+    <!-- default-src should be 'none', but to be compatible with older webview versions, we have to be permissive -->
     <!-- script-src needs 'unsafe-eval' because of web3 -->
     <!-- style-src needs 'unsafe-inline' because we have inline css on the generate screen -->
+    <!-- child-src needs blob: because worker-src is unknown in safari -->
     <meta
       http-equiv="Content-Security-Policy"
       content="
-        default-src 'none'; 
+        default-src 'self' 'unsafe-eval' 'unsafe-inline' blob: data:; 
         script-src 'self' 'unsafe-eval';
         connect-src 'self';
-        child-src 'none';
+        child-src blob:;
         object-src 'none';
         font-src 'self' data:;
         img-src 'self' data:;
