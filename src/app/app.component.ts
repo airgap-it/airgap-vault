@@ -81,13 +81,13 @@ export class MyApp {
   initChecks() {
     this.startupChecks
       .initChecks()
-      .then(() => {
-        this.rootPage = TabsPage
+      .then(async () => {
+        await this.nav.setRoot(TabsPage)
         this.isInitializedFlatPromise.resolve()
       })
-      .catch(check => {
+      .catch(async check => {
         check.consequence(this.initChecks.bind(this))
-        this.isInitializedFlatPromise.resolve()
+        this.isInitializedFlatPromise.reject(`startup check failed ${check.name}`) // If we are here, we cannot sign a transaction (no secret, rooted, etc)
       })
   }
 
