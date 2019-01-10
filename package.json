@@ -189,7 +189,8 @@
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-airgap-webview": {},
       "cordova-clipboard": {},
-      "cordova.plugins.diagnostic": {}
+      "cordova.plugins.diagnostic": {},
+      "cordova-plugin-app-version": {}
     }
   },
   "config": {

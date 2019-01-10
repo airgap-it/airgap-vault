@@ -134,4 +134,5 @@
     <plugin name="cordova-clipboard" spec="^1.2.1" />
     <plugin name="cordova.plugins.diagnostic" spec="4.0.10" />
     <engine name="android" spec="7.1.2" />
+    <plugin name="cordova-plugin-app-version" spec="0.1.9" />
 </widget>
