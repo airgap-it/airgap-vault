@@ -78,7 +78,7 @@ build_ios:
     - npm install
     - ionic cordova build ios --prod --release
     - find ./resources/ -name "*.png" -exec convert "{}" -alpha off "{}" \;
-    - xcodebuild -workspace platforms/ios/AirGap\ Vault.xcworkspace -scheme "AirGap Vault" -destination generic/platform=iOS build
+    - xcodebuild -workspace platforms/ios/AirGap\ Vault.xcworkspace -scheme "AirGap Vault" -destination generic/platform=iOS build -allowProvisioningUpdates
     - xcodebuild -workspace platforms/ios/AirGap\ Vault.xcworkspace -scheme "AirGap Vault" -sdk iphoneos -configuration AppStoreDistribution archive -archivePath platforms/ios/AirGap\ Vault.xcarchive
     - xcodebuild -exportArchive -archivePath platforms/ios/AirGap\ Vault.xcarchive -exportOptionsPlist exportOptions.plist -exportPath platforms/ios/ -allowProvisioningUpdates
     - /Applications/Xcode_9.4.app/Contents/Applications/Application\ Loader.app/Contents/Frameworks/ITunesSoftwareService.framework/Support/altool --upload-app -f platforms/ios/AirGap\ Vault.ipa -u $IOS_USERNAME -p $IOS_PASSWORD
