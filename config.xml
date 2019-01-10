@@ -4,6 +4,9 @@
     <description>An awesome Ionic/Cordova app.</description>
     <author email="contact@papers.ch" href="https://papers.ch/">Papers.ch Team</author>
     <content src="index.html" />
+    <allow-intent href="https://github.com/*">
+    <allow-intent href="https://play.google.com/*">
+    <allow-intent href="https://airgap.it/*">
     <preference name="ScrollEnabled" value="false" />
     <preference name="android-minSdkVersion" value="19" />
     <preference name="BackupWebStorage" value="none" />
