@@ -12,7 +12,7 @@
     {{ 'social-recovery-show-share.label_p2' | translate }} {{ shares?.length }}
   </p>
   <p padding-bottom>{{ 'social-recovery-show-share.text' | translate }}</p>
-  <h3 class="secret--typography" *ngIf="shares">{{ shares[currentShare] }}</h3>
+  <ng-container *ngIf="secret"><display-secret [secret]="shares[currentShare]"></display-secret></ng-container>
 </ion-content>
 
 <ion-footer no-border color="primary">
