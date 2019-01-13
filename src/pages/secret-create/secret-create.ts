@@ -35,8 +35,4 @@ export class SecretCreatePage {
   public goToSocialRecoveryImport() {
     this.navController.push(SocialRecoveryImportPage)
   }
-
-  public close() {
-    this.navController.popToRoot()
-  }
 }
