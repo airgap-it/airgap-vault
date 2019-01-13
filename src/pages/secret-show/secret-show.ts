@@ -12,7 +12,9 @@ import { TranslateService } from '@ngx-translate/core'
 })
 export class SecretShowPage {
   private secret: Secret
-  startTime = new Date()
+  private startTime = new Date()
+
+  public isRecover: boolean
 
   constructor(
     public navController: NavController,
@@ -21,6 +23,7 @@ export class SecretShowPage {
     private translateService: TranslateService
   ) {
     this.secret = this.navParams.get('secret')
+    this.isRecover = this.navParams.get('isRecover') || false
   }
 
   goToValidateSecret() {
@@ -60,5 +63,9 @@ export class SecretShowPage {
     } else {
       this.navController.push(SecretValidatePage, { secret: this.secret })
     }
+  }
+
+  done() {
+    this.navController.pop()
   }
 }

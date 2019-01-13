@@ -1,13 +1,18 @@
 import { Component } from '@angular/core'
-import { ViewController, NavParams, AlertController } from 'ionic-angular'
+import { ViewController, NavParams, AlertController, NavController } from 'ionic-angular'
 import { Secret } from '../../../models/secret'
 import { SecretsProvider } from '../../../providers/secrets/secrets.provider'
 import { TranslateService } from '@ngx-translate/core'
+import { SecretShowPage } from '../../secret-show/secret-show'
 
 @Component({
   template: `
     <ion-list no-lines no-detail>
       <ion-list-header>Settings</ion-list-header>
+      <button ion-item detail-none (click)="showSecret()">
+        <ion-icon name="trash" color="dark" item-end></ion-icon>
+        Show secret
+      </button>
       <button ion-item detail-none (click)="delete()">
         <ion-icon name="trash" color="dark" item-end></ion-icon>
         Delete
@@ -24,10 +29,24 @@ export class SecretEditPopoverComponent {
     private navParams: NavParams,
     private secretsProvider: SecretsProvider,
     private viewCtrl: ViewController,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private navCtrl: NavController
   ) {
     this.secret = this.navParams.get('secret')
     this.onDelete = this.navParams.get('onDelete')
+  }
+
+  showSecret() {
+    this.secretsProvider
+      .retrieveEntropyForSecret(this.secret)
+      .then(entropy => {
+        this.secret.secretHex = entropy
+        this.viewCtrl.dismiss()
+        this.navCtrl.push(SecretShowPage, { secret: this.secret, isRecover: true })
+      })
+      .catch(error => {
+        console.warn(error)
+      })
   }
 
   delete() {
