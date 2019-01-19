@@ -100,7 +100,8 @@ export class TransactionSignedPage {
         transaction: signedTx,
         from: txDetails.from,
         amount: txDetails.amount,
-        fee: txDetails.fee
+        fee: txDetails.fee,
+        to: txDetails.to
       }
     }
 
