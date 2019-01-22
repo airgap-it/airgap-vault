@@ -1,4 +1,4 @@
-page-transaction-unlock {
+page-transaction-broadcast {
   ion-icon {
     color: white;
   }
@@ -10,5 +10,9 @@ page-transaction-unlock {
     h3 {
       font-size: 12px;
     }
+  }
+  img {
+    width: 100%;
+    height: 100%;
   }
 }

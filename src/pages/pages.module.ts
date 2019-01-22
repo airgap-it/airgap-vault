@@ -18,8 +18,6 @@ import { TabWalletsPageModule } from './tab-wallets/tab-wallets.module'
 import { SecretImportPageModule } from './secret-import/secret-import.module'
 import { WarningsModalPageModule } from './warnings-modal/warnings-modal.module'
 import { SocialRecoverySetupPageModule } from './social-recovery-setup/social-recovery-setup.module'
-import { TransactionUnlockPageModule } from './transaction-unlock/transaction-unlock.module'
-import { TransactionOnboardingPageModule } from './transaction-onboarding/transaction-onboarding.module'
 import { TabScanPageModule } from './tab-scan/tab-scan.module'
 import { WalletSelectCoinsPageModule } from './wallet-select-coins/wallet-select-coins.module'
 import { SocialRecoveryShowSharePageModule } from './social-recovery-show-share/social-recovery-show-share.module'
@@ -31,6 +29,7 @@ import { IntroductionPageModule } from '../pages/introduction/introduction.modul
 import { LocalAuthenticationOnboardingPageModule } from './local-authentication-onboarding/local-authentication-onboarding.module'
 import { SecretGenerateOnboardingPageModule } from './secret-generate-onboarding/secret-generate-onboarding.module'
 import { DistributionOnboardingPageModule } from './distribution-onboarding/distribution-onboarding.module'
+import { TransactionBroadcastPageModule } from './transaction-broadcast/transaction-broadcast.module'
 
 @NgModule({
   imports: [
@@ -59,13 +58,12 @@ import { DistributionOnboardingPageModule } from './distribution-onboarding/dist
     SocialRecoveryShowSharePageModule,
     SocialRecoveryValidateSharePageModule,
     SocialRecoveryImportPageModule,
-    TransactionUnlockPageModule,
-    TransactionOnboardingPageModule,
     WalletSelectCoinsPageModule,
     LocalAuthenticationOnboardingPageModule,
     DistributionOnboardingPageModule,
     QRCodeModule,
-    IntroductionPageModule
+    IntroductionPageModule,
+    TransactionBroadcastPageModule,
   ],
   exports: []
 })

@@ -263,17 +263,15 @@
     "sign-tx_label":"Sign Transaction"
   },
 
-  "transaction-onboarding":{
+  "transaction-broadcast":{
     "title":"Signed Transaction",
     "heading":"Scan Signed Transaction",
-    "description":"Scan the signed transaction QR code in the next step with your AirGap Wallet app.",
-    "dont-show_label":"DON'T SHOW AGAIN",
-    "next_label":"Next Step"
-  },
-
-  "transaction-unlock": {
-    "title": "Unlock Secret",
-    "unlock_label": "Unlock"
+    "description":"Your transaction has been signed and is ready for sending.",
+    "next_label":"Next Step",
+    "same-device_label": "Same Device",
+    "same-device_info": "Both apps are installed on the same device",
+    "offline-device_label": "Offline Device",
+    "offline-device_info": "AirGap Vault is installed on an offline device."
   },
 
   "transaction-signed":{

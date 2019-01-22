@@ -1,0 +1,47 @@
+<ion-header transparent no-border>
+  <ion-navbar transparent>
+    <ion-row align-items-center>
+      <ion-col col-10>
+        <ion-title>
+          <p ion-text color="white">{{ 'transaction-broadcast.title' | translate }}</p>
+        </ion-title>
+      </ion-col>
+    </ion-row>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding class="colored-background">
+  <ion-row padding-horizontal>
+    <h3>{{ 'transaction-broadcast.heading' | translate }}</h3>
+    <p>{{ 'transaction-broadcast.description' | translate }}</p>
+  </ion-row>
+
+  <ion-row>
+    <img src="./assets/img/send-one-device.svg" />
+  </ion-row>
+
+  <ion-row>
+    <button default ion-button color="primary" (click)="sameDeviceBroadcast()" round item-right icon-left>
+      {{ 'transaction-broadcast.same-device_label' | translate }}
+    </button>
+  </ion-row>
+
+  <ion-row>
+    <p> {{'transaction-broadcast.same-device_info'|translate}}</p>
+  </ion-row>
+
+  <ion-row>
+    <img src="./assets/img/send-two-device.svg" />
+  </ion-row>
+
+  <ion-row>
+    <button default ion-button color="primary" (click)="goToTransactionSignedPage()" round item-right icon-left>
+      {{ 'transaction-broadcast.offline-device_label' | translate }}
+    </button>
+  </ion-row>
+
+  <ion-row>
+    <p>{{'transaction-broadcast.offline-device_info'|translate}} </p>
+  </ion-row>
+
+</ion-content>
