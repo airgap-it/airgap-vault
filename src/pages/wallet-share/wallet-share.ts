@@ -14,6 +14,6 @@ export class WalletSharePage {
   }
 
   done() {
-    this.navController.pop()
+    this.navController.popToRoot().then(null)
   }
 }
