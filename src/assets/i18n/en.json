@@ -264,9 +264,8 @@
   },
 
   "transaction-broadcast":{
-    "title":"Signed Transaction",
-    "heading":"Scan Signed Transaction",
-    "description":"Your transaction has been signed and is ready for sending.",
+    "title":"Send Transaction",
+    "heading":"Your transaction has been signed and is ready for sending.",
     "next_label":"Next Step",
     "same-device_label": "Same Device",
     "same-device_info": "Both apps are installed on the same device",
@@ -294,6 +293,10 @@
     "copy-address_modal": {
       "text": "Address was copied to your clipboard"
     }
+  },
+
+  "wallet-broadcast": {
+    "title":
   },
 
   "wallet-edit-delete-popover":{
