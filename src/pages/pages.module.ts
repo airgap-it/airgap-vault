@@ -30,6 +30,7 @@ import { LocalAuthenticationOnboardingPageModule } from './local-authentication-
 import { SecretGenerateOnboardingPageModule } from './secret-generate-onboarding/secret-generate-onboarding.module'
 import { DistributionOnboardingPageModule } from './distribution-onboarding/distribution-onboarding.module'
 import { TransactionBroadcastPageModule } from './transaction-broadcast/transaction-broadcast.module'
+import { WalletBroadcastPageModule } from './wallet-broadcast/wallet-broadcast.module'
 
 @NgModule({
   imports: [
@@ -64,6 +65,7 @@ import { TransactionBroadcastPageModule } from './transaction-broadcast/transact
     QRCodeModule,
     IntroductionPageModule,
     TransactionBroadcastPageModule,
+    WalletBroadcastPageModule,
   ],
   exports: []
 })

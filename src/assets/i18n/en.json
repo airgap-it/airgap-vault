@@ -295,7 +295,15 @@
     }
   },
 
-  
+  "wallet-broadcast": {
+    "title": "Send Account",
+    "heading": "Choose the way to sync your account",
+    "same-device_label": "Same Device",
+    "same-device_info": "Both apps are installed on the same device",
+    "offline-device_label": "Offline Device",
+    "offline-device_info": "AirGap Vault is installed on an offline device."
+  },
+
   "wallet-edit-delete-popover":{
     "settings_label": "Account Settings",
     "copy_label": "Copy address",

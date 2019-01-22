@@ -1,9 +1,9 @@
 import { Component } from '@angular/core'
 import { IonicPage, NavController, ToastController, NavParams, PopoverController } from 'ionic-angular'
-import { WalletSharePage } from '../wallet-share/wallet-share'
 import { WalletEditPopoverComponent } from './wallet-edit-popover/wallet-edit-popover.component'
 import { AirGapWallet } from 'airgap-coin-lib'
 import { Clipboard } from '@ionic-native/clipboard'
+import { WalletBroadcastPage } from '../wallet-broadcast/wallet-broadcast'
 
 @IonicPage()
 @Component({
@@ -28,7 +28,7 @@ export class WalletAddressPage {
   }
 
   share() {
-    this.navController.push(WalletSharePage, { wallet: this.wallet })
+    this.navController.push(WalletBroadcastPage, { wallet: this.wallet })
   }
 
   presentEditPopover(event) {
