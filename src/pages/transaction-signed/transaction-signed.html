@@ -23,9 +23,9 @@
       [size]="300"
     ></qrcode>
     <qrcode
-      *ngIf="signedTxQr && qrType === 1"
+      *ngIf="signedTx && qrType === 1"
       [level]="'L'"
-      [qrdata]="signedTxQr"
+      [qrdata]="signedTx"
       backgroundAlpha="1"
       foreground="black"
       [size]="300"

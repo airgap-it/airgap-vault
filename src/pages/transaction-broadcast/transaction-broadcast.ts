@@ -20,9 +20,10 @@ export class TransactionBroadcastPage {
   private wallet: AirGapWallet
   private platform: Platform
 
-  constructor(public navController: NavController, public navParams: NavParams, private storage: Storage) {
+  constructor(public navController: NavController, public navParams: NavParams) {
     this.transaction = this.navParams.get('transaction')
     this.wallet = this.navParams.get('wallet')
+    this.broadcastUrl = this.navParams.get('broadcastUrl')
   }
 
   sameDeviceBroadcast() {
@@ -50,6 +51,6 @@ export class TransactionBroadcastPage {
   }
 
   public goToTransactionSignedPage() {
-    this.navController.push(TransactionSignedPage, { transaction: this.transaction, wallet: this.wallet, broadcastUrl: this.broadcastUrl, signedTxQr:this.navParams.get('signedTxQr')})
+    this.navController.push(TransactionSignedPage, { transaction: this.transaction, wallet: this.wallet, broadcastUrl: this.broadcastUrl, signedTxQr:this.navParams.get('signedTxQr')}).then(null)
   }
 }

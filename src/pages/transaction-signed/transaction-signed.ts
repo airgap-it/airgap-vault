@@ -17,7 +17,7 @@ enum TransactionQRType {
   templateUrl: 'transaction-signed.html'
 })
 export class TransactionSignedPage {
-  signedTxQr?: string
+  signedTx?: string
   broadcastUrl?: string
 
   transaction: UnsignedTransaction
@@ -33,8 +33,8 @@ export class TransactionSignedPage {
     this.broadcastUrl = this.navParams.get('broadcastUrl')
     this.transaction = this.navParams.get('transaction')
     this.wallet = this.navParams.get('wallet')
+    this.signedTx = this.navParams.get('signedTxQr')
     this.airGapTx = this.wallet.coinProtocol.getTransactionDetails(this.transaction)
-    this.signedTxQr = this.navParams.get('signedTxQr')
   }
 
   switchQR() {
