@@ -295,10 +295,7 @@
     }
   },
 
-  "wallet-broadcast": {
-    "title":
-  },
-
+  
   "wallet-edit-delete-popover":{
     "settings_label": "Account Settings",
     "copy_label": "Copy address",
