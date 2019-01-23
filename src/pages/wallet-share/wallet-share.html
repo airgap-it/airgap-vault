@@ -7,14 +7,13 @@
 </ion-header>
 
 <ion-content padding class="colored-background">
+  <h3 padding-bottom [innerHTML]="'wallet-share.heading' | translate"></h3>
+
   <ion-row justify-content-center padding-bottom>
     <qrcode *ngIf="walletShareUrl" [qrdata]="walletShareUrl" backgroundAlpha="0" foreground="white" [level]="'L'" [size]="300"></qrcode>
   </ion-row>
 
-  <ion-row>
-    <p></p>
-    <p [innerHTML]="'wallet-share.text' | translate"></p>
-  </ion-row>
+  <ion-row><p [innerHTML]="'wallet-share.text' | translate"></p></ion-row>
 </ion-content>
 
 <ion-footer no-border>
