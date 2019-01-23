@@ -1,20 +1,20 @@
 import { NgModule } from '@angular/core'
 import { IonicPageModule } from 'ionic-angular'
-import { TransactionBroadcastPage } from './transaction-broadcast'
+import { TransactionBroadcastSelectionPage } from './transaction-broadcast-selection'
 import { TransactionSignedPageModule } from '../transaction-signed/transaction-signed.module'
 import { ComponentsModule } from '../../components/components.module'
 import { IonicStorageModule } from '@ionic/storage'
 import { TranslateModule } from '@ngx-translate/core'
 
 @NgModule({
-  declarations: [TransactionBroadcastPage],
+  declarations: [TransactionBroadcastSelectionPage],
   imports: [
     ComponentsModule,
     TransactionSignedPageModule,
     IonicStorageModule,
-    IonicPageModule.forChild(TransactionBroadcastPage),
+    IonicPageModule.forChild(TransactionBroadcastSelectionPage),
     TranslateModule
   ],
-  entryComponents: [TransactionBroadcastPage]
+  entryComponents: [TransactionBroadcastSelectionPage]
 })
-export class TransactionBroadcastPageModule {}
+export class TransactionBroadcastSelectionPageModule {}

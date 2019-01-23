@@ -263,14 +263,13 @@
     "sign-tx_label":"Sign Transaction"
   },
 
-  "transaction-broadcast":{
+  "transaction-broadcast-selection":{
     "title":"Send Transaction",
-    "heading":"Your transaction has been signed and is ready for sending.",
-    "next_label":"Next Step",
+    "heading":"Transaction signed. Select how you want to send it with <span class=\"style__strong color__primary\">AirGap Wallet</span>.",
     "same-device_label": "Same Device",
-    "same-device_info": "Both apps are installed on the same device",
+    "same-device_info": "AirGap Vault and AirGap Wallet are installed on the same device.",
     "offline-device_label": "Offline Device",
-    "offline-device_info": "AirGap Vault is installed on an offline device."
+    "offline-device_info": "AirGap Vault is installed on an offline device, scan the QR code with AirGap Wallet."
   },
 
   "transaction-signed":{
@@ -288,20 +287,20 @@
     "title": "Account Address",
     "address_label": "Address:",
     "path_label": "Derivation Path:",
-    "sync_label": "Sync",
+    "sync_label": "Sync Account",
     "done_label": "Done",
     "copy-address_modal": {
       "text": "Address was copied to your clipboard"
     }
   },
 
-  "wallet-broadcast": {
-    "title": "Send Account",
-    "heading": "Choose the way to sync your account",
+  "wallet-sync-selection": {
+    "title": "Sync Account",
+    "heading": "How do you want to sync this account with <span class=\"style__strong color__primary\">AirGap Wallet</span>?",
     "same-device_label": "Same Device",
-    "same-device_info": "Both apps are installed on the same device",
+    "same-device_info": "AirGap Vault and AirGap Wallet are installed on the same device.",
     "offline-device_label": "Offline Device",
-    "offline-device_info": "AirGap Vault is installed on an offline device."
+    "offline-device_info": "AirGap Vault is installed on an offline device, scan the QR code with AirGap Wallet."
   },
 
   "wallet-edit-delete-popover":{

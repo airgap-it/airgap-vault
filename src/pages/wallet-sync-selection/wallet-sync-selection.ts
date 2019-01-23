@@ -1,23 +1,16 @@
-import { Component } from '@angular/core';
+import { Component } from '@angular/core'
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular'
-import {
-  AirGapWallet,
-  DeserializedSyncProtocol,
-  EncodedType,
-  SyncProtocolUtils,
-  SyncWalletRequest
-} from 'airgap-coin-lib'
+import { AirGapWallet, DeserializedSyncProtocol, EncodedType, SyncProtocolUtils, SyncWalletRequest } from 'airgap-coin-lib'
 import { WalletSharePage } from '../wallet-share/wallet-share'
 
 declare var window: any
 
-
 @IonicPage()
 @Component({
-  selector: 'page-wallet-broadcast',
-  templateUrl: 'wallet-broadcast.html',
+  selector: 'page-wallet-sync-selection',
+  templateUrl: 'wallet-sync-selection.html'
 })
-export class WalletBroadcastPage {
+export class WalletSyncSelectionPage {
   private wallet: AirGapWallet
   private walletShareUrl: string
 
@@ -29,10 +22,9 @@ export class WalletBroadcastPage {
     this.walletShareUrl = await this.generateShareURL()
   }
 
-  goToWalletShare(){
+  goToWalletShare() {
     this.navCtrl.push(WalletSharePage, { walletShareUrl: this.walletShareUrl })
   }
-
 
   async generateShareURL(): Promise<string> {
     const syncProtocol = new SyncProtocolUtils()

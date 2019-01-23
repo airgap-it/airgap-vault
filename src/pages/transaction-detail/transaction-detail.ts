@@ -6,9 +6,10 @@ import {
   UnsignedTransaction,
   IAirGapTransaction,
   SyncProtocolUtils,
-  DeserializedSyncProtocol, EncodedType
+  DeserializedSyncProtocol,
+  EncodedType
 } from 'airgap-coin-lib'
-import { TransactionBroadcastPage } from '../transaction-broadcast/transaction-broadcast'
+import { TransactionBroadcastSelectionPage } from '../transaction-broadcast-selection/transaction-broadcast-selection'
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import bip39 from 'bip39'
 
@@ -25,7 +26,13 @@ export class TransactionDetailPage {
   public wallet: AirGapWallet
   public airGapTx: IAirGapTransaction
 
-  constructor(public navController: NavController, public navParams: NavParams, private storage: Storage, private ngZone: NgZone, private secretProvider: SecretsProvider) {}
+  constructor(
+    public navController: NavController,
+    public navParams: NavParams,
+    private storage: Storage,
+    private ngZone: NgZone,
+    private secretProvider: SecretsProvider
+  ) {}
 
   ionViewWillEnter() {
     this.transaction = this.navParams.get('transaction')
@@ -33,7 +40,7 @@ export class TransactionDetailPage {
     this.airGapTx = this.wallet.coinProtocol.getTransactionDetails(this.transaction)
   }
 
-  async signAndGoToTransactionBroadcastPage() {
+  async signAndGoToTransactionBroadcastSelectionPage() {
     const signedTx = await this.signTransaction(this.transaction, this.wallet)
     this.broadcastUrl = await this.generateBroadcastUrl(this.wallet, signedTx, this.transaction)
 
@@ -41,10 +48,15 @@ export class TransactionDetailPage {
       this.signedTxQr = signedTx
     })
 
-    this.navController.push(TransactionBroadcastPage, { transaction: this.transaction, wallet: this.wallet, broadcastUrl:this.broadcastUrl, signedTxQr: this.signedTxQr}).then(null)
+    this.navController
+      .push(TransactionBroadcastSelectionPage, {
+        transaction: this.transaction,
+        wallet: this.wallet,
+        broadcastUrl: this.broadcastUrl,
+        signedTxQr: this.signedTxQr
+      })
+      .then(null)
   }
-
-
 
   async generateBroadcastUrl(wallet: AirGapWallet, signedTx: string, unsignedTransaction: UnsignedTransaction): Promise<string> {
     const txDetails = wallet.coinProtocol.getTransactionDetails(unsignedTransaction)
@@ -67,7 +79,6 @@ export class TransactionDetailPage {
 
     return (unsignedTransaction.callback || 'airgap-wallet://?d=') + serializedTx
   }
-
 
   signTransaction(transaction: UnsignedTransaction, wallet: AirGapWallet): Promise<string> {
     const secret = this.secretProvider.findByPublicKey(wallet.publicKey)

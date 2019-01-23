@@ -3,7 +3,7 @@ import { IonicPage, NavController, ToastController, NavParams, PopoverController
 import { WalletEditPopoverComponent } from './wallet-edit-popover/wallet-edit-popover.component'
 import { AirGapWallet } from 'airgap-coin-lib'
 import { Clipboard } from '@ionic-native/clipboard'
-import { WalletBroadcastPage } from '../wallet-broadcast/wallet-broadcast'
+import { WalletSyncSelectionPage } from '../wallet-sync-selection/wallet-sync-selection'
 
 @IonicPage()
 @Component({
@@ -28,7 +28,7 @@ export class WalletAddressPage {
   }
 
   share() {
-    this.navController.push(WalletBroadcastPage, { wallet: this.wallet })
+    this.navController.push(WalletSyncSelectionPage, { wallet: this.wallet })
   }
 
   presentEditPopover(event) {

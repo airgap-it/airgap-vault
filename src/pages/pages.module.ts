@@ -29,8 +29,8 @@ import { IntroductionPageModule } from '../pages/introduction/introduction.modul
 import { LocalAuthenticationOnboardingPageModule } from './local-authentication-onboarding/local-authentication-onboarding.module'
 import { SecretGenerateOnboardingPageModule } from './secret-generate-onboarding/secret-generate-onboarding.module'
 import { DistributionOnboardingPageModule } from './distribution-onboarding/distribution-onboarding.module'
-import { TransactionBroadcastPageModule } from './transaction-broadcast/transaction-broadcast.module'
-import { WalletBroadcastPageModule } from './wallet-broadcast/wallet-broadcast.module'
+import { TransactionBroadcastSelectionPageModule } from './transaction-broadcast-selection/transaction-broadcast-selection.module'
+import { WalletSyncSelectionPageModule } from './wallet-sync-selection/wallet-sync-selection.module'
 
 @NgModule({
   imports: [
@@ -64,8 +64,8 @@ import { WalletBroadcastPageModule } from './wallet-broadcast/wallet-broadcast.m
     DistributionOnboardingPageModule,
     QRCodeModule,
     IntroductionPageModule,
-    TransactionBroadcastPageModule,
-    WalletBroadcastPageModule,
+    TransactionBroadcastSelectionPageModule,
+    WalletSyncSelectionPageModule
   ],
   exports: []
 })

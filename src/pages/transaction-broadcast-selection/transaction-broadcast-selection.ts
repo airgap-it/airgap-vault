@@ -9,10 +9,10 @@ declare var window: any
 
 @IonicPage()
 @Component({
-  selector: 'page-transaction-broadcast',
-  templateUrl: 'transaction-broadcast.html'
+  selector: 'page-transaction-broadcast-selection',
+  templateUrl: 'transaction-broadcast-selection.html'
 })
-export class TransactionBroadcastPage {
+export class TransactionBroadcastSelectionPage {
   signedTxQr?: string
   broadcastUrl?: string
 
@@ -51,6 +51,13 @@ export class TransactionBroadcastPage {
   }
 
   public goToTransactionSignedPage() {
-    this.navController.push(TransactionSignedPage, { transaction: this.transaction, wallet: this.wallet, broadcastUrl: this.broadcastUrl, signedTxQr:this.navParams.get('signedTxQr')}).then(null)
+    this.navController
+      .push(TransactionSignedPage, {
+        transaction: this.transaction,
+        wallet: this.wallet,
+        broadcastUrl: this.broadcastUrl,
+        signedTxQr: this.navParams.get('signedTxQr')
+      })
+      .then(null)
   }
 }
