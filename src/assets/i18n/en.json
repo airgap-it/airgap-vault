@@ -258,14 +258,14 @@
   },
 
   "transaction-detail":{
-    "title":"Confirm Transaction",
+    "title":"Sign Transaction",
     "text":"You're about to send:",
     "sign-tx_label":"Sign Transaction"
   },
 
   "transaction-broadcast-selection":{
     "title":"Send Transaction",
-    "heading":"Transaction signed. Select how you want to send it with <span class=\"style__strong color__primary\">AirGap Wallet</span>.",
+    "heading":"Transaction signed. Select how you want to send it to <span class=\"style__strong color__primary\">AirGap Wallet</span>.",
     "same-device_label": "Same Device",
     "same-device_info": "AirGap Vault and AirGap Wallet are installed on the same device.",
     "offline-device_label": "Offline Device",
@@ -274,8 +274,8 @@
 
   "transaction-signed":{
     "title":"Signed Transaction",
+    "heading": "This is your signed transaction, scan it with <span class=\"style__strong color__primary\">AirGap Wallet</span>.",
     "raw-tx_label":"Display Raw Transaction",
-    "same-device-broadcast_label":"Same Device Broadcast",
     "done_label":"Done"
   },
 
