@@ -15,7 +15,7 @@
   "distribution-onboarding":{
     "ask-permission": {
       "heading": "AirGap ist <span class=\"style__strong color__primary\"> nicht persistent</span>, Geheimschlüssel werden nicht abgespeichert und müssen nach einem Neustart <span class=\"style__strong color__primary\">wieder importiert</span> werden.",
-      "text":"Diese Distribution ist angedacht um sicher Geheimschlüssel zu generieren und um offline Transaktionen zu signieren, jedoch nicht um Geheimschlüssel aufzubewahren."      
+      "text":"Diese Distribution ist angedacht um sicher Geheimschlüssel zu generieren und um offline Transaktionen zu signieren, jedoch nicht um Geheimschlüssel aufzubewahren."
     },
     "no-vm": {
       "heading": "AirGap Vault Distribution sollte <span class=\"style__strong color__primary\">nicht</span> auf einer <span class=\"style__strong color__primary\">virtuellen Maschine</span> ausgeführt werden, wenn der Host eine Netzwerkverbindung hat, sogar wenn die Netzwerkverbindung vorübergehen deaktiviert wurde.",
@@ -59,11 +59,11 @@
     },
     "vault": {
       "heading": "AirGap Vault",
-      "text": "Der Geheimschlüssel wird generiert und sicher aufbewahrt in der AirGap Vault App. <b>AirGap Vault muss instaliert und mit AirGap Wallet verwendet werden.</b>"  
+      "text": "Der Geheimschlüssel wird generiert und sicher aufbewahrt in der AirGap Vault App. <b>AirGap Vault muss instaliert und mit AirGap Wallet verwendet werden.</b>"
     },
     "wallet": {
       "heading": "AirGap Wallet",
-      "text": "Die Wallet App kommt nur in Kontakt mit öffentlichen Informationen und ist für die Übermittlung von Transaktionen an die Blockchain zuständig."  
+      "text": "Die Wallet App kommt nur in Kontakt mit öffentlichen Informationen und ist für die Übermittlung von Transaktionen an die Blockchain zuständig."
     },
     "communication": {
       "highest_text": "Einweg-Kommunikation mit QR Codes.",
@@ -167,6 +167,16 @@
   "secret-validate":{
     "title":"Verifizierung Wiederherstellungs-Satz",
     "text":"Ordnen Sie die Wörter in der richtigen Reihenfolge, indem Sie das betreffende Wort jeweils anwählen."
+  },
+
+  "secret-wallet-interaction":{
+    "title":"Wallet Interaction",
+    "heading":"Looks like you're using the Vault and Wallet on the same device.",
+    "sub_heading":"You can define where you have AirGap Wallet installed to make the interaction with the Vault a bit simpler.",
+    "always":"Always ask",
+    "same_device":"Vault and Wallet on the same device",
+    "offline_device":"Vault is an offline device",
+    "continue":"continue"
   },
 
   "verify-key":{

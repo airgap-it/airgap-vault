@@ -9,7 +9,7 @@
       "heading":"Account already exists",
       "text":"You already have added this specific account. Please change its derivation path to add another address (advanced mode)."
     },
-      "okay_label":"Okay"
+    "okay_label":"Okay"
   },
 
   "about-popover": {
@@ -21,7 +21,7 @@
   "distribution-onboarding":{
     "ask-permission": {
       "heading": "AirGap is <span class=\"style__strong color__primary\"> not persistent</span>, secrets generated will not be stored and need to be <span class=\"style__strong color__primary\">imported again</span> after a restart",
-      "text":"This Distribution is intended to securely generate secrets as well as to sign transactions offline, but not for secret storage."      
+      "text":"This Distribution is intended to securely generate secrets as well as to sign transactions offline, but not for secret storage."
     },
     "no-vm": {
       "heading": "AirGap Vault Distribution should <span class=\"style__strong color__primary\">not</span> be run on a <span class=\"style__strong color__primary\">virtual machine</span>, if the host has network connectivity even if the connectivity has been turned off temporarily. ",
@@ -65,11 +65,11 @@
     },
     "vault": {
       "heading": "AirGap Vault",
-      "text": "The private key is generated and securely stored in the AirGap Vault app.<b>You have to install AirGap Vault to use AirGap Wallet</b>"  
+      "text": "The private key is generated and securely stored in the AirGap Vault app.<b>You have to install AirGap Vault to use AirGap Wallet</b>"
     },
     "wallet": {
       "heading": "AirGap Wallet",
-      "text": "The wallet application deals only with public information and is responsible for broadcasting transactions to the blockchain."  
+      "text": "The wallet application deals only with public information and is responsible for broadcasting transactions to the blockchain."
     },
     "communication": {
       "highest_text": "One-way communication with QR codes.",
@@ -172,6 +172,12 @@
 
   "secret-validate":{
     "title":"Verify your recovery phrase",
+    "text":"Match the order of your recovery phrase by selecting the correct words."
+  },
+
+
+  "secret-wallet-interaction":{
+    "title":"Wallet Interaction",
     "text":"Match the order of your recovery phrase by selecting the correct words."
   },
 
