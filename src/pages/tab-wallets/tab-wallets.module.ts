@@ -5,10 +5,12 @@ import { ComponentsModule } from '../../components/components.module'
 import { MaterialIconsModule } from 'ionic2-material-icons'
 import { FilterWalletsPipe } from './fillter-wallets.filter'
 import { TranslateModule } from '@ngx-translate/core'
+import { SecretWalletInteractionPage } from '../secret-wallet-interaction/secret-wallet-interaction'
+
 
 @NgModule({
-  declarations: [TabWalletsPage, FilterWalletsPipe],
+  declarations: [TabWalletsPage, FilterWalletsPipe, SecretWalletInteractionPage],
   imports: [ComponentsModule, MaterialIconsModule, IonicPageModule.forChild(TabWalletsPage), TranslateModule],
-  entryComponents: [TabWalletsPage]
+  entryComponents: [TabWalletsPage, SecretWalletInteractionPage]
 })
 export class TabWalletsPageModule {}

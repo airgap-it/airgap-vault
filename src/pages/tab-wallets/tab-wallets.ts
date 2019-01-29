@@ -7,6 +7,7 @@ import { Secret } from '../../models/secret'
 import { AirGapWallet } from 'airgap-coin-lib'
 import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 import { SecretCreatePage } from '../secret-create/secret-create'
+import { SecretWalletInteractionPage } from '../secret-wallet-interaction/secret-wallet-interaction'
 
 @IonicPage()
 @Component({
@@ -59,5 +60,9 @@ export class TabWalletsPage {
 
   addWallet() {
     this.navController.push(WalletSelectCoinsPage)
+  }
+
+  test() {
+    this.navController.push(SecretWalletInteractionPage)
   }
 }
