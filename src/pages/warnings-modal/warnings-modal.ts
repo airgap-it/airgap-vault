@@ -3,6 +3,15 @@ import { IonicPage, NavParams, Platform, ViewController } from 'ionic-angular'
 import { SecureStorageService } from '../../providers/storage/secure-storage'
 import { Storage } from '@ionic/storage'
 import { TranslateService } from '@ngx-translate/core'
+import { handleErrorLocal, ErrorCategory } from '../../providers/error-handler/error-handler'
+
+export enum Warning {
+  SECURE_STORAGE,
+  ROOT,
+  SCREENSHOT,
+  NETWORK,
+  INITIAL_DISCLAIMER
+}
 
 @IonicPage()
 @Component({
@@ -12,11 +21,11 @@ import { TranslateService } from '@ngx-translate/core'
 export class WarningsModalPage {
   private errorType: Warning
 
-  private title: string
-  private description: string
-  private imageUrl: string
-  private handler: Function
-  private buttonText: string = 'Ok'
+  public title: string
+  public description: string
+  public imageUrl: string
+  public handler: Function
+  public buttonText: string = 'Ok'
 
   constructor(
     public navParams: NavParams,
@@ -57,7 +66,7 @@ export class WarningsModalPage {
       this.imageUrl = './assets/img/screenshot_detected.svg'
       this.buttonText = 'Secure Device'
       this.handler = () => {
-        this.secureStorage.secureDevice()
+        this.secureStorage.secureDevice().catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
       }
     }
 
@@ -83,13 +92,13 @@ export class WarningsModalPage {
           'warnings-modal.disclaimer.understood_label'
         ])
         .subscribe(values => {
-          let title = values['warnings-modal.disclaimer.title']
-          let text = values['warnings-modal.disclaimer.text']
-          let list_text = values['warnings-modal.disclaimer.disclaimer-list.text']
-          let list_item1_text = values['warnings-modal.disclaimer.disclaimer-list.item-1_text']
-          let list_item2_text = values['warnings-modal.disclaimer.disclaimer-list.item-2_text']
-          let description_text = values['warnings-modal.disclaimer.description']
-          let label = values['warnings-modal.disclaimer.understood_label']
+          let title: string = values['warnings-modal.disclaimer.title']
+          let text: string = values['warnings-modal.disclaimer.text']
+          let list_text: string = values['warnings-modal.disclaimer.disclaimer-list.text']
+          let list_item1_text: string = values['warnings-modal.disclaimer.disclaimer-list.item-1_text']
+          let list_item2_text: string = values['warnings-modal.disclaimer.disclaimer-list.item-2_text']
+          let description_text: string = values['warnings-modal.disclaimer.description']
+          let label: string = values['warnings-modal.disclaimer.understood_label']
           this.title = title
           this.description =
             '<p><strong>' +
@@ -107,19 +116,14 @@ export class WarningsModalPage {
           this.imageUrl = null
           this.buttonText = label
           this.handler = () => {
-            this.storage.set('DISCLAIMER_INITIAL', true).then(() => {
-              this.viewCtrl.dismiss()
-            })
+            this.storage
+              .set('DISCLAIMER_INITIAL', true)
+              .then(() => {
+                this.viewCtrl.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+              })
+              .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
           }
         })
     }
   }
-}
-
-export enum Warning {
-  SECURE_STORAGE,
-  ROOT,
-  SCREENSHOT,
-  NETWORK,
-  INITIAL_DISCLAIMER
 }

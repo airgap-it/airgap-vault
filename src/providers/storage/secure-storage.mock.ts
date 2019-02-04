@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core'
 import { SecureStorage } from './secure-storage'
+import { handleErrorLocal, ErrorCategory } from '../error-handler/error-handler'
 
 @Injectable()
 export class SecureStorageServiceMock {
@@ -10,54 +11,57 @@ export class SecureStorageServiceMock {
   }
 
   isDeviceSecure(): Promise<number> {
-    return new Promise<number>((resolve, reject) => {
+    return new Promise<number>(resolve => {
       console.warn('SecureStorageServiceMock - This Device is NOT secured')
       resolve(this.isSecure)
     })
   }
 
   secureDevice(): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
+    return new Promise<void>(resolve => {
       console.warn('SecureStorageServiceMock - This Device is NOT secured')
       resolve()
     })
   }
 
-  get(alias: string, isParanoia: boolean): Promise<SecureStorage> {
+  get(alias: string, _isParanoia: boolean): Promise<SecureStorage> {
     const secureStorage: SecureStorage = {
       init() {
         console.warn('SecureStorageServiceMock')
-        return new Promise<void>((resolve, reject) => {
+        return new Promise<void>(resolve => {
           resolve()
         })
       },
       setItem(key: string, value: string): Promise<void> {
         console.warn('SecureStorageServiceMock')
         localStorage.setItem(alias + '-' + key, value)
-        return new Promise<void>((resolve, reject) => {
+        return new Promise<void>(resolve => {
           resolve()
         })
       },
       getItem(key: string): Promise<any> {
         console.warn('SecureStorageServiceMock')
         const result = localStorage.getItem(alias + '-' + key)
-        return new Promise<any>((resolve, reject) => {
+        return new Promise<any>(resolve => {
           resolve(result)
         })
       },
       removeItem: function(key) {
         console.warn('SecureStorageServiceMock')
         localStorage.removeItem(alias + '-' + key)
-        return new Promise<any>((resolve, reject) => {
+        return new Promise<any>(resolve => {
           resolve()
         })
       }
     }
 
-    return new Promise<SecureStorage>((resolve, reject) => {
-      secureStorage.init().then(() => {
-        resolve(secureStorage)
-      })
+    return new Promise<SecureStorage>(resolve => {
+      secureStorage
+        .init()
+        .then(() => {
+          resolve(secureStorage)
+        })
+        .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
     })
   }
 }

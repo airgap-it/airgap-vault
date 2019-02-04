@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core'
+import { Component, Input, OnChanges } from '@angular/core'
 
 @Component({
   selector: 'entropy-progress',
@@ -13,7 +13,7 @@ export class EntropyProgressComponent implements OnChanges {
 
   progressInPercent = 0
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges() {
     if (this.value > this.maxValue) {
       this.progressInPercent = 100
     } else {

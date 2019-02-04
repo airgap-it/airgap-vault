@@ -6,6 +6,7 @@ import { SecretCreatePage } from '../secret-create/secret-create'
 import { SecretEditPage } from '../secret-edit/secret-edit'
 import { Observable } from 'rxjs'
 import { AboutPopoverComponent } from './about-popover/about-popover.component'
+import { handleErrorLocal, ErrorCategory } from '../../providers/error-handler/error-handler'
 
 @IonicPage()
 @Component({
@@ -30,17 +31,17 @@ export class TabSecretsPage {
     this.secrets.subscribe(async list => {
       await this.secretsProvider.isReady()
       if (list.length === 0) {
-        this.navController.push(SecretCreatePage)
+        this.navController.push(SecretCreatePage).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       }
     })
   }
 
   goToNewSecret() {
-    this.navController.push(SecretCreatePage)
+    this.navController.push(SecretCreatePage).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   goToEditSecret(secret: Secret) {
-    this.navController.push(SecretEditPage, { secret: secret })
+    this.navController.push(SecretEditPage, { secret: secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   deleteSecret(secret: Secret) {
@@ -52,7 +53,7 @@ export class TabSecretsPage {
           {
             text: 'Delete',
             handler: () => {
-              this.secretsProvider.remove(secret)
+              this.secretsProvider.remove(secret).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
 
               let toast = this.toastController.create({
                 message: 'Secret deleted',
@@ -61,12 +62,12 @@ export class TabSecretsPage {
                 closeButtonText: 'Undo'
               })
 
-              toast.onDidDismiss((data, role) => {
+              toast.onDidDismiss((_data, role) => {
                 if (role === 'close') {
-                  this.secretsProvider.addOrUpdateSecret(secret)
+                  this.secretsProvider.addOrUpdateSecret(secret).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
                 }
               })
-              toast.present()
+              toast.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
             }
           },
           {
@@ -75,12 +76,15 @@ export class TabSecretsPage {
         ]
       })
       .present()
+      .catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
   }
 
   presentAboutPopover(event) {
     let popover = this.popoverCtrl.create(AboutPopoverComponent)
-    popover.present({
-      ev: event
-    })
+    popover
+      .present({
+        ev: event
+      })
+      .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 }

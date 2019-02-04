@@ -3,6 +3,7 @@ import { ViewController, NavParams, AlertController } from 'ionic-angular'
 import { Secret } from '../../../models/secret'
 import { SecretsProvider } from '../../../providers/secrets/secrets.provider'
 import { TranslateService } from '@ngx-translate/core'
+import { handleErrorLocal, ErrorCategory } from '../../../providers/error-handler/error-handler'
 
 @Component({
   template: `
@@ -51,14 +52,14 @@ export class SecretEditPopoverComponent {
               text: cancelButton,
               role: 'cancel',
               handler: () => {
-                this.viewCtrl.dismiss()
+                this.viewCtrl.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
               }
             },
             {
               text: deleteButton,
               handler: () => {
-                this.secretsProvider.remove(this.secret)
-                this.viewCtrl.dismiss()
+                this.secretsProvider.remove(this.secret).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
+                this.viewCtrl.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
 
                 if (this.onDelete) {
                   this.onDelete()
@@ -67,7 +68,7 @@ export class SecretEditPopoverComponent {
             }
           ]
         })
-        alert.present()
+        alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
       })
   }
 }

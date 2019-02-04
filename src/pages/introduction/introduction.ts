@@ -1,6 +1,7 @@
 import { Component } from '@angular/core'
 import { Platform, ViewController } from 'ionic-angular'
 import { Storage } from '@ionic/storage'
+import { handleErrorLocal, ErrorCategory } from '../../providers/error-handler/error-handler'
 
 declare var cordova: any
 
@@ -14,9 +15,12 @@ export class IntroductionPage {
   constructor(private viewController: ViewController, private platform: Platform, private storage: Storage) {}
 
   accept() {
-    this.storage.set('INTRODUCTION_INITIAL', true).then(value => {
-      this.viewController.dismiss()
-    })
+    this.storage
+      .set('INTRODUCTION_INITIAL', true)
+      .then(() => {
+        this.viewController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+      })
+      .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
   }
 
   public downloadClient() {

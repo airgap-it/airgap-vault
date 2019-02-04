@@ -33,6 +33,7 @@ import { StartupChecksProvider } from '../providers/startup-checks/startup-check
 import { SchemeRoutingProvider } from '../providers/scheme-routing/scheme-routing'
 import { ClipboardBrowserProvider } from '../providers/clipboard-browser/clipboard-browser'
 import { PermissionsProvider } from '../providers/permissions/permissions'
+import { ErrorHandlerProvider } from '../providers/error-handler/error-handler'
 
 @NgModule({
   declarations: [MyApp],
@@ -94,7 +95,8 @@ import { PermissionsProvider } from '../providers/permissions/permissions'
     },
     DeviceProvider,
     SchemeRoutingProvider,
-    PermissionsProvider
+    PermissionsProvider,
+    ErrorHandlerProvider
   ]
 })
 export class AppModule {}

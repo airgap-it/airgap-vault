@@ -6,12 +6,11 @@ import {
   AirGapWallet,
   SyncProtocolUtils,
   DeserializedSyncProtocol,
-  SignedTransaction,
   EncodedType,
-  IAirGapWallet,
   UnsignedTransaction,
   IAirGapTransaction
 } from 'airgap-coin-lib'
+import { handleErrorLocal, ErrorCategory } from '../../providers/error-handler/error-handler'
 
 declare var window: any
 
@@ -53,7 +52,7 @@ export class TransactionSignedPage {
       content: 'Signing...'
     })
 
-    loading.present()
+    loading.present().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
 
     const signedTx = await this.signTransaction(this.transaction, this.wallet)
     this.broadcastUrl = await this.generateBroadcastUrl(this.wallet, signedTx, this.transaction)
@@ -61,7 +60,7 @@ export class TransactionSignedPage {
     this.ngZone.run(() => {
       this.signedTxQr = signedTx
     })
-    loading.dismiss()
+    loading.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
   }
 
   signTransaction(transaction: UnsignedTransaction, wallet: AirGapWallet): Promise<string> {
@@ -107,7 +106,7 @@ export class TransactionSignedPage {
 
     const serializedTx = await syncProtocol.serialize(deserializedTxSigningRequest)
 
-    return (unsignedTransaction.callback || 'airgap-wallet://?d=') + serializedTx
+    return `${unsignedTransaction.callback || 'airgap-wallet://?d='}${serializedTx}`
 
     /*
     const data = JSON.stringify({
@@ -148,6 +147,6 @@ export class TransactionSignedPage {
   }
 
   done() {
-    this.navCtrl.popToRoot()
+    this.navCtrl.popToRoot().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

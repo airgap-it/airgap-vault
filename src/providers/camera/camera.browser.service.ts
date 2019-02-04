@@ -1,6 +1,4 @@
-import { ElementRef, Injectable, NgZone, Renderer2, RendererFactory2, ViewChild } from '@angular/core'
-import { CameraPreview } from '@ionic-native/camera-preview'
-import { Platform } from 'ionic-angular'
+import { ElementRef, Injectable, ViewChild } from '@angular/core'
 import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
 import { Observable } from 'rxjs'
 
@@ -10,17 +8,7 @@ const entropyCalculatorWorker = new Worker(blobURL)
 
 @Injectable()
 export class CameraBrowserService implements IEntropyGenerator {
-  private disabled = false
-
-  private cameraIsRunning = false // Prevent multiple start/stops of camera
-  private cameraIsTakingPhoto = false // Prevent stopping camera while picture is being taken
-
-  // entropy settings
-  private VIDEO_SIZE = 50
-  private VIDEO_QUALITY = 100
   private VIDEO_FREQUENCY = 2000
-
-  private renderer: Renderer2
 
   @ViewChild('cameraCanvas') public cameraCanvas: ElementRef
   canvasElement: HTMLCanvasElement
@@ -32,18 +20,10 @@ export class CameraBrowserService implements IEntropyGenerator {
 
   private cameraInterval: number
 
-  private cameraOptions: any
-
   private videoElement: any
   private videoStream: any
 
-  constructor(
-    private platform: Platform,
-    private cameraPreview: CameraPreview,
-    private rendererFactory: RendererFactory2,
-    private ngZone: NgZone
-  ) {
-    this.renderer = rendererFactory.createRenderer(null, null)
+  constructor() {
     this.entropyObservable = Observable.create(observer => {
       entropyCalculatorWorker.onmessage = event => {
         this.collectedEntropyPercentage += event.data.entropyMeasure
@@ -70,7 +50,7 @@ export class CameraBrowserService implements IEntropyGenerator {
   }
 
   start(): Promise<void> {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       const constraints = {
         video: true,
         audio: true

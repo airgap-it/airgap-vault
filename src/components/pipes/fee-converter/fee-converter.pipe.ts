@@ -20,6 +20,6 @@ export class FeeConverterPipe implements PipeTransform {
     const amount = new BigNumber(value)
     const fee = amount.shiftedBy(-1 * protocol.feeDecimals)
 
-    return fee.toFixed() + ' ' + protocol.feeSymbol.toUpperCase()
+    return `${fee.toFixed()} ${protocol.feeSymbol.toUpperCase()}`
   }
 }

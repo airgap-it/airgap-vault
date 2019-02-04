@@ -1,8 +1,9 @@
 import { Component, ViewChild } from '@angular/core'
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular'
+import { IonicPage, NavController, NavParams } from 'ionic-angular'
 import { VerifyKeyComponent } from '../../components/verify-key/verify-key'
 import { Secret } from '../../models/secret'
 import { SecretEditPage } from '../secret-edit/secret-edit'
+import { ErrorCategory, handleErrorLocal } from '../../providers/error-handler/error-handler'
 
 @IonicPage()
 @Component({
@@ -16,7 +17,7 @@ export class SecretValidatePage {
   private secret: Secret
   private validated = false
 
-  constructor(private navController: NavController, private toastController: ToastController, private navParams: NavParams) {
+  constructor(private navController: NavController, private navParams: NavParams) {
     this.secret = this.navParams.get('secret')
   }
 
@@ -29,6 +30,8 @@ export class SecretValidatePage {
   }
 
   goToSecretEditPage() {
-    this.navController.push(SecretEditPage, { secret: this.secret, isGenerating: true })
+    this.navController
+      .push(SecretEditPage, { secret: this.secret, isGenerating: true })
+      .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

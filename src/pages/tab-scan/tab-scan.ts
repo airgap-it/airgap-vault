@@ -8,6 +8,7 @@ import { SchemeRoutingProvider } from '../../providers/scheme-routing/scheme-rou
 import { ZXingScannerComponent } from '@zxing/ngx-scanner'
 import { PermissionsProvider, PermissionTypes, PermissionStatus } from '../../providers/permissions/permissions'
 import { TranslateService } from '@ngx-translate/core'
+import { handleErrorLocal, ErrorCategory } from '../../providers/error-handler/error-handler'
 
 @IonicPage()
 @Component({
@@ -24,9 +25,6 @@ export class TabScanPage {
   public isBrowser = false
 
   hasCameras = false
-
-  private webscanner: any
-  private selectedCamera
 
   public hasCameraPermission = false
 
@@ -67,7 +65,7 @@ export class TabScanPage {
   ionViewDidEnter() {
     if (!this.platform.is('cordova')) {
       this.hasCameraPermission = true
-      this.zxingScanner.camerasNotFound.subscribe((devices: MediaDeviceInfo[]) => {
+      this.zxingScanner.camerasNotFound.subscribe((_devices: MediaDeviceInfo[]) => {
         console.error('An error has occurred when trying to enumerate your video-stream-enabled devices.')
       })
       if (this.selectedDevice) {
@@ -95,7 +93,7 @@ export class TabScanPage {
       this.scanner.show()
       this.scanner.scan(
         text => {
-          this.checkScan(text)
+          this.checkScan(text).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
         },
         error => {
           console.warn(error)
@@ -114,7 +112,7 @@ export class TabScanPage {
       })
     } else {
       this.extractRawTx(data)
-        .then(tx => {
+        .then(_tx => {
           // this.transactionScanned(tx)
         })
         .catch(error => {
@@ -139,7 +137,7 @@ export class TabScanPage {
                   }
                 ]
               })
-              alert.present()
+              alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
             })
         })
     }
@@ -169,7 +167,7 @@ export class TabScanPage {
         for (let wallet of wallets) {
           alert.addInput({
             type: 'radio',
-            label: wallet.coinProtocol.name + ' ' + wallet.receivingPublicAddress,
+            label: `${wallet.coinProtocol.name} ${wallet.receivingPublicAddress}`,
             value: wallets.indexOf(wallet).toString()
           })
         }
@@ -190,7 +188,7 @@ export class TabScanPage {
             }
           }
         })
-        alert.present()
+        alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
       })
     })
   }

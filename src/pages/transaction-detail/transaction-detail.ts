@@ -4,6 +4,7 @@ import { TransactionSignedPage } from '../transaction-signed/transaction-signed'
 import { TransactionOnboardingPage } from '../transaction-onboarding/transaction-onboarding'
 import { Storage } from '@ionic/storage'
 import { AirGapWallet, UnsignedTransaction, IAirGapTransaction } from 'airgap-coin-lib'
+import { ErrorCategory, handleErrorLocal } from '../../providers/error-handler/error-handler'
 
 @IonicPage()
 @Component({
@@ -23,13 +24,16 @@ export class TransactionDetailPage {
     this.airGapTx = this.wallet.coinProtocol.getTransactionDetails(this.transaction)
   }
 
-  goToTransactionOnboardingPage() {
-    this.storage.get('DISCLAIMER_HIDE_SIGN_TX').then(val => {
-      if (val) {
-        this.navController.push(TransactionSignedPage, { transaction: this.transaction, wallet: this.wallet })
-      } else {
-        this.navController.push(TransactionOnboardingPage, { transaction: this.transaction, wallet: this.wallet })
-      }
-    })
+  async goToTransactionOnboardingPage() {
+    const val = await this.storage.get('DISCLAIMER_HIDE_SIGN_TX')
+    if (val) {
+      this.navController
+        .push(TransactionSignedPage, { transaction: this.transaction, wallet: this.wallet })
+        .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    } else {
+      this.navController
+        .push(TransactionOnboardingPage, { transaction: this.transaction, wallet: this.wallet })
+        .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    }
   }
 }
