@@ -7,6 +7,7 @@ import { ModalController } from 'ionic-angular'
 import { Storage } from '@ionic/storage'
 import { SecureStorageService } from '../storage/secure-storage'
 import { DistributionOnboardingPage } from '../../pages/distribution-onboarding/distribution-onboarding'
+import { handleErrorLocal, ErrorCategory } from '../error-handler/error-handler'
 
 @Injectable()
 export class StartupChecksProvider {
@@ -53,7 +54,7 @@ export class StartupChecksProvider {
       },
       {
         name: 'electronCheck',
-        check: () => {
+        check: (): Promise<boolean> => {
           return new Promise(async resolve => {
             const isElectron = await deviceProvider.checkForElectron()
             const hasShownDisclaimer = await this.storage.get('DISCLAIMER_ELECTRON')
@@ -70,10 +71,13 @@ export class StartupChecksProvider {
 
   presentModal(page: any, modalConfig: any, callback: Function) {
     let modal = this.modalController.create(page, modalConfig, { enableBackdropDismiss: false })
-    modal.onDidDismiss(data => callback())
-    modal.present().then(() => {
-      console.log('check modal presented')
-    })
+    modal.onDidDismiss(_data => callback())
+    modal
+      .present()
+      .then(() => {
+        console.log('check modal presented')
+      })
+      .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 
   initChecks(): Promise<Function> {
@@ -83,7 +87,7 @@ export class StartupChecksProvider {
           return promiseChain.then(chainResults => currentTask.check().then(currentResult => [...chainResults, currentResult]))
         }, Promise.resolve([]))
         .then(arrayOfResults => {
-          let failedIndex = arrayOfResults.findIndex((val, index, obs) => {
+          let failedIndex = arrayOfResults.findIndex((val, index) => {
             if (typeof val === 'number') {
               val = Boolean(val).valueOf()
             }
@@ -97,6 +101,7 @@ export class StartupChecksProvider {
 
           reject(this.checks[failedIndex])
         })
+        .catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
     })
   }
 }

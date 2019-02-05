@@ -2,6 +2,7 @@ import { Component } from '@angular/core'
 import { IonicPage, NavController, NavParams } from 'ionic-angular'
 import { SocialRecoveryValidateSharePage } from '../social-recovery-validate-share/social-recovery-validate-share'
 import { Secret } from '../../models/secret'
+import { handleErrorLocal, ErrorCategory } from '../../providers/error-handler/error-handler'
 
 @IonicPage()
 @Component({
@@ -20,14 +21,16 @@ export class SocialRecoveryShowSharePage {
   }
 
   back() {
-    this.navCtrl.pop()
+    this.navCtrl.pop().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   next() {
-    this.navCtrl.push(SocialRecoveryValidateSharePage, { shares: this.shares, currentShare: this.currentShare, secret: this.secret })
+    this.navCtrl
+      .push(SocialRecoveryValidateSharePage, { shares: this.shares, currentShare: this.currentShare, secret: this.secret })
+      .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   finish() {
-    this.navCtrl.popToRoot()
+    this.navCtrl.popToRoot().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

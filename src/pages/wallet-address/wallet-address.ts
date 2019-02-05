@@ -4,6 +4,7 @@ import { WalletSharePage } from '../wallet-share/wallet-share'
 import { WalletEditPopoverComponent } from './wallet-edit-popover/wallet-edit-popover.component'
 import { AirGapWallet } from 'airgap-coin-lib'
 import { Clipboard } from '@ionic-native/clipboard'
+import { ErrorCategory, handleErrorLocal } from '../../providers/error-handler/error-handler'
 
 @IonicPage()
 @Component({
@@ -24,11 +25,11 @@ export class WalletAddressPage {
   }
 
   done() {
-    this.navController.pop()
+    this.navController.pop().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   share() {
-    this.navController.push(WalletSharePage, { wallet: this.wallet })
+    this.navController.push(WalletSharePage, { wallet: this.wallet }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   presentEditPopover(event) {
@@ -38,9 +39,11 @@ export class WalletAddressPage {
         this.done()
       }
     })
-    popover.present({
-      ev: event
-    })
+    popover
+      .present({
+        ev: event
+      })
+      .catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
   }
 
   async copyAddressToClipboard() {

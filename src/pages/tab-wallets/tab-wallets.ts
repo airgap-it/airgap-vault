@@ -7,6 +7,7 @@ import { Secret } from '../../models/secret'
 import { AirGapWallet } from 'airgap-coin-lib'
 import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 import { SecretCreatePage } from '../secret-create/secret-create'
+import { handleErrorLocal, ErrorCategory } from '../../providers/error-handler/error-handler'
 
 @IonicPage()
 @Component({
@@ -26,7 +27,7 @@ export class TabWalletsPage {
     secrets.subscribe(async list => {
       await this.secretsProvider.isReady()
       if (list.length === 0) {
-        this.navController.push(SecretCreatePage)
+        this.navController.push(SecretCreatePage).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       }
     })
   }
@@ -44,7 +45,7 @@ export class TabWalletsPage {
   }
 
   goToReceiveAddress(wallet: AirGapWallet) {
-    this.navController.push(WalletAddressPage, { wallet: wallet })
+    this.navController.push(WalletAddressPage, { wallet: wallet }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   filterItems(ev: any) {
@@ -58,6 +59,6 @@ export class TabWalletsPage {
   }
 
   addWallet() {
-    this.navController.push(WalletSelectCoinsPage)
+    this.navController.push(WalletSelectCoinsPage).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

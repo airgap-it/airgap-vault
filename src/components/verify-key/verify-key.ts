@@ -33,7 +33,7 @@ export class VerifyKeyComponent implements OnInit {
     this.splittedSecret = this.secret
       .toLowerCase()
       .split(' ')
-      .map((word, i) => {
+      .map(word => {
         return {
           word: word
         }
@@ -96,7 +96,7 @@ export class VerifyKeyComponent implements OnInit {
     return a
   }
 
-  stringToIntHash(str, lowerbound, upperbound) {
+  stringToIntHash(str: string, lowerbound: number, upperbound: number) {
     let result = 0
 
     for (let i = 0; i < str.length; i++) {
@@ -106,7 +106,7 @@ export class VerifyKeyComponent implements OnInit {
     return (result % (upperbound - lowerbound)) + lowerbound
   }
 
-  isSelectedWord(word): boolean {
+  isSelectedWord(word: Word): boolean {
     if (this.selectedWord !== null) {
       return this.currentWords[this.selectedWord].word === word.word
     }
@@ -118,7 +118,7 @@ export class VerifyKeyComponent implements OnInit {
     this.promptNextWord()
   }
 
-  useWord(word) {
+  useWord(word: Word) {
     let index = this.emptySpot(this.currentWords)
 
     // unselect any selected words

@@ -25,7 +25,8 @@ describe('Component: VerifyKey', () => {
             useFactory: HttpLoaderFactory,
             deps: [HttpClient]
           }
-        })]
+        })
+      ]
     })
       .compileComponents()
       .then(() => {
@@ -116,7 +117,7 @@ describe('Component: VerifyKey', () => {
     // first empty spot is zero
     expect(component.emptySpot(component.currentWords)).toEqual(0)
 
-    component.useWord(words[0])
+    component.useWord({ word: words[0] })
 
     // next empty spot is one
     expect(component.emptySpot(component.currentWords)).toEqual(1)

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core'
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular'
 import { AirGapWallet, SyncProtocolUtils, DeserializedSyncProtocol, SyncWalletRequest, EncodedType } from 'airgap-coin-lib'
+import { handleErrorLocal, ErrorCategory } from '../../providers/error-handler/error-handler'
 
 declare var window: any
 
@@ -18,7 +19,7 @@ export class WalletSharePage {
   }
 
   done() {
-    this.navController.pop()
+    this.navController.pop().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   async ionViewDidEnter() {
@@ -43,7 +44,7 @@ export class WalletSharePage {
 
     const serializedTx = await syncProtocol.serialize(deserializedTxSigningRequest)
 
-    return 'airgap-wallet://?d=' + serializedTx
+    return `airgap-wallet://?d=${serializedTx}`
   }
 
   async sameDeviceSync() {

@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core'
 import { IonicPage, ViewController, Slides } from 'ionic-angular'
 import { Storage } from '@ionic/storage'
+import { handleErrorLocal, ErrorCategory } from '../../providers/error-handler/error-handler'
 
 @IonicPage()
 @Component({
@@ -18,6 +19,6 @@ export class DistributionOnboardingPage {
 
   async accept() {
     await this.storage.set('DISCLAIMER_ELECTRON', true)
-    this.viewController.dismiss()
+    this.viewController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 }

@@ -4,6 +4,7 @@ import { Secret } from '../../models/secret'
 import { SocialRecoveryShowSharePage } from '../social-recovery-show-share/social-recovery-show-share'
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import * as bip39 from 'bip39'
+import { handleErrorLocal, ErrorCategory } from '../../providers/error-handler/error-handler'
 
 @IonicPage()
 @Component({
@@ -31,7 +32,7 @@ export class SocialRecoverySetupPage {
   }
 
   back() {
-    this.navCtrl.pop()
+    this.navCtrl.pop().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   next() {
@@ -39,7 +40,9 @@ export class SocialRecoverySetupPage {
       .retrieveEntropyForSecret(this.secret)
       .then(entropy => {
         const shares = Secret.generateSocialRecover(bip39.entropyToMnemonic(entropy), this.numberOfShares, this.numberOfRequiredShares)
-        this.navCtrl.push(SocialRecoveryShowSharePage, { shares: shares, currentShare: 0, secret: this.secret })
+        this.navCtrl
+          .push(SocialRecoveryShowSharePage, { shares: shares, currentShare: 0, secret: this.secret })
+          .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       })
       .catch(error => {
         console.warn(error)

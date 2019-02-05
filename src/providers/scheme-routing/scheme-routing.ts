@@ -3,6 +3,7 @@ import { AlertController, AlertButton, App, NavController } from 'ionic-angular'
 import { DeserializedSyncProtocol, UnsignedTransaction, SyncProtocolUtils, EncodedType } from 'airgap-coin-lib'
 import { SecretsProvider } from '../secrets/secrets.provider'
 import { TransactionDetailPage } from '../../pages/transaction-detail/transaction-detail'
+import { handleErrorLocal, ErrorCategory } from '../error-handler/error-handler'
 
 @Injectable()
 export class SchemeRoutingProvider {
@@ -82,18 +83,21 @@ export class SchemeRoutingProvider {
         'No secret found',
         'You do not have any compatible wallet for this public key in AirGap. Please import your secret and create the corresponding wallet to sign this transaction',
         [cancelButton]
-      )
+      ).catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
     } else {
       if (this.navController) {
-        this.navController.push(TransactionDetailPage, {
-          transaction: unsignedTransaction,
-          wallet: correctWallet
-        })
+        this.navController
+          .push(TransactionDetailPage, {
+            transaction: unsignedTransaction,
+            wallet: correctWallet
+          })
+          .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       }
     }
   }
 
-  private async syncTypeNotSupportedAlert(deserializedSyncProtocol: DeserializedSyncProtocol, scanAgainCallback: Function) {
+  private async syncTypeNotSupportedAlert(_deserializedSyncProtocol: DeserializedSyncProtocol, scanAgainCallback: Function) {
+    // TODO: Log error locally
     const cancelButton = {
       text: 'Okay!',
       role: 'cancel',
@@ -101,7 +105,9 @@ export class SchemeRoutingProvider {
         scanAgainCallback()
       }
     }
-    this.showAlert('Sync type not supported', 'Please use another app to scan this QR.', [cancelButton])
+    this.showAlert('Sync type not supported', 'Please use another app to scan this QR.', [cancelButton]).catch(
+      handleErrorLocal(ErrorCategory.IONIC_ALERT)
+    )
   }
 
   async showAlert(title: string, message: string, buttons: AlertButton[]) {

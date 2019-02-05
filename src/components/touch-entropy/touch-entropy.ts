@@ -1,4 +1,4 @@
-import { Component, Input, NgZone, OnInit, Renderer2, ViewChild } from '@angular/core'
+import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core'
 import { Entropy, IEntropyGenerator } from '../../providers/entropy/IEntropyGenerator'
 import { Observable } from 'rxjs'
 
@@ -26,7 +26,7 @@ export class TouchEntropyComponent implements OnInit, IEntropyGenerator {
   private canvas: HTMLCanvasElement
   private context: CanvasRenderingContext2D
   private rectangle: ClientRect
-  private showStrokes
+  public showStrokes
 
   private handler
 
@@ -36,7 +36,7 @@ export class TouchEntropyComponent implements OnInit, IEntropyGenerator {
 
   private isDrawing = false
 
-  constructor(private ngZone: NgZone, private renderer: Renderer2) {
+  constructor(private renderer: Renderer2) {
     this.entropyObservable = Observable.create(observer => {
       entropyCalculatorWorker.onmessage = event => {
         this.collectedEntropyPercentage += event.data.entropyMeasure
@@ -53,8 +53,8 @@ export class TouchEntropyComponent implements OnInit, IEntropyGenerator {
   ngOnInit(): void {
     this.canvas = this.canvasRef.nativeElement
 
-    this.canvas.setAttribute('height', this.canvas.parentElement.getBoundingClientRect().height + 'px')
-    this.canvas.setAttribute('width', this.canvas.parentElement.getBoundingClientRect().width + 'px')
+    this.canvas.setAttribute('height', `${this.canvas.parentElement.getBoundingClientRect().height}px`)
+    this.canvas.setAttribute('width', `${this.canvas.parentElement.getBoundingClientRect().width}px`)
 
     this.context = this.canvas.getContext('2d')
     this.context.fillStyle = this.cursorColor
@@ -68,20 +68,20 @@ export class TouchEntropyComponent implements OnInit, IEntropyGenerator {
 
   start(): Promise<void> {
     this.collectedEntropyPercentage = 0
-    return new Promise((resolve, reject) => {
-      this.renderer.listen(this.canvas, 'mousedown', e => {
+    return new Promise(resolve => {
+      this.renderer.listen(this.canvas, 'mousedown', _e => {
         this.isDrawing = true
       })
 
-      this.renderer.listen(this.canvas, 'touchstart', e => {
+      this.renderer.listen(this.canvas, 'touchstart', _e => {
         this.isDrawing = true
       })
 
-      this.renderer.listen(this.canvas, 'mouseup', e => {
+      this.renderer.listen(this.canvas, 'mouseup', _e => {
         this.isDrawing = false
       })
 
-      this.renderer.listen(this.canvas, 'touchend', e => {
+      this.renderer.listen(this.canvas, 'touchend', _e => {
         this.isDrawing = false
       })
 
@@ -98,7 +98,7 @@ export class TouchEntropyComponent implements OnInit, IEntropyGenerator {
   }
 
   stop(): Promise<void> {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       this.isDrawing = false
       resolve()
     })
@@ -127,7 +127,7 @@ export class TouchEntropyComponent implements OnInit, IEntropyGenerator {
     return this.entropyObservable
   }
 
-  private getRandomIntInclusive(min, max) {
+  private getRandomIntInclusive(min: number, max: number) {
     const randomBuffer = new Uint32Array(1)
     window.crypto.getRandomValues(randomBuffer)
     let randomNumber = randomBuffer[0] / (0xffffffff + 1)
@@ -145,13 +145,6 @@ export class TouchEntropyComponent implements OnInit, IEntropyGenerator {
     }
 
     return buffer
-  }
-
-  private appendBuffer(buffer1, buffer2): Uint8Array {
-    const tmp = new Uint8Array(buffer1.byteLength + buffer2.byteLength)
-    tmp.set(new Uint8Array(buffer1), 0)
-    tmp.set(new Uint8Array(buffer2), buffer1.byteLength)
-    return new Uint8Array(tmp.buffer)
   }
 
   getCollectedEntropyPercentage(): number {

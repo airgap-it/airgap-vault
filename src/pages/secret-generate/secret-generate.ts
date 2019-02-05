@@ -8,8 +8,7 @@ import { EntropyService } from '../../providers/entropy/entropy.service'
 import { GyroscopeNativeService } from '../../providers/gyroscope/gyroscope.native.service'
 import { TouchEntropyComponent } from '../../components/touch-entropy/touch-entropy'
 import { PermissionsProvider, PermissionTypes } from '../../providers/permissions/permissions'
-
-declare var window: any
+import { handleErrorLocal, ErrorCategory } from '../../providers/error-handler/error-handler'
 
 @Component({
   selector: 'secret-generate',
@@ -95,14 +94,17 @@ export class SecretGeneratePage {
     this.entropyService.addEntropySource(this.audioService)
     this.entropyService.addEntropySource(this.gyroService)
     this.entropyService.addEntropySource(this.touchEntropy)
-    this.entropyService.startEntropyCollection().then(() => {
-      this.entropyService
-        .getEntropyUpdateObservable()
-        .auditTime(200)
-        .subscribe(() => {
-          this.checkEntropy()
-        })
-    })
+    this.entropyService
+      .startEntropyCollection()
+      .then(() => {
+        this.entropyService
+          .getEntropyUpdateObservable()
+          .auditTime(200)
+          .subscribe(() => {
+            this.checkEntropy()
+          })
+      })
+      .catch(handleErrorLocal(ErrorCategory.ENTROPY_COLLECTION))
   }
 
   checkEntropy() {
@@ -126,13 +128,16 @@ export class SecretGeneratePage {
   ionViewDidLeave() {
     this.cameraService.viewDidLeave()
     this.uninjectCSS()
-    this.entropyService.stopEntropyCollection()
+    this.entropyService.stopEntropyCollection().catch(handleErrorLocal(ErrorCategory.ENTROPY_COLLECTION))
   }
 
   goToSecretRulesPage() {
-    this.entropyService.getEntropyAsHex().then(hashHex => {
-      let secret = new Secret(hashHex)
-      this.navController.push(SecretRulesPage, { secret: secret })
-    })
+    this.entropyService
+      .getEntropyAsHex()
+      .then(hashHex => {
+        let secret = new Secret(hashHex)
+        this.navController.push(SecretRulesPage, { secret: secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+      })
+      .catch(handleErrorLocal(ErrorCategory.ENTROPY_COLLECTION))
   }
 }

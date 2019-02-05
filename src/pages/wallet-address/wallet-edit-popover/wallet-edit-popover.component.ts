@@ -4,6 +4,7 @@ import { SecretsProvider } from '../../../providers/secrets/secrets.provider'
 import { AirGapWallet } from 'airgap-coin-lib'
 import { Clipboard } from '@ionic-native/clipboard'
 import { TranslateService } from '@ngx-translate/core'
+import { handleErrorLocal, ErrorCategory } from '../../../providers/error-handler/error-handler'
 
 @Component({
   template: `
@@ -71,24 +72,27 @@ export class WalletEditPopoverComponent {
               text: text1,
               role: 'cancel',
               handler: () => {
-                this.viewCtrl.dismiss()
+                this.viewCtrl.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
               }
             },
             {
               text: text2,
               handler: () => {
-                alert.present()
-                this.secretsProvider.removeWallet(this.wallet).then(() => {
-                  this.viewCtrl.dismiss()
-                  if (this.onDelete) {
-                    this.onDelete()
-                  }
-                })
+                alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
+                this.secretsProvider
+                  .removeWallet(this.wallet)
+                  .then(() => {
+                    this.viewCtrl.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
+                    if (this.onDelete) {
+                      this.onDelete()
+                    }
+                  })
+                  .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
               }
             }
           ]
         })
-        alert.present()
+        alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
       })
   }
 }

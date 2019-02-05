@@ -4,6 +4,7 @@ import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import { Storage } from '@ionic/storage'
 import { LocalAuthenticationOnboardingPage } from '../local-authentication-onboarding/local-authentication-onboarding'
 import { ICoinProtocol, supportedProtocols } from 'airgap-coin-lib'
+import { handleErrorLocal, ErrorCategory } from '../../providers/error-handler/error-handler'
 
 @IonicPage()
 @Component({
@@ -43,18 +44,20 @@ export class WalletSelectCoinsPage {
     if (isHDWallet) {
       this.customDerivationPath = this.selectedProtocol.standardDerivationPath
     } else {
-      this.customDerivationPath = this.selectedProtocol.standardDerivationPath + '/0/1'
+      this.customDerivationPath = `${this.selectedProtocol.standardDerivationPath}/0/1`
     }
   }
 
   async addWallet() {
     const value = await this.storage.get('DISCLAIMER_HIDE_LOCAL_AUTH_ONBOARDING')
     if (!value) {
-      this.navCtrl.push(LocalAuthenticationOnboardingPage, {
-        protocolIdentifier: this.selectedProtocol.identifier,
-        isHDWallet: this.isHDWallet,
-        customDerivationPath: this.customDerivationPath
-      })
+      this.navCtrl
+        .push(LocalAuthenticationOnboardingPage, {
+          protocolIdentifier: this.selectedProtocol.identifier,
+          isHDWallet: this.isHDWallet,
+          customDerivationPath: this.customDerivationPath
+        })
+        .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       return
     }
     await this.secretsProvider.addWallet(this.selectedProtocol.identifier, this.isHDWallet, this.customDerivationPath)

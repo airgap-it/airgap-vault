@@ -2,6 +2,7 @@ import { Component } from '@angular/core'
 import { IonicPage, NavController, NavParams } from 'ionic-angular'
 import { SecretShowPage } from '../secret-show/secret-show'
 import { Secret } from '../../models/secret'
+import { handleErrorLocal, ErrorCategory } from '../../providers/error-handler/error-handler'
 
 @IonicPage()
 @Component({
@@ -16,6 +17,6 @@ export class SecretRulesPage {
   }
 
   goToShowSecret() {
-    this.navController.push(SecretShowPage, { secret: this.secret })
+    this.navController.push(SecretShowPage, { secret: this.secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

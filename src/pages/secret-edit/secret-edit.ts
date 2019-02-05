@@ -5,6 +5,7 @@ import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import { SocialRecoverySetupPage } from '../social-recovery-setup/social-recovery-setup'
 import { SecretEditPopoverComponent } from './secret-edit-popover/secret-edit-popover.component'
 import { WalletSelectCoinsPage } from '../wallet-select-coins/wallet-select-coins'
+import { handleErrorLocal, ErrorCategory } from '../../providers/error-handler/error-handler'
 
 @IonicPage()
 @Component({
@@ -26,12 +27,15 @@ export class SecretEditPage {
   }
 
   confirm() {
-    this.secretsProvider.addOrUpdateSecret(this.secret).then(async () => {
-      await this.dismiss()
-      if (this.isGenerating) {
-        this.navController.push(WalletSelectCoinsPage)
-      }
-    })
+    this.secretsProvider
+      .addOrUpdateSecret(this.secret)
+      .then(async () => {
+        await this.dismiss()
+        if (this.isGenerating) {
+          this.navController.push(WalletSelectCoinsPage).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+        }
+      })
+      .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
   }
 
   dismiss() {
@@ -39,18 +43,20 @@ export class SecretEditPage {
   }
 
   goToSocialRecoverySetup() {
-    this.navController.push(SocialRecoverySetupPage, { secret: this.secret })
+    this.navController.push(SocialRecoverySetupPage, { secret: this.secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   presentEditPopover(event) {
     let popover = this.popoverCtrl.create(SecretEditPopoverComponent, {
       secret: this.secret,
       onDelete: () => {
-        this.dismiss()
+        this.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
       }
     })
-    popover.present({
-      ev: event
-    })
+    popover
+      .present({
+        ev: event
+      })
+      .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 }
