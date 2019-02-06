@@ -5,15 +5,15 @@ import { Secret } from '../../models/secret'
 import { SecretCreatePage } from '../secret-create/secret-create'
 import { SecretEditPage } from '../secret-edit/secret-edit'
 import { Observable } from 'rxjs'
-import { AboutPopoverComponent } from './about-popover/about-popover.component'
+import { AboutPage } from '../about/about'
 import { handleErrorLocal, ErrorCategory } from '../../providers/error-handler/error-handler'
 
 @IonicPage()
 @Component({
-  selector: 'page-tab-secrets',
-  templateUrl: 'tab-secrets.html'
+  selector: 'page-tab-settings',
+  templateUrl: 'tab-settings.html'
 })
-export class TabSecretsPage {
+export class TabSettingsPage {
   private secrets: Observable<Secret[]>
 
   constructor(
@@ -79,12 +79,7 @@ export class TabSecretsPage {
       .catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
   }
 
-  presentAboutPopover(event) {
-    let popover = this.popoverCtrl.create(AboutPopoverComponent)
-    popover
-      .present({
-        ev: event
-      })
-      .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+  public about() {
+    this.navController.push(AboutPage).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

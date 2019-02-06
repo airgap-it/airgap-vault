@@ -61,4 +61,5 @@ export class TabWalletsPage {
   addWallet() {
     this.navController.push(WalletSelectCoinsPage).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
+
 }

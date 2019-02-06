@@ -17,6 +17,7 @@ import { WalletItemComponent } from './wallet-item/wallet-item'
 import { FeeConverterPipe } from './pipes/fee-converter/fee-converter.pipe'
 import { AmountConverterPipe } from './pipes/amount-converter/amount-converter.pipe'
 import { TranslateModule } from '@ngx-translate/core'
+import { SecretItemComponent } from './secret-item/secret-item';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { TranslateModule } from '@ngx-translate/core'
     IonTextAvatar,
     TraceInputDirective,
     FeeConverterPipe,
-    AmountConverterPipe
+    AmountConverterPipe,
+    SecretItemComponent
   ],
   imports: [IonicModule, BrowserModule, TranslateModule, MaterialIconsModule],
   exports: [
@@ -49,7 +51,8 @@ import { TranslateModule } from '@ngx-translate/core'
     ProgressFooterComponent,
     IonTextAvatar,
     FeeConverterPipe,
-    AmountConverterPipe
+    AmountConverterPipe,
+    SecretItemComponent
   ]
 })
 export class ComponentsModule { }
