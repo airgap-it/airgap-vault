@@ -33,6 +33,7 @@ import { StartupChecksProvider } from '../providers/startup-checks/startup-check
 import { SchemeRoutingProvider } from '../providers/scheme-routing/scheme-routing'
 import { ClipboardBrowserProvider } from '../providers/clipboard-browser/clipboard-browser'
 import { PermissionsProvider } from '../providers/permissions/permissions'
+import { ShareUrlProvider } from '../providers/share-url/share-url'
 import { ErrorHandlerProvider } from '../providers/error-handler/error-handler'
 
 @NgModule({
@@ -96,6 +97,7 @@ import { ErrorHandlerProvider } from '../providers/error-handler/error-handler'
     DeviceProvider,
     SchemeRoutingProvider,
     PermissionsProvider,
+    ShareUrlProvider,
     ErrorHandlerProvider
   ]
 })

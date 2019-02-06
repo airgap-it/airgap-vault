@@ -301,6 +301,9 @@
   "wallet-edit-delete-popover":{
     "settings_label": "Kontoeinstellungen",
     "copy_label": "Adresse kopieren",
+    "copy_sync_code": "Sync Code kopieren",
+    "confirm_address_copy": "Addresse wurde in die Zwischenablage kopiert.",
+    "confirm_sync_code_copy": "Sync Code wurde in die Zwischenablage kopiert.",
     "account-removal_alert":{
       "title":"Kontoentfernung bestätigen",
       "text":"Möchten Sie dieses Konto entfernen? Es kann im Nachhinein wieder mit demselben Ableitungspfad erstellt werden.",
