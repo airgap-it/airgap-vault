@@ -2,7 +2,7 @@ import { Component } from '@angular/core'
 import { IonicPage } from 'ionic-angular'
 import { TabScanPage } from '../tab-scan/tab-scan'
 import { TabWalletsPage } from '../tab-wallets/tab-wallets'
-import { TabSecretsPage } from '../tab-secrets/tab-secrets'
+import { TabSettingsPage } from '../tab-settings/tab-settings'
 
 @IonicPage()
 @Component({
@@ -12,5 +12,5 @@ import { TabSecretsPage } from '../tab-secrets/tab-secrets'
 export class TabsPage {
   tabWallets = TabWalletsPage
   tabScan = TabScanPage
-  tabSecrets = TabSecretsPage
+  tabSettings = TabSettingsPage
 }

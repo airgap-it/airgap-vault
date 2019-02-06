@@ -11,7 +11,7 @@ import { SecretRulesPageModule } from './secret-rules/secret-rules.module'
 import { SecretShowPageModule } from './secret-show/secret-show.module'
 import { WalletAddressPageModule } from './wallet-address/wallet-address.module'
 import { TabsPageModule } from './tabs/tabs.module'
-import { TabSecretsPageModule } from './tab-secrets/tab-secrets.module'
+import { TabSettingsPageModule } from './tab-settings/tab-settings.module'
 import { TransactionDetailPageModule } from './transaction-detail/transaction-detail.module'
 import { TransactionSignedPageModule } from './transaction-signed/transaction-signed.module'
 import { TabWalletsPageModule } from './tab-wallets/tab-wallets.module'
@@ -31,6 +31,7 @@ import { IntroductionPageModule } from '../pages/introduction/introduction.modul
 import { LocalAuthenticationOnboardingPageModule } from './local-authentication-onboarding/local-authentication-onboarding.module'
 import { SecretGenerateOnboardingPageModule } from './secret-generate-onboarding/secret-generate-onboarding.module'
 import { DistributionOnboardingPageModule } from './distribution-onboarding/distribution-onboarding.module'
+import { TabSettingsPage } from './tab-settings/tab-settings'
 
 @NgModule({
   imports: [
@@ -48,7 +49,7 @@ import { DistributionOnboardingPageModule } from './distribution-onboarding/dist
     WalletAddressPageModule,
     WalletSharePageModule,
     TabsPageModule,
-    TabSecretsPageModule,
+    TabSettingsPageModule,
     TabScanPageModule,
     TransactionDetailPageModule,
     TransactionSignedPageModule,

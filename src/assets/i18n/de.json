@@ -12,10 +12,16 @@
       "okay_label":"Okay"
   },
 
+  "about": {
+    "label": "About",
+    "version": "Version:",
+    "code": "Code:"
+  },
+
   "distribution-onboarding":{
     "ask-permission": {
       "heading": "AirGap ist <span class=\"style__strong color__primary\"> nicht persistent</span>, Geheimschlüssel werden nicht abgespeichert und müssen nach einem Neustart <span class=\"style__strong color__primary\">wieder importiert</span> werden.",
-      "text":"Diese Distribution ist angedacht um sicher Geheimschlüssel zu generieren und um offline Transaktionen zu signieren, jedoch nicht um Geheimschlüssel aufzubewahren."      
+      "text":"Diese Distribution ist angedacht um sicher Geheimschlüssel zu generieren und um offline Transaktionen zu signieren, jedoch nicht um Geheimschlüssel aufzubewahren."
     },
     "no-vm": {
       "heading": "AirGap Vault Distribution sollte <span class=\"style__strong color__primary\">nicht</span> auf einer <span class=\"style__strong color__primary\">virtuellen Maschine</span> ausgeführt werden, wenn der Host eine Netzwerkverbindung hat, sogar wenn die Netzwerkverbindung vorübergehen deaktiviert wurde.",
@@ -59,11 +65,11 @@
     },
     "vault": {
       "heading": "AirGap Vault",
-      "text": "Der Geheimschlüssel wird generiert und sicher aufbewahrt in der AirGap Vault App. <b>AirGap Vault muss instaliert und mit AirGap Wallet verwendet werden.</b>"  
+      "text": "Der Geheimschlüssel wird generiert und sicher aufbewahrt in der AirGap Vault App. <b>AirGap Vault muss instaliert und mit AirGap Wallet verwendet werden.</b>"
     },
     "wallet": {
       "heading": "AirGap Wallet",
-      "text": "Die Wallet App kommt nur in Kontakt mit öffentlichen Informationen und ist für die Übermittlung von Transaktionen an die Blockchain zuständig."  
+      "text": "Die Wallet App kommt nur in Kontakt mit öffentlichen Informationen und ist für die Übermittlung von Transaktionen an die Blockchain zuständig."
     },
     "communication": {
       "highest_text": "Einweg-Kommunikation mit QR Codes.",
@@ -220,7 +226,7 @@
     "grant-permission_label":"Berechtigung erteilen"
   },
 
-  "tab-secrets":{
+  "tab-settings":{
     "title":"Geheimschlüssel",
     "add-secret_label":"Geheimschlüssel hinzufügen"
   },
@@ -248,7 +254,7 @@
   "tabs": {
     "wallets": "Konten",
     "scanner": "Scanner",
-    "secrets": "Geheimschlüssel"
+    "settings": "Einstellungen"
   },
 
   "transaction-detail":{
