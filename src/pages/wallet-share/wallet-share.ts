@@ -1,6 +1,7 @@
 import { Component } from '@angular/core'
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular'
-import { AirGapWallet, SyncProtocolUtils, DeserializedSyncProtocol, SyncWalletRequest, EncodedType } from 'airgap-coin-lib'
+import { AirGapWallet } from 'airgap-coin-lib'
+import { ShareUrlProvider } from '../../providers/share-url/share-url'
 import { handleErrorLocal, ErrorCategory } from '../../providers/error-handler/error-handler'
 
 declare var window: any
@@ -14,7 +15,12 @@ export class WalletSharePage {
   private wallet: AirGapWallet
   private walletShareUrl: string
 
-  constructor(private navController: NavController, private navParams: NavParams, private platform: Platform) {
+  constructor(
+    private navController: NavController,
+    private navParams: NavParams,
+    private platform: Platform,
+    private shareUrlProvider: ShareUrlProvider
+  ) {
     this.wallet = this.navParams.get('wallet')
   }
 
@@ -23,28 +29,7 @@ export class WalletSharePage {
   }
 
   async ionViewDidEnter() {
-    this.walletShareUrl = await this.generateShareURL()
-  }
-
-  async generateShareURL(): Promise<string> {
-    const syncProtocol = new SyncProtocolUtils()
-
-    const syncWalletRequest: SyncWalletRequest = {
-      publicKey: this.wallet.publicKey,
-      isExtendedPublicKey: this.wallet.isExtendedPublicKey,
-      derivationPath: this.wallet.derivationPath
-    }
-
-    const deserializedTxSigningRequest: DeserializedSyncProtocol = {
-      version: 1,
-      protocol: this.wallet.protocolIdentifier,
-      type: EncodedType.WALLET_SYNC,
-      payload: syncWalletRequest
-    }
-
-    const serializedTx = await syncProtocol.serialize(deserializedTxSigningRequest)
-
-    return `airgap-wallet://?d=${serializedTx}`
+    this.walletShareUrl = await this.shareUrlProvider.generateShareURL(this.wallet)
   }
 
   async sameDeviceSync() {

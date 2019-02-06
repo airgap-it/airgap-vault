@@ -14,6 +14,10 @@ import { handleErrorLocal, ErrorCategory } from '../../../providers/error-handle
         <ion-icon name="clipboard" color="dark" item-end></ion-icon>
         {{ 'wallet-edit-delete-popover.copy_label' | translate }}
       </button>
+      <button ion-item detail-none (click)="copyShareUrlToClipboard()">
+        <ion-icon name="clipboard" color="dark" item-end></ion-icon>
+        {{ 'wallet-edit-delete-popover.copy_sync_code' | translate }}
+      </button>
       <button ion-item detail-none (click)="delete()">
         <ion-icon name="trash" color="dark" item-end></ion-icon>
         {{ 'wallet-edit-delete-popover.account-removal_alert.delete_label' | translate }}
@@ -24,6 +28,7 @@ import { handleErrorLocal, ErrorCategory } from '../../../providers/error-handle
 export class WalletEditPopoverComponent {
   private wallet: AirGapWallet
   private onDelete: Function
+  private walletShareUrl: string
 
   constructor(
     private alertCtrl: AlertController,
@@ -32,16 +37,19 @@ export class WalletEditPopoverComponent {
     private navParams: NavParams,
     private secretsProvider: SecretsProvider,
     private viewCtrl: ViewController,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+
   ) {
     this.wallet = this.navParams.get('wallet')
     this.onDelete = this.navParams.get('onDelete')
+    this.walletShareUrl = this.navParams.get('walletShareUrl')
   }
 
   async copyAddressToClipboard() {
     await this.clipboard.copy(this.wallet.receivingPublicAddress)
     let toast = this.toastController.create({
-      message: 'Address was copied to your clipboard',
+      // message: 'Address was copied to your clipboard',
+      message: this.translateService.instant('wallet-edit-delete-popover.confirm_address_copy'),
       duration: 2000,
       position: 'top',
       showCloseButton: true,
@@ -49,6 +57,18 @@ export class WalletEditPopoverComponent {
     })
     await toast.present()
     await this.viewCtrl.dismiss()
+  }
+
+  async copyShareUrlToClipboard() {
+    await this.clipboard.copy(this.walletShareUrl)
+    let toast = this.toastController.create({
+      message: this.translateService.instant('wallet-edit-delete-popover.confirm_sync_code_copy'),
+      duration: 2000,
+      position: 'top',
+      showCloseButton: true,
+      closeButtonText: 'Ok'
+    })
+    await toast.present()
   }
 
   delete() {

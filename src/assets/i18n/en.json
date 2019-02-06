@@ -303,7 +303,10 @@
 
   "wallet-edit-delete-popover":{
     "settings_label": "Account Settings",
-    "copy_label": "Copy address",
+    "copy_label": "Copy Address",
+    "copy_sync_code": "Copy Sync Code",
+    "confirm_address_copy": "Address was copied to your clipboard",
+    "confirm_sync_code_copy": "Sync code was copied to your clipboard",
     "account-removal_alert":{
       "title":"Confirm Account Removal",
       "text":"Do you want to remove this account? You can always add it back later, if you know its correct derivation path/coin!",
