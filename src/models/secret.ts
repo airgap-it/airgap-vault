@@ -11,6 +11,7 @@ export class Secret {
   public secretHex: string
   public isParanoia: boolean
   public hasSocialRecovery: boolean
+  public hasInteractionSetting: boolean
 
   public wallets: AirGapWallet[]
 

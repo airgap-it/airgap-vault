@@ -1,3 +1,4 @@
+import { AboutPopoverComponent } from './about-popover/about-popover.component'
 import { NgModule } from '@angular/core'
 import { EntropyProgressComponent } from './entropy-progress/entropy-progress'
 import { TouchEntropyComponent } from './touch-entropy/touch-entropy'
@@ -17,7 +18,7 @@ import { WalletItemComponent } from './wallet-item/wallet-item'
 import { FeeConverterPipe } from './pipes/fee-converter/fee-converter.pipe'
 import { AmountConverterPipe } from './pipes/amount-converter/amount-converter.pipe'
 import { TranslateModule } from '@ngx-translate/core'
-import { SecretItemComponent } from './secret-item/secret-item';
+import { SecretItemComponent } from './secret-item/secret-item'
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { SecretItemComponent } from './secret-item/secret-item';
     TraceInputDirective,
     FeeConverterPipe,
     AmountConverterPipe,
-    SecretItemComponent
+    SecretItemComponent,
+    AboutPopoverComponent
   ],
   imports: [IonicModule, BrowserModule, TranslateModule, MaterialIconsModule],
   exports: [
@@ -52,7 +54,8 @@ import { SecretItemComponent } from './secret-item/secret-item';
     IonTextAvatar,
     FeeConverterPipe,
     AmountConverterPipe,
-    SecretItemComponent
+    SecretItemComponent,
+    AboutPopoverComponent
   ]
 })
-export class ComponentsModule { }
+export class ComponentsModule {}

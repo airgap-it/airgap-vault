@@ -116,6 +116,10 @@
       "label":"Soziale Wiederherstellung",
       "text": "Generieren Sie eine Anzahl an Anteile um auf Ihre soziale Kontakte aufzuteilen."
     },
+    "interaction": {
+      "label": "Vault und Wallet Interaktion",
+      "text": "Wähle aus ob Vault und Wallet auf dem gleichen oder ob Vault auf einem offline Gerät installiert ist."
+    },
     "confirm_label":"Bestätigen"
   },
 
@@ -173,6 +177,20 @@
   "secret-validate":{
     "title":"Verifizierung Wiederherstellungs-Satz",
     "text":"Ordnen Sie die Wörter in der richtigen Reihenfolge, indem Sie das betreffende Wort jeweils anwählen."
+  },
+
+  "secret-wallet-interaction":{
+    "title":"Wallet Interaktion",
+    "same-device_heading":"Sieht so aus, als würden Sie  <span class=\"style__strong color__primary\">AirGap Vault</span> und auf dem <span class=\"style__strong color__primary\">gleichen Gerät</span> verwenden.",
+    "offline-device_heading":"Sieht so aus, als würden Sie <span class=\"style__strong color__primary\">AirGap Vault</span> auf einem <span class=\"style__strong color__primary\">Offline-Gerät</span> verwenden.",
+    "text":"Sie können definieren, wo Sie AirGap Wallet installiert haben, um die Interaktion mit dem Vault etwas zu vereinfachen.",
+    "selector": {
+      "always":"Immer nachfragen",
+      "same-device":"Vault und Wallet auf dem gleichen Gerät",
+      "offline-device":"Vault ist ein Offline-Gerät"
+    },
+    "continue_label":"Weiter",
+    "description":"Sie können ihre Präferenz jederzeit in den Einstellungen ändern."
   },
 
   "verify-key":{

@@ -1,5 +1,6 @@
+import { InteractionProvider } from './../../providers/interaction/interaction'
 import { Component } from '@angular/core'
-import { AlertController, IonicPage, NavController, ToastController, ModalController, PopoverController } from 'ionic-angular'
+import { AlertController, IonicPage, NavController, ToastController, ModalController } from 'ionic-angular'
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import { Secret } from '../../models/secret'
 import { SecretCreatePage } from '../secret-create/secret-create'
@@ -19,10 +20,10 @@ export class TabSettingsPage {
   constructor(
     public modalController: ModalController,
     public navController: NavController,
-    private popoverCtrl: PopoverController,
     private secretsProvider: SecretsProvider,
     private alertController: AlertController,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private interactionProvider: InteractionProvider
   ) {
     this.secrets = this.secretsProvider.currentSecretsList.asObservable()
   }
@@ -33,6 +34,11 @@ export class TabSettingsPage {
       if (list.length === 0) {
         this.navController.push(SecretCreatePage).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       }
+      list.forEach(secret => {
+        if (this.interactionProvider.getInteractionSettingOfSecret(secret)) {
+          secret.hasInteractionSetting = true
+        }
+      })
     })
   }
 

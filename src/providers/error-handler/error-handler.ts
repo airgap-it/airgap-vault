@@ -10,7 +10,8 @@ export enum ErrorCategory {
   SCHEME_ROUTING = 'scheme_routing',
   SECURE_STORAGE = 'secure_storage',
   INIT_CHECK = 'init_check',
-  ENTROPY_COLLECTION = 'entropy_collection'
+  ENTROPY_COLLECTION = 'entropy_collection',
+  INTERACTION_PROVIDER = 'interaction_provider'
 }
 
 const handleErrorLocal = (category?: ErrorCategory) => {
