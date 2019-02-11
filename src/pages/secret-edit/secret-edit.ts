@@ -6,6 +6,8 @@ import { SocialRecoverySetupPage } from '../social-recovery-setup/social-recover
 import { SecretEditPopoverComponent } from './secret-edit-popover/secret-edit-popover.component'
 import { WalletSelectCoinsPage } from '../wallet-select-coins/wallet-select-coins'
 import { handleErrorLocal, ErrorCategory } from '../../providers/error-handler/error-handler'
+import { SecretWalletInteractionPage } from '../secret-wallet-interaction/secret-wallet-interaction'
+import { InteractionProvider } from '../../providers/interaction/interaction'
 
 @IonicPage()
 @Component({
@@ -14,16 +16,28 @@ import { handleErrorLocal, ErrorCategory } from '../../providers/error-handler/e
 })
 export class SecretEditPage {
   isGenerating: boolean = false
+  public interactionSetting: boolean = false
+
   private secret: Secret
 
   constructor(
     public navController: NavController,
     public popoverCtrl: PopoverController,
     public navParams: NavParams,
-    private secretsProvider: SecretsProvider
+    private secretsProvider: SecretsProvider,
+    public interactionProvider: InteractionProvider
   ) {
     this.secret = this.navParams.get('secret')
     this.isGenerating = this.navParams.get('isGenerating')
+
+    this.interactionProvider
+      .getInteractionSetting()
+      .then(interactionSetting => {
+        if (interactionSetting) {
+          this.interactionSetting = true
+        }
+      })
+      .catch(handleErrorLocal(ErrorCategory.INTERACTION_PROVIDER))
   }
 
   confirm() {
@@ -44,6 +58,10 @@ export class SecretEditPage {
 
   goToSocialRecoverySetup() {
     this.navController.push(SocialRecoverySetupPage, { secret: this.secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
+  goToWalletInteraction() {
+    this.navController.push(SecretWalletInteractionPage, { isEdit: true }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   presentEditPopover(event) {

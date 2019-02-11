@@ -18,8 +18,6 @@ import { TabWalletsPageModule } from './tab-wallets/tab-wallets.module'
 import { SecretImportPageModule } from './secret-import/secret-import.module'
 import { WarningsModalPageModule } from './warnings-modal/warnings-modal.module'
 import { SocialRecoverySetupPageModule } from './social-recovery-setup/social-recovery-setup.module'
-import { TransactionUnlockPageModule } from './transaction-unlock/transaction-unlock.module'
-import { TransactionOnboardingPageModule } from './transaction-onboarding/transaction-onboarding.module'
 import { TabScanPageModule } from './tab-scan/tab-scan.module'
 import { WalletSelectCoinsPageModule } from './wallet-select-coins/wallet-select-coins.module'
 import { SocialRecoveryShowSharePageModule } from './social-recovery-show-share/social-recovery-show-share.module'
@@ -31,7 +29,9 @@ import { IntroductionPageModule } from '../pages/introduction/introduction.modul
 import { LocalAuthenticationOnboardingPageModule } from './local-authentication-onboarding/local-authentication-onboarding.module'
 import { SecretGenerateOnboardingPageModule } from './secret-generate-onboarding/secret-generate-onboarding.module'
 import { DistributionOnboardingPageModule } from './distribution-onboarding/distribution-onboarding.module'
-import { TabSettingsPage } from './tab-settings/tab-settings'
+import { TransactionBroadcastSelectionPageModule } from './transaction-broadcast-selection/transaction-broadcast-selection.module'
+import { WalletSyncSelectionPageModule } from './wallet-sync-selection/wallet-sync-selection.module'
+import { SecretWalletInteractionPageModule } from './secret-wallet-interaction/secret-wallet-interaction.module'
 
 @NgModule({
   imports: [
@@ -60,13 +60,14 @@ import { TabSettingsPage } from './tab-settings/tab-settings'
     SocialRecoveryShowSharePageModule,
     SocialRecoveryValidateSharePageModule,
     SocialRecoveryImportPageModule,
-    TransactionUnlockPageModule,
-    TransactionOnboardingPageModule,
     WalletSelectCoinsPageModule,
     LocalAuthenticationOnboardingPageModule,
     DistributionOnboardingPageModule,
     QRCodeModule,
-    IntroductionPageModule
+    IntroductionPageModule,
+    TransactionBroadcastSelectionPageModule,
+    WalletSyncSelectionPageModule,
+    SecretWalletInteractionPageModule
   ],
   exports: []
 })

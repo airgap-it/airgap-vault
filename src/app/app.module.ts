@@ -35,6 +35,8 @@ import { ClipboardBrowserProvider } from '../providers/clipboard-browser/clipboa
 import { PermissionsProvider } from '../providers/permissions/permissions'
 import { ShareUrlProvider } from '../providers/share-url/share-url'
 import { ErrorHandlerProvider } from '../providers/error-handler/error-handler'
+import { InteractionProvider } from '../providers/interaction/interaction'
+import { DeepLinkProvider } from '../providers/deep-link/deep-link'
 
 @NgModule({
   declarations: [MyApp],
@@ -97,8 +99,10 @@ import { ErrorHandlerProvider } from '../providers/error-handler/error-handler'
     DeviceProvider,
     SchemeRoutingProvider,
     PermissionsProvider,
+    InteractionProvider,
     ShareUrlProvider,
-    ErrorHandlerProvider
+    ErrorHandlerProvider,
+    DeepLinkProvider
   ]
 })
 export class AppModule {}

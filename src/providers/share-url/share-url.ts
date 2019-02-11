@@ -1,18 +1,11 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import {
-  AirGapWallet,
-  DeserializedSyncProtocol,
-  EncodedType,
-  SyncProtocolUtils,
-  SyncWalletRequest
-} from 'airgap-coin-lib'
+import { HttpClient } from '@angular/common/http'
+import { Injectable } from '@angular/core'
+import { AirGapWallet, DeserializedSyncProtocol, EncodedType, SyncProtocolUtils, SyncWalletRequest } from 'airgap-coin-lib'
 
 @Injectable()
 export class ShareUrlProvider {
-
   constructor(public http: HttpClient) {
-    console.log('Hello ShareUrlProvider Provider');
+    console.log('Hello ShareUrlProvider Provider')
   }
 
   async generateShareURL(wallet: AirGapWallet): Promise<string> {
@@ -33,6 +26,6 @@ export class ShareUrlProvider {
 
     const serializedTx = await syncProtocol.serialize(deserializedTxSigningRequest)
 
-    return 'airgap-wallet://?d=' + serializedTx
+    return `airgap-wallet://?d=${serializedTx}`
   }
 }

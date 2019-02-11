@@ -1,11 +1,16 @@
+import { DeepLinkProvider } from './../../providers/deep-link/deep-link'
 import { Component } from '@angular/core'
-import { IonicPage, NavController, ToastController, NavParams, PopoverController } from 'ionic-angular'
-import { WalletSharePage } from '../wallet-share/wallet-share'
+import { IonicPage, NavController, ToastController, NavParams, PopoverController, Platform } from 'ionic-angular'
 import { WalletEditPopoverComponent } from './wallet-edit-popover/wallet-edit-popover.component'
-import { AirGapWallet } from 'airgap-coin-lib'
+import { AirGapWallet, DeserializedSyncProtocol, EncodedType, SyncProtocolUtils, SyncWalletRequest } from 'airgap-coin-lib'
 import { Clipboard } from '@ionic-native/clipboard'
 import { ShareUrlProvider } from '../../providers/share-url/share-url'
 import { ErrorCategory, handleErrorLocal } from '../../providers/error-handler/error-handler'
+import { WalletSyncSelectionPage } from '../wallet-sync-selection/wallet-sync-selection'
+import { WalletSharePage } from '../wallet-share/wallet-share'
+import { InteractionProvider } from '../../providers/interaction/interaction'
+
+declare var window: any
 
 @IonicPage()
 @Component({
@@ -22,7 +27,10 @@ export class WalletAddressPage {
     private clipboard: Clipboard,
     private navController: NavController,
     private navParams: NavParams,
-    private shareUrlProvider: ShareUrlProvider
+    private interactionProvider: InteractionProvider,
+    private platform: Platform,
+    private shareUrlProvider: ShareUrlProvider,
+    private deepLinkProvider: DeepLinkProvider
   ) {
     this.wallet = this.navParams.get('wallet')
   }
@@ -36,8 +44,35 @@ export class WalletAddressPage {
     this.navController.pop().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  share() {
-    this.navController.push(WalletSharePage, { wallet: this.wallet }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  async share() {
+    let interactionSetting = await this.interactionProvider.getInteractionSetting()
+    if (interactionSetting) {
+      switch (interactionSetting) {
+        case 'always':
+          this.navController
+            .push(WalletSyncSelectionPage, {
+              wallet: this.wallet,
+              walletShareUrl: this.walletShareUrl
+            })
+            .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+          break
+        case 'same_device':
+          this.deepLinkProvider.sameDeviceDeeplink(this.walletShareUrl)
+          break
+        case 'offline_device':
+          this.navController
+            .push(WalletSharePage, { walletShareUrl: this.walletShareUrl })
+            .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+          break
+      }
+    } else {
+      this.navController
+        .push(WalletSyncSelectionPage, {
+          wallet: this.wallet,
+          walletShareUrl: this.walletShareUrl
+        })
+        .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    }
   }
 
   presentEditPopover(event) {
@@ -64,7 +99,7 @@ export class WalletAddressPage {
       showCloseButton: true,
       closeButtonText: 'Ok'
     })
-    await toast.present()
+    toast.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
   }
 
   async copyShareUrlToClipboard() {
