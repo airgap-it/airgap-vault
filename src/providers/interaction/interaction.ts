@@ -43,8 +43,6 @@ export class InteractionProvider {
   public startInteraction(navCtrl: NavController, interactionOptions: IInteractionOptions, secret: Secret) {
     const interactionSetting = secret.interactionSetting
 
-    console.log('starting interaction', secret, interactionOptions)
-
     if (interactionOptions.communicationType) {
       if (interactionSetting === InteractionSetting.UNDETERMINED) {
         this.goToInteractionSelectionSettingsPage(navCtrl, interactionOptions)
