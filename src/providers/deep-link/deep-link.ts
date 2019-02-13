@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core'
-import { Platform } from 'ionic-angular'
+import { Platform, AlertController } from 'ionic-angular'
+import { handleErrorLocal, ErrorCategory } from '../error-handler/error-handler'
 
 declare let window: any
 
 @Injectable()
 export class DeepLinkProvider {
-  constructor(private platform: Platform) {}
+  constructor(private platform: Platform, private alertCtrl: AlertController) {}
 
   sameDeviceDeeplink(url: string) {
     let sApp
@@ -18,6 +19,21 @@ export class DeepLinkProvider {
       })
     } else if (this.platform.is('ios')) {
       sApp = window.startApp.set(url)
+    } else {
+      console.log('same device sync only supported on devices')
+      let alert = this.alertCtrl.create({
+        title: 'Oops',
+        message: 'Deeplinking is only supported on devices.',
+        enableBackdropDismiss: false,
+        buttons: [
+          {
+            text: 'Ok',
+            role: 'cancel'
+          }
+        ]
+      })
+      alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
+      return
     }
 
     sApp.start(

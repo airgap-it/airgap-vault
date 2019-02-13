@@ -10,11 +10,11 @@ import {
   DeserializedSyncProtocol,
   EncodedType
 } from 'airgap-coin-lib'
-import { TransactionBroadcastSelectionPage } from '../transaction-broadcast-selection/transaction-broadcast-selection'
+import { InteractionSelectionPage } from '../interaction-selection/interaction-selection'
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import bip39 from 'bip39'
-import { InteractionProvider } from '../../providers/interaction/interaction'
 import { TransactionSignedPage } from '../transaction-signed/transaction-signed'
+import { InteractionProvider, InteractionOperationType, InteractionSetting } from '../../providers/interaction/interaction'
 
 declare let window: any
 
@@ -25,7 +25,6 @@ declare let window: any
 })
 export class TransactionDetailPage {
   broadcastUrl?: string
-  signedTxQr?: string
 
   public transaction: UnsignedTransaction
   public wallet: AirGapWallet
@@ -35,10 +34,10 @@ export class TransactionDetailPage {
     public navController: NavController,
     public navParams: NavParams,
     private ngZone: NgZone,
-    private secretProvider: SecretsProvider,
-    private interactionProvider: InteractionProvider,
+    private secretsProvider: SecretsProvider,
     private platform: Platform,
-    private deepLinkProvider: DeepLinkProvider
+    private deepLinkProvider: DeepLinkProvider,
+    private interactionProvider: InteractionProvider
   ) {}
 
   ionViewWillEnter() {
@@ -47,50 +46,21 @@ export class TransactionDetailPage {
     this.airGapTx = this.wallet.coinProtocol.getTransactionDetails(this.transaction)
   }
 
-  async signAndGoToTransactionBroadcastSelectionPage() {
+  async signAndGoToNextPage() {
     const signedTx = await this.signTransaction(this.transaction, this.wallet)
     this.broadcastUrl = await this.generateBroadcastUrl(this.wallet, signedTx, this.transaction)
 
-    this.ngZone.run(() => {
-      this.signedTxQr = signedTx
-    })
-    let interactionSetting = await this.interactionProvider.getInteractionSetting()
-    if (interactionSetting) {
-      switch (interactionSetting) {
-        case 'always':
-          console.log('always')
-          this.navController
-            .push(TransactionBroadcastSelectionPage, {
-              transaction: this.transaction,
-              wallet: this.wallet,
-              broadcastUrl: this.broadcastUrl,
-              signedTxQr: this.signedTxQr
-            })
-            .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-          break
-        case 'same_device':
-          this.deepLinkProvider.sameDeviceDeeplink(this.broadcastUrl)
-          break
-        case 'offline_device':
-          this.navController
-            .push(TransactionSignedPage, {
-              transaction: this.transaction,
-              wallet: this.wallet,
-              broadcastUrl: this.broadcastUrl,
-              signedTxQr: this.signedTxQr
-            })
-            .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-      }
-    } else {
-      this.navController
-        .push(TransactionBroadcastSelectionPage, {
-          transaction: this.transaction,
-          wallet: this.wallet,
-          broadcastUrl: this.broadcastUrl,
-          signedTxQr: this.signedTxQr
-        })
-        .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-    }
+    this.interactionProvider.startInteraction(
+      this.navController,
+      {
+        operationType: InteractionOperationType.TRANSACTION_BROADCAST,
+        url: this.broadcastUrl,
+        wallet: this.wallet,
+        signedTx: signedTx,
+        transaction: this.transaction
+      },
+      this.secretsProvider.getActiveSecret()
+    )
   }
 
   async generateBroadcastUrl(wallet: AirGapWallet, signedTx: string, unsignedTransaction: UnsignedTransaction): Promise<string> {
@@ -116,14 +86,14 @@ export class TransactionDetailPage {
   }
 
   signTransaction(transaction: UnsignedTransaction, wallet: AirGapWallet): Promise<string> {
-    const secret = this.secretProvider.findByPublicKey(wallet.publicKey)
+    const secret = this.secretsProvider.findByPublicKey(wallet.publicKey)
 
     // we should handle this case here as well
     if (!secret) {
       console.warn('no secret found to this public key')
     }
 
-    return this.secretProvider.retrieveEntropyForSecret(secret).then(entropy => {
+    return this.secretsProvider.retrieveEntropyForSecret(secret).then(entropy => {
       let seed = bip39.mnemonicToSeedHex(bip39.entropyToMnemonic(entropy))
       if (wallet.isExtendedPublicKey) {
         const extendedPrivateKey = wallet.coinProtocol.getExtendedPrivateKeyFromHexSecret(seed, wallet.derivationPath)
