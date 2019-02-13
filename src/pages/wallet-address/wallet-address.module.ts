@@ -6,12 +6,10 @@ import { QRCodeModule } from 'angularx-qrcode'
 import { MaterialIconsModule } from 'ionic2-material-icons'
 import { WalletEditPopoverComponent } from './wallet-edit-popover/wallet-edit-popover.component'
 import { TranslateModule } from '@ngx-translate/core'
-import { InteractionProvider } from '../../providers/interaction/interaction'
 
 @NgModule({
   declarations: [WalletAddressPage, WalletEditPopoverComponent],
   imports: [ComponentsModule, QRCodeModule, MaterialIconsModule, IonicPageModule.forChild(WalletAddressPage), TranslateModule],
-  entryComponents: [WalletAddressPage, WalletEditPopoverComponent],
-  providers: [InteractionProvider]
+  entryComponents: [WalletAddressPage, WalletEditPopoverComponent]
 })
 export class WalletAddressPageModule {}

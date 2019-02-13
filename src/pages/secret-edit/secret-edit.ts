@@ -1,13 +1,13 @@
 import { Component } from '@angular/core'
 import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular'
 import { Secret } from '../../models/secret'
+import { InteractionSetting } from '../../providers/interaction/interaction'
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import { SocialRecoverySetupPage } from '../social-recovery-setup/social-recovery-setup'
 import { SecretEditPopoverComponent } from './secret-edit-popover/secret-edit-popover.component'
 import { WalletSelectCoinsPage } from '../wallet-select-coins/wallet-select-coins'
 import { handleErrorLocal, ErrorCategory } from '../../providers/error-handler/error-handler'
-import { SecretWalletInteractionPage } from '../secret-wallet-interaction/secret-wallet-interaction'
-import { InteractionProvider } from '../../providers/interaction/interaction'
+import { InteractionSelectionSettingsPage } from '../interaction-selection-settings/interaction-selection-settings'
 
 @IonicPage()
 @Component({
@@ -24,20 +24,12 @@ export class SecretEditPage {
     public navController: NavController,
     public popoverCtrl: PopoverController,
     public navParams: NavParams,
-    private secretsProvider: SecretsProvider,
-    public interactionProvider: InteractionProvider
+    private secretsProvider: SecretsProvider
   ) {
     this.secret = this.navParams.get('secret')
     this.isGenerating = this.navParams.get('isGenerating')
 
-    this.interactionProvider
-      .getInteractionSetting()
-      .then(interactionSetting => {
-        if (interactionSetting) {
-          this.interactionSetting = true
-        }
-      })
-      .catch(handleErrorLocal(ErrorCategory.INTERACTION_PROVIDER))
+    this.interactionSetting = this.secret.interactionSetting !== InteractionSetting.UNDETERMINED
   }
 
   confirm() {
@@ -61,7 +53,9 @@ export class SecretEditPage {
   }
 
   goToWalletInteraction() {
-    this.navController.push(SecretWalletInteractionPage, { isEdit: true }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.navController
+      .push(InteractionSelectionSettingsPage, { secret: this.secret, isEdit: true })
+      .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   presentEditPopover(event) {

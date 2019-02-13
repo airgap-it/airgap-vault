@@ -6,9 +6,10 @@ import { AirGapWallet, DeserializedSyncProtocol, EncodedType, SyncProtocolUtils,
 import { Clipboard } from '@ionic-native/clipboard'
 import { ShareUrlProvider } from '../../providers/share-url/share-url'
 import { ErrorCategory, handleErrorLocal } from '../../providers/error-handler/error-handler'
-import { WalletSyncSelectionPage } from '../wallet-sync-selection/wallet-sync-selection'
+import { InteractionSelectionPage } from '../interaction-selection/interaction-selection'
 import { WalletSharePage } from '../wallet-share/wallet-share'
-import { InteractionProvider } from '../../providers/interaction/interaction'
+import { SecretsProvider } from '../../providers/secrets/secrets.provider'
+import { InteractionProvider, InteractionOperationType, InteractionSetting } from '../../providers/interaction/interaction'
 
 declare var window: any
 
@@ -27,10 +28,11 @@ export class WalletAddressPage {
     private clipboard: Clipboard,
     private navController: NavController,
     private navParams: NavParams,
-    private interactionProvider: InteractionProvider,
+    private secretsProvider: SecretsProvider,
     private platform: Platform,
     private shareUrlProvider: ShareUrlProvider,
-    private deepLinkProvider: DeepLinkProvider
+    private deepLinkProvider: DeepLinkProvider,
+    private interactionProvider: InteractionProvider
   ) {
     this.wallet = this.navParams.get('wallet')
   }
@@ -45,34 +47,14 @@ export class WalletAddressPage {
   }
 
   async share() {
-    let interactionSetting = await this.interactionProvider.getInteractionSetting()
-    if (interactionSetting) {
-      switch (interactionSetting) {
-        case 'always':
-          this.navController
-            .push(WalletSyncSelectionPage, {
-              wallet: this.wallet,
-              walletShareUrl: this.walletShareUrl
-            })
-            .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-          break
-        case 'same_device':
-          this.deepLinkProvider.sameDeviceDeeplink(this.walletShareUrl)
-          break
-        case 'offline_device':
-          this.navController
-            .push(WalletSharePage, { walletShareUrl: this.walletShareUrl })
-            .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-          break
-      }
-    } else {
-      this.navController
-        .push(WalletSyncSelectionPage, {
-          wallet: this.wallet,
-          walletShareUrl: this.walletShareUrl
-        })
-        .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-    }
+    this.interactionProvider.startInteraction(
+      this.navController,
+      {
+        operationType: InteractionOperationType.WALLET_SYNC,
+        url: this.walletShareUrl
+      },
+      this.secretsProvider.getActiveSecret()
+    )
   }
 
   presentEditPopover(event) {
@@ -92,25 +74,22 @@ export class WalletAddressPage {
 
   async copyAddressToClipboard() {
     await this.clipboard.copy(this.wallet.receivingPublicAddress)
+    this.showToast()
+  }
+
+  async copyShareUrlToClipboard() {
+    await this.clipboard.copy(this.walletShareUrl)
+    this.showToast()
+  }
+
+  async showToast() {
     let toast = this.toastController.create({
-      message: 'Address was copied to your clipboard',
-      duration: 2000,
+      message: 'Successfully copied to your clipboard!',
+      duration: 1000,
       position: 'top',
       showCloseButton: true,
       closeButtonText: 'Ok'
     })
     toast.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
-  }
-
-  async copyShareUrlToClipboard() {
-    await this.clipboard.copy(this.walletShareUrl)
-    let toast = this.toastController.create({
-      message: 'Address was copied to your clipboard',
-      duration: 2000,
-      position: 'top',
-      showCloseButton: true,
-      closeButtonText: 'Ok'
-    })
-    await toast.present()
   }
 }

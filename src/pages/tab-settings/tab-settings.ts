@@ -1,4 +1,3 @@
-import { InteractionProvider } from './../../providers/interaction/interaction'
 import { Component } from '@angular/core'
 import { AlertController, IonicPage, NavController, ToastController, ModalController } from 'ionic-angular'
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
@@ -22,8 +21,7 @@ export class TabSettingsPage {
     public navController: NavController,
     private secretsProvider: SecretsProvider,
     private alertController: AlertController,
-    private toastController: ToastController,
-    private interactionProvider: InteractionProvider
+    private toastController: ToastController
   ) {
     this.secrets = this.secretsProvider.currentSecretsList.asObservable()
   }
@@ -34,11 +32,6 @@ export class TabSettingsPage {
       if (list.length === 0) {
         this.navController.push(SecretCreatePage).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       }
-      list.forEach(secret => {
-        if (this.interactionProvider.getInteractionSettingOfSecret(secret)) {
-          secret.hasInteractionSetting = true
-        }
-      })
     })
   }
 

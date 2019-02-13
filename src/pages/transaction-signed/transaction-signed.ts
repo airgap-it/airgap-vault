@@ -1,6 +1,6 @@
 import { Component } from '@angular/core'
 import { IonicPage, NavController, NavParams } from 'ionic-angular'
-import { AirGapWallet, UnsignedTransaction, IAirGapTransaction } from 'airgap-coin-lib'
+import { AirGapWallet, SignedTransaction, IAirGapTransaction, UnsignedTransaction } from 'airgap-coin-lib'
 import { handleErrorLocal, ErrorCategory } from '../../providers/error-handler/error-handler'
 
 enum TransactionQRType {
@@ -14,28 +14,27 @@ enum TransactionQRType {
   templateUrl: 'transaction-signed.html'
 })
 export class TransactionSignedPage {
-  signedTx?: string
-  broadcastUrl?: string
+  public signedTx: string
+  public interactionUrl: string
 
-  transaction: UnsignedTransaction
-  airGapTx: IAirGapTransaction
-  wallet: AirGapWallet
+  public airGapTx: IAirGapTransaction
+  public wallet: AirGapWallet
 
-  qrType: TransactionQRType = 0
+  public qrType: TransactionQRType = 0
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this.broadcastUrl = this.navParams.get('broadcastUrl')
-    this.transaction = this.navParams.get('transaction')
+    this.interactionUrl = this.navParams.get('interactionUrl')
     this.wallet = this.navParams.get('wallet')
-    this.signedTx = this.navParams.get('signedTxQr')
-    this.airGapTx = this.wallet.coinProtocol.getTransactionDetails(this.transaction)
+    this.signedTx = this.navParams.get('signedTx')
+    const transaction: UnsignedTransaction = this.navParams.get('transaction')
+    this.airGapTx = this.wallet.coinProtocol.getTransactionDetails(transaction)
   }
 
-  switchQR() {
+  public switchQR() {
     this.qrType = this.qrType === TransactionQRType.SignedAirGap ? TransactionQRType.SignedRaw : TransactionQRType.SignedAirGap
   }
 
-  done() {
+  public done() {
     this.navCtrl.popToRoot().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

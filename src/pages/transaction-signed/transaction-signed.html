@@ -11,9 +11,9 @@
 
   <ion-row justify-content-center padding-top>
     <qrcode
-      *ngIf="broadcastUrl && qrType === 0"
+      *ngIf="interactionUrl && qrType === 0"
       [level]="'L'"
-      [qrdata]="broadcastUrl"
+      [qrdata]="interactionUrl"
       backgroundAlpha="1"
       foreground="black"
       [size]="300"

@@ -8,10 +8,10 @@ import { handleErrorLocal, ErrorCategory } from '../../providers/error-handler/e
   templateUrl: 'wallet-share.html'
 })
 export class WalletSharePage {
-  private walletShareUrl: string
+  public interactionUrl: string
 
   constructor(private navController: NavController, private navParams: NavParams) {
-    this.walletShareUrl = this.navParams.get('walletShareUrl')
+    this.interactionUrl = this.navParams.get('interactionUrl')
   }
 
   done() {
