@@ -96,6 +96,8 @@
     "myetherwallet-blockies": "0.1.1",
     "rxjs": "5.5.2",
     "secrets.js-grempe": "^1.1.0",
+    "simple-keyboard": "^2.15.1",
+    "simple-keyboard-autocorrect": "^1.2.4",
     "sw-toolbox": "3.6.0",
     "websocket": "^1.0.26",
     "zone.js": "0.8.18"
