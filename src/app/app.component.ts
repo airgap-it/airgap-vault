@@ -7,6 +7,7 @@ import { Deeplinks } from '@ionic-native/deeplinks'
 import { StartupChecksProvider } from '../providers/startup-checks/startup-checks.provider'
 import { SchemeRoutingProvider } from '../providers/scheme-routing/scheme-routing'
 import { TranslateService } from '@ngx-translate/core'
+import { ProtocolsProvider } from '../providers/protocols/protocols'
 
 interface FlatPromise<T> {
   promise: Promise<T>
@@ -43,8 +44,10 @@ export class MyApp {
     private deepLinks: Deeplinks,
     private startupChecks: StartupChecksProvider,
     private schemeRoutingProvider: SchemeRoutingProvider,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private protocolsProvider: ProtocolsProvider
   ) {
+    this.protocolsProvider.addProtocols()
     this.platform
       .ready()
       .then(() => {

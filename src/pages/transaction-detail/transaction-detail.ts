@@ -15,6 +15,7 @@ import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import bip39 from 'bip39'
 import { TransactionSignedPage } from '../transaction-signed/transaction-signed'
 import { InteractionProvider, InteractionOperationType, InteractionSetting } from '../../providers/interaction/interaction'
+import { BigNumber } from 'bignumber.js'
 
 declare let window: any
 
@@ -40,10 +41,14 @@ export class TransactionDetailPage {
     private interactionProvider: InteractionProvider
   ) {}
 
-  ionViewWillEnter() {
+  async ionViewWillEnter() {
     this.transaction = this.navParams.get('transaction')
     this.wallet = this.navParams.get('wallet')
-    this.airGapTx = this.wallet.coinProtocol.getTransactionDetails(this.transaction)
+    try {
+      this.airGapTx = await this.wallet.coinProtocol.getTransactionDetails(this.transaction)
+    } catch (e) {
+      console.log('cannot read tx details', e)
+    }
   }
 
   async signAndGoToNextPage() {
@@ -64,7 +69,18 @@ export class TransactionDetailPage {
   }
 
   async generateBroadcastUrl(wallet: AirGapWallet, signedTx: string, unsignedTransaction: UnsignedTransaction): Promise<string> {
-    const txDetails = wallet.coinProtocol.getTransactionDetails(unsignedTransaction)
+    let txDetails
+    try {
+      txDetails = await wallet.coinProtocol.getTransactionDetails(unsignedTransaction)
+    } catch (e) {
+      txDetails = {
+        from: 'UNKNOWN',
+        amount: 'UNKNOWN',
+        fee: 'UNKNOWN',
+        to: 'UNKNOWN'
+      }
+    }
+
     const syncProtocol = new SyncProtocolUtils()
     const deserializedTxSigningRequest: DeserializedSyncProtocol = {
       version: 1,

@@ -22,12 +22,14 @@ export class TransactionSignedPage {
 
   public qrType: TransactionQRType = 0
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams) {}
+
+  async ionViewWillEnter() {
     this.interactionUrl = this.navParams.get('interactionUrl')
     this.wallet = this.navParams.get('wallet')
     this.signedTx = this.navParams.get('signedTx')
     const transaction: UnsignedTransaction = this.navParams.get('transaction')
-    this.airGapTx = this.wallet.coinProtocol.getTransactionDetails(transaction)
+    this.airGapTx = await this.wallet.coinProtocol.getTransactionDetails(transaction)
   }
 
   public switchQR() {

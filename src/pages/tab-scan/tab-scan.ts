@@ -181,8 +181,9 @@ export class TabScanPage {
             const payload = rawTx
 
             try {
-              const tx = this.transactionProvider.constructFromPayload(payload, wallet)
-              resolve(tx)
+              this.transactionProvider.constructFromPayload(payload, wallet).then(tx => {
+                resolve(tx)
+              })
             } catch (error) {
               return reject(error)
             }

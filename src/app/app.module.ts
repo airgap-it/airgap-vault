@@ -37,6 +37,7 @@ import { ShareUrlProvider } from '../providers/share-url/share-url'
 import { ErrorHandlerProvider } from '../providers/error-handler/error-handler'
 import { InteractionProvider } from '../providers/interaction/interaction'
 import { DeepLinkProvider } from '../providers/deep-link/deep-link'
+import { ProtocolsProvider } from '../providers/protocols/protocols'
 
 @NgModule({
   declarations: [MyApp],
@@ -102,7 +103,8 @@ import { DeepLinkProvider } from '../providers/deep-link/deep-link'
     InteractionProvider,
     ShareUrlProvider,
     ErrorHandlerProvider,
-    DeepLinkProvider
+    DeepLinkProvider,
+    ProtocolsProvider
   ]
 })
 export class AppModule {}
