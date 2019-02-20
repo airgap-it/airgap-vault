@@ -12,7 +12,6 @@ import { Clipboard } from '@ionic-native/clipboard'
 import { Diagnostic } from '@ionic-native/diagnostic'
 import { AppVersion } from '@ionic-native/app-version'
 import { MaterialIconsModule } from 'ionic2-material-icons'
-import { TransactionsProvider } from '../providers/transactions/transactions'
 import { SecretsProvider } from '../providers/secrets/secrets.provider'
 import { SecureStorageService } from '../providers/storage/secure-storage'
 import { SecureStorageFactory } from '../providers/storage/secure-storage.factory'
@@ -67,7 +66,6 @@ import { ProtocolsProvider } from '../providers/protocols/protocols'
     DeviceMotion,
     Diagnostic,
     HttpClientModule,
-    TransactionsProvider,
     SecretsProvider,
     EntropyService,
     StartupChecksProvider,

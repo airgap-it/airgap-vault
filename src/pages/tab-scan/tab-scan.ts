@@ -2,7 +2,6 @@ import { Component, ViewChild } from '@angular/core'
 import { AlertController, IonicPage, NavController, Platform } from 'ionic-angular'
 import { Transaction } from '../../models/transaction.model'
 import { ScannerProvider } from '../../providers/scanner/scanner'
-import { TransactionsProvider } from '../../providers/transactions/transactions'
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import { SchemeRoutingProvider } from '../../providers/scheme-routing/scheme-routing'
 import { ZXingScannerComponent } from '@zxing/ngx-scanner'
@@ -34,7 +33,6 @@ export class TabScanPage {
     private navController: NavController,
     private platform: Platform,
     private secretsProvider: SecretsProvider,
-    private transactionProvider: TransactionsProvider,
     private scanner: ScannerProvider,
     private permissionsProvider: PermissionsProvider,
     private translateService: TranslateService
