@@ -41,7 +41,9 @@ export class ProtocolsProvider {
     }
   ]
 
-  constructor() {}
+  constructor() {
+    /* */
+  }
 
   addProtocols() {
     addSupportedProtocol(AeternityERC20Token)

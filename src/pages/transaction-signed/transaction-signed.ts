@@ -29,7 +29,11 @@ export class TransactionSignedPage {
     this.wallet = this.navParams.get('wallet')
     this.signedTx = this.navParams.get('signedTx')
     const transaction: UnsignedTransaction = this.navParams.get('transaction')
-    this.airGapTx = await this.wallet.coinProtocol.getTransactionDetails(transaction)
+    try {
+      this.airGapTx = await this.wallet.coinProtocol.getTransactionDetails(transaction)
+    } catch (e) {
+      console.warn(e)
+    }
   }
 
   public switchQR() {

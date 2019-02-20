@@ -11,15 +11,17 @@ export class FeeConverterPipe implements PipeTransform {
       // console.warn(`FeeConverterPipe: necessary properties missing!\n` + `Protocol: ${args.protocolIdentifier}\n` + `Value: ${value}`)
       return ''
     }
+    let protocol
 
-    const protocol = getProtocolByIdentifier(args.protocolIdentifier)
-    if (!protocol) {
+    try {
+      protocol = getProtocolByIdentifier(args.protocolIdentifier)
+    } catch (e) {
       return ''
     }
 
     const amount = new BigNumber(value)
     const fee = amount.shiftedBy(-1 * protocol.feeDecimals)
 
-    return `${fee.toFixed()} ${protocol.feeSymbol.toUpperCase()}`
+    return fee.toFixed() + ' ' + protocol.feeSymbol.toUpperCase()
   }
 }

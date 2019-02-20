@@ -17,8 +17,11 @@ export class AmountConverterPipe implements PipeTransform {
       return ''
     }
 
-    const protocol = getProtocolByIdentifier(args.protocolIdentifier)
-    if (!protocol) {
+    let protocol
+
+    try {
+      protocol = getProtocolByIdentifier(args.protocolIdentifier)
+    } catch (e) {
       return ''
     }
 
@@ -71,16 +74,16 @@ export class AmountConverterPipe implements PipeTransform {
     result = result.dividedToIntegerBy(1000)
 
     if (result.toFixed().length <= maxDigits) {
-      return `${result.toFormat()}K`
+      return result.toFormat() + 'K'
     }
 
     if (result.toFixed().length <= 3) {
-      return `${result.toFormat()}K`
+      return result.toFormat() + 'K'
     }
 
     // number is too long, take 3 digits away and try again
     result = result.dividedToIntegerBy(1000)
 
-    return `${result.toFormat()}M`
+    return result.toFormat() + 'M'
   }
 }
