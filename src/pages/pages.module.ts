@@ -3,6 +3,7 @@ import { IonicModule } from 'ionic-angular'
 import { BrowserModule } from '@angular/platform-browser'
 import { MaterialIconsModule } from 'ionic2-material-icons'
 import { ComponentsModule } from '../components/components.module'
+import { AboutPageModule } from './about/about.module'
 import { SecretGeneratePageModule } from './secret-generate/secret-generate.module'
 import { SecretValidatePageModule } from './secret-validate/secret-validate.module'
 import { SecretCreatePageModule } from './secret-create/secret-create.module'
@@ -37,6 +38,7 @@ import { InteractionSelectionSettingsPageModule } from './interaction-selection-
     BrowserModule,
     MaterialIconsModule,
     ComponentsModule,
+    AboutPageModule,
     SecretGeneratePageModule,
     SecretGenerateOnboardingPageModule,
     SecretValidatePageModule,

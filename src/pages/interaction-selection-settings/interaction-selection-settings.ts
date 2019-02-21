@@ -38,7 +38,7 @@ export class InteractionSelectionSettingsPage {
     private interactionProvider: InteractionProvider
   ) {}
 
-  async ionViewDidEnter() {
+  async ionViewWillLoad() {
     this.isEdit = await this.navParams.get('isEdit')
     this.interactionOptions = await this.navParams.get('interactionOptions')
 
