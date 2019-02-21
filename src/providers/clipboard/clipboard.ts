@@ -21,8 +21,20 @@ export class ClipboardProvider {
 
   async copyAndShowToast(text: string, toastMessage: string = 'Successfully copied to your clipboard!') {
     try {
-      this.copy(text)
-      this.showToast(toastMessage)
+      await this.copy(text)
+      await this.showToast(toastMessage)
+    } catch (err) {
+      console.error('Failed to copy: ', err)
+    }
+  }
+
+  async paste(): Promise<string> {
+    try {
+      if (this.platform.is('cordova')) {
+        return this.clipboard.paste()
+      } else {
+        return (navigator as any).clipboard.readText()
+      }
     } catch (err) {
       console.error('Failed to copy: ', err)
     }
