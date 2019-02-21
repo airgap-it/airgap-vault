@@ -50,6 +50,7 @@ export class MyApp {
     private translate: TranslateService,
     private protocolsProvider: ProtocolsProvider
   ) {
+    window['appHasStarted'] = true
     this.initializeApp().catch(handleErrorLocal(ErrorCategory.OTHER))
   }
 
