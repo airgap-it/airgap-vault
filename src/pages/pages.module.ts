@@ -22,7 +22,6 @@ import { TabScanPageModule } from './tab-scan/tab-scan.module'
 import { WalletSelectCoinsPageModule } from './wallet-select-coins/wallet-select-coins.module'
 import { SocialRecoveryShowSharePageModule } from './social-recovery-show-share/social-recovery-show-share.module'
 import { SocialRecoveryValidateSharePageModule } from './social-recovery-validate-share/social-recovery-validate-share.module'
-import { QRCodeModule } from 'angularx-qrcode'
 import { WalletSharePageModule } from './wallet-share/wallet-share.module'
 import { SocialRecoveryImportPageModule } from './social-recovery-import/social-recovery-import.module'
 import { IntroductionPageModule } from '../pages/introduction/introduction.module'
@@ -62,7 +61,6 @@ import { InteractionSelectionSettingsPageModule } from './interaction-selection-
     WalletSelectCoinsPageModule,
     LocalAuthenticationOnboardingPageModule,
     DistributionOnboardingPageModule,
-    QRCodeModule,
     IntroductionPageModule,
     InteractionSelectionPageModule,
     InteractionSelectionSettingsPageModule

@@ -19,6 +19,8 @@ import { FeeConverterPipe } from './pipes/fee-converter/fee-converter.pipe'
 import { AmountConverterPipe } from './pipes/amount-converter/amount-converter.pipe'
 import { TranslateModule } from '@ngx-translate/core'
 import { SecretItemComponent } from './secret-item/secret-item'
+import { QrClipboardComponent } from './qr-clipboard/qr-clipboard'
+import { QRCodeModule } from 'angularx-qrcode'
 
 @NgModule({
   declarations: [
@@ -37,9 +39,10 @@ import { SecretItemComponent } from './secret-item/secret-item'
     FeeConverterPipe,
     AmountConverterPipe,
     SecretItemComponent,
-    AboutPopoverComponent
+    AboutPopoverComponent,
+    QrClipboardComponent
   ],
-  imports: [IonicModule, BrowserModule, TranslateModule, MaterialIconsModule],
+  imports: [IonicModule, BrowserModule, TranslateModule, MaterialIconsModule, QRCodeModule],
   exports: [
     EntropyProgressComponent,
     TouchEntropyComponent,
@@ -55,7 +58,8 @@ import { SecretItemComponent } from './secret-item/secret-item'
     FeeConverterPipe,
     AmountConverterPipe,
     SecretItemComponent,
-    AboutPopoverComponent
+    AboutPopoverComponent,
+    QrClipboardComponent
   ]
 })
 export class ComponentsModule {}

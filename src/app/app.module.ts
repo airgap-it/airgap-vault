@@ -30,7 +30,7 @@ import { IonicStorageModule } from '@ionic/storage'
 import { DeviceMotion } from '@ionic-native/device-motion'
 import { StartupChecksProvider } from '../providers/startup-checks/startup-checks.provider'
 import { SchemeRoutingProvider } from '../providers/scheme-routing/scheme-routing'
-import { ClipboardBrowserProvider } from '../providers/clipboard-browser/clipboard-browser'
+import { ClipboardProvider } from '../providers/clipboard/clipboard'
 import { PermissionsProvider } from '../providers/permissions/permissions'
 import { ShareUrlProvider } from '../providers/share-url/share-url'
 import { ErrorHandlerProvider } from '../providers/error-handler/error-handler'
@@ -70,6 +70,7 @@ import { ProtocolsProvider } from '../providers/protocols/protocols'
     EntropyService,
     StartupChecksProvider,
     ScannerProvider,
+    Clipboard,
     {
       provide: SecureStorageService,
       useFactory: SecureStorageFactory,
@@ -90,11 +91,7 @@ import { ProtocolsProvider } from '../providers/protocols/protocols'
       useFactory: GyroscopeServiceFactory,
       deps: [Platform, DeviceMotion]
     },
-    {
-      provide: Clipboard,
-      useFactory: (platform: Platform) => (platform.is('cordova') ? new Clipboard() : new ClipboardBrowserProvider()),
-      deps: [Platform]
-    },
+    ClipboardProvider,
     DeviceProvider,
     SchemeRoutingProvider,
     PermissionsProvider,

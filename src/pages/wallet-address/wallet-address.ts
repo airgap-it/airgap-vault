@@ -3,7 +3,7 @@ import { Component } from '@angular/core'
 import { IonicPage, NavController, ToastController, NavParams, PopoverController, Platform } from 'ionic-angular'
 import { WalletEditPopoverComponent } from './wallet-edit-popover/wallet-edit-popover.component'
 import { AirGapWallet, DeserializedSyncProtocol, EncodedType, SyncProtocolUtils, SyncWalletRequest } from 'airgap-coin-lib'
-import { Clipboard } from '@ionic-native/clipboard'
+import { ClipboardProvider } from '../../providers/clipboard/clipboard'
 import { ShareUrlProvider } from '../../providers/share-url/share-url'
 import { ErrorCategory, handleErrorLocal } from '../../providers/error-handler/error-handler'
 import { InteractionSelectionPage } from '../interaction-selection/interaction-selection'
@@ -19,13 +19,13 @@ declare var window: any
   templateUrl: 'wallet-address.html'
 })
 export class WalletAddressPage {
-  private wallet: AirGapWallet
+  public wallet: AirGapWallet
   private walletShareUrl: string
 
   constructor(
     private popoverCtrl: PopoverController,
     private toastController: ToastController,
-    private clipboard: Clipboard,
+    private clipboardProvider: ClipboardProvider,
     private navController: NavController,
     private navParams: NavParams,
     private secretsProvider: SecretsProvider,
@@ -39,7 +39,6 @@ export class WalletAddressPage {
 
   async ionViewDidEnter() {
     this.walletShareUrl = await this.shareUrlProvider.generateShareURL(this.wallet)
-    console.log('walletShareUrl: ' + this.walletShareUrl)
   }
 
   done() {
@@ -73,23 +72,6 @@ export class WalletAddressPage {
   }
 
   async copyAddressToClipboard() {
-    await this.clipboard.copy(this.wallet.receivingPublicAddress)
-    this.showToast()
-  }
-
-  async copyShareUrlToClipboard() {
-    await this.clipboard.copy(this.walletShareUrl)
-    this.showToast()
-  }
-
-  async showToast() {
-    let toast = this.toastController.create({
-      message: 'Successfully copied to your clipboard!',
-      duration: 1000,
-      position: 'top',
-      showCloseButton: true,
-      closeButtonText: 'Ok'
-    })
-    toast.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
+    await this.clipboardProvider.copyAndShowToast(this.wallet.receivingPublicAddress)
   }
 }

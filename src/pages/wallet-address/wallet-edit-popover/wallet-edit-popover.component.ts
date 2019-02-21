@@ -2,7 +2,7 @@ import { Component } from '@angular/core'
 import { AlertController, NavParams, ToastController, ViewController } from 'ionic-angular'
 import { SecretsProvider } from '../../../providers/secrets/secrets.provider'
 import { AirGapWallet } from 'airgap-coin-lib'
-import { Clipboard } from '@ionic-native/clipboard'
+import { ClipboardProvider } from '../../../providers/clipboard/clipboard'
 import { TranslateService } from '@ngx-translate/core'
 import { handleErrorLocal, ErrorCategory } from '../../../providers/error-handler/error-handler'
 
@@ -32,13 +32,12 @@ export class WalletEditPopoverComponent {
 
   constructor(
     private alertCtrl: AlertController,
-    private clipboard: Clipboard,
+    private clipboardProvider: ClipboardProvider,
     private toastController: ToastController,
     private navParams: NavParams,
     private secretsProvider: SecretsProvider,
     private viewCtrl: ViewController,
-    private translateService: TranslateService,
-
+    private translateService: TranslateService
   ) {
     this.wallet = this.navParams.get('wallet')
     this.onDelete = this.navParams.get('onDelete')
@@ -46,29 +45,21 @@ export class WalletEditPopoverComponent {
   }
 
   async copyAddressToClipboard() {
-    await this.clipboard.copy(this.wallet.receivingPublicAddress)
-    let toast = this.toastController.create({
-      // message: 'Address was copied to your clipboard',
-      message: this.translateService.instant('wallet-edit-delete-popover.confirm_address_copy'),
-      duration: 2000,
-      position: 'top',
-      showCloseButton: true,
-      closeButtonText: 'Ok'
-    })
-    await toast.present()
+    await this.clipboardProvider.copyAndShowToast(
+      this.wallet.receivingPublicAddress,
+      this.translateService.instant('wallet-edit-delete-popover.confirm_address_copy')
+    )
+
     await this.viewCtrl.dismiss()
   }
 
   async copyShareUrlToClipboard() {
-    await this.clipboard.copy(this.walletShareUrl)
-    let toast = this.toastController.create({
-      message: this.translateService.instant('wallet-edit-delete-popover.confirm_sync_code_copy'),
-      duration: 2000,
-      position: 'top',
-      showCloseButton: true,
-      closeButtonText: 'Ok'
-    })
-    await toast.present()
+    await this.clipboardProvider.copyAndShowToast(
+      this.walletShareUrl,
+      this.translateService.instant('wallet-edit-delete-popover.confirm_sync_code_copy')
+    )
+
+    await this.viewCtrl.dismiss()
   }
 
   delete() {

@@ -54,7 +54,7 @@
     "airgap-coin-lib": "0.3.0",
     "angular2-template-loader": "^0.6.2",
     "angular2-uuid": "^1.1.1",
-    "angularx-qrcode": "^1.1.7",
+    "angularx-qrcode": "1.5.3",
     "bignumber.js": "^8.0.0",
     "bip39": "^2.4.0",
     "com.lampa.startapp": "^6.1.6",
