@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
+    <script type="text/javascript">
+      window.appHasStarted = false
+    </script>
+
     <meta charset="UTF-8" />
     <title>AirGap Vault</title>
     <meta
@@ -57,7 +61,32 @@
 
   <body>
     <!-- Ionic's root component and where the app will load -->
+
     <ion-app></ion-app>
+
+    <script type="text/javascript">
+      var errors = []
+      var eventErrorHandler = function(e) {
+        errors.push(e.error)
+      }
+      window.addEventListener('error', eventErrorHandler, false)
+
+      setTimeout(function() {
+        if (!window.appHasStarted) {
+          var alert = confirm('An error occured, do you wish to display it?')
+          if (alert == true) {
+            for (idx = 0; idx < errors.length; ++idx) {
+              var error = errors[idx]
+              window.document.write('<h3>' + error.message + '</h3>')
+              window.document.write('<h3>' + error.stack + '</h3>')
+            }
+            window.document.write('<h2> please send a screenshot of this page to @AirGap</h2>')
+          }
+        } else {
+          window.removeEventListener('error', eventErrorHandler)
+        }
+      }, 7000)
+    </script>
 
     <!-- The polyfills js is generated during the build process -->
     <script src="build/polyfills.js"></script>
