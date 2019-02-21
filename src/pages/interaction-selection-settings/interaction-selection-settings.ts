@@ -24,7 +24,7 @@ declare let window: any
 export class InteractionSelectionSettingsPage {
   public interactionSetting = InteractionSetting
   public selectedSetting: InteractionSetting
-  private isEdit = false
+  public isEdit = false
   private secret: Secret
 
   private interactionOptions: IInteractionOptions

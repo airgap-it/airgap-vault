@@ -1,7 +1,7 @@
 <ion-header transparent no-border>
   <ion-navbar transparent>
     <ion-title>
-      <p ion-text color="white">{{ 'secret-wallet-interaction.title' | translate }}</p>
+      <p ion-text color="white">{{ 'interaction-selection-settings.title' | translate }}</p>
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -9,18 +9,18 @@
 <ion-content class="colored-background" padding>
   <h3
     *ngIf="selectedSetting === interactionSetting.SAME_DEVICE"
-    [innerHTML]="'secret-wallet-interaction.same-device_heading' | translate"
+    [innerHTML]="'interaction-selection-settings.same-device_heading' | translate"
   ></h3>
   <h3
     *ngIf="selectedSetting === interactionSetting.OFFLINE_DEVICE"
-    [innerHTML]="'secret-wallet-interaction.offline-device_heading' | translate"
+    [innerHTML]="'interaction-selection-settings.offline-device_heading' | translate"
   ></h3>
 
-  <p>{{ 'secret-wallet-interaction.text' | translate }}</p>
+  <p>{{ 'interaction-selection-settings.text' | translate }}</p>
 
   <ion-list radio-group [ngModel]="interactionSetting" (ngModelChange)="onSelectedSettingChange($event)" no-lines padding-vertical>
     <ion-item no-padding>
-      <ion-label color="white">{{ 'secret-wallet-interaction.selector.always' | translate }}</ion-label>
+      <ion-label color="white">{{ 'interaction-selection-settings.selector.always' | translate }}</ion-label>
       <ion-radio
         [checked]="selectedSetting === interactionSetting.ALWAYS_ASK"
         [value]="interactionSetting.ALWAYS_ASK"
@@ -29,7 +29,7 @@
       ></ion-radio>
     </ion-item>
     <ion-item no-padding>
-      <ion-label color="white">{{ 'secret-wallet-interaction.selector.same-device' | translate }}</ion-label>
+      <ion-label color="white">{{ 'interaction-selection-settings.selector.same-device' | translate }}</ion-label>
       <ion-radio
         [checked]="selectedSetting === interactionSetting.SAME_DEVICE"
         [value]="interactionSetting.SAME_DEVICE"
@@ -38,7 +38,7 @@
       ></ion-radio>
     </ion-item>
     <ion-item no-padding>
-      <ion-label color="white">{{ 'secret-wallet-interaction.selector.offline-device' | translate }}</ion-label>
+      <ion-label color="white">{{ 'interaction-selection-settings.selector.offline-device' | translate }}</ion-label>
       <ion-radio
         [checked]="selectedSetting === interactionSetting.OFFLINE_DEVICE"
         [value]="interactionSetting.OFFLINE_DEVICE"
@@ -48,19 +48,19 @@
     </ion-item>
   </ion-list>
 
-  <p>{{ 'secret-wallet-interaction.description' | translate }}</p>
+  <p *ngIf="!isEdit">{{ 'interaction-selection-settings.description' | translate }}</p>
 </ion-content>
 
 <ion-footer no-border>
   <ion-toolbar padding transparent>
     <ion-row justify-content-end>
       <button default ion-button id="btn-save-secret" color="primary" round (click)="goToNextPage()" item-right *ngIf="!isEdit">
-        {{ 'secret-wallet-interaction.continue_label' | translate }}
+        {{ 'interaction-selection-settings.continue_label' | translate }}
       </button>
     </ion-row>
     <ion-row justify-content-end>
       <button default ion-button id="-save-secret" color="primary" round (click)="popToRoot()" item-right *ngIf="isEdit">
-        {{ 'secret-wallet-interaction.continue_label' | translate }}
+        {{ 'interaction-selection-settings.continue_label' | translate }}
       </button>
     </ion-row>
   </ion-toolbar>
