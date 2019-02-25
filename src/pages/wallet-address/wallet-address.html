@@ -15,7 +15,7 @@
     <ion-col>
       <ion-avatar item-start>
         <identicon [address]="wallet.receivingPublicAddress"></identicon>
-        <img class="sub-avatar" [src]="'assets/symbols/' + wallet.coinProtocol.symbol.toLowerCase() + '.svg'" />
+        <currency-symbol class="sub-avatar" [symbol]="wallet.coinProtocol.symbol"></currency-symbol>
       </ion-avatar>
     </ion-col>
     <ion-col>

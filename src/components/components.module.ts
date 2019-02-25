@@ -21,6 +21,7 @@ import { TranslateModule } from '@ngx-translate/core'
 import { SecretItemComponent } from './secret-item/secret-item'
 import { QrClipboardComponent } from './qr-clipboard/qr-clipboard'
 import { QRCodeModule } from 'angularx-qrcode'
+import { CurrencySymbolComponent } from './currency-symbol/currency-symbol';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { QRCodeModule } from 'angularx-qrcode'
     AmountConverterPipe,
     SecretItemComponent,
     AboutPopoverComponent,
-    QrClipboardComponent
+    QrClipboardComponent,
+    CurrencySymbolComponent
   ],
   imports: [IonicModule, BrowserModule, TranslateModule, MaterialIconsModule, QRCodeModule],
   exports: [
@@ -59,7 +61,8 @@ import { QRCodeModule } from 'angularx-qrcode'
     AmountConverterPipe,
     SecretItemComponent,
     AboutPopoverComponent,
-    QrClipboardComponent
+    QrClipboardComponent,
+    CurrencySymbolComponent
   ]
 })
 export class ComponentsModule {}

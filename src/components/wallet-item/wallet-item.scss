@@ -6,11 +6,11 @@ wallet-item {
     position: relative;
   }
 
-  img.sub-avatar {
+  .sub-avatar {
     position: absolute;
-    right: 0;
-    bottom: 0;
-    height: auto;
-    width: 50%;
+    height: 24px;
+    width: 24px;
+    left: 40px;
+    top: 40px;
   }
 }
