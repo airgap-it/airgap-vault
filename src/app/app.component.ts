@@ -63,7 +63,11 @@ export class MyApp {
 
     if (this.platform.is('cordova')) {
       this.statusBar.styleLightContent()
-      this.statusBar.backgroundColorByHexString('#311B58')
+      if (this.platform.is('ios')) {
+        this.statusBar.backgroundColorByHexString('#311B58')
+      } else if (this.platform.is('android')) {
+        this.statusBar.backgroundColorByHexString('#FFFFFF')
+      }
       this.splashScreen.hide()
     }
 
