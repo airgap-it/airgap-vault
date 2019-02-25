@@ -1,4 +1,3 @@
-import { DeepLinkProvider } from './../../providers/deep-link/deep-link'
 import { Component } from '@angular/core'
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular'
 import { WalletSharePage } from '../wallet-share/wallet-share'
@@ -34,7 +33,6 @@ export class InteractionSelectionSettingsPage {
     public navParams: NavParams,
     private secretProvider: SecretsProvider,
     private platform: Platform,
-    private deepLinkProvider: DeepLinkProvider,
     private interactionProvider: InteractionProvider
   ) {}
 

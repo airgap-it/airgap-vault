@@ -1,4 +1,3 @@
-import { DeepLinkProvider } from './../../providers/deep-link/deep-link'
 import { Component, NgZone } from '@angular/core'
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular'
 import { ErrorCategory, handleErrorLocal } from '../../providers/error-handler/error-handler'
@@ -37,7 +36,6 @@ export class TransactionDetailPage {
     private ngZone: NgZone,
     private secretsProvider: SecretsProvider,
     private platform: Platform,
-    private deepLinkProvider: DeepLinkProvider,
     private interactionProvider: InteractionProvider
   ) {}
 

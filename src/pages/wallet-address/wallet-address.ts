@@ -1,4 +1,3 @@
-import { DeepLinkProvider } from './../../providers/deep-link/deep-link'
 import { Component } from '@angular/core'
 import { IonicPage, NavController, ToastController, NavParams, PopoverController, Platform } from 'ionic-angular'
 import { WalletEditPopoverComponent } from './wallet-edit-popover/wallet-edit-popover.component'
@@ -31,7 +30,6 @@ export class WalletAddressPage {
     private secretsProvider: SecretsProvider,
     private platform: Platform,
     private shareUrlProvider: ShareUrlProvider,
-    private deepLinkProvider: DeepLinkProvider,
     private interactionProvider: InteractionProvider
   ) {
     this.wallet = this.navParams.get('wallet')
