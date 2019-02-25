@@ -18,7 +18,7 @@ import { StorageMock } from '../../../test-config/storage-mock'
 import { Storage } from '@ionic/storage'
 import { SecureStorageServiceMock } from '../../providers/storage/secure-storage.mock'
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core'
-import { HttpLoaderFactory } from '../../app/app.module'
+import { createTranslateLoader } from '../../app/app.module'
 import { HttpClient } from '@angular/common/http'
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing'
 import { ClipboardProvider } from '../../providers/clipboard/clipboard'
@@ -47,7 +47,7 @@ describe('TransactionSigned Page', () => {
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
+            useFactory: createTranslateLoader,
             deps: [HttpClient]
           }
         })

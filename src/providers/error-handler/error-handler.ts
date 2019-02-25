@@ -12,7 +12,8 @@ export enum ErrorCategory {
   INIT_CHECK = 'init_check',
   ENTROPY_COLLECTION = 'entropy_collection',
   INTERACTION_PROVIDER = 'interaction_provider',
-  DEEPLINK_PROVIDER = 'deeplink_provider'
+  DEEPLINK_PROVIDER = 'deeplink_provider',
+  OTHER = 'other'
 }
 
 const handleErrorLocal = (category?: ErrorCategory) => {
