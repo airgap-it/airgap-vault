@@ -32,8 +32,7 @@ export class IntroductionPage {
     if (this.platform.is('android')) {
       window.open('https://play.google.com/store/apps/details?id=it.airgap.wallet')
     } else if (this.platform.is('ios')) {
-      // window.open('itms-apps://itunes.apple.com/app/[appId]') // TODO: Replace with Vault App-ID
-      this.openUrl('https://airgap.it/') // Website fallback until we know App-ID
+      window.open('itms-apps://itunes.apple.com/app/id1420996542') // AirGap Wallet
     }
   }
 
