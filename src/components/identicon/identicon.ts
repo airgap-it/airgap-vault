@@ -18,7 +18,7 @@ export class IdenticonComponent {
     }
     if (value.startsWith('ak_')) {
       this.identicon = createIcon({ seed: value }).toDataURL()
-    } else if (value.startsWith('tz')) {
+    } else if (value.startsWith('tz') || value.startsWith('kt')) {
       this.identicon = createIcon({ seed: `0${this.b582int(value)}`, spotcolor: '#000' }).toDataURL()
     } else {
       this.identicon = toDataUrl(value.toLowerCase())

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { GenericERC20, addSubProtocol, TezosKtProtocol } from 'airgap-coin-lib'
+import { GenericERC20, addSubProtocol, TezosKtProtocol, GenericERC20Configuration } from 'airgap-coin-lib'
 import { addSupportedProtocol } from 'airgap-coin-lib/dist/utils/supportedProtocols'
 import { AeternityERC20Token } from 'airgap-coin-lib/dist/protocols/ethereum/erc20/AeToken'
 
@@ -14,7 +14,7 @@ interface SubProtocolInfo {
 
 interface SubAccount {
   protocol: string
-  subProtocols: SubProtocolInfo[]
+  subProtocols: GenericERC20Configuration[]
 }
 
 @Injectable()
@@ -28,14 +28,8 @@ export class ProtocolsProvider {
           name: 'æternity Ethereum Token',
           marketSymbol: 'ae',
           identifier: 'eth-erc20-ae',
-          data: ['0x5ca9a71b1d01849c0a95490cc00559717fcf0d1d']
-        },
-        {
-          symbol: 'GNT-ERC20',
-          name: 'Golem Ethereum Token',
-          marketSymbol: 'gnt',
-          identifier: 'eth-erc20-gnt',
-          data: ['0xa74476443119A942dE498590Fe1f2454d7D4aC0d']
+          contractAddress: '0x5ca9a71b1d01849c0a95490cc00559717fcf0d1d',
+          decimals: 18
         }
       ]
     }
@@ -58,14 +52,9 @@ export class ProtocolsProvider {
             name: subProtocol.name,
             marketSymbol: subProtocol.marketSymbol,
             identifier: subProtocol.identifier,
-            contractAddress: subProtocol.data[0],
-            decimals: 18
+            contractAddress: subProtocol.contractAddress,
+            decimals: subProtocol.decimals
           })
-          /*
-            jsonRPCAPI?: string;
-            infoAPI?: string;
-            chainId?: number;
-          */
         )
       })
     })

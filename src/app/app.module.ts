@@ -4,15 +4,15 @@ import { IonicApp, IonicModule, Platform } from 'ionic-angular'
 import { SplashScreen } from '@ionic-native/splash-screen'
 import { StatusBar } from '@ionic-native/status-bar'
 import { Deeplinks } from '@ionic-native/deeplinks'
-import { HttpClientModule } from '@angular/common/http'
-import { TranslateModule } from '@ngx-translate/core'
+import { HttpClient, HttpClientModule } from '@angular/common/http'
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
+import { TranslateHttpLoader } from '@ngx-translate/http-loader'
 import { MyApp } from './app.component'
 import { CameraPreview } from '@ionic-native/camera-preview'
 import { Clipboard } from '@ionic-native/clipboard'
 import { Diagnostic } from '@ionic-native/diagnostic'
 import { AppVersion } from '@ionic-native/app-version'
 import { MaterialIconsModule } from 'ionic2-material-icons'
-import { TransactionsProvider } from '../providers/transactions/transactions'
 import { SecretsProvider } from '../providers/secrets/secrets.provider'
 import { SecureStorageService } from '../providers/storage/secure-storage'
 import { SecureStorageFactory } from '../providers/storage/secure-storage.factory'
@@ -31,7 +31,7 @@ import { IonicStorageModule } from '@ionic/storage'
 import { DeviceMotion } from '@ionic-native/device-motion'
 import { StartupChecksProvider } from '../providers/startup-checks/startup-checks.provider'
 import { SchemeRoutingProvider } from '../providers/scheme-routing/scheme-routing'
-import { ClipboardBrowserProvider } from '../providers/clipboard-browser/clipboard-browser'
+import { ClipboardProvider } from '../providers/clipboard/clipboard'
 import { PermissionsProvider } from '../providers/permissions/permissions'
 import { ShareUrlProvider } from '../providers/share-url/share-url'
 import { ErrorHandlerProvider } from '../providers/error-handler/error-handler'
@@ -39,13 +39,23 @@ import { InteractionProvider } from '../providers/interaction/interaction'
 import { DeepLinkProvider } from '../providers/deep-link/deep-link'
 import { ProtocolsProvider } from '../providers/protocols/protocols'
 
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json')
+}
+
 @NgModule({
   declarations: [MyApp],
   imports: [
     BrowserModule,
     MaterialIconsModule,
     HttpClientModule,
-    TranslateModule.forRoot(),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: createTranslateLoader,
+        deps: [HttpClient]
+      }
+    }),
     IonicModule.forRoot(MyApp, {
       tabsHideOnSubPages: true
     }),
@@ -66,12 +76,11 @@ import { ProtocolsProvider } from '../providers/protocols/protocols'
     Deeplinks,
     DeviceMotion,
     Diagnostic,
-    HttpClientModule,
-    TransactionsProvider,
     SecretsProvider,
     EntropyService,
     StartupChecksProvider,
     ScannerProvider,
+    Clipboard,
     {
       provide: SecureStorageService,
       useFactory: SecureStorageFactory,
@@ -92,11 +101,7 @@ import { ProtocolsProvider } from '../providers/protocols/protocols'
       useFactory: GyroscopeServiceFactory,
       deps: [Platform, DeviceMotion]
     },
-    {
-      provide: Clipboard,
-      useFactory: (platform: Platform) => (platform.is('cordova') ? new Clipboard() : new ClipboardBrowserProvider()),
-      deps: [Platform]
-    },
+    ClipboardProvider,
     DeviceProvider,
     SchemeRoutingProvider,
     PermissionsProvider,

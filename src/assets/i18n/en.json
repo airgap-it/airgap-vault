@@ -312,7 +312,7 @@
   },
 
   "interaction-selection": {
-    "title": "Interaction",
+    "title": "Wallet Interaction",
     "heading": "How would you like to interact with <span class=\"style__strong color__primary\">AirGap Wallet</span>?",
     "same-device_label": "Same Device",
     "same-device_info": "AirGap Vault and AirGap Wallet are installed on the same device.",
@@ -369,6 +369,18 @@
       },
       "description": "You understand the risks involved in this software, including but no limited to losing your secret, thus private keys and access to your funds.",
       "understood_label": "I understand and accept"
+    }
+  },
+  "deep-link": {
+    "not-supported-alert": {
+      "title": "Oops",
+      "message": "Deeplinking is only supported on mobile devices.",
+      "ok": "Ok"
+    },
+    "app-not-found": {
+      "title": "Oops",
+      "message": "It looks like you don't have {{otherAppName}} installed on this device.",
+      "ok": "Ok"
     }
   }
 }

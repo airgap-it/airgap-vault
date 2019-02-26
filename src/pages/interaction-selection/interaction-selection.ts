@@ -1,4 +1,3 @@
-import { DeepLinkProvider } from '../../providers/deep-link/deep-link'
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import { Component } from '@angular/core'
 import { IonicPage, NavController, NavParams } from 'ionic-angular'

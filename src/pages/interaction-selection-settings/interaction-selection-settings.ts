@@ -1,4 +1,3 @@
-import { DeepLinkProvider } from './../../providers/deep-link/deep-link'
 import { Component } from '@angular/core'
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular'
 import { WalletSharePage } from '../wallet-share/wallet-share'
@@ -24,7 +23,7 @@ declare let window: any
 export class InteractionSelectionSettingsPage {
   public interactionSetting = InteractionSetting
   public selectedSetting: InteractionSetting
-  private isEdit = false
+  public isEdit = false
   private secret: Secret
 
   private interactionOptions: IInteractionOptions
@@ -34,11 +33,10 @@ export class InteractionSelectionSettingsPage {
     public navParams: NavParams,
     private secretProvider: SecretsProvider,
     private platform: Platform,
-    private deepLinkProvider: DeepLinkProvider,
     private interactionProvider: InteractionProvider
   ) {}
 
-  async ionViewDidEnter() {
+  async ionViewWillLoad() {
     this.isEdit = await this.navParams.get('isEdit')
     this.interactionOptions = await this.navParams.get('interactionOptions')
 

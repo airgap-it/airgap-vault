@@ -16,7 +16,7 @@ import { IonicStorageModule } from '@ionic/storage'
 import { By } from '@angular/platform-browser'
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core'
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing'
-import { HttpLoaderFactory } from '../../app/app.module'
+import { createTranslateLoader } from '../../app/app.module'
 import { HttpClient } from '@angular/common/http'
 
 describe('Wallet-Select-Coin Component', () => {
@@ -39,7 +39,7 @@ describe('Wallet-Select-Coin Component', () => {
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
+            useFactory: createTranslateLoader,
             deps: [HttpClient]
           }
         })

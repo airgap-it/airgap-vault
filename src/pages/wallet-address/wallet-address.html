@@ -15,7 +15,7 @@
     <ion-col>
       <ion-avatar item-start>
         <identicon [address]="wallet.receivingPublicAddress"></identicon>
-        <img class="sub-avatar" [src]="'assets/symbols/' + wallet.coinProtocol.symbol.toLowerCase() + '.svg'" />
+        <currency-symbol class="sub-avatar" [symbol]="wallet.coinProtocol.symbol"></currency-symbol>
       </ion-avatar>
     </ion-col>
     <ion-col>
@@ -33,8 +33,8 @@
     </ion-col>
   </ion-row>
 
-  <ion-row (click)="copyAddressToClipboard()" justify-content-center padding-bottom>
-    <qrcode [qrdata]="wallet.receivingPublicAddress" backgroundAlpha="0" foreground="white" [size]="240"></qrcode>
+  <ion-row justify-content-center padding-bottom>
+    <qr-clipboard [qrdata]="wallet.receivingPublicAddress" [level]="'L'" [size]="300"></qr-clipboard>
   </ion-row>
 </ion-content>
 

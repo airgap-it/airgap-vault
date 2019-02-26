@@ -2,6 +2,7 @@ import { Component } from '@angular/core'
 import { IonicPage, NavController, NavParams } from 'ionic-angular'
 import { AirGapWallet, SignedTransaction, IAirGapTransaction, UnsignedTransaction } from 'airgap-coin-lib'
 import { handleErrorLocal, ErrorCategory } from '../../providers/error-handler/error-handler'
+import { ClipboardProvider } from '../../providers/clipboard/clipboard'
 
 enum TransactionQRType {
   SignedAirGap = 0,
@@ -22,7 +23,7 @@ export class TransactionSignedPage {
 
   public qrType: TransactionQRType = 0
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {}
+  constructor(public navCtrl: NavController, public navParams: NavParams, private clipboardProvider: ClipboardProvider) {}
 
   async ionViewWillEnter() {
     this.interactionUrl = this.navParams.get('interactionUrl')
