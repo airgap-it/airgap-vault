@@ -1,16 +1,11 @@
 wallet-item {
-  ion-avatar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
+  .symbol--icon img {
+    height: 24px;
+    width: 24px;
   }
-
-  img.sub-avatar {
+  .symbol--icon {
     position: absolute;
-    right: 0;
-    bottom: 0;
-    height: auto;
-    width: 50%;
+    left: 24px;
+    top: 32px;
   }
 }

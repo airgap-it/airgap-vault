@@ -10,22 +10,17 @@
   <h3 [innerHTML]="'transaction-signed.heading' | translate"></h3>
 
   <ion-row justify-content-center padding-top>
-    <qrcode
-      *ngIf="interactionUrl && qrType === 0"
-      [level]="'L'"
-      [qrdata]="interactionUrl"
-      backgroundAlpha="1"
-      foreground="black"
-      [size]="300"
-    ></qrcode>
-    <qrcode *ngIf="signedTx && qrType === 1" [level]="'L'" [qrdata]="signedTx" backgroundAlpha="1" foreground="black" [size]="300"></qrcode>
+    <qr-clipboard *ngIf="interactionUrl && qrType === 0" [level]="'L'" [qrdata]="interactionUrl" [size]="300"></qr-clipboard>
+    <qr-clipboard *ngIf="signedTx && qrType === 1" [level]="'L'" [qrdata]="signedTx" [size]="300"></qr-clipboard>
   </ion-row>
 
   <ion-row padding>
     <ion-label>{{ 'transaction-signed.raw-tx_label' | translate }}</ion-label>
     <ion-toggle (ionChange)="switchQR($event)"></ion-toggle>
   </ion-row>
-  <ion-row padding-bottom margin-bottom><from-to [transaction]="airGapTx" [wallet]="wallet"></from-to></ion-row>
+  <ion-row padding-bottom margin-bottom>
+    <signed-transaction [syncProtocolString]="interactionUrl"></signed-transaction>
+  </ion-row>
   <ion-fab bottom right>
     <button default ion-button color="primary" (click)="done()" round>{{ 'transaction-signed.done_label' | translate }}</button>
   </ion-fab>

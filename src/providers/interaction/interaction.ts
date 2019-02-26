@@ -38,7 +38,7 @@ export interface IInteractionOptions {
 
 @Injectable()
 export class InteractionProvider {
-  constructor(private deepLinkProvider: DeepLinkProvider) {}
+  constructor(private deepLinkProvider: DeepLinkProvider) { }
 
   public startInteraction(navCtrl: NavController, interactionOptions: IInteractionOptions, secret: Secret) {
     const interactionSetting = secret.interactionSetting
@@ -48,7 +48,7 @@ export class InteractionProvider {
         this.goToInteractionSelectionSettingsPage(navCtrl, interactionOptions)
       }
       if (interactionOptions.communicationType === InteractionCommunicationType.DEEPLINK) {
-        this.deepLinkProvider.sameDeviceDeeplink(interactionOptions.url)
+        this.startDeeplink(interactionOptions.url, navCtrl)
       } else if (interactionOptions.communicationType === InteractionCommunicationType.QR) {
         this.navigateToPageByOperationType(navCtrl, interactionOptions)
       }
@@ -61,7 +61,7 @@ export class InteractionProvider {
           this.goToInteractionSelectionPage(navCtrl, interactionOptions)
           break
         case InteractionSetting.SAME_DEVICE:
-          this.deepLinkProvider.sameDeviceDeeplink(interactionOptions.url)
+          this.startDeeplink(interactionOptions.url, navCtrl)
           break
         case InteractionSetting.OFFLINE_DEVICE:
           this.navigateToPageByOperationType(navCtrl, interactionOptions)
@@ -106,5 +106,14 @@ export class InteractionProvider {
     } else {
       return assertNever(interactionOptions.operationType)
     }
+  }
+
+  private startDeeplink(url: string, navController: NavController) {
+    this.deepLinkProvider
+      .sameDeviceDeeplink(url)
+      .then(() => {
+        navController.popToRoot().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+      })
+      .catch(handleErrorLocal(ErrorCategory.DEEPLINK_PROVIDER))
   }
 }

@@ -7,14 +7,16 @@ import { Deeplinks } from '@ionic-native/deeplinks'
 import { StartupChecksProvider } from '../providers/startup-checks/startup-checks.provider'
 import { SchemeRoutingProvider } from '../providers/scheme-routing/scheme-routing'
 import { TranslateService } from '@ngx-translate/core'
+import { ProtocolsProvider } from '../providers/protocols/protocols'
+import { handleErrorLocal, ErrorCategory } from '../providers/error-handler/error-handler'
 
-interface FlatPromise<T> {
+interface ExposedPromise<T> {
   promise: Promise<T>
   resolve: (value?: any | PromiseLike<void>) => void
   reject: (reason?: any) => void
 }
 
-function flatPromise<T>(): FlatPromise<T> {
+function exposedPromise<T>(): ExposedPromise<T> {
   let resolve, reject
 
   // tslint:disable-next-line:promise-must-complete
@@ -34,7 +36,9 @@ export class MyApp {
 
   rootPage: any = null
 
-  isInitializedFlatPromise: FlatPromise<void> = flatPromise<void>()
+  // Sometimes the deeplink was registered before the root page was set
+  // This resulted in the root page "overwriting" the deep-linked page
+  isInitialized: ExposedPromise<void> = exposedPromise<void>()
 
   constructor(
     private platform: Platform,
@@ -43,39 +47,43 @@ export class MyApp {
     private deepLinks: Deeplinks,
     private startupChecks: StartupChecksProvider,
     private schemeRoutingProvider: SchemeRoutingProvider,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private protocolsProvider: ProtocolsProvider
   ) {
-    this.platform
-      .ready()
-      .then(() => {
-        if (this.platform.is('cordova')) {
-          this.statusBar.styleLightContent()
-          this.statusBar.backgroundColorByHexString('#311B58')
-          this.splashScreen.hide()
+    this.initializeApp().catch(handleErrorLocal(ErrorCategory.OTHER))
+  }
+
+  async initializeApp() {
+    const supportedLanguages = ['en', 'de', 'zh-cn']
+
+    this.loadLanguages(supportedLanguages)
+    this.protocolsProvider.addProtocols()
+
+    await this.platform.ready()
+
+    if (this.platform.is('cordova')) {
+      this.statusBar.styleLightContent()
+      if (this.platform.is('ios')) {
+        this.statusBar.backgroundColorByHexString('#311B58')
+      } else if (this.platform.is('android')) {
+        this.statusBar.backgroundColorByHexString('#FFFFFF')
+      }
+      this.splashScreen.hide()
+    }
+
+    this.initChecks()
+  }
+
+  loadLanguages(supportedLanguages: string[]) {
+    const language = this.translate.getBrowserLang()
+    if (language) {
+      const lowerCaseLanguage = language.toLowerCase()
+      supportedLanguages.forEach(supportedLanguage => {
+        if (supportedLanguage.startsWith(lowerCaseLanguage)) {
+          this.translate.use(supportedLanguage)
         }
-        const supportedLanguages = ['en', 'de', 'zh-cn']
-
-        for (const lang of supportedLanguages) {
-          // We bundle languages because so we don't have to load it over http
-          // and we don't need to add a CSP rule for it.
-          this.translate.setTranslation(lang, require(`../assets/i18n/${lang}.json`))
-        }
-
-        this.translate.setDefaultLang('en')
-
-        const language = this.translate.getBrowserLang()
-        if (language) {
-          const lowerCaseLanguage = language.toLowerCase()
-          supportedLanguages.forEach(supportedLanguage => {
-            if (supportedLanguage.startsWith(lowerCaseLanguage)) {
-              this.translate.use(supportedLanguage)
-            }
-          })
-        }
-
-        this.initChecks()
       })
-      .catch(console.error)
+    }
   }
 
   initChecks() {
@@ -83,11 +91,11 @@ export class MyApp {
       .initChecks()
       .then(async () => {
         await this.nav.setRoot(TabsPage)
-        this.isInitializedFlatPromise.resolve()
+        this.isInitialized.resolve()
       })
       .catch(async check => {
         check.consequence(this.initChecks.bind(this))
-        this.isInitializedFlatPromise.reject(`startup check failed ${check.name}`) // If we are here, we cannot sign a transaction (no secret, rooted, etc)
+        this.isInitialized.reject(`startup check failed ${check.name}`) // If we are here, we cannot sign a transaction (no secret, rooted, etc)
       })
   }
 
@@ -102,7 +110,7 @@ export class MyApp {
           // match.$route - the route we matched, which is the matched entry from the arguments to route()
           // match.$args - the args passed in the link
           // match.$link - the full link data
-          this.isInitializedFlatPromise.promise
+          this.isInitialized.promise
             .then(() => {
               console.log('Successfully matched route', match)
               this.schemeRoutingProvider.handleNewSyncRequest(this.nav, match.$link.url).catch(console.error)

@@ -26,6 +26,7 @@ describe('SchemeRoutingProvider Provider', () => {
   let storageProvider: Storage
   let secureStorage: SecureStorageServiceMock
   let deviceProvider: DeviceProviderMock
+  let navController: NavController
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -56,6 +57,7 @@ describe('SchemeRoutingProvider Provider', () => {
     schemeRoutingProvider = TestBed.get(SchemeRoutingProvider)
     storageProvider = TestBed.get(Storage)
     secureStorage = TestBed.get(SecureStorageService)
+    navController = TestBed.get(NavController)
   })
 
   it('should be created', () => {
@@ -66,4 +68,14 @@ describe('SchemeRoutingProvider Provider', () => {
     await schemeRoutingProvider.showAlert('Test', 'Message', [])
     done()
   })
+
+  it('should handle request', async(async () => {
+    const text: string = 'test'
+    const callback = () => undefined
+    try {
+      await schemeRoutingProvider.handleNewSyncRequest(navController, text, callback)
+    } catch (e) {
+      expect(e).toBeDefined()
+    }
+  }))
 })

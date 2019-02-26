@@ -219,21 +219,27 @@ export class SecretsProvider {
             isHDWallet,
             customDerivationPath
           )
-          wallet.addresses = wallet.deriveAddresses(1)
-          if (
-            secret.wallets.find(obj => obj.publicKey === wallet.publicKey && obj.protocolIdentifier === wallet.protocolIdentifier) ===
-            undefined
-          ) {
-            secret.wallets.push(wallet)
-            resolve(this.addOrUpdateSecret(secret))
-          } else {
-            this.showAlert(
-              'Wallet already exists',
-              'You already have added this specific wallet. Please change its derivation path to add another address (advanced mode).'
-            )
-            reject()
-          }
-          loading.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
+          wallet
+            .deriveAddresses(1)
+            .then(addresses => {
+              wallet.addresses = addresses
+
+              if (
+                secret.wallets.find(obj => obj.publicKey === wallet.publicKey && obj.protocolIdentifier === wallet.protocolIdentifier) ===
+                undefined
+              ) {
+                secret.wallets.push(wallet)
+                resolve(this.addOrUpdateSecret(secret))
+              } else {
+                this.showAlert(
+                  'Wallet already exists',
+                  'You already have added this specific wallet. Please change its derivation path to add another address (advanced mode).'
+                )
+                reject()
+              }
+              loading.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
+            })
+            .catch(handleErrorLocal(ErrorCategory.WALLET_PROVIDER))
         })
         .catch(err => {
           this.showAlert('Error', err)

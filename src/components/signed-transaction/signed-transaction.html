@@ -1,0 +1,16 @@
+<span>
+  <from-to *ngIf="airGapTx" [transaction]="airGapTx"></from-to>
+  <span *ngIf="fallbackActivated">
+    <ion-row>
+        <ion-col col-2 margin-top>
+          <ion-icon class="warning-icon" color="dark" md-name="warning"></ion-icon>
+        </ion-col>
+        <ion-col>
+          {{ 'signed-transaction.transaction-unreadable' | translate }}
+        </ion-col>
+    </ion-row>
+    <p class="text--selectable typography--mono" ion-text color="blackLight">
+      {{ rawTxData.transaction }}
+    </p>
+  </span>
+</span>

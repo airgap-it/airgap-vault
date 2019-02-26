@@ -10,7 +10,7 @@
   <h3 padding-bottom [innerHTML]="'wallet-share.heading' | translate"></h3>
 
   <ion-row justify-content-center padding-bottom>
-    <qrcode *ngIf="interactionUrl" [qrdata]="interactionUrl" backgroundAlpha="0" foreground="white" [level]="'L'" [size]="300"></qrcode>
+    <qr-clipboard *ngIf="interactionUrl" [qrdata]="interactionUrl" [level]="'L'" [size]="300"></qr-clipboard>
   </ion-row>
 
   <ion-row><p [innerHTML]="'wallet-share.text' | translate"></p></ion-row>
