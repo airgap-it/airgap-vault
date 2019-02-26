@@ -19,6 +19,7 @@ import { FeeConverterPipe } from './pipes/fee-converter/fee-converter.pipe'
 import { AmountConverterPipe } from './pipes/amount-converter/amount-converter.pipe'
 import { TranslateModule } from '@ngx-translate/core'
 import { SecretItemComponent } from './secret-item/secret-item'
+import { SignedTransactionComponent } from './signed-transaction/signed-transaction';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { SecretItemComponent } from './secret-item/secret-item'
     FeeConverterPipe,
     AmountConverterPipe,
     SecretItemComponent,
-    AboutPopoverComponent
+    AboutPopoverComponent,
+    SignedTransactionComponent
   ],
   imports: [IonicModule, BrowserModule, TranslateModule, MaterialIconsModule],
   exports: [
@@ -58,4 +60,4 @@ import { SecretItemComponent } from './secret-item/secret-item'
     AboutPopoverComponent
   ]
 })
-export class ComponentsModule {}
+export class ComponentsModule { }
