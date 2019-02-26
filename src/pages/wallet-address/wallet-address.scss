@@ -2,23 +2,17 @@ page-wallet-address {
   ion-avatar {
     width: 64px;
     height: 64px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-
     img {
       width: 64px;
       height: 64px;
     }
   }
-
-  img.sub-avatar {
+  .symbol--icon {
     position: absolute;
-    right: 0;
-    bottom: 0;
-    height: auto;
-    width: 50%;
+    height: 32px;
+    width: 32px;
+    left: 40px;
+    top: 40px;
   }
 }
 
