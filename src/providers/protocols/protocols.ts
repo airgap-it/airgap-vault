@@ -3,6 +3,8 @@ import { GenericERC20, addSubProtocol, TezosKtProtocol, GenericERC20Configuratio
 import { addSupportedProtocol } from 'airgap-coin-lib/dist/utils/supportedProtocols'
 import { AeternityERC20Token } from 'airgap-coin-lib/dist/protocols/ethereum/erc20/AeToken'
 
+import { tokens } from './tokens'
+
 interface SubProtocolInfo {
   symbol: string
   name: string
@@ -57,6 +59,20 @@ export class ProtocolsProvider {
           })
         )
       })
+    })
+
+    tokens.forEach(token => {
+      addSubProtocol(
+        'eth',
+        new GenericERC20({
+          symbol: token.symbol,
+          name: token.name,
+          marketSymbol: token.marketSymbol,
+          identifier: token.identifier,
+          contractAddress: token.contractAddress,
+          decimals: token.decimals
+        })
+      )
     })
   }
 }
