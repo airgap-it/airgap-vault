@@ -17,7 +17,7 @@ export class SocialRecoveryImportPage {
 
   socialRecoveryForm: FormGroup
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder) {}
+  constructor(public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder) { }
 
   setNumberOfShares(i: number) {
     this.numberOfShares = i

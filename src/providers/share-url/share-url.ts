@@ -5,7 +5,7 @@ import { AirGapWallet, DeserializedSyncProtocol, EncodedType, SyncProtocolUtils,
 @Injectable()
 export class ShareUrlProvider {
   constructor(public http: HttpClient) {
-    console.log('Hello ShareUrlProvider Provider')
+    //
   }
 
   async generateShareURL(wallet: AirGapWallet): Promise<string> {
