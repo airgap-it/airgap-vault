@@ -1,6 +1,5 @@
-import { Component, NgZone } from '@angular/core'
-import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular'
-import { ErrorCategory, handleErrorLocal } from '../../providers/error-handler/error-handler'
+import { Component } from '@angular/core'
+import { IonicPage, NavController, NavParams } from 'ionic-angular'
 import {
   AirGapWallet,
   UnsignedTransaction,
@@ -9,14 +8,10 @@ import {
   DeserializedSyncProtocol,
   EncodedType
 } from 'airgap-coin-lib'
-import { InteractionSelectionPage } from '../interaction-selection/interaction-selection'
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import bip39 from 'bip39'
-import { TransactionSignedPage } from '../transaction-signed/transaction-signed'
-import { InteractionProvider, InteractionOperationType, InteractionSetting } from '../../providers/interaction/interaction'
-import { BigNumber } from 'bignumber.js'
-
-declare let window: any
+import { InteractionProvider, InteractionOperationType } from '../../providers/interaction/interaction'
+import { handleErrorLocal } from '../../providers/error-handler/error-handler';
 
 @IonicPage()
 @Component({
@@ -33,11 +28,9 @@ export class TransactionDetailPage {
   constructor(
     public navController: NavController,
     public navParams: NavParams,
-    private ngZone: NgZone,
     private secretsProvider: SecretsProvider,
-    private platform: Platform,
     private interactionProvider: InteractionProvider
-  ) {}
+  ) { }
 
   async ionViewWillEnter() {
     this.transaction = this.navParams.get('transaction')
@@ -67,16 +60,17 @@ export class TransactionDetailPage {
   }
 
   async generateBroadcastUrl(wallet: AirGapWallet, signedTx: string, unsignedTransaction: UnsignedTransaction): Promise<string> {
-    let txDetails
+    let txDetails = {
+      from: undefined,
+      amount: undefined,
+      fee: undefined,
+      to: undefined
+    }
+
     try {
       txDetails = await wallet.coinProtocol.getTransactionDetails(unsignedTransaction)
     } catch (e) {
-      txDetails = {
-        from: 'UNKNOWN',
-        amount: 'UNKNOWN',
-        fee: 'UNKNOWN',
-        to: 'UNKNOWN'
-      }
+      handleErrorLocal(e)
     }
 
     const syncProtocol = new SyncProtocolUtils()
