@@ -30,8 +30,6 @@ describe('TransactionSigned Page', () => {
 
   let fixture: ComponentFixture<TransactionSignedPage>
   let component: TransactionSignedPage
-  let translate: TranslateService
-  let http: HttpTestingController
 
   beforeEach(async(() => {
     NavParamsMock.setParams({

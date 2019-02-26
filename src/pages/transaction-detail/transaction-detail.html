@@ -9,7 +9,6 @@
 <ion-content padding class="colored-background">
   <div *ngIf="airGapTx && wallet">
     <p>{{ 'transaction-detail.text' | translate }}</p>
-
     <from-to [transaction]="airGapTx" [wallet]="wallet"></from-to>
   </div>
 </ion-content>

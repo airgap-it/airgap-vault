@@ -18,7 +18,9 @@
     <ion-label>{{ 'transaction-signed.raw-tx_label' | translate }}</ion-label>
     <ion-toggle (ionChange)="switchQR($event)"></ion-toggle>
   </ion-row>
-  <ion-row padding-bottom margin-bottom><from-to [transaction]="airGapTx" [wallet]="wallet"></from-to></ion-row>
+  <ion-row padding-bottom margin-bottom>
+    <signed-transaction [syncProtocolString]="interactionUrl"></signed-transaction>
+  </ion-row>
   <ion-fab bottom right>
     <button default ion-button color="primary" (click)="done()" round>{{ 'transaction-signed.done_label' | translate }}</button>
   </ion-fab>
