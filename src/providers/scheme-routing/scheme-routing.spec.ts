@@ -20,6 +20,10 @@ import { SecureStorageService } from '../../providers/storage/secure-storage'
 import { StorageMock } from '../../../test-config/storage-mock'
 import { Storage } from '@ionic/storage'
 import { SecureStorageServiceMock } from '../../providers/storage/secure-storage.mock'
+import { HttpClientTestingModule } from '@angular/common/http/testing'
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core'
+import { createTranslateLoader } from '../../app/app.module'
+import { HttpClient } from '@angular/common/http'
 
 describe('SchemeRoutingProvider Provider', () => {
   let schemeRoutingProvider: SchemeRoutingProvider
@@ -30,6 +34,16 @@ describe('SchemeRoutingProvider Provider', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule,
+        TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useFactory: createTranslateLoader,
+            deps: [HttpClient]
+          }
+        })
+      ],
       providers: [
         SchemeRoutingProvider,
         SecretsProvider,
@@ -48,7 +62,8 @@ describe('SchemeRoutingProvider Provider', () => {
         { provide: NavParams, useClass: NavParamsMock },
         { provide: StatusBar, useClass: StatusBarMock },
         { provide: SplashScreen, useClass: SplashScreenMock },
-        { provide: Platform, useClass: PlatformMock }
+        { provide: Platform, useClass: PlatformMock },
+        TranslateService
       ]
     })
   }))
@@ -65,7 +80,7 @@ describe('SchemeRoutingProvider Provider', () => {
   })
 
   it('should show alert', async done => {
-    await schemeRoutingProvider.showAlert('Test', 'Message', [])
+    await schemeRoutingProvider.showTranslatedAlert('Test', 'Message', [])
     done()
   })
 

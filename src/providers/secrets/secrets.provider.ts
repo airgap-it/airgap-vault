@@ -187,6 +187,15 @@ export class SecretsProvider {
     }
   }
 
+  findBaseWalletByPublicKeyAndProtocolIdentifier(pubKey: string, protocolIdentifier: string): AirGapWallet | undefined {
+    const secret = this.findByPublicKey(pubKey)
+    if (!secret) {
+      return undefined
+    }
+
+    return secret.wallets.find(wallet => wallet.publicKey === pubKey && protocolIdentifier.startsWith(wallet.protocolIdentifier))
+  }
+
   getActiveSecret(): Secret {
     return this.activeSecret || this.secretsList[0]
   }

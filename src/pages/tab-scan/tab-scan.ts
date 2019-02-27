@@ -6,7 +6,6 @@ import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import { SchemeRoutingProvider } from '../../providers/scheme-routing/scheme-routing'
 import { ZXingScannerComponent } from '@zxing/ngx-scanner'
 import { PermissionsProvider, PermissionTypes, PermissionStatus } from '../../providers/permissions/permissions'
-import { TranslateService } from '@ngx-translate/core'
 import { handleErrorLocal, ErrorCategory } from '../../providers/error-handler/error-handler'
 
 @IonicPage()
@@ -34,8 +33,7 @@ export class TabScanPage {
     private platform: Platform,
     private secretsProvider: SecretsProvider,
     private scanner: ScannerProvider,
-    private permissionsProvider: PermissionsProvider,
-    private translateService: TranslateService
+    private permissionsProvider: PermissionsProvider
   ) {
     this.isBrowser = !this.platform.is('cordova')
   }
@@ -104,37 +102,8 @@ export class TabScanPage {
   }
 
   async checkScan(data: string) {
-    if (this.isAirGapTx(data)) {
-      return this.schemeRouting.handleNewSyncRequest(this.navController, data, () => {
-        this.startScan()
-      })
-    } else {
-      this.translateService
-        .get(['tab-wallets.no-secret_alert.title', 'tab-wallets.no-secret_alert.message', 'tab-wallets.no-secret_alert.text'])
-        .subscribe(values => {
-          let title = values['tab-wallets.no-secret_alert.title']
-          let message = values['tab-wallets.no-secret_alert.text']
-          let text = values['tab-wallets.no-secret_alert.okay_label']
-          let alert = this.alertCtrl.create({
-            title: title,
-            message: message,
-            enableBackdropDismiss: false,
-            buttons: [
-              {
-                text: text,
-                role: 'cancel',
-                handler: () => {
-                  this.startScan()
-                }
-              }
-            ]
-          })
-          alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
-        })
-    }
-  }
-
-  isAirGapTx(qr: string): boolean {
-    return qr.indexOf('airgap-vault://') !== -1
+    return this.schemeRouting.handleNewSyncRequest(this.navController, data, () => {
+      this.startScan()
+    })
   }
 }
