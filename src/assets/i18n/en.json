@@ -268,8 +268,18 @@
       "okay_label": "Okay"
     },
     "no-secret_alert":{
-      "title": "No secret found",
+      "title": "No account found",
       "text": "You do not have any compatible account for this public key in AirGap. Please import your secret and create the corresponding account to sign this transaction.",
+      "okay_label": "Okay"
+    },
+    "sync-operation-not-supported_alert": {
+      "title": "Sync operation not supported",
+      "text": "Please use AirGap Wallet to scan this QR.",
+      "okay_label": "Okay"
+    },
+    "invalid-sync-operation_alert": {
+      "title": "Incompatible Sync code",
+      "text": "Could not parse sync code. Please make sure this is a valid AirGap sync code.",
       "okay_label": "Okay"
     },
     "raw-tx_alert":{

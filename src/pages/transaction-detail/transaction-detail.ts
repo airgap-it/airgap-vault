@@ -11,7 +11,7 @@ import {
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import bip39 from 'bip39'
 import { InteractionProvider, InteractionOperationType } from '../../providers/interaction/interaction'
-import { handleErrorLocal } from '../../providers/error-handler/error-handler';
+import { handleErrorLocal } from '../../providers/error-handler/error-handler'
 
 @IonicPage()
 @Component({
@@ -24,17 +24,19 @@ export class TransactionDetailPage {
   public transaction: UnsignedTransaction
   public wallet: AirGapWallet
   public airGapTx: IAirGapTransaction
+  public deserializedSync: DeserializedSyncProtocol
 
   constructor(
     public navController: NavController,
     public navParams: NavParams,
     private secretsProvider: SecretsProvider,
     private interactionProvider: InteractionProvider
-  ) { }
+  ) {}
 
   async ionViewWillEnter() {
     this.transaction = this.navParams.get('transaction')
     this.wallet = this.navParams.get('wallet')
+    this.deserializedSync = this.navParams.get('deserializedSync')
     try {
       this.airGapTx = await this.wallet.coinProtocol.getTransactionDetails(this.transaction)
     } catch (e) {
