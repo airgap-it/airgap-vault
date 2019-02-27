@@ -97,26 +97,28 @@ export class MyApp {
 
   async ngAfterViewInit() {
     await this.platform.ready()
-    this.deepLinks
-      .route({
-        '/': undefined
-      })
-      .subscribe(
-        async match => {
-          // match.$route - the route we matched, which is the matched entry from the arguments to route()
-          // match.$args - the args passed in the link
-          // match.$link - the full link data
-          this.isInitialized.promise
-            .then(() => {
-              console.log('Successfully matched route', match)
-              this.schemeRoutingProvider.handleNewSyncRequest(this.nav, match.$link.url).catch(console.error)
-            })
-            .catch(console.error)
-        },
-        nomatch => {
-          // nomatch.$link - the full link data
-          console.error("Got a deeplink that didn't match", nomatch)
-        }
-      )
+    if (this.platform.is('cordova')) {
+      this.deepLinks
+        .route({
+          '/': undefined
+        })
+        .subscribe(
+          match => {
+            // match.$route - the route we matched, which is the matched entry from the arguments to route()
+            // match.$args - the args passed in the link
+            // match.$link - the full link data
+            this.isInitialized.promise
+              .then(() => {
+                console.log('Successfully matched route', match)
+                this.schemeRoutingProvider.handleNewSyncRequest(this.nav, match.$link.url).catch(console.error)
+              })
+              .catch(console.error)
+          },
+          nomatch => {
+            // nomatch.$link - the full link data
+            console.error("Got a deeplink that didn't match", nomatch)
+          }
+        )
+    }
   }
 }
