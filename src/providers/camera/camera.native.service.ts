@@ -1,11 +1,12 @@
-import { ElementRef, Injectable, NgZone, Renderer2, RendererFactory2, ViewChild } from '@angular/core'
+import { ElementRef, Injectable, Renderer2, RendererFactory2, ViewChild } from '@angular/core'
 import { CameraPreview } from '@ionic-native/camera-preview'
 import { Platform } from 'ionic-angular'
 import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
 import { Observable } from 'rxjs'
 
 import workerJS from '../../assets/workers/entropyCalculatorWorker'
-import { PermissionsProvider, PermissionTypes, PermissionStatus } from '../permissions/permissions'
+import { PermissionsProvider, PermissionStatus } from '../permissions/permissions'
+import { handleErrorLocal, ErrorCategory } from '../error-handler/error-handler'
 const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
 const entropyCalculatorWorker = new Worker(blobURL)
 
@@ -89,7 +90,7 @@ export class CameraNativeService implements IEntropyGenerator {
   private initCamera(): Promise<void> {
     console.log('initCamera')
 
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       this.cameraPreview
         .startCamera(
           Object.assign(
@@ -118,7 +119,7 @@ export class CameraNativeService implements IEntropyGenerator {
             if (this.disabled) {
               console.log('not starting, disabled')
               if (this.cameraIsRunning) {
-                this.stop()
+                this.stop().catch(handleErrorLocal(ErrorCategory.CORDOVA_PLUGIN))
               }
               return
             }
@@ -156,9 +157,11 @@ export class CameraNativeService implements IEntropyGenerator {
           error => {
             console.warn('startCamera error: ', error)
             if (error === 'Camera already started!') {
-              this.stop().then(() => {
-                return this.initCamera()
-              })
+              this.stop()
+                .then(() => {
+                  return this.initCamera()
+                })
+                .catch(handleErrorLocal(ErrorCategory.CORDOVA_PLUGIN))
             }
           }
         )
@@ -175,10 +178,10 @@ export class CameraNativeService implements IEntropyGenerator {
     // if it is called while taking a photo
     if (this.cameraIsTakingPhoto) {
       this.uninjectCSS()
-      return new Promise((resolve, reject) => {
+      return new Promise(resolve => {
         setTimeout(() => {
           console.log('CAMERA IS TAKING PHOTO, DELAYING')
-          return this.stop()
+          resolve(this.stop())
         }, 200)
       })
     }
@@ -186,7 +189,7 @@ export class CameraNativeService implements IEntropyGenerator {
     if (this.cameraInterval) {
       clearInterval(this.cameraInterval)
     }
-    return new Promise((resolve, reject) => {
+    return new Promise((_resolve, reject) => {
       this.cameraPreview.stopCamera().then(
         () => {
           this.cameraIsRunning = false

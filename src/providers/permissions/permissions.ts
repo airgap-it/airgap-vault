@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
 import { Diagnostic } from '@ionic-native/diagnostic'
 import { Platform, AlertController } from 'ionic-angular'
+import { handleErrorLocal, ErrorCategory } from '../error-handler/error-handler'
 
 export enum PermissionStatus {
   GRANTED = 'GRANTED',
@@ -120,12 +121,12 @@ export class PermissionsProvider {
         {
           text: 'Open settings',
           handler: () => {
-            this.diagnostic.switchToSettings()
+            this.diagnostic.switchToSettings().catch(handleErrorLocal(ErrorCategory.CORDOVA_PLUGIN))
           }
         }
       ]
     })
-    alert.present()
+    alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
   }
 
   private isGranted(permission: string): boolean {

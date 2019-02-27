@@ -10,6 +10,26 @@
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
 
+    <!-- default-src should be 'none', but to be compatible with older webview versions, we have to be permissive -->
+    <!-- script-src needs 'unsafe-eval' because of web3 -->
+    <!-- connect-src needs data: because because of libsodium -->
+    <!-- child-src needs blob: because worker-src is unknown in safari -->
+    <!-- style-src needs 'unsafe-inline' because we have inline css on the generate screen -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+        default-src 'self' 'unsafe-eval' 'unsafe-inline' blob: data:; 
+        script-src 'self' 'unsafe-eval';
+        connect-src 'self' data:;
+        child-src blob:;
+        object-src 'none';
+        font-src 'self' data:;
+        img-src 'self' data:;
+        worker-src blob:;
+        style-src 'self' 'unsafe-inline';
+      "
+    />
+
     <link rel="icon" type="image/x-icon" href="assets/icon/favicon.ico" />
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#4e8ef7" />

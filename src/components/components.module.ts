@@ -1,3 +1,4 @@
+import { AboutPopoverComponent } from './about-popover/about-popover.component'
 import { NgModule } from '@angular/core'
 import { EntropyProgressComponent } from './entropy-progress/entropy-progress'
 import { TouchEntropyComponent } from './touch-entropy/touch-entropy'
@@ -17,6 +18,11 @@ import { WalletItemComponent } from './wallet-item/wallet-item'
 import { FeeConverterPipe } from './pipes/fee-converter/fee-converter.pipe'
 import { AmountConverterPipe } from './pipes/amount-converter/amount-converter.pipe'
 import { TranslateModule } from '@ngx-translate/core'
+import { SecretItemComponent } from './secret-item/secret-item'
+import { SignedTransactionComponent } from './signed-transaction/signed-transaction'
+import { QrClipboardComponent } from './qr-clipboard/qr-clipboard'
+import { QRCodeModule } from 'angularx-qrcode'
+import { CurrencySymbolComponent } from './currency-symbol/currency-symbol'
 
 @NgModule({
   declarations: [
@@ -33,9 +39,14 @@ import { TranslateModule } from '@ngx-translate/core'
     IonTextAvatar,
     TraceInputDirective,
     FeeConverterPipe,
-    AmountConverterPipe
+    AmountConverterPipe,
+    SecretItemComponent,
+    AboutPopoverComponent,
+    SignedTransactionComponent,
+    QrClipboardComponent,
+    CurrencySymbolComponent,
   ],
-  imports: [IonicModule, BrowserModule, TranslateModule, MaterialIconsModule],
+  imports: [IonicModule, BrowserModule, TranslateModule, MaterialIconsModule, QRCodeModule],
   exports: [
     EntropyProgressComponent,
     TouchEntropyComponent,
@@ -49,7 +60,12 @@ import { TranslateModule } from '@ngx-translate/core'
     ProgressFooterComponent,
     IonTextAvatar,
     FeeConverterPipe,
-    AmountConverterPipe
+    AmountConverterPipe,
+    SecretItemComponent,
+    AboutPopoverComponent,
+    QrClipboardComponent,
+    CurrencySymbolComponent,
+    SignedTransactionComponent
   ]
 })
 export class ComponentsModule { }

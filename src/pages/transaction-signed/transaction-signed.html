@@ -1,52 +1,27 @@
 <ion-header transparent no-border>
   <ion-navbar transparent>
-    <ion-row align-items-center>
-      <ion-col col-10>
-        <ion-title>
-          <p ion-text color="white">{{ 'transaction-signed.title' | translate }}</p>
-        </ion-title>
-      </ion-col>
-    </ion-row>
+    <ion-title>
+      <p ion-text color="white">{{ 'transaction-signed.title' | translate }}</p>
+    </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding class="colored-background">
-  <from-to [transaction]="airGapTx" [wallet]="wallet" padding-bottom></from-to>
+  <h3 [innerHTML]="'transaction-signed.heading' | translate"></h3>
 
   <ion-row justify-content-center padding-top>
-    <qrcode
-      *ngIf="broadcastUrl && qrType === 0"
-      [level]="'L'"
-      [qrdata]="broadcastUrl"
-      backgroundAlpha="1"
-      foreground="black"
-      [size]="300"
-    ></qrcode>
-    <qrcode
-      *ngIf="signedTxQr && qrType === 1"
-      [level]="'L'"
-      [qrdata]="signedTxQr"
-      backgroundAlpha="1"
-      foreground="black"
-      [size]="300"
-    ></qrcode>
+    <qr-clipboard *ngIf="interactionUrl && qrType === 0" [level]="'L'" [qrdata]="interactionUrl" [size]="300"></qr-clipboard>
+    <qr-clipboard *ngIf="signedTx && qrType === 1" [level]="'L'" [qrdata]="signedTx" [size]="300"></qr-clipboard>
   </ion-row>
 
   <ion-row padding>
     <ion-label>{{ 'transaction-signed.raw-tx_label' | translate }}</ion-label>
     <ion-toggle (ionChange)="switchQR($event)"></ion-toggle>
   </ion-row>
+  <ion-row padding-bottom margin-bottom>
+    <signed-transaction [syncProtocolString]="interactionUrl"></signed-transaction>
+  </ion-row>
+  <ion-fab bottom right>
+    <button default ion-button color="primary" (click)="done()" round>{{ 'transaction-signed.done_label' | translate }}</button>
+  </ion-fab>
 </ion-content>
-
-<ion-footer no-border>
-  <ion-toolbar padding transparent>
-    <ion-row justify-content-end>
-      <button default ion-button color="light" (click)="sameDeviceBroadcast()" round item-right>
-        {{ 'transaction-signed.same-device-broadcast_label' | translate }}
-      </button>
-      <button default ion-button color="primary" (click)="done()" round item-right>
-        {{ 'transaction-signed.done_label' | translate }}
-      </button>
-    </ion-row>
-  </ion-toolbar>
-</ion-footer>

@@ -5,6 +5,7 @@ import { SecretEditPage } from '../secret-edit/secret-edit'
 import { Secret } from '../../models/secret'
 import { FormGroup, Validators, FormBuilder } from '@angular/forms'
 import { MnemonicValidator } from '../../validators/mnemonic.validator'
+import { handleErrorLocal, ErrorCategory } from '../../providers/error-handler/error-handler'
 
 const signer = new BIP39Signer()
 
@@ -27,6 +28,6 @@ export class SecretImportPage {
 
   goToSecretCreatePage() {
     const secret = new Secret(signer.mnemonicToEntropy(BIP39Signer.prepareMnemonic(this.mnemonic)))
-    this.navController.push(SecretEditPage, { secret: secret, isGenerating: true })
+    this.navController.push(SecretEditPage, { secret: secret, isGenerating: true }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

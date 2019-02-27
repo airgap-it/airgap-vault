@@ -5,6 +5,7 @@ import { Observable, Subscription } from 'rxjs'
 import { Observer } from 'rxjs/Observer'
 
 import workerJS from '../../assets/workers/hashWorker'
+import { handleErrorLocal, ErrorCategory } from '../error-handler/error-handler'
 const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
 const hashWorker = new Worker(blobURL)
 
@@ -64,7 +65,7 @@ export class EntropyService {
 
   stopEntropyCollection(): Promise<void> {
     let promises = []
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       // clear collection interval
       for (let i = 0; i < this.entropySubscriptions.length; i++) {
         this.entropySubscriptions[i].unsubscribe()
@@ -80,14 +81,16 @@ export class EntropyService {
 
       this.entropyGenerators = []
 
-      Promise.all(promises).then(() => {
-        resolve()
-      })
+      Promise.all(promises)
+        .then(() => {
+          resolve()
+        })
+        .catch(handleErrorLocal(ErrorCategory.ENTROPY_COLLECTION))
     })
   }
 
   getEntropyAsHex(): Promise<string> {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       hashWorker.onmessage = event => {
         const secureRandomArray = new Uint8Array(this.ENTROPY_SIZE)
         window.crypto.getRandomValues(secureRandomArray)

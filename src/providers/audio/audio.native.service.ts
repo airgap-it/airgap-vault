@@ -60,7 +60,7 @@ export class AudioNativeService implements IEntropyGenerator {
   }
 
   stop(): Promise<void> {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       console.log('removed audioinput listener')
       window.audioinput.stop()
       window.removeEventListener('audioinput', this.handler)

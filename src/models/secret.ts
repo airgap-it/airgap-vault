@@ -1,6 +1,7 @@
 import { UUID } from 'angular2-uuid'
 import { BIP39Signer } from './BIP39Signer'
 import { AirGapWallet } from 'airgap-coin-lib'
+import { InteractionSetting } from '../providers/interaction/interaction'
 
 const signer = new BIP39Signer()
 
@@ -11,14 +12,16 @@ export class Secret {
   public secretHex: string
   public isParanoia: boolean
   public hasSocialRecovery: boolean
+  public interactionSetting: InteractionSetting
 
   public wallets: AirGapWallet[]
 
   private twofactor: string
 
-  constructor(seed: string, label: string = '', isParanoia = false) {
+  constructor(seed: string, label: string = '', isParanoia = false, interactionSetting = InteractionSetting.UNDETERMINED) {
     this.label = label
     this.isParanoia = isParanoia
+    this.interactionSetting = interactionSetting
 
     // TODO: better check whether this is a mnemonic (validate)
     if (seed && seed.indexOf(' ') > -1) {

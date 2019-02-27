@@ -12,10 +12,16 @@
       "okay_label":"Okay"
   },
 
+  "about": {
+    "label": "About",
+    "version": "Version:",
+    "code": "Code:"
+  },
+
   "distribution-onboarding":{
     "ask-permission": {
       "heading": "AirGap ist <span class=\"style__strong color__primary\"> nicht persistent</span>, Geheimschlüssel werden nicht abgespeichert und müssen nach einem Neustart <span class=\"style__strong color__primary\">wieder importiert</span> werden.",
-      "text":"Diese Distribution ist angedacht um sicher Geheimschlüssel zu generieren und um offline Transaktionen zu signieren, jedoch nicht um Geheimschlüssel aufzubewahren."      
+      "text":"Diese Distribution ist angedacht um sicher Geheimschlüssel zu generieren und um offline Transaktionen zu signieren, jedoch nicht um Geheimschlüssel aufzubewahren."
     },
     "no-vm": {
       "heading": "AirGap Vault Distribution sollte <span class=\"style__strong color__primary\">nicht</span> auf einer <span class=\"style__strong color__primary\">virtuellen Maschine</span> ausgeführt werden, wenn der Host eine Netzwerkverbindung hat, sogar wenn die Netzwerkverbindung vorübergehen deaktiviert wurde.",
@@ -47,6 +53,10 @@
     "to_label": "Zu"
   },
 
+  "signed-transaction": {
+    "transaction-unreadable": "Wir konnten die Daten in dieser Transaktion nicht lesen. Dies bedeutet nicht, dass sie nicht gültig ist - Allerdings solltest du diese Transaktion nur bestätigen falls du dir über die Risiken und deren Inhalt im klaren bist."
+  },
+
   "introduction": {
     "title": "Der Neue Krypto-Wallet Standard",
     "highest": {
@@ -59,11 +69,11 @@
     },
     "vault": {
       "heading": "AirGap Vault",
-      "text": "Der Geheimschlüssel wird generiert und sicher aufbewahrt in der AirGap Vault App. <b>AirGap Vault muss instaliert und mit AirGap Wallet verwendet werden.</b>"  
+      "text": "Der Geheimschlüssel wird generiert und sicher aufbewahrt in der AirGap Vault App. <b>AirGap Vault muss instaliert und mit AirGap Wallet verwendet werden.</b>"
     },
     "wallet": {
       "heading": "AirGap Wallet",
-      "text": "Die Wallet App kommt nur in Kontakt mit öffentlichen Informationen und ist für die Übermittlung von Transaktionen an die Blockchain zuständig."  
+      "text": "Die Wallet App kommt nur in Kontakt mit öffentlichen Informationen und ist für die Übermittlung von Transaktionen an die Blockchain zuständig."
     },
     "communication": {
       "highest_text": "Einweg-Kommunikation mit QR Codes.",
@@ -110,6 +120,10 @@
       "label":"Soziale Wiederherstellung",
       "text": "Generieren Sie eine Anzahl an Anteile um auf Ihre soziale Kontakte aufzuteilen."
     },
+    "interaction": {
+      "label": "Vault und Wallet Interaktion",
+      "text": "Wähle aus ob Vault und Wallet auf dem gleichen oder ob Vault auf einem offline Gerät installiert ist."
+    },
     "confirm_label":"Bestätigen"
   },
 
@@ -130,7 +144,7 @@
   "secret-import":{
     "title":"Geheimschlüssel importieren",
     "text":"Ein bestehender Geheimschlüssel kann in AirGap importiert werden. Tragen Sie die Worte von Ihrem Wiederherstellungs-Satz ein.",
-    "placeholder":"wife pulp island master rally shed assume critic assist derive quick sport intact army mule network barely siege film swallow concert assume protect umbrella",
+    "placeholder":"wife pulp island ...",
     "warning":"Bitte überprüfen Sie die Schreibweise des Wiederherstellungs-Satzes.",
     "import_label":"Importieren"
   },
@@ -167,6 +181,20 @@
   "secret-validate":{
     "title":"Verifizierung Wiederherstellungs-Satz",
     "text":"Ordnen Sie die Wörter in der richtigen Reihenfolge, indem Sie das betreffende Wort jeweils anwählen."
+  },
+
+  "secret-wallet-interaction":{
+    "title":"Wallet Interaktion",
+    "same-device_heading":"Sieht so aus, als würden Sie  <span class=\"style__strong color__primary\">AirGap Vault</span> und auf dem <span class=\"style__strong color__primary\">gleichen Gerät</span> verwenden.",
+    "offline-device_heading":"Sieht so aus, als würden Sie <span class=\"style__strong color__primary\">AirGap Vault</span> auf einem <span class=\"style__strong color__primary\">Offline-Gerät</span> verwenden.",
+    "text":"Sie können definieren, wo Sie AirGap Wallet installiert haben, um die Interaktion mit dem Vault etwas zu vereinfachen.",
+    "selector": {
+      "always":"Immer nachfragen",
+      "same-device":"Vault und Wallet auf dem gleichen Gerät",
+      "offline-device":"Vault ist ein Offline-Gerät"
+    },
+    "continue_label":"Weiter",
+    "description":"Sie können ihre Präferenz jederzeit in den Einstellungen ändern."
   },
 
   "verify-key":{
@@ -220,7 +248,7 @@
     "grant-permission_label":"Berechtigung erteilen"
   },
 
-  "tab-secrets":{
+  "tab-settings":{
     "title":"Geheimschlüssel",
     "add-secret_label":"Geheimschlüssel hinzufügen"
   },
@@ -248,7 +276,7 @@
   "tabs": {
     "wallets": "Konten",
     "scanner": "Scanner",
-    "secrets": "Geheimschlüssel"
+    "settings": "Einstellungen"
   },
 
   "transaction-detail":{
@@ -295,6 +323,9 @@
   "wallet-edit-delete-popover":{
     "settings_label": "Kontoeinstellungen",
     "copy_label": "Adresse kopieren",
+    "copy_sync_code": "Sync Code kopieren",
+    "confirm_address_copy": "Addresse wurde in die Zwischenablage kopiert.",
+    "confirm_sync_code_copy": "Sync Code wurde in die Zwischenablage kopiert.",
     "account-removal_alert":{
       "title":"Kontoentfernung bestätigen",
       "text":"Möchten Sie dieses Konto entfernen? Es kann im Nachhinein wieder mit demselben Ableitungspfad erstellt werden.",

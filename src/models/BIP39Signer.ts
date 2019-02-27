@@ -17,7 +17,7 @@ export class BIP39Signer {
     throw new Error('Currently only recovery of secrets with 24, 18 or 12 words are supported')
   }
 
-  private getRandomIntInclusive(min, max) {
+  private getRandomIntInclusive(min: number, max: number): number {
     const randomBuffer = new Uint32Array(1)
     window.crypto.getRandomValues(randomBuffer)
     let randomNumber = randomBuffer[0] / (0xffffffff + 1)
@@ -82,7 +82,7 @@ export class BIP39Signer {
     const secretDigester = sha3_256.create()
 
     // TODO check if mnemoinc or secret
-    const seed = bip39.mnemonicToEntropy(secret)
+    const seed: string = bip39.mnemonicToEntropy(secret)
     secretDigester.update(seed)
 
     const shares = secretJS.share(seed + secretDigester.hex().slice(0, this.checkSumLength), numberOfShares, threshold)
@@ -94,7 +94,7 @@ export class BIP39Signer {
           .map(() => this.getRandomIntInclusive(0, 9))
           .join('')
       )
-      calculatedShares[i] = bip39.entropyToMnemonic(paddedShare.slice(0, 64)) + ' ' + bip39.entropyToMnemonic(paddedShare.slice(64, 128))
+      calculatedShares[i] = `${bip39.entropyToMnemonic(paddedShare.slice(0, 64))} ${bip39.entropyToMnemonic(paddedShare.slice(64, 128))}`
     }
     return calculatedShares
   }
@@ -106,7 +106,7 @@ export class BIP39Signer {
       let words = shares[i].split(' ')
       let firstHalf = words.slice(0, 24)
       let secondHalf = words.slice(24, words.length)
-      translatedShares[i] = (bip39.mnemonicToEntropy(firstHalf.join(' ')) + bip39.mnemonicToEntropy(secondHalf.join(' '))).substr(
+      translatedShares[i] = `${bip39.mnemonicToEntropy(firstHalf.join(' '))}${bip39.mnemonicToEntropy(secondHalf.join(' '))}`.substr(
         0,
         offset.offset
       )

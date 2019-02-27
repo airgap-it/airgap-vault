@@ -9,13 +9,19 @@
       "heading":"Account already exists",
       "text":"You already have added this specific account. Please change its derivation path to add another address (advanced mode)."
     },
-      "okay_label":"Okay"
+    "okay_label":"Okay"
+  },
+
+  "about": {
+    "label": "About",
+    "version": "Version:",
+    "code": "Code:"
   },
 
   "distribution-onboarding":{
     "ask-permission": {
       "heading": "AirGap is <span class=\"style__strong color__primary\"> not persistent</span>, secrets generated will not be stored and need to be <span class=\"style__strong color__primary\">imported again</span> after a restart",
-      "text":"This Distribution is intended to securely generate secrets as well as to sign transactions offline, but not for secret storage."      
+      "text":"This Distribution is intended to securely generate secrets as well as to sign transactions offline, but not for secret storage."
     },
     "no-vm": {
       "heading": "AirGap Vault Distribution should <span class=\"style__strong color__primary\">not</span> be run on a <span class=\"style__strong color__primary\">virtual machine</span>, if the host has network connectivity even if the connectivity has been turned off temporarily. ",
@@ -47,6 +53,10 @@
     "to_label": "To"
   },
 
+  "signed-transaction": {
+    "transaction-unreadable": "We were not able to extract information from this transaction. This does not mean that the transaction is invalid - Please make sure that you know what you are doing, and you can verify that you know that this transaction contains the correct data."
+  },
+
   "introduction": {
     "title": "The New Crypto Wallet Standard",
     "highest": {
@@ -59,11 +69,11 @@
     },
     "vault": {
       "heading": "AirGap Vault",
-      "text": "The private key is generated and securely stored in the AirGap Vault app.<b>You have to install AirGap Vault to use AirGap Wallet</b>"  
+      "text": "The private key is generated and securely stored in the AirGap Vault app.<b>You have to install AirGap Vault to use AirGap Wallet</b>"
     },
     "wallet": {
       "heading": "AirGap Wallet",
-      "text": "The wallet application deals only with public information and is responsible for broadcasting transactions to the blockchain."  
+      "text": "The wallet application deals only with public information and is responsible for broadcasting transactions to the blockchain."
     },
     "communication": {
       "highest_text": "One-way communication with QR codes.",
@@ -110,6 +120,10 @@
       "label":"Social Recovery",
       "text": "Generate a number of secret shares <br /> to distribute to social contacts."
     },
+    "interaction": {
+      "label": "Vault and Wallet interaction",
+      "text": "Select whether Vault and Wallet are installed on the same device or on separate devices."
+    },
     "confirm_label":"confirm"
   },
 
@@ -130,7 +144,7 @@
   "secret-import":{
     "title":"Import secret",
     "text":"You can import an existing secret to AirGap. Fill in the words from your secret.",
-    "placeholder":"wife pulp island master rally shed assume critic assist derive quick sport intact army mule network barely siege film swallow concert assume protect umbrella",
+    "placeholder":"wife pulp island ...",
     "warning":"Please double-check the spelling of your mnemonic.",
     "import_label":"Import"
   },
@@ -167,6 +181,21 @@
   "secret-validate":{
     "title":"Verify your recovery phrase",
     "text":"Match the order of your recovery phrase by selecting the correct words."
+  },
+
+
+  "interaction-selection-settings":{
+    "title":"Wallet Interaction",
+    "same-device_heading":"Looks like you're using <span class=\"style__strong color__primary\">AirGap Vault</span> and AirGap Wallet on the <span class=\"style__strong color__primary\">same device</span>.",
+    "offline-device_heading":"Looks like you’re using <span class=\"style__strong color__primary\">AirGap Vault</span> on an <span class=\"style__strong color__primary\">offline device</span>.",
+    "text":"You can define where you have AirGap Wallet installed to make the interaction with the Vault a bit simpler.",
+    "selector": {
+      "always":"Always ask",
+      "same-device":"Vault and Wallet on the same device",
+      "offline-device":"Vault is an offline device"
+    },
+    "continue_label":"continue",
+    "description":"You can always change your preference in the Settings Tab"
   },
 
   "verify-key":{
@@ -220,9 +249,12 @@
     "grant-permission_label":"Grant permission"
   },
 
-  "tab-secrets":{
-    "title":"Secrets",
-    "add-secret_label":"Add Secret"
+  "tab-settings":{
+    "about":"About",
+    "title":"Settings",
+    "information_label": "Information",
+    "secrets_label": "Secrets",
+    "add-settings_label":"Add Secret"
   },
 
   "tab-wallets":{
@@ -236,8 +268,18 @@
       "okay_label": "Okay"
     },
     "no-secret_alert":{
-      "title": "No secret found",
+      "title": "No account found",
       "text": "You do not have any compatible account for this public key in AirGap. Please import your secret and create the corresponding account to sign this transaction.",
+      "okay_label": "Okay"
+    },
+    "sync-operation-not-supported_alert": {
+      "title": "Sync operation not supported",
+      "text": "Please use AirGap Wallet to scan this QR.",
+      "okay_label": "Okay"
+    },
+    "invalid-sync-operation_alert": {
+      "title": "Incompatible Sync code",
+      "text": "Could not parse sync code. Please make sure this is a valid AirGap sync code.",
       "okay_label": "Okay"
     },
     "raw-tx_alert":{
@@ -248,32 +290,19 @@
   "tabs": {
     "wallets": "Accounts",
     "scanner": "Scanner",
-    "secrets": "Secrets"
+    "settings": "Settings"
   },
 
   "transaction-detail":{
-    "title":"Confirm Transaction",
+    "title":"Sign Transaction",
     "text":"You're about to send:",
     "sign-tx_label":"Sign Transaction"
   },
 
-  "transaction-onboarding":{
-    "title":"Signed Transaction",
-    "heading":"Scan Signed Transaction",
-    "description":"Scan the signed transaction QR code in the next step with your AirGap Wallet app.",
-    "dont-show_label":"DON'T SHOW AGAIN",
-    "next_label":"Next Step"
-  },
-
-  "transaction-unlock": {
-    "title": "Unlock Secret",
-    "unlock_label": "Unlock"
-  },
-
   "transaction-signed":{
     "title":"Signed Transaction",
+    "heading": "This is your signed transaction, scan it with <span class=\"style__strong color__primary\">AirGap Wallet</span>.",
     "raw-tx_label":"Display Raw Transaction",
-    "same-device-broadcast_label":"Same Device Broadcast",
     "done_label":"Done"
   },
 
@@ -285,16 +314,28 @@
     "title": "Account Address",
     "address_label": "Address:",
     "path_label": "Derivation Path:",
-    "sync_label": "Sync",
+    "sync_label": "Sync Account",
     "done_label": "Done",
     "copy-address_modal": {
       "text": "Address was copied to your clipboard"
     }
   },
 
+  "interaction-selection": {
+    "title": "Wallet Interaction",
+    "heading": "How would you like to interact with <span class=\"style__strong color__primary\">AirGap Wallet</span>?",
+    "same-device_label": "Same Device",
+    "same-device_info": "AirGap Vault and AirGap Wallet are installed on the same device.",
+    "offline-device_label": "Offline Device",
+    "offline-device_info": "AirGap Vault is installed on an offline device, scan the QR code with AirGap Wallet."
+  },
+
   "wallet-edit-delete-popover":{
     "settings_label": "Account Settings",
-    "copy_label": "Copy address",
+    "copy_label": "Copy Address",
+    "copy_sync_code": "Copy Sync Code",
+    "confirm_address_copy": "Address was copied to your clipboard",
+    "confirm_sync_code_copy": "Sync code was copied to your clipboard",
     "account-removal_alert":{
       "title":"Confirm Account Removal",
       "text":"Do you want to remove this account? You can always add it back later, if you know its correct derivation path/coin!",
@@ -321,6 +362,7 @@
 
   "wallet-share":{
     "title":"Sync Account",
+    "heading": "This is your Sync QR code, scan it with <span class=\"style__strong color__primary\">AirGap Wallet</span>.",
     "text":"This QR includes your <b>extended</b> public key, public address and your type of coin. Do not share it publicly!",
     "same-device_label":"Same-Device-Sync",
     "done_label":"Done"
@@ -337,6 +379,18 @@
       },
       "description": "You understand the risks involved in this software, including but no limited to losing your secret, thus private keys and access to your funds.",
       "understood_label": "I understand and accept"
+    }
+  },
+  "deep-link": {
+    "not-supported-alert": {
+      "title": "Oops",
+      "message": "Deeplinking is only supported on mobile devices.",
+      "ok": "Ok"
+    },
+    "app-not-found": {
+      "title": "Oops",
+      "message": "It looks like you don't have {{otherAppName}} installed on this device.",
+      "ok": "Ok"
     }
   }
 }

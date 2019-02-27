@@ -11,9 +11,11 @@ export class FeeConverterPipe implements PipeTransform {
       // console.warn(`FeeConverterPipe: necessary properties missing!\n` + `Protocol: ${args.protocolIdentifier}\n` + `Value: ${value}`)
       return ''
     }
+    let protocol
 
-    const protocol = getProtocolByIdentifier(args.protocolIdentifier)
-    if (!protocol) {
+    try {
+      protocol = getProtocolByIdentifier(args.protocolIdentifier)
+    } catch (e) {
       return ''
     }
 

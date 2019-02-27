@@ -8,6 +8,7 @@ import { AirGapWallet, getProtocolByIdentifier } from 'airgap-coin-lib'
 import { LoadingController, AlertController } from 'ionic-angular'
 
 import bip39 from 'bip39'
+import { handleErrorLocal, ErrorCategory } from '../error-handler/error-handler'
 @Injectable()
 export class SecretsProvider {
   private activeSecret: Secret
@@ -22,7 +23,7 @@ export class SecretsProvider {
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController
   ) {
-    this.ready = this.init();
+    this.ready = this.init()
   }
 
   private async init(): Promise<void> {
@@ -35,7 +36,7 @@ export class SecretsProvider {
   public isReady(): Promise<void> {
     return this.ready
   }
-  
+
   private read(): Promise<Secret[]> {
     return new Promise((resolve, reject) => {
       this.storage
@@ -82,7 +83,9 @@ export class SecretsProvider {
     return new Promise((resolve, reject) => {
       if (!secret.secretHex) {
         this.secretsList[this.secretsList.findIndex(obj => obj.id === secret.id)] = secret
-        this.persist().then(resolve)
+        this.persist()
+          .then(resolve)
+          .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
       } else {
         this.secureStorageService
           .get(secret.id, secret.isParanoia)
@@ -90,17 +93,21 @@ export class SecretsProvider {
             return secureStorage.setItem(secret.id, secret.secretHex)
           })
           .then(
-            value => {
+            _value => {
               secret.flushSecret()
               if (this.secretsList.findIndex(obj => obj.id === secret.id) === -1) {
                 this.ngZone.run(() => {
                   this.secretsList.push(secret)
                   this.activeSecret = secret
-                  this.persist().then(resolve)
+                  this.persist()
+                    .then(resolve)
+                    .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
                 })
               } else {
                 this.activeSecret = secret
-                this.persist().then(resolve)
+                this.persist()
+                  .then(resolve)
+                  .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
               }
             },
             error => {
@@ -113,18 +120,23 @@ export class SecretsProvider {
   }
 
   remove(secret: Secret): Promise<void> {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       return this.secureStorageService.get(secret.id, secret.isParanoia).then(secureStorage => {
-        secureStorage.removeItem(secret.id).then(() => {
-          this.secretsList.splice(this.secretsList.indexOf(secret), 1)
-          this.persist().then(resolve)
-        })
+        secureStorage
+          .removeItem(secret.id)
+          .then(() => {
+            this.secretsList.splice(this.secretsList.indexOf(secret), 1)
+            this.persist()
+              .then(resolve)
+              .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
+          })
+          .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
       })
     })
   }
 
   retrieveEntropyForSecret(secret: Secret): Promise<string> {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       return this.secureStorageService.get(secret.id, secret.isParanoia).then(secureStorage => {
         resolve(secureStorage.getItem(secret.id))
       })
@@ -175,6 +187,15 @@ export class SecretsProvider {
     }
   }
 
+  findBaseWalletByPublicKeyAndProtocolIdentifier(pubKey: string, protocolIdentifier: string): AirGapWallet | undefined {
+    const secret = this.findByPublicKey(pubKey)
+    if (!secret) {
+      return undefined
+    }
+
+    return secret.wallets.find(wallet => wallet.publicKey === pubKey && protocolIdentifier.startsWith(wallet.protocolIdentifier))
+  }
+
   getActiveSecret(): Secret {
     return this.activeSecret || this.secretsList[0]
   }
@@ -193,7 +214,7 @@ export class SecretsProvider {
       const loading = this.loadingCtrl.create({
         content: 'Deriving your wallet...'
       })
-      loading.present()
+      loading.present().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
 
       const protocol = getProtocolByIdentifier(protocolIdentifier)
 
@@ -207,25 +228,31 @@ export class SecretsProvider {
             isHDWallet,
             customDerivationPath
           )
-          wallet.addresses = wallet.deriveAddresses(1)
-          if (
-            secret.wallets.find(obj => obj.publicKey === wallet.publicKey && obj.protocolIdentifier === wallet.protocolIdentifier) ===
-            undefined
-          ) {
-            secret.wallets.push(wallet)
-            resolve(this.addOrUpdateSecret(secret))
-          } else {
-            this.showAlert(
-              'Wallet already exists',
-              'You already have added this specific wallet. Please change its derivation path to add another address (advanced mode).'
-            )
-            reject()
-          }
-          loading.dismiss()
+          wallet
+            .deriveAddresses(1)
+            .then(addresses => {
+              wallet.addresses = addresses
+
+              if (
+                secret.wallets.find(obj => obj.publicKey === wallet.publicKey && obj.protocolIdentifier === wallet.protocolIdentifier) ===
+                undefined
+              ) {
+                secret.wallets.push(wallet)
+                resolve(this.addOrUpdateSecret(secret))
+              } else {
+                this.showAlert(
+                  'Wallet already exists',
+                  'You already have added this specific wallet. Please change its derivation path to add another address (advanced mode).'
+                )
+                reject()
+              }
+              loading.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
+            })
+            .catch(handleErrorLocal(ErrorCategory.WALLET_PROVIDER))
         })
         .catch(err => {
           this.showAlert('Error', err)
-          loading.dismiss()
+          loading.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
           reject()
         })
     })
@@ -243,6 +270,6 @@ export class SecretsProvider {
         }
       ]
     })
-    alert.present()
+    alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
   }
 }

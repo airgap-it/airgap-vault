@@ -7,7 +7,7 @@
 <ion-content no-bounce [class.transparent]="hasCameraPermission">
   <p ion-text color="white" padding no-margin text-center>{{ 'tab-scan.text' | translate }}</p>
 
-  <ion-row justify-content-center align-items-center class="row--height__100">
+  <ion-row [hidden]="!hasCameraPermission" justify-content-center align-items-center class="row--height__100">
     <ion-col class="guides--container content--align__center-center">
       <img class="guides--container__img" src="assets/img/qr_code_guides.svg" />
     </ion-col>
@@ -20,7 +20,7 @@
     ></zxing-scanner>
   </ion-row>
 
-  <ion-row *ngIf="hasCameraPermission" (click)="requestPermission()" justify-content-center align-items-center class="row--height__100">
+  <ion-row [hidden]="hasCameraPermission" (click)="requestPermission()" justify-content-center align-items-center class="row--height__100">
     <ion-col text-center>
       <img src="./assets/img/permission_onboarding_camera.svg" />
       <h3 padding-horizontal [innerHTML]="'tab-scan.empty-state_heading' | translate"></h3>

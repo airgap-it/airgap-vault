@@ -17,8 +17,11 @@ export class AmountConverterPipe implements PipeTransform {
       return ''
     }
 
-    const protocol = getProtocolByIdentifier(args.protocolIdentifier)
-    if (!protocol) {
+    let protocol
+
+    try {
+      protocol = getProtocolByIdentifier(args.protocolIdentifier)
+    } catch (e) {
       return ''
     }
 

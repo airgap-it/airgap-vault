@@ -6,6 +6,7 @@ import { SocialRecoveryImportPage } from '../social-recovery-import/social-recov
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import { SecretGenerateOnboardingPage } from '../secret-generate-onboarding/secret-generate-onboarding'
 import { Storage } from '@ionic/storage'
+import { ErrorCategory, handleErrorLocal } from '../../providers/error-handler/error-handler'
 
 @IonicPage()
 @Component({
@@ -22,21 +23,17 @@ export class SecretCreatePage {
   public async goToGenerate() {
     const hasShownDisclaimer = await this.storage.get('DISCLAIMER_GENERATE_INITIAL')
     if (hasShownDisclaimer) {
-      this.navController.push(SecretGeneratePage)
+      this.navController.push(SecretGeneratePage).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } else {
-      this.navController.push(SecretGenerateOnboardingPage)
+      this.navController.push(SecretGenerateOnboardingPage).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     }
   }
 
   public goToImport() {
-    this.navController.push(SecretImportPage)
+    this.navController.push(SecretImportPage).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public goToSocialRecoveryImport() {
-    this.navController.push(SocialRecoveryImportPage)
-  }
-
-  public close() {
-    this.navController.popToRoot()
+    this.navController.push(SocialRecoveryImportPage).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

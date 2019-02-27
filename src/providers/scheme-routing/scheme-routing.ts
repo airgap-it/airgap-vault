@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core'
 import { AlertController, AlertButton, App, NavController } from 'ionic-angular'
-import { DeserializedSyncProtocol, UnsignedTransaction, SyncProtocolUtils, EncodedType } from 'airgap-coin-lib'
+import { AirGapWallet, DeserializedSyncProtocol, UnsignedTransaction, SyncProtocolUtils, EncodedType } from 'airgap-coin-lib'
 import { SecretsProvider } from '../secrets/secrets.provider'
 import { TransactionDetailPage } from '../../pages/transaction-detail/transaction-detail'
+import { handleErrorLocal, ErrorCategory } from '../error-handler/error-handler'
+import { TranslateService } from '@ngx-translate/core'
 
 @Injectable()
 export class SchemeRoutingProvider {
@@ -14,7 +16,12 @@ export class SchemeRoutingProvider {
   */
   private syncSchemeHandlers: ((deserializedSync: DeserializedSyncProtocol, scanAgainCallback: Function) => Promise<boolean>)[] = []
 
-  constructor(protected app: App, private secretsProvider: SecretsProvider, private alertController: AlertController) {
+  constructor(
+    protected app: App,
+    private secretsProvider: SecretsProvider,
+    private alertCtrl: AlertController,
+    private translateService: TranslateService
+  ) {
     this.syncSchemeHandlers[EncodedType.WALLET_SYNC] = this.syncTypeNotSupportedAlert.bind(this)
     this.syncSchemeHandlers[EncodedType.UNSIGNED_TRANSACTION] = this.handleUnsignedTransaction.bind(this)
     this.syncSchemeHandlers[EncodedType.SIGNED_TRANSACTION] = this.syncTypeNotSupportedAlert.bind(this)
@@ -41,15 +48,16 @@ export class SchemeRoutingProvider {
     this.navController = navCtrl
     const syncProtocol = new SyncProtocolUtils()
 
-    let url = new URL(rawString)
-    let d = url.searchParams.get('d')
-
-    if (d.length === 0) {
-      d = rawString // Fallback to support raw data QRs
+    let data: string | undefined
+    try {
+      let url: URL = new URL(rawString)
+      data = url.searchParams.get('d')
+    } catch (e) {
+      data = rawString // Fallback to support raw data QRs
     }
 
     try {
-      const deserializedSync = await syncProtocol.deserialize(d)
+      const deserializedSync = await syncProtocol.deserialize(data)
 
       if (deserializedSync.type in EncodedType) {
         // Only handle types that we know
@@ -58,59 +66,103 @@ export class SchemeRoutingProvider {
         return this.syncTypeNotSupportedAlert(deserializedSync, scanAgainCallback)
       }
     } catch (e) {
-      console.error('Deserialization of sync failed', e)
+      console.warn('Deserialization of sync failed', e)
+      // TODO: Log error locally
+      const cancelButton = {
+        text: 'tab-wallets.invalid-sync-operation_alert.okay_label',
+        role: 'cancel',
+        handler: () => {
+          scanAgainCallback()
+        }
+      }
+      this.showTranslatedAlert('tab-wallets.invalid-sync-operation_alert.title', 'tab-wallets.invalid-sync-operation_alert.text', [
+        cancelButton
+      ])
     }
   }
 
   private async handleUnsignedTransaction(deserializedSyncProtocol: DeserializedSyncProtocol, scanAgainCallback: Function) {
     const unsignedTransaction = deserializedSyncProtocol.payload as UnsignedTransaction
 
-    const correctWallet = this.secretsProvider.findWalletByPublicKeyAndProtocolIdentifier(
+    let correctWallet = this.secretsProvider.findWalletByPublicKeyAndProtocolIdentifier(
       unsignedTransaction.publicKey,
       deserializedSyncProtocol.protocol
     )
 
+    // If we can't find a wallet for a protocol, we will try to find the "base" wallet and then create a new
+    // wallet with the right protocol. This way we can sign all ERC20 transactions, but show the right amount
+    // and fee for all tokens we support.
     if (!correctWallet) {
+      const baseWallet = this.secretsProvider.findBaseWalletByPublicKeyAndProtocolIdentifier(
+        unsignedTransaction.publicKey,
+        deserializedSyncProtocol.protocol
+      )
+
+      // If the protocol is not supported, use the base protocol for signing
+      try {
+        correctWallet = new AirGapWallet(
+          deserializedSyncProtocol.protocol,
+          baseWallet.publicKey,
+          baseWallet.isExtendedPublicKey,
+          baseWallet.derivationPath
+        )
+        correctWallet.addresses = baseWallet.addresses
+      } catch (e) {
+        if (e.message === 'PROTOCOL_NOT_SUPPORTED') {
+          correctWallet = baseWallet
+        }
+      }
+    }
+
+    if (correctWallet) {
+      if (this.navController) {
+        this.navController
+          .push(TransactionDetailPage, {
+            transaction: unsignedTransaction,
+            wallet: correctWallet,
+            deserializedSync: deserializedSyncProtocol
+          })
+          .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+      }
+    } else {
       const cancelButton = {
-        text: 'Okay!',
+        text: 'tab-wallets.no-secret_alert.okay_label',
         role: 'cancel',
         handler: () => {
           scanAgainCallback()
         }
       }
-      this.showAlert(
-        'No secret found',
-        'You do not have any compatible wallet for this public key in AirGap. Please import your secret and create the corresponding wallet to sign this transaction',
-        [cancelButton]
-      )
-    } else {
-      if (this.navController) {
-        this.navController.push(TransactionDetailPage, {
-          transaction: unsignedTransaction,
-          wallet: correctWallet
-        })
-      }
+
+      this.showTranslatedAlert('tab-wallets.no-secret_alert.title', 'tab-wallets.no-secret_alert.text', [cancelButton])
     }
   }
 
-  private async syncTypeNotSupportedAlert(deserializedSyncProtocol: DeserializedSyncProtocol, scanAgainCallback: Function) {
+  private async syncTypeNotSupportedAlert(_deserializedSyncProtocol: DeserializedSyncProtocol, scanAgainCallback: Function) {
+    // TODO: Log error locally
     const cancelButton = {
-      text: 'Okay!',
+      text: 'tab-wallets.sync-operation-not-supported_alert.okay_label',
       role: 'cancel',
       handler: () => {
         scanAgainCallback()
       }
     }
-    this.showAlert('Sync type not supported', 'Please use another app to scan this QR.', [cancelButton])
+    this.showTranslatedAlert(
+      'tab-wallets.sync-operation-not-supported_alert.title',
+      'tab-wallets.sync-operation-not-supported_alert.text',
+      [cancelButton]
+    )
   }
 
-  async showAlert(title: string, message: string, buttons: AlertButton[]) {
-    let alert = this.alertController.create({
-      title,
-      message,
-      enableBackdropDismiss: false,
-      buttons
+  showTranslatedAlert(title: string, message: string, buttons: AlertButton[]): void {
+    const translationKeys = [title, message, ...buttons.map(button => button.text)]
+    this.translateService.get(translationKeys).subscribe(values => {
+      let alert = this.alertCtrl.create({
+        title: values[title],
+        message: values[message],
+        enableBackdropDismiss: true,
+        buttons: buttons.map(button => (button.text = values[button.text]))
+      })
+      alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
     })
-    return alert.present()
   }
 }

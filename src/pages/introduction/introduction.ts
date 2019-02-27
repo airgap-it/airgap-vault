@@ -1,6 +1,7 @@
 import { Component } from '@angular/core'
 import { Platform, ViewController } from 'ionic-angular'
 import { Storage } from '@ionic/storage'
+import { handleErrorLocal, ErrorCategory } from '../../providers/error-handler/error-handler'
 
 declare var cordova: any
 
@@ -14,9 +15,12 @@ export class IntroductionPage {
   constructor(private viewController: ViewController, private platform: Platform, private storage: Storage) {}
 
   accept() {
-    this.storage.set('INTRODUCTION_INITIAL', true).then(value => {
-      this.viewController.dismiss()
-    })
+    this.storage
+      .set('INTRODUCTION_INITIAL', true)
+      .then(() => {
+        this.viewController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+      })
+      .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
   }
 
   public downloadClient() {
@@ -28,8 +32,7 @@ export class IntroductionPage {
     if (this.platform.is('android')) {
       window.open('https://play.google.com/store/apps/details?id=it.airgap.wallet')
     } else if (this.platform.is('ios')) {
-      // window.open('itms-apps://itunes.apple.com/app/[appId]') // TODO: Replace with Vault App-ID
-      this.openUrl('https://airgap.it/') // Website fallback until we know App-ID
+      window.open('itms-apps://itunes.apple.com/app/id1420996542') // AirGap Wallet
     }
   }
 

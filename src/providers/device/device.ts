@@ -8,7 +8,7 @@ declare var rootdetection: any
 export class DeviceProvider {
   constructor(private platform: Platform) {}
 
-  checkForRoot() {
+  checkForRoot(): Promise<boolean> {
     return new Promise((resolve, reject) => {
       if (this.platform.is('android') && this.platform.is('cordova')) {
         // TODO build own android root detection with https://github.com/scottyab/rootbeer

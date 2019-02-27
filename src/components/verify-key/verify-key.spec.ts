@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing'
 import { IonicModule } from 'ionic-angular'
 import { HttpClient, HttpClientModule } from '@angular/common/http'
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
-import { HttpLoaderFactory } from '../../app/app.module'
+import { createTranslateLoader } from '../../app/app.module'
 
 describe('Component: VerifyKey', () => {
   let component: VerifyKeyComponent
@@ -22,10 +22,11 @@ describe('Component: VerifyKey', () => {
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
+            useFactory: createTranslateLoader,
             deps: [HttpClient]
           }
-        })]
+        })
+      ]
     })
       .compileComponents()
       .then(() => {
@@ -116,7 +117,7 @@ describe('Component: VerifyKey', () => {
     // first empty spot is zero
     expect(component.emptySpot(component.currentWords)).toEqual(0)
 
-    component.useWord(words[0])
+    component.useWord({ word: words[0] })
 
     // next empty spot is one
     expect(component.emptySpot(component.currentWords)).toEqual(1)

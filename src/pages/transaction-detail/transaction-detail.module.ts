@@ -7,7 +7,6 @@ import { TranslateModule } from '@ngx-translate/core'
 @NgModule({
   declarations: [TransactionDetailPage],
   imports: [ComponentsModule, IonicPageModule.forChild(TransactionDetailPage), TranslateModule],
-  entryComponents: [TransactionDetailPage],
-  providers: []
+  entryComponents: [TransactionDetailPage]
 })
 export class TransactionDetailPageModule {}
