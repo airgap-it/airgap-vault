@@ -1,5 +1,12 @@
 import { Component, Input } from '@angular/core'
-import { DeserializedSyncProtocol, IAirGapTransaction, getProtocolByIdentifier, SignedTransaction, SyncProtocolUtils } from 'airgap-coin-lib'
+import {
+  DeserializedSyncProtocol,
+  IAirGapTransaction,
+  getProtocolByIdentifier,
+  UnsignedTransaction,
+  SignedTransaction,
+  SyncProtocolUtils
+} from 'airgap-coin-lib'
 
 @Component({
   selector: 'signed-transaction',
@@ -10,12 +17,15 @@ export class SignedTransactionComponent {
   signedTx: DeserializedSyncProtocol
 
   @Input()
+  unsignedTx: DeserializedSyncProtocol
+
+  @Input()
   syncProtocolString: string
 
   airGapTx: IAirGapTransaction
   fallbackActivated: boolean = false
 
-  rawTxData: SignedTransaction
+  rawTxData: string
 
   constructor() {
     //
@@ -25,10 +35,11 @@ export class SignedTransactionComponent {
     if (this.syncProtocolString) {
       try {
         const syncUtils = new SyncProtocolUtils()
-        const parts = this.syncProtocolString.split('?d=')
+        const parts = this.syncProtocolString.split('?d=') // TODO: Use sync scheme handler to unpack
         this.signedTx = await syncUtils.deserialize(parts[parts.length - 1])
       } catch (err) {
         this.fallbackActivated = true
+        this.rawTxData = this.syncProtocolString
       }
     }
 
@@ -39,7 +50,18 @@ export class SignedTransactionComponent {
         this.fallbackActivated = false
       } catch (e) {
         this.fallbackActivated = true
-        this.rawTxData = this.signedTx.payload as SignedTransaction
+        this.rawTxData = (this.signedTx.payload as SignedTransaction).transaction
+      }
+    }
+
+    if (this.unsignedTx) {
+      const protocol = getProtocolByIdentifier(this.unsignedTx.protocol)
+      try {
+        this.airGapTx = await protocol.getTransactionDetails(this.unsignedTx.payload as UnsignedTransaction)
+        this.fallbackActivated = false
+      } catch (e) {
+        this.fallbackActivated = true
+        this.rawTxData = JSON.stringify((this.unsignedTx.payload as UnsignedTransaction).transaction)
       }
     }
   }
