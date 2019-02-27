@@ -119,7 +119,8 @@ export class SchemeRoutingProvider {
         this.navController
           .push(TransactionDetailPage, {
             transaction: unsignedTransaction,
-            wallet: correctWallet
+            wallet: correctWallet,
+            deserializedSync: deserializedSyncProtocol
           })
           .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       }

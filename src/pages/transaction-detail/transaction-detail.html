@@ -9,8 +9,8 @@
 <ion-content padding class="colored-background">
   <div *ngIf="airGapTx">
     <p>{{ 'transaction-detail.text' | translate }}</p>
-    <from-to [transaction]="airGapTx"></from-to>
   </div>
+  <signed-transaction [unsignedTx]="deserializedSync"></signed-transaction>
 </ion-content>
 
 <ion-footer no-border>
