@@ -25,7 +25,7 @@ export class SignedTransactionComponent {
   airGapTx: IAirGapTransaction
   fallbackActivated: boolean = false
 
-  rawTxData: any
+  rawTxData: string
 
   constructor() {
     //
