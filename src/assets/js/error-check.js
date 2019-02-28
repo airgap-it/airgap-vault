@@ -16,26 +16,30 @@ setTimeout(function() {
 				"If the app did indeed not load, please click 'Ok' to show the error."
 		)
 		if (alertConfirmed == true) {
+			var text = '';
 			// Title
-			window.document.write('<h1>AirGap Error Report</h1>')
+			text += '<h1>AirGap Error Report</h1>'
 
 			// Add info about browser
-			window.document.write('<p>UserAgent: ' + navigator.userAgent + '<br />Language: ' + navigator.language + '</p>')
+			text += '<p>UserAgent: ' + navigator.userAgent + '<br />Language: ' + navigator.language + '</p>'
 
 			if (airGapFallbackErrors.length > 0) {
-				window.document.write('<h3>Errors</h3>')
+				text += '<h3>Errors</h3>'
 
 				for (var idx = 0; idx < airGapFallbackErrors.length; idx++) {
 					var error = airGapFallbackErrors[idx]
 					if (error) {
-						window.document.write('<p>' + error.message + '<br />' + error.stack + '</p>')
+						text += '<p>' + error.message + '<br />' + error.stack + '</p>'
 					}
 				}	
 			}
-			window.document.write('<h3>Please send a screenshot of this screen to the AirGap Team.<br />Thank you.</h3>')
+			text += '<h3>Please send a screenshot of this screen to the AirGap Team.<br />Thank you.</h3>'
+
+			// Overwrite the whole content of the page with our text
+			window.document.write(text)
 		}
 	} else {
-		console.log('App has started, removing error listener')
+		console.debug('App has started, removing error listener')
 		window.removeEventListener('error', airGapFallbackErrorHandler)
 	}
 }, 10000)
