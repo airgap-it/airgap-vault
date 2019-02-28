@@ -31,6 +31,7 @@ import { SecretGenerateOnboardingPageModule } from './secret-generate-onboarding
 import { DistributionOnboardingPageModule } from './distribution-onboarding/distribution-onboarding.module'
 import { InteractionSelectionPageModule } from './interaction-selection/interaction-selection.module'
 import { InteractionSelectionSettingsPageModule } from './interaction-selection-settings/interaction-selection-settings.module'
+import { VerifyDataPageModule } from './verify-data/verify-data.module'
 
 @NgModule({
   imports: [
@@ -65,7 +66,8 @@ import { InteractionSelectionSettingsPageModule } from './interaction-selection-
     DistributionOnboardingPageModule,
     IntroductionPageModule,
     InteractionSelectionPageModule,
-    InteractionSelectionSettingsPageModule
+    InteractionSelectionSettingsPageModule,
+    VerifyDataPageModule
   ],
   exports: []
 })

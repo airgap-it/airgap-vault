@@ -5,6 +5,7 @@ import { SecretsProvider } from '../secrets/secrets.provider'
 import { TransactionDetailPage } from '../../pages/transaction-detail/transaction-detail'
 import { handleErrorLocal, ErrorCategory } from '../error-handler/error-handler'
 import { TranslateService } from '@ngx-translate/core'
+import { VerifyDataPage } from '../../pages/verify-data/verify-data'
 
 @Injectable()
 export class SchemeRoutingProvider {
@@ -138,7 +139,14 @@ export class SchemeRoutingProvider {
   }
 
   private async syncTypeNotSupportedAlert(_deserializedSyncProtocol: DeserializedSyncProtocol, scanAgainCallback: Function) {
+    this.navController
+      .push(VerifyDataPage, {
+        deserializedSync: _deserializedSyncProtocol
+      })
+      .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+
     // TODO: Log error locally
+    /*
     const cancelButton = {
       text: 'tab-wallets.sync-operation-not-supported_alert.okay_label',
       role: 'cancel',
@@ -150,7 +158,8 @@ export class SchemeRoutingProvider {
       'tab-wallets.sync-operation-not-supported_alert.title',
       'tab-wallets.sync-operation-not-supported_alert.text',
       [cancelButton]
-    )
+		)
+		*/
   }
 
   showTranslatedAlert(title: string, message: string, buttons: AlertButton[]): void {
