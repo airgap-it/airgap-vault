@@ -21,8 +21,7 @@ import { StorageMock } from '../../../test-config/storage-mock'
 import { Storage } from '@ionic/storage'
 import { SecureStorageServiceMock } from '../../providers/storage/secure-storage.mock'
 import { HttpClientTestingModule } from '@angular/common/http/testing'
-import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core'
-import { createTranslateLoader } from '../../app/app.module'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { HttpClient } from '@angular/common/http'
 
 describe('SchemeRoutingProvider Provider', () => {
@@ -34,16 +33,7 @@ describe('SchemeRoutingProvider Provider', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: createTranslateLoader,
-            deps: [HttpClient]
-          }
-        })
-      ],
+      imports: [HttpClientTestingModule, TranslateModule.forRoot()],
       providers: [
         SchemeRoutingProvider,
         SecretsProvider,

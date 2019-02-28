@@ -55,6 +55,13 @@ export class MyApp {
 
   async initializeApp() {
     const supportedLanguages = ['en', 'de', 'zh-cn']
+    for (const lang of supportedLanguages) {
+      // We bundle languages so we don't have to load it over http
+      // and we don't have to add a CSP / whitelist rule for it.
+      this.translate.setTranslation(lang, require(`../assets/i18n/${lang}.json`))
+      // TODO: Once we add more languages, we probably should not all languages by default
+      // (we have to check if we can optimize that)
+    }
 
     this.loadLanguages(supportedLanguages)
     this.protocolsProvider.addProtocols()

@@ -3,8 +3,7 @@ import { VerifyKeyComponent } from './verify-key'
 import { ComponentFixture, TestBed, async } from '@angular/core/testing'
 import { IonicModule } from 'ionic-angular'
 import { HttpClient, HttpClientModule } from '@angular/common/http'
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
-import { createTranslateLoader } from '../../app/app.module'
+import { TranslateModule } from '@ngx-translate/core'
 
 describe('Component: VerifyKey', () => {
   let component: VerifyKeyComponent
@@ -16,17 +15,7 @@ describe('Component: VerifyKey', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [VerifyKeyComponent],
-      imports: [
-        IonicModule.forRoot(VerifyKeyComponent),
-        HttpClientModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: createTranslateLoader,
-            deps: [HttpClient]
-          }
-        })
-      ]
+      imports: [IonicModule.forRoot(VerifyKeyComponent), HttpClientModule, TranslateModule.forRoot()]
     })
       .compileComponents()
       .then(() => {
