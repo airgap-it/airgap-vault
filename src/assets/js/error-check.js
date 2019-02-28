@@ -16,17 +16,19 @@ setTimeout(function() {
 		if (alertConfirmed == true) {
 			// Title
 			window.document.write('<h1>AirGap Error Report</h1>')
+
 			// Add info about browser
 			window.document.write('<p>UserAgent: ' + navigator.userAgent + '<br />Language: ' + navigator.language + '</p>')
 
 			if (airGapFallbackErrors.length > 0) {
 				window.document.write('<h3>Errors</h3>')
-			}
-			for (var idx = 0; idx < airGapFallbackErrors.length; idx++) {
-				var error = airGapFallbackErrors[idx]
-				if (error) {
-					window.document.write('<p>' + error.message + '<br />' + error.stack + '</p>')
-				}
+
+				for (var idx = 0; idx < airGapFallbackErrors.length; idx++) {
+					var error = airGapFallbackErrors[idx]
+					if (error) {
+						window.document.write('<p>' + error.message + '<br />' + error.stack + '</p>')
+					}
+				}	
 			}
 			window.document.write('<h3>Please send a screenshot of this screen to the AirGap Team.<br />Thank you.</h3>')
 		}
@@ -34,4 +36,3 @@ setTimeout(function() {
 		window.removeEventListener('error', airGapFallbackErrorHandler)
 	}
 }, 10000)
-asdf.asdfas()
