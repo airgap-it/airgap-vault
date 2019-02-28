@@ -2,9 +2,11 @@ window.airGapHasStarted = false
 
 var airGapFallbackErrors = []
 
-window.addEventListener('error', function airGapFallbackErrorHandler(e) {
+function airGapFallbackErrorHandler(e) {
 	airGapFallbackErrors.push(e.error)
-})
+}
+
+window.addEventListener('error', airGapFallbackErrorHandler, false)
 
 setTimeout(function() {
 	if (!window.airGapHasStarted) {
@@ -33,6 +35,7 @@ setTimeout(function() {
 			window.document.write('<h3>Please send a screenshot of this screen to the AirGap Team.<br />Thank you.</h3>')
 		}
 	} else {
+		console.log('App has started, removing error listener')
 		window.removeEventListener('error', airGapFallbackErrorHandler)
 	}
 }, 10000)
