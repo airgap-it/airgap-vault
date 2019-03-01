@@ -45,21 +45,20 @@ export class WalletEditPopoverComponent {
   }
 
   async copyAddressToClipboard() {
-    await this.clipboardProvider.copyAndShowToast(
-      this.wallet.receivingPublicAddress,
-      this.translateService.instant('wallet-edit-delete-popover.confirm_address_copy')
-    )
-
-    await this.viewCtrl.dismiss()
+    this.translateService.get(['wallet-edit-delete-popover.confirm_address_copy']).subscribe(async values => {
+      await this.clipboardProvider.copyAndShowToast(
+        this.wallet.receivingPublicAddress,
+        values['wallet-edit-delete-popover.confirm_address_copy']
+      )
+      await this.viewCtrl.dismiss()
+    })
   }
 
   async copyShareUrlToClipboard() {
-    await this.clipboardProvider.copyAndShowToast(
-      this.walletShareUrl,
-      this.translateService.instant('wallet-edit-delete-popover.confirm_sync_code_copy')
-    )
-
-    await this.viewCtrl.dismiss()
+    this.translateService.get(['wallet-edit-delete-popover.confirm_sync_code_copy']).subscribe(async values => {
+      await this.clipboardProvider.copyAndShowToast(this.walletShareUrl, values['wallet-edit-delete-popover.confirm_sync_code_copy'])
+      await this.viewCtrl.dismiss()
+    })
   }
 
   delete() {

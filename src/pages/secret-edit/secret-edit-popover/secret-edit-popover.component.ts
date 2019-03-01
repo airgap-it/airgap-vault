@@ -8,10 +8,10 @@ import { handleErrorLocal, ErrorCategory } from '../../../providers/error-handle
 @Component({
   template: `
     <ion-list no-lines no-detail>
-      <ion-list-header>Settings</ion-list-header>
+      <ion-list-header>{{ 'secret-edit.small_popover.settings' | translate }}</ion-list-header>
       <button ion-item detail-none (click)="delete()">
         <ion-icon name="trash" color="dark" item-end></ion-icon>
-        Delete
+        {{ 'secret-edit.small_popover.delete' | translate }}
       </button>
     </ion-list>
   `
