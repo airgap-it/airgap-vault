@@ -40,44 +40,63 @@ export class WarningsModalPage {
 
   ngAfterViewInit() {
     if (this.errorType === Warning.ROOT) {
-      this.title = 'Your device is rooted'
-      this.description =
-        'It seems like you have rooted your device. While we think this is neat, it weakens the security of your device significantly and we multiple mechanisms of AirGap can be circumvented by other apps. Therefore, AirGap is not able to run on this device.'
-      this.imageUrl = './assets/img/root_detection.svg'
-      this.handler = () => {
-        this.platform.exitApp()
-      }
+      this.translateService.get(['warnings-modal.root.title', 'warnings-modal.root.description']).subscribe(values => {
+        let title = values['warnings-modal.root.title']
+        let description = values['warnings-modal.root.description']
+        this.title = title
+        this.description = description
+        this.imageUrl = './assets/img/root_detection.svg'
+        this.handler = () => {
+          this.platform.exitApp()
+        }
+      })
     }
 
     if (this.errorType === Warning.SCREENSHOT) {
-      this.title = 'Screenshot detected'
-      this.description =
-        'Looks like you just took a screenshot. Make sure that you never take a screenshot you might expose your secret key.'
-      this.imageUrl = './assets/img/screenshot_detected.svg'
-      this.handler = () => {
-        this.platform.exitApp()
-      }
+      this.translateService.get(['warnings-modal.screenshot.title', 'warnings-modal.screenshot.description']).subscribe(values => {
+        let title = values['warnings-modal.screenshot.title']
+        let description = values['warnings-modal.screenshot.description']
+        this.title = title
+        this.description = description
+        this.imageUrl = './assets/img/screenshot_detected.svg'
+        this.handler = () => {
+          this.platform.exitApp()
+        }
+      })
     }
 
     if (this.errorType === Warning.SECURE_STORAGE) {
-      this.title = 'Device Unsecure'
-      this.description =
-        'Your lockscreen needs to be setup in order to properly encrypt and protect your secrets. After securing your device, please close and restart AirGap.'
-      this.imageUrl = './assets/img/screenshot_detected.svg'
-      this.buttonText = 'Secure Device'
-      this.handler = () => {
-        this.secureStorage.secureDevice().catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
-      }
+      this.translateService
+        .get([
+          'warnings-modal.secure_storage.title',
+          'warnings-modal.secure_storage.description',
+          'warnings-modal.secure_storage.button_text'
+        ])
+        .subscribe(values => {
+          let title = values['warnings-modal.secure_storage.title']
+          let description = values['warnings-modal.secure_storage.description']
+          let buttonText = values['warnings-modal.secure_storage.button_text']
+          this.title = title
+          this.description = description
+          this.imageUrl = './assets/img/screenshot_detected.svg'
+          this.buttonText = buttonText
+          this.handler = () => {
+            this.secureStorage.secureDevice().catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
+          }
+        })
     }
 
     if (this.errorType === Warning.NETWORK) {
-      this.title = 'Network Connection detected'
-      this.description =
-        'Looks like you have connected this device to a network. The AirGap App has no network priviledges but it is best to disconnect the device entierly from any network.'
-      this.imageUrl = './assets/img/network_connection.svg'
-      this.handler = () => {
-        this.platform.exitApp()
-      }
+      this.translateService.get(['warnings-modal.network.title', 'warnings-modal.network.description']).subscribe(values => {
+        let title = values['warnings-modal.network.title']
+        let description = values['warnings-modal.network.description']
+        this.title = title
+        this.description = description
+        this.imageUrl = './assets/img/network_connection.svg'
+        this.handler = () => {
+          this.platform.exitApp()
+        }
+      })
     }
 
     if (this.errorType === Warning.INITIAL_DISCLAIMER) {
