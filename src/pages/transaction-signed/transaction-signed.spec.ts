@@ -17,8 +17,7 @@ import { WalletMock } from '../../../test-config/wallet-mock'
 import { StorageMock } from '../../../test-config/storage-mock'
 import { Storage } from '@ionic/storage'
 import { SecureStorageServiceMock } from '../../providers/storage/secure-storage.mock'
-import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core'
-import { createTranslateLoader } from '../../app/app.module'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 
 import { HttpClient } from '@angular/common/http'
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing'
@@ -43,13 +42,7 @@ describe('TransactionSigned Page', () => {
         ComponentsModule,
         QRCodeModule,
         HttpClientTestingModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: createTranslateLoader,
-            deps: [HttpClient]
-          }
-        })
+        TranslateModule.forRoot()
       ],
       providers: [
         Clipboard,

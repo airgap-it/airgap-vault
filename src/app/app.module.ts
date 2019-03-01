@@ -5,8 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen'
 import { StatusBar } from '@ionic-native/status-bar'
 import { Deeplinks } from '@ionic-native/deeplinks'
 import { HttpClient, HttpClientModule } from '@angular/common/http'
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
-import { TranslateHttpLoader } from '@ngx-translate/http-loader'
+import { TranslateModule } from '@ngx-translate/core'
 import { MyApp } from './app.component'
 import { CameraPreview } from '@ionic-native/camera-preview'
 import { Clipboard } from '@ionic-native/clipboard'
@@ -39,23 +38,13 @@ import { InteractionProvider } from '../providers/interaction/interaction'
 import { DeepLinkProvider } from '../providers/deep-link/deep-link'
 import { ProtocolsProvider } from '../providers/protocols/protocols'
 
-export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json')
-}
-
 @NgModule({
   declarations: [MyApp],
   imports: [
     BrowserModule,
     MaterialIconsModule,
     HttpClientModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: createTranslateLoader,
-        deps: [HttpClient]
-      }
-    }),
+    TranslateModule.forRoot(),
     IonicModule.forRoot(MyApp, {
       tabsHideOnSubPages: true
     }),
