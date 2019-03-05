@@ -50,6 +50,7 @@ export class MyApp {
     private translate: TranslateService,
     private protocolsProvider: ProtocolsProvider
   ) {
+    window['airGapHasStarted'] = true
     this.initializeApp().catch(handleErrorLocal(ErrorCategory.OTHER))
   }
 
