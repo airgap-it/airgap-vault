@@ -2,18 +2,18 @@ window.airGapHasStarted = false
 
 var airGapFallbackErrors = []
 
-function airGapFallbackErrorHandler(e) {
+function airGapFallbackErrorHandler (e) {
 	airGapFallbackErrors.push(e.error)
 }
 
 window.addEventListener('error', airGapFallbackErrorHandler, false)
 
-setTimeout(function() {
+setTimeout(function () {
 	if (!window.airGapHasStarted) {
 		var alertConfirmed = confirm(
 			"It looks like the app didn't load. " +
-				"If this error is a mistake, please report it to us and click 'Cancel' to continue.\n" +
-				"If the app did indeed not load, please click 'Ok' to show the error."
+			"If this error is a mistake, please report it to us and click 'Cancel' to continue.\n" +
+			"If the app did indeed not load, please click 'Ok' to show the error."
 		)
 		if (alertConfirmed == true) {
 			var text = '';
@@ -31,7 +31,7 @@ setTimeout(function() {
 					if (error) {
 						text += '<p>' + error.message + '<br />' + error.stack + '</p>'
 					}
-				}	
+				}
 			}
 			text += '<h3>Please send a screenshot of this screen to the AirGap Team.<br />Thank you.</h3>'
 
@@ -41,5 +41,6 @@ setTimeout(function() {
 	} else {
 		console.debug('App has started, removing error listener')
 		window.removeEventListener('error', airGapFallbackErrorHandler)
+		airGapFallbackErrors = []
 	}
 }, 10000)
