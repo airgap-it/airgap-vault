@@ -78,7 +78,7 @@ import { ProtocolsProvider } from '../providers/protocols/protocols'
     {
       provide: CameraNativeService,
       useFactory: CameraFactory,
-      deps: [Platform, CameraPreview, RendererFactory2, NgZone, PermissionsProvider]
+      deps: [Platform, CameraPreview, RendererFactory2, PermissionsProvider]
     },
     {
       provide: AudioNativeService,

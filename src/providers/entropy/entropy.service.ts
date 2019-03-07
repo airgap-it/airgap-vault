@@ -42,22 +42,27 @@ export class EntropyService {
 
     for (let generator of this.entropyGenerators) {
       promises.push(
-        generator.start().then(() => {
-          let entropySubscription = generator.getEntropyUpdateObservable().subscribe(result => {
-            try {
-              hashWorker.postMessage({ entropyHex: result.entropyHex, call: 'update' })
-            } catch (error) {
-              console.warn(error)
-            }
-            if (this.entropyUpdateObserver) {
-              this.entropyUpdateObserver.next(void 0)
-            } else {
-              console.warn('entropyUpdateObserver is undefined!')
-            }
+        generator
+          .start()
+          .then(() => {
+            let entropySubscription = generator.getEntropyUpdateObservable().subscribe(result => {
+              try {
+                hashWorker.postMessage({ entropyHex: result.entropyHex, call: 'update' })
+              } catch (error) {
+                console.warn(error)
+              }
+              if (this.entropyUpdateObserver) {
+                this.entropyUpdateObserver.next(void 0)
+              } else {
+                console.warn('entropyUpdateObserver is undefined!')
+              }
+            })
+            this.entropySubscriptions.push(entropySubscription)
+            return
           })
-          this.entropySubscriptions.push(entropySubscription)
-          return
-        })
+          .catch(error => {
+            console.warn('generator start error', error)
+          })
       )
     }
     return Promise.all(promises)
