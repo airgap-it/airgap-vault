@@ -79,7 +79,10 @@ export class MyApp {
   }
 
   loadLanguages(supportedLanguages: string[]) {
+    this.translate.setDefaultLang('en')
+
     const language = this.translate.getBrowserLang()
+
     if (language) {
       const lowerCaseLanguage = language.toLowerCase()
       supportedLanguages.forEach(supportedLanguage => {
