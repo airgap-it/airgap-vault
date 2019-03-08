@@ -55,6 +55,9 @@
         <edit-config file="*-Info.plist" mode="merge" target="NSFaceIDUsageDescription">
             <string>AirGap uses Face ID to save your keys to the secure storage.</string>
         </edit-config>
+        <edit-config file="*-Info.plist" mode="merge" target="ITSAppUsesNonExemptEncryption">
+            <false/>
+        </edit-config>
         <allow-intent href="airgap-wallet:*" />
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
         <icon height="114" src="resources/ios/icon/icon@2x.png" width="114" />
