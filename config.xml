@@ -56,7 +56,7 @@
             <string>AirGap uses Face ID to save your keys to the secure storage.</string>
         </edit-config>
         <edit-config file="*-Info.plist" mode="merge" target="ITSAppUsesNonExemptEncryption">
-            <false/>
+            <false />
         </edit-config>
         <allow-intent href="airgap-wallet:*" />
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
@@ -138,4 +138,5 @@
     <plugin name="cordova.plugins.diagnostic" spec="4.0.10" />
     <engine name="android" spec="7.1.2" />
     <plugin name="cordova-plugin-app-version" spec="0.1.9" />
+    <engine name="ios" spec="~5.0.0" />
 </widget>
