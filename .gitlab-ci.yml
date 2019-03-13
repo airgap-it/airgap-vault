@@ -11,7 +11,7 @@ stages:
   - build
   - test
   - native_build
-  - qa  
+  - qa
 build_ionic:
   stage: build
   before_script:
@@ -41,8 +41,8 @@ unit:
     - docker
   artifacts:
     paths:
-    - lcov.info
-    - lintReport.json
+      - lcov.info
+      - lintReport.json
 
 build_android:
   stage: native_build
@@ -52,7 +52,7 @@ build_android:
   before_script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   script:
-    - sed -i -e "s/version=\"0.0.0\"/version=\"$VERSION\"/g" config.xml  
+    - sed -i -e "s/version=\"0.0.0\"/version=\"$VERSION\"/g" config.xml
     - docker build -f build/android/Dockerfile -t $IMAGE_TAG_ANDROID_CURRENT --build-arg KEYSTORE_PASSWORD="$KEYSTORE_PASSWORD" --build-arg KEYSTORE_ALIAS="$KEYSTORE_ALIAS" --build-arg BUILD_NR="$CI_PIPELINE_ID" .
     - docker run --name $CI_PIPELINE_ID $IMAGE_TAG_ANDROID_CURRENT echo "container ran."
     - docker cp $CI_PIPELINE_ID:/app/android-release-unsigned.apk android-release-unsigned-$CI_PIPELINE_ID.apk
@@ -61,17 +61,17 @@ build_android:
     - docker rm -f $CI_PIPELINE_ID || true
   artifacts:
     paths:
-    - android-release-unsigned-$CI_PIPELINE_ID.apk
-    - android-debug-$CI_PIPELINE_ID.apk
+      - android-release-unsigned-$CI_PIPELINE_ID.apk
+      - android-debug-$CI_PIPELINE_ID.apk
 
 build_ios:
   stage: native_build
   when: manual
   before_script:
     - echo "$IOS_BUILD_JSON" > build.json
-    - echo "$IOS_EXPORT_OPTIONS" > exportOptions.plist   
+    - echo "$IOS_EXPORT_OPTIONS" > exportOptions.plist
   script:
-    - sudo xcode-select -s /Applications/Xcode_9.4.app/Contents/Developer  
+    - sudo xcode-select -s /Applications/Xcode_10.1.app/Contents/Developer
     - sed -i -e "s/ios-CFBundleVersion=\"0.0.0\"/ios-CFBundleVersion=\"1.0.$CI_PIPELINE_ID\"/g" config.xml
     - sed -i -e "s/version=\"0.0.0\"/version=\"$VERSION\"/g" config.xml
     - nvm use v10.13.0
@@ -81,7 +81,7 @@ build_ios:
     - xcodebuild -workspace platforms/ios/AirGap\ Vault.xcworkspace -scheme "AirGap Vault" -destination generic/platform=iOS build -allowProvisioningUpdates
     - xcodebuild -workspace platforms/ios/AirGap\ Vault.xcworkspace -scheme "AirGap Vault" -sdk iphoneos -configuration AppStoreDistribution archive -archivePath platforms/ios/AirGap\ Vault.xcarchive
     - xcodebuild -exportArchive -archivePath platforms/ios/AirGap\ Vault.xcarchive -exportOptionsPlist exportOptions.plist -exportPath platforms/ios/ -allowProvisioningUpdates
-    - /Applications/Xcode_9.4.app/Contents/Applications/Application\ Loader.app/Contents/Frameworks/ITunesSoftwareService.framework/Support/altool --upload-app -f platforms/ios/AirGap\ Vault.ipa -u $IOS_USERNAME -p $IOS_PASSWORD
+    - /Applications/Xcode_10.1.app/Contents/Applications/Application\ Loader.app/Contents/Frameworks/ITunesSoftwareService.framework/Support/altool --upload-app -f platforms/ios/AirGap\ Vault.ipa -u $IOS_USERNAME -p $IOS_PASSWORD
   artifacts:
     paths:
       - AirGap\ Vault.ipa
