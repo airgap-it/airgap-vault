@@ -89,7 +89,7 @@
     "html-loader": "^0.5.1",
     "ionic": "3.9.1",
     "ionic-angular": "3.9.2",
-    "ionic-plugin-deeplinks": "^1.0.17",
+    "ionic-plugin-deeplinks": "git+https://github.com/airgap-it/ionic-plugin-deeplinks.git#cordova-ios-v5.0.0-fix",
     "ionic2-material-icons": "^1.0.3",
     "ionicons": "3.0.0",
     "js-sha3": "^0.7.0",
