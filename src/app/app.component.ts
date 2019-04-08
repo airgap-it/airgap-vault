@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core'
+import { Component, ViewChild, NgZone } from '@angular/core'
 import { Platform, Nav } from 'ionic-angular'
 import { StatusBar } from '@ionic-native/status-bar'
 import { SplashScreen } from '@ionic-native/splash-screen'
@@ -8,7 +8,10 @@ import { StartupChecksProvider } from '../providers/startup-checks/startup-check
 import { SchemeRoutingProvider } from '../providers/scheme-routing/scheme-routing'
 import { TranslateService } from '@ngx-translate/core'
 import { ProtocolsProvider } from '../providers/protocols/protocols'
+import { SecretsProvider } from '../providers/secrets/secrets.provider'
 import { handleErrorLocal, ErrorCategory } from '../providers/error-handler/error-handler'
+import { WalletSelectCoinsPage } from '../pages/wallet-select-coins/wallet-select-coins'
+import { SecretCreatePage } from '../pages/secret-create/secret-create'
 
 interface ExposedPromise<T> {
   promise: Promise<T>
@@ -48,7 +51,9 @@ export class MyApp {
     private startupChecks: StartupChecksProvider,
     private schemeRoutingProvider: SchemeRoutingProvider,
     private translate: TranslateService,
-    private protocolsProvider: ProtocolsProvider
+    private protocolsProvider: ProtocolsProvider,
+    private secretsProvider: SecretsProvider,
+    private ngZone: NgZone
   ) {
     window['airGapHasStarted'] = true
     this.initializeApp().catch(handleErrorLocal(ErrorCategory.OTHER))
@@ -119,15 +124,34 @@ export class MyApp {
             // match.$args - the args passed in the link
             // match.$link - the full link data
             this.isInitialized.promise
-              .then(() => {
-                console.log('Successfully matched route', match)
-                this.schemeRoutingProvider.handleNewSyncRequest(this.nav, match.$link.url).catch(console.error)
+              .then(async () => {
+                console.log('Successfully matched route', match.$link.url)
+
+                if (match.$link.url === `airgap-vault://` || match.$link.url.startsWith(`airgap-vault://add-account/`)) {
+                  if (this.secretsProvider.currentSecretsList.getValue().length > 0) {
+                    this.ngZone.run(async () => {
+                      await this.nav.popToRoot()
+                      const protocol = match.$link.url.substr(`airgap-vault://add-account/`.length)
+                      if (protocol.length > 0) {
+                        this.nav
+                          .push(WalletSelectCoinsPage, {
+                            protocol: protocol
+                          })
+                          .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+                      } else {
+                        this.nav.push(WalletSelectCoinsPage).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+                      }
+                    })
+                  }
+                } else {
+                  this.schemeRoutingProvider.handleNewSyncRequest(this.nav, match.$link.url).catch(console.error)
+                }
               })
               .catch(console.error)
           },
           nomatch => {
             // nomatch.$link - the full link data
-            console.error("Got a deeplink that didn't match", nomatch)
+            console.error("Got a deeplink that didn't match", nomatch.$link.url)
           }
         )
     }

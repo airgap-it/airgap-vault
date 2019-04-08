@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams, LoadingController, App } from 'ion
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
 import { Storage } from '@ionic/storage'
 import { LocalAuthenticationOnboardingPage } from '../local-authentication-onboarding/local-authentication-onboarding'
-import { ICoinProtocol, supportedProtocols } from 'airgap-coin-lib'
+import { ICoinProtocol, supportedProtocols, getProtocolByIdentifier } from 'airgap-coin-lib'
 import { handleErrorLocal, ErrorCategory } from '../../providers/error-handler/error-handler'
 
 @IonicPage()
@@ -27,6 +27,9 @@ export class WalletSelectCoinsPage {
     private app: App
   ) {
     this.coinProtocols = supportedProtocols()
+    try {
+      this.selectedProtocol = getProtocolByIdentifier(this.navParams.get('protocol'))
+    } catch (error) {}
   }
 
   ionViewDidLoad() {
