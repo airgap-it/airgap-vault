@@ -13,6 +13,9 @@ import { handleErrorLocal, ErrorCategory } from '../providers/error-handler/erro
 import { WalletSelectCoinsPage } from '../pages/wallet-select-coins/wallet-select-coins'
 import { SecretCreatePage } from '../pages/secret-create/secret-create'
 
+const DEEPLINK_VAULT_PREFIX = `airgap-vault://`
+const DEEPLINK_VAULT_ADD_ACCOUNT = `${DEEPLINK_VAULT_PREFIX}add-account/`
+
 interface ExposedPromise<T> {
   promise: Promise<T>
   resolve: (value?: any | PromiseLike<void>) => void
@@ -123,35 +126,39 @@ export class MyApp {
             // match.$route - the route we matched, which is the matched entry from the arguments to route()
             // match.$args - the args passed in the link
             // match.$link - the full link data
-            this.isInitialized.promise
-              .then(async () => {
-                console.log('Successfully matched route', match.$link.url)
+            if (match && match.$link && match.$link.url) {
+              this.isInitialized.promise
+                .then(async () => {
+                  console.log('Successfully matched route', match.$link.url)
 
-                if (match.$link.url === `airgap-vault://` || match.$link.url.startsWith(`airgap-vault://add-account/`)) {
-                  if (this.secretsProvider.currentSecretsList.getValue().length > 0) {
-                    this.ngZone.run(async () => {
-                      await this.nav.popToRoot()
-                      const protocol = match.$link.url.substr(`airgap-vault://add-account/`.length)
-                      if (protocol.length > 0) {
-                        this.nav
-                          .push(WalletSelectCoinsPage, {
-                            protocol: protocol
-                          })
-                          .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-                      } else {
-                        this.nav.push(WalletSelectCoinsPage).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-                      }
-                    })
+                  if (match.$link.url === DEEPLINK_VAULT_PREFIX || match.$link.url.startsWith(DEEPLINK_VAULT_ADD_ACCOUNT)) {
+                    if (this.secretsProvider.currentSecretsList.getValue().length > 0) {
+                      this.ngZone.run(async () => {
+                        await this.nav.popToRoot()
+                        const protocol = match.$link.url.substr(DEEPLINK_VAULT_ADD_ACCOUNT.length)
+                        if (protocol.length > 0) {
+                          this.nav
+                            .push(WalletSelectCoinsPage, {
+                              protocol: protocol
+                            })
+                            .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+                        } else {
+                          this.nav.push(WalletSelectCoinsPage).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+                        }
+                      })
+                    }
+                  } else {
+                    this.schemeRoutingProvider.handleNewSyncRequest(this.nav, match.$link.url).catch(console.error)
                   }
-                } else {
-                  this.schemeRoutingProvider.handleNewSyncRequest(this.nav, match.$link.url).catch(console.error)
-                }
-              })
-              .catch(console.error)
+                })
+                .catch(console.error)
+            }
           },
           nomatch => {
             // nomatch.$link - the full link data
-            console.error("Got a deeplink that didn't match", nomatch.$link.url)
+            if (nomatch && nomatch.$link && nomatch.$link.url) {
+              console.error("Got a deeplink that didn't match", nomatch.$link.url)
+            }
           }
         )
     }
