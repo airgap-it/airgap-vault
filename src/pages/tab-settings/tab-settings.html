@@ -12,15 +12,21 @@
       <ion-icon md-name="info" item-start color="dark"></ion-icon>
       {{ 'tab-settings.about' | translate }}
     </ion-item>
+    <ion-item no-lines detail-push (click)="pasteClipboard()">
+      <ion-icon name="return-right" item-start color="dark"></ion-icon>
+      {{ 'tab-settings.paste-from-clipboard_label' | translate }}
+    </ion-item>
   </ion-list>
-  <ion-label>{{ 'tab-settings.secrets_label' | translate }}</ion-label>
-  <ng-container *ngFor="let secret of (secrets | async)">
-    <secret-item [secret]="secret" (click)="goToEditSecret(secret)"></secret-item>
-  </ng-container>
-  <ion-row padding-top justify-content-end>
-    <button default ion-button color="secondary" (click)="goToNewSecret()" round icon-left>
-      <ion-icon name="add"></ion-icon>
-      {{ 'tab-settings.add-settings_label' | translate }}
-    </button>
-  </ion-row>
+  <ion-list>
+    <ion-label>{{ 'tab-settings.secrets_label' | translate }}</ion-label>
+    <ng-container *ngFor="let secret of (secrets | async)">
+      <secret-item [secret]="secret" (click)="goToEditSecret(secret)"></secret-item>
+    </ng-container>
+    <ion-row padding-top justify-content-end>
+      <button default ion-button color="secondary" (click)="goToNewSecret()" round icon-left>
+        <ion-icon name="add"></ion-icon>
+        {{ 'tab-settings.add-settings_label' | translate }}
+      </button>
+    </ion-row>
+  </ion-list>
 </ion-content>

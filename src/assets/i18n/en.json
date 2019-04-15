@@ -254,7 +254,8 @@
     "title":"Settings",
     "information_label": "Information",
     "secrets_label": "Secrets",
-    "add-settings_label":"Add Secret"
+    "add-settings_label":"Add Secret",
+    "paste-from-clipboard_label": "Paste code from clipboard"
   },
 
   "tab-wallets":{

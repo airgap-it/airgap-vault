@@ -1,6 +1,8 @@
 import { Component } from '@angular/core'
 import { AlertController, IonicPage, NavController, ToastController, ModalController } from 'ionic-angular'
 import { SecretsProvider } from '../../providers/secrets/secrets.provider'
+import { ClipboardProvider } from '../../providers/clipboard/clipboard'
+import { SchemeRoutingProvider } from '../../providers/scheme-routing/scheme-routing'
 import { Secret } from '../../models/secret'
 import { SecretCreatePage } from '../secret-create/secret-create'
 import { SecretEditPage } from '../secret-edit/secret-edit'
@@ -21,7 +23,9 @@ export class TabSettingsPage {
     public navController: NavController,
     private secretsProvider: SecretsProvider,
     private alertController: AlertController,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private schemeRoutingProvider: SchemeRoutingProvider,
+    private clipboardProvider: ClipboardProvider
   ) {
     this.secrets = this.secretsProvider.currentSecretsList.asObservable()
   }
@@ -80,5 +84,16 @@ export class TabSettingsPage {
 
   public about() {
     this.navController.push(AboutPage).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
+  public pasteClipboard() {
+    this.clipboardProvider.paste().then(
+      (text: string) => {
+        this.schemeRoutingProvider.handleNewSyncRequest(this.navController, text).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
+      },
+      (err: string) => {
+        console.error('Error: ' + err)
+      }
+    )
   }
 }
