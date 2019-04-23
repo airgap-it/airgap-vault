@@ -11,9 +11,9 @@ window.addEventListener('error', airGapFallbackErrorHandler, false)
 setTimeout(function () {
 	if (!window.airGapHasStarted) {
 		var alertConfirmed = confirm(
-			"It looks like the app didn't load. " +
-			"If this error is a mistake, please report it to us and click 'Cancel' to continue.\n" +
-			"If the app did indeed not load, please click 'Ok' to show the error."
+			"It looks like AirGap Vault is not able to load. " +
+			"If this is shown by mistake, please report it to the AirGap Support and click 'Cancel' to continue.\n" +
+			"If the app did indeed not load, please click 'Ok' to display the error report."
 		)
 		if (alertConfirmed == true) {
 			var text = '';
@@ -33,7 +33,7 @@ setTimeout(function () {
 					}
 				}
 			}
-			text += '<h3>Please send a screenshot of this screen to the AirGap Team.<br />Thank you.</h3>'
+			text += '<h3>Reach out to the AirGap Support on Telegram (https://t.me/AirGap) or Email (hi@airgap.it). Please provide a screenshot or photo of this screen.<br />Thank you.</h3>'
 
 			// Overwrite the whole content of the page with our text
 			window.document.write(text)
