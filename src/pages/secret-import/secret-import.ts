@@ -16,18 +16,20 @@ const signer = new BIP39Signer()
 })
 export class SecretImportPage {
   readonly mnemonic: string
+  readonly passphrase: string
   secretImportForm: FormGroup
 
   constructor(public navController: NavController, private formBuilder: FormBuilder) {
     const formGroup = {
-      mnemonic: ['', Validators.compose([Validators.required, MnemonicValidator.isValid])]
+      mnemonic: ['', Validators.compose([Validators.required, MnemonicValidator.isValid])],
+      passphrase: ['']
     }
 
     this.secretImportForm = this.formBuilder.group(formGroup)
   }
 
   goToSecretCreatePage() {
-    const secret = new Secret(signer.mnemonicToEntropy(BIP39Signer.prepareMnemonic(this.mnemonic)))
+    const secret = new Secret(signer.mnemonicToEntropy(BIP39Signer.prepareMnemonic(this.mnemonic)), this.passphrase)
     this.navController.push(SecretEditPage, { secret: secret, isGenerating: true }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

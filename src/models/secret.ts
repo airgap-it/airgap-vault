@@ -13,15 +13,18 @@ export class Secret {
   public isParanoia: boolean
   public hasSocialRecovery: boolean
   public interactionSetting: InteractionSetting
+  public passphrase: string
 
   public wallets: AirGapWallet[]
 
   private twofactor: string
+  
 
-  constructor(seed: string, label: string = '', isParanoia = false, interactionSetting = InteractionSetting.UNDETERMINED) {
+  constructor(seed: string, passphrase: string = '', label: string = '', isParanoia = false, interactionSetting = InteractionSetting.UNDETERMINED) {
     this.label = label
     this.isParanoia = isParanoia
     this.interactionSetting = interactionSetting
+    this.passphrase = passphrase
 
     // TODO: better check whether this is a mnemonic (validate)
     if (seed && seed.indexOf(' ') > -1) {

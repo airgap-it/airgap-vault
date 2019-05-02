@@ -141,12 +141,13 @@
     "continue_label":"Continue"
   },
 
-  "secret-import":{
-    "title":"Import secret",
-    "text":"You can import an existing secret to AirGap. Fill in the words from your secret.",
-    "placeholder":"wife pulp island ...",
-    "warning":"Please double-check the spelling of your mnemonic.",
-    "import_label":"Import"
+  "secret-import": {
+    "title": "Import secret",
+    "text": "You can import an existing secret to AirGap. Fill in the words from your secret.",
+    "placeholder": "wife pulp island ...",
+    "passphrase_placeholder": "passphrase (optional)",
+    "warning": "Please double-check the spelling of your mnemonic.",
+    "import_label": "Import"
   },
 
   "secret-rules":{

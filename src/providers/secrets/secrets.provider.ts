@@ -219,9 +219,10 @@ export class SecretsProvider {
       const protocol = getProtocolByIdentifier(protocolIdentifier)
 
       let secret = this.getActiveSecret()
+      let passhprase = secret.passphrase
       this.retrieveEntropyForSecret(secret)
         .then(entropy => {
-          let seed = bip39.mnemonicToSeedHex(bip39.entropyToMnemonic(entropy))
+          let seed = bip39.mnemonicToSeedHex(bip39.entropyToMnemonic(entropy), passhprase)
           let wallet = new AirGapWallet(
             protocol.identifier,
             protocol.getPublicKeyFromHexSecret(seed, customDerivationPath),
