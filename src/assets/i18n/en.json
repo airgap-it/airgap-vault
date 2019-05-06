@@ -50,6 +50,7 @@
     "amount_label":"AMOUNT",
     "fee_label":"FEE",
     "from_label": "From",
+    "data_label": "Data",
     "to_label": "To"
   },
 
