@@ -50,6 +50,7 @@
         <edit-config file="*-Info.plist" mode="merge" target="LSApplicationQueriesSchemes">
             <array>
                 <string>airgap-wallet</string>
+                <string>aepp-base</string>
             </array>
         </edit-config>
         <edit-config file="*-Info.plist" mode="merge" target="NSFaceIDUsageDescription">
