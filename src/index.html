@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="utf-8" />
     <title>AirGap Vault</title>
+
+    <base href="/" />
+
     <meta
       name="viewport"
       content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
@@ -15,6 +18,7 @@
     <!-- connect-src needs data: because because of libsodium -->
     <!-- child-src needs blob: because worker-src is unknown in safari -->
     <!-- style-src needs 'unsafe-inline' because we have inline css on the generate screen -->
+    <!-- TODO: ENABLE
     <meta
       http-equiv="Content-Security-Policy"
       content="
@@ -29,10 +33,9 @@
         style-src 'self' 'unsafe-inline';
       "
     />
+     -->
 
-    <link rel="icon" type="image/x-icon" href="assets/icon/favicon.ico" />
-    <link rel="manifest" href="manifest.json" />
-    <meta name="theme-color" content="#4e8ef7" />
+    <link rel="icon" type="image/png" href="assets/icon/favicon.png" />
 
     <!-- add to homescreen for ios -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -40,38 +43,9 @@
 
     <!-- check if app has loaded after x seconds. If not, error alert is shown. -->
     <script src="assets/js/error-check.js"></script>
-
-    <!-- cordova.js required for cordova apps (remove if not needed) -->
-    <script src="cordova.js"></script>
-
-    <!--
-      un-comment this code to enable service worker
-      <script>
-        if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.register('service-worker.js')
-            .then(() => console.log('service worker installed'))
-            .catch(err => console.error('Error', err));
-        }
-      </script>
-    -->
-
-    <link href="build/main.css" rel="stylesheet" />
   </head>
 
   <body>
-    <!-- Ionic's root component and where the app will load -->
-    <ion-app></ion-app>
-
-    <!-- The polyfills js is generated during the build process -->
-    <script src="build/polyfills.js"></script>
-
-    <!--
-      The vendor js is generated during the build process
-      It contains all of the dependencies in node_modules
-    -->
-    <script src="build/vendor.js"></script>
-
-    <!-- The main bundle js is generated during the build process -->
-    <script src="build/main.js"></script>
+    <app-root></app-root>
   </body>
 </html>
