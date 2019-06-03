@@ -44,7 +44,7 @@ RUN ionic cordova platforms add android
 COPY . /app
 
 # post-install hook, to be safe if it got cached
-RUN node config/patch_crypto.js
+# RUN node config/patch_crypto.js
 
 # set version code
 ARG BUILD_NR
