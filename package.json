@@ -36,11 +36,35 @@
     "@ionic-native/splash-screen": "^5.0.0",
     "@ionic-native/status-bar": "^5.0.0",
     "@ionic/angular": "^4.1.0",
+    "cordova-android": "7.1.2",
     "cordova-ios": "5.0.1",
     "core-js": "^2.5.4",
     "rxjs": "~6.5.1",
     "tslib": "^1.9.0",
-    "zone.js": "~0.8.29"
+    "zone.js": "~0.8.29",
+    "cordova-plugin-whitelist": "1.3.3",
+    "cordova-plugin-device": "2.0.2",
+    "cordova-plugin-splashscreen": "5.0.2",
+    "cordova-plugin-audioinput": "1.0.1",
+    "cordova-plugin-gyroscope": "0.1.4",
+    "cordova-plugin-ios-camera-permissions": "1.2.0",
+    "cordova-plugin-root-detection": "0.1.1",
+    "cordova-plugin-qrscanner": "2.6.0",
+    "cordova-android-support-gradle-release": "1.4.7",
+    "cordova-plugin-camera-preview": "git+https://github.com/cordova-plugin-camera-preview/cordova-plugin-camera-preview.git",
+    "cordova-plugin-statusbar": "2.4.2",
+    "ionic-plugin-deeplinks": "https://github.com/airgap-it/ionic-plugin-deeplinks#cordova-ios-v5.0.0-fix",
+    "cordova-sqlite-storage": "2.5.1",
+    "cordova-plugin-device-motion": "2.0.1",
+    "cordova-plugin-airgap-secure-storage": "0.1.7",
+    "com.lampa.startapp": "6.1.6",
+    "cordova-plugin-jailbreak-detection": "git+https://github.com/leecrossley/cordova-plugin-jailbreak-detection.git",
+    "cordova-plugin-add-swift-support": "1.7.2",
+    "cordova-plugin-ionic-keyboard": "2.1.3",
+    "cordova-plugin-airgap-webview": "git+https://github.com/airgap-it/cordova-plugin-airgap-webview.git",
+    "cordova-clipboard": "1.2.1",
+    "cordova.plugins.diagnostic": "4.0.10",
+    "cordova-plugin-app-version": "0.1.9"
   },
   "devDependencies": {
     "@angular-devkit/architect": "~0.13.8",
@@ -69,6 +93,7 @@
     "pretty-quick": "^1.11.0",
     "protractor": "~5.4.0",
     "puppeteer": "^1.17.0",
+    "replace": "^1.1.0",
     "sonarqube-scanner": "^2.4.1",
     "ts-node": "~8.1.0",
     "tslint": "~5.17.0",
@@ -90,6 +115,63 @@
           ]
         }
       ]
+    }
+  },
+  "cordova": {
+    "platforms": [
+      "android",
+      "ios"
+    ],
+    "plugins": {
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-device": {},
+      "cordova-plugin-splashscreen": {},
+      "cordova-plugin-audioinput": {},
+      "cordova-plugin-gyroscope": {},
+      "cordova-plugin-ios-camera-permissions": {
+        "CAMERA_USAGE_DESCRIPTION": "AirGap uses your camera to scan QR Codes of transactions, and to generate entropy for the secure key generation.",
+        "MICROPHONE_USAGE_DESCRIPTION": "AirGap uses your microphone to generate entropy for the secure key generation.",
+        "PHOTOLIBRARY_ADD_USAGE_DESCRIPTION": "This app needs write-access to photo library",
+        "PHOTOLIBRARY_USAGE_DESCRIPTION": "This app needs read/write-access photo library access"
+      },
+      "cordova-plugin-root-detection": {},
+      "cordova-plugin-qrscanner": {},
+      "cordova-android-support-gradle-release": {
+        "ANDROID_SUPPORT_VERSION": "26.1.0"
+      },
+      "cordova-plugin-camera-preview": {
+        "ANDROID_SUPPORT_LIBRARY_VERSION": "26.1.0"
+      },
+      "cordova-plugin-statusbar": {},
+      "ionic-plugin-deeplinks": {
+        "URL_SCHEME": "airgap-vault",
+        "DEEPLINK_HOST": "vault.airgap.it",
+        "DEEPLINK_SCHEME": "https",
+        "ANDROID_PATH_PREFIX": "/",
+        "ANDROID_2_PATH_PREFIX": "/",
+        "ANDROID_3_PATH_PREFIX": "/",
+        "ANDROID_4_PATH_PREFIX": "/",
+        "ANDROID_5_PATH_PREFIX": "/",
+        "DEEPLINK_2_SCHEME": " ",
+        "DEEPLINK_2_HOST": " ",
+        "DEEPLINK_3_SCHEME": " ",
+        "DEEPLINK_3_HOST": " ",
+        "DEEPLINK_4_SCHEME": " ",
+        "DEEPLINK_4_HOST": " ",
+        "DEEPLINK_5_SCHEME": " ",
+        "DEEPLINK_5_HOST": " "
+      },
+      "cordova-sqlite-storage": {},
+      "cordova-plugin-device-motion": {},
+      "cordova-plugin-airgap-secure-storage": {},
+      "com.lampa.startapp": {},
+      "cordova-plugin-jailbreak-detection": {},
+      "cordova-plugin-add-swift-support": {},
+      "cordova-plugin-ionic-keyboard": {},
+      "cordova-plugin-airgap-webview": {},
+      "cordova-clipboard": {},
+      "cordova.plugins.diagnostic": {},
+      "cordova-plugin-app-version": {}
     }
   }
 }
