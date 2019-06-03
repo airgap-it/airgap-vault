@@ -64,12 +64,15 @@
     "karma-coverage-istanbul-reporter": "~2.0.1",
     "karma-jasmine": "~1.1.2",
     "karma-jasmine-html-reporter": "^0.2.2",
+    "karma-spec-reporter": "0.0.32",
     "prettier": "^1.17.1",
     "pretty-quick": "^1.11.0",
     "protractor": "~5.4.0",
     "puppeteer": "^1.17.0",
+    "sonarqube-scanner": "^2.4.1",
     "ts-node": "~8.1.0",
     "tslint": "~5.17.0",
+    "tslint-config-prettier": "^1.18.0",
     "typescript": "~3.1.6"
   },
   "husky": {
