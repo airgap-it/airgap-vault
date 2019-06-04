@@ -41,7 +41,7 @@ COPY . /app
 RUN export NODE_ENV=production
 
 # post-install hook, to be safe if it got cached
-# RUN node config/patch_crypto.js
+RUN node config/patch_crypto.js
 
 # build
 RUN npm run build --prod

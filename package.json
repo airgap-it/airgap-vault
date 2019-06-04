@@ -16,7 +16,7 @@
     "lint-ci": "ng lint app --format json > ./lintReport.json || true",
     "lint-fix": "tslint --fix --project tsconfig.json",
     "e2e": "ng e2e",
-    "postinstall": "node patch-crypto.js",
+    "postinstall": "node config/patch_crypto.js || true",
     "sonar-scanner": "sonar-scanner",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\" \"test/**/*.js\"",
     "prepare-prod-build": "npm run disable-pure-getters && npm run configure-mangle",
