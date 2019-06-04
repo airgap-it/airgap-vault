@@ -1,7 +1,6 @@
 import { handleErrorLocal, ErrorCategory } from './../error-handler/error-handler.service'
 import { SecureStorageService } from './../storage/storage.service'
 import { DeviceService } from './../device/device.service'
-import 'jasmine'
 import { Injectable } from '@angular/core'
 // import { IntroductionPage } from '../../pages/introduction/introduction'
 // import { WarningsModalPage, Warning } from '../../pages/warnings-modal/warnings-modal'
