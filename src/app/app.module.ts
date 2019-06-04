@@ -1,6 +1,6 @@
 import { FeeConverterPipe } from './../app/pipes/fee-converter/fee-converter.pipe'
 import { AmountConverterPipe } from './../app/pipes/amount-converter/amount-converter.pipe'
-import { CameraPreview } from '@ionic-native/camera-preview'
+import { CameraPreview } from '@ionic-native/camera-preview/ngx'
 import { ProtocolsService } from './services/protocols/protocols.service'
 import { DeepLinkService } from './services/deep-link/deep-link.service'
 import { InteractionService } from './services/interaction/interaction.service'
@@ -25,6 +25,7 @@ import { RouteReuseStrategy } from '@angular/router'
 import { IonicModule, IonicRouteStrategy, Platform } from '@ionic/angular'
 import { SplashScreen } from '@ionic-native/splash-screen/ngx'
 import { StatusBar } from '@ionic-native/status-bar/ngx'
+import { Deeplinks } from '@ionic-native/deeplinks/ngx'
 
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
@@ -36,14 +37,24 @@ import { GyroscopeServiceFactory } from './services/gyroscope/gyroscope.factory'
 import { IonicStorageModule } from '@ionic/storage'
 import { DeviceMotion } from '@ionic-native/device-motion'
 import { SecureStorageFactory } from './services/storage/secure-storage.factory'
-
+import { TranslateModule } from '@ngx-translate/core'
 @NgModule({
   declarations: [AppComponent, AmountConverterPipe, FeeConverterPipe],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+  imports: [
+    BrowserModule,
+    IonicModule.forRoot(),
+    AppRoutingModule,
+    TranslateModule.forRoot(),
+    IonicStorageModule.forRoot({
+      name: '__airgap_storage',
+      driverOrder: ['sqlite', 'localstorage']
+    })
+  ],
   providers: [
     StatusBar,
     SplashScreen,
+    Deeplinks,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     AudioNativeService,
     SecretsService,

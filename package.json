@@ -36,6 +36,7 @@
     "@ionic-native/camera-preview": "^5.7.0",
     "@ionic-native/clipboard": "^5.7.0",
     "@ionic-native/core": "^5.0.0",
+    "@ionic-native/deeplinks": "^5.7.0",
     "@ionic-native/device-motion": "^5.7.0",
     "@ionic-native/diagnostic": "^5.7.0",
     "@ionic-native/splash-screen": "^5.0.0",
@@ -109,7 +110,7 @@
     "replace": "^1.1.0",
     "sonarqube-scanner": "^2.4.1",
     "ts-node": "~8.1.0",
-    "tslint": "~5.17.0",
+    "tslint": "^5.17.0",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "~3.1.6"
   },
