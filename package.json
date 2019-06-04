@@ -44,14 +44,15 @@
     "cordova-ios": "5.0.1",
     "cordova-plugin-add-swift-support": "1.7.2",
     "cordova-plugin-airgap-secure-storage": "0.1.7",
-    "cordova-plugin-airgap-webview": "git+https://github.com/airgap-it/cordova-plugin-airgap-webview.git",
     "cordova-plugin-app-version": "0.1.9",
     "cordova-plugin-audioinput": "1.0.1",
     "cordova-plugin-camera-preview": "git+https://github.com/cordova-plugin-camera-preview/cordova-plugin-camera-preview.git",
+    "cordova-plugin-compat": "1.2.0",
     "cordova-plugin-device": "2.0.2",
     "cordova-plugin-device-motion": "2.0.1",
     "cordova-plugin-gyroscope": "0.1.4",
     "cordova-plugin-ionic-keyboard": "2.1.3",
+    "cordova-plugin-ionic-webview": "4.0.1",
     "cordova-plugin-ios-camera-permissions": "1.2.0",
     "cordova-plugin-jailbreak-detection": "git+https://github.com/leecrossley/cordova-plugin-jailbreak-detection.git",
     "cordova-plugin-qrscanner": "2.6.0",
@@ -59,10 +60,10 @@
     "cordova-plugin-splashscreen": "5.0.2",
     "cordova-plugin-statusbar": "2.4.2",
     "cordova-plugin-whitelist": "1.3.3",
-    "cordova-sqlite-storage": "2.5.1",
+    "cordova-sqlite-storage": "2.6.0",
     "cordova.plugins.diagnostic": "4.0.10",
     "core-js": "^2.5.4",
-    "ionic-plugin-deeplinks": "https://github.com/airgap-it/ionic-plugin-deeplinks#cordova-ios-v5.0.0-fix",
+    "ionic-plugin-deeplinks": "git+https://github.com/airgap-it/ionic-plugin-deeplinks.git#cordova-ios-v5.0.0-fix",
     "rxjs": "~6.5.1",
     "tslib": "^1.9.0",
     "zone.js": "~0.8.29"
@@ -169,10 +170,10 @@
       "cordova-plugin-jailbreak-detection": {},
       "cordova-plugin-add-swift-support": {},
       "cordova-plugin-ionic-keyboard": {},
-      "cordova-plugin-airgap-webview": {},
       "cordova-clipboard": {},
       "cordova.plugins.diagnostic": {},
-      "cordova-plugin-app-version": {}
+      "cordova-plugin-app-version": {},
+      "cordova-plugin-ionic-webview": {}
     }
   }
 }
