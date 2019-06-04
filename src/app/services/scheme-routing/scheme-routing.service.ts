@@ -1,10 +1,11 @@
 import { SecretsService } from '../secrets/secrets.service'
 import { Injectable } from '@angular/core'
-import { AlertController, /*AlertButton, App,*/ NavController } from '@ionic/angular'
+import { AlertController, NavController } from '@ionic/angular'
 import { AirGapWallet, DeserializedSyncProtocol, UnsignedTransaction, SyncProtocolUtils, EncodedType } from 'airgap-coin-lib'
 // import { TransactionDetailPage } from '../../pages/transaction-detail/transaction-detail'
 import { handleErrorLocal, ErrorCategory } from '../error-handler/error-handler.service'
 import { TranslateService } from '@ngx-translate/core'
+import { AlertButton } from '@ionic/core'
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,6 @@ export class SchemeRoutingService {
 
   constructor(
     // TODO
-    // protected app: App,
     private secretsProvider: SecretsService,
     private alertCtrl: AlertController,
     private translateService: TranslateService
@@ -78,10 +78,9 @@ export class SchemeRoutingService {
           scanAgainCallback()
         }
       }
-      // TODO
-      // this.showTranslatedAlert('tab-wallets.invalid-sync-operation_alert.title', 'tab-wallets.invalid-sync-operation_alert.text', [
-      //   cancelButton
-      // ])
+      this.showTranslatedAlert('tab-wallets.invalid-sync-operation_alert.title', 'tab-wallets.invalid-sync-operation_alert.text', [
+        cancelButton
+      ])
     }
   }
 
@@ -137,8 +136,7 @@ export class SchemeRoutingService {
           scanAgainCallback()
         }
       }
-
-      // this.showTranslatedAlert('tab-wallets.no-secret_alert.title', 'tab-wallets.no-secret_alert.text', [cancelButton])
+      this.showTranslatedAlert('tab-wallets.no-secret_alert.title', 'tab-wallets.no-secret_alert.text', [cancelButton])
     }
   }
 
@@ -151,24 +149,23 @@ export class SchemeRoutingService {
         scanAgainCallback()
       }
     }
-    // TODO show alert
-    // this.showTranslatedAlert(
-    //   'tab-wallets.sync-operation-not-supported_alert.title',
-    //   'tab-wallets.sync-operation-not-supported_alert.text',
-    //   [cancelButton]
-    // )
+    this.showTranslatedAlert(
+      'tab-wallets.sync-operation-not-supported_alert.title',
+      'tab-wallets.sync-operation-not-supported_alert.text',
+      [cancelButton]
+    )
   }
 
-  // showTranslatedAlert(title: string, message: string, buttons: AlertButton[]): void {
-  //   const translationKeys = [title, message, ...buttons.map(button => button.text)]
-  //   this.translateService.get(translationKeys).subscribe(asyncvalues => {
-  //     let alert = await this.alertCtrl.create({
-  //       header: values[title],
-  //       message: values[message],
-  //       enableBackdropDismiss: true,
-  //       buttons: buttons.map(button => (button.text = values[button.text]))
-  //     })
-  //     alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
-  //   })
-  // }
+  showTranslatedAlert(title: string, message: string, buttons: AlertButton[]): void {
+    const translationKeys = [title, message, ...buttons.map(button => button.text)]
+    this.translateService.get(translationKeys).subscribe(async values => {
+      let alert = await this.alertCtrl.create({
+        header: values[title],
+        message: values[message],
+        backdropDismiss: true,
+        buttons: buttons.map(button => (button.text = values[button.text]))
+      })
+      alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
+    })
+  }
 }

@@ -51,7 +51,7 @@ export class DeepLinkService {
           header: translated['deep-link.not-supported-alert.title'],
           message: translated['deep-link.not-supported-alert.message'],
           // TODO
-          // enableBackdropDismiss: false,
+          backdropDismiss: false,
           buttons: [
             {
               text: translated['deep-link.not-supported-alert.ok'],
@@ -72,8 +72,7 @@ export class DeepLinkService {
         let alert = await this.alertCtrl.create({
           header: translated['deep-link.app-not-found.title'],
           message: translated['deep-link.app-not-found.message'],
-          // TODO
-          // enableBackdropDismiss: false,
+          backdropDismiss: false,
           buttons: [
             {
               text: translated['deep-link.app-not-found.ok'],

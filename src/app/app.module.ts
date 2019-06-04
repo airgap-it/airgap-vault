@@ -1,3 +1,5 @@
+import { FeeConverterPipe } from './../app/pipes/fee-converter/fee-converter.pipe'
+import { AmountConverterPipe } from './../app/pipes/amount-converter/amount-converter.pipe'
 import { CameraPreview } from '@ionic-native/camera-preview'
 import { ProtocolsService } from './services/protocols/protocols.service'
 import { DeepLinkService } from './services/deep-link/deep-link.service'
@@ -36,7 +38,7 @@ import { DeviceMotion } from '@ionic-native/device-motion'
 import { SecureStorageFactory } from './services/storage/secure-storage.factory'
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, AmountConverterPipe, FeeConverterPipe],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
   providers: [

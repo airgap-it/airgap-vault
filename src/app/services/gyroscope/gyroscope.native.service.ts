@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { Platform } from '@ionic/angular'
 import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
-import { DeviceMotion, DeviceMotionAccelerationData } from '@ionic-native/device-motion'
+import { DeviceMotion, DeviceMotionAccelerationData } from '@ionic-native/device-motion/ngx'
 import { GyroscopeService } from './gyroscope.factory'
 import { Observable, Subscription } from 'rxjs'
 
@@ -19,7 +19,7 @@ export class GyroscopeNativeService implements GyroscopeService, IEntropyGenerat
 
   private entropyObservable: Observable<Entropy>
 
-  constructor(private platform: Platform, private deviceMotion: any /* DeviceMotion */) {}
+  constructor(private platform: Platform, private deviceMotion: DeviceMotion) {}
 
   public start(): Promise<void> {
     this.collectedEntropyPercentage = 0

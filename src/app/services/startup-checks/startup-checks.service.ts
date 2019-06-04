@@ -76,15 +76,16 @@ export class StartupChecksService {
   }
 
   async presentModal(page: any, modalConfig: any, callback: Function) {
-    //  TODO
-    // let modal = await this.modalController.create(page, modalConfig, { enableBackdropDismiss: false })
-    // modal.onDidDismiss(_data => callback())
-    // modal
-    //   .present()
-    //   .then(() => {
-    //     console.log('check modal presented')
-    //   })
-    //   .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+    modalConfig = { ...modalConfig, ...{ component: page, backdropDismiss: false } }
+
+    let modal = await this.modalController.create(modalConfig)
+    modal.onDidDismiss()
+    modal
+      .present()
+      .then(() => {
+        console.log('check modal presented')
+      })
+      .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 
   initChecks(): Promise<Function> {

@@ -213,12 +213,11 @@ export class SecretsService {
   }
 
   addWallet(protocolIdentifier: string, isHDWallet: boolean, customDerivationPath: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const loading = this.loadingCtrl.create({
+    return new Promise(async (resolve, reject) => {
+      const loading = await this.loadingCtrl.create({
         message: 'Deriving your wallet...'
       })
-      // TODO
-      // loading.present().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
+      loading.present().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
 
       const protocol = getProtocolByIdentifier(protocolIdentifier)
 
@@ -250,15 +249,13 @@ export class SecretsService {
                 )
                 reject()
               }
-              // TODO
-              // loading.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
+              loading.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
             })
             .catch(handleErrorLocal(ErrorCategory.WALLET_PROVIDER))
         })
         .catch(err => {
           this.showAlert('Error', err)
-          // TODO
-          // loading.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
+          loading.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
           reject()
         })
     })
@@ -268,7 +265,7 @@ export class SecretsService {
     let alert = await this.alertCtrl.create({
       header: title,
       message,
-      // enableBackdropDismiss: false,
+      backdropDismiss: false,
       buttons: [
         {
           text: 'Okay!',

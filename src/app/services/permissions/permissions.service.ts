@@ -23,16 +23,13 @@ export class PermissionsService {
   constructor(private platform: Platform, private diagnostic: Diagnostic, private alertCtrl: AlertController) {}
 
   async hasCameraPermission(): Promise<PermissionStatus> {
-    // TODO
-    // const permission = await this.diagnostic.getCameraAuthorizationStatus(false)
-    return this.getPermissionStatus('true')
+    const permission = await this.diagnostic.getCameraAuthorizationStatus(false)
+    return this.getPermissionStatus(permission)
   }
 
   async hasMicrophonePermission(): Promise<PermissionStatus> {
-    // TODO
-    // const permission = await this.diagnostic.getMicrophoneAuthorizationStatus()
-    // return this.getPermissionStatus(permission)
-    return this.getPermissionStatus('true')
+    const permission = await this.diagnostic.getMicrophoneAuthorizationStatus()
+    return this.getPermissionStatus(permission)
   }
 
   async requestPermissions(permissions: PermissionTypes[]): Promise<void> {
@@ -44,16 +41,13 @@ export class PermissionsService {
       if (permissions.indexOf(PermissionTypes.MICROPHONE) >= 0) {
         permissionsToRequest.push(this.diagnostic.permission.RECORD_AUDIO)
       }
-      // TODO
-      // await this.diagnostic.requestRuntimePermissions(permissionsToRequest)
+      await this.diagnostic.requestRuntimePermissions(permissionsToRequest)
     } else if (this.platform.is('ios')) {
       if (permissions.indexOf(PermissionTypes.CAMERA) >= 0) {
-        // TODO
-        // await this.diagnostic.requestCameraAuthorization(false)
+        await this.diagnostic.requestCameraAuthorization(false)
       }
       if (permissions.indexOf(PermissionTypes.MICROPHONE) >= 0) {
-        // TODO
-        // await this.diagnostic.requestMicrophoneAuthorization()
+        await this.diagnostic.requestMicrophoneAuthorization()
       }
     } else {
     }
@@ -116,8 +110,8 @@ export class PermissionsService {
     }
   }
 
-  private showAlert(title: string, message: string) {
-    const alert = this.alertCtrl.create({
+  private async showAlert(title: string, message: string) {
+    const alert = await this.alertCtrl.create({
       header: title,
       message,
       buttons: [
@@ -129,14 +123,12 @@ export class PermissionsService {
         {
           text: 'Open settings',
           handler: () => {
-            // TODO
-            // this.diagnostic.switchToSettings().catch(handleErrorLocal(ErrorCategory.CORDOVA_PLUGIN))
+            this.diagnostic.switchToSettings().catch(handleErrorLocal(ErrorCategory.CORDOVA_PLUGIN))
           }
         }
       ]
     })
-    // TODO
-    // alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
+    alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
   }
 
   private isGranted(permission: string): boolean {

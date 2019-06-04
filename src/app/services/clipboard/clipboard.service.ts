@@ -1,20 +1,19 @@
 import { handleErrorLocal, ErrorCategory } from './../error-handler/error-handler.service'
 import { Injectable } from '@angular/core'
 import { Platform, ToastController } from '@ionic/angular'
-import { Clipboard } from '@ionic-native/clipboard'
+import { Clipboard } from '@ionic-native/clipboard/ngx'
 
 @Injectable({ providedIn: 'root' })
 export class ClipboardService {
   constructor(
     private readonly platform: Platform,
-    // private readonly clipboard: Clipboard,
+    private readonly clipboard: Clipboard,
     private readonly toastController: ToastController
   ) {}
 
   async copy(text: string): Promise<void> {
     if (this.platform.is('cordova')) {
-      // TODO
-      // return this.clipboard.copy(text)
+      return this.clipboard.copy(text)
     } else {
       return (navigator as any).clipboard.writeText(text)
     }
@@ -32,8 +31,7 @@ export class ClipboardService {
   async paste(): Promise<string> {
     try {
       if (this.platform.is('cordova')) {
-        // TODO
-        // return this.clipboard.paste()
+        return this.clipboard.paste()
       } else {
         return (navigator as any).clipboard.readText()
       }
@@ -43,14 +41,13 @@ export class ClipboardService {
   }
 
   private async showToast(message: string) {
-    let toast = this.toastController.create({
+    let toast = await this.toastController.create({
       message: message,
       duration: 1000,
       position: 'top',
       showCloseButton: true,
       closeButtonText: 'Ok'
     })
-    // TODO
-    // toast.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
+    toast.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
   }
 }
