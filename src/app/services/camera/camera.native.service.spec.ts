@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing'
 
-import { CameraService } from './camera.service'
+import { CameraNativeService } from './camera.native.service'
 
 describe('CameraService', () => {
   beforeEach(() => TestBed.configureTestingModule({}))
 
   it('should be created', () => {
-    const service: CameraService = TestBed.get(CameraService)
+    const service: CameraNativeService = TestBed.get(CameraNativeService)
     expect(service).toBeTruthy()
   })
 })
