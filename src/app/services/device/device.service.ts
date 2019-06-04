@@ -8,9 +8,9 @@ declare var rootdetection: any
   providedIn: 'root'
 })
 export class DeviceService {
-  constructor(private platform: Platform) {}
+  constructor(private readonly platform: Platform) {}
 
-  checkForRoot(): Promise<boolean> {
+  public checkForRoot(): Promise<boolean> {
     return new Promise((resolve, reject) => {
       if (this.platform.is('android') && this.platform.is('cordova')) {
         // TODO build own android root detection with https://github.com/scottyab/rootbeer
@@ -24,7 +24,7 @@ export class DeviceService {
     })
   }
 
-  async checkForElectron() {
+  public async checkForElectron() {
     return typeof navigator === 'object' && typeof navigator.userAgent === 'string' && navigator.userAgent.indexOf('Electron') >= 0
   }
 }

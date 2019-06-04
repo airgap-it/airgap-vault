@@ -1,11 +1,11 @@
 import { browser, by, element } from 'protractor'
 
 export class AppPage {
-  navigateTo() {
+  public navigateTo() {
     return browser.get('/')
   }
 
-  getPageTitle() {
+  public getPageTitle() {
     return element(by.css('ion-title')).getText()
   }
 }

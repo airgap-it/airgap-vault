@@ -1,11 +1,11 @@
 import { Component } from '@angular/core'
-import { NavController, NavParams, LoadingController } from '@ionic/angular'
-import { SecretsService } from '../../services/secrets/secrets.service'
+import { Router } from '@angular/router'
+import { LoadingController } from '@ionic/angular'
 import { Storage } from '@ionic/storage'
 // import { LocalAuthenticationOnboardingPage } from '../local-authentication-onboarding/local-authentication-onboarding'
-import { ICoinProtocol, supportedProtocols, getProtocolByIdentifier } from 'airgap-coin-lib'
-import { handleErrorLocal, ErrorCategory } from '../../services/error-handler/error-handler.service'
-import { Router } from '@angular/router'
+import { ICoinProtocol, supportedProtocols } from 'airgap-coin-lib'
+
+import { SecretsService } from '../../services/secrets/secrets.service'
 
 @Component({
   selector: 'app-account-add',
@@ -13,17 +13,17 @@ import { Router } from '@angular/router'
   styleUrls: ['./account-add.page.scss']
 })
 export class AccountAddPage {
-  selectedProtocol: ICoinProtocol
-  customDerivationPath: string
-  coinProtocols: ICoinProtocol[]
-  isHDWallet: boolean = false
-  isAdvancedMode: boolean = false
+  public selectedProtocol: ICoinProtocol
+  public customDerivationPath: string
+  public coinProtocols: ICoinProtocol[]
+  public isHDWallet: boolean = false
+  public isAdvancedMode: boolean = false
 
   constructor(
     public loadingCtrl: LoadingController,
     public router: Router,
-    private secretsProvider: SecretsService,
-    private storage: Storage
+    private readonly secretsProvider: SecretsService,
+    private readonly storage: Storage
   ) {
     this.coinProtocols = supportedProtocols()
     try {
@@ -32,18 +32,18 @@ export class AccountAddPage {
     } catch (error) {}
   }
 
-  ionViewDidLoad() {
+  public ionViewDidLoad() {
     console.log('ionViewDidLoad WalletSelectCoinsPage')
   }
 
-  onSelectedProtocolChange(selectedProtocol) {
+  public onSelectedProtocolChange(selectedProtocol) {
     console.log(selectedProtocol)
     this.selectedProtocol = selectedProtocol
     this.isHDWallet = this.selectedProtocol.supportsHD
     this.customDerivationPath = this.selectedProtocol.standardDerivationPath
   }
 
-  onIsHDWalletChange(isHDWallet) {
+  public onIsHDWalletChange(isHDWallet) {
     this.isHDWallet = isHDWallet
     if (isHDWallet) {
       this.customDerivationPath = this.selectedProtocol.standardDerivationPath
@@ -52,7 +52,7 @@ export class AccountAddPage {
     }
   }
 
-  async addWallet() {
+  public async addWallet() {
     // TODO
     // const value = await this.storage.get('DISCLAIMER_HIDE_LOCAL_AUTH_ONBOARDING')
     // if (!value) {

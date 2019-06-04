@@ -31,7 +31,7 @@ const handleErrorIgnore = error => {
 export { handleErrorIgnore, handleErrorLocal }
 
 export class ErrorHandlerService extends ErrorHandler {
-  handleError(error) {
+  public handleError(error) {
     super.handleError(error)
     handleErrorLocal(error)
   }

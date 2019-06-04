@@ -1,17 +1,17 @@
 import { Pipe, PipeTransform } from '@angular/core'
+import { getProtocolByIdentifier, ICoinProtocol } from 'airgap-coin-lib'
 import { BigNumber } from 'bignumber.js'
-import { getProtocolByIdentifier } from 'airgap-coin-lib'
 
 @Pipe({
   name: 'feeConverter'
 })
 export class FeeConverterPipe implements PipeTransform {
-  transform(value: string | number, args: { protocolIdentifier: string }): string {
+  public transform(value: string | number, args: { protocolIdentifier: string }): string {
     if (!args.protocolIdentifier || (!value && value !== 0) || isNaN(Number(value))) {
       // console.warn(`FeeConverterPipe: necessary properties missing!\n` + `Protocol: ${args.protocolIdentifier}\n` + `Value: ${value}`)
       return ''
     }
-    let protocol
+    let protocol: ICoinProtocol
 
     try {
       protocol = getProtocolByIdentifier(args.protocolIdentifier)

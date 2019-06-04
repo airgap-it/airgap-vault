@@ -1,30 +1,30 @@
-import { SecureStorageService } from './../storage/storage.service'
 import { Injectable, NgZone } from '@angular/core'
+import { AlertController, LoadingController } from '@ionic/angular'
 import { Storage } from '@ionic/storage'
+import { AirGapWallet, getProtocolByIdentifier } from 'airgap-coin-lib'
+import bip39 from 'bip39'
 import { BehaviorSubject } from 'rxjs'
 
 import { Secret } from '../../models/secret'
-import { AirGapWallet, getProtocolByIdentifier } from 'airgap-coin-lib'
-import { LoadingController, AlertController } from '@ionic/angular'
 
-import bip39 from 'bip39'
-import { handleErrorLocal, ErrorCategory } from './../error-handler/error-handler.service'
+import { ErrorCategory, handleErrorLocal } from './../error-handler/error-handler.service'
+import { SecureStorageService } from './../storage/storage.service'
 
 @Injectable({
   providedIn: 'root'
 })
 export class SecretsService {
   private activeSecret: Secret
-  private secretsList: Secret[] = []
+  private readonly secretsList: Secret[] = []
   public currentSecretsList = new BehaviorSubject(this.secretsList)
-  private ready: Promise<void>
+  private readonly ready: Promise<void>
 
   constructor(
-    private secureStorageService: SecureStorageService,
-    private storage: Storage,
-    private ngZone: NgZone,
-    private loadingCtrl: LoadingController,
-    private alertCtrl: AlertController
+    private readonly secureStorageService: SecureStorageService,
+    private readonly storage: Storage,
+    private readonly ngZone: NgZone,
+    private readonly loadingCtrl: LoadingController,
+    private readonly alertCtrl: AlertController
   ) {
     this.ready = this.init()
   }
@@ -60,7 +60,7 @@ export class SecretsService {
             if (secret.wallets) {
               for (let i = 0; i < secret.wallets.length; i++) {
                 const wallet = secret.wallets[i]
-                let airGapWallet = new AirGapWallet(
+                const airGapWallet = new AirGapWallet(
                   wallet.protocolIdentifier,
                   wallet.publicKey,
                   wallet.isExtendedPublicKey,
@@ -79,10 +79,11 @@ export class SecretsService {
     })
   }
 
-  addOrUpdateSecret(secret: Secret): Promise<void> {
+  public addOrUpdateSecret(secret: Secret): Promise<void> {
     if (!secret.wallets) {
       secret.wallets = []
     }
+
     return new Promise((resolve, reject) => {
       if (!secret.secretHex) {
         this.secretsList[this.secretsList.findIndex(obj => obj.id === secret.id)] = secret
@@ -122,7 +123,7 @@ export class SecretsService {
     })
   }
 
-  remove(secret: Secret): Promise<void> {
+  public remove(secret: Secret): Promise<void> {
     return new Promise(resolve => {
       return this.secureStorageService.get(secret.id, secret.isParanoia).then(secureStorage => {
         secureStorage
@@ -138,7 +139,7 @@ export class SecretsService {
     })
   }
 
-  retrieveEntropyForSecret(secret: Secret): Promise<string> {
+  public retrieveEntropyForSecret(secret: Secret): Promise<string> {
     return new Promise(resolve => {
       return this.secureStorageService.get(secret.id, secret.isParanoia).then(secureStorage => {
         resolve(secureStorage.getItem(secret.id))
@@ -146,24 +147,25 @@ export class SecretsService {
     })
   }
 
-  findByPublicKey(pubKey: string): Secret {
-    for (let secret of this.secretsList) {
-      let foundWallet = secret.wallets.find(wallet => wallet.publicKey === pubKey)
+  public findByPublicKey(pubKey: string): Secret {
+    for (const secret of this.secretsList) {
+      const foundWallet = secret.wallets.find(wallet => wallet.publicKey === pubKey)
       if (foundWallet !== undefined) {
         return secret
       }
     }
   }
 
-  getWallets(): AirGapWallet[] {
+  public getWallets(): AirGapWallet[] {
     const walletList = []
-    for (let secret of this.secretsList) {
+    for (const secret of this.secretsList) {
       walletList.push(...secret.wallets)
     }
+
     return walletList
   }
 
-  removeWallet(wallet: AirGapWallet): Promise<void> {
+  public removeWallet(wallet: AirGapWallet): Promise<void> {
     const secret = this.findByPublicKey(wallet.publicKey)
     if (!secret) {
       return undefined
@@ -175,22 +177,23 @@ export class SecretsService {
       ),
       1
     )
+
     return this.addOrUpdateSecret(secret)
   }
 
-  findWalletByPublicKeyAndProtocolIdentifier(pubKey: string, protocolIdentifier: string): AirGapWallet {
+  public findWalletByPublicKeyAndProtocolIdentifier(pubKey: string, protocolIdentifier: string): AirGapWallet {
     const secret = this.findByPublicKey(pubKey)
     if (!secret) {
       return undefined
     }
 
-    let foundWallet = secret.wallets.find(wallet => wallet.publicKey === pubKey && wallet.protocolIdentifier === protocolIdentifier)
+    const foundWallet = secret.wallets.find(wallet => wallet.publicKey === pubKey && wallet.protocolIdentifier === protocolIdentifier)
     if (foundWallet !== undefined) {
       return foundWallet
     }
   }
 
-  findBaseWalletByPublicKeyAndProtocolIdentifier(pubKey: string, protocolIdentifier: string): AirGapWallet | undefined {
+  public findBaseWalletByPublicKeyAndProtocolIdentifier(pubKey: string, protocolIdentifier: string): AirGapWallet | undefined {
     const secret = this.findByPublicKey(pubKey)
     if (!secret) {
       return undefined
@@ -199,20 +202,20 @@ export class SecretsService {
     return secret.wallets.find(wallet => wallet.publicKey === pubKey && protocolIdentifier.startsWith(wallet.protocolIdentifier))
   }
 
-  getActiveSecret(): Secret {
+  public getActiveSecret(): Secret {
     return this.activeSecret || this.secretsList[0]
   }
 
-  setActiveSecret(secret: Secret): any {
+  public setActiveSecret(secret: Secret): any {
     this.activeSecret = secret
   }
 
-  persist(): Promise<void> {
-    this.secretsList.forEach(obj => obj.flushSecret()) // make sure there are no secrets in there
+  public persist(): Promise<void> {
+    this.secretsList.forEach(obj => obj.flushSecret()) 
     return this.storage.set('airgap-secret-list', this.secretsList)
   }
 
-  addWallet(protocolIdentifier: string, isHDWallet: boolean, customDerivationPath: string): Promise<void> {
+  public addWallet(protocolIdentifier: string, isHDWallet: boolean, customDerivationPath: string): Promise<void> {
     return new Promise(async (resolve, reject) => {
       const loading = await this.loadingCtrl.create({
         message: 'Deriving your wallet...'
@@ -221,11 +224,11 @@ export class SecretsService {
 
       const protocol = getProtocolByIdentifier(protocolIdentifier)
 
-      let secret = this.getActiveSecret()
+      const secret = this.getActiveSecret()
       this.retrieveEntropyForSecret(secret)
         .then(entropy => {
-          let seed = bip39.mnemonicToSeedHex(bip39.entropyToMnemonic(entropy))
-          let wallet = new AirGapWallet(
+          const seed = bip39.mnemonicToSeedHex(bip39.entropyToMnemonic(entropy))
+          const wallet = new AirGapWallet(
             protocol.identifier,
             protocol.getPublicKeyFromHexSecret(seed, customDerivationPath),
             isHDWallet,
@@ -261,8 +264,8 @@ export class SecretsService {
     })
   }
 
-  async showAlert(title: string, message: string) {
-    let alert = await this.alertCtrl.create({
+  public async showAlert(title: string, message: string) {
+    const alert = await this.alertCtrl.create({
       header: title,
       message,
       backdropDismiss: false,

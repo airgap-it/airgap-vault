@@ -1,12 +1,13 @@
-import { handleErrorLocal, ErrorCategory } from './../error-handler/error-handler.service'
-import { PermissionsService, PermissionStatus } from './../permissions/permissions.service'
 import { ElementRef, Injectable, Renderer2, RendererFactory2, ViewChild } from '@angular/core'
 import { CameraPreview } from '@ionic-native/camera-preview/ngx'
 import { Platform } from '@ionic/angular'
-import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
 import { Observable } from 'rxjs'
 
 import workerJS from '../../../assets/workers/entropyCalculatorWorker'
+import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
+
+import { ErrorCategory, handleErrorLocal } from './../error-handler/error-handler.service'
+import { PermissionsService, PermissionStatus } from './../permissions/permissions.service'
 const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
 const entropyCalculatorWorker = new Worker(blobURL)
 
@@ -18,29 +19,29 @@ export class CameraNativeService implements IEntropyGenerator {
   private cameraIsTakingPhoto = false // Prevent stopping camera while picture is being taken
 
   // entropy settings
-  private VIDEO_SIZE = 50
-  private VIDEO_QUALITY = 100
-  private VIDEO_FREQUENCY = 2000
+  private readonly VIDEO_SIZE = 50
+  private readonly VIDEO_QUALITY = 100
+  private readonly VIDEO_FREQUENCY = 2000
 
-  private renderer: Renderer2
+  private readonly renderer: Renderer2
 
   @ViewChild('cameraCanvas') public cameraCanvas: ElementRef
-  canvasElement: HTMLCanvasElement
+  public canvasElement: HTMLCanvasElement
 
   private collectedEntropyPercentage: number = 0
 
   private handler: Function
-  private entropyObservable: Observable<Entropy>
+  private readonly entropyObservable: Observable<Entropy>
 
   private cameraInterval: number
 
   private cameraOptions: any
 
   constructor(
-    private platform: Platform,
-    private cameraPreview: CameraPreview,
-    private rendererFactory: RendererFactory2,
-    private permissionsProvider: PermissionsService
+    private readonly platform: Platform,
+    private readonly cameraPreview: CameraPreview,
+    private readonly rendererFactory: RendererFactory2,
+    private readonly permissionsProvider: PermissionsService
   ) {
     this.renderer = this.rendererFactory.createRenderer(null, null)
     this.entropyObservable = Observable.create(observer => {
@@ -62,20 +63,20 @@ export class CameraNativeService implements IEntropyGenerator {
     })
   }
 
-  setCameraOptions(opts) {
+  public setCameraOptions(opts) {
     this.cameraOptions = opts
   }
 
-  viewDidLeave() {
+  public viewDidLeave() {
     this.disabled = true
     this.uninjectCSS()
   }
 
-  viewWillEnter() {
+  public viewWillEnter() {
     this.disabled = false
   }
 
-  async start(): Promise<void> {
+  public async start(): Promise<void> {
     this.disabled = false
     this.collectedEntropyPercentage = 0
     await this.platform.ready()
@@ -84,6 +85,7 @@ export class CameraNativeService implements IEntropyGenerator {
     if (permissionStatus !== PermissionStatus.GRANTED) {
       return
     }
+
     return this.initCamera()
   }
 
@@ -112,6 +114,7 @@ export class CameraNativeService implements IEntropyGenerator {
           if (this.platform.is('ios')) {
             return this.cameraPreview.setFlashMode('off')
           }
+
           return Promise.resolve()
         })
         .then(
@@ -121,6 +124,7 @@ export class CameraNativeService implements IEntropyGenerator {
               if (this.cameraIsRunning) {
                 this.stop().catch(handleErrorLocal(ErrorCategory.CORDOVA_PLUGIN))
               }
+
               return
             }
             console.log('camera started.')
@@ -168,16 +172,18 @@ export class CameraNativeService implements IEntropyGenerator {
     })
   }
 
-  stop(): Promise<any> {
+  public stop(): Promise<any> {
     if (!this.cameraIsRunning) {
       console.log('CAMERA ALREADY STOPPED, ABORTING')
       this.uninjectCSS()
+
       return Promise.reject(null)
     }
     // We need to delay the stopCamera call because it crashes on iOS
     // if it is called while taking a photo
     if (this.cameraIsTakingPhoto) {
       this.uninjectCSS()
+
       return new Promise(resolve => {
         setTimeout(() => {
           console.log('CAMERA IS TAKING PHOTO, DELAYING')
@@ -189,6 +195,7 @@ export class CameraNativeService implements IEntropyGenerator {
     if (this.cameraInterval) {
       clearInterval(this.cameraInterval)
     }
+
     return new Promise((_resolve, reject) => {
       this.cameraPreview.stopCamera().then(
         () => {
@@ -203,7 +210,7 @@ export class CameraNativeService implements IEntropyGenerator {
     })
   }
 
-  getEntropyUpdateObservable(): Observable<Entropy> {
+  public getEntropyUpdateObservable(): Observable<Entropy> {
     return this.entropyObservable
   }
 
@@ -229,11 +236,11 @@ export class CameraNativeService implements IEntropyGenerator {
     this.renderer.removeClass(document.body, 'transparent-bg')
   }
 
-  getCollectedEntropyPercentage(): number {
+  public getCollectedEntropyPercentage(): number {
     return this.collectedEntropyPercentage / 10
   }
 
-  setVideoElement(element): void {
+  public setVideoElement(element): void {
     console.log('only used in browser', element)
   }
 }

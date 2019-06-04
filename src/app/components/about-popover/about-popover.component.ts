@@ -14,9 +14,9 @@ export class AboutPopoverComponent {
   public versionCode: string
   public versionNumber: string
 
-  constructor(private appVersion: AppVersion) {}
+  constructor(private readonly appVersion: AppVersion) {}
 
-  async ngOnInit() {
+  public async ngOnInit() {
     this.versionNumber = await this.appVersion.getVersionNumber()
     this.versionCode = `${await this.appVersion.getVersionCode()}`
   }

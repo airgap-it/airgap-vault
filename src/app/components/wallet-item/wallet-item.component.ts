@@ -8,5 +8,5 @@ import { AirGapWallet } from 'airgap-coin-lib'
 })
 export class WalletItemComponent {
   @Input()
-  wallet: AirGapWallet
+  public wallet: AirGapWallet
 }

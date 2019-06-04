@@ -1,13 +1,12 @@
-import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
+import { NgModule } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { Routes, RouterModule } from '@angular/router'
-
+import { RouterModule, Routes } from '@angular/router'
 import { IonicModule } from '@ionic/angular'
-
-import { TabScanPage } from './tab-scan.page'
 import { TranslateModule } from '@ngx-translate/core'
 import { ZXingScannerModule } from '@zxing/ngx-scanner'
+
+import { TabScanPage } from './tab-scan.page'
 
 const routes: Routes = [
   {

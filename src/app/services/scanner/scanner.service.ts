@@ -9,7 +9,7 @@ declare var QRScanner: any
 export class ScannerService {
   public isShowing = false
 
-  constructor(private platform: Platform) {}
+  constructor(private readonly platform: Platform) {}
 
   public askForPermission() {
     if (this.platform.is('cordova')) {

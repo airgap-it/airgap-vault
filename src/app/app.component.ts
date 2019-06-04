@@ -1,21 +1,17 @@
 import { Component, NgZone } from '@angular/core'
-
-import { Platform } from '@ionic/angular'
+import { Deeplinks } from '@ionic-native/deeplinks/ngx'
 import { SplashScreen } from '@ionic-native/splash-screen/ngx'
 import { StatusBar } from '@ionic-native/status-bar/ngx'
-import { Deeplinks } from '@ionic-native/deeplinks/ngx'
-
-import { ExposedPromise, exposedPromise } from './functions/exposed-promise'
-
-import { handleErrorLocal, ErrorCategory } from './services/error-handler/error-handler.service'
-import { StartupChecksService } from './services/startup-checks/startup-checks.service'
-import { SchemeRoutingService } from './services/scheme-routing/scheme-routing.service'
-import { ProtocolsService } from './services/protocols/protocols.service'
-import { SecretsService } from './services/secrets/secrets.service'
-
-import { DEEPLINK_VAULT_PREFIX, DEEPLINK_VAULT_ADD_ACCOUNT } from './constants'
-
+import { Platform } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
+
+import { DEEPLINK_VAULT_ADD_ACCOUNT, DEEPLINK_VAULT_PREFIX } from './constants'
+import { ExposedPromise, exposedPromise } from './functions/exposed-promise'
+import { ErrorCategory, handleErrorLocal } from './services/error-handler/error-handler.service'
+import { ProtocolsService } from './services/protocols/protocols.service'
+import { SchemeRoutingService } from './services/scheme-routing/scheme-routing.service'
+import { SecretsService } from './services/secrets/secrets.service'
+import { StartupChecksService } from './services/startup-checks/startup-checks.service'
 
 declare let window: Window & { airGapHasStarted: boolean }
 
@@ -26,19 +22,19 @@ declare let window: Window & { airGapHasStarted: boolean }
 export class AppComponent {
   // Sometimes the deeplink was registered before the root page was set
   // This resulted in the root page "overwriting" the deep-linked page
-  isInitialized: ExposedPromise<void> = exposedPromise<void>()
+  public isInitialized: ExposedPromise<void> = exposedPromise<void>()
 
   constructor(
-    private platform: Platform,
-    private statusBar: StatusBar,
-    private splashScreen: SplashScreen,
-    private deepLinks: Deeplinks,
-    private startupChecks: StartupChecksService,
-    private schemeRoutingProvider: SchemeRoutingService,
-    private translate: TranslateService,
-    private protocolsProvider: ProtocolsService,
-    private secretsProvider: SecretsService,
-    private ngZone: NgZone
+    private readonly platform: Platform,
+    private readonly statusBar: StatusBar,
+    private readonly splashScreen: SplashScreen,
+    private readonly deepLinks: Deeplinks,
+    private readonly startupChecks: StartupChecksService,
+    private readonly schemeRoutingProvider: SchemeRoutingService,
+    private readonly translate: TranslateService,
+    private readonly protocolsProvider: ProtocolsService,
+    private readonly secretsProvider: SecretsService,
+    private readonly ngZone: NgZone
   ) {
     // We set the app as started so no "error alert" will be shown in case the app fails to load. See error-check.js for details.
     window.airGapHasStarted = true
@@ -46,7 +42,7 @@ export class AppComponent {
     this.initializeApp().catch(handleErrorLocal(ErrorCategory.OTHER))
   }
 
-  async initializeApp() {
+  public async initializeApp() {
     const supportedLanguages = ['en', 'de', 'zh-cn']
     for (const lang of supportedLanguages) {
       // We bundle languages so we don't have to load it over http
@@ -75,7 +71,7 @@ export class AppComponent {
     })
   }
 
-  loadLanguages(supportedLanguages: string[]) {
+  public loadLanguages(supportedLanguages: string[]) {
     this.translate.setDefaultLang('en')
 
     const language = this.translate.getBrowserLang()
@@ -90,7 +86,7 @@ export class AppComponent {
     }
   }
 
-  initChecks() {
+  public initChecks() {
     this.startupChecks
       .initChecks()
       .then(async () => {
@@ -104,7 +100,7 @@ export class AppComponent {
       })
   }
 
-  async ngAfterViewInit() {
+  public async ngAfterViewInit() {
     await this.platform.ready()
     if (this.platform.is('cordova')) {
       this.deepLinks

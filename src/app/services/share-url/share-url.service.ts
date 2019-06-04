@@ -9,7 +9,7 @@ export class ShareUrlService {
     //
   }
 
-  async generateShareURL(wallet: AirGapWallet): Promise<string> {
+  public async generateShareURL(wallet: AirGapWallet): Promise<string> {
     const syncProtocol = new SyncProtocolUtils()
 
     const syncWalletRequest: SyncWalletRequest = {

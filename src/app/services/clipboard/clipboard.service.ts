@@ -1,7 +1,8 @@
-import { handleErrorLocal, ErrorCategory } from './../error-handler/error-handler.service'
 import { Injectable } from '@angular/core'
-import { Platform, ToastController } from '@ionic/angular'
 import { Clipboard } from '@ionic-native/clipboard/ngx'
+import { Platform, ToastController } from '@ionic/angular'
+
+import { ErrorCategory, handleErrorLocal } from './../error-handler/error-handler.service'
 
 @Injectable({ providedIn: 'root' })
 export class ClipboardService {
@@ -11,7 +12,7 @@ export class ClipboardService {
     private readonly toastController: ToastController
   ) {}
 
-  async copy(text: string): Promise<void> {
+  public async copy(text: string): Promise<void> {
     if (this.platform.is('cordova')) {
       return this.clipboard.copy(text)
     } else {
@@ -19,7 +20,7 @@ export class ClipboardService {
     }
   }
 
-  async copyAndShowToast(text: string, toastMessage: string = 'Successfully copied to your clipboard!') {
+  public async copyAndShowToast(text: string, toastMessage: string = 'Successfully copied to your clipboard!') {
     try {
       await this.copy(text)
       await this.showToast(toastMessage)
@@ -28,7 +29,7 @@ export class ClipboardService {
     }
   }
 
-  async paste(): Promise<string> {
+  public async paste(): Promise<string> {
     try {
       if (this.platform.is('cordova')) {
         return this.clipboard.paste()
@@ -41,8 +42,8 @@ export class ClipboardService {
   }
 
   private async showToast(message: string) {
-    let toast = await this.toastController.create({
-      message: message,
+    const toast = await this.toastController.create({
+      message,
       duration: 1000,
       position: 'top',
       showCloseButton: true,

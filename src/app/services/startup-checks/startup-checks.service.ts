@@ -1,24 +1,25 @@
-import { handleErrorLocal, ErrorCategory } from './../error-handler/error-handler.service'
-import { SecureStorageService } from './../storage/storage.service'
-import { DeviceService } from './../device/device.service'
 import { Injectable } from '@angular/core'
 // import { IntroductionPage } from '../../pages/introduction/introduction'
 // import { WarningsModalPage, Warning } from '../../pages/warnings-modal/warnings-modal'
 import { ModalController } from '@ionic/angular'
 import { Storage } from '@ionic/storage'
+
+import { DeviceService } from './../device/device.service'
+import { ErrorCategory, handleErrorLocal } from './../error-handler/error-handler.service'
+import { SecureStorageService } from './../storage/storage.service'
 // import { DistributionOnboardingPage } from '../../pages/distribution-onboarding/distribution-onboarding'
 
 @Injectable({
   providedIn: 'root'
 })
 export class StartupChecksService {
-  checks: { name: string; check: Function; outcome: boolean; consequence: Function }[]
+  public checks: { name: string; check: Function; outcome: boolean; consequence: Function }[]
 
   constructor(
     secureStorage: SecureStorageService,
     deviceProvider: DeviceService,
-    private modalController: ModalController,
-    private storage: Storage
+    private readonly modalController: ModalController,
+    private readonly storage: Storage
   ) {
     this.checks = [
       {
@@ -75,10 +76,10 @@ export class StartupChecksService {
     ]
   }
 
-  async presentModal(page: any, modalConfig: any, callback: Function) {
+  public async presentModal(page: any, modalConfig: any, callback: Function) {
     modalConfig = { ...modalConfig, ...{ component: page, backdropDismiss: false } }
 
-    let modal = await this.modalController.create(modalConfig)
+    const modal = await this.modalController.create(modalConfig)
     modal.onDidDismiss()
     modal
       .present()
@@ -88,22 +89,24 @@ export class StartupChecksService {
       .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 
-  initChecks(): Promise<Function> {
+  public initChecks(): Promise<Function> {
     return new Promise((resolve, reject) => {
       this.checks
         .reduce((promiseChain, currentTask) => {
           return promiseChain.then(chainResults => currentTask.check().then(currentResult => [...chainResults, currentResult]))
         }, Promise.resolve([]))
         .then(arrayOfResults => {
-          let failedIndex = arrayOfResults.findIndex((val, index) => {
+          const failedIndex = arrayOfResults.findIndex((val, index) => {
             if (typeof val === 'number') {
               val = Boolean(val).valueOf()
             }
+
             return val !== this.checks[index].outcome
           })
 
           if (failedIndex === -1) {
             resolve()
+
             return
           }
 

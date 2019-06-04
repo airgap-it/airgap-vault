@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core'
-import { Platform } from '@ionic/angular'
-import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
 import { DeviceMotion, DeviceMotionAccelerationData } from '@ionic-native/device-motion/ngx'
-import { GyroscopeService } from './gyroscope.factory'
+import { Platform } from '@ionic/angular'
 import { Observable, Subscription } from 'rxjs'
 
 import workerJS from '../../../assets/workers/entropyCalculatorWorker'
+import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
+
+import { GyroscopeService } from './gyroscope.factory'
 const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
 const entropyCalculatorWorker = new Worker(blobURL)
 
@@ -19,10 +20,11 @@ export class GyroscopeNativeService implements GyroscopeService, IEntropyGenerat
 
   private entropyObservable: Observable<Entropy>
 
-  constructor(private platform: Platform, private deviceMotion: DeviceMotion) {}
+  constructor(private readonly platform: Platform, private readonly deviceMotion: DeviceMotion) {}
 
   public start(): Promise<void> {
     this.collectedEntropyPercentage = 0
+
     return new Promise(async resolve => {
       await this.platform.ready()
       this.entropyObservable = new Observable(observer => {
@@ -37,7 +39,7 @@ export class GyroscopeNativeService implements GyroscopeService, IEntropyGenerat
           .watchAcceleration({ frequency: 500 })
           .subscribe((acceleration: DeviceMotionAccelerationData) => {
             const entropyBuffer = this.arrayBufferFromIntArray([acceleration.x, acceleration.y, acceleration.z])
-            entropyCalculatorWorker.postMessage({ entropyBuffer: entropyBuffer }, [entropyBuffer])
+            entropyCalculatorWorker.postMessage({ entropyBuffer }, [entropyBuffer])
           })
       })
       resolve()
@@ -46,10 +48,11 @@ export class GyroscopeNativeService implements GyroscopeService, IEntropyGenerat
 
   public stop(): Promise<void> {
     this.gyroSubscription.unsubscribe()
+
     return Promise.resolve()
   }
 
-  getEntropyUpdateObservable(): Observable<Entropy> {
+  public getEntropyUpdateObservable(): Observable<Entropy> {
     return this.entropyObservable
   }
 
@@ -64,7 +67,7 @@ export class GyroscopeNativeService implements GyroscopeService, IEntropyGenerat
     return buffer
   }
 
-  getCollectedEntropyPercentage(): number {
+  public getCollectedEntropyPercentage(): number {
     return this.collectedEntropyPercentage / 30
   }
 }

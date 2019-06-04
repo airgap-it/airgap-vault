@@ -1,5 +1,5 @@
 export class TransactionParameter {
-  label: string
-  value: string
-  type: string
+  public label: string
+  public value: string
+  public type: string
 }

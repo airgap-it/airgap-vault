@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
-import { GenericERC20, addSubProtocol, TezosKtProtocol, GenericERC20Configuration } from 'airgap-coin-lib'
-import { addSupportedProtocol } from 'airgap-coin-lib/dist/utils/supportedProtocols'
+import { addSubProtocol, GenericERC20, GenericERC20Configuration, TezosKtProtocol } from 'airgap-coin-lib'
 import { AeternityERC20Token } from 'airgap-coin-lib/dist/protocols/ethereum/erc20/AeToken'
+import { addSupportedProtocol } from 'airgap-coin-lib/dist/utils/supportedProtocols'
 
 import { tokens } from './tokens'
 
@@ -43,7 +43,7 @@ export class ProtocolsService {
     /* */
   }
 
-  addProtocols() {
+  public addProtocols() {
     addSupportedProtocol(AeternityERC20Token)
     addSubProtocol('xtz', new TezosKtProtocol())
 

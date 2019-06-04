@@ -1,12 +1,12 @@
 import { Component, ViewChild } from '@angular/core'
 import { AlertController, NavController, Platform } from '@ionic/angular'
-import { Transaction } from '../../models/transaction.model'
-import { ScannerService } from '../../services/scanner/scanner.service'
-import { SecretsService } from '../../services/secrets/secrets.service'
-import { SchemeRoutingService } from '../../services/scheme-routing/scheme-routing.service'
 import { ZXingScannerComponent } from '@zxing/ngx-scanner'
-import { PermissionsService, PermissionTypes, PermissionStatus } from '../../services/permissions/permissions.service'
-import { handleErrorLocal, ErrorCategory } from '../../services/error-handler/error-handler.service'
+
+import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
+import { PermissionsService, PermissionStatus, PermissionTypes } from '../../services/permissions/permissions.service'
+import { ScannerService } from '../../services/scanner/scanner.service'
+import { SchemeRoutingService } from '../../services/scheme-routing/scheme-routing.service'
+import { SecretsService } from '../../services/secrets/secrets.service'
 
 @Component({
   selector: 'app-tab-scan',
@@ -15,42 +15,42 @@ import { handleErrorLocal, ErrorCategory } from '../../services/error-handler/er
 })
 export class TabScanPage {
   @ViewChild('scanner')
-  zxingScanner: ZXingScannerComponent
-  availableDevices: MediaDeviceInfo[]
-  selectedDevice: MediaDeviceInfo
-  scannerEnabled = true
+  public zxingScanner: ZXingScannerComponent
+  public availableDevices: MediaDeviceInfo[]
+  public selectedDevice: MediaDeviceInfo
+  public scannerEnabled = true
 
   public isBrowser = false
 
-  hasCameras = false
+  public hasCameras = false
 
   public hasCameraPermission = false
 
   constructor(
-    private schemeRouting: SchemeRoutingService,
-    private alertCtrl: AlertController,
-    private navController: NavController,
-    private platform: Platform,
-    private secretsProvider: SecretsService,
-    private scanner: ScannerService,
-    private permissionsProvider: PermissionsService
+    private readonly schemeRouting: SchemeRoutingService,
+    private readonly alertCtrl: AlertController,
+    private readonly navController: NavController,
+    private readonly platform: Platform,
+    private readonly secretsProvider: SecretsService,
+    private readonly scanner: ScannerService,
+    private readonly permissionsProvider: PermissionsService
   ) {
     this.isBrowser = !this.platform.is('cordova')
   }
 
-  async ionViewWillEnter() {
+  public async ionViewWillEnter() {
     if (this.platform.is('cordova')) {
       await this.platform.ready()
       await this.checkCameraPermissionsAndActivate()
     }
   }
 
-  async requestPermission() {
+  public async requestPermission() {
     await this.permissionsProvider.userRequestsPermissions([PermissionTypes.CAMERA])
     await this.checkCameraPermissionsAndActivate()
   }
 
-  async checkCameraPermissionsAndActivate() {
+  public async checkCameraPermissionsAndActivate() {
     const permission = await this.permissionsProvider.hasCameraPermission()
     if (permission === PermissionStatus.GRANTED) {
       this.hasCameraPermission = true
@@ -58,7 +58,7 @@ export class TabScanPage {
     }
   }
 
-  ionViewDidEnter() {
+  public ionViewDidEnter() {
     if (!this.platform.is('cordova')) {
       this.hasCameraPermission = true
       this.zxingScanner.camerasNotFound.subscribe((_devices: MediaDeviceInfo[]) => {
@@ -76,11 +76,11 @@ export class TabScanPage {
     }
   }
 
-  ionViewWillLeave() {
+  public ionViewWillLeave() {
     if (this.platform.is('cordova')) {
       this.scanner.destroy()
     } else {
-      ;(this.zxingScanner as any).resetCodeReader()
+      (this.zxingScanner as any).resetCodeReader()
     }
   }
 
@@ -101,7 +101,7 @@ export class TabScanPage {
     }
   }
 
-  async checkScan(data: string) {
+  public async checkScan(data: string) {
     return this.schemeRouting.handleNewSyncRequest(this.navController, data, () => {
       this.startScan()
     })

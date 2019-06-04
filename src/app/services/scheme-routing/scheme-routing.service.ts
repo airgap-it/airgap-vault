@@ -1,11 +1,12 @@
-import { SecretsService } from '../secrets/secrets.service'
 import { Injectable } from '@angular/core'
 import { AlertController, NavController } from '@ionic/angular'
-import { AirGapWallet, DeserializedSyncProtocol, UnsignedTransaction, SyncProtocolUtils, EncodedType } from 'airgap-coin-lib'
-// import { TransactionDetailPage } from '../../pages/transaction-detail/transaction-detail'
-import { handleErrorLocal, ErrorCategory } from '../error-handler/error-handler.service'
-import { TranslateService } from '@ngx-translate/core'
 import { AlertButton } from '@ionic/core'
+import { TranslateService } from '@ngx-translate/core'
+import { AirGapWallet, DeserializedSyncProtocol, EncodedType, SyncProtocolUtils, UnsignedTransaction } from 'airgap-coin-lib'
+
+// import { TransactionDetailPage } from '../../pages/transaction-detail/transaction-detail'
+import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
+import { SecretsService } from '../secrets/secrets.service'
 
 @Injectable({
   providedIn: 'root'
@@ -17,13 +18,16 @@ export class SchemeRoutingService {
     [key in EncodedType]: (deserializedSync: DeserializedSyncProtocol, scanAgainCallback: Function) => Promise<boolean>
   }
   */
-  private syncSchemeHandlers: ((deserializedSync: DeserializedSyncProtocol, scanAgainCallback: Function) => Promise<boolean>)[] = []
+  private readonly syncSchemeHandlers: ((
+    deserializedSync: DeserializedSyncProtocol,
+    scanAgainCallback: Function
+  ) => Promise<boolean>)[] = []
 
   constructor(
     // TODO
-    private secretsProvider: SecretsService,
-    private alertCtrl: AlertController,
-    private translateService: TranslateService
+    private readonly secretsProvider: SecretsService,
+    private readonly alertCtrl: AlertController,
+    private readonly translateService: TranslateService
   ) {
     this.syncSchemeHandlers[EncodedType.WALLET_SYNC] = this.syncTypeNotSupportedAlert.bind(this)
     this.syncSchemeHandlers[EncodedType.UNSIGNED_TRANSACTION] = this.handleUnsignedTransaction.bind(this)
@@ -38,7 +42,7 @@ export class SchemeRoutingService {
     */
   }
 
-  async handleNewSyncRequest(
+  public async handleNewSyncRequest(
     navCtrl: NavController,
     rawString: string,
     scanAgainCallback: Function = () => {
@@ -53,7 +57,7 @@ export class SchemeRoutingService {
 
     let data: string | undefined
     try {
-      let url: URL = new URL(rawString)
+      const url: URL = new URL(rawString)
       data = url.searchParams.get('d')
     } catch (e) {
       data = rawString // Fallback to support raw data QRs
@@ -156,10 +160,10 @@ export class SchemeRoutingService {
     )
   }
 
-  showTranslatedAlert(title: string, message: string, buttons: AlertButton[]): void {
+  public showTranslatedAlert(title: string, message: string, buttons: AlertButton[]): void {
     const translationKeys = [title, message, ...buttons.map(button => button.text)]
     this.translateService.get(translationKeys).subscribe(async values => {
-      let alert = await this.alertCtrl.create({
+      const alert = await this.alertCtrl.create({
         header: values[title],
         message: values[message],
         backdropDismiss: true,

@@ -1,25 +1,27 @@
 import { Injectable } from '@angular/core'
 import { Platform } from '@ionic/angular'
-import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
 import { Observable } from 'rxjs'
+
+import workerJS from '../../../assets/workers/entropyCalculatorWorker'
+import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
+
+import { PermissionsService, PermissionStatus } from './../permissions/permissions.service'
 
 declare var window: any
 
-import workerJS from '../../../assets/workers/entropyCalculatorWorker'
-import { PermissionsService, PermissionStatus } from './../permissions/permissions.service'
 const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
 const entropyCalculatorWorker = new Worker(blobURL)
 
 @Injectable({ providedIn: 'root' })
 export class AudioNativeService implements IEntropyGenerator {
-  private ENTROPY_SIZE = 4096
+  private readonly ENTROPY_SIZE = 4096
 
   private collectedEntropyPercentage: number = 0
 
   private handler
-  private entropyObservable: Observable<Entropy>
+  private readonly entropyObservable: Observable<Entropy>
 
-  constructor(private platform: Platform, private permissionsProvider: PermissionsService) {
+  constructor(private readonly platform: Platform, private readonly permissionsProvider: PermissionsService) {
     this.entropyObservable = Observable.create(observer => {
       entropyCalculatorWorker.onmessage = event => {
         this.collectedEntropyPercentage += event.data.entropyMeasure
@@ -39,7 +41,7 @@ export class AudioNativeService implements IEntropyGenerator {
     })
   }
 
-  async start(): Promise<void> {
+  public async start(): Promise<void> {
     this.collectedEntropyPercentage = 0
     await this.platform.ready()
 
@@ -59,7 +61,7 @@ export class AudioNativeService implements IEntropyGenerator {
     console.log('audioinput created.')
   }
 
-  stop(): Promise<void> {
+  public stop(): Promise<void> {
     return new Promise(resolve => {
       console.log('removed audioinput listener')
       window.audioinput.stop()
@@ -68,7 +70,7 @@ export class AudioNativeService implements IEntropyGenerator {
     })
   }
 
-  getEntropyUpdateObservable(): Observable<Entropy> {
+  public getEntropyUpdateObservable(): Observable<Entropy> {
     return this.entropyObservable
   }
 
@@ -83,7 +85,7 @@ export class AudioNativeService implements IEntropyGenerator {
     return buffer
   }
 
-  getCollectedEntropyPercentage(): number {
+  public getCollectedEntropyPercentage(): number {
     return this.collectedEntropyPercentage / 200
   }
 }

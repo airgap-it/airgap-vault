@@ -1,22 +1,23 @@
-import { TransactionParameter } from './transactionparameters'
 import { IAirGapTransaction } from 'airgap-coin-lib'
 import BigNumber from 'bignumber.js'
 
+import { TransactionParameter } from './transactionparameters'
+
 export class Transaction implements IAirGapTransaction {
-  amount: BigNumber
-  blockHeight: string
-  data: string
-  fee: BigNumber
-  from: string[]
-  hash: string
-  isInbound: boolean
-  meta: {}
-  protocolIdentifier: string
-  to: string[]
-  timestamp: number
+  public amount: BigNumber
+  public blockHeight: string
+  public data: string
+  public fee: BigNumber
+  public from: string[]
+  public hash: string
+  public isInbound: boolean
+  public meta: {}
+  public protocolIdentifier: string
+  public to: string[]
+  public timestamp: number
 
-  information: TransactionParameter[] = []
+  public information: TransactionParameter[] = []
 
-  payload: string
-  publicKey: string
+  public payload: string
+  public publicKey: string
 }

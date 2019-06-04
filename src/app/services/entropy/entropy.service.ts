@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core'
-import { IEntropyGenerator } from './IEntropyGenerator'
 import { sha3_256 } from 'js-sha3'
 import { Observable, Observer, Subscription } from 'rxjs'
 
 import workerJS from '../../../assets/workers/hashWorker'
-import { handleErrorLocal, ErrorCategory } from './../error-handler/error-handler.service'
+
+import { ErrorCategory, handleErrorLocal } from './../error-handler/error-handler.service'
+import { IEntropyGenerator } from './IEntropyGenerator'
 const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
 const hashWorker = new Worker(blobURL)
 
@@ -12,12 +13,12 @@ const hashWorker = new Worker(blobURL)
   providedIn: 'root'
 })
 export class EntropyService {
-  ENTROPY_SIZE = 4096
+  public ENTROPY_SIZE = 4096
 
-  entropyGenerators: IEntropyGenerator[] = []
-  entropySubscriptions: Subscription[] = []
+  public entropyGenerators: IEntropyGenerator[] = []
+  public entropySubscriptions: Subscription[] = []
 
-  private entropyUpdateObservable: Observable<void>
+  private readonly entropyUpdateObservable: Observable<void>
   private entropyUpdateObserver: Observer<void>
 
   constructor() {
@@ -26,27 +27,27 @@ export class EntropyService {
     })
   }
 
-  addEntropySource(entropyGenerator: IEntropyGenerator) {
+  public addEntropySource(entropyGenerator: IEntropyGenerator) {
     this.entropyGenerators.push(entropyGenerator)
   }
 
-  getEntropyUpdateObservable(): Observable<void> {
+  public getEntropyUpdateObservable(): Observable<void> {
     return this.entropyUpdateObservable
   }
 
-  startEntropyCollection(): Promise<void[]> {
+  public startEntropyCollection(): Promise<void[]> {
     const promises = []
     const secureRandomArray = new Uint8Array(this.ENTROPY_SIZE)
     window.crypto.getRandomValues(secureRandomArray)
 
     hashWorker.postMessage({ call: 'init', secureRandom: Array.from(secureRandomArray) })
 
-    for (let generator of this.entropyGenerators) {
+    for (const generator of this.entropyGenerators) {
       promises.push(
         generator
           .start()
           .then(() => {
-            let entropySubscription = generator.getEntropyUpdateObservable().subscribe(result => {
+            const entropySubscription = generator.getEntropyUpdateObservable().subscribe(result => {
               try {
                 hashWorker.postMessage({ entropyHex: result.entropyHex, call: 'update' })
               } catch (error) {
@@ -59,6 +60,7 @@ export class EntropyService {
               }
             })
             this.entropySubscriptions.push(entropySubscription)
+
             return
           })
           .catch(error => {
@@ -66,11 +68,13 @@ export class EntropyService {
           })
       )
     }
+
     return Promise.all(promises)
   }
 
-  stopEntropyCollection(): Promise<void> {
-    let promises = []
+  public stopEntropyCollection(): Promise<void> {
+    const promises = []
+
     return new Promise(resolve => {
       // clear collection interval
       for (let i = 0; i < this.entropySubscriptions.length; i++) {
@@ -95,7 +99,7 @@ export class EntropyService {
     })
   }
 
-  getEntropyAsHex(): Promise<string> {
+  public getEntropyAsHex(): Promise<string> {
     return new Promise(resolve => {
       hashWorker.onmessage = event => {
         const secureRandomArray = new Uint8Array(this.ENTROPY_SIZE)

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core'
-import { AirGapWallet } from 'airgap-coin-lib'
-import { Secret } from 'src/app/models/secret'
-import { BehaviorSubject } from 'rxjs'
-import { SecretsService } from 'src/app/services/secrets/secrets.service'
 import { Router } from '@angular/router'
+import { AirGapWallet } from 'airgap-coin-lib'
+import { BehaviorSubject } from 'rxjs'
+import { Secret } from 'src/app/models/secret'
+import { SecretsService } from 'src/app/services/secrets/secrets.service'
 
 @Component({
   selector: 'app-tab-accounts',
@@ -11,15 +11,15 @@ import { Router } from '@angular/router'
   styleUrls: ['./tab-accounts.page.scss']
 })
 export class TabAccountsPage implements OnInit {
-  symbolFilter: string | undefined
-  activeSecret: Secret
+  public symbolFilter: string | undefined
+  public activeSecret: Secret
 
   public wallets = new BehaviorSubject<AirGapWallet[]>([])
 
-  constructor(public router: Router, private secretsProvider: SecretsService) {}
+  constructor(public router: Router, private readonly secretsProvider: SecretsService) {}
 
-  ngOnInit() {
-    let secrets = this.secretsProvider.currentSecretsList.asObservable()
+  public ngOnInit() {
+    const secrets = this.secretsProvider.currentSecretsList.asObservable()
     secrets.subscribe(async list => {
       await this.secretsProvider.isReady()
       if (list.length === 0) {
@@ -34,17 +34,17 @@ export class TabAccountsPage implements OnInit {
     }
   }
 
-  onSecretChanged(secret: Secret) {
+  public onSecretChanged(secret: Secret) {
     this.activeSecret = secret
     this.wallets.next(this.activeSecret.wallets)
   }
 
-  goToReceiveAddress(wallet: AirGapWallet) {
+  public goToReceiveAddress(wallet: AirGapWallet) {
     // TODO
     // this.navController.push(WalletAddressPage, { wallet: wallet }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  filterItems(ev: any) {
+  public filterItems(ev: any) {
     let val = ev.target.value
     if (val && val !== '') {
       val = val.trim().toLowerCase()
@@ -54,7 +54,7 @@ export class TabAccountsPage implements OnInit {
     }
   }
 
-  addWallet() {
+  public addWallet() {
     // TODO
     // this.navController.push(WalletSelectCoinsPage).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     this.router.navigate(['account-add'])

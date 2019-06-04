@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core'
-import { toDataUrl } from 'myetherwallet-blockies'
 import { createIcon } from '@download/blockies'
 import { BigNumber } from 'bignumber.js'
+import { toDataUrl } from 'myetherwallet-blockies'
 
 @Component({
   selector: 'identicon',
@@ -31,6 +31,7 @@ export class IdenticonComponent {
     for (let i = 0; i < v.length; i++) {
       rv = rv.plus(new BigNumber(alpha.indexOf(v[v.length - 1 - i])).multipliedBy(new BigNumber(alpha.length).exponentiatedBy(i)))
     }
+
     return rv.toString(16)
   }
 }

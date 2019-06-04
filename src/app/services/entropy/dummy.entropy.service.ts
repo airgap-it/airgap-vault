@@ -1,20 +1,21 @@
 import { Injectable } from '@angular/core'
-import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
 import { Observable } from 'rxjs'
+
+import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
 
 @Injectable({
   providedIn: 'root'
 })
 export class DummyEntropyService implements IEntropyGenerator {
-  start(): Promise<void> {
+  public start(): Promise<void> {
     return Promise.resolve()
   }
 
-  stop(): Promise<any> {
+  public stop(): Promise<any> {
     return Promise.resolve()
   }
 
-  getEntropyUpdateObservable(): Observable<Entropy> {
+  public getEntropyUpdateObservable(): Observable<Entropy> {
     return new Observable(observer => {
       observer.next({
         entropyHex: ''
@@ -22,7 +23,7 @@ export class DummyEntropyService implements IEntropyGenerator {
     })
   }
 
-  getCollectedEntropyPercentage(): number {
+  public getCollectedEntropyPercentage(): number {
     return 0
   }
 }

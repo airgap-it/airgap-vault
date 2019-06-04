@@ -1,19 +1,21 @@
-import { SecretsService } from './../../services/secrets/secrets.service'
-import { Component, Output, EventEmitter, Input } from '@angular/core'
+import { Component, EventEmitter, Input, Output } from '@angular/core'
+
 import { Secret } from '../../models/secret'
+
+import { SecretsService } from './../../services/secrets/secrets.service'
 
 @Component({
   selector: 'current-secret',
   templateUrl: 'current-secret.component.html'
 })
 export class CurrentSecretComponent {
-  private secrets: Secret[] = []
+  private readonly secrets: Secret[] = []
   private currentSecret = 0
 
   @Output('secretChanged')
-  secretChanged = new EventEmitter<Secret>()
+  public secretChanged = new EventEmitter<Secret>()
 
-  constructor(private secretsProvider: SecretsService) {
+  constructor(private readonly secretsProvider: SecretsService) {
     this.secrets = this.secretsProvider.currentSecretsList.getValue()
     this.currentSecret = this.secrets.indexOf(this.secretsProvider.getActiveSecret())
   }
@@ -23,7 +25,7 @@ export class CurrentSecretComponent {
     this.currentSecret = this.secrets.indexOf(secret)
   }
 
-  onChange(newSecret) {
+  public onChange(newSecret) {
     this.secretsProvider.setActiveSecret(this.secrets[newSecret])
     this.secretChanged.emit(this.secrets[newSecret])
   }

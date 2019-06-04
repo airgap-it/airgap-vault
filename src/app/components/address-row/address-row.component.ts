@@ -7,8 +7,8 @@ import { Component, Input } from '@angular/core'
 })
 export class AddressRowComponent {
   @Input()
-  label: string
+  public label: string
 
   @Input()
-  address: string
+  public address: string
 }

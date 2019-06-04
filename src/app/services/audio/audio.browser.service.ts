@@ -1,23 +1,23 @@
 import { Injectable } from '@angular/core'
-import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
 import { Observable } from 'rxjs'
 
 import workerJS from '../../../assets/workers/entropyCalculatorWorker'
+import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
 const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
 const entropyCalculatorWorker = new Worker(blobURL)
 
 @Injectable({ providedIn: 'root' })
 export class AudioBrowserService implements IEntropyGenerator {
-  private ENTROPY_SIZE = 4096
+  private readonly ENTROPY_SIZE = 4096
 
   private handler
 
-  private entropyObservable: Observable<Entropy>
+  private readonly entropyObservable: Observable<Entropy>
 
   private collectedEntropyPercentage: number = 0
 
-  private microphoneStreamSource
-  private scriptProcessor
+  private readonly microphoneStreamSource
+  private readonly scriptProcessor
 
   constructor() {
     this.entropyObservable = Observable.create(observer => {
@@ -29,7 +29,7 @@ export class AudioBrowserService implements IEntropyGenerator {
       }
       this.handler = event => {
         const data = event.inputBuffer.getChannelData(0)
-        let buffer1 = this.arrayBufferFromIntArray(data)
+        const buffer1 = this.arrayBufferFromIntArray(data)
         entropyCalculatorWorker.postMessage({ entropyBuffer: buffer1 }, [buffer1])
       }
     })
@@ -42,8 +42,9 @@ export class AudioBrowserService implements IEntropyGenerator {
       (navigator as any).msGetUserMedia
   }
 
-  start(): Promise<void> {
+  public start(): Promise<void> {
     this.collectedEntropyPercentage = 0
+
     return new Promise(resolve => {
       navigator.getUserMedia(
         { video: false, audio: true },
@@ -66,7 +67,7 @@ export class AudioBrowserService implements IEntropyGenerator {
     })
   }
 
-  stop(): Promise<any> {
+  public stop(): Promise<any> {
     return new Promise(resolve => {
       if (this.microphoneStreamSource) {
         this.microphoneStreamSource.stop()
@@ -80,7 +81,7 @@ export class AudioBrowserService implements IEntropyGenerator {
     })
   }
 
-  getEntropyUpdateObservable(): Observable<Entropy> {
+  public getEntropyUpdateObservable(): Observable<Entropy> {
     return this.entropyObservable
   }
 
@@ -91,10 +92,11 @@ export class AudioBrowserService implements IEntropyGenerator {
     for (let i = 0; i < array.length; i++) {
       bufView[i] = array[i]
     }
+
     return buffer
   }
 
-  getCollectedEntropyPercentage(): number {
+  public getCollectedEntropyPercentage(): number {
     return this.collectedEntropyPercentage / 200
   }
 }

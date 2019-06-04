@@ -1,7 +1,8 @@
-import { InteractionSetting } from './../services/interaction/interaction.service'
-import { UUID } from 'angular2-uuid'
-import { BIP39Signer } from './BIP39Signer'
 import { AirGapWallet } from 'airgap-coin-lib'
+import { UUID } from 'angular2-uuid'
+
+import { InteractionSetting } from './../services/interaction/interaction.service'
+import { BIP39Signer } from './BIP39Signer'
 
 const signer = new BIP39Signer()
 
@@ -16,7 +17,7 @@ export class Secret {
 
   public wallets: AirGapWallet[]
 
-  private twofactor: string
+  private readonly twofactor: string
 
   constructor(seed: string, label: string = '', isParanoia = false, interactionSetting = InteractionSetting.UNDETERMINED) {
     this.label = label
@@ -31,27 +32,27 @@ export class Secret {
     this.secretHex = seed
   }
 
-  flushSecret() {
+  public flushSecret() {
     delete this.secretHex
   }
 
-  recoverMnemonicFromHex(hex: string): string {
+  public recoverMnemonicFromHex(hex: string): string {
     return signer.entropyToMnemonic(hex)
   }
 
-  hasTwofactor(): boolean {
+  public hasTwofactor(): boolean {
     return this.twofactor && this.twofactor.length > 0
   }
 
-  static generateSocialRecover(secret: string, numberOfShares: number, threshold: number): string[] {
+  public static generateSocialRecover(secret: string, numberOfShares: number, threshold: number): string[] {
     return signer.generateSocialRecover(secret, numberOfShares, threshold)
   }
 
-  static recoverSecretFromShares(shares: string[]): string {
+  public static recoverSecretFromShares(shares: string[]): string {
     return signer.recoverKey(shares)
   }
 
-  static init(obj) {
+  public static init(obj) {
     return Object.assign(new Secret(null, obj.label), obj)
   }
 }

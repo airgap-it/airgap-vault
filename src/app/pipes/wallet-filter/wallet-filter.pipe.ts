@@ -5,7 +5,7 @@ import { AirGapWallet } from 'airgap-coin-lib'
   name: 'walletFilter'
 })
 export class WalletFilterPipe implements PipeTransform {
-  transform(items: AirGapWallet[], args: { symbol: string }): any {
+  public transform(items: AirGapWallet[], args: { symbol: string }): any {
     if (!items) {
       return []
     }

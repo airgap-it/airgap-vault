@@ -1,9 +1,9 @@
-import { sha3_256 } from 'js-sha3'
 import bip39 from 'bip39'
+import { sha3_256 } from 'js-sha3'
 import secretJS from 'secrets.js-grempe'
 
 export class BIP39Signer {
-  readonly checkSumLength = 10
+  public readonly checkSumLength = 10
 
   private getOffsetMapping(share: string): any {
     const shareWordCount = share.split(' ').length
@@ -20,17 +20,18 @@ export class BIP39Signer {
   private getRandomIntInclusive(min: number, max: number): number {
     const randomBuffer = new Uint32Array(1)
     window.crypto.getRandomValues(randomBuffer)
-    let randomNumber = randomBuffer[0] / (0xffffffff + 1)
+    const randomNumber = randomBuffer[0] / (0xffffffff + 1)
     min = Math.ceil(min)
     max = Math.floor(max)
+
     return Math.floor(randomNumber * (max - min + 1)) + min
   }
 
-  entropyToMnemonic(entropy: string): string {
+  public entropyToMnemonic(entropy: string): string {
     return bip39.entropyToMnemonic(entropy)
   }
 
-  mnemonicToEntropy(mnemonic: string): string {
+  public mnemonicToEntropy(mnemonic: string): string {
     const usedList = BIP39Signer.determineWordList(mnemonic)
 
     if (!usedList) {
@@ -40,17 +41,18 @@ export class BIP39Signer {
     return bip39.mnemonicToEntropy(mnemonic, usedList)
   }
 
-  static prepareMnemonic(mnemonic: string): string {
+  public static prepareMnemonic(mnemonic: string): string {
     return mnemonic.trim().toLowerCase()
   }
 
-  static validateMnemonic(mnemonic: string): boolean {
+  public static validateMnemonic(mnemonic: string): boolean {
     const preparedMnemonic = BIP39Signer.prepareMnemonic(mnemonic)
     const wordList = BIP39Signer.determineWordList(preparedMnemonic)
+
     return bip39.validateMnemonic(preparedMnemonic, wordList)
   }
 
-  static determineWordList(mnemonic: string): any[] {
+  public static determineWordList(mnemonic: string): any[] {
     for (const list of BIP39Signer.wordLists()) {
       if (bip39.validateMnemonic(BIP39Signer.prepareMnemonic(mnemonic), list)) {
         return list
@@ -58,7 +60,7 @@ export class BIP39Signer {
     }
   }
 
-  static wordLists(): any[] {
+  public static wordLists(): any[] {
     return [
       bip39.wordlists.english
       /*
@@ -73,7 +75,7 @@ export class BIP39Signer {
     ]
   }
 
-  generateSocialRecover(secret: string, numberOfShares: number, threshold: number): string[] {
+  public generateSocialRecover(secret: string, numberOfShares: number, threshold: number): string[] {
     if (threshold > numberOfShares) {
       throw new Error('The threshold needs to be smaller or equal to the number or shares')
     } else if (numberOfShares < 2) {
@@ -88,7 +90,7 @@ export class BIP39Signer {
     const shares = secretJS.share(seed + secretDigester.hex().slice(0, this.checkSumLength), numberOfShares, threshold)
     const calculatedShares = []
     for (let i = 0; i < shares.length; i++) {
-      let paddedShare = shares[i].concat(
+      const paddedShare = shares[i].concat(
         Array(29)
           .fill(0)
           .map(() => this.getRandomIntInclusive(0, 9))
@@ -96,16 +98,17 @@ export class BIP39Signer {
       )
       calculatedShares[i] = `${bip39.entropyToMnemonic(paddedShare.slice(0, 64))} ${bip39.entropyToMnemonic(paddedShare.slice(64, 128))}`
     }
+
     return calculatedShares
   }
 
-  recoverKey(shares: any): string {
+  public recoverKey(shares: any): string {
     const offset = this.getOffsetMapping(shares[0])
-    let translatedShares = []
+    const translatedShares = []
     for (let i = 0; i < shares.length; i++) {
-      let words = shares[i].split(' ')
-      let firstHalf = words.slice(0, 24)
-      let secondHalf = words.slice(24, words.length)
+      const words = shares[i].split(' ')
+      const firstHalf = words.slice(0, 24)
+      const secondHalf = words.slice(24, words.length)
       translatedShares[i] = `${bip39.mnemonicToEntropy(firstHalf.join(' '))}${bip39.mnemonicToEntropy(secondHalf.join(' '))}`.substr(
         0,
         offset.offset
@@ -117,13 +120,14 @@ export class BIP39Signer {
 
     secretDigester.update(seed)
 
-    let checksum = secretDigester.hex().slice(0, this.checkSumLength)
-    let checksum2 = combine.substr(-this.checkSumLength)
+    const checksum = secretDigester.hex().slice(0, this.checkSumLength)
+    const checksum2 = combine.substr(-this.checkSumLength)
     if (checksum !== checksum2) {
       throw new Error(
         'Checksum error, either the passed shares were generated for different secrets or the amount of shares is below the threshold'
       )
     }
+
     return bip39.entropyToMnemonic(seed)
   }
 }

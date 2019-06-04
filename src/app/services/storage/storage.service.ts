@@ -26,40 +26,41 @@ export class SecureStorageService {
     return new window.SecureStorage(alias, isParanoia)
   }
 
-  isDeviceSecure(): Promise<number> {
+  public isDeviceSecure(): Promise<number> {
     return new Promise<number>((resolve, reject) => {
       this.create('airgap-secure-storage', false).isDeviceSecure(resolve, reject)
     })
   }
 
-  secureDevice(): Promise<void> {
+  public secureDevice(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this.create('airgap-secure-storage', false).secureDevice(resolve, reject)
     })
   }
 
-  get(alias: string, isParanoia: boolean): Promise<SecureStorage> {
-    let secureStorage = this.create(alias, isParanoia)
+  public get(alias: string, isParanoia: boolean): Promise<SecureStorage> {
+    const secureStorage = this.create(alias, isParanoia)
+
     return new Promise<SecureStorage>((resolve, reject) => {
       secureStorage.init(
         () => {
           resolve({
-            init: function() {
+            init() {
               return new Promise<void>((resolve, reject) => {
                 secureStorage.init(resolve, reject)
               })
             },
-            setItem: function(key, value) {
+            setItem(key, value) {
               return new Promise<void>((resolve, reject) => {
                 secureStorage.setItem(key, value, resolve, reject)
               })
             },
-            getItem: function(key) {
+            getItem(key) {
               return new Promise<any>((resolve, reject) => {
                 secureStorage.getItem(key, resolve, reject)
               })
             },
-            removeItem: function(key) {
+            removeItem(key) {
               return new Promise<void>((resolve, reject) => {
                 secureStorage.removeItem(key, resolve, reject)
               })

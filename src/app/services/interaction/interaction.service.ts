@@ -1,14 +1,14 @@
-import { DeepLinkService } from './../deep-link/deep-link.service'
 import { Injectable } from '@angular/core'
-import { Storage } from '@ionic/storage'
 import { NavController } from '@ionic/angular'
-import { handleErrorLocal, ErrorCategory } from './../error-handler/error-handler.service'
 // import { InteractionSelectionPage } from '../../pages/interaction-selection/interaction-selection'
 // import { WalletSharePage } from '../../pages/wallet-share/wallet-share'
 // import { TransactionSignedPage } from '../../pages/transaction-signed/transaction-signed'
 import { AirGapWallet, UnsignedTransaction } from 'airgap-coin-lib'
+
 // import { Transaction } from '../../../models/transaction.model'
 import { Secret } from '../../models/secret'
+
+import { DeepLinkService } from './../deep-link/deep-link.service'
 
 export enum InteractionSetting {
   UNDETERMINED = 'undetermined',
@@ -40,7 +40,7 @@ export interface IInteractionOptions {
   providedIn: 'root'
 })
 export class InteractionService {
-  constructor(private deepLinkProvider: DeepLinkService) {}
+  constructor(private readonly deepLinkProvider: DeepLinkService) {}
 
   public startInteraction(navCtrl: NavController, interactionOptions: IInteractionOptions, secret: Secret) {
     const interactionSetting = secret.interactionSetting
@@ -68,6 +68,7 @@ export class InteractionService {
         case InteractionSetting.OFFLINE_DEVICE:
           this.navigateToPageByOperationType(navCtrl, interactionOptions)
           break
+        default:
       }
     }
   }
@@ -93,7 +94,7 @@ export class InteractionService {
   private navigateToPageByOperationType(navCtrl: NavController, interactionOptions: IInteractionOptions) {
     // To ensure exhausting enum
     const assertNever = (arg: never): never => {
-      throw 'INVALID_OPERATION_TYPE'
+      throw new Error('INVALID_OPERATION_TYPE')
     }
     // TODO
     // if (interactionOptions.operationType === InteractionOperationType.WALLET_SYNC) {

@@ -78,8 +78,8 @@ describe('BIP39: Signer', () => {
   })
 
   it('throw error on wrong threshold configuration', () => {
-    let numberOfShares = 5
-    let threshold = 6
+    const numberOfShares = 5
+    const threshold = 6
 
     expect(function() {
       signer.generateSocialRecover(secrets[0], numberOfShares, threshold)
@@ -87,8 +87,8 @@ describe('BIP39: Signer', () => {
   })
 
   it('throw error on wrong numberOfShares configuration', () => {
-    let numberOfShares = 1
-    let threshold = 1
+    const numberOfShares = 1
+    const threshold = 1
 
     expect(function() {
       signer.generateSocialRecover(secrets[0], numberOfShares, threshold)
@@ -96,8 +96,8 @@ describe('BIP39: Signer', () => {
   })
 
   it('throw error on wrong numberOfShares configuration', () => {
-    let numberOfShares = 1
-    let threshold = 1
+    const numberOfShares = 1
+    const threshold = 1
 
     expect(function() {
       signer.generateSocialRecover(secrets[0], numberOfShares, threshold)

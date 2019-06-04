@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core'
-import { Platform, AlertController } from '@ionic/angular'
-import { handleErrorLocal, ErrorCategory } from './../error-handler/error-handler.service'
+import { AlertController, Platform } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
+
+import { ErrorCategory, handleErrorLocal } from './../error-handler/error-handler.service'
 
 declare let window: any
 
@@ -9,9 +10,9 @@ declare let window: any
   providedIn: 'root'
 })
 export class DeepLinkService {
-  constructor(private platform: Platform, private alertCtrl: AlertController, private translateService: TranslateService) {}
+  constructor(private readonly platform: Platform, private readonly alertCtrl: AlertController, private readonly translateService: TranslateService) {}
 
-  sameDeviceDeeplink(url: string = 'airgap-wallet://'): Promise<void> {
+  public sameDeviceDeeplink(url: string = 'airgap-wallet://'): Promise<void> {
     return new Promise((resolve, reject) => {
       let sApp
 
@@ -25,6 +26,7 @@ export class DeepLinkService {
         sApp = window.startApp.set(url)
       } else {
         this.showDeeplinkOnlyOnDevicesAlert()
+
         return reject()
       }
 
@@ -37,17 +39,18 @@ export class DeepLinkService {
           console.error('deeplink used', url)
           console.error(error)
           this.showAppNotFoundAlert()
+
           return reject()
         }
       )
     })
   }
 
-  showDeeplinkOnlyOnDevicesAlert() {
+  public showDeeplinkOnlyOnDevicesAlert() {
     this.translateService
       .get(['deep-link.not-supported-alert.title', 'deep-link.not-supported-alert.message', 'deep-link.not-supported-alert.ok'])
       .subscribe(async translated => {
-        let alert = await this.alertCtrl.create({
+        const alert = await this.alertCtrl.create({
           header: translated['deep-link.not-supported-alert.title'],
           message: translated['deep-link.not-supported-alert.message'],
           backdropDismiss: false,
@@ -62,13 +65,13 @@ export class DeepLinkService {
       })
   }
 
-  showAppNotFoundAlert() {
+  public showAppNotFoundAlert() {
     this.translateService
       .get(['deep-link.app-not-found.title', 'deep-link.app-not-found.message', 'deep-link.app-not-found.ok'], {
         otherAppName: 'AirGap Wallet'
       })
       .subscribe(async translated => {
-        let alert = await this.alertCtrl.create({
+        const alert = await this.alertCtrl.create({
           header: translated['deep-link.app-not-found.title'],
           message: translated['deep-link.app-not-found.message'],
           backdropDismiss: false,

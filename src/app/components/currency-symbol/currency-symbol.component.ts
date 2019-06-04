@@ -1,4 +1,4 @@
-import { Component, Input, AfterViewInit } from '@angular/core'
+import { AfterViewInit, Component, Input } from '@angular/core'
 
 @Component({
   selector: 'currency-symbol',
@@ -7,7 +7,7 @@ import { Component, Input, AfterViewInit } from '@angular/core'
 })
 export class CurrencySymbolComponent implements AfterViewInit {
   @Input()
-  private symbol: string | undefined
+  private readonly symbol: string | undefined
 
   public symbolURL: string = 'assets/symbols/generic-coin.svg'
 
@@ -15,7 +15,7 @@ export class CurrencySymbolComponent implements AfterViewInit {
     /* */
   }
 
-  ngAfterViewInit() {
+  public ngAfterViewInit() {
     if (this.symbol) {
       const imageUrl = 'assets/symbols/' + this.symbol.toLowerCase() + '.svg'
       const img = new Image()

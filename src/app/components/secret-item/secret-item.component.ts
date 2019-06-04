@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core'
+
 import { Secret } from '../../models/secret'
 import { InteractionSetting } from '../../services/interaction/interaction.service'
 
@@ -9,7 +10,7 @@ import { InteractionSetting } from '../../services/interaction/interaction.servi
 })
 export class SecretItemComponent {
   @Input()
-  secret: Secret
+  public secret: Secret
 
   public interactionSetting = InteractionSetting
 }
