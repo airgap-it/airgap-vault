@@ -1,5 +1,6 @@
 import { Component } from '@angular/core'
-import { AlertController, ModalController, NavController, ToastController } from '@ionic/angular'
+import { Router } from '@angular/router'
+import { AlertController, ModalController, ToastController } from '@ionic/angular'
 // import { SecretCreatePage } from '../secret-create/secret-create'
 // import { SecretEditPage } from '../secret-edit/secret-edit'
 import { Observable } from 'rxjs'
@@ -17,11 +18,11 @@ import { SecretsService } from '../../services/secrets/secrets.service'
   styleUrls: ['./tab-settings.page.scss']
 })
 export class TabSettingsPage {
-  private readonly secrets: Observable<Secret[]>
+  public readonly secrets: Observable<Secret[]>
 
   constructor(
     public modalController: ModalController,
-    public navController: NavController,
+    private readonly router: Router,
     private readonly secretsProvider: SecretsService,
     private readonly alertController: AlertController,
     private readonly toastController: ToastController,
@@ -41,7 +42,8 @@ export class TabSettingsPage {
     })
   }
 
-  public goToNewSecret() {
+  public goToNewSecret(): void {
+    this.router.navigate(['secret-create']).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     // TODO
     // this.navController.push(SecretCreatePage).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
@@ -85,15 +87,15 @@ export class TabSettingsPage {
     alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
   }
 
-  public about() {
-    // TODO
-    // this.navController.push(AboutPage).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  public goToAbout(): void {
+    this.router.navigate(['/about']).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public pasteClipboard() {
     this.clipboardProvider.paste().then(
       (text: string) => {
-        this.schemeRoutingProvider.handleNewSyncRequest(this.navController, text).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
+        // TODO
+        // this.schemeRoutingProvider.handleNewSyncRequest(this.navController, text).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
       },
       (err: string) => {
         console.error('Error: ' + err)

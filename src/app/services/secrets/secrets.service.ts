@@ -2,7 +2,7 @@ import { Injectable, NgZone } from '@angular/core'
 import { AlertController, LoadingController } from '@ionic/angular'
 import { Storage } from '@ionic/storage'
 import { AirGapWallet, getProtocolByIdentifier } from 'airgap-coin-lib'
-import bip39 from 'bip39'
+import * as bip39 from 'bip39'
 import { BehaviorSubject } from 'rxjs'
 
 import { Secret } from '../../models/secret'
@@ -211,7 +211,8 @@ export class SecretsService {
   }
 
   public persist(): Promise<void> {
-    this.secretsList.forEach(obj => obj.flushSecret()) 
+    this.secretsList.forEach(obj => obj.flushSecret())
+
     return this.storage.set('airgap-secret-list', this.secretsList)
   }
 

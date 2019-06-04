@@ -49,6 +49,7 @@
     "@zxing/ngx-scanner": "1.3.0",
     "airgap-coin-lib": "^0.4.4",
     "angular2-uuid": "^1.1.1",
+    "bip39": "^2.4.0",
     "com.lampa.startapp": "6.1.6",
     "cordova-android": "7.1.2",
     "cordova-android-support-gradle-release": "1.4.7",

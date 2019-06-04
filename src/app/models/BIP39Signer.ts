@@ -1,4 +1,4 @@
-import bip39 from 'bip39'
+import * as bip39 from 'bip39'
 import { sha3_256 } from 'js-sha3'
 import secretJS from 'secrets.js-grempe'
 
