@@ -7,6 +7,9 @@ import { IonicModule } from '@ionic/angular'
 
 import { TabAccountsPage } from './tab-accounts.page'
 
+import { TranslateModule } from '@ngx-translate/core'
+import { ComponentsModule } from '../../components/components.module'
+
 const routes: Routes = [
   {
     path: '',
@@ -15,7 +18,7 @@ const routes: Routes = [
 ]
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, RouterModule.forChild(routes)],
+  imports: [CommonModule, ComponentsModule, FormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule],
   declarations: [TabAccountsPage]
 })
 export class TabAccountsPageModule {}

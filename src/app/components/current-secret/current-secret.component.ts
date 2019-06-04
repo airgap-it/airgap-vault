@@ -3,8 +3,8 @@ import { Component, Output, EventEmitter, Input } from '@angular/core'
 import { Secret } from '../../models/secret'
 
 @Component({
-  selector: 'app-current-secret',
-  templateUrl: 'app-current-secret.html'
+  selector: 'current-secret',
+  templateUrl: 'current-secret.component.html'
 })
 export class CurrentSecretComponent {
   private secrets: Secret[] = []
