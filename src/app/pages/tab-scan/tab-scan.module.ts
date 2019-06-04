@@ -6,6 +6,8 @@ import { Routes, RouterModule } from '@angular/router'
 import { IonicModule } from '@ionic/angular'
 
 import { TabScanPage } from './tab-scan.page'
+import { TranslateModule } from '@ngx-translate/core'
+import { ZXingScannerModule } from '@zxing/ngx-scanner'
 
 const routes: Routes = [
   {
@@ -15,7 +17,7 @@ const routes: Routes = [
 ]
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, RouterModule.forChild(routes)],
+  imports: [CommonModule, FormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule, ZXingScannerModule],
   declarations: [TabScanPage]
 })
 export class TabScanPageModule {}

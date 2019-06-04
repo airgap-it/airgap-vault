@@ -5,19 +5,19 @@ import { Routes, RouterModule } from '@angular/router'
 
 import { IonicModule } from '@ionic/angular'
 
-import { TabSettingsPage } from './tab-settings.page'
+import { AccountAddPage } from './account-add.page'
 import { TranslateModule } from '@ngx-translate/core'
-import { ComponentsModule } from '../../components/components.module'
+import { ComponentsModule } from 'src/app/components/components.module'
 
 const routes: Routes = [
   {
     path: '',
-    component: TabSettingsPage
+    component: AccountAddPage
   }
 ]
 
 @NgModule({
-  imports: [CommonModule, ComponentsModule, FormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule],
-  declarations: [TabSettingsPage]
+  imports: [CommonModule, FormsModule, ComponentsModule, IonicModule, RouterModule.forChild(routes), TranslateModule],
+  declarations: [AccountAddPage]
 })
-export class TabSettingsPageModule {}
+export class AccountAddPageModule {}

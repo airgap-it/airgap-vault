@@ -9,6 +9,8 @@ import { CurrentSecretComponent } from './current-secret/current-secret.componen
 import { WalletItemComponent } from './wallet-item/wallet-item.component'
 import { IdenticonComponent } from './identicon/identicon.component'
 import { CurrencySymbolComponent } from './currency-symbol/currency-symbol.component'
+import { FormsModule } from '@angular/forms'
+import { SecretItemComponent } from './secret-item/secret-item.component'
 
 @NgModule({
   declarations: [
@@ -17,15 +19,17 @@ import { CurrencySymbolComponent } from './currency-symbol/currency-symbol.compo
     CurrencySymbolComponent,
     CurrentSecretComponent,
     IdenticonComponent,
+    SecretItemComponent,
     WalletItemComponent
   ],
-  imports: [IonicModule, CommonModule, TranslateModule],
+  imports: [IonicModule, CommonModule, FormsModule, TranslateModule],
   exports: [
     AboutPopoverComponent,
     AddressRowComponent,
     CurrencySymbolComponent,
     CurrentSecretComponent,
     IdenticonComponent,
+    SecretItemComponent,
     WalletItemComponent
   ],
   entryComponents: [AboutPopoverComponent]

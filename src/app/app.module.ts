@@ -1,5 +1,3 @@
-import { FeeConverterPipe } from './../app/pipes/fee-converter/fee-converter.pipe'
-import { AmountConverterPipe } from './../app/pipes/amount-converter/amount-converter.pipe'
 import { CameraPreview } from '@ionic-native/camera-preview/ngx'
 import { ProtocolsService } from './services/protocols/protocols.service'
 import { DeepLinkService } from './services/deep-link/deep-link.service'
@@ -38,6 +36,8 @@ import { IonicStorageModule } from '@ionic/storage'
 import { DeviceMotion } from '@ionic-native/device-motion'
 import { SecureStorageFactory } from './services/storage/secure-storage.factory'
 import { TranslateModule } from '@ngx-translate/core'
+import { Diagnostic } from '@ionic-native/diagnostic/ngx'
+import { Clipboard } from '@ionic-native/clipboard/ngx'
 
 @NgModule({
   declarations: [AppComponent],
@@ -55,7 +55,9 @@ import { TranslateModule } from '@ngx-translate/core'
   providers: [
     StatusBar,
     SplashScreen,
+    Clipboard,
     Deeplinks,
+    Diagnostic,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     AudioNativeService,
     SecretsService,

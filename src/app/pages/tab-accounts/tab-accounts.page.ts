@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core'
 import { AirGapWallet } from 'airgap-coin-lib'
 import { Secret } from 'src/app/models/secret'
 import { BehaviorSubject } from 'rxjs'
-import { NavController } from '@ionic/angular'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'app-tab-accounts',
@@ -16,7 +16,7 @@ export class TabAccountsPage implements OnInit {
 
   public wallets = new BehaviorSubject<AirGapWallet[]>([])
 
-  constructor(public navController: NavController, private secretsProvider: SecretsService) {}
+  constructor(public router: Router, private secretsProvider: SecretsService) {}
 
   ngOnInit() {
     let secrets = this.secretsProvider.currentSecretsList.asObservable()
@@ -57,5 +57,6 @@ export class TabAccountsPage implements OnInit {
   addWallet() {
     // TODO
     // this.navController.push(WalletSelectCoinsPage).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.router.navigate(['account-add'])
   }
 }
