@@ -38,8 +38,9 @@ import { IonicStorageModule } from '@ionic/storage'
 import { DeviceMotion } from '@ionic-native/device-motion'
 import { SecureStorageFactory } from './services/storage/secure-storage.factory'
 import { TranslateModule } from '@ngx-translate/core'
+
 @NgModule({
-  declarations: [AppComponent, AmountConverterPipe, FeeConverterPipe],
+  declarations: [AppComponent],
   entryComponents: [],
   imports: [
     BrowserModule,

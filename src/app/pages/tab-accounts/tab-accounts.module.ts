@@ -9,6 +9,7 @@ import { TabAccountsPage } from './tab-accounts.page'
 
 import { TranslateModule } from '@ngx-translate/core'
 import { ComponentsModule } from '../../components/components.module'
+import { PipesModule } from '../../pipes/pipes.modules'
 
 const routes: Routes = [
   {
@@ -18,7 +19,7 @@ const routes: Routes = [
 ]
 
 @NgModule({
-  imports: [CommonModule, ComponentsModule, FormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule],
+  imports: [CommonModule, ComponentsModule, FormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule, PipesModule],
   declarations: [TabAccountsPage]
 })
 export class TabAccountsPageModule {}

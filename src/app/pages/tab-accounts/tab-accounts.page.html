@@ -3,30 +3,33 @@
     <ion-title>{{ 'tab-wallets.title' | translate }}</ion-title>
   </ion-toolbar>
 
-  <div padding-horizontal>
-    <!--<current-secret [chosenSecret]="activeSecret" (secretChanged)="onSecretChanged($event)"></current-secret>-->
-  </div>
+  <ion-toolbar color="secondary">
+    <div padding-horizontal>
+      <current-secret [chosenSecret]="activeSecret" (secretChanged)="onSecretChanged($event)"></current-secret>
+    </div>
+  </ion-toolbar>
 
-  <ion-searchbar
-    class="colored-background"
-    placeholder="{{ 'tab-wallets.search_placeholder' | translate }}"
-    (ionInput)="filterItems($event)"
-  ></ion-searchbar>
+  <ion-toolbar color="secondary">
+    <ion-searchbar
+      class="colored-background"
+      placeholder="{{ 'tab-wallets.search_placeholder' | translate }}"
+      (ionInput)="filterItems($event)"
+    ></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content *ngIf="wallets" padding>
-  <!--
-  <ion-list *ngFor="let wallet of wallets | async | filterWallets: { symbol: symbolFilter }">
+  <ion-list *ngFor="let wallet of wallets | async | walletFilter: { symbol: symbolFilter }">
     <wallet-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></wallet-item>
   </ion-list>
 
-  <div class="empty-list" *ngIf="wallets && (wallets | async | filterWallets: { symbol: symbolFilter }).length === 0">
+  <div class="empty-list" *ngIf="wallets && (wallets | async | walletFilter: { symbol: symbolFilter }).length === 0">
     <img src="./assets/img/no-wallet-added-onboarding.svg" />
     <p>
       <strong>{{ 'tab-wallets.empty-state_text' | translate }}</strong>
     </p>
   </div>
--->
+
   <ion-fab slot="fixed" vertical="bottom" right>
     <ion-button id="btn-add-wallet" default color="secondary" (click)="addWallet()" shape="round" slot="start">
       <ion-icon name="add"></ion-icon>

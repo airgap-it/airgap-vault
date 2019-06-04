@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core'
 
 @Component({
-  selector: 'app-address-row',
+  selector: 'address-row',
   templateUrl: './address-row.component.html',
   styleUrls: ['./address-row.component.scss']
 })
