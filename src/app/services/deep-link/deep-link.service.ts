@@ -50,7 +50,6 @@ export class DeepLinkService {
         let alert = await this.alertCtrl.create({
           header: translated['deep-link.not-supported-alert.title'],
           message: translated['deep-link.not-supported-alert.message'],
-          // TODO
           backdropDismiss: false,
           buttons: [
             {

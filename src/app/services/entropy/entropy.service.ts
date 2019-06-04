@@ -1,8 +1,7 @@
-import { Observer } from 'rxjs'
 import { Injectable } from '@angular/core'
 import { IEntropyGenerator } from './IEntropyGenerator'
 import { sha3_256 } from 'js-sha3'
-import { Observable, Subscription } from 'rxjs'
+import { Observable, Observer, Subscription } from 'rxjs'
 
 import workerJS from '../../../assets/workers/hashWorker'
 import { handleErrorLocal, ErrorCategory } from './../error-handler/error-handler.service'

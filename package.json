@@ -33,6 +33,7 @@
     "@angular/platform-browser": "^7.2.2",
     "@angular/platform-browser-dynamic": "^7.2.2",
     "@angular/router": "^7.2.2",
+    "@ionic-native/app-version": "^5.7.0",
     "@ionic-native/camera-preview": "^5.7.0",
     "@ionic-native/clipboard": "^5.7.0",
     "@ionic-native/core": "^5.0.0",

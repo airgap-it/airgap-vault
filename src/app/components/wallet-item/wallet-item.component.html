@@ -1,0 +1,10 @@
+<ion-item no-lines detail-push no-padding>
+  <ion-avatar item-start>
+    <identicon [address]="wallet.receivingPublicAddress"></identicon>
+    <currency-symbol class="symbol--icon" [symbol]="wallet.coinProtocol.symbol"></currency-symbol>
+  </ion-avatar>
+  <ion-label>
+    <h2>{{ wallet.coinProtocol.name }} {{ wallet.coinProtocol.symbol }}</h2>
+    <p class="typography--mono">{{ wallet.receivingPublicAddress }}</p>
+  </ion-label>
+</ion-item>
