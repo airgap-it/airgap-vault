@@ -1,0 +1,27 @@
+<ion-header transparent no-border>
+  <ion-navbar transparent>
+    <ion-title>
+      <p ion-text color="white">{{ 'account-share.title' | translate }}</p>
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding class="colored-background">
+  <h3 padding-bottom [innerHTML]="'wallet-share.heading' | translate"></h3>
+
+  <ion-row justify-content-center padding-bottom>
+    <qr-clipboard *ngIf="interactionUrl" [qrdata]="interactionUrl" [level]="'L'" [size]="300"></qr-clipboard>
+  </ion-row>
+
+  <ion-row>
+    <p [innerHTML]="'wallet-share.text' | translate"></p>
+  </ion-row>
+</ion-content>
+
+<ion-footer no-border>
+  <ion-toolbar padding transparent>
+    <ion-row justify-content-end>
+      <button default ion-button color="primary" (click)="done()" round item-right>{{ 'wallet-share.done_label' | translate }}</button>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>

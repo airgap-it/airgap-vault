@@ -15,7 +15,9 @@ const routes: Routes = [
   {
     path: 'distribution-onboarding',
     loadChildren: './pages/distribution-onboarding/distribution-onboarding.module#DistributionOnboardingPageModule'
-  }
+  },
+  { path: 'account-share', loadChildren: './pages/account-share/account-share.module#AccountSharePageModule' },
+  { path: 'account-address', loadChildren: './pages/account-address/account-address.module#AccountAddressPageModule' }
 ]
 
 @NgModule({

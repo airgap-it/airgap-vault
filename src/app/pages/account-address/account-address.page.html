@@ -1,0 +1,50 @@
+<ion-header transparent no-border>
+  <ion-navbar transparent>
+    <ion-title>
+      <p ion-text color="white">{{ 'account-address.title' | translate }}</p>
+    </ion-title>
+
+    <ion-buttons end>
+      <button ion-button icon-only color="dark" (click)="presentEditPopover($event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding class="colored-background">
+  <ion-row padding>
+    <ion-col>
+      <ion-avatar>
+        <identicon [address]="wallet.receivingPublicAddress"></identicon>
+      </ion-avatar>
+      <currency-symbol class="symbol--icon" [symbol]="wallet.coinProtocol.symbol"></currency-symbol>
+    </ion-col>
+    <ion-col>
+      <h2>{{ wallet.coinProtocol.name }} {{ wallet.coinProtocol.symbol }}</h2>
+      <p>
+        {{ 'wallet-address.address_label' | translate }}
+        <br />
+        <span class="selectable typography--mono" (click)="copyAddressToClipboard()">{{ wallet.receivingPublicAddress }}</span>
+      </p>
+      <p>
+        {{ 'wallet-address.path_label' | translate }}
+        <br />
+        <span class="selectable typography--mono">{{ wallet.derivationPath }}</span>
+      </p>
+    </ion-col>
+  </ion-row>
+
+  <ion-row justify-content-center padding-bottom>
+    <qr-clipboard [qrdata]="wallet.receivingPublicAddress" [level]="'L'" [size]="300"></qr-clipboard>
+  </ion-row>
+</ion-content>
+
+<ion-footer no-border>
+  <ion-toolbar padding transparent>
+    <ion-row justify-content-end>
+      <button default ion-button color="light" (click)="share()" round item-right>{{ 'wallet-address.sync_label' | translate }}</button>
+      <button default ion-button color="primary" (click)="done()" round item-right>{{ 'wallet-address.done_label' | translate }}</button>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>
