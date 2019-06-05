@@ -1,3 +1,9 @@
+import { IonTextAvatar } from './ion-text-avatar/ion-text-avatar'
+import { TraceInputDirective } from './trace-input/trace-input.directive'
+import { QrClipboardComponent } from './qr-clipboard/qr-clipboard.component'
+import { HexagonIconComponent } from './hexagon-icon/hexagon-icon.component'
+import { SignedTransactionComponent } from './signed-transaction/signed-transaction.component'
+import { ProgressFooterComponent } from './progress-footer/progress-footer.component'
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { FormsModule } from '@angular/forms'
@@ -10,7 +16,11 @@ import { CurrencySymbolComponent } from './currency-symbol/currency-symbol.compo
 import { CurrentSecretComponent } from './current-secret/current-secret.component'
 import { IdenticonComponent } from './identicon/identicon.component'
 import { SecretItemComponent } from './secret-item/secret-item.component'
-import { WalletItemComponent } from './wallet-item/wallet-item.component'
+import { AccountItemComponent } from './account-item/account-item.component'
+import { EntropyProgressComponent } from './entropy-progress/entropy-progress.component'
+import { FromToComponent } from './from-to/from-to.component'
+import { TouchEntropyComponent } from './touch-entropy/touch-entropy.component'
+import { VerifyKeyComponent } from './verify-key/verify-key.component'
 
 @NgModule({
   declarations: [
@@ -18,9 +28,19 @@ import { WalletItemComponent } from './wallet-item/wallet-item.component'
     AddressRowComponent,
     CurrencySymbolComponent,
     CurrentSecretComponent,
+    EntropyProgressComponent,
+    FromToComponent,
+    HexagonIconComponent,
     IdenticonComponent,
+    IonTextAvatar,
+    ProgressFooterComponent,
+    QrClipboardComponent,
     SecretItemComponent,
-    WalletItemComponent
+    SignedTransactionComponent,
+    TouchEntropyComponent,
+    TraceInputDirective,
+    VerifyKeyComponent,
+    AccountItemComponent
   ],
   imports: [IonicModule, CommonModule, FormsModule, TranslateModule],
   exports: [
@@ -28,9 +48,19 @@ import { WalletItemComponent } from './wallet-item/wallet-item.component'
     AddressRowComponent,
     CurrencySymbolComponent,
     CurrentSecretComponent,
+    EntropyProgressComponent,
+    FromToComponent,
+    HexagonIconComponent,
     IdenticonComponent,
+    IonTextAvatar,
+    ProgressFooterComponent,
+    QrClipboardComponent,
     SecretItemComponent,
-    WalletItemComponent
+    SignedTransactionComponent,
+    TouchEntropyComponent,
+    TraceInputDirective,
+    VerifyKeyComponent,
+    AccountItemComponent
   ],
   entryComponents: [AboutPopoverComponent]
 })

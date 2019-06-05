@@ -1,21 +1,21 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { async, ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { WalletItemComponent } from './wallet-item.component'
+import { QrClipboardComponent } from './qr-clipboard.component'
 
-describe('WalletItemComponent', () => {
-  let component: WalletItemComponent
-  let fixture: ComponentFixture<WalletItemComponent>
+describe('QrClipboardComponent', () => {
+  let component: QrClipboardComponent
+  let fixture: ComponentFixture<QrClipboardComponent>
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [WalletItemComponent],
+      declarations: [QrClipboardComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents()
   }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(WalletItemComponent)
+    fixture = TestBed.createComponent(QrClipboardComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
   })

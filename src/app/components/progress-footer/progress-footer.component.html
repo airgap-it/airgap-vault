@@ -1,0 +1,25 @@
+<ion-toolbar color="primary" no-padding>
+  <ion-row>
+    <ion-col size="3" no-padding>
+      <ion-button [disabled]="!leftEnabled" slot="start" fill="clear" color="white" (click)="leftAction()">
+        <ion-icon md-name="chevron_left"></ion-icon>
+        {{ leftLabel }}
+      </ion-button>
+    </ion-col>
+    <ion-col size="6" no-padding>
+      <ion-row justify-content-center align-items-center class="full--height">
+        <ion-icon
+          *ngFor="let n of progressArray"
+          md-name="fiber_manual_record"
+          [color]="progress === n ? 'secondary-light' : 'white'"
+        ></ion-icon>
+      </ion-row>
+    </ion-col>
+    <ion-col size="3" no-padding>
+      <ion-button [disabled]="!rightEnabled" slot="end" fill="clear" color="white" (click)="rightAction()">
+        {{ rightLabel }}
+        <ion-icon md-name="chevron_right"></ion-icon>
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-toolbar>

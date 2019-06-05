@@ -1,0 +1,16 @@
+hexagon-icon {
+  height: 64px;
+  width: 64px;
+
+  /* hexagon background */
+  .hexagon--background {
+    -webkit-clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    // TODO background-color: color($colors, primary);
+    height: 100%;
+    width: 93%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
