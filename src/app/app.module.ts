@@ -4,7 +4,7 @@ import { RouteReuseStrategy } from '@angular/router'
 import { CameraPreview } from '@ionic-native/camera-preview/ngx'
 import { Clipboard } from '@ionic-native/clipboard/ngx'
 import { Deeplinks } from '@ionic-native/deeplinks/ngx'
-import { DeviceMotion } from '@ionic-native/device-motion'
+import { DeviceMotion } from '@ionic-native/device-motion/ngx'
 import { Diagnostic } from '@ionic-native/diagnostic/ngx'
 import { SplashScreen } from '@ionic-native/splash-screen/ngx'
 import { StatusBar } from '@ionic-native/status-bar/ngx'
@@ -67,10 +67,12 @@ import { SecureStorageService } from './services/storage/storage.service'
     SecureStorageService,
     DeviceService,
     CameraNativeService,
+    CameraPreview,
     EntropyService,
     GyroscopeNativeService,
     ScannerService,
     StartupChecksService,
+    DeviceMotion,
     SchemeRoutingService,
     ClipboardService,
     PermissionsService,

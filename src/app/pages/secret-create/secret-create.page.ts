@@ -22,7 +22,9 @@ export class SecretCreatePage {
     if (hasShownDisclaimer) {
       this.router.navigate(['secret-generate']).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } else {
-      this.router.navigate(['secret-generate-onboarding']).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+      this.router.navigate(['secret-generate']).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+
+      // this.router.navigate(['secret-generate-onboarding']).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     }
   }
 

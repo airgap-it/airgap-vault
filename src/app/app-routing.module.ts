@@ -22,7 +22,12 @@ const routes: Routes = [
     loadChildren: './pages/distribution-onboarding/distribution-onboarding.module#DistributionOnboardingPageModule'
   },
   { path: 'account-share', loadChildren: './pages/account-share/account-share.module#AccountSharePageModule' },
-  { path: 'account-address', loadChildren: './pages/account-address/account-address.module#AccountAddressPageModule' }
+  { path: 'account-address', loadChildren: './pages/account-address/account-address.module#AccountAddressPageModule' },
+  { path: 'secret-generate', loadChildren: './pages/secret-generate/secret-generate.module#SecretGeneratePageModule' },
+  { path: 'secret-rules', loadChildren: './pages/secret-rules/secret-rules.module#SecretRulesPageModule' },
+  { path: 'secret-show', loadChildren: './pages/secret-show/secret-show.module#SecretShowPageModule' },
+  { path: 'secret-validate', loadChildren: './pages/secret-validate/secret-validate.module#SecretValidatePageModule' },
+  { path: 'secret-edit', loadChildren: './pages/secret-edit/secret-edit.module#SecretEditPageModule' }
 ]
 
 @NgModule({

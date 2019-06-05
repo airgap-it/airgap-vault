@@ -1,38 +1,36 @@
-// verify-key {
-//   .secret--container-60 {
-//     height: calc(60% - 36px);
-//   }
+.secret--container-60 {
+  height: calc(60% - 36px);
+}
 
-//   .secret--container-40 {
-//     height: calc(40%- 36px);
-//   }
+.secret--container-40 {
+  height: calc(40%- 36px);
+}
 
-//   .secret--container__inner {
-//     align-content: start;
-//     padding: 0 4px;
-//   }
+.secret--container__inner {
+  align-content: start;
+  padding: 0 4px;
+}
 
-//   hr {
-//     border: 2px dashed /* TODO color($colors, primary)*/;
-//     border-style: none none dashed;
-//     // TODO color: color($colors, primary);
-//     margin: 8px 0;
-//   }
+hr {
+  border: 2px dashed red /*color($colors, primary) TODO*/;
+  border-style: none none dashed;
+  color: red /*color($colors, primary)*/;
+  margin: 8px 0;
+}
 
-//   .button-secret {
-//     @extend .secret--typography;
-//     font-weight: bold;
-//   }
+.button-secret {
+  @extend .secret--typography !optional;
+  font-weight: bold;
+}
 
-//   .xtra-small {
-//     button {
-//       @extend .secret--typography;
-//       font-size: 0.8em;
-//       padding: 0 1rem;
-//     }
-//   }
+.xtra-small {
+  button {
+    @extend .secret--typography !optional;
+    font-size: 0.8em;
+    padding: 0 1rem;
+  }
+}
 
-//   .word-placeholder {
-//     min-width: 48px;
-//   }
-// }
+.word-placeholder {
+  min-width: 48px;
+}

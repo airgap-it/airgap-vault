@@ -9,7 +9,7 @@ import { MnemonicValidator } from '../../validators/mnemonic.validator'
 // import { SecretEditPage } from '../secret-edit/secret-edit'
 
 @Component({
-  selector: 'app-secret-import',
+  selector: 'secret-import',
   templateUrl: './secret-import.page.html',
   styleUrls: ['./secret-import.page.scss']
 })
