@@ -1,4 +1,4 @@
-import { Component, NgZone } from '@angular/core'
+import { Component, NgZone, AfterViewInit } from '@angular/core'
 import { Deeplinks } from '@ionic-native/deeplinks/ngx'
 import { SplashScreen } from '@ionic-native/splash-screen/ngx'
 import { StatusBar } from '@ionic-native/status-bar/ngx'
@@ -11,7 +11,7 @@ import { ErrorCategory, handleErrorLocal } from './services/error-handler/error-
 import { ProtocolsService } from './services/protocols/protocols.service'
 import { SchemeRoutingService } from './services/scheme-routing/scheme-routing.service'
 import { SecretsService } from './services/secrets/secrets.service'
-import { StartupChecksService } from './services/startup-checks/startup-checks.service'
+import { StartupChecksService, Check } from './services/startup-checks/startup-checks.service'
 
 declare let window: Window & { airGapHasStarted: boolean }
 
@@ -19,7 +19,7 @@ declare let window: Window & { airGapHasStarted: boolean }
   selector: 'app-root',
   templateUrl: 'app.component.html'
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
   // Sometimes the deeplink was registered before the root page was set
   // This resulted in the root page "overwriting" the deep-linked page
   public isInitialized: ExposedPromise<void> = exposedPromise<void>()
@@ -42,8 +42,8 @@ export class AppComponent {
     this.initializeApp().catch(handleErrorLocal(ErrorCategory.OTHER))
   }
 
-  public async initializeApp() {
-    const supportedLanguages = ['en', 'de', 'zh-cn']
+  public async initializeApp(): Promise<void> {
+    const supportedLanguages: string[] = ['en', 'de', 'zh-cn']
     for (const lang of supportedLanguages) {
       // We bundle languages so we don't have to load it over http
       // and we don't have to add a CSP / whitelist rule for it.
@@ -64,21 +64,16 @@ export class AppComponent {
     }
 
     this.initChecks()
-
-    this.platform.ready().then(() => {
-      this.statusBar.styleDefault()
-      this.splashScreen.hide()
-    })
   }
 
-  public loadLanguages(supportedLanguages: string[]) {
+  public loadLanguages(supportedLanguages: string[]): void {
     this.translate.setDefaultLang('en')
 
-    const language = this.translate.getBrowserLang()
+    const language: string = this.translate.getBrowserLang()
 
     if (language) {
-      const lowerCaseLanguage = language.toLowerCase()
-      supportedLanguages.forEach(supportedLanguage => {
+      const lowerCaseLanguage: string = language.toLowerCase()
+      supportedLanguages.forEach((supportedLanguage: string) => {
         if (supportedLanguage.startsWith(lowerCaseLanguage)) {
           this.translate.use(supportedLanguage)
         }
@@ -86,7 +81,7 @@ export class AppComponent {
     }
   }
 
-  public initChecks() {
+  public initChecks(): void {
     this.startupChecks
       .initChecks()
       .then(async () => {
@@ -94,13 +89,13 @@ export class AppComponent {
         // await this.nav.setRoot(TabsPage)
         this.isInitialized.resolve()
       })
-      .catch(async check => {
-        check.consequence(this.initChecks.bind(this))
+      .catch(async (check: Check) => {
+        check.failureConsequence(this.initChecks.bind(this))
         this.isInitialized.reject(`startup check failed ${check.name}`) // If we are here, we cannot sign a transaction (no secret, rooted, etc)
       })
   }
 
-  public async ngAfterViewInit() {
+  public async ngAfterViewInit(): Promise<void> {
     await this.platform.ready()
     if (this.platform.is('cordova')) {
       this.deepLinks

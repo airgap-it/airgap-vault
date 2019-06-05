@@ -14,6 +14,9 @@ import { TranslateModule } from '@ngx-translate/core'
 
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
+import { DistributionOnboardingPageModule } from './pages/distribution-onboarding/distribution-onboarding.module'
+import { IntroductionPageModule } from './pages/introduction/introduction.module'
+import { WarningModalPageModule } from './pages/warning-modal/warning-modal.module'
 import { AudioServiceFactory } from './services/audio/audio.factory'
 import { AudioNativeService } from './services/audio/audio.native.servive'
 import { CameraFactory } from './services/camera/camera.factory'
@@ -47,7 +50,10 @@ import { SecureStorageService } from './services/storage/storage.service'
     IonicStorageModule.forRoot({
       name: '__airgap_storage',
       driverOrder: ['sqlite', 'localstorage']
-    })
+    }),
+    WarningModalPageModule,
+    IntroductionPageModule,
+    DistributionOnboardingPageModule
   ],
   providers: [
     StatusBar,

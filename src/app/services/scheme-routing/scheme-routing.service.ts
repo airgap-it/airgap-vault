@@ -89,7 +89,9 @@ export class SchemeRoutingService {
   }
 
   private async handleUnsignedTransaction(deserializedSyncProtocol: DeserializedSyncProtocol, scanAgainCallback: Function) {
+    // tslint:disable:no-unnecessary-type-assertion
     const unsignedTransaction = deserializedSyncProtocol.payload as UnsignedTransaction
+    // tslint:enable:no-unnecessary-type-assertion
 
     let correctWallet = this.secretsProvider.findWalletByPublicKeyAndProtocolIdentifier(
       unsignedTransaction.publicKey,

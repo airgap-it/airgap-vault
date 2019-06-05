@@ -1,10 +1,9 @@
 import { Component } from '@angular/core'
 import { Router } from '@angular/router'
-import { NavController, NavParams, PopoverController } from '@ionic/angular'
+import { PopoverController } from '@ionic/angular'
 
 import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
-import { InteractionSetting } from '../../services/interaction/interaction.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
 // import { InteractionSelectionSettingsPage } from '../interaction-selection-settings/interaction-selection-settings'
 // import { SocialRecoverySetupPage } from '../social-recovery-setup/social-recovery-setup'
