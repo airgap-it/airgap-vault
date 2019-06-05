@@ -14,29 +14,29 @@ const ADDITIONAL_WORDS = 2
 })
 export class VerifyKeyComponent implements OnInit {
   @Input()
-  secret: string
+  public secret: string
 
   @Output()
-  onContinue = new EventEmitter<boolean>()
+  public onContinue = new EventEmitter<boolean>()
 
   @Output()
-  onComplete = new EventEmitter<boolean>()
+  public onComplete = new EventEmitter<boolean>()
 
-  isCompleted: boolean = false
+  public isCompleted: boolean = false
 
-  splittedSecret: Word[] = []
-  currentWords: Word[] = []
-  promptedWords: Word[] = []
+  public splittedSecret: Word[] = []
+  public currentWords: Word[] = []
+  public promptedWords: Word[] = []
 
-  selectedWord: number = null
+  public selectedWord: number = null
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.splittedSecret = this.secret
       .toLowerCase()
       .split(' ')
       .map(word => {
         return {
-          word: word
+          word
         }
       })
     this.reset()
@@ -46,15 +46,15 @@ export class VerifyKeyComponent implements OnInit {
     })
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.onComplete.unsubscribe()
   }
 
-  continue() {
+  public continue() {
     this.onContinue.emit()
   }
 
-  promptNextWord() {
+  public promptNextWord() {
     this.promptedWords.length = 0
 
     const correctWord = this.splittedSecret[this.emptySpot(this.currentWords)]
@@ -81,15 +81,15 @@ export class VerifyKeyComponent implements OnInit {
     this.promptedWords = this.shuffle(this.promptedWords)
   }
 
-  shuffle(a) {
+  public shuffle(a) {
     let counter = a.length
 
     while (counter > 0) {
-      let index = Math.floor(Math.random() * counter)
+      const index = Math.floor(Math.random() * counter)
 
       counter--
 
-      let temp = a[counter]
+      const temp = a[counter]
       a[counter] = a[index]
       a[index] = temp
     }
@@ -97,7 +97,7 @@ export class VerifyKeyComponent implements OnInit {
     return a
   }
 
-  stringToIntHash(str: string, lowerbound: number, upperbound: number) {
+  public stringToIntHash(str: string, lowerbound: number, upperbound: number) {
     let result = 0
 
     for (let i = 0; i < str.length; i++) {
@@ -107,20 +107,21 @@ export class VerifyKeyComponent implements OnInit {
     return (result % (upperbound - lowerbound)) + lowerbound
   }
 
-  isSelectedWord(word: Word): boolean {
+  public isSelectedWord(word: Word): boolean {
     if (this.selectedWord !== null) {
       return this.currentWords[this.selectedWord].word === word.word
     }
+
     return false
   }
 
-  selectEmptySpot() {
+  public selectEmptySpot() {
     this.selectedWord = null
     this.promptNextWord()
   }
 
-  useWord(word: Word) {
-    let index = this.emptySpot(this.currentWords)
+  public useWord(word: Word) {
+    const index = this.emptySpot(this.currentWords)
 
     // unselect any selected words
     this.selectedWord = null
@@ -138,29 +139,30 @@ export class VerifyKeyComponent implements OnInit {
     }
   }
 
-  emptySpot(array: Word[]): number {
+  public emptySpot(array: Word[]): number {
     if (this.selectedWord !== null) {
       return this.selectedWord
     }
+
     return array.findIndex(obj => obj === null)
   }
 
-  selectWord(index: number) {
+  public selectWord(index: number) {
     this.selectedWord = index
     this.promptNextWord()
   }
 
-  reset() {
+  public reset() {
     this.selectedWord = null
     this.currentWords = Array(this.splittedSecret.length).fill(null)
     this.promptNextWord()
   }
 
-  isFull() {
+  public isFull() {
     return this.currentWords.filter(w => w !== null).length === this.splittedSecret.length
   }
 
-  isCorrect() {
+  public isCorrect() {
     return (
       this.currentWords
         .map(w => (w ? w.word : '-'))

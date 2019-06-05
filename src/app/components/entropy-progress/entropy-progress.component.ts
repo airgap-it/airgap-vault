@@ -7,14 +7,14 @@ import { Component, Input, OnChanges } from '@angular/core'
 })
 export class EntropyProgressComponent implements OnChanges {
   @Input()
-  maxValue: number = 1
+  public maxValue: number = 1
 
   @Input()
-  value: number = 0
+  public value: number = 0
 
-  progressInPercent = 0
+  public progressInPercent = 0
 
-  ngOnChanges() {
+  public ngOnChanges() {
     if (this.value > this.maxValue) {
       this.progressInPercent = 100
     } else {

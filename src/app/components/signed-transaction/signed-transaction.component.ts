@@ -1,11 +1,11 @@
 import { Component, Input } from '@angular/core'
 import {
   DeserializedSyncProtocol,
-  IAirGapTransaction,
   getProtocolByIdentifier,
-  UnsignedTransaction,
+  IAirGapTransaction,
   SignedTransaction,
-  SyncProtocolUtils
+  SyncProtocolUtils,
+  UnsignedTransaction
 } from 'airgap-coin-lib'
 
 @Component({
@@ -15,24 +15,24 @@ import {
 })
 export class SignedTransactionComponent {
   @Input()
-  signedTx: DeserializedSyncProtocol
+  public signedTx: DeserializedSyncProtocol
 
   @Input()
-  unsignedTx: DeserializedSyncProtocol
+  public unsignedTx: DeserializedSyncProtocol
 
   @Input()
-  syncProtocolString: string
+  public syncProtocolString: string
 
-  airGapTx: IAirGapTransaction
-  fallbackActivated: boolean = false
+  public airGapTx: IAirGapTransaction
+  public fallbackActivated: boolean = false
 
-  rawTxData: string
+  public rawTxData: string
 
   constructor() {
     //
   }
 
-  async ngOnChanges() {
+  public async ngOnChanges() {
     if (this.syncProtocolString) {
       try {
         const syncUtils = new SyncProtocolUtils()

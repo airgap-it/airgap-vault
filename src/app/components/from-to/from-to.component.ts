@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core'
+
 import { Transaction } from '../../models/transaction.model'
 
 @Component({
@@ -8,7 +9,7 @@ import { Transaction } from '../../models/transaction.model'
 })
 export class FromToComponent {
   @Input()
-  transaction: Transaction
+  public transaction: Transaction
 
   constructor() {}
 }

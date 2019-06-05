@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core'
 import { ModalController } from '@ionic/angular'
+import { ComponentRef, ModalOptions } from '@ionic/core'
 import { Storage } from '@ionic/storage'
-import { WarningModalPage, Warning } from '../../pages/warning-modal/warning-modal.page'
 
 import { DistributionOnboardingPage } from '../../pages/distribution-onboarding/distribution-onboarding.page'
 import { IntroductionPage } from '../../pages/introduction/introduction.page'
+import { Warning, WarningModalPage } from '../../pages/warning-modal/warning-modal.page'
 import { DeviceService } from '../device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { SecureStorageService } from '../storage/storage.service'
-import { ComponentRef, ModalOptions } from '@ionic/core'
 
 export interface Check {
   name: string

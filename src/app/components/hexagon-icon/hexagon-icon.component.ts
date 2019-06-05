@@ -7,17 +7,17 @@ import { Component, Input } from '@angular/core'
 })
 export class HexagonIconComponent {
   @Input()
-  backgroundColor: string
+  public backgroundColor: string
 
   @Input()
-  textColor = 'white'
+  public textColor = 'white'
 
   @Input()
-  letter: string
+  public letter: string
 
   @Input()
-  icon = 'add'
+  public icon = 'add'
 
   @Input()
-  opacity = 1
+  public opacity = 1
 }

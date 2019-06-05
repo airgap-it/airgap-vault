@@ -1,5 +1,5 @@
-import { Config } from '@ionic/angular'
 import { Directive, ElementRef, Renderer } from '@angular/core'
+import { Config } from '@ionic/angular'
 
 @Directive({
   selector: 'ion-text-avatar'

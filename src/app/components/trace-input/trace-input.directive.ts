@@ -5,20 +5,20 @@ import { Directive, ElementRef, NgZone, OnInit, Renderer2 } from '@angular/core'
   inputs: ['running: traceEnabled']
 })
 export class TraceInputDirective implements OnInit {
-  private canvas: HTMLCanvasElement
-  private context: CanvasRenderingContext2D
+  private readonly canvas: HTMLCanvasElement
+  private readonly context: CanvasRenderingContext2D
 
   private mousePos = { x: 0, y: 0 }
   private lastPos = this.mousePos
 
   private isDrawing: boolean
 
-  constructor(elementRef: ElementRef, private ngZone: NgZone, private renderer: Renderer2) {
+  constructor(elementRef: ElementRef, private readonly ngZone: NgZone, private readonly renderer: Renderer2) {
     this.canvas = elementRef.nativeElement
     this.context = this.canvas.getContext('2d')
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.renderer.listen(this.canvas, 'mousedown', e => {
       this.lastPos = this.getMousePosition(this.canvas, e)
       this.isDrawing = true
@@ -50,7 +50,7 @@ export class TraceInputDirective implements OnInit {
     })
   }
 
-  startDrawing() {
+  public startDrawing() {
     if (!this.isDrawing) {
       return
     }
@@ -62,16 +62,17 @@ export class TraceInputDirective implements OnInit {
     })
   }
 
-  getMousePosition(canvas, evt) {
-    let rect = canvas.getBoundingClientRect()
+  public getMousePosition(canvas, evt) {
+    const rect = canvas.getBoundingClientRect()
+
     return {
       x: evt.clientX - rect.left,
       y: evt.clientY - rect.top
     }
   }
 
-  getTouchPosition(canvas, evt) {
-    let rect = canvas.getBoundingClientRect()
+  public getTouchPosition(canvas, evt) {
+    const rect = canvas.getBoundingClientRect()
 
     if (!evt.touches[0]) {
       return this.lastPos
@@ -83,7 +84,7 @@ export class TraceInputDirective implements OnInit {
     }
   }
 
-  renderEntropyDrawing() {
+  public renderEntropyDrawing() {
     this.context.strokeStyle = 'rgb(255, 255, 255)'
     this.context.moveTo(this.lastPos.x, this.lastPos.y)
     this.context.lineTo(this.mousePos.x, this.mousePos.y)

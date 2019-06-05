@@ -1,4 +1,4 @@
-import { Component, NgZone, AfterViewInit } from '@angular/core'
+import { AfterViewInit, Component, NgZone } from '@angular/core'
 import { Deeplinks } from '@ionic-native/deeplinks/ngx'
 import { SplashScreen } from '@ionic-native/splash-screen/ngx'
 import { StatusBar } from '@ionic-native/status-bar/ngx'
@@ -11,7 +11,7 @@ import { ErrorCategory, handleErrorLocal } from './services/error-handler/error-
 import { ProtocolsService } from './services/protocols/protocols.service'
 import { SchemeRoutingService } from './services/scheme-routing/scheme-routing.service'
 import { SecretsService } from './services/secrets/secrets.service'
-import { StartupChecksService, Check } from './services/startup-checks/startup-checks.service'
+import { Check, StartupChecksService } from './services/startup-checks/startup-checks.service'
 
 declare let window: Window & { airGapHasStarted: boolean }
 
