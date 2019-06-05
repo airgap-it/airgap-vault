@@ -7,7 +7,12 @@ const routes: Routes = [
   { path: 'tab-scan', loadChildren: './pages/tab-scan/tab-scan.module#TabScanPageModule' },
   { path: 'tab-settings', loadChildren: './pages/tab-settings/tab-settings.module#TabSettingsPageModule' },
   { path: 'account-add', loadChildren: './pages/account-add/account-add.module#AccountAddPageModule' },
-  { path: 'secret-create', loadChildren: './pages/secret-create/secret-create.module#SecretCreatePageModule' },
+  { path: 'secret-create/', loadChildren: './pages/secret-create/secret-create.module#SecretCreatePageModule' },
+  {
+    path: 'secret-create/initial',
+    loadChildren: './pages/secret-create/secret-create.module#SecretCreatePageModule',
+    data: { initial: true }
+  },
   { path: 'secret-import', loadChildren: './pages/secret-import/secret-import.module#SecretImportPageModule' },
   { path: 'secret-edit', loadChildren: './pages/secret-edit/secret-edit.module#SecretEditPageModule' },
   { path: 'warning-modal', loadChildren: './pages/warning-modal/warning-modal.module#WarningModalPageModule' },

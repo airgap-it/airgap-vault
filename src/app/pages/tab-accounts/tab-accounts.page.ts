@@ -4,6 +4,7 @@ import { AirGapWallet } from 'airgap-coin-lib'
 import { BehaviorSubject } from 'rxjs'
 import { Secret } from 'src/app/models/secret'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
+import { handleErrorLocal, ErrorCategory } from 'src/app/services/error-handler/error-handler.service'
 
 @Component({
   selector: 'app-tab-accounts',
@@ -23,8 +24,7 @@ export class TabAccountsPage implements OnInit {
     secrets.subscribe(async list => {
       await this.secretsProvider.isReady()
       if (list.length === 0) {
-        // TODO
-        // this.navController.push(SecretCreatePage).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+        this.router.navigate(['secret-create/initial']).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       }
     })
 

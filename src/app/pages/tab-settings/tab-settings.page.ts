@@ -44,8 +44,6 @@ export class TabSettingsPage {
 
   public goToNewSecret(): void {
     this.router.navigate(['secret-create']).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-    // TODO
-    // this.navController.push(SecretCreatePage).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public goToEditSecret(secret: Secret) {
