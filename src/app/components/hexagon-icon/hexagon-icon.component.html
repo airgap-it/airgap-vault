@@ -1,6 +1,0 @@
-<div class="hexagon--background" [style.background-color]="backgroundColor" [style.opacity]="opacity">
-  <ion-icon *ngIf="!letter && icon" [color]="textColor" md-name [md-name]="icon"></ion-icon>
-  <ion-text>
-    <h3 *ngIf="letter" [style.color]="textColor" no-margin>{{ letter?.substr(0, 1).toUpperCase() }}</h3>
-  </ion-text>
-</div>

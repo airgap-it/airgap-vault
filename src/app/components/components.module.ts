@@ -3,6 +3,9 @@ import { NgModule } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { IonicModule } from '@ionic/angular'
 import { TranslateModule } from '@ngx-translate/core'
+import { QRCodeModule } from 'angularx-qrcode'
+
+import { PipesModule } from '../pipes/pipes.modules'
 
 import { AboutPopoverComponent } from './about-popover/about-popover.component'
 import { AccountItemComponent } from './account-item/account-item.component'
@@ -11,7 +14,6 @@ import { CurrencySymbolComponent } from './currency-symbol/currency-symbol.compo
 import { CurrentSecretComponent } from './current-secret/current-secret.component'
 import { EntropyProgressComponent } from './entropy-progress/entropy-progress.component'
 import { FromToComponent } from './from-to/from-to.component'
-import { HexagonIconComponent } from './hexagon-icon/hexagon-icon.component'
 import { IdenticonComponent } from './identicon/identicon.component'
 import { IonTextAvatar } from './ion-text-avatar/ion-text-avatar'
 import { ProgressFooterComponent } from './progress-footer/progress-footer.component'
@@ -30,7 +32,6 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     CurrentSecretComponent,
     EntropyProgressComponent,
     FromToComponent,
-    HexagonIconComponent,
     IdenticonComponent,
     IonTextAvatar,
     ProgressFooterComponent,
@@ -42,7 +43,7 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     VerifyKeyComponent,
     AccountItemComponent
   ],
-  imports: [IonicModule, CommonModule, FormsModule, TranslateModule],
+  imports: [IonicModule, PipesModule, CommonModule, FormsModule, TranslateModule, QRCodeModule],
   exports: [
     AboutPopoverComponent,
     AddressRowComponent,
@@ -50,7 +51,6 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     CurrentSecretComponent,
     EntropyProgressComponent,
     FromToComponent,
-    HexagonIconComponent,
     IdenticonComponent,
     IonTextAvatar,
     ProgressFooterComponent,

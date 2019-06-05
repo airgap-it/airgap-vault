@@ -20,7 +20,7 @@
 
 <ion-content *ngIf="wallets" padding>
   <ion-list *ngFor="let wallet of wallets | async | walletFilter: { symbol: symbolFilter }">
-    <wallet-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></wallet-item>
+    <account-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></account-item>
   </ion-list>
 
   <div class="empty-list" *ngIf="wallets && (wallets | async | walletFilter: { symbol: symbolFilter }).length === 0">

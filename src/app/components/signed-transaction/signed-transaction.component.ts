@@ -47,10 +47,12 @@ export class SignedTransactionComponent {
     if (this.signedTx) {
       const protocol = getProtocolByIdentifier(this.signedTx.protocol)
       try {
+        // tslint:disable-next-line:no-unnecessary-type-assertion
         this.airGapTx = await protocol.getTransactionDetailsFromSigned(this.signedTx.payload as SignedTransaction)
         this.fallbackActivated = false
       } catch (e) {
         this.fallbackActivated = true
+        // tslint:disable-next-line:no-unnecessary-type-assertion
         this.rawTxData = (this.signedTx.payload as SignedTransaction).transaction
       }
     }
@@ -58,10 +60,12 @@ export class SignedTransactionComponent {
     if (this.unsignedTx) {
       const protocol = getProtocolByIdentifier(this.unsignedTx.protocol)
       try {
+        // tslint:disable-next-line:no-unnecessary-type-assertion
         this.airGapTx = await protocol.getTransactionDetails(this.unsignedTx.payload as UnsignedTransaction)
         this.fallbackActivated = false
       } catch (e) {
         this.fallbackActivated = true
+        // tslint:disable-next-line:no-unnecessary-type-assertion
         this.rawTxData = JSON.stringify((this.unsignedTx.payload as UnsignedTransaction).transaction)
       }
     }
