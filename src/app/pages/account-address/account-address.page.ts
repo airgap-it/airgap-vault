@@ -1,14 +1,15 @@
 import { Location } from '@angular/common'
-import { ErrorCategory, handleErrorLocal } from './../../services/error-handler/error-handler.service'
-import { AccountEditPopoverComponent } from './account-edit-popover/account-edit-popover.component'
-import { InteractionService } from './../../services/interaction/interaction.service'
-import { InteractionOperationType } from './../../services/interaction/interaction.service'
-import { ClipboardService } from './../../services/clipboard/clipboard.service'
-import { ShareUrlService } from './../../services/share-url/share-url.service'
-import { SecretsService } from 'src/app/services/secrets/secrets.service'
 import { Component } from '@angular/core'
 import { NavController, PopoverController } from '@ionic/angular'
 import { AirGapWallet } from 'airgap-coin-lib'
+import { SecretsService } from 'src/app/services/secrets/secrets.service'
+
+import { ClipboardService } from './../../services/clipboard/clipboard.service'
+import { ErrorCategory, handleErrorLocal } from './../../services/error-handler/error-handler.service'
+import { InteractionService } from './../../services/interaction/interaction.service'
+import { InteractionOperationType } from './../../services/interaction/interaction.service'
+import { ShareUrlService } from './../../services/share-url/share-url.service'
+import { AccountEditPopoverComponent } from './account-edit-popover/account-edit-popover.component'
 
 @Component({
   selector: 'account-address',
@@ -22,25 +23,25 @@ export class AccountAddressPage {
   constructor(
     private readonly location: Location,
 
-    private popoverCtrl: PopoverController,
-    private clipboardProvider: ClipboardService,
-    private navController: NavController,
-    private secretsProvider: SecretsService,
-    private shareUrlProvider: ShareUrlService,
-    private interactionProvider: InteractionService
+    private readonly popoverCtrl: PopoverController,
+    private readonly clipboardProvider: ClipboardService,
+    private readonly navController: NavController,
+    private readonly secretsProvider: SecretsService,
+    private readonly shareUrlProvider: ShareUrlService,
+    private readonly interactionProvider: InteractionService
   ) {
     // this.wallet = this.navParams.get('wallet')
   }
 
-  async ionViewDidEnter() {
+  public async ionViewDidEnter() {
     this.walletShareUrl = await this.shareUrlProvider.generateShareURL(this.wallet)
   }
 
-  done() {
+  public done() {
     // this.navController.pop().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  async share() {
+  public async share() {
     this.interactionProvider.startInteraction(
       this.navController,
       {
@@ -51,7 +52,7 @@ export class AccountAddressPage {
     )
   }
 
-  async presentEditPopover(event) {
+  public async presentEditPopover(event) {
     const popover = await this.popoverCtrl.create({
       component: AccountEditPopoverComponent,
       componentProps: {
@@ -60,13 +61,14 @@ export class AccountAddressPage {
           this.location.back()
         }
       },
-      event: event,
+      event,
       translucent: true
     })
+
     return popover.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
   }
 
-  async copyAddressToClipboard() {
+  public async copyAddressToClipboard() {
     await this.clipboardProvider.copyAndShowToast(this.wallet.receivingPublicAddress)
   }
 }

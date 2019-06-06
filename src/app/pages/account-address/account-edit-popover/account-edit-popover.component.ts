@@ -1,10 +1,11 @@
-import { SecretsService } from './../../../services/secrets/secrets.service'
-import { ClipboardService } from './../../../services/clipboard/clipboard.service'
-import { handleErrorLocal, ErrorCategory } from './../../../services/error-handler/error-handler.service'
 import { Component } from '@angular/core'
-import { AlertController, NavParams, ModalController } from '@ionic/angular'
-import { AirGapWallet } from 'airgap-coin-lib'
+import { AlertController, ModalController, NavParams } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
+import { AirGapWallet } from 'airgap-coin-lib'
+
+import { ClipboardService } from './../../../services/clipboard/clipboard.service'
+import { ErrorCategory, handleErrorLocal } from './../../../services/error-handler/error-handler.service'
+import { SecretsService } from './../../../services/secrets/secrets.service'
 
 @Component({
   template: `
@@ -26,24 +27,24 @@ import { TranslateService } from '@ngx-translate/core'
   `
 })
 export class AccountEditPopoverComponent {
-  private wallet: AirGapWallet
-  private onDelete: Function
-  private walletShareUrl: string
+  private readonly wallet: AirGapWallet
+  private readonly onDelete: Function
+  private readonly walletShareUrl: string
 
   constructor(
-    private alertCtrl: AlertController,
-    private clipboardProvider: ClipboardService,
-    private navParams: NavParams,
-    private secretsProvider: SecretsService,
-    private modalController: ModalController,
-    private translateService: TranslateService
+    private readonly alertCtrl: AlertController,
+    private readonly clipboardProvider: ClipboardService,
+    private readonly navParams: NavParams,
+    private readonly secretsProvider: SecretsService,
+    private readonly modalController: ModalController,
+    private readonly translateService: TranslateService
   ) {
     this.wallet = this.navParams.get('wallet')
     this.onDelete = this.navParams.get('onDelete')
     this.walletShareUrl = this.navParams.get('walletShareUrl')
   }
 
-  async copyAddressToClipboard() {
+  public async copyAddressToClipboard() {
     await this.clipboardProvider.copyAndShowToast(
       this.wallet.receivingPublicAddress,
       this.translateService.instant('wallet-edit-delete-popover.confirm_address_copy')
@@ -52,7 +53,7 @@ export class AccountEditPopoverComponent {
     await this.modalController.dismiss()
   }
 
-  async copyShareUrlToClipboard() {
+  public async copyShareUrlToClipboard() {
     await this.clipboardProvider.copyAndShowToast(
       this.walletShareUrl,
       this.translateService.instant('wallet-edit-delete-popover.confirm_sync_code_copy')
@@ -61,7 +62,7 @@ export class AccountEditPopoverComponent {
     await this.modalController.dismiss()
   }
 
-  delete() {
+  public delete() {
     this.translateService
       .get([
         'wallet-edit-delete-popover.account-removal_alert.title',
@@ -70,13 +71,13 @@ export class AccountEditPopoverComponent {
         'wallet-edit-delete-popover.account-removal_alert.delete_label'
       ])
       .subscribe(async values => {
-        let title = values['wallet-edit-delete-popover.account-removal_alert.title']
-        let message = values['wallet-edit-delete-popover.account-removal_alert.text']
-        let text1 = values['wallet-edit-delete-popover.account-removal_alert.cancel_label']
-        let text2 = values['wallet-edit-delete-popover.account-removal_alert.delete_label']
-        let alert = await this.alertCtrl.create({
+        const title = values['wallet-edit-delete-popover.account-removal_alert.title']
+        const message = values['wallet-edit-delete-popover.account-removal_alert.text']
+        const text1 = values['wallet-edit-delete-popover.account-removal_alert.cancel_label']
+        const text2 = values['wallet-edit-delete-popover.account-removal_alert.delete_label']
+        const alert = await this.alertCtrl.create({
           header: title,
-          message: message,
+          message,
           buttons: [
             {
               text: text1,

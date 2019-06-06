@@ -1,16 +1,17 @@
-import { SecretRulesPage } from './../secret-rules/secret-rules.page'
-import { handleErrorLocal, ErrorCategory } from './../../services/error-handler/error-handler.service'
-import { PermissionsService, PermissionTypes } from './../../services/permissions/permissions.service'
-import { TouchEntropyComponent } from './../../components/touch-entropy/touch-entropy.component'
-import { GyroscopeNativeService } from './../../services/gyroscope/gyroscope.native.service'
-import { EntropyService } from './../../services/entropy/entropy.service'
-import { AudioNativeService } from './../../services/audio/audio.native.servive'
-import { CameraNativeService } from './../../services/camera/camera.native.service'
-import { ChangeDetectorRef, Component, ViewChild, RendererFactory2, Renderer2, ElementRef } from '@angular/core'
+import { ChangeDetectorRef, Component, ElementRef, Renderer2, RendererFactory2, ViewChild } from '@angular/core'
+import { Router } from '@angular/router'
 import { NavController, Platform } from '@ionic/angular'
 import { auditTime } from 'rxjs/operators'
+
 import { Secret } from '../../models/secret'
-import { Router } from '@angular/router'
+
+import { TouchEntropyComponent } from './../../components/touch-entropy/touch-entropy.component'
+import { AudioNativeService } from './../../services/audio/audio.native.servive'
+import { CameraNativeService } from './../../services/camera/camera.native.service'
+import { EntropyService } from './../../services/entropy/entropy.service'
+import { ErrorCategory, handleErrorLocal } from './../../services/error-handler/error-handler.service'
+import { GyroscopeNativeService } from './../../services/gyroscope/gyroscope.native.service'
+import { PermissionsService, PermissionTypes } from './../../services/permissions/permissions.service'
 
 @Component({
   selector: 'secret-generate',
@@ -20,37 +21,37 @@ import { Router } from '@angular/router'
 export class SecretGeneratePage {
   public isBrowser = false
 
-  private renderer: Renderer2
+  private readonly renderer: Renderer2
 
   @ViewChild('videoElement')
-  videoElement: ElementRef
+  public videoElement: ElementRef
 
   @ViewChild('touchEntropy')
-  touchEntropy: TouchEntropyComponent
+  public touchEntropy: TouchEntropyComponent
 
   public cameraEnabled = true
   public audioEnabled = true
   public gyroEnabled = true
   public touchEnabled = true
 
-  private ENTROPY_STARTUP_TIME = 5
+  private readonly ENTROPY_STARTUP_TIME = 5
   private startupTimeWaited = false
 
-  entropy = {
+  public entropy = {
     isFull: false
   }
 
   constructor(
-    private router: Router,
-    private navController: NavController,
+    private readonly router: Router,
+    private readonly navController: NavController,
     public gyroService: GyroscopeNativeService,
     public entropyService: EntropyService,
     public cameraService: CameraNativeService,
     public audioService: AudioNativeService,
-    private platform: Platform,
-    private changeDetectorRef: ChangeDetectorRef,
-    private permissionsService: PermissionsService,
-    private rendererFactory: RendererFactory2
+    private readonly platform: Platform,
+    private readonly changeDetectorRef: ChangeDetectorRef,
+    private readonly permissionsService: PermissionsService,
+    private readonly rendererFactory: RendererFactory2
   ) {
     this.isBrowser = !this.platform.is('cordova')
     this.renderer = this.rendererFactory.createRenderer(null, null)
@@ -60,7 +61,7 @@ export class SecretGeneratePage {
     }, this.ENTROPY_STARTUP_TIME * 1000)
   }
 
-  checkEntropySourceStatus() {
+  public checkEntropySourceStatus() {
     if (this.startupTimeWaited) {
       this.audioEnabled = this.audioService.getCollectedEntropyPercentage() !== 0
       this.cameraEnabled = this.cameraService.getCollectedEntropyPercentage() !== 0
@@ -69,7 +70,7 @@ export class SecretGeneratePage {
     }
   }
 
-  async ionViewWillEnter() {
+  public async ionViewWillEnter() {
     await this.platform.ready()
 
     if (this.isBrowser) {
@@ -93,7 +94,7 @@ export class SecretGeneratePage {
     this.renderer.removeClass(document.body, 'hide-tabbar')
   }
 
-  initEntropy() {
+  public initEntropy() {
     this.entropyService.addEntropySource(this.cameraService)
     this.entropyService.addEntropySource(this.audioService)
     this.entropyService.addEntropySource(this.gyroService)
@@ -111,7 +112,7 @@ export class SecretGeneratePage {
       .catch(handleErrorLocal(ErrorCategory.ENTROPY_COLLECTION))
   }
 
-  checkEntropy() {
+  public checkEntropy() {
     this.changeDetectorRef.detectChanges()
     this.checkEntropySourceStatus()
 
@@ -129,17 +130,17 @@ export class SecretGeneratePage {
     }
   }
 
-  ionViewDidLeave() {
+  public ionViewDidLeave() {
     this.cameraService.viewDidLeave()
     this.uninjectCSS()
     this.entropyService.stopEntropyCollection().catch(handleErrorLocal(ErrorCategory.ENTROPY_COLLECTION))
   }
 
-  goToSecretRulesPage() {
+  public goToSecretRulesPage() {
     this.entropyService
       .getEntropyAsHex()
       .then(hashHex => {
-        let secret = new Secret(hashHex)
+        const secret = new Secret(hashHex)
         // this.navController.push(SecretRulesPage, { secret: secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
 
         this.router.navigate(['secret-rules']).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))

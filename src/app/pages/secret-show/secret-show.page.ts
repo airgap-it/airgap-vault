@@ -1,11 +1,13 @@
-import { handleErrorLocal, ErrorCategory } from './../../services/error-handler/error-handler.service'
 import { Component } from '@angular/core'
+import { Router } from '@angular/router'
 import { AlertController, NavController } from '@ionic/angular'
+import { TranslateService } from '@ngx-translate/core'
+
 // import { SecretValidatePage } from '../secret-validate/secret-validate'
 import { Secret } from '../../models/secret'
+
 import { SHOW_SECRET_MIN_TIME_IN_SECONDS } from './../../constants/constants'
-import { TranslateService } from '@ngx-translate/core'
-import { Router } from '@angular/router'
+import { ErrorCategory, handleErrorLocal } from './../../services/error-handler/error-handler.service'
 
 @Component({
   selector: 'secret-show',
@@ -13,21 +15,21 @@ import { Router } from '@angular/router'
   styleUrls: ['./secret-show.page.scss']
 })
 export class SecretShowPage {
-  private secret: Secret
-  startTime = new Date()
+  private readonly secret: Secret
+  public startTime = new Date()
 
   constructor(
     public navController: NavController,
-    private alertController: AlertController,
-    private translateService: TranslateService,
-    private router: Router
+    private readonly alertController: AlertController,
+    private readonly translateService: TranslateService,
+    private readonly router: Router
   ) {
     this.secret = new Secret('90ac75896c3f57107c4ab0979b7c2ca1790e29ce7d25308b997fbbd53b9829c4', 'asdf') // TODO: Get secret from previous page
 
     // this.secret = this.navParams.get('secret')
   }
 
-  goToValidateSecret() {
+  public goToValidateSecret() {
     if (this.startTime.getTime() + SHOW_SECRET_MIN_TIME_IN_SECONDS * 1000 > new Date().getTime()) {
       this.translateService
         .get([
@@ -38,11 +40,11 @@ export class SecretShowPage {
           'secret-show.too-fast_alert.wait_label_p2'
         ])
         .subscribe(async values => {
-          let title: string = values['secret-show.too-fast_alert.title']
-          let heading: string = values['secret-show.too-fast_alert.heading']
-          let text: string = values['secret-show.too-fast_alert.text']
-          let wait_label_p1: string = values['secret-show.too-fast_alert.wait_label_p1']
-          let wait_label_p2: string = values['secret-show.too-fast_alert.wait_label_p2']
+          const title: string = values['secret-show.too-fast_alert.title']
+          const heading: string = values['secret-show.too-fast_alert.heading']
+          const text: string = values['secret-show.too-fast_alert.text']
+          const wait_label_p1: string = values['secret-show.too-fast_alert.wait_label_p1']
+          const wait_label_p2: string = values['secret-show.too-fast_alert.wait_label_p2']
 
           const alert = await this.alertController.create({
             header: title,
