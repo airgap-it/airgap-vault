@@ -1,22 +1,18 @@
-<ion-header transparent no-border>
-  <ion-toolbar transparent>
-    <ion-title>
-      <ion-text>
-        <p color="white">{{ 'wallet-address.title' | translate }}</p>
-      </ion-text>
-    </ion-title>
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-title>{{ 'wallet-address.title' | translate }}</ion-title>
 
     <ion-buttons slot="primary">
-      <ion-button icon-only color="dark" (click)="presentEditPopover($event)"><ion-icon name="more"></ion-icon></ion-button>
+      <ion-button slot="icon-only" (click)="presentEditPopover($event)"><ion-icon name="more"></ion-icon></ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding class="colored-background">
-  <ion-row padding>
+<ion-content class="ion-padding">
+  <ion-row class="ion-padding">
     <ion-col>
       <ion-avatar><identicon [address]="wallet.receivingPublicAddress"></identicon></ion-avatar>
-      <currency-symbol class="symbol--icon" [symbol]="wallet.coinProtocol.symbol"></currency-symbol>
+      <currency-symbol [symbol]="wallet.coinProtocol.symbol"></currency-symbol>
     </ion-col>
     <ion-col>
       <h2>{{ wallet.coinProtocol.name }} {{ wallet.coinProtocol.symbol }}</h2>
@@ -33,20 +29,16 @@
     </ion-col>
   </ion-row>
 
-  <ion-row justify-content-center padding-bottom>
+  <ion-row class="ion-justify-content-center ion-padding-bottom">
     <qr-clipboard [qrdata]="wallet.receivingPublicAddress" [level]="'L'" [size]="300"></qr-clipboard>
   </ion-row>
-</ion-content>
 
-<ion-footer no-border>
-  <ion-toolbar padding transparent>
-    <ion-row justify-content-end>
-      <ion-button default color="light" (click)="share()" shape="round" item-right>
-        {{ 'wallet-address.sync_label' | translate }}
-      </ion-button>
-      <ion-button default color="primary" (click)="done()" shape="round" item-right>
-        {{ 'wallet-address.done_label' | translate }}
-      </ion-button>
-    </ion-row>
-  </ion-toolbar>
-</ion-footer>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-button color="light" (click)="share()" shape="round">
+      {{ 'wallet-address.sync_label' | translate }}
+    </ion-button>
+    <ion-button color="primary" (click)="done()" shape="round">
+      {{ 'wallet-address.done_label' | translate }}
+    </ion-button>
+  </ion-fab>
+</ion-content>
