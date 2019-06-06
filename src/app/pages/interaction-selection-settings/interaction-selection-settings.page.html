@@ -1,0 +1,71 @@
+<ion-header transparent no-border>
+  <ion-toolbar transparent>
+    <ion-title>
+      <ion-text>
+        <p color="white">{{ 'interaction-selection-settings.title' | translate }}</p>
+      </ion-text>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="colored-background" padding>
+  <h3
+    *ngIf="selectedSetting === interactionSetting.SAME_DEVICE"
+    [innerHTML]="'interaction-selection-settings.same-device_heading' | translate"
+  ></h3>
+  <h3
+    *ngIf="selectedSetting === interactionSetting.OFFLINE_DEVICE"
+    [innerHTML]="'interaction-selection-settings.offline-device_heading' | translate"
+  ></h3>
+
+  <p>{{ 'interaction-selection-settings.text' | translate }}</p>
+
+  <ion-list [ngModel]="interactionSetting" (ngModelChange)="onSelectedSettingChange($event)" no-lines padding-vertical>
+    <ion-radio-group>
+      <ion-item no-padding>
+        <ion-label color="white">{{ 'interaction-selection-settings.selector.always' | translate }}</ion-label>
+        <ion-radio
+          [checked]="selectedSetting === interactionSetting.ALWAYS_ASK"
+          [value]="interactionSetting.ALWAYS_ASK"
+          no-margin
+          slot="end"
+        ></ion-radio>
+      </ion-item>
+      <ion-item no-padding>
+        <ion-label color="white">{{ 'interaction-selection-settings.selector.same-device' | translate }}</ion-label>
+        <ion-radio
+          [checked]="selectedSetting === interactionSetting.SAME_DEVICE"
+          [value]="interactionSetting.SAME_DEVICE"
+          no-margin
+          slot="end"
+        ></ion-radio>
+      </ion-item>
+      <ion-item no-padding>
+        <ion-label color="white">{{ 'interaction-selection-settings.selector.offline-device' | translate }}</ion-label>
+        <ion-radio
+          [checked]="selectedSetting === interactionSetting.OFFLINE_DEVICE"
+          [value]="interactionSetting.OFFLINE_DEVICE"
+          no-margin
+          slot="end"
+        ></ion-radio>
+      </ion-item>
+    </ion-radio-group>
+  </ion-list>
+
+  <p *ngIf="!isEdit">{{ 'interaction-selection-settings.description' | translate }}</p>
+</ion-content>
+
+<ion-footer no-border>
+  <ion-toolbar padding transparent>
+    <ion-row justify-content-end>
+      <ion-button default id="btn-save-secret" color="primary" shape="round" (click)="goToNextPage()" item-right *ngIf="!isEdit">
+        {{ 'interaction-selection-settings.continue_label' | translate }}
+      </ion-button>
+    </ion-row>
+    <ion-row justify-content-end>
+      <ion-button default id="-save-secret" color="primary" shape="round" (click)="popToRoot()" item-right *ngIf="isEdit">
+        {{ 'interaction-selection-settings.continue_label' | translate }}
+      </ion-button>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>

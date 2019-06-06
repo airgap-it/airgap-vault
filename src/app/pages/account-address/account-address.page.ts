@@ -2,7 +2,8 @@ import { Location } from '@angular/common'
 import { Component } from '@angular/core'
 import { NavController, PopoverController } from '@ionic/angular'
 import { AirGapWallet } from 'airgap-coin-lib'
-import { SecretsService } from 'src/app/services/secrets/secrets.service'
+
+import { SecretsService } from '../../services/secrets/secrets.service'
 
 import { ClipboardService } from './../../services/clipboard/clipboard.service'
 import { ErrorCategory, handleErrorLocal } from './../../services/error-handler/error-handler.service'
