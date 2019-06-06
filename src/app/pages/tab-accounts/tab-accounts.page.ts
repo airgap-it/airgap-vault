@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { AirGapWallet } from 'airgap-coin-lib'
 import { BehaviorSubject } from 'rxjs'
+
 import { Secret } from '../../models/secret'
+import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
-import { handleErrorLocal, ErrorCategory } from '../../services/error-handler/error-handler.service'
 
 @Component({
   selector: 'app-tab-accounts',
@@ -54,8 +55,6 @@ export class TabAccountsPage implements OnInit {
   }
 
   public addWallet() {
-    // TODO
-    // this.navController.push(WalletSelectCoinsPage).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     this.router.navigate(['account-add'])
   }
 }

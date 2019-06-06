@@ -1,6 +1,7 @@
 import { NgModule, RendererFactory2 } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { RouteReuseStrategy } from '@angular/router'
+import { AppVersion } from '@ionic-native/app-version/ngx'
 import { CameraPreview } from '@ionic-native/camera-preview/ngx'
 import { Clipboard } from '@ionic-native/clipboard/ngx'
 import { Deeplinks } from '@ionic-native/deeplinks/ngx'
@@ -56,11 +57,12 @@ import { SecureStorageService } from './services/storage/storage.service'
     DistributionOnboardingPageModule
   ],
   providers: [
-    StatusBar,
-    SplashScreen,
+    AppVersion,
     Clipboard,
     Deeplinks,
     Diagnostic,
+    StatusBar,
+    SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     AudioNativeService,
     SecretsService,
