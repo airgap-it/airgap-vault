@@ -4,3 +4,8 @@
 // styles are for the entire app and not just one component. Additionally, this
 // file can hold Sass mixins, functions, and placeholder classes to be imported
 // and used throughout the application.
+
+/* right aligns text for component current-secret */
+current-secret ion-select {
+  text-align: right;
+}
