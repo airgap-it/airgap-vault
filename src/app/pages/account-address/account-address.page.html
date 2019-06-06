@@ -1,23 +1,21 @@
 <ion-header transparent no-border>
-  <ion-navbar transparent>
+  <ion-toolbar transparent>
     <ion-title>
-      <p ion-text color="white">{{ 'account-address.title' | translate }}</p>
+      <ion-text>
+        <p color="white">{{ 'wallet-address.title' | translate }}</p>
+      </ion-text>
     </ion-title>
 
-    <ion-buttons end>
-      <button ion-button icon-only color="dark" (click)="presentEditPopover($event)">
-        <ion-icon name="more"></ion-icon>
-      </button>
+    <ion-buttons slot="primary">
+      <ion-button icon-only color="dark" (click)="presentEditPopover($event)"><ion-icon name="more"></ion-icon></ion-button>
     </ion-buttons>
-  </ion-navbar>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content padding class="colored-background">
   <ion-row padding>
     <ion-col>
-      <ion-avatar>
-        <identicon [address]="wallet.receivingPublicAddress"></identicon>
-      </ion-avatar>
+      <ion-avatar><identicon [address]="wallet.receivingPublicAddress"></identicon></ion-avatar>
       <currency-symbol class="symbol--icon" [symbol]="wallet.coinProtocol.symbol"></currency-symbol>
     </ion-col>
     <ion-col>
@@ -43,8 +41,12 @@
 <ion-footer no-border>
   <ion-toolbar padding transparent>
     <ion-row justify-content-end>
-      <button default ion-button color="light" (click)="share()" round item-right>{{ 'wallet-address.sync_label' | translate }}</button>
-      <button default ion-button color="primary" (click)="done()" round item-right>{{ 'wallet-address.done_label' | translate }}</button>
+      <ion-button default color="light" (click)="share()" shape="round" item-right>
+        {{ 'wallet-address.sync_label' | translate }}
+      </ion-button>
+      <ion-button default color="primary" (click)="done()" shape="round" item-right>
+        {{ 'wallet-address.done_label' | translate }}
+      </ion-button>
     </ion-row>
   </ion-toolbar>
 </ion-footer>

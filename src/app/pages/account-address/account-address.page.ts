@@ -7,7 +7,7 @@ import { ClipboardService } from './../../services/clipboard/clipboard.service'
 import { ShareUrlService } from './../../services/share-url/share-url.service'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
 import { Component } from '@angular/core'
-import { NavController, NavParams, PopoverController } from '@ionic/angular'
+import { NavController, PopoverController } from '@ionic/angular'
 import { AirGapWallet } from 'airgap-coin-lib'
 
 @Component({
@@ -25,12 +25,11 @@ export class AccountAddressPage {
     private popoverCtrl: PopoverController,
     private clipboardProvider: ClipboardService,
     private navController: NavController,
-    private navParams: NavParams,
     private secretsProvider: SecretsService,
     private shareUrlProvider: ShareUrlService,
     private interactionProvider: InteractionService
   ) {
-    this.wallet = this.navParams.get('wallet')
+    // this.wallet = this.navParams.get('wallet')
   }
 
   async ionViewDidEnter() {
@@ -38,7 +37,7 @@ export class AccountAddressPage {
   }
 
   done() {
-    this.navController.pop().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    // this.navController.pop().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   async share() {

@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { AirGapWallet } from 'airgap-coin-lib'
 import { BehaviorSubject } from 'rxjs'
-import { Secret } from 'src/app/models/secret'
-import { SecretsService } from 'src/app/services/secrets/secrets.service'
-import { handleErrorLocal, ErrorCategory } from 'src/app/services/error-handler/error-handler.service'
+import { Secret } from '../../models/secret'
+import { SecretsService } from '../../services/secrets/secrets.service'
+import { handleErrorLocal, ErrorCategory } from '../../services/error-handler/error-handler.service'
 
 @Component({
   selector: 'app-tab-accounts',
@@ -21,10 +21,10 @@ export class TabAccountsPage implements OnInit {
 
   public ngOnInit() {
     const secrets = this.secretsProvider.currentSecretsList.asObservable()
-    secrets.subscribe(async list => {
+    secrets.subscribe(async (list: Secret[]) => {
       await this.secretsProvider.isReady()
       if (list.length === 0) {
-        this.router.navigate(['secret-create/initial']).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+        this.router.navigateByUrl('/secret-create/initial').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       }
     })
 
@@ -40,8 +40,7 @@ export class TabAccountsPage implements OnInit {
   }
 
   public goToReceiveAddress(wallet: AirGapWallet) {
-    // TODO
-    // this.navController.push(WalletAddressPage, { wallet: wallet }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.router.navigate(['account-address']).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public filterItems(ev: any) {
