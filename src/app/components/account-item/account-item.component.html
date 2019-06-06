@@ -1,7 +1,7 @@
-<ion-item no-lines detail-push no-padding>
-  <ion-avatar item-start>
+<ion-item lines="none" class="ion-no-padding">
+  <ion-avatar slot="start">
     <identicon [address]="wallet.receivingPublicAddress"></identicon>
-    <currency-symbol class="symbol--icon" [symbol]="wallet.coinProtocol.symbol"></currency-symbol>
+    <currency-symbol [symbol]="wallet.coinProtocol.symbol"></currency-symbol>
   </ion-avatar>
   <ion-label>
     <h2>{{ wallet.coinProtocol.name }} {{ wallet.coinProtocol.symbol }}</h2>

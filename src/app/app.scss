@@ -9,3 +9,10 @@
 current-secret ion-select {
   text-align: right;
 }
+
+.typography--mono {
+  font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
+  font-weight: 600;
+  font-size: 1.4rem;
+  word-wrap: break-word;
+}
