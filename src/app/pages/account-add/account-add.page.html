@@ -1,76 +1,61 @@
-<ion-header transparent no-border>
-  <ion-toolbar transparent>
+<ion-header no-border>
+  <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title>
-      <ion-text>
-        <p color="white">{{ 'wallet-select-coins.title' | translate }}</p>
-      </ion-text>
+      {{ 'wallet-select-coins.title' | translate }}
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding class="colored-background">
-  <!-- Current Secret -->
+<ion-content class="ion-padding">
   <current-secret></current-secret>
 
-  <ion-list no-lines>
+  <ion-list lines="none">
     <ion-radio-group [ngModel]="selectedProtocol" (ngModelChange)="onSelectedProtocolChange($event)">
-      <ion-list-header no-padding no-margin no-lines>
-        <ion-label color="white" class="font--weight__med">{{ 'wallet-select-coins.text' | translate }}</ion-label>
+      <ion-list-header class="ion-no-padding">
+        <ion-label class="font--weight__med">{{ 'wallet-select-coins.text' | translate }}</ion-label>
       </ion-list-header>
-      <ion-item no-padding *ngFor="let protocol of coinProtocols" no-padding>
-        <ion-avatar item-start><currency-symbol [symbol]="protocol.symbol"></currency-symbol></ion-avatar>
-        <ion-label color="white">{{ protocol.name }}</ion-label>
-        <ion-radio [id]="protocol.identifier" [value]="protocol" no-margin slot="end"></ion-radio>
+      <ion-item class="ion-no-padding" *ngFor="let protocol of coinProtocols" class="ion-no-padding">
+        <ion-avatar slot="start"><currency-symbol [symbol]="protocol.symbol"></currency-symbol></ion-avatar>
+        <ion-label>
+          <h2>
+            <strong>{{ protocol.name }}</strong>
+            <span>{{ protocol.symbol }}</span>
+          </h2>
+        </ion-label>
+        <ion-radio [id]="protocol.identifier" [value]="protocol" slot="end"></ion-radio>
       </ion-item>
     </ion-radio-group>
   </ion-list>
 
-  <ion-list no-lines padding-top>
-    <ion-item id="wallet-type-selector" no-padding *ngIf="selectedProtocol && selectedProtocol.supportsHD">
-      <ion-label class="font--weight__med" color="white">{{ 'wallet-select-coins.select-type.label' | translate }}</ion-label>
-      <ion-select [(ngModel)]="isHDWallet" (ngModelChange)="onIsHDWalletChange($event)" color="white">
+  <ion-list lines="none" class="ion-padding-top">
+    <ion-item class="ion-no-padding" *ngIf="selectedProtocol && selectedProtocol.supportsHD">
+      <ion-label class="font--weight__med">{{ 'wallet-select-coins.select-type.label' | translate }}</ion-label>
+      <ion-select [(ngModel)]="isHDWallet" (ngModelChange)="onIsHDWalletChange($event)">
         <ion-select-option [value]="false">{{ 'wallet-select-coins.select-type.single-address_label' | translate }}</ion-select-option>
         <ion-select-option [value]="true" selected>{{ 'wallet-select-coins.select-type.hd-wallet_label' | translate }}</ion-select-option>
       </ion-select>
     </ion-item>
 
-    <!-- TODO: trigger advanced setting > custom derivation input -->
-    <ion-item no-padding>
-      <ion-label class="font--weight__med" color="white">{{ 'wallet-select-coins.advanced_label' | translate }}</ion-label>
-      <ion-toggle [(ngModel)]="isAdvancedMode"></ion-toggle>
+    <ion-item class="ion-no-padding">
+      <ion-label class="font--weight__med">{{ 'wallet-select-coins.advanced_label' | translate }}</ion-label>
+      <ion-toggle color="primary" slot="end" [(ngModel)]="isAdvancedMode"></ion-toggle>
     </ion-item>
 
-    <ion-item no-padding padding-bottom *ngIf="isAdvancedMode">
+    <ion-item class="ion-no-padding" *ngIf="isAdvancedMode" lines="full">
       <ion-label position="stacked" color="primary">{{ 'wallet-select-coins.custom-path.label' | translate }}</ion-label>
       <ion-input
         [(ngModel)]="customDerivationPath"
         placeholder="{{ 'wallet-select-coins.custom-path.placeholder' | translate }}"
-        color="white"
       ></ion-input>
     </ion-item>
-
-    <!--
-      TODO: all supported wallet types with corresponding derivation path
-      <ion-item no-padding >
-        <ion-label class="font--weight__med" color="white">Imported Wallet from ...</ion-label>
-        <ion-select color="white">
-          <ion-option value="f">Trezor</ion-option>
-          <ion-option value="m">Jaxx</ion-option>
-        </ion-select>
-      </ion-item>
-    -->
   </ion-list>
-</ion-content>
 
-<ion-footer no-border>
-  <ion-toolbar padding transparent>
-    <ion-row justify-content-end>
-      <ion-button id="btn-add-coins" [disabled]="!selectedProtocol" default color="primary" shape="round" item-right (click)="addWallet()">
-        {{ 'wallet-select-coins.create_label' | translate }}
-      </ion-button>
-    </ion-row>
-  </ion-toolbar>
-</ion-footer>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-button [disabled]="!selectedProtocol" color="primary" shape="round" (click)="addWallet()">
+      {{ 'wallet-select-coins.create_label' | translate }}
+    </ion-button>
+  </ion-fab>
+</ion-content>

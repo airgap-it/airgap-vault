@@ -9,10 +9,28 @@
 current-secret ion-select {
   text-align: right;
 }
-
+/* monotype */
 .typography--mono {
   font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
   font-weight: 600;
   font-size: 1.4rem;
   word-wrap: break-word;
+}
+/* font weight - medium */
+.font--weight__med {
+  font-weight: 500;
+}
+/* Secondary Background color whith corresponding colors */
+app-account-add {
+  --ion-background-color: var(--ion-color-secondary);
+  --ion-text-color: var(--ion-color-secondary-contrast);
+  ion-toggle {
+    --handle-background: var(--ion-color-secondary-contrast);
+  }
+  ion-radio {
+    --color: var(--ion-color-secondary-contrast);
+  }
+  ion-item {
+    --border-color: var(--ion-color-secondary-contrast);
+  }
 }
