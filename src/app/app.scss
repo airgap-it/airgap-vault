@@ -6,7 +6,7 @@
 // and used throughout the application.
 
 /* right aligns text for component current-secret */
-current-secret ion-select {
+airgap-current-secret ion-select {
   text-align: right;
 }
 /* monotype */
@@ -25,7 +25,7 @@ p {
   font-size: 14px;
 }
 /* List styling */
-app-warning-modal {
+airgap-warning-modal {
   ul {
     padding-inline-start: 0;
     list-style: none;
@@ -37,15 +37,15 @@ app-warning-modal {
 }
 
 /* Secondary Background color whith corresponding colors */
-app-account-add,
-account-address,
-app-secret-create,
-secret-generate,
-secret-import,
-app-secret-edit,
-app-warning-modal,
-app-introduction,
-app-social-recovery-import {
+airgap-account-add,
+airgap-account-address,
+airgap-secret-create,
+airgap-secret-generate,
+airgap-secret-import,
+airgap-secret-edit,
+airgap-warning-modal,
+airgap-introduction,
+airgap-social-recovery-import {
   --ion-background-color: var(--ion-color-secondary);
   --ion-text-color: var(--ion-color-secondary-contrast);
   ion-toggle {
@@ -62,6 +62,6 @@ app-social-recovery-import {
   }
 }
 /* ion-textarea height fix */
-secret-import ion-textarea textarea {
+airgap-secret-import ion-textarea textarea {
   height: inherit;
 }
