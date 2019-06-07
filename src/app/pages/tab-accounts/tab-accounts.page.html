@@ -6,7 +6,7 @@
   <ion-toolbar color="secondary">
     <ion-row class="ion-padding-horizontal">
       <ion-col class="ion-no-padding">
-        <current-secret [chosenSecret]="activeSecret" (secretChanged)="onSecretChanged($event)"></current-secret>
+        <airgap-current-secret [chosenSecret]="activeSecret" (secretChanged)="onSecretChanged($event)"></airgap-current-secret>
       </ion-col>
     </ion-row>
   </ion-toolbar>
