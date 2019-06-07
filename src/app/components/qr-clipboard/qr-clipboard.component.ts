@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core'
 import { ClipboardService } from '../../services/clipboard/clipboard.service'
 
 @Component({
-  selector: 'qr-clipboard',
+  selector: 'airgap-qr-clipboard',
   templateUrl: './qr-clipboard.component.html',
   styleUrls: ['./qr-clipboard.component.scss']
 })

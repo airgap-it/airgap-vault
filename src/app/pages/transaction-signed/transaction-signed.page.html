@@ -12,8 +12,8 @@
   <h3 [innerHTML]="'transaction-signed.heading' | translate"></h3>
 
   <ion-row justify-content-center padding-top>
-    <qr-clipboard *ngIf="interactionUrl && qrType === 0" [level]="'L'" [qrdata]="interactionUrl" [size]="300"></qr-clipboard>
-    <qr-clipboard *ngIf="signedTx && qrType === 1" [level]="'L'" [qrdata]="signedTx" [size]="300"></qr-clipboard>
+    <airgap-qr-clipboard *ngIf="interactionUrl && qrType === 0" [level]="'L'" [qrdata]="interactionUrl" [size]="300"></airgap-qr-clipboard>
+    <airgap-qr-clipboard *ngIf="signedTx && qrType === 1" [level]="'L'" [qrdata]="signedTx" [size]="300"></airgap-qr-clipboard>
   </ion-row>
 
   <ion-row padding>
