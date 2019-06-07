@@ -15,7 +15,6 @@ import { CurrentSecretComponent } from './current-secret/current-secret.componen
 import { EntropyProgressComponent } from './entropy-progress/entropy-progress.component'
 import { FromToComponent } from './from-to/from-to.component'
 import { IdenticonComponent } from './identicon/identicon.component'
-import { IonTextAvatar } from './ion-text-avatar/ion-text-avatar'
 import { ProgressFooterComponent } from './progress-footer/progress-footer.component'
 import { QrClipboardComponent } from './qr-clipboard/qr-clipboard.component'
 import { SecretItemComponent } from './secret-item/secret-item.component'
@@ -33,7 +32,6 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     EntropyProgressComponent,
     FromToComponent,
     IdenticonComponent,
-    IonTextAvatar,
     ProgressFooterComponent,
     QrClipboardComponent,
     SecretItemComponent,
@@ -52,7 +50,6 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     EntropyProgressComponent,
     FromToComponent,
     IdenticonComponent,
-    IonTextAvatar,
     ProgressFooterComponent,
     QrClipboardComponent,
     SecretItemComponent,
