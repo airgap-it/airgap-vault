@@ -19,7 +19,7 @@
       </ion-list-header>
       <ion-item class="ion-no-padding" *ngFor="let protocol of coinProtocols" class="ion-no-padding">
         <ion-avatar slot="start"><currency-symbol [symbol]="protocol.symbol"></currency-symbol></ion-avatar>
-        <ion-label>
+        <ion-label text-wrap>
           <h2>
             <strong>{{ protocol.name }}</strong>
             <span>{{ protocol.symbol }}</span>
