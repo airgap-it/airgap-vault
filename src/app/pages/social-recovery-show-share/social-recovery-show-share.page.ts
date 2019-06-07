@@ -1,7 +1,8 @@
 import { Component } from '@angular/core'
-import { NavController, NavParams } from '@ionic/angular'
 
 import { Secret } from '../../models/secret'
+import { NavigationService } from '../../services/navigation/navigation.service'
+import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 
 @Component({
   selector: 'app-social-recovery-show-share',
@@ -13,23 +14,19 @@ export class SocialRecoveryShowSharePage {
   public shares: string[]
   public currentShare: number
 
-  constructor(private readonly navCtrl: NavController, navParams: NavParams) {
-    // this.shares = navParams.get('shares')
-    // this.secret = navParams.get('secret')
-    // this.currentShare = navParams.get('currentShare')
+  constructor(private readonly navigationService: NavigationService) {
+    this.shares = this.navigationService.getState().shares
+    this.secret = this.navigationService.getState().secret
+    this.currentShare = this.navigationService.getState().currentShare
   }
 
   public back() {
-    // this.navCtrl.pop().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.navigationService.back()
   }
 
   public next() {
-    // this.navCtrl
-    //   .push(SocialRecoveryValidateSharePage, { shares: this.shares, currentShare: this.currentShare, secret: this.secret })
-    //   .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-  }
-
-  public finish() {
-    // this.navCtrl.popToRoot().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.navigationService
+      .routeWithState('/social-recovery-validate-share', { shares: this.shares, currentShare: this.currentShare, secret: this.secret })
+      .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

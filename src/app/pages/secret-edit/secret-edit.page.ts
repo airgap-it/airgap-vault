@@ -6,6 +6,7 @@ import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
 import { InteractionSetting } from '../../services/interaction/interaction.service'
+import { NavigationService } from 'src/app/services/navigation/navigation.service'
 // import { InteractionSelectionSettingsPage } from '../interaction-selection-settings/interaction-selection-settings'
 // import { SocialRecoverySetupPage } from '../social-recovery-setup/social-recovery-setup'
 // import { WalletSelectCoinsPage } from '../wallet-select-coins/wallet-select-coins'
@@ -26,12 +27,12 @@ export class SecretEditPage {
   constructor(
     private readonly router: Router,
     private readonly popoverCtrl: PopoverController,
-    private readonly secretsService: SecretsService
+    private readonly secretsService: SecretsService,
+    private readonly navigationService: NavigationService
   ) {
-    if (window.history.state) {
-      this.isGenerating = window.history.state.isGenerating
-      console.log('Secret', Secret.init(window.history.state.secret))
-      this.secret = Secret.init(window.history.state.secret) // TODO: DO NOT STORE SECRET IN WINDOW
+    if (this.navigationService.getState()) {
+      this.isGenerating = this.navigationService.getState().isGenerating
+      this.secret = this.navigationService.getState().secret
       this.interactionSetting = this.secret.interactionSetting !== InteractionSetting.UNDETERMINED
     }
   }
@@ -61,15 +62,15 @@ export class SecretEditPage {
   }
 
   public goToSocialRecoverySetup() {
-    // this.navController.push(SocialRecoverySetupPage, { secret: this.secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.navigationService
+      .routeWithState('/social-recovery-setup', { secret: this.secret })
+      .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public goToWalletInteraction() {
-    /*
-    this.navController
-      .push(InteractionSelectionSettingsPage, { secret: this.secret, isEdit: true })
-			.catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-			*/
+    this.navigationService
+      .routeWithState('/interaction-selection-settings', { secret: this.secret, isEdit: true })
+      .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public presentEditPopover(event) {

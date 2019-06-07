@@ -5,6 +5,7 @@ import { VerifyKeyComponent } from '../../components/verify-key/verify-key.compo
 import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
+import { NavigationService } from '../../services/navigation/navigation.service'
 
 @Component({
   selector: 'app-social-recovery-validate-share',
@@ -15,15 +16,15 @@ export class SocialRecoveryValidateSharePage {
   @ViewChild('verify')
   public verify: VerifyKeyComponent
 
-  public validated = false
+  public validated: boolean = false
   public shares: string[]
   public currentShare: number
   public secret: Secret
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private readonly secretsService: SecretsService) {
-    // this.secret = navParams.get('secret')
-    // this.shares = navParams.get('shares')
-    // this.currentShare = navParams.get('currentShare')
+  constructor(private readonly navigationService: NavigationService, private readonly secretsService: SecretsService) {
+    this.shares = this.navigationService.getState().shares
+    this.secret = this.navigationService.getState().secret
+    this.currentShare = this.navigationService.getState().currentShare
   }
 
   public onComplete(isCorrect: boolean) {
@@ -35,7 +36,7 @@ export class SocialRecoveryValidateSharePage {
   }
 
   public back() {
-    // this.navCtrl.pop().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.navigationService.back()
   }
 
   public next() {
@@ -44,17 +45,14 @@ export class SocialRecoveryValidateSharePage {
       this.secretsService
         .addOrUpdateSecret(this.secret)
         .then(() => {
-          // this.navCtrl.popToRoot().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+          // TODO: Route back to secret detail page
+          this.navigationService.route('/tabs/tab-settings').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
         })
         .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
     } else {
-      // this.navCtrl
-      //   .push(SocialRecoveryShowSharePage, {
-      //     shares: this.shares,
-      //     currentShare: this.currentShare + 1,
-      //     secret: this.secret
-      //   })
-      //   .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+      this.navigationService
+        .routeWithState('/social-recovery-show-share', { shares: this.shares, currentShare: this.currentShare + 1, secret: this.secret })
+        .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     }
   }
 }

@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular'
 import { TranslateModule } from '@ngx-translate/core'
 
 import { SocialRecoveryShowSharePage } from './social-recovery-show-share.page'
+import { ComponentsModule } from '../../components/components.module'
 
 const routes: Routes = [
   {
@@ -15,7 +16,7 @@ const routes: Routes = [
 ]
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule],
+  imports: [CommonModule, ComponentsModule, FormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule],
   declarations: [SocialRecoveryShowSharePage]
 })
 export class SocialRecoveryShowSharePageModule {}

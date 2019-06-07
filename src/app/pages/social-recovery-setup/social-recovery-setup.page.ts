@@ -4,6 +4,8 @@ import * as bip39 from 'bip39'
 
 import { Secret } from '../../models/secret'
 import { SecretsService } from '../../services/secrets/secrets.service'
+import { NavigationService } from 'src/app/services/navigation/navigation.service'
+import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 
 @Component({
   selector: 'app-social-recovery-setup',
@@ -15,8 +17,12 @@ export class SocialRecoverySetupPage {
   private numberOfRequiredShares = 2
   private readonly secret: Secret
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private readonly secretService: SecretsService) {
-    // this.secret = this.navParams.get('secret')
+  constructor(
+    public navCtrl: NavController,
+    private readonly secretService: SecretsService,
+    private readonly navigationService: NavigationService
+  ) {
+    this.secret = this.navigationService.getState().secret
   }
 
   public setNumberOfShares(i: number) {
@@ -39,9 +45,9 @@ export class SocialRecoverySetupPage {
       .retrieveEntropyForSecret(this.secret)
       .then(entropy => {
         const shares = Secret.generateSocialRecover(bip39.entropyToMnemonic(entropy), this.numberOfShares, this.numberOfRequiredShares)
-        // this.navCtrl
-        //   .push(SocialRecoveryShowSharePage, { shares: shares, currentShare: 0, secret: this.secret })
-        //   .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+        this.navigationService
+          .routeWithState('/social-recovery-show-share', { shares: shares, currentShare: 0, secret: this.secret })
+          .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       })
       .catch(error => {
         console.warn(error)

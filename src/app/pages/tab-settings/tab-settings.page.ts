@@ -1,14 +1,12 @@
 import { Component } from '@angular/core'
 import { Router } from '@angular/router'
 import { AlertController, ModalController, ToastController } from '@ionic/angular'
-// import { SecretCreatePage } from '../secret-create/secret-create'
-// import { SecretEditPage } from '../secret-edit/secret-edit'
 import { Observable } from 'rxjs'
 
 import { Secret } from '../../models/secret'
 import { ClipboardService } from '../../services/clipboard/clipboard.service'
-// import { AboutPage } from '../about/about'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
+import { NavigationService } from '../../services/navigation/navigation.service'
 import { SchemeRoutingService } from '../../services/scheme-routing/scheme-routing.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
 
@@ -27,7 +25,8 @@ export class TabSettingsPage {
     private readonly alertController: AlertController,
     private readonly toastController: ToastController,
     private readonly schemeRoutingProvider: SchemeRoutingService,
-    private readonly clipboardProvider: ClipboardService
+    private readonly clipboardProvider: ClipboardService,
+    private readonly navigationService: NavigationService
   ) {
     this.secrets = this.secretsProvider.currentSecretsList.asObservable()
   }
@@ -46,9 +45,8 @@ export class TabSettingsPage {
     this.router.navigate(['secret-create']).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  public goToEditSecret(secret: Secret) {
-    // TODO
-    // this.navController.push(SecretEditPage, { secret: secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  public goToEditSecret(secret: Secret): void {
+    this.navigationService.routeWithState('/secret-edit', { secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public async deleteSecret(secret: Secret) {
