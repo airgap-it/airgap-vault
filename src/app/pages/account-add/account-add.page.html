@@ -18,7 +18,9 @@
         <ion-label class="font--weight__med">{{ 'wallet-select-coins.text' | translate }}</ion-label>
       </ion-list-header>
       <ion-item class="ion-no-padding" *ngFor="let protocol of coinProtocols" class="ion-no-padding">
-        <ion-avatar slot="start" class="ion-align-items-center"><currency-symbol [symbol]="protocol.symbol"></currency-symbol></ion-avatar>
+        <ion-avatar slot="start" class="ion-align-items-center">
+          <airgap-currency-symbol [symbol]="protocol.symbol"></airgap-currency-symbol>
+        </ion-avatar>
         <ion-label text-wrap>
           <h2>
             <span class="font--weight__med">{{ protocol.name }}</span>

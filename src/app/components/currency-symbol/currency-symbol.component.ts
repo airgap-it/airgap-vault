@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, Input } from '@angular/core'
 
 @Component({
-  selector: 'currency-symbol',
+  selector: 'airgap-currency-symbol',
   templateUrl: './currency-symbol.component.html',
   styleUrls: ['./currency-symbol.component.scss']
 })

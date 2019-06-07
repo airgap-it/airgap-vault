@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core'
 
 @Component({
-  selector: 'address-row',
+  selector: 'airgap-address-row',
   templateUrl: './address-row.component.html',
   styleUrls: ['./address-row.component.scss']
 })
