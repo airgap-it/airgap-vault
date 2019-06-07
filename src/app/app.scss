@@ -20,9 +20,15 @@ current-secret ion-select {
 .font--weight__med {
   font-weight: 500;
 }
+/* forces the paragraph size */
+p {
+  font-size: 14px;
+}
+
 /* Secondary Background color whith corresponding colors */
 app-account-add,
-account-address {
+account-address,
+app-secret-create {
   --ion-background-color: var(--ion-color-secondary);
   --ion-text-color: var(--ion-color-secondary-contrast);
   ion-toggle {
