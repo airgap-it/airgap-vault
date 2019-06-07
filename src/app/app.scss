@@ -44,7 +44,8 @@ secret-generate,
 secret-import,
 app-secret-edit,
 app-warning-modal,
-app-introduction {
+app-introduction,
+app-social-recovery-import {
   --ion-background-color: var(--ion-color-secondary);
   --ion-text-color: var(--ion-color-secondary-contrast);
   ion-toggle {
