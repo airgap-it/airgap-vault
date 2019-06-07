@@ -1,5 +1,4 @@
 import { Component } from '@angular/core'
-import { NavController, NavParams } from '@ionic/angular'
 import {
   AirGapWallet,
   DeserializedSyncProtocol,
@@ -12,8 +11,8 @@ import * as bip39 from 'bip39'
 
 import { handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { InteractionOperationType, InteractionService } from '../../services/interaction/interaction.service'
+import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
-import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 @Component({
   selector: 'airgap-transaction-detail',

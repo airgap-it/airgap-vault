@@ -8,7 +8,7 @@ import { Identifiable } from '../../models/identifiable'
   providedIn: 'root'
 })
 export class NavigationService {
-  private state: any
+  private state: { [key: string]: any } = {}
 
   constructor(private readonly router: Router, private readonly location: Location) {}
 
@@ -20,7 +20,7 @@ export class NavigationService {
     return this.router.navigateByUrl(route)
   }
 
-  public async routeWithState(route: string, object: any): Promise<boolean> {
+  public async routeWithState(route: string, object: { [key: string]: any }): Promise<boolean> {
     this.state = object
 
     return this.router.navigateByUrl(route)
@@ -30,7 +30,7 @@ export class NavigationService {
     this.location.back()
   }
 
-  public getState(): any {
+  public getState(): { [key: string]: any } {
     return this.state
   }
 

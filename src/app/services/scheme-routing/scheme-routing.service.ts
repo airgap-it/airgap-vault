@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core'
-import { AlertController, NavController } from '@ionic/angular'
+import { AlertController } from '@ionic/angular'
 import { AlertButton } from '@ionic/core'
 import { TranslateService } from '@ngx-translate/core'
 import { AirGapWallet, DeserializedSyncProtocol, EncodedType, SyncProtocolUtils, UnsignedTransaction } from 'airgap-coin-lib'
 
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
-import { SecretsService } from '../secrets/secrets.service'
 import { NavigationService } from '../navigation/navigation.service'
+import { SecretsService } from '../secrets/secrets.service'
 
 @Injectable({
   providedIn: 'root'

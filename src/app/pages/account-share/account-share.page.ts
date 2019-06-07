@@ -1,21 +1,22 @@
 import { Component } from '@angular/core'
 
+import { NavigationService } from '../../services/navigation/navigation.service'
+
 import { ErrorCategory, handleErrorLocal } from './../../services/error-handler/error-handler.service'
-import { Router } from '@angular/router'
 
 @Component({
-  selector: 'account-share',
+  selector: 'airgap-account-share',
   templateUrl: './account-share.page.html',
   styleUrls: ['./account-share.page.scss']
 })
 export class AccountSharePage {
   public interactionUrl: string
 
-  constructor(private readonly router: Router) {
-    this.interactionUrl = window.history.state.interactionUrl
+  constructor(private readonly navigationService: NavigationService) {
+    this.interactionUrl = this.navigationService.getState().interactionUrl
   }
 
-  public done() {
-    this.router.navigateByUrl('/tabs/tab-accounts').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  public done(): void {
+    this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

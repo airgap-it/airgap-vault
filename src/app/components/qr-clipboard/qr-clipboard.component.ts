@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core'
 
-import { ClipboardService } from './../../services/clipboard/clipboard.service'
+import { ClipboardService } from '../../services/clipboard/clipboard.service'
 
 @Component({
   selector: 'qr-clipboard',
@@ -12,14 +12,14 @@ export class QrClipboardComponent {
   public level: string = 'L'
 
   @Input()
-  public qrdata: any = ''
+  public qrdata: string = ''
 
   @Input()
   public size: number = 300
 
   constructor(private readonly clipboardService: ClipboardService) {}
 
-  public async copyToClipboard() {
+  public async copyToClipboard(): Promise<void> {
     await this.clipboardService.copyAndShowToast(this.qrdata)
   }
 }

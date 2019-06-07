@@ -1,11 +1,11 @@
 import { Component } from '@angular/core'
-import { NavController, NavParams } from '@ionic/angular'
+import { NavController } from '@ionic/angular'
 import * as bip39 from 'bip39'
+import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
+import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 import { Secret } from '../../models/secret'
 import { SecretsService } from '../../services/secrets/secrets.service'
-import { NavigationService } from 'src/app/services/navigation/navigation.service'
-import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 
 @Component({
   selector: 'airgap-social-recovery-setup',
@@ -40,13 +40,17 @@ export class SocialRecoverySetupPage {
     // this.navCtrl.pop().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  public next() {
+  public next(): void {
     this.secretService
       .retrieveEntropyForSecret(this.secret)
       .then(entropy => {
-        const shares = Secret.generateSocialRecover(bip39.entropyToMnemonic(entropy), this.numberOfShares, this.numberOfRequiredShares)
+        const shares: string[] = Secret.generateSocialRecover(
+          bip39.entropyToMnemonic(entropy),
+          this.numberOfShares,
+          this.numberOfRequiredShares
+        )
         this.navigationService
-          .routeWithState('/social-recovery-show-share', { shares: shares, currentShare: 0, secret: this.secret })
+          .routeWithState('/social-recovery-show-share', { shares, currentShare: 0, secret: this.secret })
           .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       })
       .catch(error => {

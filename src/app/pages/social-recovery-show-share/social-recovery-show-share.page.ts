@@ -1,8 +1,8 @@
 import { Component } from '@angular/core'
 
 import { Secret } from '../../models/secret'
-import { NavigationService } from '../../services/navigation/navigation.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
+import { NavigationService } from '../../services/navigation/navigation.service'
 
 @Component({
   selector: 'airgap-social-recovery-show-share',

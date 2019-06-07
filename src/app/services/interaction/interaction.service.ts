@@ -1,16 +1,11 @@
 import { Injectable } from '@angular/core'
-import { NavController } from '@ionic/angular'
-// import { InteractionSelectionPage } from '../../pages/interaction-selection/interaction-selection'
-// import { WalletSharePage } from '../../pages/wallet-share/wallet-share'
-// import { TransactionSignedPage } from '../../pages/transaction-signed/transaction-signed'
 import { AirGapWallet, UnsignedTransaction } from 'airgap-coin-lib'
 
-// import { Transaction } from '../../../models/transaction.model'
 import { Secret } from '../../models/secret'
+import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
+import { NavigationService } from '../navigation/navigation.service'
 
 import { DeepLinkService } from './../deep-link/deep-link.service'
-import { Router } from '@angular/router'
-import { handleErrorLocal, ErrorCategory } from '../error-handler/error-handler.service'
 
 export enum InteractionSetting {
   UNDETERMINED = 'undetermined',
@@ -42,11 +37,10 @@ export interface IInteractionOptions {
   providedIn: 'root'
 })
 export class InteractionService {
-  constructor(private readonly router: Router, private readonly deepLinkProvider: DeepLinkService) {}
+  constructor(private readonly navigationService: NavigationService, private readonly deepLinkProvider: DeepLinkService) {}
 
-  public startInteraction(interactionOptions: IInteractionOptions, secret: Secret) {
-    console.log('start interaction', interactionOptions, secret)
-    const interactionSetting = secret.interactionSetting
+  public startInteraction(interactionOptions: IInteractionOptions, secret: Secret): void {
+    const interactionSetting: InteractionSetting = secret.interactionSetting
 
     if (interactionOptions.communicationType) {
       if (interactionSetting === InteractionSetting.UNDETERMINED) {
@@ -76,41 +70,35 @@ export class InteractionService {
     }
   }
 
-  private goToInteractionSelectionPage(interactionOptions: IInteractionOptions) {
-    console.log('goToInteractionSelectionPage')
-    this.router
-      .navigateByUrl('/interaction-selection', { state: { interactionOptions } })
+  private goToInteractionSelectionPage(interactionOptions: IInteractionOptions): void {
+    this.navigationService
+      .routeWithState('/interaction-selection', { interactionOptions })
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  private goToInteractionSelectionSettingsPage(interactionOptions: IInteractionOptions) {
-    console.log('goToInteractionSelectionSettingsPage')
-    this.router
-      .navigateByUrl('/interaction-selection-settings', { state: { interactionOptions } })
+  private goToInteractionSelectionSettingsPage(interactionOptions: IInteractionOptions): void {
+    this.navigationService
+      .routeWithState('/interaction-selection-settings', { interactionOptions })
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  private navigateToPageByOperationType(interactionOptions: IInteractionOptions) {
-    console.log('navigateToPageByOperationType')
-
+  private navigateToPageByOperationType(interactionOptions: IInteractionOptions): void {
     // To ensure exhausting enum
-    const assertNever = (arg: never): never => {
+    const assertNever: (arg: never) => never = (arg: never): never => {
       throw new Error('INVALID_OPERATION_TYPE')
     }
 
     if (interactionOptions.operationType === InteractionOperationType.WALLET_SYNC) {
-      this.router
-        .navigateByUrl('/account-share', { state: { interactionUrl: interactionOptions.url } })
+      this.navigationService
+        .routeWithState('/account-share', { interactionUrl: interactionOptions.url })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } else if (interactionOptions.operationType === InteractionOperationType.TRANSACTION_BROADCAST) {
-      this.router
-        .navigateByUrl('/transaction-signed', {
-          state: {
-            interactionUrl: interactionOptions.url,
-            wallet: interactionOptions.wallet,
-            signedTx: interactionOptions.signedTx,
-            transaction: interactionOptions.transaction
-          }
+      this.navigationService
+        .routeWithState('/transaction-signed', {
+          interactionUrl: interactionOptions.url,
+          wallet: interactionOptions.wallet,
+          signedTx: interactionOptions.signedTx,
+          transaction: interactionOptions.transaction
         })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } else {
@@ -118,13 +106,11 @@ export class InteractionService {
     }
   }
 
-  private startDeeplink(url: string) {
-    console.log('startDeeplink')
-
+  private startDeeplink(url: string): void {
     this.deepLinkProvider
       .sameDeviceDeeplink(url)
       .then(() => {
-        this.router.navigateByUrl('/tabs/tab-account').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+        this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       })
       .catch(handleErrorLocal(ErrorCategory.DEEPLINK_PROVIDER))
   }

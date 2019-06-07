@@ -1,11 +1,10 @@
 import { Component, ViewChild } from '@angular/core'
-import { NavController, NavParams } from '@ionic/angular'
 
 import { VerifyKeyComponent } from '../../components/verify-key/verify-key.component'
 import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
-import { SecretsService } from '../../services/secrets/secrets.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
+import { SecretsService } from '../../services/secrets/secrets.service'
 
 @Component({
   selector: 'airgap-social-recovery-validate-share',

@@ -1,15 +1,14 @@
 import { Component } from '@angular/core'
-import { NavController } from '@ionic/angular'
 
+import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import {
   IInteractionOptions,
   InteractionCommunicationType,
   InteractionService,
   InteractionSetting
 } from '../../services/interaction/interaction.service'
+import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
-import { Router } from '@angular/router'
-import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 
 @Component({
   selector: 'airgap-interaction-selection',
@@ -20,24 +19,24 @@ export class InteractionSelectionPage {
   private readonly interactionOptions: IInteractionOptions
 
   constructor(
-    private readonly router: Router,
+    private readonly navigationService: NavigationService,
     private readonly secretsService: SecretsService,
     private readonly interactionService: InteractionService
   ) {
-    this.interactionOptions = window.history.state.interactionOptions
+    this.interactionOptions = this.navigationService.getState().interactionOptions
   }
 
-  public async selectOfflineDevice() {
+  public async selectOfflineDevice(): Promise<void> {
     this.interactionOptions.communicationType = InteractionCommunicationType.QR
     this.goToNextPage()
   }
 
-  public async selectSameDevice() {
+  public async selectSameDevice(): Promise<void> {
     this.interactionOptions.communicationType = InteractionCommunicationType.DEEPLINK
     this.goToNextPage()
   }
 
-  private goToNextPage() {
+  private goToNextPage(): void {
     const secret = this.secretsService.getActiveSecret()
     if (secret.interactionSetting === InteractionSetting.UNDETERMINED) {
       this.goToInteractionSelectionSettingsPage(this.interactionOptions)
@@ -46,9 +45,9 @@ export class InteractionSelectionPage {
     }
   }
 
-  private goToInteractionSelectionSettingsPage(interactionOptions: IInteractionOptions) {
-    this.router
-      .navigateByUrl('/interaction-selection-settings', { state: { interactionOptions } })
+  private goToInteractionSelectionSettingsPage(interactionOptions: IInteractionOptions): void {
+    this.navigationService
+      .routeWithState('/interaction-selection-settings', { interactionOptions })
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

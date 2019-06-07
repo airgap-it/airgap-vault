@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { AirGapWallet } from 'airgap-coin-lib'
 import { BehaviorSubject, Observable } from 'rxjs'
+import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
-import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 @Component({
   selector: 'airgap-tab-accounts',

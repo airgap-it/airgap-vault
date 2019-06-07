@@ -1,16 +1,14 @@
 import { Component } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { Router } from '@angular/router'
 
 import { BIP39Signer } from '../../models/BIP39Signer'
 import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
+import { NavigationService } from '../../services/navigation/navigation.service'
 import { MnemonicValidator } from '../../validators/mnemonic.validator'
-import { NavigationService } from 'src/app/services/navigation/navigation.service'
-// import { SecretEditPage } from '../secret-edit/secret-edit'
 
 @Component({
-  selector: 'secret-import',
+  selector: 'airgap-secret-import',
   templateUrl: './secret-import.page.html',
   styleUrls: ['./secret-import.page.scss']
 })
@@ -19,7 +17,9 @@ export class SecretImportPage {
   public secretImportForm: FormGroup
 
   constructor(private readonly navigationService: NavigationService, private readonly formBuilder: FormBuilder) {
-    const formGroup = {
+    const formGroup: {
+      [key: string]: any
+    } = {
       mnemonic: ['', Validators.compose([Validators.required, MnemonicValidator.isValid])]
     }
 

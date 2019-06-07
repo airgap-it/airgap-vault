@@ -1,6 +1,5 @@
 import { Component } from '@angular/core'
-import { Router } from '@angular/router'
-import { AlertController, NavController } from '@ionic/angular'
+import { AlertController } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 
 import { Secret } from '../../models/secret'

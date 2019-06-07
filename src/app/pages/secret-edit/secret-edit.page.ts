@@ -1,12 +1,12 @@
 import { Component } from '@angular/core'
 import { Router } from '@angular/router'
 import { PopoverController } from '@ionic/angular'
+import { NavigationService } from '../../services/navigation/navigation.service'
 
 import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
-import { SecretsService } from '../../services/secrets/secrets.service'
 import { InteractionSetting } from '../../services/interaction/interaction.service'
-import { NavigationService } from 'src/app/services/navigation/navigation.service'
+import { SecretsService } from '../../services/secrets/secrets.service'
 // import { InteractionSelectionSettingsPage } from '../interaction-selection-settings/interaction-selection-settings'
 // import { SocialRecoverySetupPage } from '../social-recovery-setup/social-recovery-setup'
 // import { WalletSelectCoinsPage } from '../wallet-select-coins/wallet-select-coins'
@@ -61,19 +61,19 @@ export class SecretEditPage {
     }
   }
 
-  public goToSocialRecoverySetup() {
+  public goToSocialRecoverySetup(): void {
     this.navigationService
       .routeWithState('/social-recovery-setup', { secret: this.secret })
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  public goToWalletInteraction() {
+  public goToWalletInteraction(): void {
     this.navigationService
       .routeWithState('/interaction-selection-settings', { secret: this.secret, isEdit: true })
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  public presentEditPopover(event) {
+  public async presentEditPopover(event: Event): Promise<void> {
     /*
     const popover = this.popoverCtrl.create(SecretEditPopoverComponent, {
       secret: this.secret,

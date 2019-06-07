@@ -5,8 +5,9 @@ import { RouterModule, Routes } from '@angular/router'
 import { IonicModule } from '@ionic/angular'
 import { TranslateModule } from '@ngx-translate/core'
 
-import { SocialRecoveryValidateSharePage } from './social-recovery-validate-share.page'
 import { ComponentsModule } from '../../components/components.module'
+
+import { SocialRecoveryValidateSharePage } from './social-recovery-validate-share.page'
 
 const routes: Routes = [
   {
