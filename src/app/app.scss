@@ -30,16 +30,19 @@ app-account-add,
 account-address,
 app-secret-create,
 secret-generate,
-secret-import {
+secret-import,
+app-secret-edit {
   --ion-background-color: var(--ion-color-secondary);
   --ion-text-color: var(--ion-color-secondary-contrast);
   ion-toggle {
     --handle-background: var(--ion-color-secondary-contrast);
   }
-  ion-radio {
+  ion-radio,
+  ion-label {
     --color: var(--ion-color-secondary-contrast);
   }
-  ion-item {
+  ion-item,
+  ion-checkbox {
     --border-color: var(--ion-color-secondary-contrast);
   }
 }
