@@ -1,17 +1,12 @@
 import { Component } from '@angular/core'
 import { Router } from '@angular/router'
 import { PopoverController } from '@ionic/angular'
-import { NavigationService } from '../../services/navigation/navigation.service'
 
 import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { InteractionSetting } from '../../services/interaction/interaction.service'
+import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
-// import { InteractionSelectionSettingsPage } from '../interaction-selection-settings/interaction-selection-settings'
-// import { SocialRecoverySetupPage } from '../social-recovery-setup/social-recovery-setup'
-// import { WalletSelectCoinsPage } from '../wallet-select-coins/wallet-select-coins'
-
-// import { SecretEditPopoverComponent } from './secret-edit-popover/secret-edit-popover.component'
 
 @Component({
   selector: 'airgap-secret-edit',

@@ -1,6 +1,5 @@
 import { Location } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
-import { Router } from '@angular/router'
 import { PopoverController } from '@ionic/angular'
 import { AirGapWallet } from 'airgap-coin-lib'
 

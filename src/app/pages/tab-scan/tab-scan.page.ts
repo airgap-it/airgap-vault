@@ -1,12 +1,11 @@
 import { Component, ViewChild } from '@angular/core'
-import { AlertController, NavController, Platform } from '@ionic/angular'
+import { Platform } from '@ionic/angular'
 import { ZXingScannerComponent } from '@zxing/ngx-scanner'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { PermissionsService, PermissionStatus, PermissionTypes } from '../../services/permissions/permissions.service'
 import { ScannerService } from '../../services/scanner/scanner.service'
 import { SchemeRoutingService } from '../../services/scheme-routing/scheme-routing.service'
-import { SecretsService } from '../../services/secrets/secrets.service'
 
 @Component({
   selector: 'airgap-tab-scan',
@@ -18,47 +17,44 @@ export class TabScanPage {
   public zxingScanner: ZXingScannerComponent
   public availableDevices: MediaDeviceInfo[]
   public selectedDevice: MediaDeviceInfo
-  public scannerEnabled = true
+  public scannerEnabled: boolean = true
 
-  public isBrowser = false
+  public isBrowser: boolean = false
 
-  public hasCameras = false
+  public hasCameras: boolean = false
 
-  public hasCameraPermission = false
+  public hasCameraPermission: boolean = false
 
   constructor(
     private readonly schemeRouting: SchemeRoutingService,
-    private readonly alertCtrl: AlertController,
-    private readonly navController: NavController,
     private readonly platform: Platform,
-    private readonly secretsProvider: SecretsService,
     private readonly scanner: ScannerService,
     private readonly permissionsProvider: PermissionsService
   ) {
     this.isBrowser = !this.platform.is('cordova')
   }
 
-  public async ionViewWillEnter() {
+  public async ionViewWillEnter(): Promise<void> {
     if (this.platform.is('cordova')) {
       await this.platform.ready()
       await this.checkCameraPermissionsAndActivate()
     }
   }
 
-  public async requestPermission() {
+  public async requestPermission(): Promise<void> {
     await this.permissionsProvider.userRequestsPermissions([PermissionTypes.CAMERA])
     await this.checkCameraPermissionsAndActivate()
   }
 
-  public async checkCameraPermissionsAndActivate() {
-    const permission = await this.permissionsProvider.hasCameraPermission()
+  public async checkCameraPermissionsAndActivate(): Promise<void> {
+    const permission: PermissionStatus = await this.permissionsProvider.hasCameraPermission()
     if (permission === PermissionStatus.GRANTED) {
       this.hasCameraPermission = true
       this.startScan()
     }
   }
 
-  public ionViewDidEnter() {
+  public ionViewDidEnter(): void {
     if (!this.platform.is('cordova')) {
       this.hasCameraPermission = true
       this.zxingScanner.camerasNotFound.subscribe((_devices: MediaDeviceInfo[]) => {
@@ -76,7 +72,7 @@ export class TabScanPage {
     }
   }
 
-  public ionViewWillLeave() {
+  public ionViewWillLeave(): void {
     if (this.platform.is('cordova')) {
       this.scanner.destroy()
     } else {
@@ -84,14 +80,14 @@ export class TabScanPage {
     }
   }
 
-  public startScan() {
+  public startScan(): void {
     if (this.platform.is('cordova')) {
       this.scanner.show()
       this.scanner.scan(
-        text => {
+        (text: string) => {
           this.checkScan(text).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
         },
-        error => {
+        (error: string) => {
           console.warn(error)
           this.startScan()
         }
@@ -101,7 +97,7 @@ export class TabScanPage {
     }
   }
 
-  public async checkScan(data: string) {
+  public async checkScan(data: string): Promise<boolean | void> {
     return this.schemeRouting.handleNewSyncRequest(data, () => {
       this.startScan()
     })
