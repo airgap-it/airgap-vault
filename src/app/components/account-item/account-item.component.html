@@ -4,7 +4,10 @@
     <currency-symbol [symbol]="wallet.coinProtocol.symbol"></currency-symbol>
   </ion-avatar>
   <ion-label>
-    <h2>{{ wallet.coinProtocol.name }} {{ wallet.coinProtocol.symbol }}</h2>
+    <h2>
+      <span class="font--weight__med">{{ wallet.coinProtocol.name }}</span>
+      {{ wallet.coinProtocol.symbol }}
+    </h2>
     <p class="typography--mono">{{ wallet.receivingPublicAddress }}</p>
   </ion-label>
 </ion-item>

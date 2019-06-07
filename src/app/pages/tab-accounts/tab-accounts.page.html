@@ -4,23 +4,23 @@
   </ion-toolbar>
 
   <ion-toolbar color="secondary">
-    <div padding-horizontal>
-      <current-secret [chosenSecret]="activeSecret" (secretChanged)="onSecretChanged($event)"></current-secret>
-    </div>
+    <ion-row class="ion-padding-horizontal">
+      <ion-col class="ion-no-padding">
+        <current-secret [chosenSecret]="activeSecret" (secretChanged)="onSecretChanged($event)"></current-secret>
+      </ion-col>
+    </ion-row>
   </ion-toolbar>
 
   <ion-toolbar color="secondary">
-    <ion-searchbar
-      class="colored-background"
-      placeholder="{{ 'tab-wallets.search_placeholder' | translate }}"
-      (ionInput)="filterItems($event)"
-    ></ion-searchbar>
+    <ion-searchbar placeholder="{{ 'tab-wallets.search_placeholder' | translate }}" (ionInput)="filterItems($event)"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="wallets" padding>
-  <ion-list *ngFor="let wallet of wallets | async | walletFilter: { symbol: symbolFilter }">
-    <account-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></account-item>
+<ion-content *ngIf="wallets" class="ion-padding-horizontal">
+  <ion-list>
+    <ng-container *ngFor="let wallet of wallets | async | walletFilter: { symbol: symbolFilter }">
+      <account-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></account-item>
+    </ng-container>
   </ion-list>
 
   <div class="empty-list" *ngIf="wallets && (wallets | async | walletFilter: { symbol: symbolFilter }).length === 0">
@@ -31,7 +31,7 @@
   </div>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-button id="btn-add-wallet" color="secondary" (click)="addWallet()" shape="round">
+    <ion-button color="secondary" shape="round" (click)="addWallet()">
       <ion-icon slot="start" name="add"></ion-icon>
       {{ 'tab-wallets.add-wallet_label' | translate }}
     </ion-button>
