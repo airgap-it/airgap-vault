@@ -5,13 +5,14 @@ import { AirGapWallet } from 'airgap-coin-lib'
 
 import { SecretsService } from '../../services/secrets/secrets.service'
 
-import { ClipboardService } from './../../services/clipboard/clipboard.service'
-import { ErrorCategory, handleErrorLocal } from './../../services/error-handler/error-handler.service'
-import { InteractionService } from './../../services/interaction/interaction.service'
-import { InteractionOperationType } from './../../services/interaction/interaction.service'
-import { ShareUrlService } from './../../services/share-url/share-url.service'
+import { ClipboardService } from '../../services/clipboard/clipboard.service'
+import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
+import { InteractionService } from '../../services/interaction/interaction.service'
+import { InteractionOperationType } from '../../services/interaction/interaction.service'
+import { ShareUrlService } from '../../services/share-url/share-url.service'
 import { AccountEditPopoverComponent } from './account-edit-popover/account-edit-popover.component'
 import { Router } from '@angular/router'
+import { NavigationService } from '../../services/navigation/navigation.service'
 
 @Component({
   selector: 'account-address',
@@ -30,9 +31,10 @@ export class AccountAddressPage {
     private readonly router: Router,
     private readonly secretsProvider: SecretsService,
     private readonly shareUrlProvider: ShareUrlService,
-    private readonly interactionProvider: InteractionService
+    private readonly interactionProvider: InteractionService,
+    private readonly navigationService: NavigationService
   ) {
-    this.wallet = window.history.state.wallet // TODO: Remove
+    this.wallet = this.navigationService.getState().wallet
   }
 
   public async ionViewDidEnter() {

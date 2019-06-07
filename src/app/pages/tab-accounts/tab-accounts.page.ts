@@ -6,6 +6,7 @@ import { BehaviorSubject } from 'rxjs'
 import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
+import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 @Component({
   selector: 'app-tab-accounts',
@@ -18,7 +19,11 @@ export class TabAccountsPage implements OnInit {
 
   public wallets = new BehaviorSubject<AirGapWallet[]>([])
 
-  constructor(public router: Router, private readonly secretsProvider: SecretsService) {}
+  constructor(
+    public router: Router,
+    private readonly secretsProvider: SecretsService,
+    private readonly navigationService: NavigationService
+  ) {}
 
   public ngOnInit() {
     const secrets = this.secretsProvider.currentSecretsList.asObservable()
@@ -41,7 +46,7 @@ export class TabAccountsPage implements OnInit {
   }
 
   public goToReceiveAddress(wallet: AirGapWallet) {
-    this.router.navigate(['account-address'], { state: { wallet } }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.navigationService.routeWithState('/account-address', { wallet }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public filterItems(ev: any) {
