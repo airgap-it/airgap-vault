@@ -5,7 +5,7 @@ import { Storage } from '@ionic/storage'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 
 @Component({
-  selector: 'app-secret-generate-onboarding',
+  selector: 'airgap-secret-generate-onboarding',
   templateUrl: './secret-generate-onboarding.page.html',
   styleUrls: ['./secret-generate-onboarding.page.scss']
 })

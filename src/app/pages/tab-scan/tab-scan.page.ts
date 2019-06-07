@@ -9,7 +9,7 @@ import { SchemeRoutingService } from '../../services/scheme-routing/scheme-routi
 import { SecretsService } from '../../services/secrets/secrets.service'
 
 @Component({
-  selector: 'app-tab-scan',
+  selector: 'airgap-tab-scan',
   templateUrl: './tab-scan.page.html',
   styleUrls: ['./tab-scan.page.scss']
 })

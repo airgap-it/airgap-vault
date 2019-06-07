@@ -7,7 +7,7 @@ import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/er
 declare let cordova: any
 
 @Component({
-  selector: 'app-introduction',
+  selector: 'airgap-introduction',
   templateUrl: './introduction.page.html',
   styleUrls: ['./introduction.page.scss']
 })

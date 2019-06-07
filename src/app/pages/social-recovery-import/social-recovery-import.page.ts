@@ -6,7 +6,7 @@ import { Secret } from '../../models/secret'
 import { MnemonicValidator } from '../../validators/mnemonic.validator'
 
 @Component({
-  selector: 'app-social-recovery-import',
+  selector: 'airgap-social-recovery-import',
   templateUrl: './social-recovery-import.page.html',
   styleUrls: ['./social-recovery-import.page.scss']
 })

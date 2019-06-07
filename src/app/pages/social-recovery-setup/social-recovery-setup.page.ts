@@ -8,7 +8,7 @@ import { NavigationService } from 'src/app/services/navigation/navigation.servic
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 
 @Component({
-  selector: 'app-social-recovery-setup',
+  selector: 'airgap-social-recovery-setup',
   templateUrl: './social-recovery-setup.page.html',
   styleUrls: ['./social-recovery-setup.page.scss']
 })

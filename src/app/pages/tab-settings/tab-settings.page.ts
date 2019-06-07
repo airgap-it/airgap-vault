@@ -1,6 +1,6 @@
-import { Component } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
-import { AlertController, ModalController, ToastController } from '@ionic/angular'
+import { AlertController, ToastController } from '@ionic/angular'
 import { Observable } from 'rxjs'
 
 import { Secret } from '../../models/secret'
@@ -11,15 +11,14 @@ import { SchemeRoutingService } from '../../services/scheme-routing/scheme-routi
 import { SecretsService } from '../../services/secrets/secrets.service'
 
 @Component({
-  selector: 'app-tab-settings',
+  selector: 'airgap-tab-settings',
   templateUrl: './tab-settings.page.html',
   styleUrls: ['./tab-settings.page.scss']
 })
-export class TabSettingsPage {
+export class TabSettingsPage implements OnInit {
   public readonly secrets: Observable<Secret[]>
 
   constructor(
-    public modalController: ModalController,
     private readonly router: Router,
     private readonly secretsProvider: SecretsService,
     private readonly alertController: AlertController,
@@ -31,26 +30,24 @@ export class TabSettingsPage {
     this.secrets = this.secretsProvider.currentSecretsList.asObservable()
   }
 
-  public ionViewWillEnter() {
-    this.secrets.subscribe(async list => {
-      await this.secretsProvider.isReady()
-      if (list.length === 0) {
-        // TODO
-        // this.navController.push(SecretCreatePage).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  public ngOnInit(): void {
+    this.secrets.subscribe(async (secrets: Secret[]) => {
+      if (secrets.length === 0) {
+        this.router.navigateByUrl('/secret-create/initial').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       }
     })
   }
 
   public goToNewSecret(): void {
-    this.router.navigate(['secret-create']).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.navigationService.route('/secret-create').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public goToEditSecret(secret: Secret): void {
     this.navigationService.routeWithState('/secret-edit', { secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  public async deleteSecret(secret: Secret) {
-    const alert = await this.alertController.create({
+  public async deleteSecret(secret: Secret): Promise<void> {
+    const alert: HTMLIonAlertElement = await this.alertController.create({
       header: 'Delete ' + secret.label,
       subHeader: 'Are you sure you want to delete ' + secret.label + '?',
       buttons: [
@@ -59,7 +56,7 @@ export class TabSettingsPage {
           handler: async () => {
             this.secretsProvider.remove(secret).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
 
-            const toast = await this.toastController.create({
+            const toast: HTMLIonToastElement = await this.toastController.create({
               message: 'Secret deleted',
               duration: 5000,
               showCloseButton: true,
@@ -84,10 +81,10 @@ export class TabSettingsPage {
   }
 
   public goToAbout(): void {
-    this.router.navigate(['/about']).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.navigationService.route('/about').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  public pasteClipboard() {
+  public pasteClipboard(): void {
     this.clipboardProvider.paste().then(
       (text: string) => {
         this.schemeRoutingProvider.handleNewSyncRequest(text).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))

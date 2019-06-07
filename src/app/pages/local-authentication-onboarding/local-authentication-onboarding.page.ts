@@ -5,7 +5,7 @@ import { Storage } from '@ionic/storage'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 
 @Component({
-  selector: 'app-local-authentication-onboarding',
+  selector: 'airgap-local-authentication-onboarding',
   templateUrl: './local-authentication-onboarding.page.html',
   styleUrls: ['./local-authentication-onboarding.page.scss']
 })

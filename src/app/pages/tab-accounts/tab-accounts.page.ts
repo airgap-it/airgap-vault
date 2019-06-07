@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { AirGapWallet } from 'airgap-coin-lib'
-import { BehaviorSubject } from 'rxjs'
+import { BehaviorSubject, Observable } from 'rxjs'
 
 import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
@@ -9,11 +9,13 @@ import { SecretsService } from '../../services/secrets/secrets.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 @Component({
-  selector: 'app-tab-accounts',
+  selector: 'airgap-tab-accounts',
   templateUrl: './tab-accounts.page.html',
   styleUrls: ['./tab-accounts.page.scss']
 })
 export class TabAccountsPage implements OnInit {
+  public readonly secrets: Observable<Secret[]>
+
   public symbolFilter: string | undefined
   public activeSecret: Secret
 
@@ -23,13 +25,13 @@ export class TabAccountsPage implements OnInit {
     public router: Router,
     private readonly secretsProvider: SecretsService,
     private readonly navigationService: NavigationService
-  ) {}
+  ) {
+    this.secrets = this.secretsProvider.currentSecretsList.asObservable()
+  }
 
-  public ngOnInit() {
-    const secrets = this.secretsProvider.currentSecretsList.asObservable()
-    secrets.subscribe(async (list: Secret[]) => {
-      await this.secretsProvider.isReady()
-      if (list.length === 0) {
+  public ngOnInit(): void {
+    this.secrets.subscribe(async (secrets: Secret[]) => {
+      if (secrets.length === 0) {
         this.router.navigateByUrl('/secret-create/initial').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       }
     })

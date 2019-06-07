@@ -1,8 +1,8 @@
 import { Component } from '@angular/core'
-import { NavController, NavParams } from '@ionic/angular'
 import { AirGapWallet, DeserializedSyncProtocol } from 'airgap-coin-lib'
+
+import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
-import { handleErrorLocal, ErrorCategory } from '../../services/error-handler/error-handler.service'
 
 enum TransactionQRType {
   SignedAirGap = 0,
@@ -10,7 +10,7 @@ enum TransactionQRType {
 }
 
 @Component({
-  selector: 'app-transaction-signed',
+  selector: 'airgap-transaction-signed',
   templateUrl: './transaction-signed.page.html',
   styleUrls: ['./transaction-signed.page.scss']
 })

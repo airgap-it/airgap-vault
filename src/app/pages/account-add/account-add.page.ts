@@ -1,16 +1,15 @@
 import { Component } from '@angular/core'
-import { Router } from '@angular/router'
-import { LoadingController, ModalController } from '@ionic/angular'
+import { ModalController } from '@ionic/angular'
 import { Storage } from '@ionic/storage'
-// import { LocalAuthenticationOnboardingPage } from '../local-authentication-onboarding/local-authentication-onboarding'
 import { ICoinProtocol, supportedProtocols } from 'airgap-coin-lib'
 
+import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
+import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
 import { LocalAuthenticationOnboardingPage } from '../local-authentication-onboarding/local-authentication-onboarding.page'
-import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 
 @Component({
-  selector: 'app-account-add',
+  selector: 'airgap-account-add',
   templateUrl: './account-add.page.html',
   styleUrls: ['./account-add.page.scss']
 })
@@ -22,43 +21,35 @@ export class AccountAddPage {
   public isAdvancedMode: boolean = false
 
   constructor(
-    public loadingCtrl: LoadingController,
-    public router: Router,
     private readonly secretsProvider: SecretsService,
     private readonly storage: Storage,
-    private readonly modalController: ModalController
+    private readonly modalController: ModalController,
+    private readonly navigationService: NavigationService
   ) {
     this.coinProtocols = supportedProtocols()
     try {
-      // TODO
-      // this.selectedProtocol = getProtocolByIdentifier(this.navParams.get('protocol'))
+      this.selectedProtocol = this.navigationService.getState().protocol
     } catch (error) {}
   }
 
-  public ionViewDidLoad() {
-    console.log('ionViewDidLoad WalletSelectCoinsPage')
-  }
-
-  public onSelectedProtocolChange(selectedProtocol) {
-    console.log(selectedProtocol)
+  public onSelectedProtocolChange(selectedProtocol: ICoinProtocol): void {
     this.selectedProtocol = selectedProtocol
     this.isHDWallet = this.selectedProtocol.supportsHD
     this.customDerivationPath = this.selectedProtocol.standardDerivationPath
   }
 
-  public onIsHDWalletChange(isHDWallet) {
+  public onIsHDWalletChange(isHDWallet: boolean): void {
     this.isHDWallet = isHDWallet
-    if (isHDWallet) {
-      this.customDerivationPath = this.selectedProtocol.standardDerivationPath
-    } else {
-      this.customDerivationPath = `${this.selectedProtocol.standardDerivationPath}/0/1`
-    }
+
+    this.customDerivationPath = isHDWallet
+      ? this.selectedProtocol.standardDerivationPath
+      : `${this.selectedProtocol.standardDerivationPath}/0/1`
   }
 
-  public async addWallet() {
-    const value = await this.storage.get('DISCLAIMER_HIDE_LOCAL_AUTH_ONBOARDING')
+  public async addWallet(): Promise<void> {
+    const value: boolean = await this.storage.get('DISCLAIMER_HIDE_LOCAL_AUTH_ONBOARDING')
     if (!value) {
-      const modal = await this.modalController.create({
+      const modal: HTMLIonModalElement = await this.modalController.create({
         component: LocalAuthenticationOnboardingPage
       })
 
@@ -70,24 +61,17 @@ export class AccountAddPage {
         .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
 
       modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
-
-      // this.router.navigateByUrl('/local-authentication-onboarding')
-      // this.navCtrl
-      //   .push(LocalAuthenticationOnboardingPage, {
-      //     protocolIdentifier: this.selectedProtocol.identifier,
-      //     isHDWallet: this.isHDWallet,
-      //     customDerivationPath: this.customDerivationPath
-      //   })
-      //   .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-      //   return
     } else {
       this.addWalletAndReturnToAddressPage()
     }
   }
 
-  private async addWalletAndReturnToAddressPage() {
-    console.log(this.selectedProtocol.identifier, this.isHDWallet, this.customDerivationPath)
-    await this.secretsProvider.addWallet(this.selectedProtocol.identifier, this.isHDWallet, this.customDerivationPath)
-    this.router.navigateByUrl('/tabs/tab-accounts')
+  private addWalletAndReturnToAddressPage(): void {
+    this.secretsProvider
+      .addWallet(this.selectedProtocol.identifier, this.isHDWallet, this.customDerivationPath)
+      .then(() => {
+        this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+      })
+      .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
   }
 }

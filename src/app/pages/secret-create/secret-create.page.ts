@@ -6,7 +6,7 @@ import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/er
 import { SecretsService } from '../../services/secrets/secrets.service'
 
 @Component({
-  selector: 'app-secret-create',
+  selector: 'airgap-secret-create',
   templateUrl: './secret-create.page.html',
   styleUrls: ['./secret-create.page.scss']
 })

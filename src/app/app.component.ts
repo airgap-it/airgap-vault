@@ -5,7 +5,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx'
 import { Platform } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 
-import { DEEPLINK_VAULT_ADD_ACCOUNT, DEEPLINK_VAULT_PREFIX } from './constants'
+import { DEEPLINK_VAULT_ADD_ACCOUNT, DEEPLINK_VAULT_PREFIX } from './constants/constants'
 import { ExposedPromise, exposedPromise } from './functions/exposed-promise'
 import { ErrorCategory, handleErrorLocal } from './services/error-handler/error-handler.service'
 import { NavigationService } from './services/navigation/navigation.service'
@@ -17,7 +17,7 @@ import { Check, StartupChecksService } from './services/startup-checks/startup-c
 declare let window: Window & { airGapHasStarted: boolean }
 
 @Component({
-  selector: 'app-root',
+  selector: 'airgap-root',
   templateUrl: 'app.component.html'
 })
 export class AppComponent implements AfterViewInit {

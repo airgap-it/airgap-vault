@@ -4,7 +4,7 @@ import { AppVersion } from '@ionic-native/app-version/ngx'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 
 @Component({
-  selector: 'app-about',
+  selector: 'airgap-about',
   templateUrl: './about.page.html',
   styleUrls: ['./about.page.scss']
 })

@@ -11,7 +11,7 @@ import {
 import { SecretsService } from '../../services/secrets/secrets.service'
 
 @Component({
-  selector: 'app-interaction-selection-settings',
+  selector: 'airgap-interaction-selection-settings',
   templateUrl: './interaction-selection-settings.page.html',
   styleUrls: ['./interaction-selection-settings.page.scss']
 })

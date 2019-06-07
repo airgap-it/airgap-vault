@@ -16,7 +16,7 @@ import { SecretsService } from '../../services/secrets/secrets.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 @Component({
-  selector: 'app-transaction-detail',
+  selector: 'airgap-transaction-detail',
   templateUrl: './transaction-detail.page.html',
   styleUrls: ['./transaction-detail.page.scss']
 })

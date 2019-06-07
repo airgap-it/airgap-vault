@@ -14,7 +14,7 @@ import { NavigationService } from 'src/app/services/navigation/navigation.servic
 // import { SecretEditPopoverComponent } from './secret-edit-popover/secret-edit-popover.component'
 
 @Component({
-  selector: 'app-secret-edit',
+  selector: 'airgap-secret-edit',
   templateUrl: './secret-edit.page.html',
   styleUrls: ['./secret-edit.page.scss']
 })

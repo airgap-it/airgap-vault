@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { AppVersion } from '@ionic-native/app-version/ngx'
 
 @Component({
@@ -10,13 +10,13 @@ import { AppVersion } from '@ionic-native/app-version/ngx'
     </ion-list>
   `
 })
-export class AboutPopoverComponent {
+export class AboutPopoverComponent implements OnInit {
   public versionCode: string
   public versionNumber: string
 
   constructor(private readonly appVersion: AppVersion) {}
 
-  public async ngOnInit() {
+  public async ngOnInit(): Promise<void> {
     this.versionNumber = await this.appVersion.getVersionNumber()
     this.versionCode = `${await this.appVersion.getVersionCode()}`
   }

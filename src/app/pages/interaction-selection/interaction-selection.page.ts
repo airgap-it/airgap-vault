@@ -12,7 +12,7 @@ import { Router } from '@angular/router'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 
 @Component({
-  selector: 'app-interaction-selection',
+  selector: 'airgap-interaction-selection',
   templateUrl: './interaction-selection.page.html',
   styleUrls: ['./interaction-selection.page.scss']
 })

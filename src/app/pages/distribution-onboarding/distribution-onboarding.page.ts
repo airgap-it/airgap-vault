@@ -5,7 +5,7 @@ import { Storage } from '@ionic/storage'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 
 @Component({
-  selector: 'app-distribution-onboarding',
+  selector: 'airgap-distribution-onboarding',
   templateUrl: './distribution-onboarding.page.html',
   styleUrls: ['./distribution-onboarding.page.scss']
 })

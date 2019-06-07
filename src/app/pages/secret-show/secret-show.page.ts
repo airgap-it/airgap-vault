@@ -3,33 +3,30 @@ import { Router } from '@angular/router'
 import { AlertController, NavController } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 
-// import { SecretValidatePage } from '../secret-validate/secret-validate'
 import { Secret } from '../../models/secret'
+import { NavigationService } from '../../services/navigation/navigation.service'
 
 import { SHOW_SECRET_MIN_TIME_IN_SECONDS } from './../../constants/constants'
 import { ErrorCategory, handleErrorLocal } from './../../services/error-handler/error-handler.service'
 
 @Component({
-  selector: 'secret-show',
+  selector: 'airgap-secret-show',
   templateUrl: './secret-show.page.html',
   styleUrls: ['./secret-show.page.scss']
 })
 export class SecretShowPage {
-  private readonly secret: Secret
-  public startTime = new Date()
+  public readonly secret: Secret
+  public readonly startTime: Date = new Date()
 
   constructor(
-    public navController: NavController,
+    private readonly navigationService: NavigationService,
     private readonly alertController: AlertController,
-    private readonly translateService: TranslateService,
-    private readonly router: Router
+    private readonly translateService: TranslateService
   ) {
-    this.secret = new Secret('90ac75896c3f57107c4ab0979b7c2ca1790e29ce7d25308b997fbbd53b9829c4', 'asdf') // TODO: Get secret from previous page
-
-    // this.secret = this.navParams.get('secret')
+    this.secret = this.navigationService.getState().secret
   }
 
-  public goToValidateSecret() {
+  public goToValidateSecret(): void {
     if (this.startTime.getTime() + SHOW_SECRET_MIN_TIME_IN_SECONDS * 1000 > new Date().getTime()) {
       this.translateService
         .get([
@@ -39,33 +36,34 @@ export class SecretShowPage {
           'secret-show.too-fast_alert.wait_label_p1',
           'secret-show.too-fast_alert.wait_label_p2'
         ])
-        .subscribe(async values => {
+        .subscribe(async (values: string[]) => {
           const title: string = values['secret-show.too-fast_alert.title']
           const heading: string = values['secret-show.too-fast_alert.heading']
           const text: string = values['secret-show.too-fast_alert.text']
-          const wait_label_p1: string = values['secret-show.too-fast_alert.wait_label_p1']
-          const wait_label_p2: string = values['secret-show.too-fast_alert.wait_label_p2']
+          const waitLabelP1: string = values['secret-show.too-fast_alert.wait_label_p1']
+          const waitLabelP2: string = values['secret-show.too-fast_alert.wait_label_p2']
 
-          const alert = await this.alertController.create({
+          const alert: HTMLIonAlertElement = await this.alertController.create({
             header: title,
-            message:
-              heading +
-              '<br/>' +
-              text +
-              '<br/>' +
-              wait_label_p1 +
-              '<strong>' +
-              SHOW_SECRET_MIN_TIME_IN_SECONDS.toString() +
-              wait_label_p2 +
-              '</strong>',
+            message: [
+              heading,
+              '<br/>',
+              text,
+              '<br/>',
+              waitLabelP1,
+              '<strong>',
+              SHOW_SECRET_MIN_TIME_IN_SECONDS.toString(),
+              waitLabelP2,
+              '</strong>'
+            ].join(),
             buttons: ['Okay']
           })
           alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
         })
     } else {
-      this.router.navigate(['secret-validate']).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-
-      // this.navController.push(SecretValidatePage, { secret: this.secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+      this.navigationService
+        .routeWithState('secret-validate', { secret: this.secret })
+        .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     }
   }
 }
