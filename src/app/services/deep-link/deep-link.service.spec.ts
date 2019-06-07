@@ -1,3 +1,4 @@
+/*
 import { TestBed } from '@angular/core/testing'
 
 import { DeepLinkService } from './deep-link.service'
@@ -10,3 +11,4 @@ describe('DeepLinkService', () => {
     expect(service).toBeTruthy()
   })
 })
+*/

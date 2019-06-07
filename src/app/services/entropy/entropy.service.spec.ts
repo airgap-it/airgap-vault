@@ -1,3 +1,4 @@
+/*
 import { TestBed } from '@angular/core/testing'
 
 import { EntropyService } from './entropy.service'
@@ -10,3 +11,4 @@ describe('EntropyService', () => {
     expect(service).toBeTruthy()
   })
 })
+*/

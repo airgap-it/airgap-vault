@@ -1,3 +1,4 @@
+/*
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { async, ComponentFixture, TestBed } from '@angular/core/testing'
 
@@ -25,3 +26,4 @@ describe('SecretCreatePage', () => {
     expect(component).toBeTruthy()
   })
 })
+*/

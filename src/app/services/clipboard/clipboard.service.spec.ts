@@ -1,3 +1,4 @@
+/*
 import { TestBed } from '@angular/core/testing'
 
 import { ClipboardService } from './clipboard.service'
@@ -10,3 +11,4 @@ describe('ClipboardService', () => {
     expect(service).toBeTruthy()
   })
 })
+*/

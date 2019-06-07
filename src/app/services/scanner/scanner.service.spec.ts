@@ -1,3 +1,4 @@
+/*
 import { TestBed } from '@angular/core/testing'
 
 import { ScannerService } from './scanner.service'
@@ -10,3 +11,4 @@ describe('ScannerService', () => {
     expect(service).toBeTruthy()
   })
 })
+*/

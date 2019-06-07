@@ -1,3 +1,5 @@
+/*
+/*
 import { TestBed } from '@angular/core/testing'
 
 import { StartupChecksService } from './startup-checks.service'
@@ -10,3 +12,4 @@ describe('StartupChecksService', () => {
     expect(service).toBeTruthy()
   })
 })
+*/
