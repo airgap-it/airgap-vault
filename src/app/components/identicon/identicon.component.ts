@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js'
 import { toDataUrl } from 'myetherwallet-blockies'
 
 @Component({
-  selector: 'identicon',
+  selector: 'airgap-identicon',
   templateUrl: './identicon.component.html',
   styleUrls: ['./identicon.component.scss']
 })
