@@ -21,7 +21,7 @@
     <ion-toggle (ionChange)="switchQR($event)"></ion-toggle>
   </ion-row>
   <ion-row padding-bottom margin-bottom>
-    <signed-transaction [syncProtocolString]="interactionUrl"></signed-transaction>
+    <airgap-signed-transaction [syncProtocolString]="interactionUrl"></airgap-signed-transaction>
   </ion-row>
   <ion-fab slot="fixed" vertical="bottom" right>
     <ion-button default color="primary" (click)="done()" shape="round">{{ 'transaction-signed.done_label' | translate }}</ion-button>

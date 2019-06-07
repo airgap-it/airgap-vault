@@ -9,7 +9,7 @@ import {
 } from 'airgap-coin-lib'
 
 @Component({
-  selector: 'signed-transaction',
+  selector: 'airgap-signed-transaction',
   templateUrl: './signed-transaction.component.html',
   styleUrls: ['./signed-transaction.component.scss']
 })

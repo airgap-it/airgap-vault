@@ -10,7 +10,7 @@
   <div *ngIf="airGapTx">
     <p>{{ 'transaction-detail.text' | translate }}</p>
   </div>
-  <signed-transaction [unsignedTx]="deserializedSync"></signed-transaction>
+  <airgap-signed-transaction [unsignedTx]="deserializedSync"></airgap-signed-transaction>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-button color="primary" shape="round" (click)="signAndGoToNextPage()">
