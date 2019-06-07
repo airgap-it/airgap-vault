@@ -1,29 +1,27 @@
-<ion-header transparent no-border>
-  <ion-toolbar transparent>
+<ion-header no-border>
+  <ion-toolbar>
     <ion-title>
-      <ion-text>
-        <p color="white">{{ 'interaction-selection.title' | translate }}</p>
-      </ion-text>
+      {{ 'interaction-selection.title' | translate }}
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding class="colored-background">
-  <h3 padding-bottom [innerHTML]="'interaction-selection.heading' | translate"></h3>
+<ion-content class="ion-padding">
+  <h3 class="ion-padding-bottom" [innerHTML]="'interaction-selection.heading' | translate"></h3>
 
-  <ion-row justify-content-center><img src="./assets/img/send-one-device.svg" /></ion-row>
+  <ion-row class="ion-justify-content-center"><img src="./assets/img/send-one-device.svg" /></ion-row>
 
   <ion-row>
-    <ion-button expand="block" default color="primary" (click)="selectSameDevice()" shape="round" item-right slot="start">
+    <ion-button color="primary" shape="round" expand="block" (click)="selectSameDevice()">
       {{ 'interaction-selection.same-device_label' | translate }}
     </ion-button>
     <p>{{ 'interaction-selection.same-device_info' | translate }}</p>
   </ion-row>
 
-  <ion-row justify-content-center padding-top><img src="./assets/img/send-two-device.svg" /></ion-row>
+  <ion-row class="ion-justify-content-center ion-padding-top"><img src="./assets/img/send-two-device.svg" /></ion-row>
 
   <ion-row>
-    <ion-button expand="block" default color="primary" (click)="selectOfflineDevice()" shape="round" item-right slot="start">
+    <ion-button color="primary" shape="round" expand="block" (click)="selectOfflineDevice()">
       {{ 'interaction-selection.offline-device_label' | translate }}
     </ion-button>
     <p>{{ 'interaction-selection.offline-device_info' | translate }}</p>

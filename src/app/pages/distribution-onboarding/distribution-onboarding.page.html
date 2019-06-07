@@ -1,31 +1,31 @@
-<ion-content class="colored-background" padding>
+<ion-content class="ion-padding">
   <ion-slides>
     <ion-slide>
-      <ion-row padding-vertical text-left>
+      <ion-row class="ion-padding-vertical ion-text-left">
         <h1 [innerHTML]="'distribution-onboarding.ask-permission.heading' | translate"></h1>
 
         <p>{{ 'distribution-onboarding.ask-permission.text' | translate }}</p>
       </ion-row>
 
       <ion-footer no-border>
-        <ion-toolbar padding transparent>
-          <ion-row justify-content-end>
-            <ion-button default color="primary" (click)="next()" shape="round" item-right>{{ 'next' | translate }}</ion-button>
+        <ion-toolbar class="ion-padding" transparent>
+          <ion-row class="ion-justify-content-end">
+            <ion-button color="primary" shape="round" (click)="next()">{{ 'next' | translate }}</ion-button>
           </ion-row>
         </ion-toolbar>
       </ion-footer>
     </ion-slide>
     <ion-slide>
-      <ion-row padding-vertical text-left>
+      <ion-row class="ion-padding-vertical ion-text-left">
         <h1 [innerHTML]="'distribution-onboarding.no-vm.heading' | translate"></h1>
 
         <p>{{ 'distribution-onboarding.no-vm.text' | translate }}</p>
       </ion-row>
 
       <ion-footer no-border>
-        <ion-toolbar padding transparent>
-          <ion-row justify-content-end>
-            <ion-button default color="primary" (click)="accept()" shape="round" item-right>
+        <ion-toolbar class="ion-padding" transparent>
+          <ion-row class="ion-justify-content-end">
+            <ion-button color="primary" shape="round" (click)="accept()">
               {{ 'distribution-onboarding.understood_label' | translate }}
             </ion-button>
           </ion-row>

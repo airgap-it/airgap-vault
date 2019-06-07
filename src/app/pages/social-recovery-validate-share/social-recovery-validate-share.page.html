@@ -1,15 +1,13 @@
-<ion-header transparent no-border>
-  <ion-toolbar transparent>
+<ion-header no-border>
+  <ion-toolbar>
     <ion-title>
-      <ion-text>
-        <p color="white">{{ 'social-recovery-validate-share.title' | translate }}</p>
-      </ion-text>
+      {{ 'social-recovery-validate-share.title' | translate }}
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="colored-background">
-  <p padding-horizontal>{{ 'social-recovery-validate-share.text' | translate }}</p>
+<ion-content>
+  <p class="ion-padding-horizontal">{{ 'social-recovery-validate-share.text' | translate }}</p>
   <verify-key
     *ngIf="shares"
     #verify
