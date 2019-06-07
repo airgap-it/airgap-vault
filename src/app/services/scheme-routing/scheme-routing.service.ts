@@ -4,56 +4,36 @@ import { AlertButton } from '@ionic/core'
 import { TranslateService } from '@ngx-translate/core'
 import { AirGapWallet, DeserializedSyncProtocol, EncodedType, SyncProtocolUtils, UnsignedTransaction } from 'airgap-coin-lib'
 
-// import { TransactionDetailPage } from '../../pages/transaction-detail/transaction-detail'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { SecretsService } from '../secrets/secrets.service'
+import { NavigationService } from '../navigation/navigation.service'
 
 @Injectable({
   providedIn: 'root'
 })
 export class SchemeRoutingService {
-  private navController: NavController
-  /* TS 2.7 feature
-  private syncSchemeHandlers: {
+  private readonly syncSchemeHandlers: {
     [key in EncodedType]: (deserializedSync: DeserializedSyncProtocol, scanAgainCallback: Function) => Promise<boolean>
   }
-  */
-  private readonly syncSchemeHandlers: ((
-    deserializedSync: DeserializedSyncProtocol,
-    scanAgainCallback: Function
-  ) => Promise<boolean>)[] = []
 
   constructor(
-    // TODO
+    private readonly navigationService: NavigationService,
     private readonly secretsProvider: SecretsService,
     private readonly alertCtrl: AlertController,
     private readonly translateService: TranslateService
   ) {
-    this.syncSchemeHandlers[EncodedType.WALLET_SYNC] = this.syncTypeNotSupportedAlert.bind(this)
-    this.syncSchemeHandlers[EncodedType.UNSIGNED_TRANSACTION] = this.handleUnsignedTransaction.bind(this)
-    this.syncSchemeHandlers[EncodedType.SIGNED_TRANSACTION] = this.syncTypeNotSupportedAlert.bind(this)
-
-    /* TS 2.7 feature
     this.syncSchemeHandlers = {
       [EncodedType.WALLET_SYNC]: this.syncTypeNotSupportedAlert.bind(this),
       [EncodedType.UNSIGNED_TRANSACTION]: this.handleUnsignedTransaction.bind(this),
       [EncodedType.SIGNED_TRANSACTION]: this.syncTypeNotSupportedAlert.bind(this)
     }
-    */
   }
 
-  public async handleNewSyncRequest(
-    navCtrl: NavController,
-    rawString: string,
-    scanAgainCallback: Function = () => {
-      /* */
-    }
-  ) {
+  public async handleNewSyncRequest(rawString: string, scanAgainCallback: () => void = () => {}): Promise<boolean | void> {
     // wait for secrets to be loaded for sure
     await this.secretsProvider.isReady()
 
-    this.navController = navCtrl
-    const syncProtocol = new SyncProtocolUtils()
+    const syncProtocol: SyncProtocolUtils = new SyncProtocolUtils()
 
     let data: string | undefined
     try {
@@ -124,16 +104,13 @@ export class SchemeRoutingService {
     }
 
     if (correctWallet) {
-      // TODO implement correct routing
-      // if (this.navController) {
-      //   this.navController
-      //     .push(TransactionDetailPage, {
-      //       transaction: unsignedTransaction,
-      //       wallet: correctWallet,
-      //       deserializedSync: deserializedSyncProtocol
-      //     })
-      //     .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-      // }
+      this.navigationService
+        .routeWithState('transaction-detail', {
+          transaction: unsignedTransaction,
+          wallet: correctWallet,
+          deserializedSync: deserializedSyncProtocol
+        })
+        .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } else {
       const cancelButton = {
         text: 'tab-wallets.no-secret_alert.okay_label',

@@ -13,6 +13,7 @@ import * as bip39 from 'bip39'
 import { handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { InteractionOperationType, InteractionService } from '../../services/interaction/interaction.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
+import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 @Component({
   selector: 'app-transaction-detail',
@@ -28,16 +29,15 @@ export class TransactionDetailPage {
   public deserializedSync: DeserializedSyncProtocol
 
   constructor(
-    public navController: NavController,
-    public navParams: NavParams,
+    private readonly navigationService: NavigationService,
     private readonly secretsService: SecretsService,
     private readonly interactionService: InteractionService
   ) {}
 
   public async ionViewWillEnter() {
-    // this.transaction = this.navParams.get('transaction')
-    // this.wallet = this.navParams.get('wallet')
-    // this.deserializedSync = this.navParams.get('deserializedSync')
+    this.transaction = this.navigationService.getState().transaction
+    this.wallet = this.navigationService.getState().wallet
+    this.deserializedSync = this.navigationService.getState().deserializedSync
     try {
       this.airGapTx = await this.wallet.coinProtocol.getTransactionDetails(this.transaction)
     } catch (e) {

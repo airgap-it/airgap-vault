@@ -1,6 +1,8 @@
 import { Component } from '@angular/core'
 import { NavController, NavParams } from '@ionic/angular'
 import { AirGapWallet, DeserializedSyncProtocol } from 'airgap-coin-lib'
+import { NavigationService } from '../../services/navigation/navigation.service'
+import { handleErrorLocal, ErrorCategory } from '../../services/error-handler/error-handler.service'
 
 enum TransactionQRType {
   SignedAirGap = 0,
@@ -21,19 +23,17 @@ export class TransactionSignedPage {
 
   public signedTransactionSync: DeserializedSyncProtocol
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {}
-
-  public async ionViewWillEnter() {
-    // this.interactionUrl = this.navParams.get('interactionUrl')
-    // this.wallet = this.navParams.get('wallet')
-    // this.signedTx = this.navParams.get('signedTx')
+  constructor(public navigationService: NavigationService) {
+    this.interactionUrl = this.navigationService.getState().interactionUrl
+    this.wallet = this.navigationService.getState().interactionUrl
+    this.signedTx = this.navigationService.getState().interactionUrl
   }
 
-  public switchQR() {
+  public switchQR(): void {
     this.qrType = this.qrType === TransactionQRType.SignedAirGap ? TransactionQRType.SignedRaw : TransactionQRType.SignedAirGap
   }
 
-  public done() {
-    // this.navCtrl.popToRoot().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  public done(): void {
+    this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

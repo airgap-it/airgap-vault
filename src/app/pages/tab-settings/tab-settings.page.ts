@@ -90,8 +90,7 @@ export class TabSettingsPage {
   public pasteClipboard() {
     this.clipboardProvider.paste().then(
       (text: string) => {
-        // TODO
-        // this.schemeRoutingProvider.handleNewSyncRequest(this.navController, text).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
+        this.schemeRoutingProvider.handleNewSyncRequest(text).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
       },
       (err: string) => {
         console.error('Error: ' + err)

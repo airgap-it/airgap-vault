@@ -80,7 +80,7 @@ export class TabScanPage {
     if (this.platform.is('cordova')) {
       this.scanner.destroy()
     } else {
-      (this.zxingScanner as any).resetCodeReader()
+      ;(this.zxingScanner as any).resetCodeReader()
     }
   }
 
@@ -102,7 +102,7 @@ export class TabScanPage {
   }
 
   public async checkScan(data: string) {
-    return this.schemeRouting.handleNewSyncRequest(this.navController, data, () => {
+    return this.schemeRouting.handleNewSyncRequest(data, () => {
       this.startScan()
     })
   }

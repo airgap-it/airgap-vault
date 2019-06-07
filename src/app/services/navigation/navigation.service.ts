@@ -33,4 +33,16 @@ export class NavigationService {
   public getState(): any {
     return this.state
   }
+
+  public routeToAccountsTab(): Promise<boolean> {
+    return this.router.navigateByUrl('/tabs/tab-accounts')
+  }
+
+  public routeToScanTab(): Promise<boolean> {
+    return this.router.navigateByUrl('/tabs/tab-scan')
+  }
+
+  public routeToSettingsTab(): Promise<boolean> {
+    return this.router.navigateByUrl('/tabs/tab-settings')
+  }
 }

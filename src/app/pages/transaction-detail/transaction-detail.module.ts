@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular'
 import { TranslateModule } from '@ngx-translate/core'
 
 import { TransactionDetailPage } from './transaction-detail.page'
+import { ComponentsModule } from 'src/app/components/components.module'
 
 const routes: Routes = [
   {
@@ -15,7 +16,7 @@ const routes: Routes = [
 ]
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule],
+  imports: [CommonModule, ComponentsModule, FormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule],
   declarations: [TransactionDetailPage]
 })
 export class TransactionDetailPageModule {}
