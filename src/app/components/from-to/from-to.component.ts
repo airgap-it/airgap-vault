@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core'
 import { Transaction } from '../../models/transaction.model'
 
 @Component({
-  selector: 'from-to',
+  selector: 'airgap-from-to',
   templateUrl: './from-to.component.html',
   styleUrls: ['./from-to.component.scss']
 })
