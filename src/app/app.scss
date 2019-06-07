@@ -24,6 +24,17 @@ current-secret ion-select {
 p {
   font-size: 14px;
 }
+/* List styling */
+app-warning-modal {
+  ul {
+    padding-inline-start: 0;
+    list-style: none;
+    li:before {
+      content: '\00AC';
+      padding-right: 4px;
+    }
+  }
+}
 
 /* Secondary Background color whith corresponding colors */
 app-account-add,
@@ -31,7 +42,8 @@ account-address,
 app-secret-create,
 secret-generate,
 secret-import,
-app-secret-edit {
+app-secret-edit,
+app-warning-modal {
   --ion-background-color: var(--ion-color-secondary);
   --ion-text-color: var(--ion-color-secondary-contrast);
   ion-toggle {

@@ -1,23 +1,15 @@
 <ion-header transparent no-border>
   <ion-toolbar transparent>
-    <ion-title>
-      <ion-text>
-        <p color="white">{{ title }}</p>
-      </ion-text>
-    </ion-title>
+    <ion-title>{{ title }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="colored-background">
-  <ion-row padding-horizontal [innerHtml]="description"></ion-row>
+<ion-content>
+  <ion-row class="ion-padding-horizontal" [innerHtml]="description"></ion-row>
 
-  <ion-row *ngIf="imageUrl" justify-content-center><img class="warning-img" [src]="imageUrl" /></ion-row>
+  <ion-row class="ion-justify-content-center" *ngIf="imageUrl"><img class="warning-img" [src]="imageUrl" /></ion-row>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-button default (click)="handler()" color="primary" shape="round" item-right>{{ buttonText }}</ion-button>
+  </ion-fab>
 </ion-content>
-
-<ion-footer no-border>
-  <ion-toolbar padding transparent>
-    <ion-row justify-content-end>
-      <ion-button default (click)="handler()" color="primary" shape="round" item-right>{{ buttonText }}</ion-button>
-    </ion-row>
-  </ion-toolbar>
-</ion-footer>
