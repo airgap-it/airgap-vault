@@ -3,10 +3,11 @@ import { UUID } from 'angular2-uuid'
 
 import { InteractionSetting } from './../services/interaction/interaction.service'
 import { BIP39Signer } from './BIP39Signer'
+import { Identifiable } from './identifiable'
 
-const signer = new BIP39Signer()
+const signer: BIP39Signer = new BIP39Signer()
 
-export class Secret {
+export class Secret implements Identifiable {
   public id: string = UUID.UUID()
   public label: string
 
@@ -19,20 +20,29 @@ export class Secret {
 
   private readonly twofactor: string
 
-  constructor(seed: string, label: string = '', isParanoia = false, interactionSetting = InteractionSetting.UNDETERMINED) {
+  constructor(
+    seed: string,
+    label: string = '',
+    isParanoia: boolean = false,
+    interactionSetting: InteractionSetting = InteractionSetting.UNDETERMINED
+  ) {
     this.label = label
     this.isParanoia = isParanoia
     this.interactionSetting = interactionSetting
 
-    // TODO: better check whether this is a mnemonic (validate)
-    if (seed && seed.indexOf(' ') > -1) {
-      seed = signer.mnemonicToEntropy(seed)
-    }
-
-    this.secretHex = seed
+    this.secretHex = this.getEntropyFromMnemonic(seed)
   }
 
-  public flushSecret() {
+  public getEntropyFromMnemonic(mnemonic: string): string {
+    // TODO: better check whether this is a mnemonic (validate)
+    return mnemonic && mnemonic.indexOf(' ') > -1 ? signer.mnemonicToEntropy(mnemonic) : mnemonic
+  }
+
+  public getIdentifier(): string {
+    return this.id
+  }
+
+  public flushSecret(): void {
     delete this.secretHex
   }
 
@@ -52,7 +62,7 @@ export class Secret {
     return signer.recoverKey(shares)
   }
 
-  public static init(obj) {
+  public static init(obj: Secret): Secret {
     return Object.assign(new Secret(null, obj.label), obj)
   }
 }

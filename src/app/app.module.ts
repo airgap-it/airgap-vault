@@ -17,6 +17,7 @@ import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
 import { DistributionOnboardingPageModule } from './pages/distribution-onboarding/distribution-onboarding.module'
 import { IntroductionPageModule } from './pages/introduction/introduction.module'
+import { LocalAuthenticationOnboardingPageModule } from './pages/local-authentication-onboarding/local-authentication-onboarding.module'
 import { WarningModalPageModule } from './pages/warning-modal/warning-modal.module'
 import { AudioServiceFactory } from './services/audio/audio.factory'
 import { AudioNativeService } from './services/audio/audio.native.servive'
@@ -54,7 +55,8 @@ import { SecureStorageService } from './services/storage/storage.service'
     }),
     WarningModalPageModule,
     IntroductionPageModule,
-    DistributionOnboardingPageModule
+    DistributionOnboardingPageModule,
+    LocalAuthenticationOnboardingPageModule
   ],
   providers: [
     AppVersion,

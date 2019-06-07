@@ -1,8 +1,8 @@
 import { Component } from '@angular/core'
-import { NavController } from '@ionic/angular'
+import { ModalController } from '@ionic/angular'
 import { Storage } from '@ionic/storage'
 
-import { SecretsService } from '../../services/secrets/secrets.service'
+import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 
 @Component({
   selector: 'app-local-authentication-onboarding',
@@ -10,23 +10,10 @@ import { SecretsService } from '../../services/secrets/secrets.service'
   styleUrls: ['./local-authentication-onboarding.page.scss']
 })
 export class LocalAuthenticationOnboardingPage {
-  private readonly protocolIdentifier: string
-  private readonly isHDWallet: boolean
-  private readonly customDerivationPath: string
+  constructor(public modalController: ModalController, private readonly storage: Storage) {}
 
-  constructor(public navCtrl: NavController, private readonly storage: Storage, private readonly secretsProvider: SecretsService) {
-    // this.protocolIdentifier = this.navParams.get('protocolIdentifier')
-    // this.isHDWallet = this.navParams.get('isHDWallet')
-    // this.customDerivationPath = this.navParams.get('customDerivationPath')
-  }
-
-  public async authenticate() {
+  public async authenticate(): Promise<void> {
     await this.storage.set('DISCLAIMER_HIDE_LOCAL_AUTH_ONBOARDING', true)
-    try {
-      await this.secretsProvider.addWallet(this.protocolIdentifier, this.isHDWallet, this.customDerivationPath)
-    } catch (e) {
-      // return await this.navCtrl.pop()
-    }
-    // await this.navCtrl.popToRoot()
+    this.modalController.dismiss({ authenticated: true }).catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 }

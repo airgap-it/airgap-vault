@@ -30,7 +30,6 @@ export class SecretImportPage {
 
     const secret: Secret = new Secret(signer.mnemonicToEntropy(BIP39Signer.prepareMnemonic(this.mnemonic)))
 
-    this.router.navigate(['secret-edit']).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-    // this.navController.push(SecretEditPage, { secret, isGenerating: true }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.router.navigate(['secret-edit'], { state: { secret, isGenerating: true } }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

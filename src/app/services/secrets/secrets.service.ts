@@ -16,7 +16,7 @@ import { SecureStorageService } from './../storage/storage.service'
 export class SecretsService {
   private activeSecret: Secret
   private readonly secretsList: Secret[] = []
-  public currentSecretsList = new BehaviorSubject(this.secretsList)
+  public currentSecretsList: BehaviorSubject<Secret[]> = new BehaviorSubject(this.secretsList)
   private readonly ready: Promise<void>
 
   constructor(
@@ -30,8 +30,8 @@ export class SecretsService {
   }
 
   private async init(): Promise<void> {
-    const secrets = await this.read()
-    this.secretsList.push(...secrets.map(obj => Secret.init(obj)))
+    const secrets: Secret[] = await this.read()
+    this.secretsList.push(...secrets.map((obj: Secret) => Secret.init(obj)))
     this.activeSecret = this.secretsList[0]
     this.currentSecretsList.next(this.secretsList) // we need to force this update, as [] will not be broadcasted again
   }

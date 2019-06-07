@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { Storage } from '@ionic/storage'
 
@@ -10,11 +10,16 @@ import { SecretsService } from '../../services/secrets/secrets.service'
   templateUrl: './secret-create.page.html',
   styleUrls: ['./secret-create.page.scss']
 })
-export class SecretCreatePage {
+export class SecretCreatePage implements OnInit {
   constructor(private readonly router: Router, private readonly secretsService: SecretsService, private readonly storage: Storage) {}
 
-  public isRoot(): boolean {
-    return this.secretsService.currentSecretsList.getValue().length === 0
+  public ngOnInit(): void {
+    // console.log(this.router.getCurrentNavigation())
+    // console.log(this.router.getCurrentNavigation().extras.state)
+  }
+
+  public canGoBack(): boolean {
+    return this.secretsService.currentSecretsList.getValue().length > 0
   }
 
   public async goToGenerate(): Promise<void> {
@@ -22,9 +27,7 @@ export class SecretCreatePage {
     if (hasShownDisclaimer) {
       this.router.navigate(['secret-generate']).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } else {
-      this.router.navigate(['secret-generate']).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-
-      // this.router.navigate(['secret-generate-onboarding']).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+      this.router.navigate(['secret-generate-onboarding']).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     }
   }
 

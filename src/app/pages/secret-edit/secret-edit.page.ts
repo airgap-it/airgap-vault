@@ -5,6 +5,7 @@ import { PopoverController } from '@ionic/angular'
 import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
+import { InteractionSetting } from '../../services/interaction/interaction.service'
 // import { InteractionSelectionSettingsPage } from '../interaction-selection-settings/interaction-selection-settings'
 // import { SocialRecoverySetupPage } from '../social-recovery-setup/social-recovery-setup'
 // import { WalletSelectCoinsPage } from '../wallet-select-coins/wallet-select-coins'
@@ -27,11 +28,12 @@ export class SecretEditPage {
     private readonly popoverCtrl: PopoverController,
     private readonly secretsService: SecretsService
   ) {
-    this.secret = new Secret('90ac75896c3f57107c4ab0979b7c2ca1790e29ce7d25308b997fbbd53b9829c4', 'asdf') // TODO: Get secret from previous page
-    /*this.isGenerating = this.navParams.get('isGenerating')
-
-		this.interactionSetting = this.secret.interactionSetting !== InteractionSetting.UNDETERMINED
-		*/
+    if (window.history.state) {
+      this.isGenerating = window.history.state.isGenerating
+      console.log('Secret', Secret.init(window.history.state.secret))
+      this.secret = Secret.init(window.history.state.secret) // TODO: DO NOT STORE SECRET IN WINDOW
+      this.interactionSetting = this.secret.interactionSetting !== InteractionSetting.UNDETERMINED
+    }
   }
 
   public async confirm(): Promise<void> {
