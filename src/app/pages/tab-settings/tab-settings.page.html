@@ -4,28 +4,32 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
   <ion-list>
-    <ion-label>{{ 'tab-settings.information_label' | translate }}</ion-label>
+    <ion-list-header>
+      <ion-label>{{ 'tab-settings.information_label' | translate }}</ion-label>
+    </ion-list-header>
 
-    <ion-item no-lines detail-push (click)="goToAbout()">
-      <ion-icon md-name="info" item-start color="dark"></ion-icon>
-      {{ 'tab-settings.about' | translate }}
+    <ion-item lines="none" detail="true" (click)="goToAbout()">
+      <ion-icon md-name="info" slot="start" color="dark"></ion-icon>
+      <ion-label>{{ 'tab-settings.about' | translate }}</ion-label>
     </ion-item>
-    <ion-item no-lines detail-push (click)="pasteClipboard()">
-      <ion-icon name="return-right" item-start color="dark"></ion-icon>
-      {{ 'tab-settings.paste-from-clipboard_label' | translate }}
+    <ion-item lines="none" detail="true" (click)="pasteClipboard()">
+      <ion-icon name="return-right" slot="start" color="dark"></ion-icon>
+      <ion-label>{{ 'tab-settings.paste-from-clipboard_label' | translate }}</ion-label>
     </ion-item>
   </ion-list>
   <ion-list>
-    <ion-label>{{ 'tab-settings.secrets_label' | translate }}</ion-label>
+    <ion-list-header>
+      <ion-label>{{ 'tab-settings.secrets_label' | translate }}</ion-label>
+    </ion-list-header>
     <ng-container *ngFor="let secret of secrets | async">
       <secret-item [secret]="secret" (click)="goToEditSecret(secret)"></secret-item>
     </ng-container>
-    <ion-row padding-top justify-content-end>
+    <ion-row class="ion-padding ion-justify-content-end">
       <ion-button color="secondary" (click)="goToNewSecret()" shape="round">
         <ion-icon slot="start" name="add"></ion-icon>
-        {{ 'tab-settings.add-settings_label' | translate }}
+        <ion-label>{{ 'tab-settings.add-settings_label' | translate }}</ion-label>
       </ion-button>
     </ion-row>
   </ion-list>
