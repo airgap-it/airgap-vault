@@ -50,7 +50,6 @@ export class TransactionDetailPage {
     this.broadcastUrl = await this.generateBroadcastUrl(this.wallet, signedTx, this.transaction)
 
     this.interactionService.startInteraction(
-      this.navController,
       {
         operationType: InteractionOperationType.TRANSACTION_BROADCAST,
         url: this.broadcastUrl,

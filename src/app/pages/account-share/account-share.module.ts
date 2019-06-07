@@ -3,8 +3,11 @@ import { NgModule } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { RouterModule, Routes } from '@angular/router'
 import { IonicModule } from '@ionic/angular'
+import { TranslateModule } from '@ngx-translate/core'
+import { QRCodeModule } from 'angularx-qrcode'
 
 import { AccountSharePage } from './account-share.page'
+import { ComponentsModule } from '../../components/components.module'
 
 const routes: Routes = [
   {
@@ -14,7 +17,7 @@ const routes: Routes = [
 ]
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, RouterModule.forChild(routes)],
+  imports: [CommonModule, ComponentsModule, FormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule, QRCodeModule],
   declarations: [AccountSharePage]
 })
 export class AccountSharePageModule {}

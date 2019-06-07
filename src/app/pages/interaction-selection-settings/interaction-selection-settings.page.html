@@ -18,7 +18,7 @@
 
   <p>{{ 'interaction-selection-settings.text' | translate }}</p>
 
-  <ion-list [ngModel]="interactionSetting" (ngModelChange)="onSelectedSettingChange($event)" no-lines padding-vertical>
+  <ion-list [ngModel]="interactionSetting" ngDefaultControl (ngModelChange)="onSelectedSettingChange($event)" no-lines padding-vertical>
     <ion-radio-group>
       <ion-item class="ion-no-padding">
         <ion-label color="white">{{ 'interaction-selection-settings.selector.always' | translate }}</ion-label>

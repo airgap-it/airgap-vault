@@ -41,7 +41,7 @@ export class TabAccountsPage implements OnInit {
   }
 
   public goToReceiveAddress(wallet: AirGapWallet) {
-    this.router.navigate(['account-address']).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.router.navigate(['account-address'], { state: { wallet } }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public filterItems(ev: any) {

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core'
-import { NavController, NavParams } from '@ionic/angular'
 
 import { ErrorCategory, handleErrorLocal } from './../../services/error-handler/error-handler.service'
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'account-share',
@@ -11,11 +11,11 @@ import { ErrorCategory, handleErrorLocal } from './../../services/error-handler/
 export class AccountSharePage {
   public interactionUrl: string
 
-  constructor(private readonly navController: NavController, private readonly navParams: NavParams) {
-    this.interactionUrl = this.navParams.get('interactionUrl')
+  constructor(private readonly router: Router) {
+    this.interactionUrl = window.history.state.interactionUrl
   }
 
   public done() {
-    this.navController.pop().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.router.navigateByUrl('/tabs/tab-accounts').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

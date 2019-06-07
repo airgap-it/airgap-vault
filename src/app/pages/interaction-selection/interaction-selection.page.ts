@@ -8,6 +8,8 @@ import {
   InteractionSetting
 } from '../../services/interaction/interaction.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
+import { Router } from '@angular/router'
+import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 
 @Component({
   selector: 'app-interaction-selection',
@@ -18,12 +20,11 @@ export class InteractionSelectionPage {
   private readonly interactionOptions: IInteractionOptions
 
   constructor(
-    public navCtrl: NavController,
+    private readonly router: Router,
     private readonly secretsService: SecretsService,
     private readonly interactionService: InteractionService
   ) {
-    // TODO
-    // this.interactionOptions = this.navParams.get('interactionOptions')
+    this.interactionOptions = window.history.state.interactionOptions
   }
 
   public async selectOfflineDevice() {
@@ -41,16 +42,13 @@ export class InteractionSelectionPage {
     if (secret.interactionSetting === InteractionSetting.UNDETERMINED) {
       this.goToInteractionSelectionSettingsPage(this.interactionOptions)
     } else {
-      this.interactionService.startInteraction(this.navCtrl, this.interactionOptions, secret)
+      this.interactionService.startInteraction(this.interactionOptions, secret)
     }
   }
 
   private goToInteractionSelectionSettingsPage(interactionOptions: IInteractionOptions) {
-    // TODO
-    // this.navCtrl
-    //   .push(InteractionSelectionSettingsPage, {
-    //     interactionOptions: interactionOptions
-    //   })
-    //   .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.router
+      .navigateByUrl('/interaction-selection-settings', { state: { interactionOptions } })
+      .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

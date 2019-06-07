@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { NavController, Platform } from '@ionic/angular'
 
 import { Secret } from '../../models/secret'
@@ -15,7 +15,7 @@ import { SecretsService } from '../../services/secrets/secrets.service'
   templateUrl: './interaction-selection-settings.page.html',
   styleUrls: ['./interaction-selection-settings.page.scss']
 })
-export class InteractionSelectionSettingsPage {
+export class InteractionSelectionSettingsPage implements OnInit {
   public interactionSetting = InteractionSetting
   public selectedSetting: InteractionSetting
   public isEdit = false
@@ -28,18 +28,19 @@ export class InteractionSelectionSettingsPage {
     private readonly secretService: SecretsService,
     private readonly platform: Platform,
     private readonly interactionService: InteractionService
-  ) {}
+  ) {
+    console.log(window.history.state)
+    this.isEdit = window.history.state.isEdit
+    this.interactionOptions = window.history.state.interactionOptions
+  }
 
-  public async ionViewWillLoad() {
-    // TODO
-    // this.isEdit = await this.navParams.get('isEdit')
-    // this.interactionOptions = await this.navParams.get('interactionOptions')
-
+  public async ngOnInit() {
     if (this.isEdit) {
-      // this.secret = this.navParams.get('secret')
+      this.secret = window.history.state.secret
       this.selectedSetting = this.secret.interactionSetting
     } else {
       this.secret = this.secretService.getActiveSecret()
+      console.log('SECRET SET', this.secret)
       this.selectedSetting =
         this.interactionOptions.communicationType === InteractionCommunicationType.QR
           ? InteractionSetting.OFFLINE_DEVICE
@@ -58,7 +59,7 @@ export class InteractionSelectionSettingsPage {
   }
 
   public goToNextPage() {
-    this.interactionService.startInteraction(this.navCtrl, this.interactionOptions, this.secret)
+    this.interactionService.startInteraction(this.interactionOptions, this.secret)
   }
 
   public popToRoot() {

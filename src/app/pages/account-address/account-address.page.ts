@@ -11,6 +11,7 @@ import { InteractionService } from './../../services/interaction/interaction.ser
 import { InteractionOperationType } from './../../services/interaction/interaction.service'
 import { ShareUrlService } from './../../services/share-url/share-url.service'
 import { AccountEditPopoverComponent } from './account-edit-popover/account-edit-popover.component'
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'account-address',
@@ -26,12 +27,12 @@ export class AccountAddressPage {
 
     private readonly popoverCtrl: PopoverController,
     private readonly clipboardProvider: ClipboardService,
-    private readonly navController: NavController,
+    private readonly router: Router,
     private readonly secretsProvider: SecretsService,
     private readonly shareUrlProvider: ShareUrlService,
     private readonly interactionProvider: InteractionService
   ) {
-    // this.wallet = this.navParams.get('wallet')
+    this.wallet = window.history.state.wallet // TODO: Remove
   }
 
   public async ionViewDidEnter() {
@@ -39,12 +40,11 @@ export class AccountAddressPage {
   }
 
   public done() {
-    // this.navController.pop().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.router.navigateByUrl('/tabs/tab-accounts').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public async share() {
     this.interactionProvider.startInteraction(
-      this.navController,
       {
         operationType: InteractionOperationType.WALLET_SYNC,
         url: this.walletShareUrl
