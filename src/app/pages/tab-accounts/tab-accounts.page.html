@@ -19,7 +19,7 @@
 <ion-content *ngIf="wallets" class="ion-padding-horizontal">
   <ion-list>
     <ng-container *ngFor="let wallet of wallets | async | walletFilter: { symbol: symbolFilter }">
-      <account-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></account-item>
+      <airgap-account-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></airgap-account-item>
     </ng-container>
   </ion-list>
 
