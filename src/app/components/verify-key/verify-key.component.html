@@ -8,7 +8,7 @@
         *ngIf="currentWords[i]"
         (click)="selectWord(i)"
       >
-        {{ currentWords[i].word }}
+        {{ currentWords[i] }}
       </ion-button>
       <ion-button
         shape="round"
@@ -47,7 +47,7 @@
           class="button-secret"
           (click)="useWord(word)"
         >
-          {{ word.word }}
+          {{ word }}
         </ion-button>
       </ion-col>
     </ion-row>

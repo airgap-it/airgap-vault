@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core'
 import { sha3_256 } from 'js-sha3'
-import { Observable, Observer, Subscription } from 'rxjs'
+import { Observable, Observer, Subscriber, Subscription } from 'rxjs'
 
-import workerJS from '../../../assets/workers/hashWorker'
+import hashWorkerJS from '../../../assets/workers/hashWorker'
 
 import { ErrorCategory, handleErrorLocal } from './../error-handler/error-handler.service'
 import { IEntropyGenerator } from './IEntropyGenerator'
-const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
-const hashWorker = new Worker(blobURL)
+const blobURL: string = window.URL.createObjectURL(new Blob([hashWorkerJS]))
+const hashWorker: Worker = new Worker(blobURL)
 
 @Injectable({
   providedIn: 'root'
 })
 export class EntropyService {
-  public ENTROPY_SIZE = 4096
+  public ENTROPY_SIZE: number = 4096
 
   public entropyGenerators: IEntropyGenerator[] = []
   public entropySubscriptions: Subscription[] = []
@@ -22,12 +22,14 @@ export class EntropyService {
   private entropyUpdateObserver: Observer<void>
 
   constructor() {
-    this.entropyUpdateObservable = Observable.create(observer => {
-      this.entropyUpdateObserver = observer
-    })
+    this.entropyUpdateObservable = new Observable(
+      (observer: Subscriber<void>): void => {
+        this.entropyUpdateObserver = observer
+      }
+    )
   }
 
-  public addEntropySource(entropyGenerator: IEntropyGenerator) {
+  public addEntropySource(entropyGenerator: IEntropyGenerator): void {
     this.entropyGenerators.push(entropyGenerator)
   }
 
@@ -36,8 +38,8 @@ export class EntropyService {
   }
 
   public startEntropyCollection(): Promise<void[]> {
-    const promises = []
-    const secureRandomArray = new Uint8Array(this.ENTROPY_SIZE)
+    const promises: Promise<void>[] = []
+    const secureRandomArray: Uint8Array = new Uint8Array(this.ENTROPY_SIZE)
     window.crypto.getRandomValues(secureRandomArray)
 
     hashWorker.postMessage({ call: 'init', secureRandom: Array.from(secureRandomArray) })

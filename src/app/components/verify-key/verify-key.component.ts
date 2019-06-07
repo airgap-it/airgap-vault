@@ -1,18 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
 import * as bip39 from 'bip39'
 import { sha3_256 } from 'js-sha3'
-interface Word {
-  word: string
-}
 
-const ADDITIONAL_WORDS = 2
+type SingleWord = string
+
+const ADDITIONAL_WORDS: number = 2
 
 @Component({
   selector: 'airgap-verify-key',
   templateUrl: './verify-key.component.html',
   styleUrls: ['./verify-key.component.scss']
 })
-export class VerifyKeyComponent implements OnInit {
+export class VerifyKeyComponent implements OnInit, OnDestroy {
   @Input()
   public secret: string
 
@@ -24,24 +23,18 @@ export class VerifyKeyComponent implements OnInit {
 
   public isCompleted: boolean = false
 
-  public splittedSecret: Word[] = []
-  public currentWords: Word[] = []
-  public promptedWords: Word[] = []
+  public splittedSecret: SingleWord[] = []
+  public currentWords: SingleWord[] = []
+  public promptedWords: SingleWord[] = []
 
   public selectedWord: number = null
 
   public ngOnInit(): void {
-    this.splittedSecret = this.secret
-      .toLowerCase()
-      .split(' ')
-      .map(word => {
-        return {
-          word
-        }
-      })
+    this.splittedSecret = this.secret.toLowerCase().split(' ')
+
     this.reset()
 
-    this.onComplete.subscribe(result => {
+    this.onComplete.subscribe((result: boolean) => {
       this.isCompleted = result
     })
   }
@@ -50,46 +43,46 @@ export class VerifyKeyComponent implements OnInit {
     this.onComplete.unsubscribe()
   }
 
-  public continue() {
+  public continue(): void {
     this.onContinue.emit()
   }
 
-  public promptNextWord() {
-    this.promptedWords.length = 0
+  public promptNextWord(): void {
+    this.promptedWords = []
 
-    const correctWord = this.splittedSecret[this.emptySpot(this.currentWords)]
+    const correctWord: SingleWord = this.splittedSecret[this.emptySpot(this.currentWords)]
 
     this.promptedWords.push(correctWord)
 
-    const wordList = bip39.wordlists.EN.slice()
+    const wordList: string[] = bip39.wordlists.EN
 
-    for (let i = 0; i < ADDITIONAL_WORDS; i++) {
-      const filteredList = wordList.filter(word => !this.splittedSecret.find(w => w.word === word))
+    for (let i: number = 0; i < ADDITIONAL_WORDS; i++) {
+      const filteredList: string[] = wordList.filter(
+        (originalWord: string) => !this.splittedSecret.find((word: SingleWord) => word === originalWord)
+      )
 
-      let hashedWord = sha3_256(correctWord.word)
-      for (let hashRuns = 0; hashRuns <= i; hashRuns++) {
+      let hashedWord: string = sha3_256(correctWord)
+      for (let hashRuns: number = 0; hashRuns <= i; hashRuns++) {
         hashedWord = sha3_256(hashedWord)
       }
 
-      const word: Word = {
-        word: filteredList[this.stringToIntHash(hashedWord, 0, filteredList.length)]
-      }
+      const additionalWord: SingleWord = filteredList[this.stringToIntHash(hashedWord, 0, filteredList.length)]
 
-      this.promptedWords.push(word)
+      this.promptedWords.push(additionalWord)
     }
 
     this.promptedWords = this.shuffle(this.promptedWords)
   }
 
-  public shuffle(a) {
-    let counter = a.length
+  public shuffle(a: string[]): string[] {
+    let counter: number = a.length
 
     while (counter > 0) {
-      const index = Math.floor(Math.random() * counter)
+      const index: number = Math.floor(Math.random() * counter)
 
       counter--
 
-      const temp = a[counter]
+      const temp: string = a[counter]
       a[counter] = a[index]
       a[index] = temp
     }
@@ -97,31 +90,31 @@ export class VerifyKeyComponent implements OnInit {
     return a
   }
 
-  public stringToIntHash(str: string, lowerbound: number, upperbound: number) {
-    let result = 0
+  public stringToIntHash(str: string, lowerbound: number, upperbound: number): number {
+    let result: number = 0
 
-    for (let i = 0; i < str.length; i++) {
+    for (let i: number = 0; i < str.length; i++) {
       result = result + str.charCodeAt(i)
     }
 
     return (result % (upperbound - lowerbound)) + lowerbound
   }
 
-  public isSelectedWord(word: Word): boolean {
+  public isSelectedWord(word: SingleWord): boolean {
     if (this.selectedWord !== null) {
-      return this.currentWords[this.selectedWord].word === word.word
+      return this.currentWords[this.selectedWord] === word
     }
 
     return false
   }
 
-  public selectEmptySpot() {
+  public selectEmptySpot(): void {
     this.selectedWord = null
     this.promptNextWord()
   }
 
-  public useWord(word: Word) {
-    const index = this.emptySpot(this.currentWords)
+  public useWord(word: SingleWord): void {
+    const index: number = this.emptySpot(this.currentWords)
 
     // unselect any selected words
     this.selectedWord = null
@@ -129,7 +122,9 @@ export class VerifyKeyComponent implements OnInit {
 
     // prompt next word
     if (!this.isFull() && index < this.splittedSecret.length - 1) {
-      return this.promptNextWord()
+      this.promptNextWord()
+
+      return
     }
 
     if (this.isFull()) {
@@ -139,33 +134,33 @@ export class VerifyKeyComponent implements OnInit {
     }
   }
 
-  public emptySpot(array: Word[]): number {
+  public emptySpot(array: SingleWord[]): number {
     if (this.selectedWord !== null) {
       return this.selectedWord
     }
 
-    return array.findIndex(obj => obj === null)
+    return array.findIndex((word: SingleWord) => word === null)
   }
 
-  public selectWord(index: number) {
+  public selectWord(index: number): void {
     this.selectedWord = index
     this.promptNextWord()
   }
 
-  public reset() {
+  public reset(): void {
     this.selectedWord = null
     this.currentWords = Array(this.splittedSecret.length).fill(null)
     this.promptNextWord()
   }
 
-  public isFull() {
-    return this.currentWords.filter(w => w !== null).length === this.splittedSecret.length
+  public isFull(): boolean {
+    return this.currentWords.filter((word: string) => word !== null).length === this.splittedSecret.length
   }
 
-  public isCorrect() {
+  public isCorrect(): boolean {
     return (
       this.currentWords
-        .map(w => (w ? w.word : '-'))
+        .map((word: SingleWord) => (word ? word : '-'))
         .join(' ')
         .trim() === this.secret.trim()
     )
