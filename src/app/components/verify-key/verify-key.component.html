@@ -1,23 +1,23 @@
-<ion-row class="secret--container-60" align-items-center>
-  <ion-row justify-content-center class="secret--container__inner">
+<ion-row class="secret--container-60 ion-align-items-center">
+  <ion-row class="secret--container__inner ion-justify-content-center ">
     <span *ngFor="let word of splittedSecret; index as i" [class.xtra-small]="splittedSecret.length > 10">
       <ion-button
-        *ngIf="currentWords[i]"
-        (click)="selectWord(i)"
-        [color]="selectedWord === i ? 'primary' : 'secondary-light'"
         shape="round"
         size="small"
+        [color]="selectedWord === i ? 'primary' : 'secondary-light'"
+        *ngIf="currentWords[i]"
+        (click)="selectWord(i)"
       >
         {{ currentWords[i].word }}
       </ion-button>
       <ion-button
-        *ngIf="!currentWords[i]"
-        (click)="selectEmptySpot()"
-        class="word-placeholder"
         shape="round"
-        [color]="i === emptySpot(currentWords) ? 'primary' : 'secondary-light'"
         fill="outline"
         size="small"
+        [color]="i === emptySpot(currentWords) ? 'primary' : 'secondary-light'"
+        class="word-placeholder"
+        *ngIf="!currentWords[i]"
+        (click)="selectEmptySpot()"
       >
         {{ i + 1 }}
       </ion-button>
@@ -25,27 +25,27 @@
   </ion-row>
 </ion-row>
 <hr />
-<ion-row class="secret--container-40" align-items-center>
-  <ion-col *ngIf="!isCompleted && !isCorrect() && promptedWords.length === 0" id="error" padding-top padding-horizontal>
+<ion-row class="secret--container-40 ion-align-items-center">
+  <ion-col id="error" class="ion-padding-top padding-horizontal" *ngIf="!isCompleted && !isCorrect() && promptedWords.length === 0">
     <p [innerHTML]="'verify-key.incorrect_text' | translate"></p>
   </ion-col>
 
-  <ion-col *ngIf="isCompleted && isCorrect() && promptedWords.length === 0" id="message" padding-top padding-horizontal>
-    <p padding-bottom>{{ 'verify-key.success_text' | translate }}</p>
-    <ion-button (click)="continue()" color="primary" expand="block" shape="round">
+  <ion-col id="message" class="ion-padding-top ion-padding-horizontal" *ngIf="isCompleted && isCorrect() && promptedWords.length === 0">
+    <p class="ion-padding-bottom">{{ 'verify-key.success_text' | translate }}</p>
+    <ion-button color="primary" expand="block" shape="round" (click)="continue()">
       {{ 'verify-key.continue_label' | translate }}
     </ion-button>
   </ion-col>
 
-  <ion-col *ngIf="promptedWords.length > 0" id="wordSelector" padding-top>
+  <ion-col id="wordSelector" class="ion-padding-top" *ngIf="promptedWords.length > 0">
     <ion-row *ngFor="let word of promptedWords" padding-horizontal>
       <ion-col>
         <ion-button
-          (click)="useWord(word)"
-          class="button-secret"
-          [color]="isSelectedWord(word) ? 'primary' : 'secondary-light'"
           expand="block"
           shape="round"
+          [color]="isSelectedWord(word) ? 'primary' : 'secondary-light'"
+          class="button-secret"
+          (click)="useWord(word)"
         >
           {{ word.word }}
         </ion-button>

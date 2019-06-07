@@ -1,13 +1,13 @@
 <ng-container *ngIf="transaction">
   <address-row *ngFor="let address of transaction.from" [address]="address" label="{{ 'from-to.from_label' | translate }}"></address-row>
 
-  <ion-row align-items-center>
-    <ion-col size="3" no-padding>
-      <ion-row justify-content-center>
+  <ion-row class="align-items-center">
+    <ion-col size="3" class="ion-no-padding">
+      <ion-row class="ion-justify-content-center">
         <div class="line"></div>
       </ion-row>
     </ion-col>
-    <ion-col size="9" padding-bottom>
+    <ion-col size="9" class="ion-padding-bottom">
       <ion-label position="stacked" class="typography--uppercase">{{ 'from-to.amount_label' | translate }}</ion-label>
       <div class="typography--mono" item-content>
         <span class="typography--mono">

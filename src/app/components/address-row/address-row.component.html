@@ -1,13 +1,13 @@
-<ion-row no-lines no-padding align-items-center>
-  <ion-col col-3>
-    <ion-row justify-content-center>
+<ion-row lines="none" class="ion-no-padding ion-align-items-center">
+  <ion-col size="3">
+    <ion-row class="ion-justify-content-center">
       <ion-avatar>
         <identicon [address]="address"></identicon>
       </ion-avatar>
     </ion-row>
   </ion-col>
-  <ion-col col-9>
-    <ion-label stacked *ngIf="label">{{ label }}</ion-label>
+  <ion-col size="9">
+    <ion-label position="stacked" *ngIf="label">{{ label }}</ion-label>
     <div item-content class="typography--mono">{{ address }}</div>
   </ion-col>
 </ion-row>
