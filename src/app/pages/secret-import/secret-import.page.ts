@@ -6,6 +6,7 @@ import { BIP39Signer } from '../../models/BIP39Signer'
 import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { MnemonicValidator } from '../../validators/mnemonic.validator'
+import { NavigationService } from 'src/app/services/navigation/navigation.service'
 // import { SecretEditPage } from '../secret-edit/secret-edit'
 
 @Component({
@@ -17,7 +18,7 @@ export class SecretImportPage {
   public readonly mnemonic: string
   public secretImportForm: FormGroup
 
-  constructor(private readonly router: Router, private readonly formBuilder: FormBuilder) {
+  constructor(private readonly navigationService: NavigationService, private readonly formBuilder: FormBuilder) {
     const formGroup = {
       mnemonic: ['', Validators.compose([Validators.required, MnemonicValidator.isValid])]
     }
@@ -30,6 +31,8 @@ export class SecretImportPage {
 
     const secret: Secret = new Secret(signer.mnemonicToEntropy(BIP39Signer.prepareMnemonic(this.mnemonic)))
 
-    this.router.navigate(['secret-edit'], { state: { secret, isGenerating: true } }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.navigationService
+      .routeWithState('secret-edit', { secret, isGenerating: true })
+      .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }
