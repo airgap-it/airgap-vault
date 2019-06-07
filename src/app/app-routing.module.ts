@@ -28,7 +28,41 @@ const routes: Routes = [
   { path: 'secret-show', loadChildren: './pages/secret-show/secret-show.module#SecretShowPageModule' },
   { path: 'secret-validate', loadChildren: './pages/secret-validate/secret-validate.module#SecretValidatePageModule' },
   { path: 'secret-edit', loadChildren: './pages/secret-edit/secret-edit.module#SecretEditPageModule' },
-  { path: 'about', loadChildren: './pages/about/about.module#AboutPageModule' }
+  { path: 'about', loadChildren: './pages/about/about.module#AboutPageModule' },
+  {
+    path: 'interaction-selection',
+    loadChildren: './pages/interaction-selection/interaction-selection.module#InteractionSelectionPageModule'
+  },
+  {
+    path: 'interaction-selection-settings',
+    loadChildren: './pages/interaction-selection-settings/interaction-selection-settings.module#InteractionSelectionSettingsPageModule'
+  },
+  {
+    path: 'local-authentication-onboarding',
+    loadChildren: './pages/local-authentication-onboarding/local-authentication-onboarding.module#LocalAuthenticationOnboardingPageModule'
+  },
+  {
+    path: 'secret-generate-onboarding',
+    loadChildren: './pages/secret-generate-onboarding/secret-generate-onboarding.module#SecretGenerateOnboardingPageModule'
+  },
+  {
+    path: 'social-recovery-import',
+    loadChildren: './pages/social-recovery-import/social-recovery-import.module#SocialRecoveryImportPageModule'
+  },
+  {
+    path: 'social-recovery-setup',
+    loadChildren: './pages/social-recovery-setup/social-recovery-setup.module#SocialRecoverySetupPageModule'
+  },
+  {
+    path: 'social-recovery-show-share',
+    loadChildren: './pages/social-recovery-show-share/social-recovery-show-share.module#SocialRecoveryShowSharePageModule'
+  },
+  {
+    path: 'social-recovery-validate-share',
+    loadChildren: './pages/social-recovery-validate-share/social-recovery-validate-share.module#SocialRecoveryValidateSharePageModule'
+  },
+  { path: 'transaction-detail', loadChildren: './pages/transaction-detail/transaction-detail.module#TransactionDetailPageModule' },
+  { path: 'transaction-signed', loadChildren: './pages/transaction-signed/transaction-signed.module#TransactionSignedPageModule' }
 ]
 
 @NgModule({

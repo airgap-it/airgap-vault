@@ -1,0 +1,27 @@
+<ion-header transparent no-border>
+  <ion-toolbar transparent>
+    <ion-title>
+      <ion-text>
+        <p color="white">{{ 'transaction-detail.title' | translate }}</p>
+      </ion-text>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding class="colored-background">
+  <div *ngIf="airGapTx">
+    <p>{{ 'transaction-detail.text' | translate }}</p>
+  </div>
+  <signed-transaction [unsignedTx]="deserializedSync"></signed-transaction>
+</ion-content>
+
+<ion-footer no-border>
+  <ion-toolbar padding transparent>
+    <ion-row justify-content-end>
+      <ion-button default color="primary" (click)="signAndGoToNextPage()" shape="round" item-right slot="start">
+        <ion-icon md-name="check"></ion-icon>
+        {{ 'transaction-detail.sign-tx_label' | translate }}
+      </ion-button>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>

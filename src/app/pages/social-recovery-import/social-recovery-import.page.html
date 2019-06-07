@@ -1,0 +1,53 @@
+<ion-header transparent no-border>
+  <ion-toolbar transparent>
+    <ion-title>
+      <ion-text>
+        <p color="white">{{ 'social-recovery-import.title' | translate }}</p>
+      </ion-text>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="colored-background" padding>
+  <p class="font--weight__med" padding-bottom>{{ 'social-recovery-import.text' | translate }}</p>
+
+  <p class="font--weight__med">{{ 'social-recovery-import.share-recovery.heading' | translate }}</p>
+
+  <ion-row>
+    <ion-button
+      *ngFor="let i of [2, 3, 4, 5, 6]"
+      class="button--rounded"
+      shape="round"
+      color="secondary-light"
+      (click)="setNumberOfShares(i)"
+      [color]="i === numberOfShares ? 'primary' : 'secondary-light'"
+    >
+      {{ i }}
+    </ion-button>
+  </ion-row>
+
+  <ion-list *ngIf="shares">
+    <form [formGroup]="socialRecoveryForm">
+      <ion-item no-lines *ngFor="let i of getNumberArray(numberOfShares)">
+        <ion-label color="primary" position="stacked">{{ 'social-recovery-import.share-recovery.label' | translate }} {{ i }}</ion-label>
+        <ion-textarea
+          [formControlName]="'share_' + i"
+          padding-bottom
+          color="white"
+          placeholder="duck goose dinosaur ..."
+          [(ngModel)]="shares[i]"
+        ></ion-textarea>
+      </ion-item>
+    </form>
+  </ion-list>
+</ion-content>
+
+<ion-footer no-border *ngIf="socialRecoveryForm">
+  <ion-toolbar padding transparent>
+    <ion-row justify-content-end>
+      <ion-button default color="primary" (click)="recover()" shape="round" item-right [disabled]="!socialRecoveryForm.valid">
+        {{ 'social-recovery-import.recover_label' | translate }}
+      </ion-button>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>
