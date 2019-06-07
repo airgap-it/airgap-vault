@@ -8,7 +8,7 @@ interface Word {
 const ADDITIONAL_WORDS = 2
 
 @Component({
-  selector: 'verify-key',
+  selector: 'airgap-verify-key',
   templateUrl: './verify-key.component.html',
   styleUrls: ['./verify-key.component.scss']
 })
