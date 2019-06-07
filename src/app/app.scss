@@ -43,3 +43,7 @@ secret-import {
     --border-color: var(--ion-color-secondary-contrast);
   }
 }
+/* ion-textarea height fix */
+secret-import ion-textarea textarea {
+  height: inherit;
+}
