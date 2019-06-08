@@ -5,6 +5,13 @@
 // file can hold Sass mixins, functions, and placeholder classes to be imported
 // and used throughout the application.
 
+/* styling for translations */
+.style__strong {
+  font-weight: bold;
+}
+.color__primary {
+  color: var(--ion-color-primary);
+}
 /* right aligns text for component current-secret */
 airgap-current-secret ion-select {
   text-align: right;
@@ -35,7 +42,7 @@ airgap-warning-modal {
   }
 }
 
-/* Secondary Background color whith corresponding colors */
+/* secondary background color whith corresponding colors */
 airgap-account-add,
 airgap-account-address,
 airgap-secret-create,
