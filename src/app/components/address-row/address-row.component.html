@@ -1,13 +1,15 @@
 <ion-row lines="none" class="ion-no-padding ion-align-items-center">
   <ion-col size="3">
     <ion-row class="ion-justify-content-center">
-      <ion-avatar>
-        <airgap-identicon [address]="address"></airgap-identicon>
-      </ion-avatar>
+      <ion-col class="ion-justify-content-center">
+        <ion-avatar class="ion-justify-content-center ion-align-items-center">
+          <airgap-identicon [address]="address"></airgap-identicon>
+        </ion-avatar>
+      </ion-col>
     </ion-row>
   </ion-col>
   <ion-col size="9">
     <ion-label position="stacked" *ngIf="label">{{ label }}</ion-label>
-    <div item-content class="typography--mono">{{ address }}</div>
+    <p class="typography--mono ion-no-margin">{{ address }}</p>
   </ion-col>
 </ion-row>

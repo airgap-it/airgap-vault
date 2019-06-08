@@ -1,5 +1,8 @@
 <ion-header no-border>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
     <ion-title>
       {{ 'transaction-detail.title' | translate }}
     </ion-title>
@@ -7,9 +10,7 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <div *ngIf="airGapTx">
-    <p>{{ 'transaction-detail.text' | translate }}</p>
-  </div>
+  <h3>{{ 'transaction-detail.text' | translate }}</h3>
   <airgap-signed-transaction [unsignedTx]="deserializedSync"></airgap-signed-transaction>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">

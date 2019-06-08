@@ -13,24 +13,20 @@
     </ion-col>
     <ion-col size="9" class="ion-padding-bottom">
       <ion-label position="stacked" class="typography--uppercase">{{ 'from-to.amount_label' | translate }}</ion-label>
-      <div class="typography--mono" item-content>
-        <span class="typography--mono">
-          {{ transaction.amount | amountConverter: { protocolIdentifier: transaction.protocolIdentifier } }}
-        </span>
-      </div>
+      <p class="typography--mono ion-no-margin ion-padding-bottom">
+        {{ transaction.amount | amountConverter: { protocolIdentifier: transaction.protocolIdentifier } }}
+      </p>
 
       <ng-container *ngIf="transaction.fee">
         <ion-label position="stacked" class="typography--uppercase">{{ 'from-to.fee_label' | translate }}</ion-label>
-        <div class="typography--mono" item-content>
-          <span class="typography--mono">{{ transaction.fee | feeConverter: { protocolIdentifier: transaction.protocolIdentifier } }}</span>
-        </div>
+        <p class="typography--mono ion-no-margin" [ngClass]="{ 'transaction.data': 'ion-padding-bottom' }">
+          {{ transaction.fee | feeConverter: { protocolIdentifier: transaction.protocolIdentifier } }}
+        </p>
       </ng-container>
 
       <ng-container *ngIf="transaction.data">
         <ion-label position="stacked" class="typography--uppercase">{{ 'from-to.data_label' | translate }}</ion-label>
-        <div item-content>
-          {{ transaction.data }}
-        </div>
+        <p class="typography--mono ion-no-margin">{{ transaction.data }}</p>
       </ng-container>
     </ion-col>
   </ion-row>
