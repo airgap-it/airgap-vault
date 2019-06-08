@@ -12,18 +12,22 @@
   <ion-row class="ion-justify-content-center"><img src="./assets/img/send-one-device.svg" /></ion-row>
 
   <ion-row>
-    <ion-button color="primary" shape="round" expand="block" (click)="selectSameDevice()">
-      {{ 'interaction-selection.same-device_label' | translate }}
-    </ion-button>
-    <p>{{ 'interaction-selection.same-device_info' | translate }}</p>
+    <ion-col size="12">
+      <ion-button color="primary" shape="round" expand="block" (click)="selectSameDevice()">
+        {{ 'interaction-selection.same-device_label' | translate }}
+      </ion-button>
+      <p>{{ 'interaction-selection.same-device_info' | translate }}</p>
+    </ion-col>
   </ion-row>
 
   <ion-row class="ion-justify-content-center ion-padding-top"><img src="./assets/img/send-two-device.svg" /></ion-row>
 
   <ion-row>
-    <ion-button color="primary" shape="round" expand="block" (click)="selectOfflineDevice()">
-      {{ 'interaction-selection.offline-device_label' | translate }}
-    </ion-button>
-    <p>{{ 'interaction-selection.offline-device_info' | translate }}</p>
+    <ion-col size="12">
+      <ion-button color="primary" shape="round" expand="block" (click)="selectOfflineDevice()">
+        {{ 'interaction-selection.offline-device_label' | translate }}
+      </ion-button>
+      <p>{{ 'interaction-selection.offline-device_info' | translate }}</p>
+    </ion-col>
   </ion-row>
 </ion-content>
