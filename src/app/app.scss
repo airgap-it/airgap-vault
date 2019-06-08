@@ -13,7 +13,6 @@ airgap-current-secret ion-select {
 .typography--mono {
   font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
   font-weight: 600;
-  font-size: 1.4rem;
   word-wrap: break-word;
 }
 /* font weight - medium */
@@ -64,4 +63,16 @@ airgap-social-recovery-import {
 /* ion-textarea height fix */
 airgap-secret-import ion-textarea textarea {
   height: inherit;
+}
+/* sets the identicon component size */
+airgap-identicon {
+  width: inherit;
+  height: inherit;
+  min-width: 48px;
+  min-height: 48px;
+}
+/* clipboard compomnent styling */
+airgap-qr-clipboard {
+  padding: 24px;
+  background-color: var(--ion-color-secondary-contrast);
 }

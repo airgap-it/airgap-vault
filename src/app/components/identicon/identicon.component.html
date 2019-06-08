@@ -1,1 +1,2 @@
-<img [src]="identicon" />
+<img *ngIf="identicon" [src]="identicon" />
+<div *ngIf="!identicon"></div>
