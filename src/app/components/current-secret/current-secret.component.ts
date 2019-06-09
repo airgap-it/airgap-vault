@@ -10,7 +10,7 @@ import { SecretsService } from '../../services/secrets/secrets.service'
 export class CurrentSecretComponent {
   public currentSecret: number = 0
 
-  private readonly secrets: Secret[] = []
+  public readonly secrets: Secret[] = []
 
   @Output()
   public readonly secretChanged: EventEmitter<Secret> = new EventEmitter<Secret>()

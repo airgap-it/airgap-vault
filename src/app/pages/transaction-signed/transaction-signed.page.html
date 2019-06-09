@@ -18,7 +18,7 @@
 
   <ion-row padding>
     <ion-label>{{ 'transaction-signed.raw-tx_label' | translate }}</ion-label>
-    <ion-toggle (ionChange)="switchQR($event)"></ion-toggle>
+    <ion-toggle (ionChange)="switchQR()"></ion-toggle>
   </ion-row>
   <ion-row padding-bottom margin-bottom>
     <airgap-signed-transaction [syncProtocolString]="interactionUrl"></airgap-signed-transaction>

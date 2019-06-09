@@ -8,6 +8,7 @@ import { TranslateModule } from '@ngx-translate/core'
 import { ComponentsModule } from '../../components/components.module'
 
 import { AccountAddressPage } from './account-address.page'
+import { AccountEditPopoverComponent } from './account-edit-popover/account-edit-popover.component'
 
 const routes: Routes = [
   {
@@ -18,6 +19,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [CommonModule, ComponentsModule, FormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule],
-  declarations: [AccountAddressPage]
+  declarations: [AccountAddressPage, AccountEditPopoverComponent]
 })
 export class AccountAddressPageModule {}

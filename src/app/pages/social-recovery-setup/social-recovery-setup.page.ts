@@ -13,8 +13,8 @@ import { SecretsService } from '../../services/secrets/secrets.service'
   styleUrls: ['./social-recovery-setup.page.scss']
 })
 export class SocialRecoverySetupPage {
-  private numberOfShares = 3
-  private numberOfRequiredShares = 2
+  public numberOfShares: number = 3
+  public numberOfRequiredShares: number = 2
   private readonly secret: Secret
 
   constructor(

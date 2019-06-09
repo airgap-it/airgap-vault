@@ -16,8 +16,9 @@ export class SecretValidatePage {
   @ViewChild('verify')
   public verify: VerifyKeyComponent
 
-  private readonly secret: Secret
-  private validated = false
+  public readonly secret: Secret
+
+  private validated: boolean = false
 
   constructor(private readonly navController: NavController, private readonly router: Router) {
     // this.secret = this.navParams.get('secret')

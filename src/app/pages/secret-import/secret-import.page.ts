@@ -13,7 +13,7 @@ import { MnemonicValidator } from '../../validators/mnemonic.validator'
   styleUrls: ['./secret-import.page.scss']
 })
 export class SecretImportPage {
-  public readonly mnemonic: string
+  public mnemonic: string
   public secretImportForm: FormGroup
 
   constructor(private readonly navigationService: NavigationService, private readonly formBuilder: FormBuilder) {
