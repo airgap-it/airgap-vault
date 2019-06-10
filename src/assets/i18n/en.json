@@ -224,7 +224,7 @@
     },
     "shares-number_label": "Number of secret shares",
     "shares-recovery_label":"Number of shares needed for recovery",
-    "start":"Start",
+    "start_label":"Start",
     "back_label":"Back",
     "next_label":"Next"
   },

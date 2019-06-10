@@ -1,5 +1,8 @@
 <ion-header no-border>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
     <ion-title>
       {{ 'social-recovery-setup.title' | translate }}
     </ion-title>
@@ -11,11 +14,10 @@
   <p class="font--weight__med">{{ 'social-recovery-setup.secret-shares.label' | translate }}</p>
   <p class="ion-padding-bottom">{{ 'social-recovery-setup.secret-shares.text' | translate }}</p>
   <p class="font--weight__med">{{ 'social-recovery-setup.shares-number_label' | translate }}</p>
-  <ion-row class="ion-padding-bottom">
+  <ion-row class="ion-padding-bottom button--rounded">
     <ion-button
       shape="round"
       color="tertiary"
-      class="button--rounded"
       *ngFor="let i of [2, 3, 4, 5, 6]"
       (click)="setNumberOfShares(i)"
       [color]="i === numberOfShares ? 'primary' : 'tertiary'"
@@ -24,11 +26,10 @@
     </ion-button>
   </ion-row>
   <p class="font--weight__med">{{ 'social-recovery-setup.shares-recovery_label' | translate }}</p>
-  <ion-row>
+  <ion-row class="button--rounded">
     <ion-button
       shape="round"
       color="tertiary"
-      class="button--rounded"
       *ngFor="let i of [2, 3, 4, 5, 6]"
       (click)="setNumberOfRequiredShares(i)"
       [color]="i === numberOfRequiredShares ? 'primary' : 'tertiary'"
@@ -37,43 +38,10 @@
       {{ i }}
     </ion-button>
   </ion-row>
-</ion-content>
 
-<ion-footer no-border>
-  <ion-item lines="none" transparent>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-button color="primary" shape="round" (click)="next()">
       {{ 'social-recovery-setup.start_label' | translate }}
     </ion-button>
-  </ion-item>
-</ion-footer>
-
-<ion-footer no-border color="primary">
-  <ion-toolbar color="primary ion-no-padding">
-    <ion-row>
-      <ion-col size="3" class="ion-no-padding">
-        <!-- TODO: navigate back -->
-        <ion-button slot="start" fill="clear" color="white">
-          <ion-icon md-name="chevron_left" (click)="back()"></ion-icon>
-          {{ 'social-recovery-setup.back_label' | translate }}
-        </ion-button>
-      </ion-col>
-      <ion-col size="6" class="ion-no-padding">
-        <ion-row class="full--height ion-justify-content-center ion-align-items-center">
-          <!-- TODO: Set active color for current page/view ! -->
-          <ion-icon md-name="fiber_manual_record" color="white"></ion-icon>
-          <ion-icon md-name="fiber_manual_record" color="white"></ion-icon>
-          <ion-icon md-name="fiber_manual_record" color="white"></ion-icon>
-          <ion-icon md-name="fiber_manual_record" color="white"></ion-icon>
-          <ion-icon md-name="fiber_manual_record" color="white"></ion-icon>
-        </ion-row>
-      </ion-col>
-      <ion-col size="3" class="ion-no-padding">
-        <!-- TODO: navigate forward -->
-        <ion-button slot="end" fill="clear" color="white" (click)="next()">
-          {{ 'social-recovery-setup.next_label' | translate }}
-          <ion-icon md-name="chevron_right"></ion-icon>
-        </ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-toolbar>
-</ion-footer>
+  </ion-fab>
+</ion-content>

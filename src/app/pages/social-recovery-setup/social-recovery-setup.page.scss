@@ -1,3 +1,6 @@
-.full--height {
-  height: 100%;
+.button--rounded ion-button {
+  --padding-end: 0;
+  --padding-start: 0;
+  width: 40px;
+  height: 40px;
 }
