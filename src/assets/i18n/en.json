@@ -231,10 +231,7 @@
 
   "social-recovery-show-share":{
     "title":"Social Recovery",
-    "secret-shares": {
-      "label_p1": "Secret Share",
-      "label_p2": "of"
-    },
+    "secret-shares_label": "Secret Share {{currentShare}} of {{shareLength}}",
     "text":"Write down each word on a piece of paper, remember to follow all the rules."
   },
 
