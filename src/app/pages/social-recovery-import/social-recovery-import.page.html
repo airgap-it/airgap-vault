@@ -8,18 +8,17 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <p class="font--weight__med ion-padding-bottom">{{ 'social-recovery-import.text' | translate }}</p>
+  <p class="ion-padding-bottom">{{ 'social-recovery-import.text' | translate }}</p>
 
   <p class="font--weight__med">{{ 'social-recovery-import.share-recovery.heading' | translate }}</p>
 
-  <ion-row>
+  <ion-row class="button--rounded">
     <ion-button
       shape="round"
-      class="button--rounded"
       *ngFor="let i of [2, 3, 4, 5, 6]"
       color="secondary-light"
       (click)="setNumberOfShares(i)"
-      [color]="i === numberOfShares ? 'primary' : 'secondary-light'"
+      [color]="i === numberOfShares ? 'primary' : 'tertiary'"
     >
       {{ i }}
     </ion-button>
@@ -27,14 +26,9 @@
 
   <ion-list *ngIf="shares">
     <form [formGroup]="socialRecoveryForm">
-      <ion-item lines="none" *ngFor="let i of getNumberArray(numberOfShares)">
+      <ion-item *ngFor="let i of getNumberArray(numberOfShares)" class="ion-no-padding ion-margin-bottom">
         <ion-label color="primary" position="stacked">{{ 'social-recovery-import.share-recovery.label' | translate }} {{ i }}</ion-label>
-        <ion-textarea
-          class="ion-padding-bottom"
-          [formControlName]="'share_' + i"
-          placeholder="duck goose dinosaur ..."
-          [(ngModel)]="shares[i]"
-        ></ion-textarea>
+        <ion-textarea [formControlName]="'share_' + i" placeholder="duck goose dinosaur ..." [(ngModel)]="shares[i]"></ion-textarea>
       </ion-item>
     </form>
   </ion-list>
