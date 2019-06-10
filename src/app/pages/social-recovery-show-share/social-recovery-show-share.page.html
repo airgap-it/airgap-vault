@@ -11,7 +11,7 @@
     {{ 'social-recovery-show-share.secret-shares_label' | translate: { currentShare: currentShare + 1, shareLength: shares?.length } }}
   </p>
   <p class="ion-padding-bottom">{{ 'social-recovery-show-share.text' | translate }}</p>
-  <h5 class="typography--mono" *ngIf="shares">{{ shares[currentShare] }}</h5>
+  <h6 class="typography--mono" *ngIf="shares">{{ shares[currentShare] }}</h6>
 </ion-content>
 
 <ion-footer no-border color="primary">
