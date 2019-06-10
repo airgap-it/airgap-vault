@@ -31,7 +31,8 @@ p {
   font-size: 14px;
 }
 /* List styling */
-airgap-warning-modal {
+airgap-warning-modal,
+secret-rules {
   ul {
     padding-inline-start: 0;
     list-style: none;
@@ -58,7 +59,8 @@ airgap-transaction-detail,
 airgap-secret-generate-onboarding,
 airgap-social-recovery-setup,
 secret-generate,
-secret-validate {
+secret-validate,
+secret-rules {
   --ion-background-color: var(--ion-color-secondary);
   ion-toolbar {
     --background: var(--ion-color-secondary);
