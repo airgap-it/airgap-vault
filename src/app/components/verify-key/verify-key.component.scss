@@ -1,36 +1,20 @@
 .secret--container-60 {
   height: calc(60% - 36px);
 }
-
 .secret--container-40 {
   height: calc(40%- 36px);
 }
-
-.secret--container__inner {
-  align-content: start;
-  padding: 0 4px;
-}
-
 hr {
-  border: 2px dashed red /*color($colors, primary) TODO*/;
+  border: 2px dashed var(--ion-color-primary);
   border-style: none none dashed;
-  color: red /*color($colors, primary)*/;
   margin: 8px 0;
 }
-
-.button-secret {
-  @extend .secret--typography !optional;
-  font-weight: bold;
-}
-
-.xtra-small {
-  button {
-    @extend .secret--typography !optional;
-    font-size: 0.8em;
-    padding: 0 1rem;
-  }
-}
-
 .word-placeholder {
   min-width: 48px;
+}
+.size__xs {
+  font-size: 11px;
+}
+.typography--mono {
+  text-transform: lowercase;
 }
