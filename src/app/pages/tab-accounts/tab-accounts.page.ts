@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core'
-import { Router } from '@angular/router'
 import { AirGapWallet } from 'airgap-coin-lib'
 import { BehaviorSubject, Observable } from 'rxjs'
-import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
+import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
 
 @Component({
@@ -19,20 +18,16 @@ export class TabAccountsPage implements OnInit {
   public symbolFilter: string | undefined
   public activeSecret: Secret
 
-  public wallets = new BehaviorSubject<AirGapWallet[]>([])
+  public wallets: BehaviorSubject<AirGapWallet[]> = new BehaviorSubject<AirGapWallet[]>([])
 
-  constructor(
-    public router: Router,
-    private readonly secretsProvider: SecretsService,
-    private readonly navigationService: NavigationService
-  ) {
+  constructor(private readonly secretsProvider: SecretsService, private readonly navigationService: NavigationService) {
     this.secrets = this.secretsProvider.currentSecretsList.asObservable()
   }
 
   public ngOnInit(): void {
     this.secrets.subscribe(async (secrets: Secret[]) => {
       if (secrets.length === 0) {
-        this.router.navigateByUrl('/secret-create/initial').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+        this.navigationService.route('/secret-create/initial').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       }
     })
 
@@ -42,26 +37,26 @@ export class TabAccountsPage implements OnInit {
     }
   }
 
-  public onSecretChanged(secret: Secret) {
+  public onSecretChanged(secret: Secret): void {
     this.activeSecret = secret
     this.wallets.next(this.activeSecret.wallets)
   }
 
-  public goToReceiveAddress(wallet: AirGapWallet) {
+  public goToReceiveAddress(wallet: AirGapWallet): void {
     this.navigationService.routeWithState('/account-address', { wallet }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  public filterItems(ev: any) {
-    let val = ev.target.value
-    if (val && val !== '') {
-      val = val.trim().toLowerCase()
-      this.symbolFilter = val
-    } else {
-      this.symbolFilter = undefined
+  public filterItems(event: any): void {
+    function isValidSymbol(data: unknown): data is string {
+      return data && typeof data === 'string' && data !== ''
     }
+
+    const value: unknown = event.target.value
+
+    this.symbolFilter = isValidSymbol(value) ? value.trim().toLowerCase() : undefined
   }
 
-  public addWallet() {
-    this.router.navigate(['account-add'])
+  public addWallet(): void {
+    this.navigationService.route('/account-add').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

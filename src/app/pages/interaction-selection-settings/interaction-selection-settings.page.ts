@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core'
-import { NavController, Platform } from '@ionic/angular'
 
 import { Secret } from '../../models/secret'
 import {
@@ -8,6 +7,7 @@ import {
   InteractionService,
   InteractionSetting
 } from '../../services/interaction/interaction.service'
+import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
 
 @Component({
@@ -16,25 +16,23 @@ import { SecretsService } from '../../services/secrets/secrets.service'
   styleUrls: ['./interaction-selection-settings.page.scss']
 })
 export class InteractionSelectionSettingsPage implements OnInit {
-  public interactionSetting = InteractionSetting
+  public interactionSetting: typeof InteractionSetting = InteractionSetting
   public selectedSetting: InteractionSetting
-  public isEdit = false
+  public isEdit: boolean = false
   private secret: Secret
 
   private readonly interactionOptions: IInteractionOptions
 
   constructor(
-    public navCtrl: NavController,
+    private readonly navigationService: NavigationService,
     private readonly secretService: SecretsService,
-    private readonly platform: Platform,
     private readonly interactionService: InteractionService
   ) {
-    console.log(window.history.state)
-    this.isEdit = window.history.state.isEdit
-    this.interactionOptions = window.history.state.interactionOptions
+    this.isEdit = this.navigationService.getState().isEdit
+    this.interactionOptions = this.navigationService.getState().interactionOptions
   }
 
-  public async ngOnInit() {
+  public async ngOnInit(): Promise<void> {
     if (this.isEdit) {
       this.secret = window.history.state.secret
       this.selectedSetting = this.secret.interactionSetting
@@ -53,17 +51,16 @@ export class InteractionSelectionSettingsPage implements OnInit {
     }
   }
 
-  public onSelectedSettingChange(selectedSetting) {
+  public onSelectedSettingChange(selectedSetting: InteractionSetting): void {
     this.secret.interactionSetting = selectedSetting
     this.secretService.addOrUpdateSecret(this.secret)
   }
 
-  public goToNextPage() {
+  public goToNextPage(): void {
     this.interactionService.startInteraction(this.interactionOptions, this.secret)
   }
 
-  public popToRoot() {
-    // TODO
-    // this.navCtrl.popToRoot().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  public goBack(): void {
+    this.navigationService.back()
   }
 }

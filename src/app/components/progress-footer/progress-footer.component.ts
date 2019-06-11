@@ -1,48 +1,47 @@
-import { Component, Input } from '@angular/core'
-import { NavController } from '@ionic/angular'
+import { Component, Input, OnInit } from '@angular/core'
 
-import { ErrorCategory, handleErrorLocal } from './../../services/error-handler/error-handler.service'
+import { NavigationService } from '../../services/navigation/navigation.service'
 
 @Component({
   selector: 'progress-footer',
   templateUrl: './progress-footer.component.html',
   styleUrls: ['./progress-footer.component.scss']
 })
-export class ProgressFooterComponent {
+export class ProgressFooterComponent implements OnInit {
   @Input()
-  public progress = 0
+  public progress: number = 0
 
   @Input()
-  public maxProgress = 1
+  public maxProgress: number = 1
 
   // make sure to bind the context / method.bind(this)
   @Input()
   public rightAction: () => void
 
   @Input()
-  public rightEnabled = true
+  public rightEnabled: boolean = true
 
   @Input()
-  public rightLabel = 'Next'
+  public rightLabel: string = 'Next'
 
   // make sure to bind the context / method.bind(this)
   @Input()
-  public leftAction = () => {
-    this.navController.pop().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  public leftAction = (): void => {
+    this.navigationSerivce.back()
   }
 
   @Input()
-  public leftEnabled = true
+  public leftEnabled: boolean = true
 
   @Input()
-  public leftLabel = 'Back'
+  public leftLabel: string = 'Back'
 
   public progressArray: number[] = []
 
-  constructor(private readonly navController: NavController) {}
+  constructor(private readonly navigationSerivce: NavigationService) {}
 
-  public ngOnInit() {
-    this.progressArray = new Array(this.maxProgress).fill(0).map((_x, i) => i)
+  public ngOnInit(): void {
+    this.progressArray = new Array(this.maxProgress).fill(0).map((_value: number, index: number) => index)
     if (!this.rightAction) {
       throw new Error('ProgressFooterComponent: No "rightAction" method passed')
     }

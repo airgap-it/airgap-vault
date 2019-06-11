@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core'
-import { Router } from '@angular/router'
 import { AlertController, ToastController } from '@ionic/angular'
 import { Observable } from 'rxjs'
 
@@ -19,7 +18,6 @@ export class TabSettingsPage implements OnInit {
   public readonly secrets: Observable<Secret[]>
 
   constructor(
-    private readonly router: Router,
     private readonly secretsProvider: SecretsService,
     private readonly alertController: AlertController,
     private readonly toastController: ToastController,
@@ -33,7 +31,7 @@ export class TabSettingsPage implements OnInit {
   public ngOnInit(): void {
     this.secrets.subscribe(async (secrets: Secret[]) => {
       if (secrets.length === 0) {
-        this.router.navigateByUrl('/secret-create/initial').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+        this.navigationService.route('/secret-create/initial').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       }
     })
   }

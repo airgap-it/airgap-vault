@@ -1,8 +1,9 @@
 import { Component } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { NavController } from '@ionic/angular'
 
 import { Secret } from '../../models/secret'
+import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
+import { NavigationService } from '../../services/navigation/navigation.service'
 import { MnemonicValidator } from '../../validators/mnemonic.validator'
 
 @Component({
@@ -16,11 +17,11 @@ export class SocialRecoveryImportPage {
 
   public socialRecoveryForm: FormGroup
 
-  constructor(public navCtrl: NavController, public formBuilder: FormBuilder) {
+  constructor(private readonly navigationService: NavigationService, public formBuilder: FormBuilder) {
     this.setNumberOfShares(2)
   }
 
-  public setNumberOfShares(i: number) {
+  public setNumberOfShares(i: number): void {
     this.numberOfShares = i
     this.shares = Array(i)
 
@@ -36,24 +37,24 @@ export class SocialRecoveryImportPage {
     this.socialRecoveryForm = this.formBuilder.group(formGroup)
   }
 
-  public recover() {
+  public recover(): void {
     try {
-      const secret = Secret.recoverSecretFromShares(this.shares)
-      // this.navCtrl
-      //   .push(SecretEditPage, { secret: new Secret(secret, 'Recovery by Social Recovery') })
-      //   .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+      const secretString: string = Secret.recoverSecretFromShares(this.shares)
+      this.navigationService
+        .routeWithState('secret-edit', { secret: new Secret(secretString, 'Recovery by Social Recovery') })
+        .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } catch (error) {
       console.log('oops')
     }
   }
 
-  public back() {
-    // this.navCtrl.pop().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  public back(): void {
+    this.navigationService.back()
   }
 
-  public getNumberArray(i: number): number[] {
-    return Array(i)
+  public getNumberArray(numberOfElements: number): number[] {
+    return Array(numberOfElements)
       .fill(0)
-      .map((_x, i) => i)
+      .map((_value: number, index: number) => index)
   }
 }
