@@ -3,12 +3,12 @@ import { DeviceMotion, DeviceMotionAccelerationData } from '@ionic-native/device
 import { Platform } from '@ionic/angular'
 import { Observable, Subscription } from 'rxjs'
 
-import workerJS from '../../../assets/workers/entropyCalculatorWorker'
+import entropyCalculatorWorkerJS from '../../../assets/workers/entropyCalculatorWorker'
 import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
 
 import { GyroscopeService } from './gyroscope.factory'
-const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
-const entropyCalculatorWorker = new Worker(blobURL)
+const blobURL: string = window.URL.createObjectURL(new Blob([entropyCalculatorWorkerJS]))
+const entropyCalculatorWorker: Worker = new Worker(blobURL)
 
 @Injectable({
   providedIn: 'root'
