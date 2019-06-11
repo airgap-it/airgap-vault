@@ -5,7 +5,7 @@ import { IonicModule } from '@ionic/angular'
 import { TranslateModule } from '@ngx-translate/core'
 import { QRCodeModule } from 'angularx-qrcode'
 
-import { PipesModule } from '../pipes/pipes.modules'
+import { PipesModule } from '../pipes/pipes.module'
 
 import { AboutPopoverComponent } from './about-popover/about-popover.component'
 import { AccountItemComponent } from './account-item/account-item.component'
