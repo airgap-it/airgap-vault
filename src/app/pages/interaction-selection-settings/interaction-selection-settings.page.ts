@@ -34,7 +34,7 @@ export class InteractionSelectionSettingsPage implements OnInit {
 
   public async ngOnInit(): Promise<void> {
     if (this.isEdit) {
-      this.secret = window.history.state.secret
+      this.secret = this.navigationService.getState().secret
       this.selectedSetting = this.secret.interactionSetting
     } else {
       this.secret = this.secretService.getActiveSecret()
