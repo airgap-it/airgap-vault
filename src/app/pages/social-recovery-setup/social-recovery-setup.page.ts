@@ -1,10 +1,9 @@
 import { Component } from '@angular/core'
-import { NavController } from '@ionic/angular'
 import * as bip39 from 'bip39'
-import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
-import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 import { Secret } from '../../models/secret'
+import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
+import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
 
 @Component({
@@ -17,27 +16,23 @@ export class SocialRecoverySetupPage {
   public numberOfRequiredShares: number = 2
   private readonly secret: Secret
 
-  constructor(
-    public navCtrl: NavController,
-    private readonly secretService: SecretsService,
-    private readonly navigationService: NavigationService
-  ) {
+  constructor(private readonly secretService: SecretsService, private readonly navigationService: NavigationService) {
     this.secret = this.navigationService.getState().secret
   }
 
-  public setNumberOfShares(i: number) {
+  public setNumberOfShares(i: number): void {
     this.numberOfShares = i
     if (this.numberOfRequiredShares > this.numberOfShares) {
       this.numberOfRequiredShares = this.numberOfShares
     }
   }
 
-  public setNumberOfRequiredShares(i: number) {
+  public setNumberOfRequiredShares(i: number): void {
     this.numberOfRequiredShares = i
   }
 
-  public back() {
-    // this.navCtrl.pop().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  public back(): void {
+    this.navigationService.back()
   }
 
   public next(): void {
