@@ -1,11 +1,11 @@
-import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core'
-import { Observable } from 'rxjs'
+import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core'
+import { Observable, Subscriber } from 'rxjs'
 
-import workerJS from '../../../assets/workers/entropyCalculatorWorker'
+import entropyCalculatorWorkerJS from '../../../assets/workers/entropyCalculatorWorker'
 
 import { Entropy, IEntropyGenerator } from './../../services/entropy/IEntropyGenerator'
-const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
-const entropyCalculatorWorker = new Worker(blobURL)
+const blobURL: string = window.URL.createObjectURL(new Blob([entropyCalculatorWorkerJS]))
+const entropyCalculatorWorker: Worker = new Worker(blobURL)
 
 @Component({
   selector: 'airgap-touch-entropy',
@@ -14,42 +14,43 @@ const entropyCalculatorWorker = new Worker(blobURL)
 })
 export class TouchEntropyComponent implements OnInit, IEntropyGenerator {
   @Input()
-  public cursorSize = 2
+  public cursorSize: number = 2
 
   @Input()
-  public randomFactorInPercent = 10
+  public randomFactorInPercent: number = 10
 
   @Input()
-  public cursorColor = 'white'
+  public cursorColor: string = 'white'
 
   @ViewChild('canvas')
-  public canvasRef
+  public canvasRef: ElementRef<HTMLCanvasElement>
 
   private canvas: HTMLCanvasElement
   private context: CanvasRenderingContext2D
   private rectangle: ClientRect
-  public showStrokes
 
-  private handler
+  private handler: (numbers: number[]) => void
 
   private readonly entropyObservable: Observable<Entropy>
 
   private collectedEntropyPercentage: number = 0
 
-  private isDrawing = false
+  private isDrawing: boolean = false
 
   constructor(private readonly renderer: Renderer2) {
-    this.entropyObservable = Observable.create(observer => {
-      entropyCalculatorWorker.onmessage = event => {
-        this.collectedEntropyPercentage += event.data.entropyMeasure
-        observer.next({ entropyHex: event.data.entropyHex })
-      }
+    this.entropyObservable = new Observable(
+      (observer: Subscriber<Entropy>): void => {
+        entropyCalculatorWorker.onmessage = (event: MessageEvent): void => {
+          this.collectedEntropyPercentage += event.data.entropyMeasure
+          observer.next({ entropyHex: event.data.entropyHex })
+        }
 
-      this.handler = entropy => {
-        const buffer1 = this.arrayBufferFromIntArray(entropy)
-        entropyCalculatorWorker.postMessage({ entropyBuffer: buffer1 }, [buffer1])
+        this.handler = (numbers: number[]): void => {
+          const buffer1: ArrayBuffer = this.arrayBufferFromIntArray(numbers)
+          entropyCalculatorWorker.postMessage({ entropyBuffer: buffer1 }, [buffer1])
+        }
       }
-    })
+    )
   }
 
   public ngOnInit(): void {
@@ -61,42 +62,37 @@ export class TouchEntropyComponent implements OnInit, IEntropyGenerator {
     this.context = this.canvas.getContext('2d')
     this.context.fillStyle = this.cursorColor
     this.rectangle = this.canvas.getBoundingClientRect()
-    this.showStrokes = true
-  }
-
-  public ngOnDestroy(): void {
-    this.showStrokes = false
   }
 
   public start(): Promise<void> {
     this.collectedEntropyPercentage = 0
 
     return new Promise(resolve => {
-      this.renderer.listen(this.canvas, 'mousedown', _e => {
+      this.renderer.listen(this.canvas, 'mousedown', () => {
         this.isDrawing = true
       })
 
-      this.renderer.listen(this.canvas, 'touchstart', _e => {
+      this.renderer.listen(this.canvas, 'touchstart', () => {
         this.isDrawing = true
       })
 
-      this.renderer.listen(this.canvas, 'mouseup', _e => {
+      this.renderer.listen(this.canvas, 'mouseup', () => {
         this.isDrawing = false
       })
 
-      this.renderer.listen(this.canvas, 'touchend', _e => {
+      this.renderer.listen(this.canvas, 'touchend', () => {
         this.isDrawing = false
       })
 
-      this.renderer.listen(this.canvas, 'mousemove', e => {
+      this.renderer.listen(this.canvas, 'mousemove', (event: MouseEvent) => {
         if (this.isDrawing) {
-          this.collectEntropy(e)
+          this.collectEntropy(event.clientX, event.clientY)
         }
       })
 
-      this.renderer.listen(this.canvas, 'touchmove', e => {
+      this.renderer.listen(this.canvas, 'touchmove', (event: TouchEvent) => {
         if (this.isDrawing) {
-          this.collectEntropy(e)
+          this.collectEntropy(event.touches[0].clientX, event.touches[0].clientY)
         }
       })
 
@@ -111,15 +107,12 @@ export class TouchEntropyComponent implements OnInit, IEntropyGenerator {
     })
   }
 
-  public collectEntropy(e) {
-    const x = e.clientX || e.touches[0].clientX
-    const y = e.clientY || e.touches[0].clientY
-
-    const currX = Math.ceil(((x - this.rectangle.left) / (this.rectangle.right - this.rectangle.left)) * this.canvas.width)
-    const currY = Math.ceil(((y - this.rectangle.top) / (this.rectangle.bottom - this.rectangle.top)) * this.canvas.height) - 56
+  public collectEntropy(x: number, y: number): void {
+    const currX: number = Math.ceil(((x - this.rectangle.left) / (this.rectangle.right - this.rectangle.left)) * this.canvas.width)
+    const currY: number = Math.ceil(((y - this.rectangle.top) / (this.rectangle.bottom - this.rectangle.top)) * this.canvas.height) - 56
 
     if (this.getRandomIntInclusive(0, 100) <= this.randomFactorInPercent) {
-      const timeStampInMs =
+      const timeStampInMs: number =
         window.performance && window.performance.now && window.performance.timing && window.performance.timing.navigationStart
           ? window.performance.now() + window.performance.timing.navigationStart
           : Date.now()
@@ -134,21 +127,23 @@ export class TouchEntropyComponent implements OnInit, IEntropyGenerator {
     return this.entropyObservable
   }
 
-  private getRandomIntInclusive(min: number, max: number) {
-    const randomBuffer = new Uint32Array(1)
-    window.crypto.getRandomValues(randomBuffer)
-    const randomNumber = randomBuffer[0] / (0xffffffff + 1)
-    min = Math.ceil(min)
-    max = Math.floor(max)
+  private getRandomIntInclusive(min: number, max: number): number {
+    const randomBuffer: Uint32Array = new Uint32Array(1)
 
-    return Math.floor(randomNumber * (max - min + 1)) + min
+    window.crypto.getRandomValues(randomBuffer)
+
+    const randomNumber: number = randomBuffer[0] / (0xffffffff + 1)
+    const roundedMin: number = Math.ceil(min)
+    const roundedMax: number = Math.floor(max)
+
+    return Math.floor(randomNumber * (roundedMax - roundedMin + 1)) + roundedMin
   }
 
-  private arrayBufferFromIntArray(array: number[]) {
-    const buffer = new ArrayBuffer(array.length * 2)
-    const bufView = new Uint8Array(buffer)
+  private arrayBufferFromIntArray(array: number[]): ArrayBuffer {
+    const buffer: ArrayBuffer = new ArrayBuffer(array.length * 2)
+    const bufView: Uint8Array = new Uint8Array(buffer)
 
-    for (let i = 0; i < array.length; i++) {
+    for (let i: number = 0; i < array.length; i++) {
       bufView[i] = Math.abs(array[i] * 10000)
     }
 
