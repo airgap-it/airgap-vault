@@ -22,7 +22,6 @@ export class AccountAddressPage implements OnInit {
   private walletShareUrl: string
 
   constructor(
-    private readonly location: Location,
     private readonly popoverCtrl: PopoverController,
     private readonly clipboardProvider: ClipboardService,
     private readonly secretsProvider: SecretsService,
@@ -56,8 +55,9 @@ export class AccountAddressPage implements OnInit {
       component: AccountEditPopoverComponent,
       componentProps: {
         wallet: this.wallet,
+        walletShareUrl: this.walletShareUrl,
         onDelete: (): void => {
-          this.location.back()
+          this.navigationService.back()
         }
       },
       event,

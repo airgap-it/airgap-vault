@@ -3,28 +3,14 @@ import { AlertController, ModalController, NavParams } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 import { AirGapWallet } from 'airgap-coin-lib'
 
-import { ClipboardService } from './../../../services/clipboard/clipboard.service'
-import { ErrorCategory, handleErrorLocal } from './../../../services/error-handler/error-handler.service'
-import { SecretsService } from './../../../services/secrets/secrets.service'
+import { ClipboardService } from '../../../services/clipboard/clipboard.service'
+import { ErrorCategory, handleErrorLocal } from '../../../services/error-handler/error-handler.service'
+import { SecretsService } from '../../../services/secrets/secrets.service'
 
 @Component({
-  template: `
-    <ion-list no-lines no-detail>
-      <ion-list-header>{{ 'wallet-edit-delete-popover.settings_label' | translate }}</ion-list-header>
-      <button ion-item detail-none (click)="copyAddressToClipboard()">
-        <ion-icon name="clipboard" color="dark" item-end></ion-icon>
-        {{ 'wallet-edit-delete-popover.copy_label' | translate }}
-      </button>
-      <button ion-item detail-none (click)="copyShareUrlToClipboard()">
-        <ion-icon name="clipboard" color="dark" item-end></ion-icon>
-        {{ 'wallet-edit-delete-popover.copy_sync_code' | translate }}
-      </button>
-      <button ion-item detail-none (click)="delete()">
-        <ion-icon name="trash" color="dark" item-end></ion-icon>
-        {{ 'wallet-edit-delete-popover.account-removal_alert.delete_label' | translate }}
-      </button>
-    </ion-list>
-  `
+  selector: 'airgap-account-edit-popover',
+  templateUrl: 'account-edit-popover.component.html',
+  styleUrls: ['./account-edit-popover.component.scss']
 })
 export class AccountEditPopoverComponent {
   private readonly wallet: AirGapWallet
@@ -44,7 +30,7 @@ export class AccountEditPopoverComponent {
     this.walletShareUrl = this.navParams.get('walletShareUrl')
   }
 
-  public async copyAddressToClipboard() {
+  public async copyAddressToClipboard(): Promise<void> {
     await this.clipboardProvider.copyAndShowToast(
       this.wallet.receivingPublicAddress,
       this.translateService.instant('wallet-edit-delete-popover.confirm_address_copy')
@@ -53,7 +39,7 @@ export class AccountEditPopoverComponent {
     await this.modalController.dismiss()
   }
 
-  public async copyShareUrlToClipboard() {
+  public async copyShareUrlToClipboard(): Promise<void> {
     await this.clipboardProvider.copyAndShowToast(
       this.walletShareUrl,
       this.translateService.instant('wallet-edit-delete-popover.confirm_sync_code_copy')
@@ -62,7 +48,7 @@ export class AccountEditPopoverComponent {
     await this.modalController.dismiss()
   }
 
-  public delete() {
+  public delete(): void {
     this.translateService
       .get([
         'wallet-edit-delete-popover.account-removal_alert.title',
@@ -70,12 +56,13 @@ export class AccountEditPopoverComponent {
         'wallet-edit-delete-popover.account-removal_alert.cancel_label',
         'wallet-edit-delete-popover.account-removal_alert.delete_label'
       ])
-      .subscribe(async values => {
-        const title = values['wallet-edit-delete-popover.account-removal_alert.title']
-        const message = values['wallet-edit-delete-popover.account-removal_alert.text']
-        const text1 = values['wallet-edit-delete-popover.account-removal_alert.cancel_label']
-        const text2 = values['wallet-edit-delete-popover.account-removal_alert.delete_label']
-        const alert = await this.alertCtrl.create({
+      .subscribe(async (values: string[]) => {
+        const title: string = values['wallet-edit-delete-popover.account-removal_alert.title']
+        const message: string = values['wallet-edit-delete-popover.account-removal_alert.text']
+        const text1: string = values['wallet-edit-delete-popover.account-removal_alert.cancel_label']
+        const text2: string = values['wallet-edit-delete-popover.account-removal_alert.delete_label']
+
+        const alert: HTMLIonAlertElement = await this.alertCtrl.create({
           header: title,
           message,
           buttons: [

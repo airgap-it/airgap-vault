@@ -18,6 +18,7 @@ const routes: Routes = [
 ]
 
 @NgModule({
+  entryComponents: [AccountEditPopoverComponent],
   imports: [CommonModule, ComponentsModule, FormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule],
   declarations: [AccountAddressPage, AccountEditPopoverComponent]
 })

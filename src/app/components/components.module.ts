@@ -7,7 +7,6 @@ import { QRCodeModule } from 'angularx-qrcode'
 
 import { PipesModule } from '../pipes/pipes.module'
 
-import { AboutPopoverComponent } from './about-popover/about-popover.component'
 import { AccountItemComponent } from './account-item/account-item.component'
 import { AddressRowComponent } from './address-row/address-row.component'
 import { CurrencySymbolComponent } from './currency-symbol/currency-symbol.component'
@@ -25,7 +24,6 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
 
 @NgModule({
   declarations: [
-    AboutPopoverComponent,
     AddressRowComponent,
     CurrencySymbolComponent,
     CurrentSecretComponent,
@@ -43,7 +41,6 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
   ],
   imports: [IonicModule, PipesModule, CommonModule, FormsModule, TranslateModule, QRCodeModule],
   exports: [
-    AboutPopoverComponent,
     AddressRowComponent,
     CurrencySymbolComponent,
     CurrentSecretComponent,
@@ -59,6 +56,6 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     VerifyKeyComponent,
     AccountItemComponent
   ],
-  entryComponents: [AboutPopoverComponent]
+  entryComponents: []
 })
 export class ComponentsModule {}
