@@ -24,7 +24,7 @@
       <ion-label>{{ 'tab-settings.secrets_label' | translate }}</ion-label>
     </ion-list-header>
     <ng-container *ngFor="let secret of secrets | async">
-      <airgap-secret-item [secret]="secret" (click)="goToEditSecret(secret)"></airgap-secret-item>
+      <airgap-secret-item [secret]="secret" (click)="goToEditSecret(secret)" class="ion-padding"></airgap-secret-item>
     </ng-container>
     <ion-row class="ion-padding ion-justify-content-end">
       <ion-button color="secondary" (click)="goToNewSecret()" shape="round">
