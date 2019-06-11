@@ -5,11 +5,9 @@ airgap-currency-symbol {
   left: 40px;
   top: 40px;
 }
-airgap-identicon {
+airgap-identicon,
+airgap-identicon img,
+ion-avatar {
   width: 64px;
   height: 64px;
-  img {
-    width: 64px;
-    height: 64px;
-  }
 }
