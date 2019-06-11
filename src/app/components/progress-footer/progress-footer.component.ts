@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core'
 import { NavigationService } from '../../services/navigation/navigation.service'
 
 @Component({
-  selector: 'progress-footer',
+  selector: 'airgap-progress-footer',
   templateUrl: './progress-footer.component.html',
   styleUrls: ['./progress-footer.component.scss']
 })
