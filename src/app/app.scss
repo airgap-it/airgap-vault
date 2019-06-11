@@ -12,10 +12,6 @@
 .color__primary {
   color: var(--ion-color-primary);
 }
-/* right aligns text for component current-secret */
-airgap-current-secret ion-select {
-  text-align: right;
-}
 /* monotype */
 .typography--mono {
   font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
@@ -57,6 +53,17 @@ airgap-identicon {
 airgap-qr-clipboard {
   padding: 24px;
   background-color: var(--ion-color-secondary-contrast);
+}
+/* removes padding and adds it only if used in the tabs-accounts toolbar */
+airgap-current-secret {
+  ion-item {
+    --padding-start: 0;
+  }
+}
+airgap-tab-accounts {
+  airgap-current-secret ion-item {
+    --padding-start: 16px;
+  }
 }
 /* ios specific styling */
 .ios {

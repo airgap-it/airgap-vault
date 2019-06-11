@@ -1,14 +1,10 @@
-<ion-header no-border class="colored-background">
+<ion-header no-border>
   <ion-toolbar color="secondary">
     <ion-title>{{ 'tab-wallets.title' | translate }}</ion-title>
   </ion-toolbar>
 
   <ion-toolbar color="secondary">
-    <ion-row class="ion-padding-horizontal">
-      <ion-col class="ion-no-padding">
-        <airgap-current-secret [chosenSecret]="activeSecret" (secretChanged)="onSecretChanged($event)"></airgap-current-secret>
-      </ion-col>
-    </ion-row>
+    <airgap-current-secret [chosenSecret]="activeSecret" (secretChanged)="onSecretChanged($event)"></airgap-current-secret>
   </ion-toolbar>
 
   <ion-toolbar color="secondary">
