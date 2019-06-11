@@ -58,3 +58,17 @@ airgap-qr-clipboard {
   padding: 24px;
   background-color: var(--ion-color-secondary-contrast);
 }
+/* ios specific styling */
+.ios {
+  airgap-account-item {
+    ion-item {
+      --padding-bottom: 4px;
+      --padding-top: 4px;
+    }
+  }
+  airgap-tab-accounts {
+    ion-list {
+      padding-top: 8px;
+    }
+  }
+}
