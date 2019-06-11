@@ -27,9 +27,7 @@ export class AccountAddPage {
     private readonly navigationService: NavigationService
   ) {
     this.coinProtocols = supportedProtocols()
-    try {
-      this.selectedProtocol = this.navigationService.getState().protocol
-    } catch (error) {}
+    this.selectedProtocol = this.navigationService.getState().protocol
   }
 
   public onSelectedProtocolChange(selectedProtocol: ICoinProtocol): void {
