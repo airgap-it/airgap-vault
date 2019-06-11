@@ -25,12 +25,14 @@ export class TraceInputDirective implements OnInit {
   public ngOnInit(): void {
     this.renderer.listen(this.canvas, 'mousedown', (event: MouseEvent) => {
       this.lastPos = this.getMousePosition(this.canvas, event)
+      this.mousePos = { ...this.lastPos }
       this.isDrawing = true
       this.startDrawing()
     })
 
     this.renderer.listen(this.canvas, 'touchstart', (event: TouchEvent) => {
       this.lastPos = this.getTouchPosition(this.canvas, event)
+      this.mousePos = { ...this.lastPos }
       this.isDrawing = true
       this.startDrawing()
     })
@@ -92,8 +94,8 @@ export class TraceInputDirective implements OnInit {
     this.context.strokeStyle = 'rgb(255, 255, 255)'
     this.context.moveTo(this.lastPos.x, this.lastPos.y)
     this.context.lineTo(this.mousePos.x, this.mousePos.y)
-    this.context.stroke()
     this.lastPos = this.mousePos
+    this.context.stroke()
     this.startDrawing()
   }
 }

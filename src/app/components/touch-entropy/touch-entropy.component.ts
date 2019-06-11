@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core'
+import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild, AfterViewChecked, AfterViewInit } from '@angular/core'
 import { Observable, Subscriber } from 'rxjs'
 
 import entropyCalculatorWorkerJS from '../../../assets/workers/entropyCalculatorWorker'
@@ -12,7 +12,7 @@ const entropyCalculatorWorker: Worker = new Worker(blobURL)
   templateUrl: './touch-entropy.component.html',
   styleUrls: ['./touch-entropy.component.scss']
 })
-export class TouchEntropyComponent implements OnInit, IEntropyGenerator {
+export class TouchEntropyComponent implements AfterViewInit, IEntropyGenerator {
   @Input()
   public cursorSize: number = 2
 
@@ -53,8 +53,20 @@ export class TouchEntropyComponent implements OnInit, IEntropyGenerator {
     )
   }
 
-  public ngOnInit(): void {
+  public ngAfterViewInit(): void {
     this.canvas = this.canvasRef.nativeElement
+
+    this.initCanvas()
+  }
+
+  private initCanvas(): void {
+    if (!this.isCanvasReady()) {
+      setTimeout(() => {
+        this.initCanvas()
+      }, 50)
+
+      return
+    }
 
     this.canvas.setAttribute('height', `${this.canvas.parentElement.getBoundingClientRect().height}px`)
     this.canvas.setAttribute('width', `${this.canvas.parentElement.getBoundingClientRect().width}px`)
@@ -62,6 +74,10 @@ export class TouchEntropyComponent implements OnInit, IEntropyGenerator {
     this.context = this.canvas.getContext('2d')
     this.context.fillStyle = this.cursorColor
     this.rectangle = this.canvas.getBoundingClientRect()
+  }
+
+  private isCanvasReady(): boolean {
+    return this.canvas.parentElement.getBoundingClientRect().height > 0
   }
 
   public start(): Promise<void> {

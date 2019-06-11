@@ -75,21 +75,10 @@ export class SecretGeneratePage implements OnInit {
       this.cameraService.setVideoElement(this.videoElement)
     }
     this.cameraService.viewWillEnter()
-    this.injectCSS()
 
     await this.permissionsService.requestPermissions([PermissionTypes.CAMERA, PermissionTypes.MICROPHONE])
 
     this.initEntropy()
-  }
-
-  private injectCSS(): void {
-    // inject css to html, body, .ion-app, ion-content
-    this.renderer.addClass(document.body, 'hide-tabbar')
-  }
-
-  private uninjectCSS(): void {
-    // removes injected css
-    this.renderer.removeClass(document.body, 'hide-tabbar')
   }
 
   public initEntropy(): void {
@@ -130,7 +119,6 @@ export class SecretGeneratePage implements OnInit {
 
   public ionViewDidLeave(): void {
     this.cameraService.viewDidLeave()
-    this.uninjectCSS()
     this.entropyService.stopEntropyCollection().catch(handleErrorLocal(ErrorCategory.ENTROPY_COLLECTION))
   }
 
