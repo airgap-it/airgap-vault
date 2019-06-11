@@ -27,7 +27,9 @@
   <ion-list *ngIf="shares">
     <form [formGroup]="socialRecoveryForm">
       <ion-item *ngFor="let i of getNumberArray(numberOfShares)" class="ion-no-padding ion-margin-bottom">
-        <ion-label color="primary" position="stacked">{{ 'social-recovery-import.share-recovery.label' | translate }} {{ i }}</ion-label>
+        <ion-label color="primary" position="stacked">
+          {{ 'social-recovery-import.share-recovery.label' | translate }} {{ i + 1 }}
+        </ion-label>
         <ion-textarea [formControlName]="'share_' + i" placeholder="duck goose dinosaur ..." [(ngModel)]="shares[i]"></ion-textarea>
       </ion-item>
     </form>
