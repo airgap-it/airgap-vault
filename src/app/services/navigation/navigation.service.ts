@@ -4,11 +4,16 @@ import { Router } from '@angular/router'
 
 import { Identifiable } from '../../models/identifiable'
 
+interface State {
+  // tslint:disable-next-line: no-any
+  [key: string]: any
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class NavigationService {
-  private state: { [key: string]: any } = {}
+  private state: State = {}
 
   constructor(private readonly router: Router, private readonly location: Location) {}
 
@@ -20,7 +25,7 @@ export class NavigationService {
     return this.router.navigateByUrl(route)
   }
 
-  public async routeWithState(route: string, object: { [key: string]: any }): Promise<boolean> {
+  public async routeWithState(route: string, object: State): Promise<boolean> {
     this.state = object
 
     return this.router.navigateByUrl(route)
@@ -30,7 +35,7 @@ export class NavigationService {
     this.location.back()
   }
 
-  public getState(): { [key: string]: any } {
+  public getState(): State {
     return this.state
   }
 

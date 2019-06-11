@@ -65,7 +65,7 @@
     <ion-button color="primary" shape="round" (click)="goToNextPage()" *ngIf="!isEdit">
       {{ 'interaction-selection-settings.continue_label' | translate }}
     </ion-button>
-    <ion-button color="primary" shape="round" (click)="popToRoot()" *ngIf="isEdit">
+    <ion-button color="primary" shape="round" (click)="goBack()" *ngIf="isEdit">
       {{ 'interaction-selection-settings.continue_label' | translate }}
     </ion-button>
   </ion-fab>

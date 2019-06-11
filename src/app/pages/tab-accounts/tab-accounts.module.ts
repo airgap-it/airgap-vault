@@ -6,7 +6,7 @@ import { IonicModule } from '@ionic/angular'
 import { TranslateModule } from '@ngx-translate/core'
 
 import { ComponentsModule } from '../../components/components.module'
-import { PipesModule } from '../../pipes/pipes.modules'
+import { PipesModule } from '../../pipes/pipes.module'
 
 import { TabAccountsPage } from './tab-accounts.page'
 

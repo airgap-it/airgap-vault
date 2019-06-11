@@ -1,14 +1,12 @@
 import { Component, ViewChild } from '@angular/core'
-import { Router } from '@angular/router'
-import { NavController } from '@ionic/angular'
 
+import { VerifyKeyComponent } from '../../components/verify-key/verify-key.component'
 import { Secret } from '../../models/secret'
-
-import { VerifyKeyComponent } from './../../components/verify-key/verify-key.component'
-// import { SecretEditPage } from '../secret-edit/secret-edit'
+import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
+import { NavigationService } from '../../services/navigation/navigation.service'
 
 @Component({
-  selector: 'secret-validate',
+  selector: 'airgap-secret-validate',
   templateUrl: './secret-validate.page.html',
   styleUrls: ['./secret-validate.page.scss']
 })
@@ -18,25 +16,23 @@ export class SecretValidatePage {
 
   public readonly secret: Secret
 
-  private validated: boolean = false
+  private validated: boolean = false // TODO: Can this be removed?
 
-  constructor(private readonly navController: NavController, private readonly router: Router) {
-    // this.secret = this.navParams.get('secret')
-    this.secret = new Secret('90ac75896c3f57107c4ab0979b7c2ca1790e29ce7d25308b997fbbd53b9829c4', 'asdf') // TODO: Get secret from previous page
+  constructor(private readonly navigationService: NavigationService) {
+    this.secret = this.navigationService.getState().secret
   }
 
-  public onComplete(isCorrect: boolean) {
+  public onComplete(isCorrect: boolean): void {
     this.validated = isCorrect
   }
 
-  public onContinue() {
+  public onContinue(): void {
     this.goToSecretEditPage()
   }
 
-  public goToSecretEditPage() {
-    // this.router.navigate(['secret-edit']).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-    // this.navController
-    //   .push(SecretEditPage, { secret: this.secret, isGenerating: true })
-    //   .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  public goToSecretEditPage(): void {
+    this.navigationService
+      .routeWithState('secret-edit', { secret: this.secret, isGenerating: true })
+      .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

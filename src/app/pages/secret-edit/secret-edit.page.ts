@@ -1,5 +1,4 @@
 import { Component } from '@angular/core'
-import { Router } from '@angular/router'
 import { PopoverController } from '@ionic/angular'
 
 import { Secret } from '../../models/secret'
@@ -20,7 +19,6 @@ export class SecretEditPage {
   public secret: Secret
 
   constructor(
-    private readonly router: Router,
     private readonly popoverCtrl: PopoverController,
     private readonly secretsService: SecretsService,
     private readonly navigationService: NavigationService
@@ -44,13 +42,13 @@ export class SecretEditPage {
 
     await this.dismiss()
     if (this.isGenerating) {
-      this.router.navigate(['account-add']).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+      this.navigationService.route('/account-add').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     }
   }
 
   public async dismiss(): Promise<boolean> {
     try {
-      return this.router.navigateByUrl('/tabs/tab-accounts')
+      return this.navigationService.routeToAccountsTab()
     } catch (error) {
       return false
     }

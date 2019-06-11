@@ -1,8 +1,8 @@
 import { Component } from '@angular/core'
-import { Router } from '@angular/router'
 import { Storage } from '@ionic/storage'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
+import { NavigationService } from '../../services/navigation/navigation.service'
 
 @Component({
   selector: 'airgap-secret-generate-onboarding',
@@ -10,10 +10,10 @@ import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/er
   styleUrls: ['./secret-generate-onboarding.page.scss']
 })
 export class SecretGenerateOnboardingPage {
-  constructor(public router: Router, private readonly storage: Storage) {}
+  constructor(private readonly navigationService: NavigationService, private readonly storage: Storage) {}
 
-  public async continue() {
+  public async continue(): Promise<void> {
     await this.storage.set('DISCLAIMER_GENERATE_INITIAL', true)
-    this.router.navigateByUrl('secret-generate').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.navigationService.route('secret-generate').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }
