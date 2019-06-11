@@ -53,7 +53,7 @@ export class CameraBrowserService implements IEntropyGenerator {
     return new Promise(resolve => {
       const constraints = {
         video: true,
-        audio: true
+        audio: false
       }
 
       this.collectedEntropyPercentage = 0
