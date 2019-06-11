@@ -1,29 +1,30 @@
-<ion-header transparent no-border>
-  <ion-toolbar transparent>
+<ion-header no-border>
+  <ion-toolbar>
     <ion-title>
-      <ion-text>
-        <p color="white">{{ 'transaction-signed.title' | translate }}</p>
-      </ion-text>
+      <ion-buttons slot="start">
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
+      {{ 'transaction-signed.title' | translate }
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding class="colored-background">
+<ion-content class="ion-padding">
   <h3 [innerHTML]="'transaction-signed.heading' | translate"></h3>
 
-  <ion-row justify-content-center padding-top>
+  <ion-row class="ion-justify-content-center ion-padding-top">
     <airgap-qr-clipboard *ngIf="interactionUrl && qrType === 0" [level]="'L'" [qrdata]="interactionUrl" [size]="300"></airgap-qr-clipboard>
     <airgap-qr-clipboard *ngIf="signedTx && qrType === 1" [level]="'L'" [qrdata]="signedTx" [size]="300"></airgap-qr-clipboard>
   </ion-row>
 
-  <ion-row padding>
+  <ion-row class="ion-padding">
     <ion-label>{{ 'transaction-signed.raw-tx_label' | translate }}</ion-label>
     <ion-toggle (ionChange)="switchQR()"></ion-toggle>
   </ion-row>
-  <ion-row padding-bottom margin-bottom>
+  <ion-row class="ion-padding-bottom ion-margin-bottom">
     <airgap-signed-transaction [syncProtocolString]="interactionUrl"></airgap-signed-transaction>
   </ion-row>
-  <ion-fab slot="fixed" vertical="bottom" right>
-    <ion-button default color="primary" (click)="done()" shape="round">{{ 'transaction-signed.done_label' | translate }}</ion-button>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-button color="primary" shape="round" (click)="done()">{{ 'transaction-signed.done_label' | translate }}</ion-button>
   </ion-fab>
 </ion-content>

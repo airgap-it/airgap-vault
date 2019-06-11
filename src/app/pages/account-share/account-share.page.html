@@ -10,9 +10,9 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <h3 padding-bottom [innerHTML]="'wallet-share.heading' | translate"></h3>
+  <h3 class="ion-padding-bottom" [innerHTML]="'wallet-share.heading' | translate"></h3>
 
-  <ion-row justify-content-center padding-bottom>
+  <ion-row class="ion-justify-content-center ion-padding-bottom">
     <airgap-qr-clipboard *ngIf="interactionUrl" [qrdata]="interactionUrl" [level]="'L'" [size]="300"></airgap-qr-clipboard>
   </ion-row>
 
