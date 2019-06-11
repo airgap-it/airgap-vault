@@ -5,8 +5,8 @@ import { RouterModule, Routes } from '@angular/router'
 import { IonicModule } from '@ionic/angular'
 import { TranslateModule } from '@ngx-translate/core'
 
+import { SecretEditPopoverComponent } from './secret-edit-popover/secret-edit-popover.component'
 import { SecretEditPage } from './secret-edit.page'
-
 const routes: Routes = [
   {
     path: '',
@@ -15,7 +15,8 @@ const routes: Routes = [
 ]
 
 @NgModule({
+  entryComponents: [SecretEditPopoverComponent],
   imports: [CommonModule, FormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule],
-  declarations: [SecretEditPage]
+  declarations: [SecretEditPage, SecretEditPopoverComponent]
 })
 export class SecretEditPageModule {}

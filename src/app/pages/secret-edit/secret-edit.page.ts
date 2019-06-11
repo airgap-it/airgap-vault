@@ -6,6 +6,7 @@ import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/er
 import { InteractionSetting } from '../../services/interaction/interaction.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
+import { SecretEditPopoverComponent } from './secret-edit-popover/secret-edit-popover.component'
 
 @Component({
   selector: 'airgap-secret-edit',
@@ -67,18 +68,18 @@ export class SecretEditPage {
   }
 
   public async presentEditPopover(event: Event): Promise<void> {
-    /*
-    const popover = this.popoverCtrl.create(SecretEditPopoverComponent, {
-      secret: this.secret,
-      onDelete: () => {
-        this.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
-      }
+    const popover: HTMLIonPopoverElement = await this.popoverCtrl.create({
+      component: SecretEditPopoverComponent,
+      componentProps: {
+        secret: this.secret,
+        onDelete: (): void => {
+          this.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+        }
+      },
+      event,
+      translucent: true
     })
-    popover
-      .present({
-        ev: event
-      })
-			.catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
-			*/
+
+    popover.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 }

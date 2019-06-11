@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { AlertController, ModalController, NavParams } from '@ionic/angular'
+import { AlertController, PopoverController } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 import { AirGapWallet } from 'airgap-coin-lib'
 
@@ -20,15 +20,10 @@ export class AccountEditPopoverComponent {
   constructor(
     private readonly alertCtrl: AlertController,
     private readonly clipboardProvider: ClipboardService,
-    private readonly navParams: NavParams,
     private readonly secretsProvider: SecretsService,
-    private readonly modalController: ModalController,
+    private readonly popoverController: PopoverController,
     private readonly translateService: TranslateService
-  ) {
-    this.wallet = this.navParams.get('wallet')
-    this.onDelete = this.navParams.get('onDelete')
-    this.walletShareUrl = this.navParams.get('walletShareUrl')
-  }
+  ) {}
 
   public async copyAddressToClipboard(): Promise<void> {
     await this.clipboardProvider.copyAndShowToast(
@@ -36,7 +31,7 @@ export class AccountEditPopoverComponent {
       this.translateService.instant('wallet-edit-delete-popover.confirm_address_copy')
     )
 
-    await this.modalController.dismiss()
+    await this.popoverController.dismiss()
   }
 
   public async copyShareUrlToClipboard(): Promise<void> {
@@ -45,7 +40,7 @@ export class AccountEditPopoverComponent {
       this.translateService.instant('wallet-edit-delete-popover.confirm_sync_code_copy')
     )
 
-    await this.modalController.dismiss()
+    await this.popoverController.dismiss()
   }
 
   public delete(): void {
@@ -69,18 +64,18 @@ export class AccountEditPopoverComponent {
             {
               text: text1,
               role: 'cancel',
-              handler: () => {
-                this.modalController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
+              handler: (): void => {
+                this.popoverController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
               }
             },
             {
               text: text2,
-              handler: () => {
+              handler: (): void => {
                 alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
                 this.secretsProvider
                   .removeWallet(this.wallet)
                   .then(() => {
-                    this.modalController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
+                    this.popoverController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
                     if (this.onDelete) {
                       this.onDelete()
                     }
