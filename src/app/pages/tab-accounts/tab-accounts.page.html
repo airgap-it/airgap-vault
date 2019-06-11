@@ -6,7 +6,7 @@
   <ion-toolbar color="secondary">
     <ion-row class="ion-padding-horizontal">
       <ion-col class="ion-no-padding">
-        <airgap-current-secret [chosenSecret]="activeSecret" (secretChanged)="onSecretChanged($event)"></airgap-current-secret>
+        <airgap-current-secret></airgap-current-secret>
       </ion-col>
     </ion-row>
   </ion-toolbar>
@@ -16,14 +16,14 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="wallets" class="ion-padding-horizontal">
+<ion-content *ngIf="wallets$" class="ion-padding-horizontal">
   <ion-list>
-    <ng-container *ngFor="let wallet of wallets | async | walletFilter: { symbol: symbolFilter }">
+    <ng-container *ngFor="let wallet of wallets$ | async | walletFilter: { symbol: symbolFilter }">
       <airgap-account-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></airgap-account-item>
     </ng-container>
   </ion-list>
 
-  <div class="empty-list" *ngIf="wallets && (wallets | async | walletFilter: { symbol: symbolFilter }).length === 0">
+  <div class="empty-list" *ngIf="wallets$ && (wallets$ | async | walletFilter: { symbol: symbolFilter }).length === 0">
     <img src="./assets/img/no-wallet-added-onboarding.svg" />
     <p>
       <strong>{{ 'tab-wallets.empty-state_text' | translate }}</strong>

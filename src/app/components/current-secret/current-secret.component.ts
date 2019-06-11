@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core'
+import { Component } from '@angular/core'
+import { Observable } from 'rxjs'
 
 import { Secret } from '../../models/secret'
 import { SecretsService } from '../../services/secrets/secrets.service'
@@ -8,25 +9,21 @@ import { SecretsService } from '../../services/secrets/secrets.service'
   templateUrl: 'current-secret.component.html'
 })
 export class CurrentSecretComponent {
-  public currentSecret: number = 0
+  public currentSecret: Secret // Used to match the current active secret in the list
 
-  public readonly secrets: Secret[] = []
-
-  @Output()
-  public readonly secretChanged: EventEmitter<Secret> = new EventEmitter<Secret>()
+  public readonly secrets$: Observable<Secret[]>
+  public readonly currentSecret$: Observable<Secret>
 
   constructor(private readonly secretsProvider: SecretsService) {
-    this.secrets = this.secretsProvider.currentSecretsList.getValue()
-    this.currentSecret = this.secrets.indexOf(this.secretsProvider.getActiveSecret())
+    this.secrets$ = this.secretsProvider.getSecretsObservable()
+    this.currentSecret$ = this.secretsProvider.getActiveSecretObservable()
+
+    this.currentSecret$.subscribe((secret: Secret) => {
+      this.currentSecret = secret
+    })
   }
 
-  @Input()
-  set chosenSecret(secret: Secret) {
-    this.currentSecret = this.secrets.indexOf(secret)
-  }
-
-  public onChange(newSecret: number): void {
-    this.secretsProvider.setActiveSecret(this.secrets[newSecret])
-    this.secretChanged.emit(this.secrets[newSecret])
+  public onChange(newSecret: Secret): void {
+    this.secretsProvider.setActiveSecret(newSecret)
   }
 }

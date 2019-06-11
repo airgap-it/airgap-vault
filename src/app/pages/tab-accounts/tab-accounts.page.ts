@@ -16,12 +16,14 @@ export class TabAccountsPage implements OnInit {
   public readonly secrets: Observable<Secret[]>
 
   public symbolFilter: string | undefined
-  public activeSecret: Secret
 
-  public wallets: BehaviorSubject<AirGapWallet[]> = new BehaviorSubject<AirGapWallet[]>([])
+  public wallets$: BehaviorSubject<AirGapWallet[]> = new BehaviorSubject<AirGapWallet[]>([])
 
   constructor(private readonly secretsProvider: SecretsService, private readonly navigationService: NavigationService) {
     this.secrets = this.secretsProvider.currentSecretsList.asObservable()
+    this.secretsProvider.getActiveSecretObservable().subscribe((secret: Secret) => {
+      this.wallets$.next(secret.wallets)
+    })
   }
 
   public ngOnInit(): void {
@@ -30,16 +32,6 @@ export class TabAccountsPage implements OnInit {
         this.navigationService.route('/secret-create/initial').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       }
     })
-
-    if (this.secretsProvider.getActiveSecret()) {
-      this.activeSecret = this.secretsProvider.getActiveSecret()
-      this.wallets.next(this.activeSecret.wallets)
-    }
-  }
-
-  public onSecretChanged(secret: Secret): void {
-    this.activeSecret = secret
-    this.wallets.next(this.activeSecret.wallets)
   }
 
   public goToReceiveAddress(wallet: AirGapWallet): void {
