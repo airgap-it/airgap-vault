@@ -1,14 +1,15 @@
-<ion-header transparent no-border>
-  <ion-toolbar transparent>
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
     <ion-title>
-      <ion-text>
-        <p color="white">{{ 'wallet-share.title' | translate }}</p>
-      </ion-text>
+      {{ 'wallet-share.title' | translate }}
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding class="colored-background">
+<ion-content class="ion-padding">
   <h3 padding-bottom [innerHTML]="'wallet-share.heading' | translate"></h3>
 
   <ion-row justify-content-center padding-bottom>
@@ -16,12 +17,8 @@
   </ion-row>
 
   <ion-row><p [innerHTML]="'wallet-share.text' | translate"></p></ion-row>
-</ion-content>
 
-<ion-footer no-border>
-  <ion-toolbar padding transparent>
-    <ion-row justify-content-end>
-      <ion-button default color="primary" (click)="done()" shape="round" item-right>{{ 'wallet-share.done_label' | translate }}</ion-button>
-    </ion-row>
-  </ion-toolbar>
-</ion-footer>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-button color="primary" shape="round" (click)="done()">{{ 'wallet-share.done_label' | translate }}</ion-button>
+  </ion-fab>
+</ion-content>
