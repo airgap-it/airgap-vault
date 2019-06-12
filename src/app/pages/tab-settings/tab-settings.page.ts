@@ -28,7 +28,8 @@ export class TabSettingsPage implements OnInit {
     this.secrets = this.secretsProvider.currentSecretsList.asObservable()
   }
 
-  public ngOnInit(): void {
+  public async ngOnInit(): Promise<void> {
+    await this.secretsProvider.isReady()
     this.secrets.subscribe(async (secrets: Secret[]) => {
       if (secrets.length === 0) {
         this.navigationService.route('/secret-create/initial').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
