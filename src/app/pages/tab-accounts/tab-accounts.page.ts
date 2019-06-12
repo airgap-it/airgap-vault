@@ -20,14 +20,13 @@ export class TabAccountsPage implements OnInit {
   public wallets$: BehaviorSubject<AirGapWallet[]> = new BehaviorSubject<AirGapWallet[]>([])
 
   constructor(private readonly secretsProvider: SecretsService, private readonly navigationService: NavigationService) {
-    this.secrets = this.secretsProvider.currentSecretsList.asObservable()
+    this.secrets = this.secretsProvider.getSecretsObservable()
     this.secretsProvider.getActiveSecretObservable().subscribe((secret: Secret) => {
       this.wallets$.next(secret.wallets)
     })
   }
 
   public async ngOnInit(): Promise<void> {
-    await this.secretsProvider.isReady()
     this.secrets.subscribe(async (secrets: Secret[]) => {
       if (secrets.length === 0) {
         this.navigationService.route('/secret-create/initial').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
