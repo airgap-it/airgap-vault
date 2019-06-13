@@ -107,11 +107,11 @@
     "secret_input_label":"Secret Name",
     "security-level": {
       "heading":"Security Level",
-      "text":"You can encrypt your key additionally using a passcode."
+      "text":"You can encrypt your secret additionally using a passcode."
     },
     "passcode": {
       "label":"Passcode",
-      "text":"Set a passcode for your accounts."
+      "text":"Set a passcode for your secret. This is an optional setting."
     },
     "secret-recovery": {
       "heading":"Secret Recovery",
@@ -294,7 +294,7 @@
 
   "transaction-detail":{
     "title":"Sign Transaction",
-    "text":"You're about to send:",
+    "text":"You're about to sign:",
     "sign-tx_label":"Sign Transaction"
   },
 
