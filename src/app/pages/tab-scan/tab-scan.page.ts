@@ -23,7 +23,7 @@ export class TabScanPage {
 
   public hasCameras: boolean = false
 
-  public hasCameraPermission: boolean = false
+  public hasCameraPermission: boolean | undefined = undefined
 
   constructor(
     private readonly schemeRouting: SchemeRoutingService,
@@ -51,6 +51,8 @@ export class TabScanPage {
     if (permission === PermissionStatus.GRANTED) {
       this.hasCameraPermission = true
       this.startScan()
+    } else {
+      this.hasCameraPermission = false
     }
   }
 

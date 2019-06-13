@@ -4,9 +4,11 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx'
 import { StatusBar } from '@ionic-native/status-bar/ngx'
 import { Platform } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
+import { first } from 'rxjs/operators'
 
 import { DEEPLINK_VAULT_ADD_ACCOUNT, DEEPLINK_VAULT_PREFIX } from './constants/constants'
 import { ExposedPromise, exposedPromise } from './functions/exposed-promise'
+import { Secret } from './models/secret'
 import { ErrorCategory, handleErrorLocal } from './services/error-handler/error-handler.service'
 import { NavigationService } from './services/navigation/navigation.service'
 import { ProtocolsService } from './services/protocols/protocols.service'
@@ -112,22 +114,27 @@ export class AppComponent implements AfterViewInit {
               console.log('Successfully matched route', match.$link.url)
 
               if (match.$link.url === DEEPLINK_VAULT_PREFIX || match.$link.url.startsWith(DEEPLINK_VAULT_ADD_ACCOUNT)) {
-                if (this.secretsProvider.currentSecretsList.getValue().length > 0) {
-                  this.ngZone
-                    .run(async () => {
-                      this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+                this.secretsProvider
+                  .getSecretsObservable()
+                  .pipe(first())
+                  .subscribe((secrets: Secret[]) => {
+                    if (secrets.length > 0) {
+                      this.ngZone
+                        .run(async () => {
+                          this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
 
-                      const protocol: string = match.$link.url.substr(DEEPLINK_VAULT_ADD_ACCOUNT.length)
-                      if (protocol.length > 0) {
-                        this.navigationService
-                          .routeWithState('account-add', { protocol })
-                          .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-                      } else {
-                        this.navigationService.route('account-add').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-                      }
-                    })
-                    .catch(handleErrorLocal(ErrorCategory.OTHER))
-                }
+                          const protocol: string = match.$link.url.substr(DEEPLINK_VAULT_ADD_ACCOUNT.length)
+                          if (protocol.length > 0) {
+                            this.navigationService
+                              .routeWithState('account-add', { protocol })
+                              .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+                          } else {
+                            this.navigationService.route('account-add').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+                          }
+                        })
+                        .catch(handleErrorLocal(ErrorCategory.OTHER))
+                    }
+                  })
               } else {
                 this.schemeRoutingProvider.handleNewSyncRequest(match.$link.url).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
               }

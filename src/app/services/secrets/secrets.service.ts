@@ -1,9 +1,9 @@
-import { Injectable, NgZone } from '@angular/core'
+import { Injectable } from '@angular/core'
 import { AlertController, LoadingController } from '@ionic/angular'
 import { Storage } from '@ionic/storage'
 import { AirGapWallet, getProtocolByIdentifier, ICoinProtocol } from 'airgap-coin-lib'
 import * as bip39 from 'bip39'
-import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs'
+import { Observable, ReplaySubject } from 'rxjs'
 
 import { Secret } from '../../models/secret'
 
@@ -14,19 +14,16 @@ import { SecureStorage, SecureStorageService } from './../storage/storage.servic
   providedIn: 'root'
 })
 export class SecretsService {
+  private readonly ready: Promise<void>
+  private readonly secretsList: Secret[] = []
   private activeSecret: Secret
+
   private readonly activeSecret$: ReplaySubject<Secret> = new ReplaySubject(1)
   private readonly secrets$: ReplaySubject<Secret[]> = new ReplaySubject(1)
-
-  private readonly secretsList: Secret[] = []
-  private readonly ready: Promise<void>
-
-  public currentSecretsList: BehaviorSubject<Secret[]> = new BehaviorSubject(this.secretsList) // TODO: Remove, use this.secrets$ instead
 
   constructor(
     private readonly secureStorageService: SecureStorageService,
     private readonly storage: Storage,
-    private readonly ngZone: NgZone,
     private readonly loadingCtrl: LoadingController,
     private readonly alertCtrl: AlertController
   ) {
@@ -39,8 +36,6 @@ export class SecretsService {
     this.secrets$.next(this.secretsList)
     this.activeSecret = this.secretsList[0]
     this.activeSecret$.next(this.activeSecret)
-
-    this.currentSecretsList.next(this.secretsList) // we need to force this update, as [] will not be broadcasted again
   }
 
   public isReady(): Promise<void> {
@@ -49,12 +44,14 @@ export class SecretsService {
 
   private async read(): Promise<Secret[]> {
     const rawSecretsPayload: unknown = await this.storage.get('airgap-secret-list')
+
     // necessary due to double serialization bug we had
     let secrets: Secret[] = typeof rawSecretsPayload === 'string' ? JSON.parse(rawSecretsPayload) : rawSecretsPayload
 
     if (!secrets) {
       secrets = []
     }
+
     for (let k: number = 0; k < secrets.length; k++) {
       const secret: Secret = secrets[k]
       if (secret.wallets) {
@@ -77,72 +74,49 @@ export class SecretsService {
     return secrets
   }
 
-  public addOrUpdateSecret(secret: Secret): Promise<void> {
+  public async addOrUpdateSecret(secret: Secret): Promise<void> {
     if (!secret.wallets) {
       secret.wallets = []
     }
 
-    return new Promise((resolve, reject) => {
-      if (!secret.secretHex) {
-        this.secretsList[this.secretsList.findIndex(obj => obj.id === secret.id)] = secret
-        this.persist()
-          .then(resolve)
-          .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
-      } else {
-        this.secureStorageService
-          .get(secret.id, secret.isParanoia)
-          .then(secureStorage => {
-            return secureStorage.setItem(secret.id, secret.secretHex)
-          })
-          .then(
-            _value => {
-              secret.flushSecret()
-              if (this.secretsList.findIndex(obj => obj.id === secret.id) === -1) {
-                this.ngZone.run(() => {
-                  this.secretsList.push(secret)
-                  this.setActiveSecret(secret)
-                  this.persist()
-                    .then(resolve)
-                    .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
-                })
-              } else {
-                this.setActiveSecret(secret)
-                this.persist()
-                  .then(resolve)
-                  .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
-              }
-            },
-            error => {
-              console.warn(error)
-              reject(error)
-            }
-          )
+    if (!secret.secretHex) {
+      this.secretsList[this.secretsList.findIndex((item: Secret) => item.id === secret.id)] = secret
+
+      return this.persist()
+    } else {
+      const secureStorage: SecureStorage = await this.secureStorageService.get(secret.id, secret.isParanoia)
+
+      await secureStorage.setItem(secret.id, secret.secretHex)
+
+      secret.flushSecret()
+
+      // It's a new secret, push to array
+      if (this.secretsList.findIndex((item: Secret) => item.id === secret.id) === -1) {
+        this.secretsList.push(secret)
+        this.secrets$.next(this.secretsList)
       }
-    })
+
+      this.setActiveSecret(secret)
+
+      return this.persist()
+    }
   }
 
-  public remove(secret: Secret): Promise<void> {
-    return new Promise(resolve => {
-      return this.secureStorageService.get(secret.id, secret.isParanoia).then((secureStorage: SecureStorage) => {
-        secureStorage
-          .removeItem(secret.id)
-          .then(() => {
-            this.secretsList.splice(this.secretsList.indexOf(secret), 1)
-            this.persist()
-              .then(resolve)
-              .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
-          })
-          .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
-      })
-    })
+  public async remove(secret: Secret): Promise<void> {
+    const secureStorage: SecureStorage = await this.secureStorageService.get(secret.id, secret.isParanoia)
+
+    await secureStorage.removeItem(secret.id)
+
+    this.secretsList.splice(this.secretsList.indexOf(secret), 1)
+    this.secrets$.next(this.secretsList)
+
+    await this.persist()
   }
 
-  public retrieveEntropyForSecret(secret: Secret): Promise<string> {
-    return new Promise(resolve => {
-      return this.secureStorageService.get(secret.id, secret.isParanoia).then((secureStorage: SecureStorage) => {
-        resolve(secureStorage.getItem(secret.id))
-      })
-    })
+  public async retrieveEntropyForSecret(secret: Secret): Promise<string> {
+    const secureStorage: SecureStorage = await this.secureStorageService.get(secret.id, secret.isParanoia)
+
+    return secureStorage.getItem(secret.id)
   }
 
   public findByPublicKey(pubKey: string): Secret {
@@ -230,54 +204,51 @@ export class SecretsService {
     return this.storage.set('airgap-secret-list', this.secretsList)
   }
 
-  public addWallet(protocolIdentifier: string, isHDWallet: boolean, customDerivationPath: string): Promise<void> {
-    return new Promise(async (resolve, reject) => {
-      const loading: HTMLIonLoadingElement = await this.loadingCtrl.create({
-        message: 'Deriving your wallet...'
-      })
-      loading.present().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
-
-      const protocol: ICoinProtocol = getProtocolByIdentifier(protocolIdentifier)
-
-      const secret: Secret = this.getActiveSecret()
-      this.retrieveEntropyForSecret(secret)
-        .then((entropy: string) => {
-          const seed: string = bip39.mnemonicToSeedHex(bip39.entropyToMnemonic(entropy))
-          const wallet: AirGapWallet = new AirGapWallet(
-            protocol.identifier,
-            protocol.getPublicKeyFromHexSecret(seed, customDerivationPath),
-            isHDWallet,
-            customDerivationPath
-          )
-          wallet
-            .deriveAddresses(1)
-            .then((addresses: string[]) => {
-              wallet.addresses = addresses
-
-              if (
-                secret.wallets.find(
-                  (obj: AirGapWallet) => obj.publicKey === wallet.publicKey && obj.protocolIdentifier === wallet.protocolIdentifier
-                ) === undefined
-              ) {
-                secret.wallets.push(wallet)
-                resolve(this.addOrUpdateSecret(secret))
-              } else {
-                this.showAlert(
-                  'Wallet already exists',
-                  'You already have added this specific wallet. Please change its derivation path to add another address (advanced mode).'
-                )
-                reject()
-              }
-              loading.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
-            })
-            .catch(handleErrorLocal(ErrorCategory.WALLET_PROVIDER))
-        })
-        .catch((error: Error) => {
-          this.showAlert('Error', error.message)
-          loading.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
-          reject()
-        })
+  public async addWallet(protocolIdentifier: string, isHDWallet: boolean, customDerivationPath: string): Promise<void> {
+    const loading: HTMLIonLoadingElement = await this.loadingCtrl.create({
+      message: 'Deriving your wallet...'
     })
+    loading.present().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
+
+    const protocol: ICoinProtocol = getProtocolByIdentifier(protocolIdentifier)
+
+    const secret: Secret = this.getActiveSecret()
+
+    try {
+      const entropy: string = await this.retrieveEntropyForSecret(secret)
+
+      const seed: string = bip39.mnemonicToSeedHex(bip39.entropyToMnemonic(entropy))
+      const wallet: AirGapWallet = new AirGapWallet(
+        protocol.identifier,
+        protocol.getPublicKeyFromHexSecret(seed, customDerivationPath),
+        isHDWallet,
+        customDerivationPath
+      )
+
+      const addresses: string[] = await wallet.deriveAddresses(1)
+      wallet.addresses = addresses
+
+      if (
+        secret.wallets.find(
+          (obj: AirGapWallet) => obj.publicKey === wallet.publicKey && obj.protocolIdentifier === wallet.protocolIdentifier
+        ) === undefined
+      ) {
+        secret.wallets.push(wallet)
+
+        loading.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
+        this.addOrUpdateSecret(secret)
+      } else {
+        loading.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
+        this.showAlert(
+          'Wallet already exists',
+          'You already have added this specific wallet. Please change its derivation path to add another address (advanced mode).'
+        )
+      }
+    } catch (error) {
+      loading.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
+      this.showAlert('Error', error.message)
+      throw error
+    }
   }
 
   public async showAlert(title: string, message: string): Promise<void> {
