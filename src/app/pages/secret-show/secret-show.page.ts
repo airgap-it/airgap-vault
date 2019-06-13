@@ -1,6 +1,7 @@
 import { Component } from '@angular/core'
 import { AlertController } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
+import { first } from 'rxjs/operators'
 
 import { Secret } from '../../models/secret'
 import { NavigationService } from '../../services/navigation/navigation.service'
@@ -35,6 +36,7 @@ export class SecretShowPage {
           'secret-show.too-fast_alert.wait_label_p1',
           'secret-show.too-fast_alert.wait_label_p2'
         ])
+        .pipe(first())
         .subscribe(async (values: string[]) => {
           const title: string = values['secret-show.too-fast_alert.title']
           const heading: string = values['secret-show.too-fast_alert.heading']

@@ -2,6 +2,7 @@ import { AfterViewInit, Component } from '@angular/core'
 import { ModalController, NavParams } from '@ionic/angular'
 import { Storage } from '@ionic/storage'
 import { TranslateService } from '@ngx-translate/core'
+import { first } from 'rxjs/operators'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { SecureStorageService } from '../../services/storage/storage.service'
@@ -79,6 +80,7 @@ export class WarningModalPage implements AfterViewInit {
           'warnings-modal.disclaimer.description',
           'warnings-modal.disclaimer.understood_label'
         ])
+        .pipe(first())
         .subscribe((values: string[]) => {
           const title: string = values['warnings-modal.disclaimer.title']
           const text: string = values['warnings-modal.disclaimer.text']

@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core'
 import { Platform } from '@ionic/angular'
 import { ZXingScannerComponent } from '@zxing/ngx-scanner'
+import { first } from 'rxjs/operators'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { PermissionsService, PermissionStatus, PermissionTypes } from '../../services/permissions/permissions.service'
@@ -59,14 +60,14 @@ export class TabScanPage {
   public ionViewDidEnter(): void {
     if (!this.platform.is('cordova')) {
       this.hasCameraPermission = true
-      this.zxingScanner.camerasNotFound.subscribe((_devices: MediaDeviceInfo[]) => {
+      this.zxingScanner.camerasNotFound.pipe(first()).subscribe((_devices: MediaDeviceInfo[]) => {
         console.error('An error has occurred when trying to enumerate your video-stream-enabled devices.')
       })
       if (this.selectedDevice) {
         // Not the first time that we open scanner
         this.zxingScanner.startScan(this.selectedDevice)
       }
-      this.zxingScanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
+      this.zxingScanner.camerasFound.pipe(first()).subscribe((devices: MediaDeviceInfo[]) => {
         this.hasCameras = true
         this.availableDevices = devices
         this.selectedDevice = devices[0]

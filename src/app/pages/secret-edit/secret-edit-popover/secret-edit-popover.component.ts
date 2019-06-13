@@ -1,6 +1,7 @@
 import { Component } from '@angular/core'
 import { AlertController, PopoverController } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
+import { first } from 'rxjs/operators'
 
 import { Secret } from '../../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../../services/error-handler/error-handler.service'
@@ -30,6 +31,7 @@ export class SecretEditPopoverComponent {
         'secret-edit-delete-popover.cancel_label',
         'secret-edit-delete-popover.delete_label'
       ])
+      .pipe(first())
       .subscribe(async (values: string[]) => {
         const title: string = values['secret-edit-delete-popover.title']
         const message: string = values['secret-edit-delete-popover.text']

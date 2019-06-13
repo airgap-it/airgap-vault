@@ -2,6 +2,7 @@ import { Component } from '@angular/core'
 import { AlertController, PopoverController } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 import { AirGapWallet } from 'airgap-coin-lib'
+import { first } from 'rxjs/operators'
 
 import { ClipboardService } from '../../../services/clipboard/clipboard.service'
 import { ErrorCategory, handleErrorLocal } from '../../../services/error-handler/error-handler.service'
@@ -51,25 +52,26 @@ export class AccountEditPopoverComponent {
         'wallet-edit-delete-popover.account-removal_alert.cancel_label',
         'wallet-edit-delete-popover.account-removal_alert.delete_label'
       ])
+      .pipe(first())
       .subscribe(async (values: string[]) => {
         const title: string = values['wallet-edit-delete-popover.account-removal_alert.title']
         const message: string = values['wallet-edit-delete-popover.account-removal_alert.text']
-        const text1: string = values['wallet-edit-delete-popover.account-removal_alert.cancel_label']
-        const text2: string = values['wallet-edit-delete-popover.account-removal_alert.delete_label']
+        const cancelButton: string = values['wallet-edit-delete-popover.account-removal_alert.cancel_label']
+        const deleteButton: string = values['wallet-edit-delete-popover.account-removal_alert.delete_label']
 
         const alert: HTMLIonAlertElement = await this.alertCtrl.create({
           header: title,
           message,
           buttons: [
             {
-              text: text1,
+              text: cancelButton,
               role: 'cancel',
               handler: (): void => {
                 this.popoverController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
               }
             },
             {
-              text: text2,
+              text: deleteButton,
               handler: (): void => {
                 alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
                 this.secretsProvider
