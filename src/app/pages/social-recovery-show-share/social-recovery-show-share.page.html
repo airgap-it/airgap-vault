@@ -15,5 +15,9 @@
 </ion-content>
 
 <ion-footer no-border color="primary">
-  <progress-footer [progress]="currentShare * 2" [maxProgress]="shares.length * 2" [rightAction]="next.bind(this)"></progress-footer>
+  <airgap-progress-footer
+    [progress]="currentShare * 2"
+    [maxProgress]="shares.length * 2"
+    [rightAction]="next.bind(this)"
+  ></airgap-progress-footer>
 </ion-footer>

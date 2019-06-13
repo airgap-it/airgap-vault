@@ -18,11 +18,11 @@
 </ion-content>
 
 <ion-footer no-border color="primary">
-  <progress-footer
+  <airgap-progress-footer
     [rightEnabled]="validated"
     [progress]="currentShare * 2 + 1"
     [maxProgress]="shares.length * 2"
     [rightAction]="next.bind(this)"
     [rightLabel]="shares.length - 1 === this.currentShare ? 'Finish' : 'Next'"
-  ></progress-footer>
+  ></airgap-progress-footer>
 </ion-footer>

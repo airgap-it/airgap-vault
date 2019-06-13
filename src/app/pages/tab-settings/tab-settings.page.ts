@@ -25,10 +25,10 @@ export class TabSettingsPage implements OnInit {
     private readonly clipboardProvider: ClipboardService,
     private readonly navigationService: NavigationService
   ) {
-    this.secrets = this.secretsProvider.currentSecretsList.asObservable()
+    this.secrets = this.secretsProvider.getSecretsObservable()
   }
 
-  public ngOnInit(): void {
+  public async ngOnInit(): Promise<void> {
     this.secrets.subscribe(async (secrets: Secret[]) => {
       if (secrets.length === 0) {
         this.navigationService.route('/secret-create/initial').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
