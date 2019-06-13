@@ -41,7 +41,7 @@ export class CameraNativeService implements IEntropyGenerator {
     private readonly platform: Platform,
     private readonly cameraPreview: CameraPreview,
     private readonly rendererFactory: RendererFactory2,
-    private readonly permissionsProvider: PermissionsService
+    private readonly permissionsService: PermissionsService
   ) {
     this.renderer = this.rendererFactory.createRenderer(null, null)
     this.entropyObservable = Observable.create(observer => {
@@ -81,7 +81,7 @@ export class CameraNativeService implements IEntropyGenerator {
     this.collectedEntropyPercentage = 0
     await this.platform.ready()
 
-    const permissionStatus = await this.permissionsProvider.hasCameraPermission()
+    const permissionStatus = await this.permissionsService.hasCameraPermission()
     if (permissionStatus !== PermissionStatus.GRANTED) {
       return
     }

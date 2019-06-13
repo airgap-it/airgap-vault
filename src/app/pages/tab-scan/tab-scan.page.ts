@@ -30,7 +30,7 @@ export class TabScanPage {
     private readonly schemeRouting: SchemeRoutingService,
     private readonly platform: Platform,
     private readonly scanner: ScannerService,
-    private readonly permissionsProvider: PermissionsService
+    private readonly permissionsService: PermissionsService
   ) {
     this.isBrowser = !this.platform.is('cordova')
   }
@@ -43,12 +43,12 @@ export class TabScanPage {
   }
 
   public async requestPermission(): Promise<void> {
-    await this.permissionsProvider.userRequestsPermissions([PermissionTypes.CAMERA])
+    await this.permissionsService.userRequestsPermissions([PermissionTypes.CAMERA])
     await this.checkCameraPermissionsAndActivate()
   }
 
   public async checkCameraPermissionsAndActivate(): Promise<void> {
-    const permission: PermissionStatus = await this.permissionsProvider.hasCameraPermission()
+    const permission: PermissionStatus = await this.permissionsService.hasCameraPermission()
     if (permission === PermissionStatus.GRANTED) {
       this.hasCameraPermission = true
       this.startScan()

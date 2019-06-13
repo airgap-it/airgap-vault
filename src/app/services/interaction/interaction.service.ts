@@ -37,7 +37,7 @@ export interface IInteractionOptions {
   providedIn: 'root'
 })
 export class InteractionService {
-  constructor(private readonly navigationService: NavigationService, private readonly deepLinkProvider: DeepLinkService) {}
+  constructor(private readonly navigationService: NavigationService, private readonly deepLinkService: DeepLinkService) {}
 
   public startInteraction(interactionOptions: IInteractionOptions, secret: Secret): void {
     const interactionSetting: InteractionSetting = secret.interactionSetting
@@ -107,11 +107,11 @@ export class InteractionService {
   }
 
   private startDeeplink(url: string): void {
-    this.deepLinkProvider
+    this.deepLinkService
       .sameDeviceDeeplink(url)
       .then(() => {
         this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       })
-      .catch(handleErrorLocal(ErrorCategory.DEEPLINK_PROVIDER))
+      .catch(handleErrorLocal(ErrorCategory.DEEPLINK_SERVICE))
   }
 }

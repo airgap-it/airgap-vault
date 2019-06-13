@@ -33,10 +33,10 @@ export class AppComponent implements AfterViewInit {
     private readonly splashScreen: SplashScreen,
     private readonly deepLinks: Deeplinks,
     private readonly startupChecks: StartupChecksService,
-    private readonly schemeRoutingProvider: SchemeRoutingService,
+    private readonly schemeRoutingService: SchemeRoutingService,
     private readonly translate: TranslateService,
-    private readonly protocolsProvider: ProtocolsService,
-    private readonly secretsProvider: SecretsService,
+    private readonly protocolsService: ProtocolsService,
+    private readonly secretsService: SecretsService,
     private readonly ngZone: NgZone,
     private readonly navigationService: NavigationService
   ) {
@@ -57,7 +57,7 @@ export class AppComponent implements AfterViewInit {
     }
 
     this.loadLanguages(supportedLanguages)
-    this.protocolsProvider.addProtocols()
+    this.protocolsService.addProtocols()
 
     await this.platform.ready()
 
@@ -114,7 +114,7 @@ export class AppComponent implements AfterViewInit {
               console.log('Successfully matched route', match.$link.url)
 
               if (match.$link.url === DEEPLINK_VAULT_PREFIX || match.$link.url.startsWith(DEEPLINK_VAULT_ADD_ACCOUNT)) {
-                this.secretsProvider
+                this.secretsService
                   .getSecretsObservable()
                   .pipe(first())
                   .subscribe((secrets: Secret[]) => {
@@ -136,7 +136,7 @@ export class AppComponent implements AfterViewInit {
                     }
                   })
               } else {
-                this.schemeRoutingProvider.handleNewSyncRequest(match.$link.url).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
+                this.schemeRoutingService.handleNewSyncRequest(match.$link.url).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
               }
             }
           },

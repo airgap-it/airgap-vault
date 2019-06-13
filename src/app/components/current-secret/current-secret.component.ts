@@ -12,12 +12,12 @@ export class CurrentSecretComponent {
   public readonly secrets$: Observable<Secret[]>
   public readonly currentSecret$: Observable<Secret>
 
-  constructor(private readonly secretsProvider: SecretsService) {
-    this.secrets$ = this.secretsProvider.getSecretsObservable()
-    this.currentSecret$ = this.secretsProvider.getActiveSecretObservable()
+  constructor(private readonly secretsService: SecretsService) {
+    this.secrets$ = this.secretsService.getSecretsObservable()
+    this.currentSecret$ = this.secretsService.getActiveSecretObservable()
   }
 
   public onChange(newSecret: Secret): void {
-    this.secretsProvider.setActiveSecret(newSecret)
+    this.secretsService.setActiveSecret(newSecret)
   }
 }

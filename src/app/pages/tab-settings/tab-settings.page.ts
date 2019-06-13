@@ -18,14 +18,14 @@ export class TabSettingsPage {
   public readonly secrets: Observable<Secret[]>
 
   constructor(
-    private readonly secretsProvider: SecretsService,
+    private readonly secretsService: SecretsService,
     private readonly alertController: AlertController,
     private readonly toastController: ToastController,
-    private readonly schemeRoutingProvider: SchemeRoutingService,
-    private readonly clipboardProvider: ClipboardService,
+    private readonly schemeRoutingService: SchemeRoutingService,
+    private readonly clipboardService: ClipboardService,
     private readonly navigationService: NavigationService
   ) {
-    this.secrets = this.secretsProvider.getSecretsObservable()
+    this.secrets = this.secretsService.getSecretsObservable()
   }
 
   public goToNewSecret(): void {
@@ -44,7 +44,7 @@ export class TabSettingsPage {
         {
           text: 'Delete',
           handler: async () => {
-            this.secretsProvider.remove(secret).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
+            this.secretsService.remove(secret).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
 
             const toast: HTMLIonToastElement = await this.toastController.create({
               message: 'Secret deleted',
@@ -55,7 +55,7 @@ export class TabSettingsPage {
 
             toast.onDidDismiss().then(role => {
               if (role === 'close') {
-                this.secretsProvider.addOrUpdateSecret(secret).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
+                this.secretsService.addOrUpdateSecret(secret).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
               }
             })
 
@@ -75,9 +75,9 @@ export class TabSettingsPage {
   }
 
   public pasteClipboard(): void {
-    this.clipboardProvider.paste().then(
+    this.clipboardService.paste().then(
       (text: string) => {
-        this.schemeRoutingProvider.handleNewSyncRequest(text).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
+        this.schemeRoutingService.handleNewSyncRequest(text).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
       },
       (err: string) => {
         console.error('Error: ' + err)

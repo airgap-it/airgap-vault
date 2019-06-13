@@ -21,7 +21,7 @@ export class AccountAddPage {
   public isAdvancedMode: boolean = false
 
   constructor(
-    private readonly secretsProvider: SecretsService,
+    private readonly secretsService: SecretsService,
     private readonly storage: Storage,
     private readonly modalController: ModalController,
     private readonly navigationService: NavigationService
@@ -65,7 +65,7 @@ export class AccountAddPage {
   }
 
   private addWalletAndReturnToAddressPage(): void {
-    this.secretsProvider
+    this.secretsService
       .addWallet(this.selectedProtocol.identifier, this.isHDWallet, this.customDerivationPath)
       .then(() => {
         this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))

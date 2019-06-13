@@ -18,7 +18,7 @@ export class SecretEditPopoverComponent {
 
   constructor(
     private readonly alertCtrl: AlertController,
-    private readonly secretsProvider: SecretsService,
+    private readonly secretsService: SecretsService,
     private readonly popoverController: PopoverController,
     private readonly translateService: TranslateService
   ) {}
@@ -52,7 +52,7 @@ export class SecretEditPopoverComponent {
             {
               text: deleteButton,
               handler: (): void => {
-                this.secretsProvider.remove(this.secret).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
+                this.secretsService.remove(this.secret).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
                 this.popoverController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
 
                 if (this.onDelete) {

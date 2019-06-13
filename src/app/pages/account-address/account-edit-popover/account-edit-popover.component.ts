@@ -20,14 +20,14 @@ export class AccountEditPopoverComponent {
 
   constructor(
     private readonly alertCtrl: AlertController,
-    private readonly clipboardProvider: ClipboardService,
-    private readonly secretsProvider: SecretsService,
+    private readonly clipboardService: ClipboardService,
+    private readonly secretsService: SecretsService,
     private readonly popoverController: PopoverController,
     private readonly translateService: TranslateService
   ) {}
 
   public async copyAddressToClipboard(): Promise<void> {
-    await this.clipboardProvider.copyAndShowToast(
+    await this.clipboardService.copyAndShowToast(
       this.wallet.receivingPublicAddress,
       this.translateService.instant('wallet-edit-delete-popover.confirm_address_copy')
     )
@@ -36,7 +36,7 @@ export class AccountEditPopoverComponent {
   }
 
   public async copyShareUrlToClipboard(): Promise<void> {
-    await this.clipboardProvider.copyAndShowToast(
+    await this.clipboardService.copyAndShowToast(
       this.walletShareUrl,
       this.translateService.instant('wallet-edit-delete-popover.confirm_sync_code_copy')
     )
@@ -74,7 +74,7 @@ export class AccountEditPopoverComponent {
               text: deleteButton,
               handler: (): void => {
                 alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
-                this.secretsProvider
+                this.secretsService
                   .removeWallet(this.wallet)
                   .then(() => {
                     this.popoverController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))

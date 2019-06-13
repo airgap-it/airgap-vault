@@ -25,7 +25,7 @@ export class StartupChecksService {
 
   constructor(
     private readonly secureStorage: SecureStorageService,
-    private readonly deviceProvider: DeviceService,
+    private readonly deviceService: DeviceService,
     private readonly modalController: ModalController,
     private readonly storage: Storage
   ) {
@@ -33,7 +33,7 @@ export class StartupChecksService {
       {
         name: 'rootCheck',
         expectedOutcome: false,
-        check: (): Promise<boolean> => this.deviceProvider.checkForRoot(),
+        check: (): Promise<boolean> => this.deviceService.checkForRoot(),
         failureConsequence: (callback: () => void): void => {
           this.presentModal(WarningModalPage, { errorType: Warning.ROOT }, callback).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
         }
@@ -74,7 +74,7 @@ export class StartupChecksService {
         name: 'electronCheck',
         expectedOutcome: true,
         check: async (): Promise<boolean> => {
-          const isElectron: boolean = await deviceProvider.checkForElectron()
+          const isElectron: boolean = await deviceService.checkForElectron()
           const hasShownDisclaimer: boolean = await this.storage.get('DISCLAIMER_ELECTRON')
 
           return !isElectron || hasShownDisclaimer

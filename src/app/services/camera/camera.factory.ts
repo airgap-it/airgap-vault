@@ -12,10 +12,10 @@ export function CameraFactory(
   platform: Platform,
   cameraPreview: CameraPreview,
   rendererFactory: RendererFactory2,
-  permissionsProvider: PermissionsService
+  permissionsService: PermissionsService
 ): IEntropyGenerator {
   if (platform.is('cordova')) {
-    return new CameraNativeService(platform, cameraPreview, rendererFactory, permissionsProvider)
+    return new CameraNativeService(platform, cameraPreview, rendererFactory, permissionsService)
   } else {
     return new CameraBrowserService()
   }
