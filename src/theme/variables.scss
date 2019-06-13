@@ -89,7 +89,8 @@ airgap-secret-rules,
 airgap-secret-show,
 airgap-social-recovery-show-share,
 airgap-social-recovery-validate-share,
-airgap-current-secret {
+airgap-current-secret,
+airgap-local-authentication-onboarding {
   --ion-background-color: var(--ion-color-secondary);
   ion-toolbar {
     --background: var(--ion-color-secondary);
