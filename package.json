@@ -58,6 +58,7 @@
     "cordova-ios": "5.0.1",
     "cordova-plugin-add-swift-support": "^1.7.2",
     "cordova-plugin-airgap-secure-storage": "^0.1.7",
+    "cordova-plugin-airgap-security-utils": "0.1.0",
     "cordova-plugin-airgap-webview": "git+https://github.com/airgap-it/cordova-plugin-airgap-webview.git#content-filter",
     "cordova-plugin-app-version": "^0.1.9",
     "cordova-plugin-audioinput": "^1.0.1",
@@ -194,7 +195,8 @@
       "cordova-clipboard": {},
       "cordova.plugins.diagnostic": {},
       "cordova-plugin-app-version": {},
-      "cordova-plugin-airgap-webview": {}
+      "cordova-plugin-airgap-webview": {},
+      "cordova-plugin-airgap-security-utils": {}
     }
   }
 }
