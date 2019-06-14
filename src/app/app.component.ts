@@ -136,7 +136,9 @@ export class AppComponent implements AfterViewInit {
                     }
                   })
               } else {
-                this.schemeRoutingService.handleNewSyncRequest(match.$link.url).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
+                this.ngZone.run(async () => {
+                  this.schemeRoutingService.handleNewSyncRequest(match.$link.url).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
+                })
               }
             }
           },
