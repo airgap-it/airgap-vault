@@ -28,7 +28,7 @@ export class SecretGeneratePage implements OnInit {
   @ViewChild('touchEntropy')
   public touchEntropy: TouchEntropyComponent
 
-  public cameraEnabled: boolean = true
+  public cameraEnabled: boolean = false
   public audioEnabled: boolean = true
   public gyroEnabled: boolean = true
   public touchEnabled: boolean = true
