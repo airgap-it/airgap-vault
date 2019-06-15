@@ -1,28 +1,80 @@
-/*
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { async, ComponentFixture, TestBed } from '@angular/core/testing'
+import { EncodedType, SyncProtocolUtils } from 'airgap-coin-lib'
+
+import { UnitHelper } from '../../../../test-config/unit-test-helper'
 
 import { SignedTransactionComponent } from './signed-transaction.component'
 
 describe('SignedTransactionComponent', () => {
-  let component: SignedTransactionComponent
-  let fixture: ComponentFixture<SignedTransactionComponent>
+  let signedTransactionFixture: ComponentFixture<SignedTransactionComponent>
+  let signedTransaction: SignedTransactionComponent
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [SignedTransactionComponent],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }).compileComponents()
+  let unitHelper: UnitHelper
+  beforeEach(() => {
+    unitHelper = new UnitHelper()
+    TestBed.configureTestingModule(
+      unitHelper.testBed({
+        declarations: []
+      })
+    )
+      .compileComponents()
+      .catch(console.error)
+  })
+
+  beforeEach(async () => {
+    signedTransactionFixture = TestBed.createComponent(SignedTransactionComponent)
+    signedTransaction = signedTransactionFixture.componentInstance
+  })
+
+  it('should be created', () => {
+    expect(signedTransaction instanceof SignedTransactionComponent).toBe(true)
+  })
+
+  it('should load the from-to component if a valid tx is given', async(async () => {
+    const syncProtocol = new SyncProtocolUtils()
+    const serializedTx = await syncProtocol.serialize({
+      version: 1,
+      protocol: 'eth',
+      type: EncodedType.SIGNED_TRANSACTION,
+      payload: {
+        accountIdentifier: 'test',
+        transaction:
+          'f86c808504a817c800825208944a1e1d37462a422873bfccb1e705b05cc4bd922e880de0b6b3a76400008026a00678aaa8f8fd478952bf46044589f5489e809c5ae5717dfe6893490b1f98b441a06a82b82dad7c3232968ec3aa2bba32879b3ecdb877934915d7e65e095fe53d5d'
+      }
+    })
+
+    expect(signedTransaction.airGapTx).toBe(undefined)
+    expect(signedTransaction.fallbackActivated).toBe(false)
+
+    const signedTx = await syncProtocol.deserialize(serializedTx)
+    signedTransaction.signedTx = signedTx
+    await signedTransaction.ngOnChanges()
+
+    expect(signedTransaction.airGapTx).toBeDefined()
+    expect(signedTransaction.fallbackActivated).toBe(false)
   }))
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(SignedTransactionComponent)
-    component = fixture.componentInstance
-    fixture.detectChanges()
-  })
+  it('should load fallback if something about the TX is wrong', async(async () => {
+    const syncProtocol = new SyncProtocolUtils()
+    const serializedTx = await syncProtocol.serialize({
+      version: 1,
+      protocol: 'eth',
+      type: EncodedType.SIGNED_TRANSACTION,
+      payload: {
+        accountIdentifier: 'test',
+        transaction:
+          'asdasdasdasdsad944a1e1d37462a422873bfccb1e705b05cc4bd922e880de0b6b3a76400008026a00678aaa8f8fd478952bf46044589f5489e809c5ae5717dfe6893490b1f98b441a06a82b82dad7c3232968ec3aa2bba32879b3ecdb877934915d7e65e095fe53d5d'
+      }
+    })
 
-  it('should create', () => {
-    expect(component).toBeTruthy()
-  })
+    expect(signedTransaction.airGapTx).toBe(undefined)
+    expect(signedTransaction.fallbackActivated).toBe(false)
+
+    const signedTx = await syncProtocol.deserialize(serializedTx)
+    signedTransaction.signedTx = signedTx
+    await signedTransaction.ngOnChanges()
+
+    expect(signedTransaction.airGapTx).toBeUndefined()
+    expect(signedTransaction.fallbackActivated).toBe(true)
+  }))
 })
-*/
