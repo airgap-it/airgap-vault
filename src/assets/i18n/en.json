@@ -145,7 +145,7 @@
     "title": "Import secret",
     "text": "You can import an existing secret to AirGap. Fill in the words from your secret.",
     "placeholder": "wife pulp island ...",
-    "passphrase_placeholder": "passphrase (optional)",
+    "passphrase_placeholder": "passphrase (optional) NOTE: This participates in creating keys and adrresses! Should be treated as an additional secret word!",
     "warning": "Please double-check the spelling of your mnemonic.",
     "import_label": "Import"
   },
