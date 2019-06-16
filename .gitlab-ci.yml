@@ -93,7 +93,19 @@ qa:
   before_script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   script:
-    - docker create --name qa-$CI_PIPELINE_ID $IMAGE_TAG_CURRENT npm run sonar-scanner -- -X -Dsonar.typescript.lcov.reportPaths=lcov.info -Dsonar.typescript.tslint.reportPaths=lintReport.json -Dsonar.test.inclusions=**/*.spec.ts -Dsonar.tests=src/ -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts -Dsonar.sources=src/ -Dsonar.host.url=$SONAR_URL -Dsonar.login=$SONAR_LOGIN -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME -Dsonar.gitlab.project_id=$CI_PROJECT_ID
+    - docker create --name qa-$CI_PIPELINE_ID $IMAGE_TAG_CURRENT npm run sonar-scanner -- -X
+      -Dsonar.typescript.lcov.reportPaths=lcov.info
+      -Dsonar.typescript.tslint.reportPaths=lintReport.json
+      -Dsonar.test.inclusions=**/*.spec.ts
+      -Dsonar.tests=src/
+      -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts
+      -Dsonar.sources=src/
+      -Dsonar.host.url=$SONAR_URL
+      -Dsonar.login=$SONAR_LOGIN
+      -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA
+      -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME
+      -Dsonar.gitlab.project_id=$CI_PROJECT_ID
+      -Dsonar.branch.name=$CI_BUILD_REF_NAME
     - docker cp lcov.info qa-$CI_PIPELINE_ID:/app/lcov.info
     - docker cp lintReport.json qa-$CI_PIPELINE_ID:/app/lintReport.json
     - docker start -a qa-$CI_PIPELINE_ID
