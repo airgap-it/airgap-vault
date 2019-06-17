@@ -56,7 +56,7 @@ export class SecretShowPage {
               SHOW_SECRET_MIN_TIME_IN_SECONDS.toString(),
               waitLabelP2,
               '</strong>'
-            ].join(),
+            ].join(''),
             buttons: ['Okay']
           })
           alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))

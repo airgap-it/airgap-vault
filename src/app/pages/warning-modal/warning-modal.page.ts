@@ -102,7 +102,7 @@ export class WarningModalPage implements AfterViewInit {
             '</li></ul></p><p>',
             descriptionText,
             '</p>'
-          ].join()
+          ].join('')
 
           this.imageUrl = undefined
           this.buttonText = understoodLabel
