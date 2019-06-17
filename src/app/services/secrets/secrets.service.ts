@@ -82,6 +82,8 @@ export class SecretsService {
     if (!secret.secretHex) {
       this.secretsList[this.secretsList.findIndex((item: Secret) => item.id === secret.id)] = secret
 
+      this.setActiveSecret(secret)
+
       return this.persist()
     } else {
       const secureStorage: SecureStorage = await this.secureStorageService.get(secret.id, secret.isParanoia)
