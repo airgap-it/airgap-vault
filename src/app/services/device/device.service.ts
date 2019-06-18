@@ -29,7 +29,7 @@ export class DeviceService {
   }
 
   public onScreenCaptureStateChanged(callback: (captured: boolean) => void): void {
-    if (this.platform.is('android') && this.platform.is('cordova')) {
+    if (this.platform.is('ios') && this.platform.is('cordova')) {
       SecurityUtils.SecureScreen.onScreenCaptureStateChanged(function(captured: boolean) {
         callback(captured)
       })
@@ -37,13 +37,13 @@ export class DeviceService {
   }
 
   public removeScreenCaptureObservers(): void {
-    if (this.platform.is('android') && this.platform.is('cordova')) {
+    if (this.platform.is('ios') && this.platform.is('cordova')) {
       SecurityUtils.SecureScreen.removeScreenCaptureObservers()
     }
   }
 
   public onScreenshotTaken(callback: () => void) {
-    if (this.platform.is('android') && this.platform.is('cordova')) {
+    if (this.platform.is('ios') && this.platform.is('cordova')) {
       SecurityUtils.SecureScreen.onScreenshotTaken(function() {
         callback()
       })
@@ -51,7 +51,7 @@ export class DeviceService {
   }
 
   public removeScreenshotObservers(): void {
-    if (this.platform.is('android') && this.platform.is('cordova')) {
+    if (this.platform.is('ios') && this.platform.is('cordova')) {
       SecurityUtils.SecureScreen.removeScreenshotObservers()
     }
   }
