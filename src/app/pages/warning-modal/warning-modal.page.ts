@@ -49,6 +49,7 @@ export class WarningModalPage implements AfterViewInit {
       this.title = 'warnings-modal.screenshot.title'
       this.description = 'warnings-modal.screenshot.description'
       this.imageUrl = './assets/img/screenshot_detected.svg'
+      this.buttonText = 'Ok'
       this.handler = () => {
         this.modalController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
       }
