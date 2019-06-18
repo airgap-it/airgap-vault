@@ -1,6 +1,7 @@
 import { Location } from '@angular/common'
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
+import { NavController } from '@ionic/angular'
 
 import { Identifiable } from '../../models/identifiable'
 
@@ -15,7 +16,7 @@ interface State {
 export class NavigationService {
   private state: State = {}
 
-  constructor(private readonly router: Router, private readonly location: Location) {}
+  constructor(private readonly router: Router, private readonly location: Location, private readonly navCtrl: NavController) {}
 
   public async routeWithIdentifiableObject(router: Router, route: string, object: Identifiable): Promise<boolean> {
     return router.navigate([route, object.getIdentifier()])
@@ -33,6 +34,10 @@ export class NavigationService {
 
   public back(): void {
     this.location.back()
+  }
+
+  public routeBack(route: string): void {
+    this.navCtrl.navigateBack(route)
   }
 
   public getState(): State {

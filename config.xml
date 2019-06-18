@@ -16,7 +16,7 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="3000" />
     <preference name="Orientation" value="portrait" />
-    <preference name="deployment-target" value="10.0" />
+    <preference name="deployment-target" value="11.0" />
     <feature name="CDVWKWebViewEngine">
         <param name="ios-package" value="CDVWKWebViewEngine" />
     </feature>
@@ -133,8 +133,8 @@
     <plugin name="cordova-sqlite-storage" spec="2.5.1" />
     <plugin name="cordova-plugin-device-motion" spec="2.0.1" />
     <plugin name="cordova-plugin-airgap-secure-storage" spec="0.1.7" />
+    <plugin name="cordova-plugin-airgap-security-utils" spec="0.2.0" />
     <plugin name="com.lampa.startapp" spec="6.1.6" />
-    <plugin name="cordova-plugin-jailbreak-detection" spec="git+https://github.com/leecrossley/cordova-plugin-jailbreak-detection.git" />
     <plugin name="cordova-plugin-add-swift-support" spec="1.7.2" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="2.1.3" />
     <plugin name="cordova-plugin-airgap-webview" spec="git+https://github.com/airgap-it/cordova-plugin-airgap-webview.git#content-filter" />
@@ -142,7 +142,6 @@
     <plugin name="cordova.plugins.diagnostic" spec="4.0.10" />
     <plugin name="cordova-plugin-app-version" spec="0.1.9" />
     <plugin name="cordova-clipboard" spec="1.2.1" />
-    <plugin name="cordova-plugin-airgap-security-utils" spec="0.1.0" />
     <engine name="android" spec="7.1.2" />
     <engine name="ios" spec="5.0.1" />
 </widget>

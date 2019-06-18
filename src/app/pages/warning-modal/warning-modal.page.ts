@@ -50,7 +50,9 @@ export class WarningModalPage implements AfterViewInit {
       this.description =
         'Looks like you just took a screenshot. Make sure that you never take a screenshot you might expose your secret key.'
       this.imageUrl = './assets/img/screenshot_detected.svg'
-      this.handler = () => {}
+      this.handler = () => {
+        this.modalController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+      }
     }
 
     if (this.errorType === Warning.SECURE_STORAGE) {
