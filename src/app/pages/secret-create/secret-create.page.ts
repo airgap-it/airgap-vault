@@ -1,6 +1,8 @@
-import { Component } from '@angular/core'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { Storage } from '@ionic/storage'
+import { first } from 'rxjs/operators'
 
+import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
@@ -10,15 +12,24 @@ import { SecretsService } from '../../services/secrets/secrets.service'
   templateUrl: './secret-create.page.html',
   styleUrls: ['./secret-create.page.scss']
 })
-export class SecretCreatePage {
+export class SecretCreatePage implements OnInit {
+  public canGoBack: boolean = false
+
   constructor(
     private readonly navigationService: NavigationService,
     private readonly secretsService: SecretsService,
     private readonly storage: Storage
   ) {}
 
-  public canGoBack(): boolean {
-    return this.secretsService.currentSecretsList.getValue().length > 0
+  public ngOnInit(): void {
+    this.secretsService
+      .getSecretsObservable()
+      .pipe(first())
+      .subscribe((secrets: Secret[]) => {
+        if (secrets.length > 0) {
+          this.canGoBack = true
+        }
+      })
   }
 
   public async goToGenerate(): Promise<void> {

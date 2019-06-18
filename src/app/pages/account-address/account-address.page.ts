@@ -23,17 +23,17 @@ export class AccountAddressPage implements OnInit {
 
   constructor(
     private readonly popoverCtrl: PopoverController,
-    private readonly clipboardProvider: ClipboardService,
-    private readonly secretsProvider: SecretsService,
-    private readonly shareUrlProvider: ShareUrlService,
-    private readonly interactionProvider: InteractionService,
+    private readonly clipboardService: ClipboardService,
+    private readonly secretsService: SecretsService,
+    private readonly shareUrlService: ShareUrlService,
+    private readonly interactionService: InteractionService,
     private readonly navigationService: NavigationService
   ) {
     this.wallet = this.navigationService.getState().wallet
   }
 
   public async ngOnInit(): Promise<void> {
-    this.walletShareUrl = await this.shareUrlProvider.generateShareURL(this.wallet)
+    this.walletShareUrl = await this.shareUrlService.generateShareURL(this.wallet)
   }
 
   public done(): void {
@@ -41,12 +41,12 @@ export class AccountAddressPage implements OnInit {
   }
 
   public async share(): Promise<void> {
-    this.interactionProvider.startInteraction(
+    this.interactionService.startInteraction(
       {
         operationType: InteractionOperationType.WALLET_SYNC,
         url: this.walletShareUrl
       },
-      this.secretsProvider.getActiveSecret()
+      this.secretsService.getActiveSecret()
     )
   }
 
@@ -68,6 +68,6 @@ export class AccountAddressPage implements OnInit {
   }
 
   public async copyAddressToClipboard(): Promise<void> {
-    await this.clipboardProvider.copyAndShowToast(this.wallet.receivingPublicAddress)
+    await this.clipboardService.copyAndShowToast(this.wallet.receivingPublicAddress)
   }
 }

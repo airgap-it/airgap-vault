@@ -1,12 +1,12 @@
 import * as bip39 from 'bip39'
-import { sha3_256 } from 'js-sha3'
+import { Hasher, sha3_256 } from 'js-sha3'
 import secretJS from 'secrets.js-grempe'
 
 export class BIP39Signer {
-  public readonly checkSumLength = 10
+  public readonly checkSumLength: number = 10
 
-  private getOffsetMapping(share: string): any {
-    const shareWordCount = share.split(' ').length
+  private getOffsetMapping(share: string): { offset: number; seedOffset: number } {
+    const shareWordCount: number = share.split(' ').length
     if (shareWordCount === 48) {
       return { offset: 99, seedOffset: 64 }
     } else if (shareWordCount === 36) {
@@ -18,9 +18,9 @@ export class BIP39Signer {
   }
 
   private getRandomIntInclusive(min: number, max: number): number {
-    const randomBuffer = new Uint32Array(1)
+    const randomBuffer: Uint32Array = new Uint32Array(1)
     window.crypto.getRandomValues(randomBuffer)
-    const randomNumber = randomBuffer[0] / (0xffffffff + 1)
+    const randomNumber: number = randomBuffer[0] / (0xffffffff + 1)
     min = Math.ceil(min)
     max = Math.floor(max)
 
@@ -81,7 +81,7 @@ export class BIP39Signer {
     } else if (numberOfShares < 2) {
       throw new Error('At least two shares are needed')
     }
-    const secretDigester = sha3_256.create()
+    const secretDigester: Hasher = sha3_256.create()
 
     // TODO check if mnemoinc or secret
     const seed: string = bip39.mnemonicToEntropy(secret)

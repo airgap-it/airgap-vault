@@ -2,6 +2,7 @@ import { AfterViewInit, Component } from '@angular/core'
 import { ModalController, NavParams } from '@ionic/angular'
 import { Storage } from '@ionic/storage'
 import { TranslateService } from '@ngx-translate/core'
+import { first } from 'rxjs/operators'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { SecureStorageService } from '../../services/storage/storage.service'
@@ -24,9 +25,9 @@ export class WarningModalPage implements AfterViewInit {
 
   public title: string
   public description: string
-  public imageUrl: string
+  public imageUrl: string | undefined = undefined
   public handler: () => void = () => undefined
-  public buttonText: string = 'Ok'
+  public buttonText: string = undefined
 
   constructor(
     public navParams: NavParams,
@@ -36,19 +37,17 @@ export class WarningModalPage implements AfterViewInit {
     private readonly translateService: TranslateService
   ) {}
 
-  public ngAfterViewInit() {
+  public ngAfterViewInit(): void {
     if (this.errorType === Warning.ROOT) {
-      this.title = 'Your device is rooted'
-      this.description =
-        'It seems like you have rooted your device. While we think this is neat, it weakens the security of your device significantly and we multiple mechanisms of AirGap can be circumvented by other apps. Therefore, AirGap is not able to run on this device.'
+      this.title = 'warnings-modal.root.title'
+      this.description = 'warnings-modal.root.description'
       this.imageUrl = './assets/img/root_detection.svg'
-      this.handler = () => {}
+      this.handler = (): void => undefined
     }
 
     if (this.errorType === Warning.SCREENSHOT) {
-      this.title = 'Screenshot detected'
-      this.description =
-        'Looks like you just took a screenshot. Make sure that you never take a screenshot you might expose your secret key.'
+      this.title = 'warnings-modal.screenshot.title'
+      this.description = 'warnings-modal.screenshot.description'
       this.imageUrl = './assets/img/screenshot_detected.svg'
       this.handler = () => {
         this.modalController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
@@ -56,22 +55,20 @@ export class WarningModalPage implements AfterViewInit {
     }
 
     if (this.errorType === Warning.SECURE_STORAGE) {
-      this.title = 'Device Unsecure'
-      this.description =
-        'Your lockscreen needs to be setup in order to properly encrypt and protect your secrets. After securing your device, please close and restart AirGap.'
+      this.title = 'warnings-modal.secure-storage.title'
+      this.description = 'warnings-modal.secure-storage.description'
       this.imageUrl = './assets/img/screenshot_detected.svg'
-      this.buttonText = 'Secure Device'
-      this.handler = () => {
+      this.buttonText = 'warnings-modal.secure-storage.button-text_label'
+      this.handler = (): void => {
         this.secureStorage.secureDevice().catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
       }
     }
 
     if (this.errorType === Warning.NETWORK) {
-      this.title = 'Network Connection detected'
-      this.description =
-        'Looks like you have connected this device to a network. The AirGap App has no network priviledges but it is best to disconnect the device entierly from any network.'
+      this.title = 'warnings-modal.network.title'
+      this.description = 'warnings-modal.network.description'
       this.imageUrl = './assets/img/network_connection.svg'
-      this.handler = () => {}
+      this.handler = (): void => undefined
     }
 
     if (this.errorType === Warning.INITIAL_DISCLAIMER) {
@@ -85,32 +82,33 @@ export class WarningModalPage implements AfterViewInit {
           'warnings-modal.disclaimer.description',
           'warnings-modal.disclaimer.understood_label'
         ])
-        .subscribe(values => {
+        .pipe(first())
+        .subscribe((values: string[]) => {
           const title: string = values['warnings-modal.disclaimer.title']
           const text: string = values['warnings-modal.disclaimer.text']
-          const list_text: string = values['warnings-modal.disclaimer.disclaimer-list.text']
-          const list_item1_text: string = values['warnings-modal.disclaimer.disclaimer-list.item-1_text']
-          const list_item2_text: string = values['warnings-modal.disclaimer.disclaimer-list.item-2_text']
-          const description_text: string = values['warnings-modal.disclaimer.description']
-          const label: string = values['warnings-modal.disclaimer.understood_label']
+          const listText: string = values['warnings-modal.disclaimer.disclaimer-list.text']
+          const listItem1Text: string = values['warnings-modal.disclaimer.disclaimer-list.item-1_text']
+          const listItem2Text: string = values['warnings-modal.disclaimer.disclaimer-list.item-2_text']
+          const descriptionText: string = values['warnings-modal.disclaimer.description']
+          const understoodLabel: string = values['warnings-modal.disclaimer.understood_label']
           this.title = title
-          this.description =
-            '<p><strong>' +
-            text +
-            '</strong></p><p>' +
-            list_text +
-            '<ul><li>' +
-            list_item1_text +
-            '</li><li>' +
-            list_item2_text +
-            '</li></ul></p><p>' +
-            description_text +
+          this.description = [
+            '<p><strong>',
+            text,
+            '</strong></p><p>',
+            listText,
+            '<ul><li>',
+            listItem1Text,
+            '</li><li>',
+            listItem2Text,
+            '</li></ul></p><p>',
+            descriptionText,
             '</p>'
+          ].join('')
 
-          this.imageUrl = null
-          this.buttonText = label
-          this.handler = () => {
-            console.log('handler called')
+          this.imageUrl = undefined
+          this.buttonText = understoodLabel
+          this.handler = (): void => {
             this.storage
               .set('DISCLAIMER_INITIAL', true)
               .then(() => {

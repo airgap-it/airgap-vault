@@ -18,7 +18,7 @@ export class SchemeRoutingService {
 
   constructor(
     private readonly navigationService: NavigationService,
-    private readonly secretsProvider: SecretsService,
+    private readonly secretsService: SecretsService,
     private readonly alertCtrl: AlertController,
     private readonly translateService: TranslateService
   ) {
@@ -31,7 +31,7 @@ export class SchemeRoutingService {
 
   public async handleNewSyncRequest(rawString: string, scanAgainCallback: () => void = () => {}): Promise<boolean | void> {
     // wait for secrets to be loaded for sure
-    await this.secretsProvider.isReady()
+    await this.secretsService.isReady()
 
     const syncProtocol: SyncProtocolUtils = new SyncProtocolUtils()
 
@@ -73,7 +73,7 @@ export class SchemeRoutingService {
     const unsignedTransaction = deserializedSyncProtocol.payload as UnsignedTransaction
     // tslint:enable:no-unnecessary-type-assertion
 
-    let correctWallet = this.secretsProvider.findWalletByPublicKeyAndProtocolIdentifier(
+    let correctWallet = this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(
       unsignedTransaction.publicKey,
       deserializedSyncProtocol.protocol
     )
@@ -82,7 +82,7 @@ export class SchemeRoutingService {
     // wallet with the right protocol. This way we can sign all ERC20 transactions, but show the right amount
     // and fee for all tokens we support.
     if (!correctWallet) {
-      const baseWallet = this.secretsProvider.findBaseWalletByPublicKeyAndProtocolIdentifier(
+      const baseWallet = this.secretsService.findBaseWalletByPublicKeyAndProtocolIdentifier(
         unsignedTransaction.publicKey,
         deserializedSyncProtocol.protocol
       )

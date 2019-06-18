@@ -19,19 +19,20 @@ export class TabAccountsPage implements OnInit {
 
   public wallets$: BehaviorSubject<AirGapWallet[]> = new BehaviorSubject<AirGapWallet[]>([])
 
-  constructor(private readonly secretsProvider: SecretsService, private readonly navigationService: NavigationService) {
-    this.secrets = this.secretsProvider.currentSecretsList.asObservable()
-    this.secretsProvider.getActiveSecretObservable().subscribe((secret: Secret) => {
-      this.wallets$.next(secret.wallets)
-    })
+  constructor(private readonly secretsService: SecretsService, private readonly navigationService: NavigationService) {
+    this.secrets = this.secretsService.getSecretsObservable()
   }
 
-  public ngOnInit(): void {
+  public async ngOnInit(): Promise<void> {
+    this.secretsService.getActiveSecretObservable().subscribe((secret: Secret) => {
+      this.wallets$.next(secret.wallets)
+    })
+
     this.secrets.subscribe(async (secrets: Secret[]) => {
       if (secrets.length === 0) {
         this.navigationService.route('/secret-create/initial').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       }
-    })
+    }) // We should never unsubscribe, because we need to watch this in case a user deletes all his secrets
   }
 
   public goToReceiveAddress(wallet: AirGapWallet): void {

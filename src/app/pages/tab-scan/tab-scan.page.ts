@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core'
 import { Platform } from '@ionic/angular'
 import { ZXingScannerComponent } from '@zxing/ngx-scanner'
+import { first } from 'rxjs/operators'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { PermissionsService, PermissionStatus, PermissionTypes } from '../../services/permissions/permissions.service'
@@ -23,13 +24,13 @@ export class TabScanPage {
 
   public hasCameras: boolean = false
 
-  public hasCameraPermission: boolean = false
+  public hasCameraPermission: boolean | undefined = undefined
 
   constructor(
     private readonly schemeRouting: SchemeRoutingService,
     private readonly platform: Platform,
     private readonly scanner: ScannerService,
-    private readonly permissionsProvider: PermissionsService
+    private readonly permissionsService: PermissionsService
   ) {
     this.isBrowser = !this.platform.is('cordova')
   }
@@ -42,29 +43,31 @@ export class TabScanPage {
   }
 
   public async requestPermission(): Promise<void> {
-    await this.permissionsProvider.userRequestsPermissions([PermissionTypes.CAMERA])
+    await this.permissionsService.userRequestsPermissions([PermissionTypes.CAMERA])
     await this.checkCameraPermissionsAndActivate()
   }
 
   public async checkCameraPermissionsAndActivate(): Promise<void> {
-    const permission: PermissionStatus = await this.permissionsProvider.hasCameraPermission()
+    const permission: PermissionStatus = await this.permissionsService.hasCameraPermission()
     if (permission === PermissionStatus.GRANTED) {
       this.hasCameraPermission = true
       this.startScan()
+    } else {
+      this.hasCameraPermission = false
     }
   }
 
   public ionViewDidEnter(): void {
     if (!this.platform.is('cordova')) {
       this.hasCameraPermission = true
-      this.zxingScanner.camerasNotFound.subscribe((_devices: MediaDeviceInfo[]) => {
+      this.zxingScanner.camerasNotFound.pipe(first()).subscribe((_devices: MediaDeviceInfo[]) => {
         console.error('An error has occurred when trying to enumerate your video-stream-enabled devices.')
       })
       if (this.selectedDevice) {
         // Not the first time that we open scanner
         this.zxingScanner.startScan(this.selectedDevice)
       }
-      this.zxingScanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
+      this.zxingScanner.camerasFound.pipe(first()).subscribe((devices: MediaDeviceInfo[]) => {
         this.hasCameras = true
         this.availableDevices = devices
         this.selectedDevice = devices[0]

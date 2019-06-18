@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component } from '@angular/core'
 import { AlertController, ToastController } from '@ionic/angular'
 import { Observable } from 'rxjs'
 
@@ -14,26 +14,18 @@ import { SecretsService } from '../../services/secrets/secrets.service'
   templateUrl: './tab-settings.page.html',
   styleUrls: ['./tab-settings.page.scss']
 })
-export class TabSettingsPage implements OnInit {
+export class TabSettingsPage {
   public readonly secrets: Observable<Secret[]>
 
   constructor(
-    private readonly secretsProvider: SecretsService,
+    private readonly secretsService: SecretsService,
     private readonly alertController: AlertController,
     private readonly toastController: ToastController,
-    private readonly schemeRoutingProvider: SchemeRoutingService,
-    private readonly clipboardProvider: ClipboardService,
+    private readonly schemeRoutingService: SchemeRoutingService,
+    private readonly clipboardService: ClipboardService,
     private readonly navigationService: NavigationService
   ) {
-    this.secrets = this.secretsProvider.currentSecretsList.asObservable()
-  }
-
-  public ngOnInit(): void {
-    this.secrets.subscribe(async (secrets: Secret[]) => {
-      if (secrets.length === 0) {
-        this.navigationService.route('/secret-create/initial').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-      }
-    })
+    this.secrets = this.secretsService.getSecretsObservable()
   }
 
   public goToNewSecret(): void {
@@ -52,7 +44,7 @@ export class TabSettingsPage implements OnInit {
         {
           text: 'Delete',
           handler: async () => {
-            this.secretsProvider.remove(secret).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
+            this.secretsService.remove(secret).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
 
             const toast: HTMLIonToastElement = await this.toastController.create({
               message: 'Secret deleted',
@@ -63,7 +55,7 @@ export class TabSettingsPage implements OnInit {
 
             toast.onDidDismiss().then(role => {
               if (role === 'close') {
-                this.secretsProvider.addOrUpdateSecret(secret).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
+                this.secretsService.addOrUpdateSecret(secret).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
               }
             })
 
@@ -83,9 +75,9 @@ export class TabSettingsPage implements OnInit {
   }
 
   public pasteClipboard(): void {
-    this.clipboardProvider.paste().then(
+    this.clipboardService.paste().then(
       (text: string) => {
-        this.schemeRoutingProvider.handleNewSyncRequest(text).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
+        this.schemeRoutingService.handleNewSyncRequest(text).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
       },
       (err: string) => {
         console.error('Error: ' + err)

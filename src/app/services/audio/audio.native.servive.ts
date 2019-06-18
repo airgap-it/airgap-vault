@@ -2,26 +2,26 @@ import { Injectable } from '@angular/core'
 import { Platform } from '@ionic/angular'
 import { Observable } from 'rxjs'
 
-import workerJS from '../../../assets/workers/entropyCalculatorWorker'
+import entropyCalculatorWorkerJS from '../../../assets/workers/entropyCalculatorWorker'
 import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
 
 import { PermissionsService, PermissionStatus } from './../permissions/permissions.service'
 
 declare var window: any
 
-const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
-const entropyCalculatorWorker = new Worker(blobURL)
+const blobURL: string = window.URL.createObjectURL(new Blob([entropyCalculatorWorkerJS]))
+const entropyCalculatorWorker: Worker = new Worker(blobURL)
 
 @Injectable({ providedIn: 'root' })
 export class AudioNativeService implements IEntropyGenerator {
-  private readonly ENTROPY_SIZE = 4096
+  private readonly ENTROPY_SIZE: number = 4096
 
   private collectedEntropyPercentage: number = 0
 
   private handler
   private readonly entropyObservable: Observable<Entropy>
 
-  constructor(private readonly platform: Platform, private readonly permissionsProvider: PermissionsService) {
+  constructor(private readonly platform: Platform, private readonly permissionsService: PermissionsService) {
     this.entropyObservable = Observable.create(observer => {
       entropyCalculatorWorker.onmessage = event => {
         this.collectedEntropyPercentage += event.data.entropyMeasure
@@ -45,7 +45,7 @@ export class AudioNativeService implements IEntropyGenerator {
     this.collectedEntropyPercentage = 0
     await this.platform.ready()
 
-    const permissionStatus = await this.permissionsProvider.hasMicrophonePermission()
+    const permissionStatus = await this.permissionsService.hasMicrophonePermission()
     if (permissionStatus !== PermissionStatus.GRANTED) {
       return
     }

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core'
 import { AlertController, PopoverController } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
+import { first } from 'rxjs/operators'
 
 import { Secret } from '../../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../../services/error-handler/error-handler.service'
@@ -17,7 +18,7 @@ export class SecretEditPopoverComponent {
 
   constructor(
     private readonly alertCtrl: AlertController,
-    private readonly secretsProvider: SecretsService,
+    private readonly secretsService: SecretsService,
     private readonly popoverController: PopoverController,
     private readonly translateService: TranslateService
   ) {}
@@ -30,6 +31,7 @@ export class SecretEditPopoverComponent {
         'secret-edit-delete-popover.cancel_label',
         'secret-edit-delete-popover.delete_label'
       ])
+      .pipe(first())
       .subscribe(async (values: string[]) => {
         const title: string = values['secret-edit-delete-popover.title']
         const message: string = values['secret-edit-delete-popover.text']
@@ -50,7 +52,7 @@ export class SecretEditPopoverComponent {
             {
               text: deleteButton,
               handler: (): void => {
-                this.secretsProvider.remove(this.secret).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
+                this.secretsService.remove(this.secret).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
                 this.popoverController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
 
                 if (this.onDelete) {

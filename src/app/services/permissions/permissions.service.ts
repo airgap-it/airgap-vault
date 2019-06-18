@@ -24,20 +24,20 @@ export class PermissionsService {
   constructor(private readonly platform: Platform, private readonly diagnostic: Diagnostic, private readonly alertCtrl: AlertController) {}
 
   public async hasCameraPermission(): Promise<PermissionStatus> {
-    const permission = await this.diagnostic.getCameraAuthorizationStatus(false)
+    const permission: string = await this.diagnostic.getCameraAuthorizationStatus(false)
 
     return this.getPermissionStatus(permission)
   }
 
   public async hasMicrophonePermission(): Promise<PermissionStatus> {
-    const permission = await this.diagnostic.getMicrophoneAuthorizationStatus()
+    const permission: string = await this.diagnostic.getMicrophoneAuthorizationStatus()
 
     return this.getPermissionStatus(permission)
   }
 
   public async requestPermissions(permissions: PermissionTypes[]): Promise<void> {
     if (this.platform.is('android')) {
-      const permissionsToRequest = []
+      const permissionsToRequest: string[] = []
       if (permissions.indexOf(PermissionTypes.CAMERA) >= 0) {
         permissionsToRequest.push(this.diagnostic.permission.CAMERA)
       }
@@ -52,7 +52,6 @@ export class PermissionsService {
       if (permissions.indexOf(PermissionTypes.MICROPHONE) >= 0) {
         await this.diagnostic.requestMicrophoneAuthorization()
       }
-    } else {
     }
   }
 
@@ -61,8 +60,8 @@ export class PermissionsService {
    * can ask him for the permissions natively, otherwise we show an alert with a
    * link to the settings.
    */
-  public async userRequestsPermissions(permissions: PermissionTypes[]) {
-    let canRequestPermission = false
+  public async userRequestsPermissions(permissions: PermissionTypes[]): Promise<void> {
+    let canRequestPermission: boolean = false
     for (const p of permissions) {
       canRequestPermission = (await this.canAskForPermission(p)) || canRequestPermission
     }
@@ -78,21 +77,21 @@ export class PermissionsService {
   }
 
   private async canAskForPermission(permission: PermissionTypes): Promise<boolean> {
-    let canAskForPermission = true
+    let canAskForPermission: boolean = true
     if (this.platform.is('android')) {
       if (permission === PermissionTypes.CAMERA) {
-        const permissionStatus = await this.hasCameraPermission()
+        const permissionStatus: PermissionStatus = await this.hasCameraPermission()
         canAskForPermission = !(permissionStatus === PermissionStatus.DENIED_ALWAYS)
       } else if (permission === PermissionTypes.MICROPHONE) {
-        const permissionStatus = await this.hasMicrophonePermission()
+        const permissionStatus: PermissionStatus = await this.hasMicrophonePermission()
         canAskForPermission = !(permissionStatus === PermissionStatus.DENIED_ALWAYS)
       }
     } else if (this.platform.is('ios')) {
       if (permission === PermissionTypes.CAMERA) {
-        const permissionStatus = await this.hasCameraPermission()
+        const permissionStatus: PermissionStatus = await this.hasCameraPermission()
         canAskForPermission = !(permissionStatus === PermissionStatus.DENIED)
       } else if (permission === PermissionTypes.MICROPHONE) {
-        const permissionStatus = await this.hasMicrophonePermission()
+        const permissionStatus: PermissionStatus = await this.hasMicrophonePermission()
         canAskForPermission = !(permissionStatus === PermissionStatus.DENIED)
       }
     }
@@ -114,8 +113,8 @@ export class PermissionsService {
     }
   }
 
-  private async showAlert(title: string, message: string) {
-    const alert = await this.alertCtrl.create({
+  private async showAlert(title: string, message: string): Promise<void> {
+    const alert: HTMLIonAlertElement = await this.alertCtrl.create({
       header: title,
       message,
       buttons: [
