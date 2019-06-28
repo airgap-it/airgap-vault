@@ -141,8 +141,7 @@
     <plugin name="cordova-plugin-app-version" spec="0.1.9" />
     <plugin name="cordova-clipboard" spec="1.2.1" />
     <plugin name="cordova-plugin-qrscanner" spec="3.0.1" />
-    <plugin name="cordova-plugin-airgap-secure-storage" spec="git+https://github.com/airgap-it/cordova-plugin-airgap-secure-storage.git#feat/swift5" />
-    <plugin name="cordova-plugin-airgap-security-utils" spec="0.2.1" />
-    <engine name="android" spec="7.1.2" />
+    <plugin name="cordova-plugin-airgap-security-utils" spec="0.3.0" />
     <engine name="ios" spec="5.0.1" />
+    <engine name="android" spec="7.1.4" />
 </widget>
