@@ -1,9 +1,25 @@
 import { Injectable } from '@angular/core'
-import { addSubProtocol, GenericERC20, GenericERC20Configuration, TezosKtProtocol } from 'airgap-coin-lib'
+import {
+  addSubProtocol,
+  GenericERC20,
+  GenericERC20Configuration,
+  IAirGapTransaction,
+  SignedTransaction,
+  TezosKtProtocol,
+  UnsignedTransaction
+} from 'airgap-coin-lib'
 import { AeternityERC20Token } from 'airgap-coin-lib/dist/protocols/ethereum/erc20/AeToken'
 import { addSupportedProtocol } from 'airgap-coin-lib/dist/utils/supportedProtocols'
 
 import { tokens } from './tokens'
+export interface Token {
+  symbol: string
+  name: string
+  marketSymbol: string
+  identifier: string
+  contractAddress: string
+  decimals: number
+}
 
 interface SubProtocolInfo {
   symbol: string
@@ -76,5 +92,30 @@ export class ProtocolsService {
         })
       )
     })
+  }
+
+  public async getTokenTransferDetailsFromSigned(
+    tx: IAirGapTransaction,
+    signedTransaction: SignedTransaction
+  ): Promise<IAirGapTransaction> {
+    const subtoken: Token | undefined = tokens.find((token: Token) => token.contractAddress.toLowerCase() === tx.to[0].toLowerCase())
+    if (subtoken) {
+      const genericErc20: GenericERC20 = new GenericERC20(subtoken)
+
+      return genericErc20.getTransactionDetailsFromSigned(signedTransaction)
+    }
+
+    return tx
+  }
+
+  public async getTokenTransferDetails(tx: IAirGapTransaction, unsignedTransaction: UnsignedTransaction): Promise<IAirGapTransaction> {
+    const subtoken: Token | undefined = tokens.find((token: Token) => token.contractAddress.toLowerCase() === tx.to[0].toLowerCase())
+    if (subtoken) {
+      const genericErc20: GenericERC20 = new GenericERC20(subtoken)
+
+      return genericErc20.getTransactionDetails(unsignedTransaction)
+    }
+
+    return tx
   }
 }
