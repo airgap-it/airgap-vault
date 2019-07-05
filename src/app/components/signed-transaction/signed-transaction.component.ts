@@ -8,6 +8,8 @@ import {
   UnsignedTransaction
 } from 'airgap-coin-lib'
 
+import { ProtocolsService } from '../../services/protocols/protocols.service'
+
 @Component({
   selector: 'airgap-signed-transaction',
   templateUrl: './signed-transaction.component.html',
@@ -28,7 +30,7 @@ export class SignedTransactionComponent {
 
   public rawTxData: string
 
-  constructor() {
+  constructor(private readonly protocolsService: ProtocolsService) {
     //
   }
 
@@ -48,7 +50,14 @@ export class SignedTransactionComponent {
       const protocol = getProtocolByIdentifier(this.signedTx.protocol)
       try {
         // tslint:disable-next-line:no-unnecessary-type-assertion
-        this.airGapTx = await protocol.getTransactionDetailsFromSigned(this.signedTx.payload as SignedTransaction)
+        const signedTransaction: SignedTransaction = this.signedTx.payload as SignedTransaction
+        this.airGapTx = await protocol.getTransactionDetailsFromSigned(signedTransaction)
+        try {
+          this.airGapTx = await this.protocolsService.getTokenTransferDetailsFromSigned(this.airGapTx, signedTransaction)
+        } catch (error) {
+          console.error('unable to parse token transaction, using ethereum transaction details instead')
+        }
+
         this.fallbackActivated = false
       } catch (e) {
         this.fallbackActivated = true
@@ -61,7 +70,14 @@ export class SignedTransactionComponent {
       const protocol = getProtocolByIdentifier(this.unsignedTx.protocol)
       try {
         // tslint:disable-next-line:no-unnecessary-type-assertion
-        this.airGapTx = await protocol.getTransactionDetails(this.unsignedTx.payload as UnsignedTransaction)
+        const unsignedTransaction: UnsignedTransaction = this.unsignedTx.payload as UnsignedTransaction
+        this.airGapTx = await protocol.getTransactionDetails(unsignedTransaction)
+        try {
+          this.airGapTx = await this.protocolsService.getTokenTransferDetails(this.airGapTx, unsignedTransaction)
+        } catch (error) {
+          console.error('unable to parse token transaction, using ethereum transaction details instead')
+        }
+
         this.fallbackActivated = false
       } catch (e) {
         this.fallbackActivated = true
