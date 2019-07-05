@@ -72,7 +72,7 @@ build_ios:
     - echo "$IOS_BUILD_JSON" > build.json
     - echo "$IOS_EXPORT_OPTIONS" > exportOptions.plist
   script:
-    - export DEVELOPER_DIR=/Applications/Xcode_10.2.app
+    - export DEVELOPER_DIR=$XCODE_PATH
     - sed -i -e "s/ios-CFBundleVersion=\"0.0.0\"/ios-CFBundleVersion=\"1.0.$CI_PIPELINE_ID\"/g" config.xml
     - sed -i -e "s/version=\"0.0.0\"/version=\"$VERSION\"/g" config.xml
     - nvm use v10.13.0
