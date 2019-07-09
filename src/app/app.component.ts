@@ -68,9 +68,7 @@ export class AppComponent implements AfterViewInit {
       this.splashScreen.hide()
     }
 
-    if (this.platform.is('ios')) {
-      SecurityUtils.LocalAuthentication.toggleAutomaticAuthentication(true)
-    }
+    SecurityUtils.LocalAuthentication.toggleAutomaticAuthentication(true)
 
     this.initChecks()
   }
