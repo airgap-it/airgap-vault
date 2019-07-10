@@ -4,8 +4,8 @@ RUN apt-get update -y && apt-get install -y \
     bzip2 \
     build-essential  \
     pkg-config  \
-    libcairo2-dev \
-    libjpeg-dev
+    libjpeg-dev \
+    libcairo2-dev 
 
 # android build tools version
 RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --all --no-ui --filter build-tools-26.0.2,android-27"]
