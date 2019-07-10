@@ -23,7 +23,7 @@ export interface SecureStorage {
 })
 export class SecureStorageService {
   private create(alias: string, isParanoia: boolean): CordovaSecureStorage {
-    return new window.SecureStorage(alias, isParanoia)
+    return new window.SecurityUtils.SecureStorage(alias, isParanoia)
   }
 
   public isDeviceSecure(): Promise<number> {

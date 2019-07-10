@@ -52,12 +52,13 @@
     "angularx-qrcode": "^1.5.3",
     "bip39": "^2.4.0",
     "com.lampa.startapp": "6.1.6",
-    "cordova-android": "7.1.2",
+    "cordova-android": "7.1.4",
     "cordova-android-support-gradle-release": "1.4.7",
     "cordova-clipboard": "1.2.1",
     "cordova-ios": "5.0.1",
     "cordova-plugin-add-swift-support": "1.7.2",
-    "cordova-plugin-airgap-secure-storage": "0.1.7",
+    "cordova-plugin-airgap-security-utils": "0.3.4",
+    "cordova-plugin-airgap-webview": "git+https://github.com/airgap-it/cordova-plugin-airgap-webview.git#content-filter",
     "cordova-plugin-app-version": "0.1.9",
     "cordova-plugin-audioinput": "1.0.1",
     "cordova-plugin-camera-preview": "git+https://github.com/cordova-plugin-camera-preview/cordova-plugin-camera-preview.git",
@@ -66,10 +67,8 @@
     "cordova-plugin-device-motion": "2.0.1",
     "cordova-plugin-gyroscope": "0.1.4",
     "cordova-plugin-ionic-keyboard": "2.1.3",
-    "cordova-plugin-ionic-webview": "4.0.1",
     "cordova-plugin-ios-camera-permissions": "1.2.0",
-    "cordova-plugin-jailbreak-detection": "git+https://github.com/leecrossley/cordova-plugin-jailbreak-detection.git",
-    "cordova-plugin-qrscanner": "2.6.0",
+    "cordova-plugin-qrscanner": "3.0.1",
     "cordova-plugin-root-detection": "0.1.1",
     "cordova-plugin-splashscreen": "5.0.2",
     "cordova-plugin-statusbar": "2.4.2",
@@ -142,8 +141,8 @@
   },
   "cordova": {
     "platforms": [
-      "android",
-      "ios"
+      "ios",
+      "android"
     ],
     "plugins": {
       "cordova-plugin-whitelist": {},
@@ -186,15 +185,14 @@
       },
       "cordova-sqlite-storage": {},
       "cordova-plugin-device-motion": {},
-      "cordova-plugin-airgap-secure-storage": {},
       "com.lampa.startapp": {},
-      "cordova-plugin-jailbreak-detection": {},
       "cordova-plugin-add-swift-support": {},
       "cordova-plugin-ionic-keyboard": {},
       "cordova-clipboard": {},
       "cordova.plugins.diagnostic": {},
       "cordova-plugin-app-version": {},
-      "cordova-plugin-ionic-webview": {}
+      "cordova-plugin-airgap-webview": {},
+      "cordova-plugin-airgap-security-utils": {}
     }
   }
 }
