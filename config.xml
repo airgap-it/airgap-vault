@@ -104,7 +104,6 @@
         <variable name="PHOTOLIBRARY_ADD_USAGE_DESCRIPTION" value="This app needs write-access to photo library" />
         <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="This app needs read/write-access photo library access" />
     </plugin>
-    <plugin name="cordova-plugin-root-detection" spec="0.1.1" />
     <plugin name="cordova-android-support-gradle-release" spec="1.4.7">
         <variable name="ANDROID_SUPPORT_VERSION" value="26.1.0" />
     </plugin>

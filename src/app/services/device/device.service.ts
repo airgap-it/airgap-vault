@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core'
 import { Platform } from '@ionic/angular'
 
 declare var SecurityUtils: any
-declare var rootdetection: any
 
 @Injectable({
   providedIn: 'root'
