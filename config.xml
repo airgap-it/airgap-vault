@@ -104,7 +104,6 @@
         <variable name="PHOTOLIBRARY_ADD_USAGE_DESCRIPTION" value="This app needs write-access to photo library" />
         <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="This app needs read/write-access photo library access" />
     </plugin>
-    <plugin name="cordova-plugin-root-detection" spec="0.1.1" />
     <plugin name="cordova-android-support-gradle-release" spec="1.4.7">
         <variable name="ANDROID_SUPPORT_VERSION" value="26.1.0" />
     </plugin>
@@ -141,7 +140,7 @@
     <plugin name="cordova-plugin-app-version" spec="0.1.9" />
     <plugin name="cordova-clipboard" spec="1.2.1" />
     <plugin name="cordova-plugin-qrscanner" spec="3.0.1" />
-    <plugin name="cordova-plugin-airgap-security-utils" spec="0.3.4" />
+    <plugin name="cordova-plugin-airgap-security-utils" spec="0.3.5" />
     <engine name="ios" spec="5.0.1" />
     <engine name="android" spec="7.1.4" />
 </widget>
