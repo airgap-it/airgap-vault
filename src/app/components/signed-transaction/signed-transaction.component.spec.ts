@@ -43,14 +43,14 @@ describe('SignedTransactionComponent', () => {
       }
     })
 
-    expect(signedTransaction.airGapTx).toBe(undefined)
+    expect(signedTransaction.airGapTxs).toBe(undefined)
     expect(signedTransaction.fallbackActivated).toBe(false)
 
     const signedTx = await syncProtocol.deserialize(serializedTx)
     signedTransaction.signedTx = signedTx
     await signedTransaction.ngOnChanges()
 
-    expect(signedTransaction.airGapTx).toBeDefined()
+    expect(signedTransaction.airGapTxs).toBeDefined()
     expect(signedTransaction.fallbackActivated).toBe(false)
   }))
 
@@ -67,14 +67,14 @@ describe('SignedTransactionComponent', () => {
       }
     })
 
-    expect(signedTransaction.airGapTx).toBe(undefined)
+    expect(signedTransaction.airGapTxs).toBe(undefined)
     expect(signedTransaction.fallbackActivated).toBe(false)
 
     const signedTx = await syncProtocol.deserialize(serializedTx)
     signedTransaction.signedTx = signedTx
     await signedTransaction.ngOnChanges()
 
-    expect(signedTransaction.airGapTx).toBeUndefined()
+    expect(signedTransaction.airGapTxs).toBeUndefined()
     expect(signedTransaction.fallbackActivated).toBe(true)
   }))
 })
