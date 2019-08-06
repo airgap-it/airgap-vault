@@ -1,12 +1,14 @@
-import { Component, Input } from '@angular/core'
+import { Component, Input, OnChanges, OnInit } from '@angular/core'
 import {
   DeserializedSyncProtocol,
   getProtocolByIdentifier,
   IAirGapTransaction,
+  ICoinProtocol,
   SignedTransaction,
   SyncProtocolUtils,
   UnsignedTransaction
 } from 'airgap-coin-lib'
+import BigNumber from 'bignumber.js'
 
 import { ProtocolsService } from '../../services/protocols/protocols.service'
 
@@ -15,7 +17,7 @@ import { ProtocolsService } from '../../services/protocols/protocols.service'
   templateUrl: './signed-transaction.component.html',
   styleUrls: ['./signed-transaction.component.scss']
 })
-export class SignedTransactionComponent {
+export class SignedTransactionComponent implements OnChanges {
   @Input()
   public signedTx: DeserializedSyncProtocol
 
@@ -25,8 +27,16 @@ export class SignedTransactionComponent {
   @Input()
   public syncProtocolString: string
 
-  public airGapTx: IAirGapTransaction
+  public airGapTxs: IAirGapTransaction[]
   public fallbackActivated: boolean = false
+
+  public aggregatedInfo:
+    | {
+        numberOfTxs: number
+        totalAmount: BigNumber
+        totalFees: BigNumber
+      }
+    | undefined
 
   public rawTxData: string
 
@@ -34,11 +44,11 @@ export class SignedTransactionComponent {
     //
   }
 
-  public async ngOnChanges() {
+  public async ngOnChanges(): Promise<void> {
     if (this.syncProtocolString) {
       try {
-        const syncUtils = new SyncProtocolUtils()
-        const parts = this.syncProtocolString.split('?d=') // TODO: Use sync scheme handler to unpack
+        const syncUtils: SyncProtocolUtils = new SyncProtocolUtils()
+        const parts: string[] = this.syncProtocolString.split('?d=') // TODO: Use sync scheme handler to unpack
         this.signedTx = await syncUtils.deserialize(parts[parts.length - 1])
       } catch (err) {
         this.fallbackActivated = true
@@ -47,13 +57,26 @@ export class SignedTransactionComponent {
     }
 
     if (this.signedTx) {
-      const protocol = getProtocolByIdentifier(this.signedTx.protocol)
+      const protocol: ICoinProtocol = getProtocolByIdentifier(this.signedTx.protocol)
       try {
         // tslint:disable-next-line:no-unnecessary-type-assertion
         const signedTransaction: SignedTransaction = this.signedTx.payload as SignedTransaction
-        this.airGapTx = await protocol.getTransactionDetailsFromSigned(signedTransaction)
+        this.airGapTxs = await protocol.getTransactionDetailsFromSigned(signedTransaction)
+        if (
+          this.airGapTxs.length > 1 &&
+          this.airGapTxs.every((tx: IAirGapTransaction) => tx.protocolIdentifier === this.airGapTxs[0].protocolIdentifier)
+        ) {
+          this.aggregatedInfo = {
+            numberOfTxs: this.airGapTxs.length,
+            totalAmount: this.airGapTxs.reduce((pv: BigNumber, cv: IAirGapTransaction) => pv.plus(cv.amount), new BigNumber(0)),
+            totalFees: this.airGapTxs.reduce((pv: BigNumber, cv: IAirGapTransaction) => pv.plus(cv.fee), new BigNumber(0))
+          }
+        }
         try {
-          this.airGapTx = await this.protocolsService.getTokenTransferDetailsFromSigned(this.airGapTx, signedTransaction)
+          if (this.airGapTxs.length !== 1) {
+            throw Error('TokenTransferDetails returned more than 1 transaction!')
+          }
+          this.airGapTxs = [await this.protocolsService.getTokenTransferDetailsFromSigned(this.airGapTxs[0], signedTransaction)]
         } catch (error) {
           console.error('unable to parse token transaction, using ethereum transaction details instead')
         }
@@ -67,13 +90,27 @@ export class SignedTransactionComponent {
     }
 
     if (this.unsignedTx) {
-      const protocol = getProtocolByIdentifier(this.unsignedTx.protocol)
+      const protocol: ICoinProtocol = getProtocolByIdentifier(this.unsignedTx.protocol)
       try {
         // tslint:disable-next-line:no-unnecessary-type-assertion
         const unsignedTransaction: UnsignedTransaction = this.unsignedTx.payload as UnsignedTransaction
-        this.airGapTx = await protocol.getTransactionDetails(unsignedTransaction)
+        this.airGapTxs = await protocol.getTransactionDetails(unsignedTransaction)
+        if (
+          this.airGapTxs.length > 1 &&
+          this.airGapTxs.every((tx: IAirGapTransaction) => tx.protocolIdentifier === this.airGapTxs[0].protocolIdentifier)
+        ) {
+          this.aggregatedInfo = {
+            numberOfTxs: this.airGapTxs.length,
+            totalAmount: this.airGapTxs.reduce((pv: BigNumber, cv: IAirGapTransaction) => pv.plus(cv.amount), new BigNumber(0)),
+            totalFees: this.airGapTxs.reduce((pv: BigNumber, cv: IAirGapTransaction) => pv.plus(cv.fee), new BigNumber(0))
+          }
+        }
+
         try {
-          this.airGapTx = await this.protocolsService.getTokenTransferDetails(this.airGapTx, unsignedTransaction)
+          if (this.airGapTxs.length !== 1) {
+            throw Error('TokenTransferDetails returned more than 1 transaction!')
+          }
+          this.airGapTxs = [await this.protocolsService.getTokenTransferDetails(this.airGapTxs[0], unsignedTransaction)]
         } catch (error) {
           console.error('unable to parse token transaction, using ethereum transaction details instead')
         }
