@@ -102,7 +102,13 @@ export class ProtocolsService {
     if (subtoken) {
       const genericErc20: GenericERC20 = new GenericERC20(subtoken)
 
-      return genericErc20.getTransactionDetailsFromSigned(signedTransaction)
+      const transactions: IAirGapTransaction[] = await genericErc20.getTransactionDetailsFromSigned(signedTransaction)
+
+      if (transactions.length !== 1) {
+        throw Error('TokenTransferDetails returned more than 1 transaction!')
+      }
+
+      return transactions[0]
     }
 
     return tx
@@ -113,7 +119,13 @@ export class ProtocolsService {
     if (subtoken) {
       const genericErc20: GenericERC20 = new GenericERC20(subtoken)
 
-      return genericErc20.getTransactionDetails(unsignedTransaction)
+      const transactions: IAirGapTransaction[] = await genericErc20.getTransactionDetails(unsignedTransaction)
+
+      if (transactions.length !== 1) {
+        throw Error('TokenTransferDetails returned more than 1 transaction!')
+      }
+
+      return transactions[0]
     }
 
     return tx
