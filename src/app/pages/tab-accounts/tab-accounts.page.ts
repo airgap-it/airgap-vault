@@ -25,7 +25,9 @@ export class TabAccountsPage implements OnInit {
 
   public async ngOnInit(): Promise<void> {
     this.secretsService.getActiveSecretObservable().subscribe((secret: Secret) => {
-      this.wallets$.next(secret.wallets)
+      if (secret && secret.wallets) {
+        this.wallets$.next(secret.wallets)
+      }
     })
 
     this.secrets.subscribe(async (secrets: Secret[]) => {
