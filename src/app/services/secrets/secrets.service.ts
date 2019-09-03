@@ -247,6 +247,11 @@ export class SecretsService {
         )
       }
     } catch (error) {
+      // minimal solution without dependency
+      if (error.message.startsWith('Expected BIP32 derivation path')) {
+        error.message = 'Expected BIP32 derivation path, got invalid string'
+      }
+
       loading.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
       this.showAlert('Error', error.message)
       throw error
