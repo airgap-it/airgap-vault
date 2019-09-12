@@ -24,32 +24,32 @@ export class StartupChecksProvider {
         name: 'rootCheck',
         check: () => deviceProvider.checkForRoot(),
         outcome: false,
-        consequence: (cb: Function) => {
-          this.presentModal(WarningsModalPage, { errorType: Warning.ROOT }, cb)
+        consequence: async () => {
+          await this.presentModal(WarningsModalPage, { errorType: Warning.ROOT })
         }
       },
       {
         name: 'deviceSecureCheck',
         check: () => secureStorage.isDeviceSecure(),
         outcome: true,
-        consequence: (cb: Function) => {
-          this.presentModal(WarningsModalPage, { errorType: Warning.SECURE_STORAGE }, cb)
+        consequence: async () => {
+          await this.presentModal(WarningsModalPage, { errorType: Warning.SECURE_STORAGE })
         }
       },
       {
         name: 'disclaimerAcceptedCheck',
         check: () => this.storage.get('DISCLAIMER_INITIAL'),
         outcome: true,
-        consequence: (cb: Function) => {
-          this.presentModal(WarningsModalPage, { errorType: Warning.INITIAL_DISCLAIMER }, cb)
+        consequence: async () => {
+          await this.presentModal(WarningsModalPage, { errorType: Warning.INITIAL_DISCLAIMER })
         }
       },
       {
         name: 'introductionAcceptedCheck',
         check: () => this.storage.get('INTRODUCTION_INITIAL'),
         outcome: true,
-        consequence: (cb: Function) => {
-          this.presentModal(IntroductionPage, {}, cb)
+        consequence: async () => {
+          await this.presentModal(IntroductionPage, {})
         }
       },
       {
@@ -62,46 +62,34 @@ export class StartupChecksProvider {
           })
         },
         outcome: true,
-        consequence: (cb: Function) => {
-          this.presentModal(DistributionOnboardingPage, {}, cb)
+        consequence: async () => {
+          await this.presentModal(DistributionOnboardingPage, {})
         }
       }
     ]
   }
 
-  presentModal(page: any, modalConfig: any, callback: Function) {
-    let modal = this.modalController.create(page, modalConfig, { enableBackdropDismiss: false })
-    modal.onDidDismiss(_data => callback())
-    modal
-      .present()
-      .then(() => {
-        console.log('check modal presented')
-      })
-      .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+  async presentModal(page: any, modalConfig: any): Promise<any> {
+    return new Promise(async resolve => {
+      let modal = this.modalController.create(page, modalConfig, { enableBackdropDismiss: false })
+      modal
+        .present()
+        .then(() => {
+          console.log('check modal presented')
+        })
+        .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+      modal.onDidDismiss(_data => resolve())
+    })
   }
 
   initChecks(): Promise<Function> {
-    return new Promise((resolve, reject) => {
-      this.checks
-        .reduce((promiseChain, currentTask) => {
-          return promiseChain.then(chainResults => currentTask.check().then(currentResult => [...chainResults, currentResult]))
-        }, Promise.resolve([]))
-        .then(arrayOfResults => {
-          let failedIndex = arrayOfResults.findIndex((val, index) => {
-            if (typeof val === 'number') {
-              val = Boolean(val).valueOf()
-            }
-            return val !== this.checks[index].outcome
-          })
-
-          if (failedIndex === -1) {
-            resolve()
-            return
-          }
-
-          reject(this.checks[failedIndex])
-        })
-        .catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
+    return new Promise(async resolve => {
+      for (const check of this.checks) {
+        if (+(await check.check()) !== +check.outcome) {
+          await check.consequence()
+        }
+      }
+      resolve()
     })
   }
 }

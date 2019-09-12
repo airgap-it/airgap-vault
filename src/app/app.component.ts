@@ -101,17 +101,11 @@ export class MyApp {
     }
   }
 
-  initChecks() {
-    this.startupChecks
-      .initChecks()
-      .then(async () => {
-        await this.nav.setRoot(TabsPage)
-        this.isInitialized.resolve()
-      })
-      .catch(async check => {
-        check.consequence(this.initChecks.bind(this))
-        this.isInitialized.reject(`startup check failed ${check.name}`) // If we are here, we cannot sign a transaction (no secret, rooted, etc)
-      })
+  async initChecks() {
+    await this.startupChecks.initChecks()
+
+    await this.nav.setRoot(TabsPage)
+    this.isInitialized.resolve()
   }
 
   async ngAfterViewInit() {
