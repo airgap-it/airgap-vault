@@ -39,15 +39,19 @@ export class WarningModalPage implements AfterViewInit {
 
   public ngAfterViewInit(): void {
     if (this.errorType === Warning.ROOT) {
-      this.title = 'warnings-modal.root.title'
-      this.description = 'warnings-modal.root.description'
+      this.translateService.get(['warnings-modal.root.title', 'warnings-modal.root.description']).subscribe(values => {
+        this.title = values['warnings-modal.root.title']
+        this.description = values['warnings-modal.root.description']
+      })
       this.imageUrl = './assets/img/root_detection.svg'
       this.handler = (): void => undefined
     }
 
     if (this.errorType === Warning.SCREENSHOT) {
-      this.title = 'warnings-modal.screenshot.title'
-      this.description = 'warnings-modal.screenshot.description'
+      this.translateService.get(['warnings-modal.screenshot.title', 'warnings-modal.screenshot.description']).subscribe(values => {
+        this.title = values['warnings-modal.screenshot.title']
+        this.description = values['warnings-modal.screenshot.description']
+      })
       this.imageUrl = './assets/img/screenshot_detected.svg'
       this.buttonText = 'Ok'
       this.handler = () => {
@@ -56,8 +60,10 @@ export class WarningModalPage implements AfterViewInit {
     }
 
     if (this.errorType === Warning.SECURE_STORAGE) {
-      this.title = 'warnings-modal.secure-storage.title'
-      this.description = 'warnings-modal.secure-storage.description'
+      this.translateService.get(['warnings-modal.secure-storage.title', 'warnings-modal.secure-storage.description']).subscribe(values => {
+        this.title = values['warnings-modal.secure-storage.title']
+        this.description = values['warnings-modal.secure-storage.description']
+      })
       this.imageUrl = './assets/img/screenshot_detected.svg'
       this.buttonText = 'warnings-modal.secure-storage.button-text_label'
       this.handler = (): void => {
@@ -66,8 +72,10 @@ export class WarningModalPage implements AfterViewInit {
     }
 
     if (this.errorType === Warning.NETWORK) {
-      this.title = 'warnings-modal.network.title'
-      this.description = 'warnings-modal.network.description'
+      this.translateService.get(['warnings-modal.network.title', 'warnings-modal.network.description']).subscribe(values => {
+        this.title = values['warnings-modal.network.title']
+        this.description = values['warnings-modal.network.description']
+      })
       this.imageUrl = './assets/img/network_connection.svg'
       this.handler = (): void => undefined
     }
