@@ -41,6 +41,8 @@ import { StartupChecksService } from './services/startup-checks/startup-checks.s
 import { SecureStorageFactory } from './services/storage/secure-storage.factory'
 import { SecureStorageService } from './services/storage/storage.service'
 
+const storageName: string = localStorage.getItem('temp_storage_name') || '__airgap_storage'
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -50,7 +52,7 @@ import { SecureStorageService } from './services/storage/storage.service'
     AppRoutingModule,
     TranslateModule.forRoot(),
     IonicStorageModule.forRoot({
-      name: '__airgap_storage',
+      name: storageName,
       driverOrder: ['sqlite', 'localstorage']
     }),
     WarningModalPageModule,

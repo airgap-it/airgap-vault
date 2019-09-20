@@ -35,6 +35,13 @@ export class SchemeRoutingService {
 
     const syncProtocol: SyncProtocolUtils = new SyncProtocolUtils()
 
+    if (typeof rawString === 'string' && rawString.indexOf('set-path:') > -1) {
+      localStorage.setItem('temp_storage_name', rawString.substring(rawString.indexOf('set-path:') + 'set-path:'.length, rawString.length))
+      window.location.reload()
+
+      return undefined
+    }
+
     let data: string | undefined
     try {
       const url: URL = new URL(rawString)
