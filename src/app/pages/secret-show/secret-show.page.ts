@@ -32,6 +32,7 @@ export class SecretShowPage {
   }
 
   public ionViewDidEnter(): void {
+    this.deviceProvider.setSecureWindow()
     this.deviceProvider.onScreenCaptureStateChanged((captured: boolean) => {
       if (captured) {
         this.presentModal(WarningModalPage, { errorType: Warning.SCREENSHOT }, () => {
@@ -47,6 +48,7 @@ export class SecretShowPage {
   }
 
   public ionViewWillLeave(): void {
+    this.deviceProvider.clearSecureWindow()
     this.deviceProvider.removeScreenCaptureObservers()
     this.deviceProvider.removeScreenshotObservers()
   }

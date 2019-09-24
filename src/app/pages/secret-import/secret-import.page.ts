@@ -6,6 +6,7 @@ import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { MnemonicValidator } from '../../validators/mnemonic.validator'
+import { DeviceService } from 'src/app/services/device/device.service'
 
 @Component({
   selector: 'airgap-secret-import',
@@ -16,7 +17,11 @@ export class SecretImportPage {
   public mnemonic: string
   public secretImportForm: FormGroup
 
-  constructor(private readonly navigationService: NavigationService, private readonly formBuilder: FormBuilder) {
+  constructor(
+    private readonly navigationService: NavigationService,
+    private readonly deviceProvider: DeviceService,
+    private readonly formBuilder: FormBuilder
+  ) {
     const formGroup: {
       [key: string]: any
     } = {
@@ -24,6 +29,14 @@ export class SecretImportPage {
     }
 
     this.secretImportForm = this.formBuilder.group(formGroup)
+  }
+
+  public ionViewDidEnter(): void {
+    this.deviceProvider.setSecureWindow()
+  }
+
+  public ionViewWillLeave(): void {
+    this.deviceProvider.clearSecureWindow()
   }
 
   public goToSecretCreatePage(): void {
