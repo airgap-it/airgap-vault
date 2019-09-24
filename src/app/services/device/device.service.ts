@@ -30,6 +30,18 @@ export class DeviceService {
     }
   }
 
+  public setSecureWindow() {
+    if (this.platform.is('android') && this.platform.is('cordova')) {
+      SecurityUtils.SecureScreen.setWindowSecureFlag()
+    }
+  }
+
+  public clearSecureWindow() {
+    if (this.platform.is('android') && this.platform.is('cordova')) {
+      SecurityUtils.SecureScreen.clearWindowSecureFlag()
+    }
+  }
+
   public removeScreenCaptureObservers(): void {
     if (this.platform.is('ios') && this.platform.is('cordova')) {
       SecurityUtils.SecureScreen.removeScreenCaptureObservers()

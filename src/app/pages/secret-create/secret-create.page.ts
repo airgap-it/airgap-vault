@@ -6,6 +6,7 @@ import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
+import { DeviceService } from 'src/app/services/device/device.service'
 
 @Component({
   selector: 'airgap-secret-create',
@@ -18,6 +19,7 @@ export class SecretCreatePage implements OnInit {
   constructor(
     private readonly navigationService: NavigationService,
     private readonly secretsService: SecretsService,
+    private readonly deviceProvider: DeviceService,
     private readonly storage: Storage
   ) {}
 
@@ -30,6 +32,14 @@ export class SecretCreatePage implements OnInit {
           this.canGoBack = true
         }
       })
+  }
+
+  public ionViewDidEnter(): void {
+    this.deviceProvider.setSecureWindow()
+  }
+
+  public ionViewWillLeave(): void {
+    this.deviceProvider.clearSecureWindow()
   }
 
   public async goToGenerate(): Promise<void> {

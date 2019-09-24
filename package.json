@@ -57,7 +57,7 @@
     "cordova-clipboard": "1.2.1",
     "cordova-ios": "5.0.1",
     "cordova-plugin-add-swift-support": "1.7.2",
-    "cordova-plugin-airgap-security-utils": "0.3.6",
+    "cordova-plugin-airgap-security-utils": "0.4.0",
     "cordova-plugin-airgap-webview": "git+https://github.com/airgap-it/cordova-plugin-airgap-webview.git#content-filter",
     "cordova-plugin-app-version": "0.1.9",
     "cordova-plugin-audioinput": "1.0.1",
