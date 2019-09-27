@@ -102,7 +102,7 @@ export class ProtocolsService {
     if (subtoken) {
       const genericErc20: GenericERC20 = new GenericERC20(subtoken)
 
-      return genericErc20.getTransactionDetailsFromSigned(signedTransaction)
+      return genericErc20.getTransactionDetailsFromSigned(signedTransaction)[0]
     }
 
     return tx
@@ -113,7 +113,7 @@ export class ProtocolsService {
     if (subtoken) {
       const genericErc20: GenericERC20 = new GenericERC20(subtoken)
 
-      return genericErc20.getTransactionDetails(unsignedTransaction)
+      return genericErc20.getTransactionDetails(unsignedTransaction)[0]
     }
 
     return tx

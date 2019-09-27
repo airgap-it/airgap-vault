@@ -227,7 +227,7 @@ export class SecretsService {
         customDerivationPath
       )
 
-      const addresses: string[] = await wallet.deriveAddresses(1)
+      const addresses: string[] = [await protocol.getAddressFromPublicKey(wallet.publicKey)]
       wallet.addresses = addresses
 
       if (

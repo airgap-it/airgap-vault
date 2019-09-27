@@ -37,8 +37,10 @@ export class TransactionDetailPage {
     this.transaction = this.navigationService.getState().transaction
     this.wallet = this.navigationService.getState().wallet
     this.deserializedSync = this.navigationService.getState().deserializedSync
+    console.log('this.deserializedSync', this.deserializedSync)
     try {
-      this.airGapTx = await this.wallet.coinProtocol.getTransactionDetails(this.transaction)
+      this.airGapTx = (await this.wallet.coinProtocol.getTransactionDetails(this.transaction))[0]
+      console.log('this.airGapTx', this.airGapTx)
     } catch (e) {
       console.log('cannot read tx details', e)
     }
@@ -69,7 +71,7 @@ export class TransactionDetailPage {
     }
 
     try {
-      txDetails = await wallet.coinProtocol.getTransactionDetails(unsignedTransaction)
+      txDetails = (await wallet.coinProtocol.getTransactionDetails(unsignedTransaction))[0]
     } catch (e) {
       handleErrorLocal(e)
     }
@@ -106,7 +108,6 @@ export class TransactionDetailPage {
       const seed = bip39.mnemonicToSeedHex(bip39.entropyToMnemonic(entropy))
       if (wallet.isExtendedPublicKey) {
         const extendedPrivateKey = wallet.coinProtocol.getExtendedPrivateKeyFromHexSecret(seed, wallet.derivationPath)
-
         return wallet.coinProtocol.signWithExtendedPrivateKey(extendedPrivateKey, transaction.transaction)
       } else {
         const privateKey = wallet.coinProtocol.getPrivateKeyFromHexSecret(seed, wallet.derivationPath)

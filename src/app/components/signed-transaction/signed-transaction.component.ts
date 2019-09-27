@@ -51,7 +51,7 @@ export class SignedTransactionComponent {
       try {
         // tslint:disable-next-line:no-unnecessary-type-assertion
         const signedTransaction: SignedTransaction = this.signedTx.payload as SignedTransaction
-        this.airGapTx = await protocol.getTransactionDetailsFromSigned(signedTransaction)
+        this.airGapTx = (await protocol.getTransactionDetailsFromSigned(signedTransaction))[0]
         try {
           this.airGapTx = await this.protocolsService.getTokenTransferDetailsFromSigned(this.airGapTx, signedTransaction)
         } catch (error) {
@@ -71,7 +71,7 @@ export class SignedTransactionComponent {
       try {
         // tslint:disable-next-line:no-unnecessary-type-assertion
         const unsignedTransaction: UnsignedTransaction = this.unsignedTx.payload as UnsignedTransaction
-        this.airGapTx = await protocol.getTransactionDetails(unsignedTransaction)
+        this.airGapTx = (await protocol.getTransactionDetails(unsignedTransaction))[0]
         try {
           this.airGapTx = await this.protocolsService.getTokenTransferDetails(this.airGapTx, unsignedTransaction)
         } catch (error) {
