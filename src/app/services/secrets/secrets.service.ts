@@ -227,7 +227,7 @@ export class SecretsService {
         customDerivationPath
       )
 
-      const addresses: string[] = [await protocol.getAddressFromPublicKey(wallet.publicKey)]
+      const addresses: string[] = await wallet.deriveAddresses(1) // TODO investigate why await wallet.deriveAddresses(1) doesn't derive an address for cosmos   await protocol.getAddressFromPublicKey(wallet.publicKey)
       wallet.addresses = addresses
 
       if (
