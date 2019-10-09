@@ -7,12 +7,15 @@ import {
   SignedTransaction,
   SyncProtocolUtils
 } from 'airgap-coin-lib'
+import { deepCopy } from '../../helpers/deep-copy'
 
 @Component({
   selector: 'signed-transaction',
   templateUrl: 'signed-transaction.html'
 })
 export class SignedTransactionComponent {
+  public displayRawData: boolean = false
+  public airGapTxCopy: IAirGapTransaction
   @Input()
   signedTx: DeserializedSyncProtocol
 
@@ -23,12 +26,21 @@ export class SignedTransactionComponent {
   syncProtocolString: string
 
   airGapTx: IAirGapTransaction
+
   fallbackActivated: boolean = false
 
   rawTxData: string
 
   constructor() {
     //
+  }
+
+  public showRawData() {
+    this.displayRawData = !this.displayRawData
+    this.airGapTxCopy = deepCopy(this.airGapTx)
+    const protocol = getProtocolByIdentifier(this.airGapTx.protocolIdentifier)
+    this.airGapTxCopy.amount = this.airGapTxCopy.amount.shiftedBy(-1 * protocol.decimals)
+    this.airGapTxCopy.fee = this.airGapTxCopy.fee.shiftedBy(-1 * protocol.feeDecimals)
   }
 
   async ngOnChanges() {

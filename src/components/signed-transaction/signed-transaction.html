@@ -1,4 +1,11 @@
 <from-to *ngIf="airGapTx" [transaction]="airGapTx"></from-to>
+
+<ion-row padding>
+  <ion-label>{{ 'signed-transaction.raw-tx_label' | translate }}</ion-label>
+  <ion-toggle (ionChange)="showRawData($event)"></ion-toggle>
+</ion-row>
+<pre *ngIf="displayRawData">{{ airGapTxCopy | json }}</pre>
+
 <ng-container *ngIf="fallbackActivated">
   <ion-row>
     <ion-col col-2 margin-top><ion-icon class="warning-icon" color="white" md-name="warning"></ion-icon></ion-col>
