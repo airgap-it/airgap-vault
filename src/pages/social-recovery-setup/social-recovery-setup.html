@@ -52,28 +52,11 @@
 <ion-footer no-border color="primary">
   <ion-navbar color="primary" no-padding>
     <ion-row>
+      <ion-col col-9 no-padding></ion-col>
       <ion-col col-3 no-padding>
-        <!-- TODO: navigate back -->
-        <button ion-button icon-left clear color="white">
-          <ion-icon md-name="chevron_left" (click)="back()"></ion-icon>
-          {{ 'social-recovery-setup.back_label' | translate }}
-        </button>
-      </ion-col>
-      <ion-col col-6 no-padding>
-        <ion-row justify-content-center align-items-center class="full--height">
-          <!-- TODO: Set active color for current page/view ! -->
-          <ion-icon md-name="fiber_manual_record" color="white"></ion-icon>
-          <ion-icon md-name="fiber_manual_record" color="white"></ion-icon>
-          <ion-icon md-name="fiber_manual_record" color="white"></ion-icon>
-          <ion-icon md-name="fiber_manual_record" color="white"></ion-icon>
-          <ion-icon md-name="fiber_manual_record" color="white"></ion-icon>
-        </ion-row>
-      </ion-col>
-      <ion-col col-3 no-padding>
-        <!-- TODO: navigate forward -->
         <button ion-button icon-right clear color="white" (click)="next()">
           {{ 'social-recovery-setup.next_label' | translate }}
-          <ion-icon md-name="chevron_right"></ion-icon>
+          <ion-icon name="ios-arrow-forward"></ion-icon>
         </button>
       </ion-col>
     </ion-row>
