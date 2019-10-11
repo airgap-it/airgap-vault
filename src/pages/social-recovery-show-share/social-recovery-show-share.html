@@ -9,7 +9,7 @@
 <ion-content class="colored-background" padding>
   <p class="font--weight__med" padding-bottom>
     {{ 'social-recovery-show-share.secret-shares.label_p1' | translate }} {{ currentShare + 1 }}
-    {{ 'social-recovery-show-share.label_p2' | translate }} {{ shares?.length }}
+    {{ 'social-recovery-show-share.secret-shares.label_p2' | translate }} {{ shares?.length }}
   </p>
   <p padding-bottom>{{ 'social-recovery-show-share.text' | translate }}</p>
   <h3 class="secret--typography" *ngIf="shares">{{ shares[currentShare] }}</h3>
