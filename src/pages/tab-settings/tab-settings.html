@@ -9,7 +9,7 @@
     <ion-label>{{ 'tab-settings.information_label' | translate }}</ion-label>
 
     <ion-item no-lines detail-push (click)="about()">
-      <ion-icon md-name="info" item-start color="dark"></ion-icon>
+      <ion-icon name="md-information-circle" item-start color="dark"></ion-icon>
       {{ 'tab-settings.about' | translate }}
     </ion-item>
     <ion-item no-lines detail-push (click)="pasteClipboard()">
@@ -19,7 +19,7 @@
   </ion-list>
   <ion-list>
     <ion-label>{{ 'tab-settings.secrets_label' | translate }}</ion-label>
-    <ng-container *ngFor="let secret of (secrets | async)">
+    <ng-container *ngFor="let secret of secrets | async">
       <secret-item [secret]="secret" (click)="goToEditSecret(secret)"></secret-item>
     </ng-container>
     <ion-row padding-top justify-content-end>

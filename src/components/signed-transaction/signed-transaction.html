@@ -1,7 +1,7 @@
 <from-to *ngIf="airGapTx" [transaction]="airGapTx"></from-to>
 <ng-container *ngIf="fallbackActivated">
   <ion-row>
-    <ion-col col-2 margin-top><ion-icon class="warning-icon" color="white" md-name="warning"></ion-icon></ion-col>
+    <ion-col col-2 margin-top><ion-icon class="warning-icon" color="white" name="md-warning"></ion-icon></ion-col>
     <ion-col col-10>{{ 'signed-transaction.transaction-unreadable' | translate }}</ion-col>
   </ion-row>
   <ion-row>

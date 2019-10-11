@@ -2,7 +2,7 @@
   <ion-row>
     <ion-col col-3 no-padding>
       <button [disabled]="!leftEnabled" ion-button icon-left clear color="white" (click)="leftAction()">
-        <ion-icon md-name="chevron_left"></ion-icon>
+        <ion-icon name="ios-arrow-back"></ion-icon>
         {{ leftLabel }}
       </button>
     </ion-col>
@@ -10,7 +10,7 @@
       <ion-row justify-content-center align-items-center class="full--height">
         <ion-icon
           *ngFor="let n of progressArray"
-          md-name="fiber_manual_record"
+          name="ios-radio-button-on"
           [color]="progress === n ? 'secondary-light' : 'white'"
         ></ion-icon>
       </ion-row>
@@ -18,7 +18,7 @@
     <ion-col col-3 no-padding>
       <button [disabled]="!rightEnabled" ion-button icon-right clear color="white" (click)="rightAction()">
         {{ rightLabel }}
-        <ion-icon md-name="chevron_right"></ion-icon>
+        <ion-icon name="ios-arrow-forward"></ion-icon>
       </button>
     </ion-col>
   </ion-row>
