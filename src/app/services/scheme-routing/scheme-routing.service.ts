@@ -7,6 +7,7 @@ import { AirGapWallet, DeserializedSyncProtocol, EncodedType, SyncProtocolUtils,
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { NavigationService } from '../navigation/navigation.service'
 import { SecretsService } from '../secrets/secrets.service'
+import EncodeHintType from '@zxing/library/esm5/core/EncodeHintType'
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,9 @@ export class SchemeRoutingService {
     this.syncSchemeHandlers = {
       [EncodedType.WALLET_SYNC]: this.syncTypeNotSupportedAlert.bind(this),
       [EncodedType.UNSIGNED_TRANSACTION]: this.handleUnsignedTransaction.bind(this),
-      [EncodedType.SIGNED_TRANSACTION]: this.syncTypeNotSupportedAlert.bind(this)
+      [EncodedType.SIGNED_TRANSACTION]: this.syncTypeNotSupportedAlert.bind(this),
+      [EncodedType.MESSAGE_SIGN_REQUEST]: this.syncTypeNotSupportedAlert.bind(this),
+      [EncodedType.MESSAGE_SIGN_RESPONSE]: this.syncTypeNotSupportedAlert.bind(this)
     }
   }
 
