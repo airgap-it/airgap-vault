@@ -1,14 +1,13 @@
 import { TestBed } from '@angular/core/testing'
-import { Router } from '@angular/router'
 import { SplashScreen } from '@ionic-native/splash-screen'
 import { StatusBar } from '@ionic-native/status-bar/ngx'
 import { NavController, Platform } from '@ionic/angular'
 import { Storage } from '@ionic/storage'
 
-import { PlatformMock, SplashScreenMock, StatusBarMock } from './../../../../test-config/ionic-mocks'
 import { StorageMock } from '../../../../test-config/storage-mock'
 import { UnitHelper } from '../../../../test-config/unit-test-helper'
 
+import { PlatformMock, SplashScreenMock, StatusBarMock } from './../../../../test-config/ionic-mocks'
 import { SchemeRoutingService } from './scheme-routing.service'
 
 describe('SchemeRoutingProvider Provider', () => {
@@ -53,6 +52,7 @@ describe('SchemeRoutingProvider Provider', () => {
   })
 
   it('should throw for invalid URL', async done => {
+    // TODO: Fix this test. Currently errors are caught inside "handleNewSyncRequest".
     const text: string = 'test'
     const callback = () => undefined
     try {
