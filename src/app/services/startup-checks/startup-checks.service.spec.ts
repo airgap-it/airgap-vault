@@ -1,26 +1,26 @@
-import { SecureStorageService } from './../storage/storage.service'
-import { DeviceService } from './../device/device.service'
-import { SecureStorageServiceMock } from './../storage/secure-storage.mock'
-import { UnitHelper } from './../../../../test-config/unit-test-helper'
 import { async, TestBed } from '@angular/core/testing'
-import { NavController, NavParams, Platform, ModalController } from '@ionic/angular'
-import { StatusBar } from '@ionic-native/status-bar'
 import { SplashScreen } from '@ionic-native/splash-screen'
+import { StatusBar } from '@ionic-native/status-bar'
+import { ModalController, NavController, NavParams, Platform } from '@ionic/angular'
+import { Storage } from '@ionic/storage'
+import { StorageMock } from 'test-config/storage-mock'
+
+import { SecretsService } from '../secrets/secrets.service'
 
 import {
-  PlatformMock,
-  StatusBarMock,
-  SplashScreenMock,
-  NavParamsMock,
   DeviceProviderMock,
   ModalControllerMock,
-  NavControllerMock
+  NavControllerMock,
+  NavParamsMock,
+  PlatformMock,
+  SplashScreenMock,
+  StatusBarMock
 } from './../../../../test-config/ionic-mocks'
-
-import { Storage } from '@ionic/storage'
-import { SecretsService } from '../secrets/secrets.service'
+import { UnitHelper } from './../../../../test-config/unit-test-helper'
+import { DeviceService } from './../device/device.service'
+import { SecureStorageServiceMock } from './../storage/secure-storage.mock'
+import { SecureStorageService } from './../storage/storage.service'
 import { StartupChecksService } from './startup-checks.service'
-import { StorageMock } from 'test-config/storage-mock'
 
 describe('StartupCheck Service', () => {
   let startupChecksService: StartupChecksService
@@ -53,16 +53,17 @@ describe('StartupCheck Service', () => {
       .catch(console.error)
   })
 
-  beforeEach(() => {
+  beforeEach(async () => {
     startupChecksService = TestBed.get(StartupChecksService)
     storageProvider = TestBed.get(Storage)
     deviceProvider = TestBed.get(DeviceService)
     secureStorage = TestBed.get(SecureStorageService)
 
     secureStorage.isSecure = 1
-    deviceProvider.isRooted = 0
-    storageProvider.set('DISCLAIMER_INITIAL', true)
-    storageProvider.set('INTRODUCTION_INITIAL', true)
+    deviceProvider.isRooted = false
+    deviceProvider.isElectron = false
+    await storageProvider.set('DISCLAIMER_INITIAL', true)
+    await storageProvider.set('INTRODUCTION_INITIAL', true)
   })
 
   it('should be created', () => {
@@ -70,15 +71,15 @@ describe('StartupCheck Service', () => {
   })
 
   it('should should show root modal if device is rooted', async(() => {
-    deviceProvider.isRooted = 1
+    deviceProvider.isRooted = true
 
     startupChecksService.initChecks().catch(consequence => {
       expect(consequence.name).toBe('rootCheck')
     })
   }))
 
-  it('should should show disclaimer modal if the disclaimer has not been accepted yet', async(() => {
-    storageProvider.set('DISCLAIMER_INITIAL', false)
+  it('should should show disclaimer modal if the disclaimer has not been accepted yet', async(async () => {
+    await storageProvider.set('DISCLAIMER_INITIAL', false)
 
     startupChecksService
       .initChecks()
@@ -90,8 +91,8 @@ describe('StartupCheck Service', () => {
       })
   }))
 
-  it('should should show the introduction modal if the introduction has not been accepted yet', async(() => {
-    storageProvider.set('INTRODUCTION_INITIAL', false)
+  it('should should show the introduction modal if the introduction has not been accepted yet', async(async () => {
+    await storageProvider.set('INTRODUCTION_INITIAL', false)
 
     startupChecksService
       .initChecks()
@@ -116,11 +117,12 @@ describe('StartupCheck Service', () => {
       })
   }))
 
-  it('should resolve is everything is ok', async(() => {
-    storageProvider.set('DISCLAIMER_INITIAL', true)
-    storageProvider.set('INTRODUCTION_INITIAL', true)
+  it('should resolve if everything is ok', async(async () => {
+    await storageProvider.set('DISCLAIMER_INITIAL', true)
+    await storageProvider.set('INTRODUCTION_INITIAL', true)
     secureStorage.isSecure = 1
-    deviceProvider.isRooted = 0
+    deviceProvider.isRooted = false
+    deviceProvider.isElectron = false
 
     startupChecksService.initChecks()
   }))

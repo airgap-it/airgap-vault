@@ -61,10 +61,15 @@ export class MockActivatedRouteSnapshot {
   }
 }
 export class DeviceProviderMock {
-  public isRooted = 0
+  public isRooted: boolean = false
+  public isElectron: boolean = false
 
-  public checkForRoot() {
-    return Promise.resolve(this.isRooted)
+  public async checkForRoot(): Promise<boolean> {
+    return this.isRooted
+  }
+
+  public async checkForElectron(): Promise<boolean> {
+    return this.isElectron
   }
 }
 

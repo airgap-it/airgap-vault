@@ -8,6 +8,7 @@ import {
   UnsignedTransaction
 } from 'airgap-coin-lib'
 import * as bip39 from 'bip39'
+import { Secret } from 'src/app/models/secret'
 
 import { handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { InteractionOperationType, InteractionService } from '../../services/interaction/interaction.service'
@@ -24,7 +25,7 @@ export class TransactionDetailPage {
 
   public transaction: UnsignedTransaction
   public wallet: AirGapWallet
-  public airGapTx: IAirGapTransaction
+  public airGapTxs: IAirGapTransaction[]
   public deserializedSync: DeserializedSyncProtocol
 
   constructor(
@@ -33,19 +34,19 @@ export class TransactionDetailPage {
     private readonly interactionService: InteractionService
   ) {}
 
-  public async ionViewWillEnter() {
+  public async ionViewWillEnter(): Promise<void> {
     this.transaction = this.navigationService.getState().transaction
     this.wallet = this.navigationService.getState().wallet
     this.deserializedSync = this.navigationService.getState().deserializedSync
     try {
-      this.airGapTx = await this.wallet.coinProtocol.getTransactionDetails(this.transaction)
+      this.airGapTxs = await this.wallet.coinProtocol.getTransactionDetails(this.transaction)
     } catch (e) {
       console.log('cannot read tx details', e)
     }
   }
 
-  public async signAndGoToNextPage() {
-    const signedTx = await this.signTransaction(this.transaction, this.wallet)
+  public async signAndGoToNextPage(): Promise<void> {
+    const signedTx: string = await this.signTransaction(this.transaction, this.wallet)
     this.broadcastUrl = await this.generateBroadcastUrl(this.wallet, signedTx, this.transaction)
 
     this.interactionService.startInteraction(
@@ -69,12 +70,15 @@ export class TransactionDetailPage {
     }
 
     try {
-      txDetails = await wallet.coinProtocol.getTransactionDetails(unsignedTransaction)
+      const transactions = await wallet.coinProtocol.getTransactionDetails(unsignedTransaction) // TODO: Look at all transactions
+      console.log(transactions)
+
+      txDetails = transactions[0]
     } catch (e) {
       handleErrorLocal(e)
     }
 
-    const syncProtocol = new SyncProtocolUtils()
+    const syncProtocol: SyncProtocolUtils = new SyncProtocolUtils()
     const deserializedTxSigningRequest: DeserializedSyncProtocol = {
       version: 1,
       protocol: this.wallet.protocolIdentifier,
@@ -89,27 +93,27 @@ export class TransactionDetailPage {
       }
     }
 
-    const serializedTx = await syncProtocol.serialize(deserializedTxSigningRequest)
+    const serializedTx: string = await syncProtocol.serialize(deserializedTxSigningRequest)
 
     return `${unsignedTransaction.callback || 'airgap-wallet://?d='}${serializedTx}`
   }
 
   public signTransaction(transaction: UnsignedTransaction, wallet: AirGapWallet): Promise<string> {
-    const secret = this.secretsService.findByPublicKey(wallet.publicKey)
+    const secret: Secret = this.secretsService.findByPublicKey(wallet.publicKey)
 
     // we should handle this case here as well
     if (!secret) {
       console.warn('no secret found to this public key')
     }
 
-    return this.secretsService.retrieveEntropyForSecret(secret).then(entropy => {
-      const seed = bip39.mnemonicToSeedHex(bip39.entropyToMnemonic(entropy))
+    return this.secretsService.retrieveEntropyForSecret(secret).then((entropy: string) => {
+      const seed: string = bip39.mnemonicToSeedHex(bip39.entropyToMnemonic(entropy))
       if (wallet.isExtendedPublicKey) {
-        const extendedPrivateKey = wallet.coinProtocol.getExtendedPrivateKeyFromHexSecret(seed, wallet.derivationPath)
+        const extendedPrivateKey: string = wallet.coinProtocol.getExtendedPrivateKeyFromHexSecret(seed, wallet.derivationPath)
 
         return wallet.coinProtocol.signWithExtendedPrivateKey(extendedPrivateKey, transaction.transaction)
       } else {
-        const privateKey = wallet.coinProtocol.getPrivateKeyFromHexSecret(seed, wallet.derivationPath)
+        const privateKey: Buffer = wallet.coinProtocol.getPrivateKeyFromHexSecret(seed, wallet.derivationPath)
 
         return wallet.coinProtocol.signWithPrivateKey(privateKey, transaction.transaction)
       }

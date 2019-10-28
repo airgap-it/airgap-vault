@@ -1,6 +1,7 @@
+import { BigNumber } from 'bignumber.js'
+
 import { ProtocolsService } from './../../services/protocols/protocols.service'
 import { AmountConverterPipe } from './amount-converter.pipe'
-import { BigNumber } from 'bignumber.js'
 const BN = BigNumber.clone({
   FORMAT: {
     decimalSeparator: `.`,
@@ -127,7 +128,7 @@ describe('AmountConverter Pipe', () => {
   })
 
   it('should handle values that are empty object', () => {
-    let value: any = {}
+    const value: any = {}
     expect(amountConverterPipe.transform(value, { protocolIdentifier: 'eth', maxDigits: 0 })).toEqual('')
   })
 
