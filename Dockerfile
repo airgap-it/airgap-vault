@@ -22,6 +22,8 @@ RUN mkdir /app
 WORKDIR /app
 
 # Install app dependencies, using wildcard if package-lock exists
+COPY install-build-deps.js /app
+COPY install-test-deps.js /app
 COPY package.json /app
 COPY package-lock.json /app
 
