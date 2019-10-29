@@ -25,6 +25,8 @@ WORKDIR /app
 COPY package.json /app
 COPY package-lock.json /app
 
+RUN npm run install-test-dependencies
+
 # install dependencies
 RUN npm install
 
