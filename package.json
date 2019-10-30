@@ -97,6 +97,7 @@
     "@angular/language-service": "~7.2.2",
     "@ionic/angular-toolkit": "~1.5.1",
     "replace": "^1.1.0",
+    "sonarqube-scanner": "^2.4.1",
     "typescript": "~3.1.6"
   },
   "buildDependencies": {
@@ -110,6 +111,7 @@
     "@angular/language-service": "~7.2.2",
     "@ionic/angular-toolkit": "~1.5.1",
     "replace": "^1.1.0",
+    "sonarqube-scanner": "^2.4.1",
     "typescript": "~3.1.6"
   },
   "testDependencies": {
@@ -133,7 +135,6 @@
     "pretty-quick": "^1.11.0",
     "protractor": "~5.4.0",
     "puppeteer": "^1.17.0",
-    "sonarqube-scanner": "^2.4.1",
     "ts-node": "~8.1.0",
     "tslint": "^5.17.0",
     "tslint-config-prettier": "^1.18.0"
