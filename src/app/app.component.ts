@@ -19,8 +19,6 @@ import { Check, StartupChecksService } from './services/startup-checks/startup-c
 declare let window: Window & { airGapHasStarted: boolean }
 declare var SecurityUtils: any
 
-declare const require // TODO: Remove and fix types
-
 @Component({
   selector: 'airgap-root',
   templateUrl: 'app.component.html'

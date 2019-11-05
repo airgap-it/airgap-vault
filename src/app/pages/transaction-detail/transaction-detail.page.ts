@@ -113,7 +113,7 @@ export class TransactionDetailPage {
 
         return wallet.coinProtocol.signWithExtendedPrivateKey(extendedPrivateKey, transaction.transaction)
       } else {
-        const privateKey = wallet.coinProtocol.getPrivateKeyFromHexSecret(seed, wallet.derivationPath)
+        const privateKey: Buffer = wallet.coinProtocol.getPrivateKeyFromHexSecret(seed, wallet.derivationPath)
 
         return wallet.coinProtocol.signWithPrivateKey(privateKey, transaction.transaction)
       }
