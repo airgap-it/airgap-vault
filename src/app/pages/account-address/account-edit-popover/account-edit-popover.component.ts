@@ -28,7 +28,7 @@ export class AccountEditPopoverComponent {
 
   public async copyAddressToClipboard(): Promise<void> {
     await this.clipboardService.copyAndShowToast(
-      this.wallet.receivingPublicAddress,
+      this.wallet.receivingPublicAddress(),
       this.translateService.instant('wallet-edit-delete-popover.confirm_address_copy')
     )
 

@@ -68,6 +68,6 @@ export class AccountAddressPage implements OnInit {
   }
 
   public async copyAddressToClipboard(): Promise<void> {
-    await this.clipboardService.copyAndShowToast(this.wallet.receivingPublicAddress)
+    await this.clipboardService.copyAndShowToast((this.wallet as any).receivingPublicAddress)
   }
 }
