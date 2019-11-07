@@ -22,10 +22,10 @@ export class SecretGeneratePage implements OnInit {
 
   private readonly renderer: Renderer2
 
-  @ViewChild('videoElement')
+  @ViewChild('videoElement', { static: false })
   public videoElement: ElementRef
 
-  @ViewChild('touchEntropy')
+  @ViewChild('touchEntropy', { static: true })
   public touchEntropy: TouchEntropyComponent
 
   public cameraEnabled: boolean = false

@@ -22,7 +22,7 @@ export class TouchEntropyComponent implements AfterViewInit, IEntropyGenerator {
   @Input()
   public cursorColor: string = 'white'
 
-  @ViewChild('canvas')
+  @ViewChild('canvas', { static: true })
   public canvasRef: ElementRef<HTMLCanvasElement>
 
   private canvas: HTMLCanvasElement
