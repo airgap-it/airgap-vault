@@ -10,7 +10,7 @@ const entropyCalculatorWorker = new Worker(blobURL)
 export class CameraBrowserService implements IEntropyGenerator {
   private readonly VIDEO_FREQUENCY = 2000
 
-  @ViewChild('cameraCanvas') public cameraCanvas: ElementRef
+  @ViewChild('cameraCanvas', { static: false }) public cameraCanvas: ElementRef
   public canvasElement: HTMLCanvasElement
 
   private collectedEntropyPercentage: number = 0

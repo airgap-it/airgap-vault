@@ -16,6 +16,9 @@ WORKDIR /app
 
 # using npm 6.5.0 to fix installing certain cordova/ionic plugins
 RUN npm install -g npm@6.5.0 ionic@4.6.0
+RUN npm cache clean -f
+RUN npm install -g n
+RUN n 10.14.1
 
 # Install app dependencies, using wildcard if package-lock exists
 COPY package.json /app/package.json

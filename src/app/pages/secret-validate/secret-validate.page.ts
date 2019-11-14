@@ -11,7 +11,7 @@ import { NavigationService } from '../../services/navigation/navigation.service'
   styleUrls: ['./secret-validate.page.scss']
 })
 export class SecretValidatePage {
-  @ViewChild('verify')
+  @ViewChild('verify', { static: true })
   public verify: VerifyKeyComponent
 
   public readonly secret: Secret

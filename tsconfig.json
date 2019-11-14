@@ -32,6 +32,7 @@
     // "noFallthroughCasesInSwitch": true /* Report errors for fallthrough cases in switch statement. */
   },
   "angularCompilerOptions": {
+    "enableIvy": true,
     "strictInjectionParameters": true,
     "fullTemplateTypeCheck": true
   }
