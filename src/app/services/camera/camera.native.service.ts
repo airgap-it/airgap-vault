@@ -25,7 +25,7 @@ export class CameraNativeService implements IEntropyGenerator {
 
   private readonly renderer: Renderer2
 
-  @ViewChild('cameraCanvas') public cameraCanvas: ElementRef
+  @ViewChild('cameraCanvas', { static: false }) public cameraCanvas: ElementRef
   public canvasElement: HTMLCanvasElement
 
   private collectedEntropyPercentage: number = 0

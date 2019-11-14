@@ -14,7 +14,7 @@ import { SchemeRoutingService } from '../../services/scheme-routing/scheme-routi
   styleUrls: ['./tab-scan.page.scss']
 })
 export class TabScanPage {
-  @ViewChild('scanner')
+  @ViewChild('scanner', { static: false })
   public zxingScanner: ZXingScannerComponent
   public availableDevices: MediaDeviceInfo[]
   public selectedDevice: MediaDeviceInfo

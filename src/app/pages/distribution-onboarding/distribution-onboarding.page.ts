@@ -10,7 +10,7 @@ import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/er
   styleUrls: ['./distribution-onboarding.page.scss']
 })
 export class DistributionOnboardingPage {
-  @ViewChild(IonSlides)
+  @ViewChild(IonSlides, { static: true })
   public slides: IonSlides
 
   constructor(private readonly modalController: ModalController, private readonly storage: Storage) {}
