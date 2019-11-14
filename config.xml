@@ -63,12 +63,12 @@
         <edit-config file="*-Info.plist" mode="merge" target="ITSAppUsesNonExemptEncryption">
             <false />
         </edit-config>
-        <config-file target="*-Debug.plist" parent="com.apple.developer.associated-domains">
+        <config-file parent="com.apple.developer.associated-domains" target="*-Debug.plist">
             <array>
                 <string>applinks:vault.airgap.it</string>
             </array>
         </config-file>
-        <config-file target="*-Release.plist" parent="com.apple.developer.associated-domains">
+        <config-file parent="com.apple.developer.associated-domains" target="*-Release.plist">
             <array>
                 <string>applinks:vault.airgap.it</string>
             </array>

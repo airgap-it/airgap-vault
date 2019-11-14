@@ -36,3 +36,24 @@ video {
   min-width: 100vw;
   object-fit: contain;
 }
+
+.wrapper {
+  width: 100%;
+}
+
+.progress-bar {
+  width: 100%;
+  background-color: #e0e0e0;
+  padding: 3px;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.progress-bar-fill {
+  display: block;
+  height: 22px;
+  background-color: #659cef;
+  border-radius: 3px;
+
+  transition: width 500ms ease-in-out;
+}

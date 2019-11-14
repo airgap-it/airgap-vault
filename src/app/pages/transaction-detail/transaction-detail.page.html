@@ -11,7 +11,7 @@
 
 <ion-content class="ion-padding">
   <h3>{{ 'transaction-detail.text' | translate }}</h3>
-  <airgap-signed-transaction [unsignedTx]="deserializedSync"></airgap-signed-transaction>
+  <airgap-signed-transaction [unsignedTxs]="deserializedSync"></airgap-signed-transaction>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-button color="primary" shape="round" (click)="signAndGoToNextPage()">

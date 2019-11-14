@@ -1,12 +1,12 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core'
+import { Component, Input, OnChanges } from '@angular/core'
 import {
-  DeserializedSyncProtocol,
   getProtocolByIdentifier,
   IAirGapTransaction,
   ICoinProtocol,
+  Serializer,
   SignedTransaction,
-  SyncProtocolUtils,
-  UnsignedTransaction
+  UnsignedTransaction,
+  IACMessageDefinitionObject
 } from 'airgap-coin-lib'
 import BigNumber from 'bignumber.js'
 
@@ -19,10 +19,10 @@ import { ProtocolsService } from '../../services/protocols/protocols.service'
 })
 export class SignedTransactionComponent implements OnChanges {
   @Input()
-  public signedTx: DeserializedSyncProtocol
+  public signedTxs: IACMessageDefinitionObject | undefined // TODO: Type
 
   @Input()
-  public unsignedTx: DeserializedSyncProtocol
+  public unsignedTxs: IACMessageDefinitionObject[] | undefined // TODO: Type
 
   @Input()
   public syncProtocolString: string
@@ -47,20 +47,24 @@ export class SignedTransactionComponent implements OnChanges {
   public async ngOnChanges(): Promise<void> {
     if (this.syncProtocolString) {
       try {
-        const syncUtils: SyncProtocolUtils = new SyncProtocolUtils()
+        const serializer: Serializer = new Serializer()
+        console.log(this.syncProtocolString)
         const parts: string[] = this.syncProtocolString.split('?d=') // TODO: Use sync scheme handler to unpack
-        this.signedTx = await syncUtils.deserialize(parts[parts.length - 1])
+        const data: string = parts[parts.length - 1]
+        console.log(data)
+        this.signedTxs = await serializer.deserialize(data.split(','))[0]
       } catch (err) {
+        console.log('ERROR', err)
         this.fallbackActivated = true
         this.rawTxData = this.syncProtocolString
       }
     }
 
-    if (this.signedTx) {
-      const protocol: ICoinProtocol = getProtocolByIdentifier(this.signedTx.protocol)
+    if (this.signedTxs) {
+      const protocol: ICoinProtocol = getProtocolByIdentifier(this.signedTxs.protocol)
       try {
         // tslint:disable-next-line:no-unnecessary-type-assertion
-        const signedTransaction: SignedTransaction = this.signedTx.payload as SignedTransaction
+        const signedTransaction: SignedTransaction = this.signedTxs.payload as SignedTransaction
         this.airGapTxs = await protocol.getTransactionDetailsFromSigned(signedTransaction)
         if (
           this.airGapTxs.length > 1 &&
@@ -85,16 +89,17 @@ export class SignedTransactionComponent implements OnChanges {
       } catch (e) {
         this.fallbackActivated = true
         // tslint:disable-next-line:no-unnecessary-type-assertion
-        this.rawTxData = (this.signedTx.payload as SignedTransaction).transaction
+        this.rawTxData = (this.signedTxs.payload as SignedTransaction).transaction
       }
     }
 
-    if (this.unsignedTx) {
-      const protocol: ICoinProtocol = getProtocolByIdentifier(this.unsignedTx.protocol)
+    if (this.unsignedTxs && this.unsignedTxs.length > 0) {
+      const protocol: ICoinProtocol = getProtocolByIdentifier(this.unsignedTxs[0].protocol)
       try {
         // tslint:disable-next-line:no-unnecessary-type-assertion
-        const unsignedTransaction: UnsignedTransaction = this.unsignedTx.payload as UnsignedTransaction
+        const unsignedTransaction: UnsignedTransaction = this.unsignedTxs[0].payload as UnsignedTransaction
         this.airGapTxs = await protocol.getTransactionDetails(unsignedTransaction)
+        console.log(this.airGapTxs)
         if (
           this.airGapTxs.length > 1 &&
           this.airGapTxs.every((tx: IAirGapTransaction) => tx.protocolIdentifier === this.airGapTxs[0].protocolIdentifier)
@@ -119,7 +124,7 @@ export class SignedTransactionComponent implements OnChanges {
       } catch (e) {
         this.fallbackActivated = true
         // tslint:disable-next-line:no-unnecessary-type-assertion
-        this.rawTxData = JSON.stringify((this.unsignedTx.payload as UnsignedTransaction).transaction)
+        this.rawTxData = JSON.stringify((this.unsignedTxs[0].payload as UnsignedTransaction).transaction)
       }
     }
   }

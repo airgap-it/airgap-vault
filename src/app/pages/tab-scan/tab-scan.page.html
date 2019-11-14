@@ -13,6 +13,14 @@
       {{ 'tab-scan.text' | translate }}
     </p>
   </ion-text>
+  
+  <br />
+  <div class="wrapper">
+    <div class="progress-bar">
+      <span class="progress-bar-fill" [style.width]="percentageScanned + '%'"></span>
+    </div>
+  </div>
+
   <ng-container *ngIf="hasCameraPermission !== undefined">
     <ion-row class="row--height__100 ion-justify-content-center ion-align-items-center" [hidden]="!hasCameraPermission">
       <ion-col class="guides--container ion-justify-content-center ion-align-items-center">

@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core'
+import { Component, ViewChild, NgZone } from '@angular/core'
 import { Platform } from '@ionic/angular'
 import { ZXingScannerComponent } from '@zxing/ngx-scanner'
 import { first } from 'rxjs/operators'
@@ -26,11 +26,16 @@ export class TabScanPage {
 
   public hasCameraPermission: boolean | undefined = undefined
 
+  public percentageScanned: number = 0
+
+  private parts: Set<string> = new Set()
+
   constructor(
     private readonly schemeRouting: SchemeRoutingService,
     private readonly platform: Platform,
     private readonly scanner: ScannerService,
-    private readonly permissionsService: PermissionsService
+    private readonly permissionsService: PermissionsService,
+    private readonly ngZone: NgZone
   ) {
     this.isBrowser = !this.platform.is('cordova')
   }
@@ -73,6 +78,9 @@ export class TabScanPage {
         this.selectedDevice = devices[0]
       })
     }
+
+    this.parts = new Set()
+    this.percentageScanned = 0
   }
 
   public ionViewWillLeave(): void {
@@ -101,8 +109,14 @@ export class TabScanPage {
   }
 
   public async checkScan(data: string): Promise<boolean | void> {
-    return this.schemeRouting.handleNewSyncRequest(data, () => {
-      this.startScan()
+    this.parts.add(data)
+    this.ngZone.run(() => {
+      this.schemeRouting
+        .handleNewSyncRequest(Array.from(this.parts), (scanResult: { availablePages: number[]; totalPages: number }) => {
+          this.percentageScanned = Math.max(0, Math.min(100, (scanResult.availablePages.length / scanResult.totalPages) * 100))
+          this.startScan()
+        })
+        .catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
     })
   }
 }

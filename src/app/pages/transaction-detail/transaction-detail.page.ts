@@ -1,15 +1,15 @@
 import { Component } from '@angular/core'
 import {
   AirGapWallet,
-  DeserializedSyncProtocol,
-  EncodedType,
+  IACMessageDefinitionObject,
+  IACMessageType,
   IAirGapTransaction,
-  SyncProtocolUtils,
+  Serializer,
   UnsignedTransaction
 } from 'airgap-coin-lib'
 import * as bip39 from 'bip39'
-import { Secret } from 'src/app/models/secret'
 
+import { Secret } from '../../models/secret'
 import { handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { InteractionOperationType, InteractionService } from '../../services/interaction/interaction.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
@@ -26,7 +26,7 @@ export class TransactionDetailPage {
   public transaction: UnsignedTransaction
   public wallet: AirGapWallet
   public airGapTxs: IAirGapTransaction[]
-  public deserializedSync: DeserializedSyncProtocol
+  public deserializedSync: IACMessageDefinitionObject[]
 
   constructor(
     private readonly navigationService: NavigationService,
@@ -37,7 +37,8 @@ export class TransactionDetailPage {
   public async ionViewWillEnter(): Promise<void> {
     this.transaction = this.navigationService.getState().transaction
     this.wallet = this.navigationService.getState().wallet
-    this.deserializedSync = this.navigationService.getState().deserializedSync
+    this.deserializedSync = [this.navigationService.getState().deserializedSync]
+    console.log('deserialized sync', this.deserializedSync)
     try {
       this.airGapTxs = await this.wallet.coinProtocol.getTransactionDetails(this.transaction)
     } catch (e) {
@@ -78,11 +79,10 @@ export class TransactionDetailPage {
       handleErrorLocal(e)
     }
 
-    const syncProtocol: SyncProtocolUtils = new SyncProtocolUtils()
-    const deserializedTxSigningRequest: DeserializedSyncProtocol = {
-      version: 1,
+    const syncProtocol: Serializer = new Serializer()
+    const deserializedTxSigningRequest: IACMessageDefinitionObject = {
       protocol: this.wallet.protocolIdentifier,
-      type: EncodedType.SIGNED_TRANSACTION,
+      type: IACMessageType.TransactionSignResponse,
       payload: {
         accountIdentifier: wallet.publicKey.substr(-6),
         transaction: signedTx,
@@ -93,9 +93,9 @@ export class TransactionDetailPage {
       }
     }
 
-    const serializedTx: string = await syncProtocol.serialize(deserializedTxSigningRequest)
+    const serializedTx: string[] = await syncProtocol.serialize([deserializedTxSigningRequest], 10)
 
-    return `${unsignedTransaction.callback || 'airgap-wallet://?d='}${serializedTx}`
+    return `${unsignedTransaction.callback || 'airgap-wallet://?d='}${serializedTx.join(',')}`
   }
 
   public signTransaction(transaction: UnsignedTransaction, wallet: AirGapWallet): Promise<string> {

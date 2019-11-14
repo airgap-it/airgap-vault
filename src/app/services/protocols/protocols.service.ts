@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
 import {
   addSubProtocol,
+  addSupportedProtocol,
   GenericERC20,
   GenericERC20Configuration,
   IAirGapTransaction,
@@ -9,7 +10,6 @@ import {
   UnsignedTransaction
 } from 'airgap-coin-lib'
 import { AeternityERC20Token } from 'airgap-coin-lib/dist/protocols/ethereum/erc20/AeToken'
-import { addSupportedProtocol } from 'airgap-coin-lib/dist/utils/supportedProtocols'
 
 import { tokens } from './tokens'
 export interface Token {

@@ -2,61 +2,63 @@ import { Injectable } from '@angular/core'
 import { AlertController } from '@ionic/angular'
 import { AlertButton } from '@ionic/core'
 import { TranslateService } from '@ngx-translate/core'
-import { AirGapWallet, DeserializedSyncProtocol, EncodedType, SyncProtocolUtils, UnsignedTransaction } from 'airgap-coin-lib'
+import { AirGapWallet, IACMessageDefinitionObject, IACMessageType, Serializer, UnsignedTransaction } from 'airgap-coin-lib'
 
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { NavigationService } from '../navigation/navigation.service'
 import { SecretsService } from '../secrets/secrets.service'
-import EncodeHintType from '@zxing/library/esm5/core/EncodeHintType'
+import { to } from 'src/app/utils/utils'
+
+enum IACResult {
+  SUCCESS = 0,
+  PARTIAL = 1,
+  ERROR = 2
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class SchemeRoutingService {
   private readonly syncSchemeHandlers: {
-    [key in EncodedType]: (deserializedSync: DeserializedSyncProtocol, scanAgainCallback: Function) => Promise<boolean>
+    [key in IACMessageType]: (deserializedSync: IACMessageDefinitionObject, scanAgainCallback: Function) => Promise<boolean>
   }
 
   constructor(
     private readonly navigationService: NavigationService,
     private readonly secretsService: SecretsService,
-    private readonly alertCtrl: AlertController,
+    private readonly alertController: AlertController,
     private readonly translateService: TranslateService
   ) {
     this.syncSchemeHandlers = {
-      [EncodedType.WALLET_SYNC]: this.syncTypeNotSupportedAlert.bind(this),
-      [EncodedType.UNSIGNED_TRANSACTION]: this.handleUnsignedTransaction.bind(this),
-      [EncodedType.SIGNED_TRANSACTION]: this.syncTypeNotSupportedAlert.bind(this),
-      [EncodedType.MESSAGE_SIGN_REQUEST]: this.syncTypeNotSupportedAlert.bind(this),
-      [EncodedType.MESSAGE_SIGN_RESPONSE]: this.syncTypeNotSupportedAlert.bind(this)
+      [IACMessageType.MetadataRequest]: this.syncTypeNotSupportedAlert.bind(this),
+      [IACMessageType.MetadataResponse]: this.syncTypeNotSupportedAlert.bind(this),
+      [IACMessageType.AccountShareRequest]: this.syncTypeNotSupportedAlert.bind(this),
+      [IACMessageType.AccountShareResponse]: this.syncTypeNotSupportedAlert.bind(this),
+      [IACMessageType.TransactionSignRequest]: this.handleUnsignedTransaction.bind(this),
+      [IACMessageType.TransactionSignResponse]: this.syncTypeNotSupportedAlert.bind(this),
+      [IACMessageType.MessageSignRequest]: this.syncTypeNotSupportedAlert.bind(this),
+      [IACMessageType.MessageSignResponse]: this.syncTypeNotSupportedAlert.bind(this)
     }
   }
 
-  public async handleNewSyncRequest(rawString: string, scanAgainCallback: () => void = () => {}): Promise<boolean | void> {
+  public async handleNewSyncRequest(
+    data: string | string[],
+    scanAgainCallback: Function = (scanResult: { currentPage: number; totalPageNumber: number }): void => {}
+  ): Promise<IACResult> {
     // wait for secrets to be loaded for sure
     await this.secretsService.isReady()
 
-    const syncProtocol: SyncProtocolUtils = new SyncProtocolUtils()
+    const serializer: Serializer = new Serializer()
 
-    let data: string | undefined
-    try {
-      const url: URL = new URL(rawString)
-      data = url.searchParams.get('d')
-    } catch (e) {
-      data = rawString // Fallback to support raw data QRs
-    }
+    const toDecode: string[] = Array.isArray(data) ? data : data.split(',')
+    const [error, deserializedSync]: [Error, IACMessageDefinitionObject[]] = await to(serializer.deserialize(toDecode))
 
-    try {
-      const deserializedSync = await syncProtocol.deserialize(data)
+    if (error && !error.message) {
+      scanAgainCallback(error)
 
-      if (deserializedSync.type in EncodedType) {
-        // Only handle types that we know
-        return this.syncSchemeHandlers[deserializedSync.type](deserializedSync, scanAgainCallback)
-      } else {
-        return this.syncTypeNotSupportedAlert(deserializedSync, scanAgainCallback)
-      }
-    } catch (e) {
-      console.warn('Deserialization of sync failed', e)
+      return IACResult.PARTIAL
+    } else if (error && error.message) {
+      console.warn('Deserialization of sync failed', error)
       // TODO: Log error locally
       const cancelButton = {
         text: 'tab-wallets.invalid-sync-operation_alert.okay_label',
@@ -68,13 +70,24 @@ export class SchemeRoutingService {
       this.showTranslatedAlert('tab-wallets.invalid-sync-operation_alert.title', 'tab-wallets.invalid-sync-operation_alert.text', [
         cancelButton
       ])
+
+      return IACResult.ERROR
+    }
+    const firstMessage: IACMessageDefinitionObject = deserializedSync[0]
+
+    if (firstMessage.type in IACMessageType) {
+      this.syncSchemeHandlers[firstMessage.type](firstMessage, scanAgainCallback).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
+
+      return IACResult.SUCCESS
+    } else {
+      this.syncTypeNotSupportedAlert(firstMessage, scanAgainCallback).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
+
+      return IACResult.ERROR
     }
   }
 
-  private async handleUnsignedTransaction(deserializedSyncProtocol: DeserializedSyncProtocol, scanAgainCallback: Function) {
-    // tslint:disable:no-unnecessary-type-assertion
-    const unsignedTransaction = deserializedSyncProtocol.payload as UnsignedTransaction
-    // tslint:enable:no-unnecessary-type-assertion
+  private async handleUnsignedTransaction(deserializedSyncProtocol: IACMessageDefinitionObject, scanAgainCallback: Function) {
+    const unsignedTransaction: UnsignedTransaction = deserializedSyncProtocol.payload as UnsignedTransaction
 
     let correctWallet = this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(
       unsignedTransaction.publicKey,
@@ -126,7 +139,7 @@ export class SchemeRoutingService {
     }
   }
 
-  private async syncTypeNotSupportedAlert(_deserializedSyncProtocol: DeserializedSyncProtocol, scanAgainCallback: Function) {
+  private async syncTypeNotSupportedAlert(_deserializedSyncProtocol: IACMessageDefinitionObject, scanAgainCallback: Function) {
     // TODO: Log error locally
     const cancelButton = {
       text: 'tab-wallets.sync-operation-not-supported_alert.okay_label',
@@ -145,7 +158,7 @@ export class SchemeRoutingService {
   public showTranslatedAlert(title: string, message: string, buttons: AlertButton[]): void {
     const translationKeys = [title, message, ...buttons.map(button => button.text)]
     this.translateService.get(translationKeys).subscribe(async values => {
-      const alert = await this.alertCtrl.create({
+      const alert = await this.alertController.create({
         header: values[title],
         message: values[message],
         backdropDismiss: true,

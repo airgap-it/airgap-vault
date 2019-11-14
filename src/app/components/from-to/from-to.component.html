@@ -14,13 +14,13 @@
     <ion-col size="9" class="ion-padding-bottom">
       <ion-label position="stacked" class="typography--uppercase">{{ 'from-to.amount_label' | translate }}</ion-label>
       <p class="typography--mono ion-no-margin ion-padding-bottom">
-        {{ transaction.amount.toFixed() | amountConverter: { protocolIdentifier: transaction.protocolIdentifier, maxDigits: undefined } }}
+        {{ transaction.amount | amountConverter: { protocolIdentifier: transaction.protocolIdentifier, maxDigits: undefined } }}
       </p>
 
       <ng-container *ngIf="transaction.fee">
         <ion-label position="stacked" class="typography--uppercase">{{ 'from-to.fee_label' | translate }}</ion-label>
         <p class="typography--mono ion-no-margin" [ngClass]="{ 'transaction.data': 'ion-padding-bottom' }">
-          {{ transaction.fee.toFixed() | feeConverter: { protocolIdentifier: transaction.protocolIdentifier } }}
+          {{ transaction.fee | feeConverter: { protocolIdentifier: transaction.protocolIdentifier } }}
         </p>
       </ng-container>
 
