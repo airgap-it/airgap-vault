@@ -28,6 +28,8 @@ export class TabScanPage {
 
   public percentageScanned: number = 0
 
+  public isMultiQr: boolean = false
+
   private parts: Set<string> = new Set()
 
   constructor(
@@ -81,6 +83,7 @@ export class TabScanPage {
 
     this.parts = new Set()
     this.percentageScanned = 0
+    this.isMultiQr = false
   }
 
   public ionViewWillLeave(): void {
@@ -113,7 +116,10 @@ export class TabScanPage {
     this.ngZone.run(() => {
       this.schemeRouting
         .handleNewSyncRequest(Array.from(this.parts), (scanResult: { availablePages: number[]; totalPages: number }) => {
-          this.percentageScanned = Math.max(0, Math.min(100, (scanResult.availablePages.length / scanResult.totalPages) * 100))
+          if (scanResult && scanResult.availablePages) {
+            this.isMultiQr = true
+            this.percentageScanned = Math.max(0, Math.min(1, scanResult.availablePages.length / scanResult.totalPages))
+          }
           this.startScan()
         })
         .catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
