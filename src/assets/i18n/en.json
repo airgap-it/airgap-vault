@@ -125,7 +125,7 @@
       "label": "Vault and Wallet interaction",
       "text": "Select whether Vault and Wallet are installed on the same device or on separate devices."
     },
-    "confirm_label":"confirm"
+    "confirm_label":"Confirm"
   },
 
   "secret-edit-delete-popover":{
