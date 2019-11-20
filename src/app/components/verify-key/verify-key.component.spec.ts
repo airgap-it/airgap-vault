@@ -125,7 +125,7 @@ describe('Component: VerifyKey', () => {
 
     // now select a word
     component.selectWord(5)
-    expect(component.selectedWord).toEqual(5)
+    expect(component.selectedWordIndex).toEqual(5)
     expect(component.currentWords[5]).toEqual(words[5])
   }))
 

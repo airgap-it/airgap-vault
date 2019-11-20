@@ -7,7 +7,7 @@
           size="small"
           class="typography--mono"
           [class.size__xs]="splittedSecret.length > 10"
-          [color]="selectedWord === i ? 'primary' : 'tertiary'"
+          [color]="selectedWordIndex === i ? 'primary' : 'tertiary'"
           *ngIf="currentWords[i]"
           (click)="selectWord(i)"
         >
