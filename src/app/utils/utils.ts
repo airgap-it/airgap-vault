@@ -77,5 +77,8 @@ export function parseIACUrl(url: string | string[], parameter: string): string[]
     }
   }
 
+  // In case one of the elements contains a chunked string, we have to flatten it.
+  result = result.reduce((pv: string[], cv: string) => [...pv, ...cv.split(',')], [])
+
   return result.filter((el: string) => el !== '')
 }
