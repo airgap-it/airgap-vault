@@ -86,6 +86,6 @@ export class AudioNativeService implements IEntropyGenerator {
   }
 
   public getCollectedEntropyPercentage(): number {
-    return this.collectedEntropyPercentage / 200
+    return this.collectedEntropyPercentage / 150
   }
 }

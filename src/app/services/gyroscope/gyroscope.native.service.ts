@@ -68,6 +68,6 @@ export class GyroscopeNativeService implements GyroscopeService, IEntropyGenerat
   }
 
   public getCollectedEntropyPercentage(): number {
-    return this.collectedEntropyPercentage / 30
+    return this.collectedEntropyPercentage / 25
   }
 }
