@@ -27,6 +27,8 @@ export class TabScanPage {
   public hasCameraPermission: boolean | undefined = undefined
 
   public percentageScanned: number = 0
+  public numberOfQrsScanned: number = 0
+  public numberOfQrsTotal: number = 0
 
   public isMultiQr: boolean = false
 
@@ -118,6 +120,8 @@ export class TabScanPage {
         .handleNewSyncRequest(Array.from(this.parts), (scanResult: { availablePages: number[]; totalPages: number }) => {
           if (scanResult && scanResult.availablePages) {
             this.isMultiQr = true
+            this.numberOfQrsScanned = scanResult.availablePages.length
+            this.numberOfQrsTotal = scanResult.totalPages
             this.percentageScanned = Math.max(0, Math.min(1, scanResult.availablePages.length / scanResult.totalPages))
           }
           this.startScan()

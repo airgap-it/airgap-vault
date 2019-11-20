@@ -243,6 +243,7 @@
   "tab-scan":{
     "title":"QR Code Scanner",
     "text":"Scan a QR Code from AirGap Wallet",
+    "multi-qr_text": "This transaction consists of multiple QR codes. Keep your camera on the changing QRs and wait until all codes are scanned.",
     "empty-state_heading": "In order to scan QR codes, AirGap Vault needs the <span class=\"style__strong color__primary\">camera permission</span>.",
     "grant-permission_label":"Grant permission"
   },
