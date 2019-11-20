@@ -54,3 +54,28 @@ export function partition<T>(array: T[], isValid: (element: T) => boolean): [T[]
 
   return [pass, fail]
 }
+
+function readParameterFromUrl(url: string, parameter: string): string {
+  try {
+    const parsedUrl: URL = new URL(url)
+
+    return parsedUrl.searchParams.get(parameter)
+  } catch (error) {
+    return url
+  }
+}
+
+export function parseIACUrl(url: string | string[], parameter: string): string[] {
+  let result: string[] | undefined
+  if (Array.isArray(url)) {
+    result = url.map((chunk: string) => readParameterFromUrl(chunk, parameter))
+  } else {
+    try {
+      result = readParameterFromUrl(url, parameter).split(',')
+    } catch (error) {
+      result = url.split(',')
+    }
+  }
+
+  return result.filter((el: string) => el !== '')
+}

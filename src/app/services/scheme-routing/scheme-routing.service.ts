@@ -7,7 +7,7 @@ import { AirGapWallet, IACMessageDefinitionObject, IACMessageType, Serializer, U
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { NavigationService } from '../navigation/navigation.service'
 import { SecretsService } from '../secrets/secrets.service'
-import { to } from 'src/app/utils/utils'
+import { to, parseIACUrl } from 'src/app/utils/utils'
 
 enum IACResult {
   SUCCESS = 0,
@@ -50,7 +50,7 @@ export class SchemeRoutingService {
 
     const serializer: Serializer = new Serializer()
 
-    const toDecode: string[] = Array.isArray(data) ? data : data.split(',')
+    const toDecode: string[] = parseIACUrl(data, 'd')
     const [error, deserializedSync]: [Error, IACMessageDefinitionObject[]] = await to(serializer.deserialize(toDecode))
 
     if (error && !error.message) {
