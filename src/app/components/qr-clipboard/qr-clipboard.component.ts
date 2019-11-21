@@ -2,6 +2,7 @@ import { Component, Input, OnDestroy } from '@angular/core'
 
 import { ClipboardService } from '../../services/clipboard/clipboard.service'
 import { serializedDataToUrlString } from 'src/app/utils/utils'
+import { SerializerService } from 'src/app/services/serializer/serializer.service'
 
 @Component({
   selector: 'airgap-qr-clipboard',
@@ -26,10 +27,10 @@ export class QrClipboardComponent implements OnDestroy {
   public activeChunk: number = 0
 
   private readonly timeout: NodeJS.Timeout
-  constructor(private readonly clipboardService: ClipboardService) {
+  constructor(private readonly clipboardService: ClipboardService, private readonly serializerService: SerializerService) {
     this.timeout = setInterval(() => {
       this.activeChunk = ++this.activeChunk % this.qrdataArray.length
-    }, 250)
+    }, this.serializerService.displayTimePerChunk)
   }
 
   public async copyToClipboard(): Promise<void> {
