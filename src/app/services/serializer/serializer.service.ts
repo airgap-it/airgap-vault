@@ -14,9 +14,9 @@ export class SerializerService {
   private readonly v1Tov2Mapping: Map<number, number> = new Map<number, number>()
   private readonly v2Tov1Mapping: Map<number, number> = new Map<number, number>()
 
+  public useV2: boolean = false
   public chunkSize: number = 250
-  public serializerVersion: 1 | 2 = 1
-  public displayTimePerChunk: number = 250
+  public displayTimePerChunk: number = 500
 
   constructor() {
     this.v1Tov2Mapping.set(2, 4) // AccountShareResponse
@@ -29,7 +29,7 @@ export class SerializerService {
   }
 
   public async serialize(chunks: IACMessageDefinitionObject[]): Promise<string[]> {
-    if (this.serializerVersion === 1 && !chunks.some((chunk: IACMessageDefinitionObject) => chunk.protocol === 'cosmos')) {
+    if (!this.useV2 && !chunks.some((chunk: IACMessageDefinitionObject) => chunk.protocol === 'cosmos')) {
       return [await this.serializeV1(chunks[0])]
     } else {
       return this.serializeV2(chunks)
@@ -39,7 +39,7 @@ export class SerializerService {
   public async deserialize(chunks: string | string[]): Promise<IACMessageDefinitionObject[]> {
     const parsedChunks: string[] = parseIACUrl(chunks, 'd')
     try {
-      return this.deserializeV2(parsedChunks)
+      return await this.deserializeV2(parsedChunks)
     } catch (error) {
       return [await this.deserializeV1(parsedChunks[0])]
     }
