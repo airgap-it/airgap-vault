@@ -104,7 +104,7 @@
   "secret-edit":{
     "title":" Your Secret",
     "text":"Give your secret a name and select the security level.",
-    "secret_input_label":"Secret Name",
+    "secret_input_label":"Label of your secret",
     "security-level": {
       "heading":"Security Level",
       "text":"You can encrypt your secret additionally using a passcode."
