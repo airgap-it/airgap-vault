@@ -4,6 +4,7 @@ import { TranslateService } from '@ngx-translate/core'
 import { first } from 'rxjs/operators'
 
 import { ErrorCategory, handleErrorLocal } from './../error-handler/error-handler.service'
+import { serializedDataToUrlString } from 'src/app/utils/utils'
 
 declare let window: any
 
@@ -18,8 +19,7 @@ export class DeepLinkService {
   ) {}
 
   public sameDeviceDeeplink(url: string = 'airgap-wallet://'): Promise<void> {
-    const defaultAppUrl: string = 'airgap-wallet://'
-    const deeplinkUrl: string = url.includes('://') ? url : [defaultAppUrl, url].join('')
+    const deeplinkUrl: string = url.includes('://') ? url : serializedDataToUrlString(url)
 
     return new Promise((resolve, reject) => {
       let sApp

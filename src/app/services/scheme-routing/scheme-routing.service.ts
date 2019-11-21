@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core'
 import { AlertController } from '@ionic/angular'
 import { AlertButton } from '@ionic/core'
 import { TranslateService } from '@ngx-translate/core'
-import { AirGapWallet, IACMessageDefinitionObject, IACMessageType, Serializer, UnsignedTransaction } from 'airgap-coin-lib'
+import { AirGapWallet, IACMessageDefinitionObject, IACMessageType, UnsignedTransaction } from 'airgap-coin-lib'
 
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { NavigationService } from '../navigation/navigation.service'
 import { SecretsService } from '../secrets/secrets.service'
-import { to, parseIACUrl } from 'src/app/utils/utils'
+import { to } from 'src/app/utils/utils'
+import { SerializerService } from '../../services/serializer/serializer.service'
 
 enum IACResult {
   SUCCESS = 0,
@@ -27,7 +28,8 @@ export class SchemeRoutingService {
     private readonly navigationService: NavigationService,
     private readonly secretsService: SecretsService,
     private readonly alertController: AlertController,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    private readonly serializerService: SerializerService
   ) {
     this.syncSchemeHandlers = {
       [IACMessageType.MetadataRequest]: this.syncTypeNotSupportedAlert.bind(this),
@@ -48,10 +50,7 @@ export class SchemeRoutingService {
     // wait for secrets to be loaded for sure
     await this.secretsService.isReady()
 
-    const serializer: Serializer = new Serializer()
-
-    const toDecode: string[] = parseIACUrl(data, 'd')
-    const [error, deserializedSync]: [Error, IACMessageDefinitionObject[]] = await to(serializer.deserialize(toDecode))
+    const [error, deserializedSync]: [Error, IACMessageDefinitionObject[]] = await to(this.serializerService.deserialize(data))
 
     if (error && !error.message) {
       scanAgainCallback(error)

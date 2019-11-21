@@ -1,6 +1,7 @@
 import { Component, Input, OnDestroy } from '@angular/core'
 
 import { ClipboardService } from '../../services/clipboard/clipboard.service'
+import { serializedDataToUrlString } from 'src/app/utils/utils'
 
 @Component({
   selector: 'airgap-qr-clipboard',
@@ -15,7 +16,8 @@ export class QrClipboardComponent implements OnDestroy {
 
   @Input()
   set qrdata(value: string | string[]) {
-    this.qrdataArray = Array.isArray(value) ? value : [value]
+    const array: string[] = Array.isArray(value) ? value : [value]
+    this.qrdataArray = array.length === 1 ? [serializedDataToUrlString(array)] : array
   }
 
   @Input()

@@ -14,6 +14,7 @@ import { handleErrorLocal } from '../../services/error-handler/error-handler.ser
 import { InteractionOperationType, InteractionService } from '../../services/interaction/interaction.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
+import { SerializerService } from '../../services/serializer/serializer.service'
 
 @Component({
   selector: 'airgap-transaction-detail',
@@ -31,7 +32,8 @@ export class TransactionDetailPage {
   constructor(
     private readonly navigationService: NavigationService,
     private readonly secretsService: SecretsService,
-    private readonly interactionService: InteractionService
+    private readonly interactionService: InteractionService,
+    private readonly serializerService: SerializerService
   ) {}
 
   public async ionViewWillEnter(): Promise<void> {
@@ -79,7 +81,6 @@ export class TransactionDetailPage {
       handleErrorLocal(e)
     }
 
-    const syncProtocol: Serializer = new Serializer()
     const deserializedTxSigningRequest: IACMessageDefinitionObject = {
       protocol: this.wallet.protocolIdentifier,
       type: IACMessageType.TransactionSignResponse,
@@ -93,7 +94,7 @@ export class TransactionDetailPage {
       }
     }
 
-    const serializedTx: string[] = await syncProtocol.serialize([deserializedTxSigningRequest], 10)
+    const serializedTx: string[] = await this.serializerService.serialize([deserializedTxSigningRequest])
 
     return `${unsignedTransaction.callback || 'airgap-wallet://?d='}${serializedTx.join(',')}`
   }

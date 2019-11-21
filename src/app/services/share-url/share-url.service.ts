@@ -1,21 +1,17 @@
 import { Injectable } from '@angular/core'
-import { AccountShareResponse, AirGapWallet, IACMessageDefinitionObject, IACMessageType, Serializer } from 'airgap-coin-lib'
-
-function serializedDataToUrlString(data: string[], host: string = 'airgap-wallet://', parameter: string = 'd'): string {
-  return `${host}?${parameter}=${data.join(',')}`
-}
+import { AccountShareResponse, AirGapWallet, IACMessageDefinitionObject, IACMessageType } from 'airgap-coin-lib'
+import { SerializerService } from '../../services/serializer/serializer.service'
+import { serializedDataToUrlString } from 'src/app/utils/utils'
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShareUrlService {
-  constructor() {
+  constructor(private readonly serializerService: SerializerService) {
     //
   }
 
   public async generateShareURL(wallet: AirGapWallet): Promise<string> {
-    const serializer: Serializer = new Serializer()
-
     const accountShareResponse: AccountShareResponse = {
       publicKey: wallet.publicKey,
       isExtendedPublicKey: wallet.isExtendedPublicKey,
@@ -28,7 +24,7 @@ export class ShareUrlService {
       payload: accountShareResponse
     }
 
-    const serializedTx: string[] = await serializer.serialize([deserializedTxSigningRequest], 10)
+    const serializedTx: string[] = await this.serializerService.serialize([deserializedTxSigningRequest])
 
     return serializedDataToUrlString(serializedTx, 'airgap-wallet://')
   }

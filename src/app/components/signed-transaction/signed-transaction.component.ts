@@ -11,6 +11,7 @@ import {
 import BigNumber from 'bignumber.js'
 
 import { ProtocolsService } from '../../services/protocols/protocols.service'
+import { SerializerService } from '../../services/serializer/serializer.service'
 
 @Component({
   selector: 'airgap-signed-transaction',
@@ -40,19 +41,14 @@ export class SignedTransactionComponent implements OnChanges {
 
   public rawTxData: string
 
-  constructor(private readonly protocolsService: ProtocolsService) {
+  constructor(private readonly protocolsService: ProtocolsService, private readonly serializerService: SerializerService) {
     //
   }
 
   public async ngOnChanges(): Promise<void> {
     if (this.syncProtocolString) {
       try {
-        const serializer: Serializer = new Serializer()
-        console.log(this.syncProtocolString)
-        const parts: string[] = this.syncProtocolString.split('?d=') // TODO: Use sync scheme handler to unpack
-        const data: string = parts[parts.length - 1]
-        console.log(data)
-        this.signedTxs = await serializer.deserialize(data.split(','))[0]
+        this.signedTxs = await this.serializerService.deserialize(this.syncProtocolString)[0]
       } catch (err) {
         console.log('ERROR', err)
         this.fallbackActivated = true
