@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { ModalController, Platform } from '@ionic/angular'
 import { ComponentRef, ModalOptions } from '@ionic/core'
 
-import { WarningModalPage } from '../../pages/warning-modal/warning-modal.page'
+import { Warning, WarningModalPage } from '../../pages/warning-modal/warning-modal.page'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { NavigationService } from '../navigation/navigation.service'
 
