@@ -6,51 +6,37 @@ import { first } from 'rxjs/operators'
 import { Secret } from '../../models/secret'
 import { NavigationService } from '../../services/navigation/navigation.service'
 
-import { SHOW_SECRET_MIN_TIME_IN_SECONDS } from './../../constants/constants'
-import { ErrorCategory, handleErrorLocal } from './../../services/error-handler/error-handler.service'
-import { DeviceService } from 'src/app/services/device/device.service'
-import { ComponentRef, ModalOptions } from '@ionic/core'
-import { Warning, WarningModalPage } from '../warning-modal/warning-modal.page'
+import { SHOW_SECRET_MIN_TIME_IN_SECONDS } from '../../constants/constants'
+import { SecureBasePage } from '../../secure-base/secure-base.page'
+import { DeviceService } from '../../services/device/device.service'
+import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 
 @Component({
   selector: 'airgap-secret-show',
   templateUrl: './secret-show.page.html',
   styleUrls: ['./secret-show.page.scss']
 })
-export class SecretShowPage {
+export class SecretShowPage extends SecureBasePage {
   public readonly secret: Secret
   public readonly startTime: Date = new Date()
 
   constructor(
-    private readonly navigationService: NavigationService,
+    deviceProvider: DeviceService,
+    modalController: ModalController,
+    protected readonly navigationService: NavigationService,
     private readonly alertController: AlertController,
-    private readonly translateService: TranslateService,
-    private readonly deviceProvider: DeviceService,
-    private readonly modalController: ModalController
+    private readonly translateService: TranslateService
   ) {
+    super(navigationService, deviceProvider, modalController)
     this.secret = this.navigationService.getState().secret
   }
 
   public ionViewDidEnter(): void {
-    this.deviceProvider.setSecureWindow()
-    this.deviceProvider.onScreenCaptureStateChanged((captured: boolean) => {
-      if (captured) {
-        this.presentModal(WarningModalPage, { errorType: Warning.SCREENSHOT }, () => {
-          this.navigationService.routeBack('/secret-create')
-        }).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
-      }
-    })
-    this.deviceProvider.onScreenshotTaken(() => {
-      this.presentModal(WarningModalPage, { errorType: Warning.SCREENSHOT }, () => {
-        this.navigationService.routeBack('/secret-create')
-      }).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
-    })
+    super.ionViewDidEnter()
   }
 
   public ionViewWillLeave(): void {
-    this.deviceProvider.clearSecureWindow()
-    this.deviceProvider.removeScreenCaptureObservers()
-    this.deviceProvider.removeScreenshotObservers()
+    super.ionViewWillLeave()
   }
 
   public goToValidateSecret(): void {
@@ -93,27 +79,5 @@ export class SecretShowPage {
         .routeWithState('secret-validate', { secret: this.secret })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     }
-  }
-
-  public async presentModal(page: ComponentRef, properties: ModalOptions['componentProps'], callback: Function): Promise<void> {
-    const modal: HTMLIonModalElement = await this.modalController.create({
-      component: page,
-      componentProps: properties,
-      backdropDismiss: false
-    })
-
-    modal
-      .onDidDismiss()
-      .then(() => {
-        callback()
-      })
-      .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
-
-    modal
-      .present()
-      .then(() => {
-        console.log('check modal presented')
-      })
-      .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 }

@@ -1,37 +1,42 @@
 import { Component } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { ModalController } from '@ionic/angular'
 
 import { Secret } from '../../models/secret'
+import { SecureBasePage } from '../../secure-base/secure-base.page'
+import { DeviceService } from '../../services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { MnemonicValidator } from '../../validators/mnemonic.validator'
-import { DeviceService } from 'src/app/services/device/device.service'
 
 @Component({
   selector: 'airgap-social-recovery-import',
   templateUrl: './social-recovery-import.page.html',
   styleUrls: ['./social-recovery-import.page.scss']
 })
-export class SocialRecoveryImportPage {
+export class SocialRecoveryImportPage extends SecureBasePage {
   public numberOfShares: number
   public shares: string[]
 
   public socialRecoveryForm: FormGroup
 
   constructor(
-    private readonly navigationService: NavigationService,
-    private readonly deviceProvider: DeviceService,
+    deviceProvider: DeviceService,
+    modalController: ModalController,
+    protected readonly navigationService: NavigationService,
     public formBuilder: FormBuilder
   ) {
+    super(navigationService, deviceProvider, modalController)
+
     this.setNumberOfShares(2)
   }
 
   public ionViewDidEnter(): void {
-    this.deviceProvider.setSecureWindow()
+    super.ionViewDidEnter()
   }
 
   public ionViewWillLeave(): void {
-    this.deviceProvider.clearSecureWindow()
+    super.ionViewWillLeave()
   }
 
   public setNumberOfShares(i: number): void {

@@ -12,7 +12,7 @@ export class DeviceService {
   public checkForRoot(): Promise<boolean> {
     return new Promise((resolve, reject) => {
       if (this.platform.is('cordova')) {
-        SecurityUtils.DeviceIntegrity.assess(function(result) {
+        SecurityUtils.DeviceIntegrity.assess(result => {
           resolve(!result)
         })
       } else {
@@ -24,19 +24,19 @@ export class DeviceService {
 
   public onScreenCaptureStateChanged(callback: (captured: boolean) => void): void {
     if (this.platform.is('ios') && this.platform.is('cordova')) {
-      SecurityUtils.SecureScreen.onScreenCaptureStateChanged(function(captured: boolean) {
+      SecurityUtils.SecureScreen.onScreenCaptureStateChanged((captured: boolean) => {
         callback(captured)
       })
     }
   }
 
-  public setSecureWindow() {
+  public setSecureWindow(): void {
     if (this.platform.is('android') && this.platform.is('cordova')) {
       SecurityUtils.SecureScreen.setWindowSecureFlag()
     }
   }
 
-  public clearSecureWindow() {
+  public clearSecureWindow(): void {
     if (this.platform.is('android') && this.platform.is('cordova')) {
       SecurityUtils.SecureScreen.clearWindowSecureFlag()
     }
@@ -48,9 +48,9 @@ export class DeviceService {
     }
   }
 
-  public onScreenshotTaken(callback: () => void) {
+  public onScreenshotTaken(callback: () => void): void {
     if (this.platform.is('ios') && this.platform.is('cordova')) {
-      SecurityUtils.SecureScreen.onScreenshotTaken(function() {
+      SecurityUtils.SecureScreen.onScreenshotTaken(() => {
         callback()
       })
     }

@@ -1,27 +1,32 @@
 import { Component } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { ModalController } from '@ionic/angular'
 
 import { BIP39Signer } from '../../models/BIP39Signer'
 import { Secret } from '../../models/secret'
+import { SecureBasePage } from '../../secure-base/secure-base.page'
+import { DeviceService } from '../../services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { MnemonicValidator } from '../../validators/mnemonic.validator'
-import { DeviceService } from 'src/app/services/device/device.service'
 
 @Component({
   selector: 'airgap-secret-import',
   templateUrl: './secret-import.page.html',
   styleUrls: ['./secret-import.page.scss']
 })
-export class SecretImportPage {
+export class SecretImportPage extends SecureBasePage {
   public mnemonic: string
   public secretImportForm: FormGroup
 
   constructor(
-    private readonly navigationService: NavigationService,
-    private readonly deviceProvider: DeviceService,
+    deviceProvider: DeviceService,
+    modalController: ModalController,
+    protected readonly navigationService: NavigationService,
     private readonly formBuilder: FormBuilder
   ) {
+    super(navigationService, deviceProvider, modalController)
+
     const formGroup: {
       [key: string]: any
     } = {
@@ -32,11 +37,11 @@ export class SecretImportPage {
   }
 
   public ionViewDidEnter(): void {
-    this.deviceProvider.setSecureWindow()
+    super.ionViewDidEnter()
   }
 
   public ionViewWillLeave(): void {
-    this.deviceProvider.clearSecureWindow()
+    super.ionViewWillLeave()
   }
 
   public goToSecretCreatePage(): void {
