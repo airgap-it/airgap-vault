@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { AlertController, ModalController } from '@ionic/angular'
+import { AlertController } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 import { first } from 'rxjs/operators'
 
@@ -7,7 +7,6 @@ import { Secret } from '../../models/secret'
 import { NavigationService } from '../../services/navigation/navigation.service'
 
 import { SHOW_SECRET_MIN_TIME_IN_SECONDS } from '../../constants/constants'
-import { SecureBasePage } from '../../secure-base/secure-base.page'
 import { DeviceService } from '../../services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 
@@ -16,27 +15,25 @@ import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/er
   templateUrl: './secret-show.page.html',
   styleUrls: ['./secret-show.page.scss']
 })
-export class SecretShowPage extends SecureBasePage {
+export class SecretShowPage {
   public readonly secret: Secret
   public readonly startTime: Date = new Date()
 
   constructor(
-    deviceProvider: DeviceService,
-    modalController: ModalController,
-    protected readonly navigationService: NavigationService,
+    private readonly deviceService: DeviceService,
+    private readonly navigationService: NavigationService,
     private readonly alertController: AlertController,
     private readonly translateService: TranslateService
   ) {
-    super(navigationService, deviceProvider, modalController)
     this.secret = this.navigationService.getState().secret
   }
 
   public ionViewDidEnter(): void {
-    super.ionViewDidEnter()
+    this.deviceService.enableScreenshotProtection()
   }
 
   public ionViewWillLeave(): void {
-    super.ionViewWillLeave()
+    this.deviceService.disableScreenshotProtection()
   }
 
   public goToValidateSecret(): void {

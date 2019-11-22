@@ -1,9 +1,7 @@
 import { Component } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { ModalController } from '@ionic/angular'
 
 import { Secret } from '../../models/secret'
-import { SecureBasePage } from '../../secure-base/secure-base.page'
 import { DeviceService } from '../../services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
@@ -14,29 +12,26 @@ import { MnemonicValidator } from '../../validators/mnemonic.validator'
   templateUrl: './social-recovery-import.page.html',
   styleUrls: ['./social-recovery-import.page.scss']
 })
-export class SocialRecoveryImportPage extends SecureBasePage {
+export class SocialRecoveryImportPage {
   public numberOfShares: number
   public shares: string[]
 
   public socialRecoveryForm: FormGroup
 
   constructor(
-    deviceProvider: DeviceService,
-    modalController: ModalController,
-    protected readonly navigationService: NavigationService,
+    private readonly deviceService: DeviceService,
+    private readonly navigationService: NavigationService,
     public formBuilder: FormBuilder
   ) {
-    super(navigationService, deviceProvider, modalController)
-
     this.setNumberOfShares(2)
   }
 
   public ionViewDidEnter(): void {
-    super.ionViewDidEnter()
+    this.deviceService.enableScreenshotProtection()
   }
 
   public ionViewWillLeave(): void {
-    super.ionViewWillLeave()
+    this.deviceService.disableScreenshotProtection()
   }
 
   public setNumberOfShares(i: number): void {
