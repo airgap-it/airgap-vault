@@ -8,7 +8,7 @@ import { IntroductionPage } from '../../pages/introduction/introduction.page'
 import { Warning, WarningModalPage } from '../../pages/warning-modal/warning-modal.page'
 import { DeviceService } from '../device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
-import { SecureStorageService } from '../storage/storage.service'
+import { SecureStorageService } from '../secure-storage/secure-storage.service'
 
 export interface Check {
   name: string
@@ -24,7 +24,7 @@ export class StartupChecksService {
   public checks: Check[]
 
   constructor(
-    private readonly secureStorage: SecureStorageService,
+    private readonly secureStorageService: SecureStorageService,
     private readonly deviceService: DeviceService,
     private readonly modalController: ModalController,
     private readonly storage: Storage
@@ -42,7 +42,7 @@ export class StartupChecksService {
         name: 'deviceSecureCheck',
         expectedOutcome: true,
         check: async (): Promise<boolean> => {
-          const result: number = await this.secureStorage.isDeviceSecure()
+          const result: number = await this.secureStorageService.isDeviceSecure()
 
           return Boolean(result).valueOf()
         },
@@ -110,7 +110,7 @@ export class StartupChecksService {
 
   public initChecks(): Promise<void> {
     return new Promise(async (resolve, reject) => {
-      const results: void | (boolean)[] = await Promise.all(this.checks.map((check: Check) => check.check())).catch(
+      const results: void | boolean[] = await Promise.all(this.checks.map((check: Check) => check.check())).catch(
         handleErrorLocal(ErrorCategory.INIT_CHECK)
       )
 

@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core'
 import { first } from 'rxjs/operators'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
-import { SecureStorageService } from '../../services/storage/storage.service'
+import { SecureStorageService } from '../../services/secure-storage/secure-storage.service'
 
 export enum Warning {
   SECURE_STORAGE,
@@ -31,7 +31,7 @@ export class WarningModalPage implements AfterViewInit {
 
   constructor(
     public navParams: NavParams,
-    private readonly secureStorage: SecureStorageService,
+    private readonly secureStorageService: SecureStorageService,
     private readonly modalController: ModalController,
     private readonly storage: Storage,
     private readonly translateService: TranslateService
@@ -67,7 +67,7 @@ export class WarningModalPage implements AfterViewInit {
       this.imageUrl = './assets/img/screenshot_detected.svg'
       this.buttonText = 'warnings-modal.secure-storage.button-text_label'
       this.handler = (): void => {
-        this.secureStorage.secureDevice().catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
+        this.secureStorageService.secureDevice().catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
       }
     }
 

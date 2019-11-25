@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 
 import { ErrorCategory, handleErrorLocal } from './../error-handler/error-handler.service'
-import { SecureStorage } from './storage.service'
+import { SecureStorage } from './secure-storage.service'
 
 @Injectable({
   providedIn: 'root'

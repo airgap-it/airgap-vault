@@ -38,8 +38,8 @@ import { SchemeRoutingService } from './services/scheme-routing/scheme-routing.s
 import { SecretsService } from './services/secrets/secrets.service'
 import { ShareUrlService } from './services/share-url/share-url.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
-import { SecureStorageFactory } from './services/storage/secure-storage.factory'
-import { SecureStorageService } from './services/storage/storage.service'
+import { SecureStorageFactory } from './services/secure-storage/secure-storage.factory'
+import { SecureStorageService } from './services/secure-storage/secure-storage.service'
 import { SerializerService } from './services/serializer/serializer.service'
 
 @NgModule({

@@ -8,7 +8,7 @@ import { Observable, ReplaySubject } from 'rxjs'
 import { Secret } from '../../models/secret'
 
 import { ErrorCategory, handleErrorLocal } from './../error-handler/error-handler.service'
-import { SecureStorage, SecureStorageService } from './../storage/storage.service'
+import { SecureStorage, SecureStorageService } from './../secure-storage/secure-storage.service'
 
 @Injectable({
   providedIn: 'root'

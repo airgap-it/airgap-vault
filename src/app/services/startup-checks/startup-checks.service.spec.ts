@@ -18,8 +18,8 @@ import {
 } from './../../../../test-config/ionic-mocks'
 import { UnitHelper } from './../../../../test-config/unit-test-helper'
 import { DeviceService } from './../device/device.service'
-import { SecureStorageServiceMock } from './../storage/secure-storage.mock'
-import { SecureStorageService } from './../storage/storage.service'
+import { SecureStorageServiceMock } from './../secure-storage/secure-storage.mock'
+import { SecureStorageService } from './../secure-storage/secure-storage.service'
 import { StartupChecksService } from './startup-checks.service'
 
 describe('StartupCheck Service', () => {

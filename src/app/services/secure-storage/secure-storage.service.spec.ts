@@ -1,7 +1,7 @@
 /*
 import { TestBed } from '@angular/core/testing'
 
-import { SecureStorageService } from './storage.service'
+import { SecureStorageService } from './secure-storage.service'
 
 describe('StorageService', () => {
   beforeEach(() => TestBed.configureTestingModule({}))
