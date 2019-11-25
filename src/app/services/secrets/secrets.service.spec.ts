@@ -30,7 +30,7 @@ describe('SecretsService', () => {
 
   beforeEach(() => {
     secureStorageService = TestBed.get(SecureStorageServiceMock)
-    storage = TestBed.get(Storage)
+    storageService = TestBed.get(Storage)
     secretsService = TestBed.get(SecretsService)
   })
 
