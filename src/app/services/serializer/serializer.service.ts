@@ -33,7 +33,6 @@ export class SerializerService {
   }
 
   set chunkSize(value: number) {
-    console.log('chunk set', value)
     this.storageService.set(SettingsKey.SETTINGS_SERIALIZER_CHUNK_SIZE, value)
     this._chunkSize = value
   }
