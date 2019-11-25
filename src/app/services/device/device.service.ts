@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core'
-import { Platform } from '@ionic/angular'
+import { ModalController, Platform } from '@ionic/angular'
+import { ComponentRef, ModalOptions } from '@ionic/core'
+
+import { Warning, WarningModalPage } from '../../pages/warning-modal/warning-modal.page'
+import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
+import { NavigationService } from '../navigation/navigation.service'
 
 declare var SecurityUtils: any
 
@@ -7,12 +12,60 @@ declare var SecurityUtils: any
   providedIn: 'root'
 })
 export class DeviceService {
-  constructor(private readonly platform: Platform) {}
+  constructor(
+    private readonly platform: Platform,
+    private readonly modalController: ModalController,
+    protected readonly navigationService: NavigationService
+  ) {}
+
+  public enableScreenshotProtection(): void {
+    this.setSecureWindow()
+    this.onScreenCaptureStateChanged((captured: boolean) => {
+      if (captured) {
+        this.presentModal(WarningModalPage, { errorType: Warning.SCREENSHOT }, () => {
+          this.navigationService.routeBack('/secret-create')
+        }).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
+      }
+    })
+    this.onScreenshotTaken(() => {
+      this.presentModal(WarningModalPage, { errorType: Warning.SCREENSHOT }, () => {
+        this.navigationService.routeBack('/secret-create')
+      }).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
+    })
+  }
+
+  public disableScreenshotProtection(): void {
+    this.clearSecureWindow()
+    this.removeScreenCaptureObservers()
+    this.removeScreenshotObservers()
+  }
+
+  private async presentModal(page: ComponentRef, properties: ModalOptions['componentProps'], callback: Function): Promise<void> {
+    const modal: HTMLIonModalElement = await this.modalController.create({
+      component: page,
+      componentProps: properties,
+      backdropDismiss: false
+    })
+
+    modal
+      .onDidDismiss()
+      .then(() => {
+        callback()
+      })
+      .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+
+    modal
+      .present()
+      .then(() => {
+        console.log('check modal presented')
+      })
+      .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+  }
 
   public checkForRoot(): Promise<boolean> {
     return new Promise((resolve, reject) => {
       if (this.platform.is('cordova')) {
-        SecurityUtils.DeviceIntegrity.assess(function(result) {
+        SecurityUtils.DeviceIntegrity.assess(result => {
           resolve(!result)
         })
       } else {
@@ -24,19 +77,19 @@ export class DeviceService {
 
   public onScreenCaptureStateChanged(callback: (captured: boolean) => void): void {
     if (this.platform.is('ios') && this.platform.is('cordova')) {
-      SecurityUtils.SecureScreen.onScreenCaptureStateChanged(function(captured: boolean) {
+      SecurityUtils.SecureScreen.onScreenCaptureStateChanged((captured: boolean) => {
         callback(captured)
       })
     }
   }
 
-  public setSecureWindow() {
+  public setSecureWindow(): void {
     if (this.platform.is('android') && this.platform.is('cordova')) {
       SecurityUtils.SecureScreen.setWindowSecureFlag()
     }
   }
 
-  public clearSecureWindow() {
+  public clearSecureWindow(): void {
     if (this.platform.is('android') && this.platform.is('cordova')) {
       SecurityUtils.SecureScreen.clearWindowSecureFlag()
     }
@@ -48,9 +101,9 @@ export class DeviceService {
     }
   }
 
-  public onScreenshotTaken(callback: () => void) {
+  public onScreenshotTaken(callback: () => void): void {
     if (this.platform.is('ios') && this.platform.is('cordova')) {
-      SecurityUtils.SecureScreen.onScreenshotTaken(function() {
+      SecurityUtils.SecureScreen.onScreenshotTaken(() => {
         callback()
       })
     }

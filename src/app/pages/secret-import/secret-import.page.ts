@@ -3,10 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 
 import { BIP39Signer } from '../../models/BIP39Signer'
 import { Secret } from '../../models/secret'
+import { DeviceService } from '../../services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { MnemonicValidator } from '../../validators/mnemonic.validator'
-import { DeviceService } from 'src/app/services/device/device.service'
 
 @Component({
   selector: 'airgap-secret-import',
@@ -18,8 +18,8 @@ export class SecretImportPage {
   public secretImportForm: FormGroup
 
   constructor(
+    private readonly deviceService: DeviceService,
     private readonly navigationService: NavigationService,
-    private readonly deviceProvider: DeviceService,
     private readonly formBuilder: FormBuilder
   ) {
     const formGroup: {
@@ -32,11 +32,11 @@ export class SecretImportPage {
   }
 
   public ionViewDidEnter(): void {
-    this.deviceProvider.setSecureWindow()
+    this.deviceService.enableScreenshotProtection()
   }
 
   public ionViewWillLeave(): void {
-    this.deviceProvider.clearSecureWindow()
+    this.deviceService.disableScreenshotProtection()
   }
 
   public goToSecretCreatePage(): void {
