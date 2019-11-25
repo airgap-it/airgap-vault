@@ -51,7 +51,8 @@
     "fee_label":"FEE",
     "from_label": "From",
     "data_label": "Data",
-    "to_label": "To"
+    "to_label": "To",
+    "transaction-details_label": "Display extra transaction details"
   },
 
   "signed-transaction": {
