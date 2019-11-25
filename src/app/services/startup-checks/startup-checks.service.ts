@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core'
 import { ModalController } from '@ionic/angular'
 import { ComponentRef, ModalOptions } from '@ionic/core'
-import { Storage } from '@ionic/storage'
 
 import { DistributionOnboardingPage } from '../../pages/distribution-onboarding/distribution-onboarding.page'
 import { IntroductionPage } from '../../pages/introduction/introduction.page'
@@ -9,6 +8,7 @@ import { Warning, WarningModalPage } from '../../pages/warning-modal/warning-mod
 import { DeviceService } from '../device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { SecureStorageService } from '../secure-storage/secure-storage.service'
+import { StorageService, SettingsKey } from '../storage/storage.service'
 
 export interface Check {
   name: string
@@ -27,7 +27,7 @@ export class StartupChecksService {
     private readonly secureStorageService: SecureStorageService,
     private readonly deviceService: DeviceService,
     private readonly modalController: ModalController,
-    private readonly storage: Storage
+    private readonly storageService: StorageService
   ) {
     this.checks = [
       {
@@ -55,7 +55,7 @@ export class StartupChecksService {
       {
         name: 'disclaimerAcceptedCheck',
         expectedOutcome: true,
-        check: (): Promise<boolean> => this.storage.get('DISCLAIMER_INITIAL'),
+        check: (): Promise<boolean> => this.storageService.get(SettingsKey.DISCLAIMER_INITIAL),
         failureConsequence: (callback: () => void): void => {
           this.presentModal(WarningModalPage, { errorType: Warning.INITIAL_DISCLAIMER }, callback).catch(
             handleErrorLocal(ErrorCategory.INIT_CHECK)
@@ -65,7 +65,7 @@ export class StartupChecksService {
       {
         name: 'introductionAcceptedCheck',
         expectedOutcome: true,
-        check: (): Promise<boolean> => this.storage.get('INTRODUCTION_INITIAL'),
+        check: (): Promise<boolean> => this.storageService.get(SettingsKey.INTRODUCTION_INITIAL),
         failureConsequence: (callback: () => void): void => {
           this.presentModal(IntroductionPage, {}, callback).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
         }
@@ -75,7 +75,7 @@ export class StartupChecksService {
         expectedOutcome: true,
         check: async (): Promise<boolean> => {
           const isElectron: boolean = await deviceService.checkForElectron()
-          const hasShownDisclaimer: boolean = await this.storage.get('DISCLAIMER_ELECTRON')
+          const hasShownDisclaimer: boolean = await this.storageService.get(SettingsKey.DISCLAIMER_ELECTRON)
 
           return !isElectron || hasShownDisclaimer
         },

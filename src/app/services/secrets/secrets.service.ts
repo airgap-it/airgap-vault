@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core'
 import { AlertController, LoadingController } from '@ionic/angular'
-import { Storage } from '@ionic/storage'
 import { AirGapWallet, getProtocolByIdentifier, ICoinProtocol } from 'airgap-coin-lib'
 import * as bip39 from 'bip39'
 import { Observable, ReplaySubject } from 'rxjs'
@@ -9,6 +8,7 @@ import { Secret } from '../../models/secret'
 
 import { ErrorCategory, handleErrorLocal } from './../error-handler/error-handler.service'
 import { SecureStorage, SecureStorageService } from './../secure-storage/secure-storage.service'
+import { StorageService, SettingsKey } from '../storage/storage.service'
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +23,7 @@ export class SecretsService {
 
   constructor(
     private readonly secureStorageService: SecureStorageService,
-    private readonly storage: Storage,
+    private readonly storageService: StorageService,
     private readonly loadingCtrl: LoadingController,
     private readonly alertCtrl: AlertController
   ) {
@@ -43,7 +43,7 @@ export class SecretsService {
   }
 
   private async read(): Promise<Secret[]> {
-    const rawSecretsPayload: unknown = await this.storage.get('airgap-secret-list')
+    const rawSecretsPayload: unknown = await this.storageService.get(SettingsKey.AIRGAP_SECRET_LIST)
 
     // necessary due to double serialization bug we had
     let secrets: Secret[] = typeof rawSecretsPayload === 'string' ? JSON.parse(rawSecretsPayload) : rawSecretsPayload
@@ -203,7 +203,7 @@ export class SecretsService {
       secret.flushSecret()
     })
 
-    return this.storage.set('airgap-secret-list', this.secretsList)
+    return this.storageService.set(SettingsKey.AIRGAP_SECRET_LIST, this.secretsList)
   }
 
   public async addWallet(protocolIdentifier: string, isHDWallet: boolean, customDerivationPath: string): Promise<void> {

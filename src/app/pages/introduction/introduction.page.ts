@@ -1,8 +1,8 @@
 import { Component } from '@angular/core'
 import { ModalController, Platform } from '@ionic/angular'
-import { Storage } from '@ionic/storage'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
+import { StorageService, SettingsKey } from 'src/app/services/storage/storage.service'
 
 declare let cordova: any
 
@@ -14,11 +14,15 @@ declare let cordova: any
 export class IntroductionPage {
   public security: string = 'highest'
 
-  constructor(private readonly modalController: ModalController, private readonly platform: Platform, private readonly storage: Storage) {}
+  constructor(
+    private readonly modalController: ModalController,
+    private readonly platform: Platform,
+    private readonly storageService: StorageService
+  ) {}
 
   public accept() {
-    this.storage
-      .set('INTRODUCTION_INITIAL', true)
+    this.storageService
+      .set(SettingsKey.INTRODUCTION_INITIAL, true)
       .then(() => {
         this.modalController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
       })

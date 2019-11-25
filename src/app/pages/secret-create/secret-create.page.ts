@@ -1,5 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
-import { Storage } from '@ionic/storage'
+import { Component, OnInit } from '@angular/core'
 import { first } from 'rxjs/operators'
 
 import { Secret } from '../../models/secret'
@@ -7,6 +6,7 @@ import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/er
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
 import { DeviceService } from 'src/app/services/device/device.service'
+import { StorageService, SettingsKey } from 'src/app/services/storage/storage.service'
 
 @Component({
   selector: 'airgap-secret-create',
@@ -19,8 +19,8 @@ export class SecretCreatePage implements OnInit {
   constructor(
     private readonly navigationService: NavigationService,
     private readonly secretsService: SecretsService,
-    private readonly deviceProvider: DeviceService,
-    private readonly storage: Storage
+    private readonly deviceService: DeviceService,
+    private readonly storageService: StorageService
   ) {}
 
   public ngOnInit(): void {
@@ -35,15 +35,15 @@ export class SecretCreatePage implements OnInit {
   }
 
   public ionViewDidEnter(): void {
-    this.deviceProvider.setSecureWindow()
+    this.deviceService.setSecureWindow()
   }
 
   public ionViewWillLeave(): void {
-    this.deviceProvider.clearSecureWindow()
+    this.deviceService.clearSecureWindow()
   }
 
   public async goToGenerate(): Promise<void> {
-    const hasShownDisclaimer: boolean = await this.storage.get('DISCLAIMER_GENERATE_INITIAL')
+    const hasShownDisclaimer: boolean = await this.storageService.get(SettingsKey.DISCLAIMER_GENERATE_INITIAL)
     if (hasShownDisclaimer) {
       this.navigationService.route('/secret-generate').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } else {

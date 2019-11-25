@@ -6,9 +6,10 @@ import { SecretsService } from './secrets.service'
 import { SecureStorageService } from '../secure-storage/secure-storage.service'
 import { Storage } from '@ionic/storage'
 import { Secret } from 'src/app/models/secret'
+import { StorageService } from '../storage/storage.service'
 
 describe('SecretsService', () => {
-  let storage: StorageMock
+  let storageService: StorageMock
   let secureStorageService: SecureStorageServiceMock
   let secretsService: SecretsService
   let unitHelper: UnitHelper
@@ -18,7 +19,7 @@ describe('SecretsService', () => {
       unitHelper.testBed({
         providers: [
           SecretsService,
-          { provide: Storage, useClass: StorageMock },
+          { provide: StorageService, useClass: StorageMock },
           { provide: SecureStorageService, useClass: SecureStorageServiceMock }
         ]
       })

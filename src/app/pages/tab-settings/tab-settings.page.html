@@ -39,7 +39,7 @@
     </ion-item>
     <ion-item>
       {{ 'tab-settings.qr.enable-new-serializer_label' | translate }}
-      <ion-toggle [(ngModel)]="serializerService.useV2" (ionChange)="switchSerializerVersion($event)" slot="end"></ion-toggle>
+      <ion-toggle [(ngModel)]="serializerService.useV2" slot="end"></ion-toggle>
     </ion-item>
     <ion-item>
       <ion-label>
@@ -49,7 +49,6 @@
     <ion-item>
       <ion-range
         [(ngModel)]="serializerService.displayTimePerChunk "
-        (ionChange)="qrMsChanged($event)"
         min="50"
         max="2000"
         step="50"
@@ -69,7 +68,6 @@
     <ion-item>
       <ion-range
         [(ngModel)]="serializerService.chunkSize"
-        (ionChange)="qrBytesChanged($event)"
         min="10"
         max="500"
         step="10"

@@ -2,17 +2,17 @@ import { TestBed } from '@angular/core/testing'
 import { SplashScreen } from '@ionic-native/splash-screen'
 import { StatusBar } from '@ionic-native/status-bar/ngx'
 import { NavController, Platform } from '@ionic/angular'
-import { Storage } from '@ionic/storage'
 
 import { StorageMock } from '../../../../test-config/storage-mock'
 import { UnitHelper } from '../../../../test-config/unit-test-helper'
 
 import { PlatformMock, SplashScreenMock, StatusBarMock } from './../../../../test-config/ionic-mocks'
 import { SchemeRoutingService } from './scheme-routing.service'
+import { StorageService } from '../storage/storage.service'
 
-describe('SchemeRoutingProvider Provider', () => {
+describe('SchemeRoutingService Service', () => {
   let schemeRoutingService: SchemeRoutingService
-  let storageProvider: Storage
+  let storageService: StorageService
   let navController: NavController
   let statusBar: StatusBar
 
@@ -24,7 +24,7 @@ describe('SchemeRoutingProvider Provider', () => {
       unitHelper.testBed({
         providers: [
           SchemeRoutingService,
-          { provide: Storage, useClass: StorageMock },
+          { provide: StorageService, useClass: StorageMock },
           { provide: StatusBar, useClass: StatusBarMock },
           { provide: SplashScreen, useClass: SplashScreenMock },
           { provide: Platform, useClass: PlatformMock }
@@ -37,7 +37,7 @@ describe('SchemeRoutingProvider Provider', () => {
 
   beforeEach(() => {
     schemeRoutingService = TestBed.get(SchemeRoutingService)
-    storageProvider = TestBed.get(Storage)
+    storageService = TestBed.get(StorageService)
     statusBar = TestBed.get(StatusBar)
     navController = TestBed.get(NavController)
   })

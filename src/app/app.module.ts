@@ -41,6 +41,7 @@ import { StartupChecksService } from './services/startup-checks/startup-checks.s
 import { SecureStorageFactory } from './services/secure-storage/secure-storage.factory'
 import { SecureStorageService } from './services/secure-storage/secure-storage.service'
 import { SerializerService } from './services/serializer/serializer.service'
+import { StorageService } from './services/storage/storage.service'
 
 @NgModule({
   declarations: [AppComponent],
@@ -87,6 +88,7 @@ import { SerializerService } from './services/serializer/serializer.service'
     DeepLinkService,
     ProtocolsService,
     SerializerService,
+    StorageService,
     {
       provide: SecureStorageService,
       useFactory: SecureStorageFactory,

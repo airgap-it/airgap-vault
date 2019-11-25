@@ -1,11 +1,11 @@
 import { AfterViewInit, Component } from '@angular/core'
 import { ModalController, NavParams } from '@ionic/angular'
-import { Storage } from '@ionic/storage'
 import { TranslateService } from '@ngx-translate/core'
 import { first } from 'rxjs/operators'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { SecureStorageService } from '../../services/secure-storage/secure-storage.service'
+import { StorageService, SettingsKey } from 'src/app/services/storage/storage.service'
 
 export enum Warning {
   SECURE_STORAGE,
@@ -33,7 +33,7 @@ export class WarningModalPage implements AfterViewInit {
     public navParams: NavParams,
     private readonly secureStorageService: SecureStorageService,
     private readonly modalController: ModalController,
-    private readonly storage: Storage,
+    private readonly storageService: StorageService,
     private readonly translateService: TranslateService
   ) {}
 
@@ -118,8 +118,8 @@ export class WarningModalPage implements AfterViewInit {
           this.imageUrl = undefined
           this.buttonText = understoodLabel
           this.handler = (): void => {
-            this.storage
-              .set('DISCLAIMER_INITIAL', true)
+            this.storageService
+              .set(SettingsKey.DISCLAIMER_INITIAL, true)
               .then(() => {
                 this.modalController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
               })

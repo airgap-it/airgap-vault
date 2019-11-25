@@ -19,18 +19,18 @@ export class SocialRecoverySetupPage {
 
   constructor(
     private readonly secretService: SecretsService,
-    private readonly deviceProvider: DeviceService,
+    private readonly deviceService: DeviceService,
     private readonly navigationService: NavigationService
   ) {
     this.secret = this.navigationService.getState().secret
   }
 
   public ionViewDidEnter(): void {
-    this.deviceProvider.setSecureWindow()
+    this.deviceService.setSecureWindow()
   }
 
   public ionViewWillLeave(): void {
-    this.deviceProvider.clearSecureWindow()
+    this.deviceService.clearSecureWindow()
   }
 
   public setNumberOfShares(i: number): void {
