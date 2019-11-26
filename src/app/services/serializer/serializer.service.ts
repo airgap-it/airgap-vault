@@ -4,6 +4,7 @@ import { DeserializedSyncProtocol, SyncProtocolUtils } from 'airgap-coin-lib/dis
 
 import { parseIACUrl } from '../../utils/utils'
 import { StorageService, SettingsKey } from '../storage/storage.service'
+import BigNumber from 'bignumber.js'
 
 @Injectable({
   providedIn: 'root'
@@ -66,6 +67,12 @@ export class SerializerService {
 
   public async serialize(chunks: IACMessageDefinitionObject[]): Promise<string[]> {
     if (!this.useV2 && !chunks.some((chunk: IACMessageDefinitionObject) => chunk.protocol === 'cosmos')) {
+      if (chunks[0].protocol === 'btc' && chunks[0].type === 6) {
+        // This expects a BigNumber, but we now have a string. So we need to convert it.
+        const legacyPayload: any = chunks[0].payload
+        legacyPayload.amount = new BigNumber(legacyPayload.amount)
+        legacyPayload.fee = new BigNumber(legacyPayload.fee)
+      }
       return [await this.serializeV1(chunks[0])]
     } else {
       return this.serializeV2(chunks)
