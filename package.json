@@ -10,6 +10,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:stats": "ng build --stats-json",
+    "build:analyze": "npm run build:stats && webpack-bundle-analyzer ./www/stats.json",
     "test": "ng test",
     "test-ci": "ng test --code-coverage --watch=false",
     "lint": "ng lint",
@@ -139,7 +141,8 @@
     "puppeteer": "^1.17.0",
     "ts-node": "~8.1.0",
     "tslint": "^5.17.0",
-    "tslint-config-prettier": "^1.18.0"
+    "tslint-config-prettier": "^1.18.0",
+    "webpack-bundle-analyzer": "^3.6.0"
   },
   "husky": {
     "hooks": {
