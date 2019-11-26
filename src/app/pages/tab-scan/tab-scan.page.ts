@@ -1,4 +1,4 @@
-import { Component, ViewChild, NgZone } from '@angular/core'
+import { Component, NgZone, ViewChild } from '@angular/core'
 import { Platform } from '@ionic/angular'
 import { ZXingScannerComponent } from '@zxing/ngx-scanner'
 import { first } from 'rxjs/operators'
@@ -6,7 +6,7 @@ import { first } from 'rxjs/operators'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { PermissionsService, PermissionStatus, PermissionTypes } from '../../services/permissions/permissions.service'
 import { ScannerService } from '../../services/scanner/scanner.service'
-import { SchemeRoutingService } from '../../services/scheme-routing/scheme-routing.service'
+import { IACResult, SchemeRoutingService } from '../../services/scheme-routing/scheme-routing.service'
 
 @Component({
   selector: 'airgap-tab-scan',
@@ -49,6 +49,13 @@ export class TabScanPage {
       await this.platform.ready()
       await this.checkCameraPermissionsAndActivate()
     }
+    this.resetScannerPage()
+  }
+
+  private resetScannerPage(): void {
+    this.parts = new Set()
+    this.percentageScanned = 0
+    this.isMultiQr = false
   }
 
   public async requestPermission(): Promise<void> {
@@ -82,10 +89,6 @@ export class TabScanPage {
         this.selectedDevice = devices[0]
       })
     }
-
-    this.parts = new Set()
-    this.percentageScanned = 0
-    this.isMultiQr = false
   }
 
   public ionViewWillLeave(): void {
@@ -114,7 +117,19 @@ export class TabScanPage {
   }
 
   public async checkScan(data: string): Promise<boolean | void> {
+    const sizeBefore: number = this.parts.size
     this.parts.add(data)
+
+    if (sizeBefore === this.parts.size) {
+      // We scanned a string we already have in our cache, ignoring it and starting scan again.
+      console.log(`[SCAN:checkScan]: Already scanned string skipping ${data}`)
+      this.startScan()
+
+      return undefined
+    }
+
+    console.log(`[SCAN:checkScan]: Trying to decode string ${data}`)
+
     this.ngZone.run(() => {
       this.schemeRouting
         .handleNewSyncRequest(Array.from(this.parts), (scanResult: { availablePages: number[]; totalPages: number }) => {
@@ -125,6 +140,11 @@ export class TabScanPage {
             this.percentageScanned = Math.max(0, Math.min(1, scanResult.availablePages.length / scanResult.totalPages))
           }
           this.startScan()
+        })
+        .then((result: IACResult) => {
+          if (result === IACResult.SUCCESS) {
+            this.resetScannerPage()
+          }
         })
         .catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
     })

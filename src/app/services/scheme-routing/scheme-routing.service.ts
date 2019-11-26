@@ -4,13 +4,13 @@ import { AlertButton } from '@ionic/core'
 import { TranslateService } from '@ngx-translate/core'
 import { AirGapWallet, IACMessageDefinitionObject, IACMessageType, UnsignedTransaction } from 'airgap-coin-lib'
 
+import { SerializerService } from '../../services/serializer/serializer.service'
+import { to } from '../../utils/utils'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { NavigationService } from '../navigation/navigation.service'
 import { SecretsService } from '../secrets/secrets.service'
-import { to } from 'src/app/utils/utils'
-import { SerializerService } from '../../services/serializer/serializer.service'
 
-enum IACResult {
+export enum IACResult {
   SUCCESS = 0,
   PARTIAL = 1,
   ERROR = 2

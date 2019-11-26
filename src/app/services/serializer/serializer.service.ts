@@ -84,6 +84,10 @@ export class SerializerService {
     try {
       return await this.deserializeV2(parsedChunks)
     } catch (error) {
+      if (error && error.availablePages && error.totalPages) {
+        throw error
+      }
+
       return [await this.deserializeV1(parsedChunks[0])]
     }
   }
