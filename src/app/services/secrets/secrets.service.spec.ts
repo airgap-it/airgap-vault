@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing'
-import { Storage } from '@ionic/storage'
 import { StorageMock } from 'test-config/storage-mock'
 
 import { SecureStorageService } from '../secure-storage/secure-storage.service'
@@ -10,9 +9,9 @@ import { SecureStorageServiceMock } from './../secure-storage/secure-storage.moc
 import { SecretsService } from './secrets.service'
 
 describe('SecretsService', () => {
-  let storageService: StorageMock
-  let secureStorageService: SecureStorageServiceMock
-  let secretsService: SecretsService
+  // let storageService: StorageMock
+  // let secureStorageService: SecureStorageServiceMock
+  // let secretsService: SecretsService
   let unitHelper: UnitHelper
   beforeEach(() => {
     unitHelper = new UnitHelper()
@@ -29,11 +28,11 @@ describe('SecretsService', () => {
       .catch(console.error)
   })
 
-  beforeEach(() => {
-    secureStorageService = TestBed.get(SecureStorageServiceMock)
-    storageService = TestBed.get(Storage)
-    secretsService = TestBed.get(SecretsService)
-  })
+  // beforeEach(() => {
+  //   secureStorageService = TestBed.get(SecureStorageServiceMock)
+  //   storageService = TestBed.get(Storage)
+  //   secretsService = TestBed.get(SecretsService)
+  // })
 
   it('should be created', () => {
     const secretsService: SecretsService = TestBed.get(SecretsService)

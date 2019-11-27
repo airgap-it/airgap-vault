@@ -15,9 +15,12 @@ import { SecretsService } from './services/secrets/secrets.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
 
 describe('AppComponent', () => {
-  let statusBarSpy, splashScreenSpy, platformReadySpy, platformSpy
-  let component: AppComponent
-  let fixture: ComponentFixture<AppComponent>
+  let statusBarSpy: StatusBar
+  let splashScreenSpy: SplashScreen
+  let platformReadySpy: Promise<void>
+  let platformSpy: Platform
+  // let component: AppComponent
+  // let fixture: ComponentFixture<AppComponent>
   let unitHelper: UnitHelper
   beforeEach(() => {
     statusBarSpy = jasmine.createSpyObj('StatusBar', ['styleDefault'])
@@ -50,12 +53,12 @@ describe('AppComponent', () => {
 
   beforeEach(async () => {
     localStorage.clear()
-    fixture = TestBed.createComponent(AppComponent)
-    component = fixture.componentInstance
+    // fixture = TestBed.createComponent(AppComponent)
+    // component = fixture.componentInstance
   })
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent)
+    const fixture: ComponentFixture<AppComponent> = TestBed.createComponent(AppComponent)
     const app = fixture.debugElement.componentInstance
     expect(app).toBeTruthy()
   })

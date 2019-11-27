@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing'
 import { SplashScreen } from '@ionic-native/splash-screen'
 import { StatusBar } from '@ionic-native/status-bar/ngx'
-import { NavController, Platform } from '@ionic/angular'
+import { Platform } from '@ionic/angular'
 
 import { StorageMock } from '../../../../test-config/storage-mock'
 import { UnitHelper } from '../../../../test-config/unit-test-helper'
@@ -12,9 +12,9 @@ import { SchemeRoutingService } from './scheme-routing.service'
 
 describe('SchemeRoutingService Service', () => {
   let schemeRoutingService: SchemeRoutingService
-  let storageService: StorageService
-  let navController: NavController
-  let statusBar: StatusBar
+  // let storageService: StorageService
+  // let navController: NavController
+  // let statusBar: StatusBar
 
   let unitHelper: UnitHelper
   beforeEach(() => {
@@ -37,9 +37,9 @@ describe('SchemeRoutingService Service', () => {
 
   beforeEach(() => {
     schemeRoutingService = TestBed.get(SchemeRoutingService)
-    storageService = TestBed.get(StorageService)
-    statusBar = TestBed.get(StatusBar)
-    navController = TestBed.get(NavController)
+    // storageService = TestBed.get(StorageService)
+    // statusBar = TestBed.get(StatusBar)
+    // navController = TestBed.get(NavController)
   })
 
   it('should be created', () => {
@@ -59,6 +59,7 @@ describe('SchemeRoutingService Service', () => {
       await schemeRoutingService.handleNewSyncRequest(text, callback)
     } catch (error) {
       if (error.name === "TypeError: Failed to construct 'URL': Invalid URL") {
+        //
       }
     }
     done()

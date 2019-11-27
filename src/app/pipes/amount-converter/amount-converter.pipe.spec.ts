@@ -1,8 +1,7 @@
 import { BigNumber } from 'bignumber.js'
 
-import { ProtocolsService } from './../../services/protocols/protocols.service'
 import { AmountConverterPipe } from './amount-converter.pipe'
-const BN = BigNumber.clone({
+const BN: typeof BigNumber = BigNumber.clone({
   FORMAT: {
     decimalSeparator: `.`,
     groupSeparator: `'`,
@@ -12,10 +11,6 @@ const BN = BigNumber.clone({
 
 describe('AmountConverter Pipe', () => {
   let amountConverterPipe: AmountConverterPipe
-
-  beforeAll(() => {
-    const protocolsService = new ProtocolsService()
-  })
 
   beforeEach(() => {
     amountConverterPipe = new AmountConverterPipe()
