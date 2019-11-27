@@ -2,7 +2,7 @@ import { Component } from '@angular/core'
 import { ModalController } from '@ionic/angular'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
-import { SettingsKey, StorageService } from 'src/app/services/storage/storage.service'
+import { SettingsKey, StorageService } from '../../services/storage/storage.service'
 
 @Component({
   selector: 'airgap-local-authentication-onboarding',

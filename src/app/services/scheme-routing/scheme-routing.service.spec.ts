@@ -5,10 +5,10 @@ import { NavController, Platform } from '@ionic/angular'
 
 import { StorageMock } from '../../../../test-config/storage-mock'
 import { UnitHelper } from '../../../../test-config/unit-test-helper'
+import { StorageService } from '../storage/storage.service'
 
 import { PlatformMock, SplashScreenMock, StatusBarMock } from './../../../../test-config/ionic-mocks'
 import { SchemeRoutingService } from './scheme-routing.service'
-import { StorageService } from '../storage/storage.service'
 
 describe('SchemeRoutingService Service', () => {
   let schemeRoutingService: SchemeRoutingService

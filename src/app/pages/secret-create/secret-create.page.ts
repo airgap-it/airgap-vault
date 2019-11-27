@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core'
 import { first } from 'rxjs/operators'
 
 import { Secret } from '../../models/secret'
+import { DeviceService } from '../../services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
-import { DeviceService } from 'src/app/services/device/device.service'
-import { StorageService, SettingsKey } from 'src/app/services/storage/storage.service'
+import { SettingsKey, StorageService } from '../../services/storage/storage.service'
 
 @Component({
   selector: 'airgap-secret-create',

@@ -3,8 +3,8 @@ import { AlertController, Platform } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 import { first } from 'rxjs/operators'
 
-import { ErrorCategory, handleErrorLocal } from './../error-handler/error-handler.service'
-import { serializedDataToUrlString } from 'src/app/utils/utils'
+import { serializedDataToUrlString } from '../../utils/utils'
+import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 
 declare let window: any
 

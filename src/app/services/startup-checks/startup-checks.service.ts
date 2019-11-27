@@ -8,7 +8,7 @@ import { Warning, WarningModalPage } from '../../pages/warning-modal/warning-mod
 import { DeviceService } from '../device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { SecureStorageService } from '../secure-storage/secure-storage.service'
-import { StorageService, SettingsKey } from '../storage/storage.service'
+import { SettingsKey, StorageService } from '../storage/storage.service'
 
 export interface Check {
   name: string

@@ -1,11 +1,11 @@
 import { Component, Input, OnChanges } from '@angular/core'
 import {
   getProtocolByIdentifier,
+  IACMessageDefinitionObject,
   IAirGapTransaction,
   ICoinProtocol,
   SignedTransaction,
-  UnsignedTransaction,
-  IACMessageDefinitionObject
+  UnsignedTransaction
 } from 'airgap-coin-lib'
 import BigNumber from 'bignumber.js'
 

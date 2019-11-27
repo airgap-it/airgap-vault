@@ -5,8 +5,8 @@ import { ICoinProtocol, supportedProtocols } from 'airgap-coin-lib'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
+import { SettingsKey, StorageService } from '../../services/storage/storage.service'
 import { LocalAuthenticationOnboardingPage } from '../local-authentication-onboarding/local-authentication-onboarding.page'
-import { StorageService, SettingsKey } from 'src/app/services/storage/storage.service'
 
 @Component({
   selector: 'airgap-account-add',

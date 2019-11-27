@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core'
-import { IACMessageDefinitionObject, Serializer, IACMessageType } from 'airgap-coin-lib'
-import { DeserializedSyncProtocol, SyncProtocolUtils, EncodedType } from 'airgap-coin-lib/dist/serializer/v1/serializer'
+import { IACMessageDefinitionObject, IACMessageType, Serializer } from 'airgap-coin-lib'
+import { DeserializedSyncProtocol, EncodedType, SyncProtocolUtils } from 'airgap-coin-lib/dist/serializer/v1/serializer'
+import BigNumber from 'bignumber.js'
 
 import { parseIACUrl } from '../../utils/utils'
-import { StorageService, SettingsKey } from '../storage/storage.service'
-import BigNumber from 'bignumber.js'
+import { SettingsKey, StorageService } from '../storage/storage.service'
 
 @Injectable({
   providedIn: 'root'
@@ -73,6 +73,7 @@ export class SerializerService {
         legacyPayload.amount = new BigNumber(legacyPayload.amount)
         legacyPayload.fee = new BigNumber(legacyPayload.fee)
       }
+
       return [await this.serializeV1(chunks[0])]
     } else {
       return this.serializeV2(chunks)

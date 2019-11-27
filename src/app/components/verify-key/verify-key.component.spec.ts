@@ -1,6 +1,7 @@
+import { async, ComponentFixture, TestBed } from '@angular/core/testing'
+
 import { UnitHelper } from './../../../../test-config/unit-test-helper'
 import { VerifyKeyComponent } from './verify-key.component'
-import { ComponentFixture, TestBed, async } from '@angular/core/testing'
 
 describe('Component: VerifyKey', () => {
   let component: VerifyKeyComponent
@@ -28,7 +29,7 @@ describe('Component: VerifyKey', () => {
   it('should validate a regular mnemonic, and emit correct event', async(() => {
     component.secret = correctMnemonic
     fixture.detectChanges()
-    let words = component.secret.split(' ')
+    const words = component.secret.split(' ')
 
     // validate onComplete Event is True
     component.onContinue.subscribe(event => {
@@ -87,7 +88,9 @@ describe('Component: VerifyKey', () => {
     const words = component.secret.split(' ')
 
     words.forEach((word, i) => {
-      if (i === words.length - 1) return
+      if (i === words.length - 1) {
+        return
+      }
       component.useWord(word)
     })
 
@@ -134,7 +137,7 @@ describe('Component: VerifyKey', () => {
     component.ngOnInit()
     fixture.detectChanges()
 
-    let wordSelector = fixture.nativeElement.querySelector('#wordSelector')
+    const wordSelector = fixture.nativeElement.querySelector('#wordSelector')
 
     // check if there are three words
     expect(wordSelector.children.length).toBe(3)
@@ -156,7 +159,9 @@ describe('Component: VerifyKey', () => {
     fixture.detectChanges()
 
     component.secret.split(' ').forEach((word, i) => {
-      if (i > 10) return
+      if (i > 10) {
+        return
+      }
       component.useWord(word)
     })
 
@@ -165,7 +170,7 @@ describe('Component: VerifyKey', () => {
 
     fixture.detectChanges()
 
-    let wordSelector = fixture.nativeElement.querySelector('#wordSelector')
+    const wordSelector = fixture.nativeElement.querySelector('#wordSelector')
 
     // check if there are three words
     expect(wordSelector.children.length).toBe(3)

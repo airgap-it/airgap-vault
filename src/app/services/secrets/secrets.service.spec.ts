@@ -1,12 +1,13 @@
-import { StorageMock } from 'test-config/storage-mock'
-import { SecureStorageServiceMock } from './../secure-storage/secure-storage.mock'
-import { UnitHelper } from './../../../../test-config/unit-test-helper'
-import { TestBed, async } from '@angular/core/testing'
-import { SecretsService } from './secrets.service'
-import { SecureStorageService } from '../secure-storage/secure-storage.service'
+import { TestBed } from '@angular/core/testing'
 import { Storage } from '@ionic/storage'
-import { Secret } from 'src/app/models/secret'
+import { StorageMock } from 'test-config/storage-mock'
+
+import { SecureStorageService } from '../secure-storage/secure-storage.service'
 import { StorageService } from '../storage/storage.service'
+
+import { UnitHelper } from './../../../../test-config/unit-test-helper'
+import { SecureStorageServiceMock } from './../secure-storage/secure-storage.mock'
+import { SecretsService } from './secrets.service'
 
 describe('SecretsService', () => {
   let storageService: StorageMock

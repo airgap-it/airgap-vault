@@ -6,6 +6,7 @@ import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/er
 import { InteractionSetting } from '../../services/interaction/interaction.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
+
 import { SecretEditPopoverComponent } from './secret-edit-popover/secret-edit-popover.component'
 
 @Component({

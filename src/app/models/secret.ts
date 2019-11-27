@@ -1,10 +1,11 @@
 import { AirGapWallet } from 'airgap-coin-lib'
 import { UUID } from 'angular2-uuid'
 
+import { toBoolean } from '../utils/utils'
+
 import { InteractionSetting } from './../services/interaction/interaction.service'
 import { BIP39Signer } from './BIP39Signer'
 import { Identifiable } from './identifiable'
-import { toBoolean } from '../utils/utils'
 
 const signer: BIP39Signer = new BIP39Signer()
 
