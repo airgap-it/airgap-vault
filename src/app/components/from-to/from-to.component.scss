@@ -2,3 +2,16 @@
   border-left: 1px solid white;
   height: 96px;
 }
+.rawdata--container {
+  pre {
+    background-color: var(--ion-color-light);
+    color: var(--ion-color-dark);
+    padding: 8px;
+  }
+}
+.rawdata--container.ios {
+  margin-bottom: 48px;
+}
+.rawdata--container.md {
+  margin-bottom: var(--margin-bottom);
+}
