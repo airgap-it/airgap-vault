@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, NgZone } from '@angular/core'
 import { ModalController, Platform } from '@ionic/angular'
 import { ComponentRef, ModalOptions } from '@ionic/core'
 
@@ -13,6 +13,7 @@ declare var SecurityUtils: any
 })
 export class DeviceService {
   constructor(
+    private readonly ngZone: NgZone,
     private readonly platform: Platform,
     private readonly modalController: ModalController,
     protected readonly navigationService: NavigationService
@@ -78,7 +79,9 @@ export class DeviceService {
   public onScreenCaptureStateChanged(callback: (captured: boolean) => void): void {
     if (this.platform.is('ios') && this.platform.is('cordova')) {
       SecurityUtils.SecureScreen.onScreenCaptureStateChanged((captured: boolean) => {
-        callback(captured)
+        this.ngZone.run(() => {
+          callback(captured)
+        })
       })
     }
   }
@@ -104,7 +107,9 @@ export class DeviceService {
   public onScreenshotTaken(callback: () => void): void {
     if (this.platform.is('ios') && this.platform.is('cordova')) {
       SecurityUtils.SecureScreen.onScreenshotTaken(() => {
-        callback()
+        this.ngZone.run(() => {
+          callback()
+        })
       })
     }
   }
