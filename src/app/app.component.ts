@@ -88,16 +88,10 @@ export class AppComponent implements AfterViewInit {
     }
   }
 
-  public initChecks(): void {
-    this.startupChecks
-      .initChecks()
-      .then(async () => {
-        this.isInitialized.resolve()
-      })
-      .catch(async (check: Check) => {
-        check.failureConsequence(this.initChecks.bind(this))
-        this.isInitialized.reject(`startup check failed ${check.name}`) // If we are here, we cannot sign a transaction (no secret, rooted, etc)
-      })
+  public async initChecks(): Promise<void> {
+    await this.startupChecks.initChecks()
+
+    this.isInitialized.resolve()
   }
 
   public async ngAfterViewInit(): Promise<void> {
