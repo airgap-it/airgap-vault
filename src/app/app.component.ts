@@ -14,7 +14,7 @@ import { NavigationService } from './services/navigation/navigation.service'
 import { ProtocolsService } from './services/protocols/protocols.service'
 import { SchemeRoutingService } from './services/scheme-routing/scheme-routing.service'
 import { SecretsService } from './services/secrets/secrets.service'
-import { Check, StartupChecksService } from './services/startup-checks/startup-checks.service'
+import { StartupChecksService } from './services/startup-checks/startup-checks.service'
 
 declare let window: Window & { airGapHasStarted: boolean }
 declare var SecurityUtils: any
