@@ -13,7 +13,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: '../tab-accounts/tab-accounts.module#TabAccountsPageModule'
+            loadChildren: () => import('../tab-accounts/tab-accounts.module').then(m => m.TabAccountsPageModule)
           }
         ]
       },
@@ -22,7 +22,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: '../tab-scan/tab-scan.module#TabScanPageModule'
+            loadChildren: () => import('../tab-scan/tab-scan.module').then(m => m.TabScanPageModule)
           }
         ]
       },
@@ -31,7 +31,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: '../tab-settings/tab-settings.module#TabSettingsPageModule'
+            loadChildren: () => import('../tab-settings/tab-settings.module').then(m => m.TabSettingsPageModule)
           }
         ]
       },

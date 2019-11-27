@@ -2,67 +2,94 @@ import { NgModule } from '@angular/core'
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router'
 
 const routes: Routes = [
-  { path: '', loadChildren: './pages/tabs/tabs.module#TabsPageModule' },
-  { path: 'tab-accounts', loadChildren: './pages/tab-accounts/tab-accounts.module#TabAccountsPageModule' },
-  { path: 'tab-scan', loadChildren: './pages/tab-scan/tab-scan.module#TabScanPageModule' },
-  { path: 'tab-settings', loadChildren: './pages/tab-settings/tab-settings.module#TabSettingsPageModule' },
-  { path: 'account-add', loadChildren: './pages/account-add/account-add.module#AccountAddPageModule' },
-  { path: 'secret-create', loadChildren: './pages/secret-create/secret-create.module#SecretCreatePageModule' },
+  { path: '', loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule) },
+  { path: 'tab-accounts', loadChildren: () => import('./pages/tab-accounts/tab-accounts.module').then(m => m.TabAccountsPageModule) },
+  { path: 'tab-scan', loadChildren: () => import('./pages/tab-scan/tab-scan.module').then(m => m.TabScanPageModule) },
+  { path: 'tab-settings', loadChildren: () => import('./pages/tab-settings/tab-settings.module').then(m => m.TabSettingsPageModule) },
+  { path: 'account-add', loadChildren: () => import('./pages/account-add/account-add.module').then(m => m.AccountAddPageModule) },
+  { path: 'secret-create', loadChildren: () => import('./pages/secret-create/secret-create.module').then(m => m.SecretCreatePageModule) },
   {
     path: 'secret-create/initial',
-    loadChildren: './pages/secret-create/secret-create.module#SecretCreatePageModule',
+    loadChildren: () => import('./pages/secret-create/secret-create.module').then(m => m.SecretCreatePageModule),
     data: { initial: true }
   },
-  { path: 'secret-import', loadChildren: './pages/secret-import/secret-import.module#SecretImportPageModule' },
-  { path: 'secret-edit', loadChildren: './pages/secret-edit/secret-edit.module#SecretEditPageModule' },
-  { path: 'warning-modal', loadChildren: './pages/warning-modal/warning-modal.module#WarningModalPageModule' },
-  { path: 'introduction', loadChildren: './pages/introduction/introduction.module#IntroductionPageModule' },
+  { path: 'secret-import', loadChildren: () => import('./pages/secret-import/secret-import.module').then(m => m.SecretImportPageModule) },
+  { path: 'secret-edit', loadChildren: () => import('./pages/secret-edit/secret-edit.module').then(m => m.SecretEditPageModule) },
+  { path: 'warning-modal', loadChildren: () => import('./pages/warning-modal/warning-modal.module').then(m => m.WarningModalPageModule) },
+  { path: 'introduction', loadChildren: () => import('./pages/introduction/introduction.module').then(m => m.IntroductionPageModule) },
   {
     path: 'distribution-onboarding',
-    loadChildren: './pages/distribution-onboarding/distribution-onboarding.module#DistributionOnboardingPageModule'
+    loadChildren: () =>
+      import('./pages/distribution-onboarding/distribution-onboarding.module').then(m => m.DistributionOnboardingPageModule)
   },
-  { path: 'account-share', loadChildren: './pages/account-share/account-share.module#AccountSharePageModule' },
-  { path: 'account-address', loadChildren: './pages/account-address/account-address.module#AccountAddressPageModule' },
-  { path: 'secret-generate', loadChildren: './pages/secret-generate/secret-generate.module#SecretGeneratePageModule' },
-  { path: 'secret-rules', loadChildren: './pages/secret-rules/secret-rules.module#SecretRulesPageModule' },
-  { path: 'secret-show', loadChildren: './pages/secret-show/secret-show.module#SecretShowPageModule' },
-  { path: 'secret-validate', loadChildren: './pages/secret-validate/secret-validate.module#SecretValidatePageModule' },
-  { path: 'secret-edit', loadChildren: './pages/secret-edit/secret-edit.module#SecretEditPageModule' },
-  { path: 'about', loadChildren: './pages/about/about.module#AboutPageModule' },
+  { path: 'account-share', loadChildren: () => import('./pages/account-share/account-share.module').then(m => m.AccountSharePageModule) },
+  {
+    path: 'account-address',
+    loadChildren: () => import('./pages/account-address/account-address.module').then(m => m.AccountAddressPageModule)
+  },
+  {
+    path: 'secret-generate',
+    loadChildren: () => import('./pages/secret-generate/secret-generate.module').then(m => m.SecretGeneratePageModule)
+  },
+  { path: 'secret-rules', loadChildren: () => import('./pages/secret-rules/secret-rules.module').then(m => m.SecretRulesPageModule) },
+  { path: 'secret-show', loadChildren: () => import('./pages/secret-show/secret-show.module').then(m => m.SecretShowPageModule) },
+  {
+    path: 'secret-validate',
+    loadChildren: () => import('./pages/secret-validate/secret-validate.module').then(m => m.SecretValidatePageModule)
+  },
+  { path: 'secret-edit', loadChildren: () => import('./pages/secret-edit/secret-edit.module').then(m => m.SecretEditPageModule) },
+  { path: 'about', loadChildren: () => import('./pages/about/about.module').then(m => m.AboutPageModule) },
   {
     path: 'interaction-selection',
-    loadChildren: './pages/interaction-selection/interaction-selection.module#InteractionSelectionPageModule'
+    loadChildren: () => import('./pages/interaction-selection/interaction-selection.module').then(m => m.InteractionSelectionPageModule)
   },
   {
     path: 'interaction-selection-settings',
-    loadChildren: './pages/interaction-selection-settings/interaction-selection-settings.module#InteractionSelectionSettingsPageModule'
+    loadChildren: () =>
+      import('./pages/interaction-selection-settings/interaction-selection-settings.module').then(
+        m => m.InteractionSelectionSettingsPageModule
+      )
   },
   {
     path: 'local-authentication-onboarding',
-    loadChildren: './pages/local-authentication-onboarding/local-authentication-onboarding.module#LocalAuthenticationOnboardingPageModule'
+    loadChildren: () =>
+      import('./pages/local-authentication-onboarding/local-authentication-onboarding.module').then(
+        m => m.LocalAuthenticationOnboardingPageModule
+      )
   },
   {
     path: 'secret-generate-onboarding',
-    loadChildren: './pages/secret-generate-onboarding/secret-generate-onboarding.module#SecretGenerateOnboardingPageModule'
+    loadChildren: () =>
+      import('./pages/secret-generate-onboarding/secret-generate-onboarding.module').then(m => m.SecretGenerateOnboardingPageModule)
   },
   {
     path: 'social-recovery-import',
-    loadChildren: './pages/social-recovery-import/social-recovery-import.module#SocialRecoveryImportPageModule'
+    loadChildren: () => import('./pages/social-recovery-import/social-recovery-import.module').then(m => m.SocialRecoveryImportPageModule)
   },
   {
     path: 'social-recovery-setup',
-    loadChildren: './pages/social-recovery-setup/social-recovery-setup.module#SocialRecoverySetupPageModule'
+    loadChildren: () => import('./pages/social-recovery-setup/social-recovery-setup.module').then(m => m.SocialRecoverySetupPageModule)
   },
   {
     path: 'social-recovery-show-share',
-    loadChildren: './pages/social-recovery-show-share/social-recovery-show-share.module#SocialRecoveryShowSharePageModule'
+    loadChildren: () =>
+      import('./pages/social-recovery-show-share/social-recovery-show-share.module').then(m => m.SocialRecoveryShowSharePageModule)
   },
   {
     path: 'social-recovery-validate-share',
-    loadChildren: './pages/social-recovery-validate-share/social-recovery-validate-share.module#SocialRecoveryValidateSharePageModule'
+    loadChildren: () =>
+      import('./pages/social-recovery-validate-share/social-recovery-validate-share.module').then(
+        m => m.SocialRecoveryValidateSharePageModule
+      )
   },
-  { path: 'transaction-detail', loadChildren: './pages/transaction-detail/transaction-detail.module#TransactionDetailPageModule' },
-  { path: 'transaction-signed', loadChildren: './pages/transaction-signed/transaction-signed.module#TransactionSignedPageModule' }
+  {
+    path: 'transaction-detail',
+    loadChildren: () => import('./pages/transaction-detail/transaction-detail.module').then(m => m.TransactionDetailPageModule)
+  },
+  {
+    path: 'transaction-signed',
+    loadChildren: () => import('./pages/transaction-signed/transaction-signed.module').then(m => m.TransactionSignedPageModule)
+  }
 ]
 
 @NgModule({
