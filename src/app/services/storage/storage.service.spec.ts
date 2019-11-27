@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing'
-
-import { StorageService } from './storage.service'
-import { UnitHelper } from 'test-config/unit-test-helper'
 import { Storage } from '@ionic/storage'
 import { StorageMock } from 'test-config/storage-mock'
+import { UnitHelper } from 'test-config/unit-test-helper'
+
+import { StorageService } from './storage.service'
 
 describe('StorageService', () => {
   beforeEach(() => {

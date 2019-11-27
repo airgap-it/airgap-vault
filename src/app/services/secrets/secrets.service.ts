@@ -5,10 +5,9 @@ import * as bip39 from 'bip39'
 import { Observable, ReplaySubject } from 'rxjs'
 
 import { Secret } from '../../models/secret'
-
-import { ErrorCategory, handleErrorLocal } from './../error-handler/error-handler.service'
-import { SecureStorage, SecureStorageService } from './../secure-storage/secure-storage.service'
-import { StorageService, SettingsKey } from '../storage/storage.service'
+import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
+import { SecureStorage, SecureStorageService } from '../secure-storage/secure-storage.service'
+import { SettingsKey, StorageService } from '../storage/storage.service'
 
 @Injectable({
   providedIn: 'root'

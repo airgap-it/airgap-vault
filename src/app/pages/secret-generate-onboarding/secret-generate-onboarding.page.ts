@@ -2,7 +2,7 @@ import { Component } from '@angular/core'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
-import { StorageService, SettingsKey } from 'src/app/services/storage/storage.service'
+import { SettingsKey, StorageService } from '../../services/storage/storage.service'
 
 @Component({
   selector: 'airgap-secret-generate-onboarding',

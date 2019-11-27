@@ -8,7 +8,7 @@ import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/er
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SchemeRoutingService } from '../../services/scheme-routing/scheme-routing.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
-import { SerializerService } from 'src/app/services/serializer/serializer.service'
+import { SerializerService } from '../../services/serializer/serializer.service'
 
 @Component({
   selector: 'airgap-tab-settings',

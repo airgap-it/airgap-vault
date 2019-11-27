@@ -5,7 +5,7 @@ import { first } from 'rxjs/operators'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { SecureStorageService } from '../../services/secure-storage/secure-storage.service'
-import { StorageService, SettingsKey } from 'src/app/services/storage/storage.service'
+import { SettingsKey, StorageService } from '../../services/storage/storage.service'
 
 export enum Warning {
   SECURE_STORAGE,

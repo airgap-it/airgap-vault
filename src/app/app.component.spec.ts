@@ -1,23 +1,26 @@
-import { UnitHelper } from './../../test-config/unit-test-helper'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
-import { TestBed, ComponentFixture } from '@angular/core/testing'
+import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { Deeplinks } from '@ionic-native/deeplinks/ngx'
 import { SplashScreen } from '@ionic-native/splash-screen/ngx'
 import { StatusBar } from '@ionic-native/status-bar/ngx'
 import { Platform } from '@ionic/angular'
-
-import { AppComponent } from './app.component'
-import { Deeplinks } from '@ionic-native/deeplinks/ngx'
-import { StartupChecksService } from './services/startup-checks/startup-checks.service'
-import { SchemeRoutingService } from './services/scheme-routing/scheme-routing.service'
 import { TranslateService } from '@ngx-translate/core'
-import { ProtocolsService } from './services/protocols/protocols.service'
-import { SecretsService } from './services/secrets/secrets.service'
+
+import { UnitHelper } from './../../test-config/unit-test-helper'
+import { AppComponent } from './app.component'
 import { NavigationService } from './services/navigation/navigation.service'
+import { ProtocolsService } from './services/protocols/protocols.service'
+import { SchemeRoutingService } from './services/scheme-routing/scheme-routing.service'
+import { SecretsService } from './services/secrets/secrets.service'
+import { StartupChecksService } from './services/startup-checks/startup-checks.service'
 
 describe('AppComponent', () => {
-  let statusBarSpy, splashScreenSpy, platformReadySpy, platformSpy
-  let component: AppComponent
-  let fixture: ComponentFixture<AppComponent>
+  let statusBarSpy: StatusBar
+  let splashScreenSpy: SplashScreen
+  let platformReadySpy: Promise<void>
+  let platformSpy: Platform
+  // let component: AppComponent
+  // let fixture: ComponentFixture<AppComponent>
   let unitHelper: UnitHelper
   beforeEach(() => {
     statusBarSpy = jasmine.createSpyObj('StatusBar', ['styleDefault'])
@@ -50,12 +53,12 @@ describe('AppComponent', () => {
 
   beforeEach(async () => {
     localStorage.clear()
-    fixture = TestBed.createComponent(AppComponent)
-    component = fixture.componentInstance
+    // fixture = TestBed.createComponent(AppComponent)
+    // component = fixture.componentInstance
   })
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent)
+    const fixture: ComponentFixture<AppComponent> = TestBed.createComponent(AppComponent)
     const app = fixture.debugElement.componentInstance
     expect(app).toBeTruthy()
   })

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, Renderer2, ViewChild, AfterViewInit } from '@angular/core'
+import { AfterViewInit, Component, ElementRef, Input, Renderer2, ViewChild } from '@angular/core'
 import { Observable, Subscriber } from 'rxjs'
 
 import entropyCalculatorWorkerJS from '../../../assets/workers/entropyCalculatorWorker'

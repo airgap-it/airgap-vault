@@ -2,11 +2,10 @@ import { Injectable } from '@angular/core'
 import { AirGapWallet, UnsignedTransaction } from 'airgap-coin-lib'
 
 import { Secret } from '../../models/secret'
+import { assertNever } from '../../utils/utils'
+import { DeepLinkService } from '../deep-link/deep-link.service'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { NavigationService } from '../navigation/navigation.service'
-
-import { DeepLinkService } from './../deep-link/deep-link.service'
-import { assertNever } from 'src/app/utils/utils'
 
 export enum InteractionSetting {
   UNDETERMINED = 'undetermined',

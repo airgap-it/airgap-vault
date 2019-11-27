@@ -3,12 +3,11 @@ import { AlertController } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 import { first } from 'rxjs/operators'
 
-import { Secret } from '../../models/secret'
-import { NavigationService } from '../../services/navigation/navigation.service'
-
 import { SHOW_SECRET_MIN_TIME_IN_SECONDS } from '../../constants/constants'
+import { Secret } from '../../models/secret'
 import { DeviceService } from '../../services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
+import { NavigationService } from '../../services/navigation/navigation.service'
 
 @Component({
   selector: 'airgap-secret-show',
