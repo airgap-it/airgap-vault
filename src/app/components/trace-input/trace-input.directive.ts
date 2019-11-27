@@ -19,7 +19,10 @@ export class TraceInputDirective implements OnInit {
 
   constructor(elementRef: ElementRef, private readonly ngZone: NgZone, private readonly renderer: Renderer2) {
     this.canvas = elementRef.nativeElement
-    this.context = this.canvas.getContext('2d')
+    const context = this.canvas.getContext('2d')
+    if (context) {
+      this.context = context
+    }
   }
 
   public ngOnInit(): void {

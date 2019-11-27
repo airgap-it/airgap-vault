@@ -3,7 +3,6 @@ import {
   getProtocolByIdentifier,
   IAirGapTransaction,
   ICoinProtocol,
-  Serializer,
   SignedTransaction,
   UnsignedTransaction,
   IACMessageDefinitionObject

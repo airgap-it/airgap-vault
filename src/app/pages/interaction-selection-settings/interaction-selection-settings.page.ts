@@ -18,7 +18,7 @@ import { SecretsService } from '../../services/secrets/secrets.service'
 })
 export class InteractionSelectionSettingsPage implements OnInit {
   public interactionSetting: typeof InteractionSetting = InteractionSetting
-  public selectedSetting: InteractionSetting
+  public selectedSetting: InteractionSetting | undefined
   public isEdit: boolean = false
   private secret: Secret
 

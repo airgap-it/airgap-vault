@@ -7,17 +7,17 @@ declare var QRScanner: any
   providedIn: 'root'
 })
 export class ScannerService {
-  public isShowing = false
+  public isShowing: boolean = false
 
   constructor(private readonly platform: Platform) {}
 
-  public askForPermission() {
+  public askForPermission(): void {
     if (this.platform.is('cordova')) {
       QRScanner.openSettings()
     }
   }
 
-  public hasPermission(): Promise<Boolean[]> {
+  public hasPermission(): Promise<boolean[]> {
     if (this.platform.is('cordova')) {
       return new Promise((resolve, reject) => {
         const onDone = (err, status) => {
@@ -45,10 +45,12 @@ export class ScannerService {
         }
         QRScanner.prepare(onDone)
       })
+    } else {
+      throw new Error('Permission status can only be requested on native devices')
     }
   }
 
-  public scan(successCallback: (text: string) => void = null, errorCallback: (text: string) => void = null) {
+  public scan(successCallback: (text: string) => void, errorCallback: ((text: string) => void) | null = null) {
     const scanCallback = (err, text) => {
       if (err) {
         console.error('Scanner scan error', err)

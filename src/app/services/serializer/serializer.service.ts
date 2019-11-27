@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
-import { IACMessageDefinitionObject, Serializer } from 'airgap-coin-lib'
-import { DeserializedSyncProtocol, SyncProtocolUtils } from 'airgap-coin-lib/dist/serializer/v1/serializer'
+import { IACMessageDefinitionObject, Serializer, IACMessageType } from 'airgap-coin-lib'
+import { DeserializedSyncProtocol, SyncProtocolUtils, EncodedType } from 'airgap-coin-lib/dist/serializer/v1/serializer'
 
 import { parseIACUrl } from '../../utils/utils'
 import { StorageService, SettingsKey } from '../storage/storage.service'
@@ -13,8 +13,8 @@ export class SerializerService {
   private readonly syncProtocolUtils: SyncProtocolUtils = new SyncProtocolUtils()
   private readonly serializer: Serializer = new Serializer()
 
-  private readonly v1Tov2Mapping: Map<number, number> = new Map<number, number>()
-  private readonly v2Tov1Mapping: Map<number, number> = new Map<number, number>()
+  private readonly v1Tov2Mapping: Map<EncodedType, IACMessageType> = new Map<EncodedType, IACMessageType>()
+  private readonly v2Tov1Mapping: Map<IACMessageType, EncodedType> = new Map<IACMessageType, EncodedType>()
 
   private _useV2: boolean = false
   private _chunkSize: number = 250
@@ -48,11 +48,11 @@ export class SerializerService {
   }
 
   constructor(private readonly storageService: StorageService) {
-    this.v1Tov2Mapping.set(2, 4) // AccountShareResponse
-    this.v1Tov2Mapping.set(0, 5) // TransactionSignRequest
-    this.v1Tov2Mapping.set(1, 6) // TransactionSignResponse
+    this.v1Tov2Mapping.set(EncodedType.WALLET_SYNC, IACMessageType.AccountShareResponse) // AccountShareResponse
+    this.v1Tov2Mapping.set(EncodedType.UNSIGNED_TRANSACTION, IACMessageType.TransactionSignRequest) // TransactionSignRequest
+    this.v1Tov2Mapping.set(EncodedType.SIGNED_TRANSACTION, IACMessageType.TransactionSignResponse) // TransactionSignResponse
 
-    Array.from(this.v1Tov2Mapping.entries()).forEach((value: [number, number]) => {
+    Array.from(this.v1Tov2Mapping.entries()).forEach((value: [EncodedType, number]) => {
       this.v2Tov1Mapping.set(value[1], value[0])
     })
 
@@ -93,8 +93,14 @@ export class SerializerService {
   }
 
   private async serializeV1(chunk: IACMessageDefinitionObject): Promise<string> {
+    const v1Type: EncodedType | undefined = this.v2Tov1Mapping.get(chunk.type)
+
+    if (!v1Type) {
+      throw new Error('Serializer V1 type not supported')
+    }
+
     const chunkToSerialize: DeserializedSyncProtocol = {
-      type: this.v2Tov1Mapping.get(chunk.type),
+      type: v1Type,
       protocol: chunk.protocol,
       payload: chunk.payload as any
     }
@@ -109,8 +115,14 @@ export class SerializerService {
   private async deserializeV1(chunk: string): Promise<IACMessageDefinitionObject> {
     const deserialized: DeserializedSyncProtocol = await this.syncProtocolUtils.deserialize(chunk)
 
+    const v2Type: IACMessageType | undefined = this.v1Tov2Mapping.get(deserialized.type)
+
+    if (!v2Type) {
+      throw new Error('Serializer V2 type not supported')
+    }
+
     const iacMessage: IACMessageDefinitionObject = {
-      type: this.v1Tov2Mapping.get(deserialized.type),
+      type: v2Type,
       protocol: deserialized.protocol,
       payload: deserialized.payload as any
     }

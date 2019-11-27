@@ -1,12 +1,5 @@
 import { Component } from '@angular/core'
-import {
-  AirGapWallet,
-  IACMessageDefinitionObject,
-  IACMessageType,
-  IAirGapTransaction,
-  Serializer,
-  UnsignedTransaction
-} from 'airgap-coin-lib'
+import { AirGapWallet, IACMessageDefinitionObject, IACMessageType, IAirGapTransaction, UnsignedTransaction } from 'airgap-coin-lib'
 import * as bip39 from 'bip39'
 
 import { Secret } from '../../models/secret'
@@ -65,12 +58,7 @@ export class TransactionDetailPage {
   }
 
   public async generateBroadcastUrl(wallet: AirGapWallet, signedTx: string, unsignedTransaction: UnsignedTransaction): Promise<string> {
-    let txDetails = {
-      from: undefined,
-      amount: undefined,
-      fee: undefined,
-      to: undefined
-    }
+    let txDetails: IAirGapTransaction | undefined
 
     try {
       const transactions = await wallet.coinProtocol.getTransactionDetails(unsignedTransaction) // TODO: Look at all transactions
@@ -81,30 +69,35 @@ export class TransactionDetailPage {
       handleErrorLocal(e)
     }
 
-    const deserializedTxSigningRequest: IACMessageDefinitionObject = {
-      protocol: this.wallet.protocolIdentifier,
-      type: IACMessageType.TransactionSignResponse,
-      payload: {
-        accountIdentifier: wallet.publicKey.substr(-6),
-        transaction: signedTx,
-        from: txDetails.from,
-        amount: txDetails.amount,
-        fee: txDetails.fee,
-        to: txDetails.to
+    if (txDetails) {
+      const deserializedTxSigningRequest: IACMessageDefinitionObject = {
+        protocol: this.wallet.protocolIdentifier,
+        type: IACMessageType.TransactionSignResponse,
+        payload: {
+          accountIdentifier: wallet.publicKey.substr(-6),
+          transaction: signedTx,
+          from: txDetails.from,
+          amount: txDetails.amount,
+          fee: txDetails.fee,
+          to: txDetails.to
+        }
       }
+
+      const serializedTx: string[] = await this.serializerService.serialize([deserializedTxSigningRequest])
+
+      return `${unsignedTransaction.callback || 'airgap-wallet://?d='}${serializedTx.join(',')}`
+    } else {
+      throw new Error('Could not get transaction details')
     }
-
-    const serializedTx: string[] = await this.serializerService.serialize([deserializedTxSigningRequest])
-
-    return `${unsignedTransaction.callback || 'airgap-wallet://?d='}${serializedTx.join(',')}`
   }
 
   public signTransaction(transaction: UnsignedTransaction, wallet: AirGapWallet): Promise<string> {
-    const secret: Secret = this.secretsService.findByPublicKey(wallet.publicKey)
+    const secret: Secret | undefined = this.secretsService.findByPublicKey(wallet.publicKey)
 
     // we should handle this case here as well
     if (!secret) {
-      console.warn('no secret found to this public key')
+      console.warn('no secret found for this public key')
+      throw new Error('no secret found for this public key')
     }
 
     return this.secretsService.retrieveEntropyForSecret(secret).then((entropy: string) => {

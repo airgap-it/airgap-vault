@@ -27,7 +27,7 @@ export class VerifyKeyComponent implements OnInit {
   public currentWords: SingleWord[] = []
   public promptedWords: SingleWord[] = []
 
-  public selectedWordIndex: number = null
+  public selectedWordIndex: number | null = null
 
   public ngOnInit(): void {
     this.splittedSecret = this.secret.toLowerCase().split(' ')

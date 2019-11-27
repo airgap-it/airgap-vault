@@ -121,13 +121,15 @@ export class SecretsService {
     return secureStorage.getItem(secret.id)
   }
 
-  public findByPublicKey(pubKey: string): Secret {
+  public findByPublicKey(pubKey: string): Secret | undefined {
     for (const secret of this.secretsList) {
       const foundWallet: AirGapWallet | undefined = secret.wallets.find((wallet: AirGapWallet) => wallet.publicKey === pubKey)
       if (foundWallet !== undefined) {
         return secret
       }
     }
+
+    return undefined
   }
 
   public getWallets(): AirGapWallet[] {
@@ -139,8 +141,8 @@ export class SecretsService {
     return walletList
   }
 
-  public removeWallet(wallet: AirGapWallet): Promise<void> {
-    const secret: Secret = this.findByPublicKey(wallet.publicKey)
+  public async removeWallet(wallet: AirGapWallet): Promise<void> {
+    const secret: Secret | undefined = this.findByPublicKey(wallet.publicKey)
     if (!secret) {
       return undefined
     }
@@ -156,8 +158,8 @@ export class SecretsService {
     return this.addOrUpdateSecret(secret)
   }
 
-  public findWalletByPublicKeyAndProtocolIdentifier(pubKey: string, protocolIdentifier: string): AirGapWallet {
-    const secret: Secret = this.findByPublicKey(pubKey)
+  public findWalletByPublicKeyAndProtocolIdentifier(pubKey: string, protocolIdentifier: string): AirGapWallet | undefined {
+    const secret: Secret | undefined = this.findByPublicKey(pubKey)
     if (!secret) {
       return undefined
     }
@@ -165,13 +167,12 @@ export class SecretsService {
     const foundWallet: AirGapWallet | undefined = secret.wallets.find(
       (wallet: AirGapWallet) => wallet.publicKey === pubKey && wallet.protocolIdentifier === protocolIdentifier
     )
-    if (foundWallet !== undefined) {
-      return foundWallet
-    }
+
+    return foundWallet
   }
 
   public findBaseWalletByPublicKeyAndProtocolIdentifier(pubKey: string, protocolIdentifier: string): AirGapWallet | undefined {
-    const secret: Secret = this.findByPublicKey(pubKey)
+    const secret: Secret | undefined = this.findByPublicKey(pubKey)
     if (!secret) {
       return undefined
     }

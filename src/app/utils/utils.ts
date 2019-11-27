@@ -59,7 +59,7 @@ function readParameterFromUrl(url: string, parameter: string): string {
   try {
     const parsedUrl: URL = new URL(url)
 
-    return parsedUrl.searchParams.get(parameter)
+    return parsedUrl.searchParams.get(parameter) || ''
   } catch (error) {
     return url
   }
@@ -85,4 +85,13 @@ export function parseIACUrl(url: string | string[], parameter: string): string[]
 
 export function serializedDataToUrlString(data: string | string[], host: string = 'airgap-wallet://', parameter: string = 'd'): string {
   return `${host}?${parameter}=${Array.isArray(data) ? data.join(',') : data}`
+}
+
+export function toBoolean(value: unknown): boolean {
+  // All falsy and truthy values can be converted to a real boolean by using a double negative (!!)
+  return !!value
+}
+
+export function assertNever(name: string, arg: never): never {
+  throw new Error(`${name} ${arg}`)
 }

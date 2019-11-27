@@ -45,12 +45,16 @@ export class SchemeRoutingService {
 
   public async handleNewSyncRequest(
     data: string | string[],
-    scanAgainCallback: Function = (scanResult: { currentPage: number; totalPageNumber: number }): void => {}
+    scanAgainCallback: Function = (scanResult: { currentPage: number; totalPageNumber: number }): void => {
+      console.log(scanResult)
+    }
   ): Promise<IACResult> {
     // wait for secrets to be loaded for sure
     await this.secretsService.isReady()
 
-    const [error, deserializedSync]: [Error, IACMessageDefinitionObject[]] = await to(this.serializerService.deserialize(data))
+    const [error, deserializedSync]: [Error | null, IACMessageDefinitionObject[] | undefined] = await to(
+      this.serializerService.deserialize(data)
+    )
 
     if (error && !error.message) {
       scanAgainCallback(error)
@@ -72,20 +76,29 @@ export class SchemeRoutingService {
 
       return IACResult.ERROR
     }
-    const firstMessage: IACMessageDefinitionObject = deserializedSync[0]
+    if (deserializedSync && deserializedSync.length > 0) {
+      const firstMessage: IACMessageDefinitionObject = deserializedSync[0]
 
-    if (firstMessage.type in IACMessageType) {
-      this.syncSchemeHandlers[firstMessage.type](firstMessage, scanAgainCallback).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
+      if (firstMessage.type in IACMessageType) {
+        this.syncSchemeHandlers[firstMessage.type](firstMessage, scanAgainCallback).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
 
-      return IACResult.SUCCESS
+        return IACResult.SUCCESS
+      } else {
+        this.syncTypeNotSupportedAlert(firstMessage, scanAgainCallback).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
+
+        return IACResult.ERROR
+      }
     } else {
-      this.syncTypeNotSupportedAlert(firstMessage, scanAgainCallback).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
+      console.warn('No message found')
 
       return IACResult.ERROR
     }
   }
 
-  private async handleUnsignedTransaction(deserializedSyncProtocol: IACMessageDefinitionObject, scanAgainCallback: Function) {
+  private async handleUnsignedTransaction(
+    deserializedSyncProtocol: IACMessageDefinitionObject,
+    scanAgainCallback: Function
+  ): Promise<boolean> {
     const unsignedTransaction: UnsignedTransaction = deserializedSyncProtocol.payload as UnsignedTransaction
 
     let correctWallet = this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(
@@ -97,23 +110,25 @@ export class SchemeRoutingService {
     // wallet with the right protocol. This way we can sign all ERC20 transactions, but show the right amount
     // and fee for all tokens we support.
     if (!correctWallet) {
-      const baseWallet = this.secretsService.findBaseWalletByPublicKeyAndProtocolIdentifier(
+      const baseWallet: AirGapWallet | undefined = this.secretsService.findBaseWalletByPublicKeyAndProtocolIdentifier(
         unsignedTransaction.publicKey,
         deserializedSyncProtocol.protocol
       )
 
-      // If the protocol is not supported, use the base protocol for signing
-      try {
-        correctWallet = new AirGapWallet(
-          deserializedSyncProtocol.protocol,
-          baseWallet.publicKey,
-          baseWallet.isExtendedPublicKey,
-          baseWallet.derivationPath
-        )
-        correctWallet.addresses = baseWallet.addresses
-      } catch (e) {
-        if (e.message === 'PROTOCOL_NOT_SUPPORTED') {
-          correctWallet = baseWallet
+      if (baseWallet) {
+        // If the protocol is not supported, use the base protocol for signing
+        try {
+          correctWallet = new AirGapWallet(
+            deserializedSyncProtocol.protocol,
+            baseWallet.publicKey,
+            baseWallet.isExtendedPublicKey,
+            baseWallet.derivationPath
+          )
+          correctWallet.addresses = baseWallet.addresses
+        } catch (e) {
+          if (e.message === 'PROTOCOL_NOT_SUPPORTED') {
+            correctWallet = baseWallet
+          }
         }
       }
     }
@@ -126,6 +141,8 @@ export class SchemeRoutingService {
           deserializedSync: deserializedSyncProtocol
         })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+
+      return true
     } else {
       const cancelButton = {
         text: 'tab-wallets.no-secret_alert.okay_label',
@@ -135,10 +152,15 @@ export class SchemeRoutingService {
         }
       }
       this.showTranslatedAlert('tab-wallets.no-secret_alert.title', 'tab-wallets.no-secret_alert.text', [cancelButton])
+
+      return false
     }
   }
 
-  private async syncTypeNotSupportedAlert(_deserializedSyncProtocol: IACMessageDefinitionObject, scanAgainCallback: Function) {
+  private async syncTypeNotSupportedAlert(
+    _deserializedSyncProtocol: IACMessageDefinitionObject,
+    scanAgainCallback: Function
+  ): Promise<boolean> {
     // TODO: Log error locally
     const cancelButton = {
       text: 'tab-wallets.sync-operation-not-supported_alert.okay_label',
@@ -152,6 +174,8 @@ export class SchemeRoutingService {
       'tab-wallets.sync-operation-not-supported_alert.text',
       [cancelButton]
     )
+
+    return false
   }
 
   public showTranslatedAlert(title: string, message: string, buttons: AlertButton[]): void {

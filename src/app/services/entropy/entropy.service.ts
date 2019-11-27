@@ -22,11 +22,9 @@ export class EntropyService {
   private entropyUpdateObserver: Observer<void>
 
   constructor() {
-    this.entropyUpdateObservable = new Observable(
-      (observer: Subscriber<void>): void => {
-        this.entropyUpdateObserver = observer
-      }
-    )
+    this.entropyUpdateObservable = new Observable((observer: Subscriber<void>): void => {
+      this.entropyUpdateObserver = observer
+    })
   }
 
   public addEntropySource(entropyGenerator: IEntropyGenerator): void {
@@ -75,7 +73,7 @@ export class EntropyService {
   }
 
   public stopEntropyCollection(): Promise<void> {
-    const promises = []
+    const promises: Promise<void>[] = []
 
     return new Promise(resolve => {
       // clear collection interval

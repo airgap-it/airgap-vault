@@ -27,7 +27,7 @@ export class WarningModalPage implements AfterViewInit {
   public description: string
   public imageUrl: string | undefined = undefined
   public handler: () => void = () => undefined
-  public buttonText: string = undefined
+  public buttonText: string | undefined = undefined
 
   constructor(
     public navParams: NavParams,

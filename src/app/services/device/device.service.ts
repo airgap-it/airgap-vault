@@ -64,7 +64,7 @@ export class DeviceService {
   }
 
   public checkForRoot(): Promise<boolean> {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       if (this.platform.is('cordova')) {
         SecurityUtils.DeviceIntegrity.assess(result => {
           resolve(!result)

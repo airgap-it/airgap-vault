@@ -21,15 +21,6 @@ export interface Token {
   decimals: number
 }
 
-interface SubProtocolInfo {
-  symbol: string
-  name: string
-  marketSymbol: string
-
-  identifier: string
-  data: [string]
-}
-
 interface SubAccount {
   protocol: string
   subProtocols: GenericERC20Configuration[]
