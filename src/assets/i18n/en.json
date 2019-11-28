@@ -196,7 +196,7 @@
       "same-device":"Vault and Wallet on the same device",
       "offline-device":"Vault is an offline device"
     },
-    "continue_label":"continue",
+    "continue_label":"Continue",
     "description":"You can always change your preference in the Settings Tab"
   },
 
