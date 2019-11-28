@@ -17,7 +17,7 @@ export class SerializerService {
   private readonly v2Tov1Mapping: Map<IACMessageType, EncodedType> = new Map<IACMessageType, EncodedType>()
 
   private _useV2: boolean = false
-  private _chunkSize: number = 250
+  private _chunkSize: number = 100
   private _displayTimePerChunk: number = 500
 
   get useV2(): boolean {

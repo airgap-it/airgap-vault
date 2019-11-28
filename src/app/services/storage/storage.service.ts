@@ -35,7 +35,7 @@ const defaultValues: SettingsKeyReturnDefaults = {
   [SettingsKey.INTRODUCTION_INITIAL]: false,
   [SettingsKey.AIRGAP_SECRET_LIST]: [],
   [SettingsKey.SETTINGS_SERIALIZER_ENABLE_V2]: false,
-  [SettingsKey.SETTINGS_SERIALIZER_CHUNK_TIME]: 250,
+  [SettingsKey.SETTINGS_SERIALIZER_CHUNK_TIME]: 500,
   [SettingsKey.SETTINGS_SERIALIZER_CHUNK_SIZE]: 100
 }
 
