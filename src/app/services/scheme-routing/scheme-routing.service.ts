@@ -45,9 +45,7 @@ export class SchemeRoutingService {
 
   public async handleNewSyncRequest(
     data: string | string[],
-    scanAgainCallback: Function = (scanResult: { currentPage: number; totalPageNumber: number }): void => {
-      console.log(scanResult)
-    }
+    scanAgainCallback: Function = (_scanResult: { currentPage: number; totalPageNumber: number }): void => {}
   ): Promise<IACResult> {
     // wait for secrets to be loaded for sure
     await this.secretsService.isReady()
@@ -90,6 +88,7 @@ export class SchemeRoutingService {
       }
     } else {
       console.warn('No message found')
+      scanAgainCallback()
 
       return IACResult.ERROR
     }
@@ -181,12 +180,18 @@ export class SchemeRoutingService {
   public showTranslatedAlert(title: string, message: string, buttons: AlertButton[]): void {
     const translationKeys = [title, message, ...buttons.map(button => button.text)]
     this.translateService.get(translationKeys).subscribe(async values => {
+      const translatedButtons = buttons.map(button => {
+        button.text = values[button.text]
+        return button
+      })
+
       const alert = await this.alertController.create({
         header: values[title],
         message: values[message],
         backdropDismiss: true,
-        buttons: buttons.map(button => (button.text = values[button.text]))
+        buttons: translatedButtons
       })
+
       alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
     })
   }
