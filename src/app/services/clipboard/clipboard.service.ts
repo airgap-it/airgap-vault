@@ -20,7 +20,7 @@ export class ClipboardService {
     }
   }
 
-  public async copyAndShowToast(text: string, toastMessage: string = 'Successfully copied to your clipboard!') {
+  public async copyAndShowToast(text: string, toastMessage: string = 'Successfully copied to your clipboard!'): Promise<void> {
     try {
       await this.copy(text)
       await this.showToast(toastMessage)
@@ -37,12 +37,13 @@ export class ClipboardService {
         return (navigator as any).clipboard.readText()
       }
     } catch (err) {
-      console.error('Failed to copy: ', err)
+      console.error('Failed to paste: ', err)
+      throw err
     }
   }
 
   private async showToast(message: string) {
-    const toast = await this.toastController.create({
+    const toast: HTMLIonToastElement = await this.toastController.create({
       message,
       duration: 1000,
       position: 'top',

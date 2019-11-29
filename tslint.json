@@ -1,8 +1,10 @@
 {
-  "extends": ["tslint-config-valorsoft", "tslint-config-valorsoft/tslint-angular.json", "tslint-config-prettier"],
+  "extends": ["tslint-config-valorsoft", "tslint-config-valorsoft/tslint-angular.json", "tslint-plugin-prettier", "tslint-config-prettier"],
   "rulesDirectory": "node_modules/codelyzer",
 
   "rules": {
+    "prettier": true,
+    "strict-comparisons": true,
     "component-class-suffix": [true, "Component", "Page"],
     "directive-selector": [true, "attribute", "airgap", "camelCase"],
     "component-selector": [true, "element", "airgap", "kebab-case"],

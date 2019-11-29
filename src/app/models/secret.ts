@@ -1,6 +1,8 @@
 import { AirGapWallet } from 'airgap-coin-lib'
 import { UUID } from 'angular2-uuid'
 
+import { toBoolean } from '../utils/utils'
+
 import { InteractionSetting } from './../services/interaction/interaction.service'
 import { BIP39Signer } from './BIP39Signer'
 import { Identifiable } from './identifiable'
@@ -21,7 +23,7 @@ export class Secret implements Identifiable {
   private readonly twofactor: string
 
   constructor(
-    seed: string,
+    seed: string | null,
     label: string = '',
     isParanoia: boolean = false,
     interactionSetting: InteractionSetting = InteractionSetting.UNDETERMINED
@@ -30,7 +32,9 @@ export class Secret implements Identifiable {
     this.isParanoia = isParanoia
     this.interactionSetting = interactionSetting
 
-    this.secretHex = this.getEntropyFromMnemonic(seed)
+    if (seed !== null) {
+      this.secretHex = this.getEntropyFromMnemonic(seed)
+    }
   }
 
   public getEntropyFromMnemonic(mnemonic: string): string {
@@ -51,7 +55,7 @@ export class Secret implements Identifiable {
   }
 
   public hasTwofactor(): boolean {
-    return this.twofactor && this.twofactor.length > 0
+    return toBoolean(this.twofactor) && this.twofactor.length > 0
   }
 
   public static generateSocialRecover(secret: string, numberOfShares: number, threshold: number): string[] {

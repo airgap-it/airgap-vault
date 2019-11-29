@@ -81,9 +81,13 @@ export class CameraBrowserService implements IEntropyGenerator {
 
         const context = canvas.getContext('2d')
 
-        context.drawImage(video, 0, 0)
-        const buffer = context.getImageData(0, 0, video.videoWidth, video.videoHeight).data
-        this.handler(buffer)
+        if (context) {
+          context.drawImage(video, 0, 0)
+          const buffer = context.getImageData(0, 0, video.videoWidth, video.videoHeight).data
+          this.handler(buffer)
+        } else {
+          console.error('context is undefined')
+        }
       }, this.VIDEO_FREQUENCY / 5)
     })
   }

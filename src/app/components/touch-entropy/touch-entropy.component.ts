@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild, AfterViewChecked, AfterViewInit } from '@angular/core'
+import { AfterViewInit, Component, ElementRef, Input, Renderer2, ViewChild } from '@angular/core'
 import { Observable, Subscriber } from 'rxjs'
 
 import entropyCalculatorWorkerJS from '../../../assets/workers/entropyCalculatorWorker'
@@ -38,19 +38,17 @@ export class TouchEntropyComponent implements AfterViewInit, IEntropyGenerator {
   private isDrawing: boolean = false
 
   constructor(private readonly renderer: Renderer2) {
-    this.entropyObservable = new Observable(
-      (observer: Subscriber<Entropy>): void => {
-        entropyCalculatorWorker.onmessage = (event: MessageEvent): void => {
-          this.collectedEntropyPercentage += event.data.entropyMeasure
-          observer.next({ entropyHex: event.data.entropyHex })
-        }
-
-        this.handler = (numbers: number[]): void => {
-          const buffer1: ArrayBuffer = this.arrayBufferFromIntArray(numbers)
-          entropyCalculatorWorker.postMessage({ entropyBuffer: buffer1 }, [buffer1])
-        }
+    this.entropyObservable = new Observable((observer: Subscriber<Entropy>): void => {
+      entropyCalculatorWorker.onmessage = (event: MessageEvent): void => {
+        this.collectedEntropyPercentage += event.data.entropyMeasure
+        observer.next({ entropyHex: event.data.entropyHex })
       }
-    )
+
+      this.handler = (numbers: number[]): void => {
+        const buffer1: ArrayBuffer = this.arrayBufferFromIntArray(numbers)
+        entropyCalculatorWorker.postMessage({ entropyBuffer: buffer1 }, [buffer1])
+      }
+    })
   }
 
   public ngAfterViewInit(): void {
@@ -68,16 +66,23 @@ export class TouchEntropyComponent implements AfterViewInit, IEntropyGenerator {
       return
     }
 
-    this.canvas.setAttribute('height', `${this.canvas.parentElement.getBoundingClientRect().height}px`)
-    this.canvas.setAttribute('width', `${this.canvas.parentElement.getBoundingClientRect().width}px`)
+    this.canvas.setAttribute('height', `${this.canvas.parentElement!.getBoundingClientRect().height}px`) // We know parentElement needs to be defined here because we check it in the ready function
+    this.canvas.setAttribute('width', `${this.canvas.parentElement!.getBoundingClientRect().width}px`) // We know parentElement needs to be defined here because we check it in the ready function
 
-    this.context = this.canvas.getContext('2d')
+    const context = this.canvas.getContext('2d')
+    if (context) {
+      this.context = context
+    }
     this.context.fillStyle = this.cursorColor
     this.rectangle = this.canvas.getBoundingClientRect()
   }
 
   private isCanvasReady(): boolean {
-    return this.canvas.parentElement.getBoundingClientRect().height > 0
+    if (this.canvas.parentElement) {
+      return this.canvas.parentElement.getBoundingClientRect().height > 0
+    } else {
+      return false
+    }
   }
 
   public start(): Promise<void> {

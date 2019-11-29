@@ -9,3 +9,22 @@
 @import '~@ionic/angular/css/text-alignment.css';
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
+
+/* Center content vertically and horizontally */
+.content--align__center-center {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+/* FAB with a button, bottom padding fix for ios devices */
+.ios {
+  .can-go-back {
+    ion-fab.fab-vertical-bottom {
+      bottom: 24px;
+    }
+  }
+}
+ion-label {
+  font-size: 12px;
+}

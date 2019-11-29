@@ -11,9 +11,11 @@ import { ErrorCategory, handleErrorLocal } from './../../services/error-handler/
 })
 export class AccountSharePage {
   public interactionUrl: string
+  public splits: string[] = []
 
   constructor(private readonly navigationService: NavigationService) {
     this.interactionUrl = this.navigationService.getState().interactionUrl
+    this.splits = this.interactionUrl.substr('airgap-wallet://?d='.length).split(',')
   }
 
   public done(): void {

@@ -1,12 +1,13 @@
+import { async, ComponentFixture, TestBed } from '@angular/core/testing'
+
 import { UnitHelper } from './../../../../test-config/unit-test-helper'
 import { VerifyKeyComponent } from './verify-key.component'
-import { ComponentFixture, TestBed, async } from '@angular/core/testing'
 
 describe('Component: VerifyKey', () => {
   let component: VerifyKeyComponent
   let fixture: ComponentFixture<VerifyKeyComponent>
 
-  const correctMnemonic =
+  const correctMnemonic: string =
     'usage puzzle bottom amused genuine bike brown ripple lend aware symbol genuine neutral tortoise pluck rose brown cliff sing smile appear black occur zero'
 
   let unitHelper: UnitHelper
@@ -28,14 +29,14 @@ describe('Component: VerifyKey', () => {
   it('should validate a regular mnemonic, and emit correct event', async(() => {
     component.secret = correctMnemonic
     fixture.detectChanges()
-    let words = component.secret.split(' ')
+    const words = component.secret.split(' ')
 
     // validate onComplete Event is True
     component.onContinue.subscribe(event => {
       expect(event).toBeTruthy()
     })
 
-    words.forEach((word, i) => {
+    words.forEach((word: string) => {
       expect(component.isFull()).toBeFalsy()
       component.useWord(word)
     })
@@ -54,7 +55,7 @@ describe('Component: VerifyKey', () => {
       expect(event).toBeFalsy()
     })
 
-    words.forEach((word, i) => {
+    words.forEach((word: string, i: number) => {
       expect(component.isFull()).toBeFalsy()
       if (i === 5) {
         component.useWord('wrongWord')
@@ -73,7 +74,7 @@ describe('Component: VerifyKey', () => {
     component.ngOnInit()
     const words = component.secret.split(' ')
 
-    words.forEach((word, i) => {
+    words.forEach(word => {
       component.useWord(word)
     })
 
@@ -84,10 +85,12 @@ describe('Component: VerifyKey', () => {
     component.secret = correctMnemonic
     fixture.detectChanges()
     component.ngOnInit()
-    const words = component.secret.split(' ')
+    const words: string[] = component.secret.split(' ')
 
-    words.forEach((word, i) => {
-      if (i === words.length - 1) return
+    words.forEach((word: string, i: number) => {
+      if (i === words.length - 1) {
+        return
+      }
       component.useWord(word)
     })
 
@@ -119,13 +122,13 @@ describe('Component: VerifyKey', () => {
     component.ngOnInit()
     const words = component.secret.split(' ')
 
-    words.forEach((word, i) => {
+    words.forEach((word: string) => {
       component.useWord(word)
     })
 
     // now select a word
     component.selectWord(5)
-    expect(component.selectedWord).toEqual(5)
+    expect(component.selectedWordIndex).toEqual(5)
     expect(component.currentWords[5]).toEqual(words[5])
   }))
 
@@ -134,13 +137,13 @@ describe('Component: VerifyKey', () => {
     component.ngOnInit()
     fixture.detectChanges()
 
-    let wordSelector = fixture.nativeElement.querySelector('#wordSelector')
+    const wordSelector = fixture.nativeElement.querySelector('#wordSelector')
 
     // check if there are three words
     expect(wordSelector.children.length).toBe(3)
 
-    let foundWord = false
-    for (let i = 0; i < wordSelector.children.length; i++) {
+    let foundWord: boolean = false
+    for (let i: number = 0; i < wordSelector.children.length; i++) {
       if (wordSelector.children.item(i).textContent.trim() === correctMnemonic.split(' ')[0]) {
         foundWord = true
       }
@@ -155,23 +158,25 @@ describe('Component: VerifyKey', () => {
     component.ngOnInit()
     fixture.detectChanges()
 
-    component.secret.split(' ').forEach((word, i) => {
-      if (i > 10) return
+    component.secret.split(' ').forEach((word: string, i: number) => {
+      if (i > 10) {
+        return
+      }
       component.useWord(word)
     })
 
-    const selectedIndex = 5
+    const selectedIndex: number = 5
     component.selectWord(selectedIndex)
 
     fixture.detectChanges()
 
-    let wordSelector = fixture.nativeElement.querySelector('#wordSelector')
+    const wordSelector = fixture.nativeElement.querySelector('#wordSelector')
 
     // check if there are three words
     expect(wordSelector.children.length).toBe(3)
 
-    let foundWord = false
-    for (let i = 0; i < wordSelector.children.length; i++) {
+    let foundWord: boolean = false
+    for (let i: number = 0; i < wordSelector.children.length; i++) {
       if (wordSelector.children.item(i).textContent.trim() === correctMnemonic.split(' ')[selectedIndex]) {
         foundWord = true
       }

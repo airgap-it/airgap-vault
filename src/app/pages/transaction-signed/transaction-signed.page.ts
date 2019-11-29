@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { AirGapWallet, DeserializedSyncProtocol } from 'airgap-coin-lib'
+import { AirGapWallet } from 'airgap-coin-lib'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
@@ -18,13 +18,16 @@ export class TransactionSignedPage {
   public signedTx: string
   public interactionUrl: string
 
+  public splits: string[]
+
   public wallet: AirGapWallet
   public qrType: TransactionQRType = 0
 
-  public signedTransactionSync: DeserializedSyncProtocol
+  public signedTransactionSync: any // TODO: Types
 
   constructor(public navigationService: NavigationService) {
     this.interactionUrl = this.navigationService.getState().interactionUrl
+    this.splits = this.interactionUrl.substr('airgap-wallet://?d='.length).split(',')
     this.wallet = this.navigationService.getState().interactionUrl
     this.signedTx = this.navigationService.getState().interactionUrl
   }

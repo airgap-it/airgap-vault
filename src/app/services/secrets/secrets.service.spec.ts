@@ -1,16 +1,17 @@
+import { TestBed } from '@angular/core/testing'
 import { StorageMock } from 'test-config/storage-mock'
-import { SecureStorageServiceMock } from './../storage/secure-storage.mock'
+
+import { SecureStorageService } from '../secure-storage/secure-storage.service'
+import { StorageService } from '../storage/storage.service'
+
 import { UnitHelper } from './../../../../test-config/unit-test-helper'
-import { TestBed, async } from '@angular/core/testing'
+import { SecureStorageServiceMock } from './../secure-storage/secure-storage.mock'
 import { SecretsService } from './secrets.service'
-import { SecureStorageService } from '../storage/storage.service'
-import { Storage } from '@ionic/storage'
-import { Secret } from 'src/app/models/secret'
 
 describe('SecretsService', () => {
-  let storage: StorageMock
-  let secureStorageService: SecureStorageServiceMock
-  let secretsService: SecretsService
+  // let storageService: StorageMock
+  // let secureStorageService: SecureStorageServiceMock
+  // let secretsService: SecretsService
   let unitHelper: UnitHelper
   beforeEach(() => {
     unitHelper = new UnitHelper()
@@ -18,7 +19,7 @@ describe('SecretsService', () => {
       unitHelper.testBed({
         providers: [
           SecretsService,
-          { provide: Storage, useClass: StorageMock },
+          { provide: StorageService, useClass: StorageMock },
           { provide: SecureStorageService, useClass: SecureStorageServiceMock }
         ]
       })
@@ -27,11 +28,11 @@ describe('SecretsService', () => {
       .catch(console.error)
   })
 
-  beforeEach(() => {
-    secureStorageService = TestBed.get(SecureStorageServiceMock)
-    storage = TestBed.get(Storage)
-    secretsService = TestBed.get(SecretsService)
-  })
+  // beforeEach(() => {
+  //   secureStorageService = TestBed.get(SecureStorageServiceMock)
+  //   storageService = TestBed.get(Storage)
+  //   secretsService = TestBed.get(SecretsService)
+  // })
 
   it('should be created', () => {
     const secretsService: SecretsService = TestBed.get(SecretsService)

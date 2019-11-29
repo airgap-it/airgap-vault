@@ -7,24 +7,27 @@ export class BIP39Signer {
 
   private getOffsetMapping(share: string): { offset: number; seedOffset: number } {
     const shareWordCount: number = share.split(' ').length
-    if (shareWordCount === 48) {
-      return { offset: 99, seedOffset: 64 }
-    } else if (shareWordCount === 36) {
-      return { offset: 67, seedOffset: 42 }
-    } else if (shareWordCount === 24) {
-      return { offset: 67, seedOffset: 32 }
+
+    switch (shareWordCount) {
+      case 48:
+        return { offset: 99, seedOffset: 64 }
+      case 36:
+        return { offset: 67, seedOffset: 42 }
+      case 24:
+        return { offset: 67, seedOffset: 32 }
+      default:
+        throw new Error('Currently only recovery of secrets with 48, 36 or 24 words are supported')
     }
-    throw new Error('Currently only recovery of secrets with 24, 18 or 12 words are supported')
   }
 
   private getRandomIntInclusive(min: number, max: number): number {
     const randomBuffer: Uint32Array = new Uint32Array(1)
     window.crypto.getRandomValues(randomBuffer)
     const randomNumber: number = randomBuffer[0] / (0xffffffff + 1)
-    min = Math.ceil(min)
-    max = Math.floor(max)
+    const ceilMin: number = Math.ceil(min)
+    const floorMax: number = Math.floor(max)
 
-    return Math.floor(randomNumber * (max - min + 1)) + min
+    return Math.floor(randomNumber * (floorMax - ceilMin + 1)) + ceilMin
   }
 
   public entropyToMnemonic(entropy: string): string {
@@ -32,7 +35,7 @@ export class BIP39Signer {
   }
 
   public mnemonicToEntropy(mnemonic: string): string {
-    const usedList = BIP39Signer.determineWordList(mnemonic)
+    const usedList: string[] | undefined = BIP39Signer.determineWordList(mnemonic)
 
     if (!usedList) {
       throw Error('non-compatible mnemonic')
@@ -46,21 +49,23 @@ export class BIP39Signer {
   }
 
   public static validateMnemonic(mnemonic: string): boolean {
-    const preparedMnemonic = BIP39Signer.prepareMnemonic(mnemonic)
-    const wordList = BIP39Signer.determineWordList(preparedMnemonic)
+    const preparedMnemonic: string = BIP39Signer.prepareMnemonic(mnemonic)
+    const wordList: string[] | undefined = BIP39Signer.determineWordList(preparedMnemonic)
 
     return bip39.validateMnemonic(preparedMnemonic, wordList)
   }
 
-  public static determineWordList(mnemonic: string): any[] {
+  public static determineWordList(mnemonic: string): string[] | undefined {
     for (const list of BIP39Signer.wordLists()) {
       if (bip39.validateMnemonic(BIP39Signer.prepareMnemonic(mnemonic), list)) {
         return list
       }
     }
+
+    return undefined
   }
 
-  public static wordLists(): any[] {
+  public static wordLists(): string[][] {
     return [
       bip39.wordlists.english
       /*
@@ -88,7 +93,7 @@ export class BIP39Signer {
     secretDigester.update(seed)
 
     const shares = secretJS.share(seed + secretDigester.hex().slice(0, this.checkSumLength), numberOfShares, threshold)
-    const calculatedShares = []
+    const calculatedShares: string[] = []
     for (let i = 0; i < shares.length; i++) {
       const paddedShare = shares[i].concat(
         Array(29)
@@ -104,7 +109,7 @@ export class BIP39Signer {
 
   public recoverKey(shares: any): string {
     const offset = this.getOffsetMapping(shares[0])
-    const translatedShares = []
+    const translatedShares: string[] = []
     for (let i = 0; i < shares.length; i++) {
       const words = shares[i].split(' ')
       const firstHalf = words.slice(0, 24)

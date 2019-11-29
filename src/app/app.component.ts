@@ -14,7 +14,7 @@ import { NavigationService } from './services/navigation/navigation.service'
 import { ProtocolsService } from './services/protocols/protocols.service'
 import { SchemeRoutingService } from './services/scheme-routing/scheme-routing.service'
 import { SecretsService } from './services/secrets/secrets.service'
-import { Check, StartupChecksService } from './services/startup-checks/startup-checks.service'
+import { StartupChecksService } from './services/startup-checks/startup-checks.service'
 
 declare let window: Window & { airGapHasStarted: boolean }
 declare var SecurityUtils: any
@@ -88,16 +88,10 @@ export class AppComponent implements AfterViewInit {
     }
   }
 
-  public initChecks(): void {
-    this.startupChecks
-      .initChecks()
-      .then(async () => {
-        this.isInitialized.resolve()
-      })
-      .catch(async (check: Check) => {
-        check.failureConsequence(this.initChecks.bind(this))
-        this.isInitialized.reject(`startup check failed ${check.name}`) // If we are here, we cannot sign a transaction (no secret, rooted, etc)
-      })
+  public async initChecks(): Promise<void> {
+    await this.startupChecks.initChecks()
+
+    this.isInitialized.resolve()
   }
 
   public async ngAfterViewInit(): Promise<void> {

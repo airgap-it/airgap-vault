@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core'
 
 import { VerifyKeyComponent } from '../../components/verify-key/verify-key.component'
 import { Secret } from '../../models/secret'
+import { DeviceService } from '../../services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 
@@ -16,14 +17,16 @@ export class SecretValidatePage {
 
   public readonly secret: Secret
 
-  private validated: boolean = false // TODO: Can this be removed?
-
-  constructor(private readonly navigationService: NavigationService) {
+  constructor(private readonly deviceService: DeviceService, private readonly navigationService: NavigationService) {
     this.secret = this.navigationService.getState().secret
   }
 
-  public onComplete(isCorrect: boolean): void {
-    this.validated = isCorrect
+  public ionViewDidEnter(): void {
+    this.deviceService.enableScreenshotProtection()
+  }
+
+  public ionViewWillLeave(): void {
+    this.deviceService.disableScreenshotProtection()
   }
 
   public onContinue(): void {

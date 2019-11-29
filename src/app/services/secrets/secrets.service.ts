@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core'
 import { AlertController, LoadingController } from '@ionic/angular'
-import { Storage } from '@ionic/storage'
 import { AirGapWallet, getProtocolByIdentifier, ICoinProtocol } from 'airgap-coin-lib'
 import * as bip39 from 'bip39'
 import { Observable, ReplaySubject } from 'rxjs'
 
 import { Secret } from '../../models/secret'
-
-import { ErrorCategory, handleErrorLocal } from './../error-handler/error-handler.service'
-import { SecureStorage, SecureStorageService } from './../storage/storage.service'
+import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
+import { SecureStorage, SecureStorageService } from '../secure-storage/secure-storage.service'
+import { SettingsKey, StorageService } from '../storage/storage.service'
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +22,7 @@ export class SecretsService {
 
   constructor(
     private readonly secureStorageService: SecureStorageService,
-    private readonly storage: Storage,
+    private readonly storageService: StorageService,
     private readonly loadingCtrl: LoadingController,
     private readonly alertCtrl: AlertController
   ) {
@@ -43,7 +42,7 @@ export class SecretsService {
   }
 
   private async read(): Promise<Secret[]> {
-    const rawSecretsPayload: unknown = await this.storage.get('airgap-secret-list')
+    const rawSecretsPayload: unknown = await this.storageService.get(SettingsKey.AIRGAP_SECRET_LIST)
 
     // necessary due to double serialization bug we had
     let secrets: Secret[] = typeof rawSecretsPayload === 'string' ? JSON.parse(rawSecretsPayload) : rawSecretsPayload
@@ -121,13 +120,15 @@ export class SecretsService {
     return secureStorage.getItem(secret.id)
   }
 
-  public findByPublicKey(pubKey: string): Secret {
+  public findByPublicKey(pubKey: string): Secret | undefined {
     for (const secret of this.secretsList) {
       const foundWallet: AirGapWallet | undefined = secret.wallets.find((wallet: AirGapWallet) => wallet.publicKey === pubKey)
       if (foundWallet !== undefined) {
         return secret
       }
     }
+
+    return undefined
   }
 
   public getWallets(): AirGapWallet[] {
@@ -139,8 +140,8 @@ export class SecretsService {
     return walletList
   }
 
-  public removeWallet(wallet: AirGapWallet): Promise<void> {
-    const secret: Secret = this.findByPublicKey(wallet.publicKey)
+  public async removeWallet(wallet: AirGapWallet): Promise<void> {
+    const secret: Secret | undefined = this.findByPublicKey(wallet.publicKey)
     if (!secret) {
       return undefined
     }
@@ -156,8 +157,8 @@ export class SecretsService {
     return this.addOrUpdateSecret(secret)
   }
 
-  public findWalletByPublicKeyAndProtocolIdentifier(pubKey: string, protocolIdentifier: string): AirGapWallet {
-    const secret: Secret = this.findByPublicKey(pubKey)
+  public findWalletByPublicKeyAndProtocolIdentifier(pubKey: string, protocolIdentifier: string): AirGapWallet | undefined {
+    const secret: Secret | undefined = this.findByPublicKey(pubKey)
     if (!secret) {
       return undefined
     }
@@ -165,13 +166,12 @@ export class SecretsService {
     const foundWallet: AirGapWallet | undefined = secret.wallets.find(
       (wallet: AirGapWallet) => wallet.publicKey === pubKey && wallet.protocolIdentifier === protocolIdentifier
     )
-    if (foundWallet !== undefined) {
-      return foundWallet
-    }
+
+    return foundWallet
   }
 
   public findBaseWalletByPublicKeyAndProtocolIdentifier(pubKey: string, protocolIdentifier: string): AirGapWallet | undefined {
-    const secret: Secret = this.findByPublicKey(pubKey)
+    const secret: Secret | undefined = this.findByPublicKey(pubKey)
     if (!secret) {
       return undefined
     }
@@ -203,7 +203,7 @@ export class SecretsService {
       secret.flushSecret()
     })
 
-    return this.storage.set('airgap-secret-list', this.secretsList)
+    return this.storageService.set(SettingsKey.AIRGAP_SECRET_LIST, this.secretsList)
   }
 
   public async addWallet(protocolIdentifier: string, isHDWallet: boolean, customDerivationPath: string): Promise<void> {

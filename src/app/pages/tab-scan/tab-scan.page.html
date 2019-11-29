@@ -4,39 +4,46 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title>{{ 'tab-scan.title' | translate }}</ion-title>
+    <ion-title slot="end" *ngIf="isMultiQr">{{ numberOfQrsScanned }}/{{ numberOfQrsTotal }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content forceOverscroll="false" [class.transparent]="hasCameraPermission">
-  <ion-text color="light">
-    <p class="ion-padding ion-no-margin ion-text-center">
-      {{ 'tab-scan.text' | translate }}
+  <ion-text color="secondary">
+    <p class="ion-padding ion-no-margin">
+      <ng-container *ngIf="!isMultiQr">
+        {{ 'tab-scan.text' | translate }}
+      </ng-container>
+      <ng-container *ngIf="isMultiQr">
+        {{ 'tab-scan.multi-qr_text' | translate }}
+      </ng-container>
     </p>
   </ion-text>
-  <ng-container *ngIf="hasCameraPermission !== undefined">
-    <ion-row class="row--height__100 ion-justify-content-center ion-align-items-center" [hidden]="!hasCameraPermission">
-      <ion-col class="guides--container ion-justify-content-center ion-align-items-center">
-        <img class="guides--container__img" src="assets/img/qr_code_guides.svg" />
-      </ion-col>
-      <zxing-scanner
-        [hidden]="!isBrowser"
-        #scanner
-        [device]="selectedDevice"
-        [scannerEnabled]="scannerEnabled"
-        (scanSuccess)="checkScan($event)"
-      ></zxing-scanner>
-    </ion-row>
 
-    <ion-row
-      class="row--height__100 ion-justify-content-center ion-align-items-center"
-      [hidden]="hasCameraPermission"
-      (click)="requestPermission()"
-    >
-      <ion-col class="ion-text-center">
-        <img src="../assets/img/permission_onboarding_camera.svg" />
-        <h3 class="ion-padding-horizontal" [innerHTML]="'tab-scan.empty-state_heading' | translate"></h3>
-        <ion-button shape="round" color="primary">{{ 'tab-scan.grant-permission_label' | translate }}</ion-button>
-      </ion-col>
-    </ion-row>
-  </ng-container>
+  <ion-progress-bar *ngIf="isMultiQr" style="height: 8px" color="secondary" [value]="percentageScanned"></ion-progress-bar>
+
+  <ion-row [hidden]="!hasCameraPermission" class="row--height__100 ion-justify-content-center ion-align-items-center ">
+    <ion-col class="guides--container content--align__center-center">
+      <img class="guides--container__img" src="assets/img/qr_code_guides.svg" />
+    </ion-col>
+    <zxing-scanner
+      [hidden]="!isBrowser"
+      #scanner
+      [device]="selectedDevice"
+      [scannerEnabled]="scannerEnabled"
+      (scanSuccess)="checkScan($event)"
+    ></zxing-scanner>
+  </ion-row>
+
+  <ion-row
+    class="row--height__100 ion-justify-content-center ion-align-items-center"
+    [hidden]="hasCameraPermission"
+    (click)="requestPermission()"
+  >
+    <ion-col class="ion-text-center">
+      <img src="../assets/img/permission_onboarding_camera.svg" />
+      <h3 class="ion-padding-horizontal" [innerHTML]="'tab-scan.empty-state_heading' | translate"></h3>
+      <ion-button shape="round" color="primary">{{ 'tab-scan.grant-permission_label' | translate }}</ion-button>
+    </ion-col>
+  </ion-row>
 </ion-content>

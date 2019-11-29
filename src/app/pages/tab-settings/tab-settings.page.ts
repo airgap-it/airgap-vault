@@ -8,6 +8,7 @@ import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/er
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SchemeRoutingService } from '../../services/scheme-routing/scheme-routing.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
+import { SerializerService } from '../../services/serializer/serializer.service'
 
 @Component({
   selector: 'airgap-tab-settings',
@@ -18,6 +19,7 @@ export class TabSettingsPage {
   public readonly secrets: Observable<Secret[]>
 
   constructor(
+    public readonly serializerService: SerializerService,
     private readonly secretsService: SecretsService,
     private readonly alertController: AlertController,
     private readonly toastController: ToastController,
@@ -83,5 +85,18 @@ export class TabSettingsPage {
         console.error('Error: ' + err)
       }
     )
+  }
+
+  public switchSerializerVersion(event: TouchEvent): void {
+    console.log((event.detail as any).checked)
+    this.serializerService.useV2 = (event.detail as any).checked
+  }
+  public qrMsChanged(event: TouchEvent): void {
+    console.log((event.detail as any).value)
+    this.serializerService.displayTimePerChunk = (event.detail as any).value
+  }
+  public qrBytesChanged(event: TouchEvent): void {
+    console.log((event.detail as any).value)
+    this.serializerService.chunkSize = (event.detail as any).value
   }
 }

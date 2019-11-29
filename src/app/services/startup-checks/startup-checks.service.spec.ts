@@ -3,9 +3,6 @@ import { SplashScreen } from '@ionic-native/splash-screen'
 import { StatusBar } from '@ionic-native/status-bar'
 import { ModalController, NavController, NavParams, Platform } from '@ionic/angular'
 import { Storage } from '@ionic/storage'
-import { StorageMock } from 'test-config/storage-mock'
-
-import { SecretsService } from '../secrets/secrets.service'
 
 import {
   DeviceProviderMock,
@@ -15,11 +12,14 @@ import {
   PlatformMock,
   SplashScreenMock,
   StatusBarMock
-} from './../../../../test-config/ionic-mocks'
-import { UnitHelper } from './../../../../test-config/unit-test-helper'
-import { DeviceService } from './../device/device.service'
-import { SecureStorageServiceMock } from './../storage/secure-storage.mock'
-import { SecureStorageService } from './../storage/storage.service'
+} from '../../../../test-config/ionic-mocks'
+import { StorageMock } from '../../../../test-config/storage-mock'
+import { UnitHelper } from '../../../../test-config/unit-test-helper'
+import { DeviceService } from '../device/device.service'
+import { SecretsService } from '../secrets/secrets.service'
+import { SecureStorageServiceMock } from '../secure-storage/secure-storage.mock'
+import { SecureStorageService } from '../secure-storage/secure-storage.service'
+
 import { StartupChecksService } from './startup-checks.service'
 
 describe('StartupCheck Service', () => {
@@ -81,40 +81,67 @@ describe('StartupCheck Service', () => {
   it('should should show disclaimer modal if the disclaimer has not been accepted yet', async(async () => {
     await storageProvider.set('DISCLAIMER_INITIAL', false)
 
-    startupChecksService
-      .initChecks()
-      .then(() => {
-        expect(true).toEqual(false) // we should not get here
+    startupChecksService.checks = startupChecksService.checks.map(check => {
+      check.failureConsequence = jasmine.createSpy('failureConsequence', async () => {
+        await check.failureConsequence()
       })
-      .catch(consequence => {
-        expect(consequence.name).toBe('disclaimerAcceptedCheck')
+
+      return check
+    })
+
+    await startupChecksService.initChecks().then(() => {
+      startupChecksService.checks.forEach(check => {
+        if (check.name === 'disclaimerAcceptedCheck') {
+          expect(check.failureConsequence).toHaveBeenCalled()
+        } else {
+          expect(check.failureConsequence).not.toHaveBeenCalled()
+        }
       })
+    })
   }))
 
   it('should should show the introduction modal if the introduction has not been accepted yet', async(async () => {
     await storageProvider.set('INTRODUCTION_INITIAL', false)
 
-    startupChecksService
-      .initChecks()
-      .then(() => {
-        expect(true).toEqual(false) // we should not get here
+    startupChecksService.checks = startupChecksService.checks.map(check => {
+      check.failureConsequence = jasmine.createSpy('failureConsequence', async () => {
+        await check.failureConsequence()
       })
-      .catch(consequence => {
-        expect(consequence.name).toBe('introductionAcceptedCheck')
+
+      return check
+    })
+
+    await startupChecksService.initChecks().then(() => {
+      startupChecksService.checks.forEach(check => {
+        if (check.name === 'introductionAcceptedCheck') {
+          expect(check.failureConsequence).toHaveBeenCalled()
+        } else {
+          expect(check.failureConsequence).not.toHaveBeenCalled()
+        }
       })
+    })
   }))
 
-  it('should should show the device security modal if device is not secure', async(() => {
+  it('should should show the device security modal if device is not secure', async(async () => {
     secureStorage.isSecure = 0
 
-    startupChecksService
-      .initChecks()
-      .then(() => {
-        expect(true).toEqual(false) // we should not get here
+    startupChecksService.checks = startupChecksService.checks.map(check => {
+      check.failureConsequence = jasmine.createSpy('failureConsequence', async () => {
+        await check.failureConsequence()
       })
-      .catch(consequence => {
-        expect(consequence.name).toBe('deviceSecureCheck')
+
+      return check
+    })
+
+    await startupChecksService.initChecks().then(() => {
+      startupChecksService.checks.forEach(check => {
+        if (check.name === 'deviceSecureCheck') {
+          expect(check.failureConsequence).toHaveBeenCalled()
+        } else {
+          expect(check.failureConsequence).not.toHaveBeenCalled()
+        }
       })
+    })
   }))
 
   it('should resolve if everything is ok', async(async () => {

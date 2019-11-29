@@ -14,10 +14,6 @@
       <ion-icon slot="start" color="dark" src="assets/icons/md-info.svg"></ion-icon>
       <ion-label>{{ 'tab-settings.about' | translate }}</ion-label>
     </ion-item>
-    <ion-item lines="none" detail="true" (click)="pasteClipboard()">
-      <ion-icon name="return-right" slot="start" color="dark"></ion-icon>
-      <ion-label>{{ 'tab-settings.paste-from-clipboard_label' | translate }}</ion-label>
-    </ion-item>
   </ion-list>
   <ion-list>
     <ion-list-header>
@@ -32,5 +28,40 @@
         <ion-label>{{ 'tab-settings.add-settings_label' | translate }}</ion-label>
       </ion-button>
     </ion-row>
+  </ion-list>
+  <ion-list no-border lines="none">
+    <ion-list-header class="ion-no-margin" lines="none">
+      <ion-label>{{ 'tab-settings.qr.settings_label' | translate }}</ion-label>
+    </ion-list-header>
+    <ion-item (click)="pasteClipboard()">
+      <ion-icon name="return-right" slot="start"></ion-icon>
+      {{ 'tab-settings.paste-from-clipboard_label' | translate }}
+    </ion-item>
+    <ion-item>
+      {{ 'tab-settings.qr.enable-new-serializer_label' | translate }}
+      <ion-toggle [(ngModel)]="serializerService.useV2" slot="end"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>
+        {{ 'tab-settings.qr.page-time_label' | translate }} ({{ serializerService.displayTimePerChunk }} ms)
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-range [(ngModel)]="serializerService.displayTimePerChunk" min="100" max="2000" step="50" pin snaps="false" color="secondary">
+        <ion-label slot="start">100 ms</ion-label>
+        <ion-label slot="end">2000 ms</ion-label>
+      </ion-range>
+    </ion-item>
+    <ion-item>
+      <ion-label>
+        {{ 'tab-settings.qr.page-size_label' | translate }} ({{ serializerService.chunkSize }} bytes)
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-range [(ngModel)]="serializerService.chunkSize" min="10" max="500" step="10" pin snaps="false" color="secondary">
+        <ion-label slot="start">10 bytes</ion-label>
+        <ion-label slot="end">500 bytes</ion-label>
+      </ion-range>
+    </ion-item>
   </ion-list>
 </ion-content>

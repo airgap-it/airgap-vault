@@ -110,3 +110,9 @@ airgap-local-authentication-onboarding {
     --border-color: var(--ion-color-secondary-contrast);
   }
 }
+
+.ios {
+  ion-item {
+    --background-activated: transparent
+  }
+}

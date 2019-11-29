@@ -2,10 +2,10 @@ import { Component } from '@angular/core'
 import * as bip39 from 'bip39'
 
 import { Secret } from '../../models/secret'
+import { DeviceService } from '../../services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
-import { DeviceService } from 'src/app/services/device/device.service'
 
 @Component({
   selector: 'airgap-social-recovery-setup',
@@ -19,18 +19,18 @@ export class SocialRecoverySetupPage {
 
   constructor(
     private readonly secretService: SecretsService,
-    private readonly deviceProvider: DeviceService,
+    private readonly deviceService: DeviceService,
     private readonly navigationService: NavigationService
   ) {
     this.secret = this.navigationService.getState().secret
   }
 
   public ionViewDidEnter(): void {
-    this.deviceProvider.setSecureWindow()
+    this.deviceService.setSecureWindow()
   }
 
   public ionViewWillLeave(): void {
-    this.deviceProvider.clearSecureWindow()
+    this.deviceService.clearSecureWindow()
   }
 
   public setNumberOfShares(i: number): void {

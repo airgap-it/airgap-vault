@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core'
 import { AirGapWallet, UnsignedTransaction } from 'airgap-coin-lib'
 
 import { Secret } from '../../models/secret'
+import { assertNever } from '../../utils/utils'
+import { DeepLinkService } from '../deep-link/deep-link.service'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { NavigationService } from '../navigation/navigation.service'
-
-import { DeepLinkService } from './../deep-link/deep-link.service'
 
 export enum InteractionSetting {
   UNDETERMINED = 'undetermined',
@@ -83,11 +83,6 @@ export class InteractionService {
   }
 
   private navigateToPageByOperationType(interactionOptions: IInteractionOptions): void {
-    // To ensure exhausting enum
-    const assertNever: (arg: never) => never = (arg: never): never => {
-      throw new Error('INVALID_OPERATION_TYPE')
-    }
-
     if (interactionOptions.operationType === InteractionOperationType.WALLET_SYNC) {
       this.navigationService
         .routeWithState('/account-share', { interactionUrl: interactionOptions.url })
@@ -102,7 +97,7 @@ export class InteractionService {
         })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } else {
-      return assertNever(interactionOptions.operationType)
+      return assertNever('INVALID_OPERATION_TYPE', interactionOptions.operationType)
     }
   }
 

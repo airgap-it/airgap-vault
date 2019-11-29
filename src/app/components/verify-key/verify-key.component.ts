@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import * as bip39 from 'bip39'
 import { sha3_256 } from 'js-sha3'
 
@@ -11,7 +11,7 @@ const ADDITIONAL_WORDS: number = 2
   templateUrl: './verify-key.component.html',
   styleUrls: ['./verify-key.component.scss']
 })
-export class VerifyKeyComponent implements OnInit, OnDestroy {
+export class VerifyKeyComponent implements OnInit {
   @Input()
   public secret: string
 
@@ -27,20 +27,12 @@ export class VerifyKeyComponent implements OnInit, OnDestroy {
   public currentWords: SingleWord[] = []
   public promptedWords: SingleWord[] = []
 
-  public selectedWord: number = null
+  public selectedWordIndex: number | null = null
 
   public ngOnInit(): void {
     this.splittedSecret = this.secret.toLowerCase().split(' ')
 
     this.reset()
-
-    this.onComplete.subscribe((result: boolean) => {
-      this.isCompleted = result
-    })
-  }
-
-  public ngOnDestroy(): void {
-    this.onComplete.unsubscribe()
   }
 
   public continue(): void {
@@ -101,15 +93,15 @@ export class VerifyKeyComponent implements OnInit, OnDestroy {
   }
 
   public isSelectedWord(word: SingleWord): boolean {
-    if (this.selectedWord !== null) {
-      return this.currentWords[this.selectedWord] === word
+    if (this.selectedWordIndex !== null) {
+      return this.currentWords[this.selectedWordIndex] === word
     }
 
     return false
   }
 
   public selectEmptySpot(): void {
-    this.selectedWord = null
+    this.selectedWordIndex = null
     this.promptNextWord()
   }
 
@@ -117,7 +109,7 @@ export class VerifyKeyComponent implements OnInit, OnDestroy {
     const index: number = this.emptySpot(this.currentWords)
 
     // unselect any selected words
-    this.selectedWord = null
+    this.selectedWordIndex = null
     this.currentWords[index] = word
 
     // prompt next word
@@ -130,25 +122,30 @@ export class VerifyKeyComponent implements OnInit, OnDestroy {
     if (this.isFull()) {
       // if all words are placed, check for correctness, else next
       this.promptedWords = []
-      this.onComplete.emit(this.isCorrect())
+      this.setCompletedState(this.isCorrect())
     }
   }
 
+  public setCompletedState(state: boolean) {
+    this.isCompleted = state
+    this.onComplete.emit(state)
+  }
+
   public emptySpot(array: SingleWord[]): number {
-    if (this.selectedWord !== null) {
-      return this.selectedWord
+    if (this.selectedWordIndex !== null) {
+      return this.selectedWordIndex
     }
 
     return array.findIndex((word: SingleWord) => word === null)
   }
 
   public selectWord(index: number): void {
-    this.selectedWord = index
+    this.selectedWordIndex = index
     this.promptNextWord()
   }
 
   public reset(): void {
-    this.selectedWord = null
+    this.selectedWordIndex = null
     this.currentWords = Array(this.splittedSecret.length).fill(null)
     this.promptNextWord()
   }

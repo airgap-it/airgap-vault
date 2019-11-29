@@ -2,10 +2,10 @@ import { Component } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 
 import { Secret } from '../../models/secret'
+import { DeviceService } from '../../services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { MnemonicValidator } from '../../validators/mnemonic.validator'
-import { DeviceService } from 'src/app/services/device/device.service'
 
 @Component({
   selector: 'airgap-social-recovery-import',
@@ -19,19 +19,19 @@ export class SocialRecoveryImportPage {
   public socialRecoveryForm: FormGroup
 
   constructor(
+    private readonly deviceService: DeviceService,
     private readonly navigationService: NavigationService,
-    private readonly deviceProvider: DeviceService,
     public formBuilder: FormBuilder
   ) {
     this.setNumberOfShares(2)
   }
 
   public ionViewDidEnter(): void {
-    this.deviceProvider.setSecureWindow()
+    this.deviceService.enableScreenshotProtection()
   }
 
   public ionViewWillLeave(): void {
-    this.deviceProvider.clearSecureWindow()
+    this.deviceService.disableScreenshotProtection()
   }
 
   public setNumberOfShares(i: number): void {

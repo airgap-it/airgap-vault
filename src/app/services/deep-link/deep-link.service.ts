@@ -3,7 +3,8 @@ import { AlertController, Platform } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 import { first } from 'rxjs/operators'
 
-import { ErrorCategory, handleErrorLocal } from './../error-handler/error-handler.service'
+import { serializedDataToUrlString } from '../../utils/utils'
+import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 
 declare let window: any
 
@@ -18,17 +19,19 @@ export class DeepLinkService {
   ) {}
 
   public sameDeviceDeeplink(url: string = 'airgap-wallet://'): Promise<void> {
+    const deeplinkUrl: string = url.includes('://') ? url : serializedDataToUrlString(url)
+
     return new Promise((resolve, reject) => {
       let sApp
 
       if (this.platform.is('android')) {
         sApp = window.startApp.set({
           action: 'ACTION_VIEW',
-          uri: url,
+          uri: deeplinkUrl,
           flags: ['FLAG_ACTIVITY_NEW_TASK']
         })
       } else if (this.platform.is('ios')) {
-        sApp = window.startApp.set(url)
+        sApp = window.startApp.set(deeplinkUrl)
       } else {
         this.showDeeplinkOnlyOnDevicesAlert()
 
@@ -41,7 +44,7 @@ export class DeepLinkService {
           resolve()
         },
         error => {
-          console.error('deeplink used', url)
+          console.error('deeplink used', deeplinkUrl)
           console.error(error)
           this.showAppNotFoundAlert()
 

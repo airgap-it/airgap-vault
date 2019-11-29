@@ -1,19 +1,13 @@
 import { Component } from '@angular/core'
-import {
-  AirGapWallet,
-  DeserializedSyncProtocol,
-  EncodedType,
-  IAirGapTransaction,
-  SyncProtocolUtils,
-  UnsignedTransaction
-} from 'airgap-coin-lib'
+import { AirGapWallet, IACMessageDefinitionObject, IACMessageType, IAirGapTransaction, UnsignedTransaction } from 'airgap-coin-lib'
 import * as bip39 from 'bip39'
-import { Secret } from 'src/app/models/secret'
 
+import { Secret } from '../../models/secret'
 import { handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { InteractionOperationType, InteractionService } from '../../services/interaction/interaction.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
+import { SerializerService } from '../../services/serializer/serializer.service'
 
 @Component({
   selector: 'airgap-transaction-detail',
@@ -26,18 +20,20 @@ export class TransactionDetailPage {
   public transaction: UnsignedTransaction
   public wallet: AirGapWallet
   public airGapTxs: IAirGapTransaction[]
-  public deserializedSync: DeserializedSyncProtocol
+  public deserializedSync: IACMessageDefinitionObject[]
 
   constructor(
     private readonly navigationService: NavigationService,
     private readonly secretsService: SecretsService,
-    private readonly interactionService: InteractionService
+    private readonly interactionService: InteractionService,
+    private readonly serializerService: SerializerService
   ) {}
 
   public async ionViewWillEnter(): Promise<void> {
     this.transaction = this.navigationService.getState().transaction
     this.wallet = this.navigationService.getState().wallet
-    this.deserializedSync = this.navigationService.getState().deserializedSync
+    this.deserializedSync = [this.navigationService.getState().deserializedSync]
+    console.log('deserialized sync', this.deserializedSync)
     try {
       this.airGapTxs = await this.wallet.coinProtocol.getTransactionDetails(this.transaction)
     } catch (e) {
@@ -62,12 +58,7 @@ export class TransactionDetailPage {
   }
 
   public async generateBroadcastUrl(wallet: AirGapWallet, signedTx: string, unsignedTransaction: UnsignedTransaction): Promise<string> {
-    let txDetails = {
-      from: undefined,
-      amount: undefined,
-      fee: undefined,
-      to: undefined
-    }
+    let txDetails: IAirGapTransaction | undefined
 
     try {
       const transactions = await wallet.coinProtocol.getTransactionDetails(unsignedTransaction) // TODO: Look at all transactions
@@ -78,32 +69,35 @@ export class TransactionDetailPage {
       handleErrorLocal(e)
     }
 
-    const syncProtocol: SyncProtocolUtils = new SyncProtocolUtils()
-    const deserializedTxSigningRequest: DeserializedSyncProtocol = {
-      version: 1,
-      protocol: this.wallet.protocolIdentifier,
-      type: EncodedType.SIGNED_TRANSACTION,
-      payload: {
-        accountIdentifier: wallet.publicKey.substr(-6),
-        transaction: signedTx,
-        from: txDetails.from,
-        amount: txDetails.amount,
-        fee: txDetails.fee,
-        to: txDetails.to
+    if (txDetails) {
+      const deserializedTxSigningRequest: IACMessageDefinitionObject = {
+        protocol: this.wallet.protocolIdentifier,
+        type: IACMessageType.TransactionSignResponse,
+        payload: {
+          accountIdentifier: wallet.publicKey.substr(-6),
+          transaction: signedTx,
+          from: txDetails.from,
+          amount: txDetails.amount,
+          fee: txDetails.fee,
+          to: txDetails.to
+        }
       }
+
+      const serializedTx: string[] = await this.serializerService.serialize([deserializedTxSigningRequest])
+
+      return `${unsignedTransaction.callback || 'airgap-wallet://?d='}${serializedTx.join(',')}`
+    } else {
+      throw new Error('Could not get transaction details')
     }
-
-    const serializedTx: string = await syncProtocol.serialize(deserializedTxSigningRequest)
-
-    return `${unsignedTransaction.callback || 'airgap-wallet://?d='}${serializedTx}`
   }
 
   public signTransaction(transaction: UnsignedTransaction, wallet: AirGapWallet): Promise<string> {
-    const secret: Secret = this.secretsService.findByPublicKey(wallet.publicKey)
+    const secret: Secret | undefined = this.secretsService.findByPublicKey(wallet.publicKey)
 
     // we should handle this case here as well
     if (!secret) {
-      console.warn('no secret found to this public key')
+      console.warn('no secret found for this public key')
+      throw new Error('no secret found for this public key')
     }
 
     return this.secretsService.retrieveEntropyForSecret(secret).then((entropy: string) => {

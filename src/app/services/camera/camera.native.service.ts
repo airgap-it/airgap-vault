@@ -237,7 +237,7 @@ export class CameraNativeService implements IEntropyGenerator {
   }
 
   public getCollectedEntropyPercentage(): number {
-    return this.collectedEntropyPercentage / 10
+    return this.collectedEntropyPercentage / 6
   }
 
   public setVideoElement(element): void {

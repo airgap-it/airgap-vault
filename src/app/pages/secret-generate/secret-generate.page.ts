@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, OnInit, Renderer2, RendererFactory2, ViewChild } from '@angular/core'
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { Platform } from '@ionic/angular'
 import { auditTime } from 'rxjs/operators'
 
@@ -19,8 +19,6 @@ import { PermissionsService, PermissionTypes } from '../../services/permissions/
 })
 export class SecretGeneratePage implements OnInit {
   public isBrowser: boolean = false
-
-  private readonly renderer: Renderer2
 
   @ViewChild('videoElement', { static: false })
   public videoElement: ElementRef
@@ -48,11 +46,9 @@ export class SecretGeneratePage implements OnInit {
     private readonly navigationService: NavigationService,
     private readonly platform: Platform,
     private readonly changeDetectorRef: ChangeDetectorRef,
-    private readonly permissionsService: PermissionsService,
-    private readonly rendererFactory: RendererFactory2
+    private readonly permissionsService: PermissionsService
   ) {
     this.isBrowser = !this.platform.is('cordova')
-    this.renderer = this.rendererFactory.createRenderer(null, null)
     setTimeout(() => {
       this.startupTimeWaited = true
       this.checkEntropySourceStatus()

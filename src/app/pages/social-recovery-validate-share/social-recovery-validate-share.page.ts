@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core'
 
 import { VerifyKeyComponent } from '../../components/verify-key/verify-key.component'
 import { Secret } from '../../models/secret'
+import { DeviceService } from '../../services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
@@ -20,10 +21,22 @@ export class SocialRecoveryValidateSharePage {
   public currentShare: number
   public secret: Secret
 
-  constructor(private readonly navigationService: NavigationService, private readonly secretsService: SecretsService) {
+  constructor(
+    private readonly deviceService: DeviceService,
+    private readonly navigationService: NavigationService,
+    private readonly secretsService: SecretsService
+  ) {
     this.shares = this.navigationService.getState().shares
     this.secret = this.navigationService.getState().secret
     this.currentShare = this.navigationService.getState().currentShare
+  }
+
+  public ionViewDidEnter(): void {
+    this.deviceService.enableScreenshotProtection()
+  }
+
+  public ionViewWillLeave(): void {
+    this.deviceService.disableScreenshotProtection()
   }
 
   public onComplete(isCorrect: boolean) {

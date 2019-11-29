@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core'
 import { ModalController } from '@ionic/angular'
 import { ComponentRef, ModalOptions } from '@ionic/core'
-import { Storage } from '@ionic/storage'
 
 import { DistributionOnboardingPage } from '../../pages/distribution-onboarding/distribution-onboarding.page'
 import { IntroductionPage } from '../../pages/introduction/introduction.page'
 import { Warning, WarningModalPage } from '../../pages/warning-modal/warning-modal.page'
 import { DeviceService } from '../device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
-import { SecureStorageService } from '../storage/storage.service'
+import { SecureStorageService } from '../secure-storage/secure-storage.service'
+import { SettingsKey, StorageService } from '../storage/storage.service'
 
 export interface Check {
   name: string
   expectedOutcome: boolean
   check(): Promise<boolean>
-  failureConsequence(callback: () => void): void
+  failureConsequence(): Promise<void>
 }
 
 @Injectable({
@@ -24,40 +24,38 @@ export class StartupChecksService {
   public checks: Check[]
 
   constructor(
-    private readonly secureStorage: SecureStorageService,
+    private readonly secureStorageService: SecureStorageService,
     private readonly deviceService: DeviceService,
     private readonly modalController: ModalController,
-    private readonly storage: Storage
+    private readonly storageService: StorageService
   ) {
     this.checks = [
       {
         name: 'rootCheck',
         expectedOutcome: false,
         check: (): Promise<boolean> => this.deviceService.checkForRoot(),
-        failureConsequence: (callback: () => void): void => {
-          this.presentModal(WarningModalPage, { errorType: Warning.ROOT }, callback).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
+        failureConsequence: async (): Promise<void> => {
+          await this.presentModal(WarningModalPage, { errorType: Warning.ROOT }).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
         }
       },
       {
         name: 'deviceSecureCheck',
         expectedOutcome: true,
         check: async (): Promise<boolean> => {
-          const result: number = await this.secureStorage.isDeviceSecure()
+          const result: number = await this.secureStorageService.isDeviceSecure()
 
           return Boolean(result).valueOf()
         },
-        failureConsequence: (callback: () => void): void => {
-          this.presentModal(WarningModalPage, { errorType: Warning.SECURE_STORAGE }, callback).catch(
-            handleErrorLocal(ErrorCategory.INIT_CHECK)
-          )
+        failureConsequence: async (): Promise<void> => {
+          await this.presentModal(WarningModalPage, { errorType: Warning.SECURE_STORAGE }).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
         }
       },
       {
         name: 'disclaimerAcceptedCheck',
         expectedOutcome: true,
-        check: (): Promise<boolean> => this.storage.get('DISCLAIMER_INITIAL'),
-        failureConsequence: (callback: () => void): void => {
-          this.presentModal(WarningModalPage, { errorType: Warning.INITIAL_DISCLAIMER }, callback).catch(
+        check: (): Promise<boolean> => this.storageService.get(SettingsKey.DISCLAIMER_INITIAL),
+        failureConsequence: async (): Promise<void> => {
+          await this.presentModal(WarningModalPage, { errorType: Warning.INITIAL_DISCLAIMER }).catch(
             handleErrorLocal(ErrorCategory.INIT_CHECK)
           )
         }
@@ -65,9 +63,9 @@ export class StartupChecksService {
       {
         name: 'introductionAcceptedCheck',
         expectedOutcome: true,
-        check: (): Promise<boolean> => this.storage.get('INTRODUCTION_INITIAL'),
-        failureConsequence: (callback: () => void): void => {
-          this.presentModal(IntroductionPage, {}, callback).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
+        check: (): Promise<boolean> => this.storageService.get(SettingsKey.INTRODUCTION_INITIAL),
+        failureConsequence: async (): Promise<void> => {
+          await this.presentModal(IntroductionPage, {}).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
         }
       },
       {
@@ -75,60 +73,49 @@ export class StartupChecksService {
         expectedOutcome: true,
         check: async (): Promise<boolean> => {
           const isElectron: boolean = await deviceService.checkForElectron()
-          const hasShownDisclaimer: boolean = await this.storage.get('DISCLAIMER_ELECTRON')
+          const hasShownDisclaimer: boolean = await this.storageService.get(SettingsKey.DISCLAIMER_ELECTRON)
 
           return !isElectron || hasShownDisclaimer
         },
-        failureConsequence: (callback: () => void): void => {
-          this.presentModal(DistributionOnboardingPage, {}, callback).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
+        failureConsequence: async (): Promise<void> => {
+          await this.presentModal(DistributionOnboardingPage, {}).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
         }
       }
     ]
   }
 
-  public async presentModal(page: ComponentRef, properties: ModalOptions['componentProps'], callback: Function): Promise<void> {
-    const modal: HTMLIonModalElement = await this.modalController.create({
-      component: page,
-      componentProps: properties,
-      backdropDismiss: false
+  public async presentModal(page: ComponentRef, properties: ModalOptions['componentProps']): Promise<void> {
+    return new Promise(async resolve => {
+      const modal: HTMLIonModalElement = await this.modalController.create({
+        component: page,
+        componentProps: properties,
+        backdropDismiss: false
+      })
+
+      modal
+        .present()
+        .then(() => {
+          console.log('check modal presented')
+        })
+        .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+
+      modal
+        .onDidDismiss()
+        .then(() => {
+          resolve()
+        })
+        .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
     })
-
-    modal
-      .onDidDismiss()
-      .then(() => {
-        callback()
-      })
-      .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
-
-    modal
-      .present()
-      .then(() => {
-        console.log('check modal presented')
-      })
-      .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 
   public initChecks(): Promise<void> {
-    return new Promise(async (resolve, reject) => {
-      const results: void | (boolean)[] = await Promise.all(this.checks.map((check: Check) => check.check())).catch(
-        handleErrorLocal(ErrorCategory.INIT_CHECK)
-      )
-
-      if (!results) {
-        return
+    return new Promise(async resolve => {
+      for (const check of this.checks) {
+        if (+(await check.check()) !== +check.expectedOutcome) {
+          await check.failureConsequence()
+        }
       }
-
-      const failedIndex: number = results.findIndex((checkOutcome: boolean, index: number) => {
-        return checkOutcome !== this.checks[index].expectedOutcome
-      })
-
-      if (failedIndex === -1) {
-        resolve()
-
-        return
-      }
-
-      reject(this.checks[failedIndex])
+      resolve()
     })
   }
 }

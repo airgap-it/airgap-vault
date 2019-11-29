@@ -1,11 +1,11 @@
 import { Component } from '@angular/core'
 import { ModalController } from '@ionic/angular'
-import { Storage } from '@ionic/storage'
 import { ICoinProtocol, supportedProtocols } from 'airgap-coin-lib'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
+import { SettingsKey, StorageService } from '../../services/storage/storage.service'
 import { LocalAuthenticationOnboardingPage } from '../local-authentication-onboarding/local-authentication-onboarding.page'
 
 @Component({
@@ -22,12 +22,12 @@ export class AccountAddPage {
 
   constructor(
     private readonly secretsService: SecretsService,
-    private readonly storage: Storage,
+    private readonly storageService: StorageService,
     private readonly modalController: ModalController,
     private readonly navigationService: NavigationService
   ) {
     this.coinProtocols = supportedProtocols()
-    this.selectedProtocol = this.navigationService.getState().protocol
+    this.onSelectedProtocolChange(this.navigationService.getState().protocol || this.coinProtocols[0])
   }
 
   public onSelectedProtocolChange(selectedProtocol: ICoinProtocol): void {
@@ -45,7 +45,7 @@ export class AccountAddPage {
   }
 
   public async addWallet(): Promise<void> {
-    const value: boolean = await this.storage.get('DISCLAIMER_HIDE_LOCAL_AUTH_ONBOARDING')
+    const value: boolean = await this.storageService.get(SettingsKey.DISCLAIMER_HIDE_LOCAL_AUTH_ONBOARDING)
     if (!value) {
       const modal: HTMLIonModalElement = await this.modalController.create({
         component: LocalAuthenticationOnboardingPage
