@@ -12,6 +12,8 @@ import { NavigationService } from './services/navigation/navigation.service'
 import { ProtocolsService } from './services/protocols/protocols.service'
 import { SchemeRoutingService } from './services/scheme-routing/scheme-routing.service'
 import { SecretsService } from './services/secrets/secrets.service'
+import { SecureStorageServiceMock } from './services/secure-storage/secure-storage.mock'
+import { SecureStorageService } from './services/secure-storage/secure-storage.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
 
 describe('AppComponent', () => {
@@ -34,6 +36,7 @@ describe('AppComponent', () => {
         declarations: [AppComponent],
         schemas: [CUSTOM_ELEMENTS_SCHEMA],
         providers: [
+          { provide: SecureStorageService, useClass: SecureStorageServiceMock },
           { provide: StatusBar, useValue: statusBarSpy },
           { provide: SplashScreen, useValue: splashScreenSpy },
           { provide: Platform, useValue: platformSpy },

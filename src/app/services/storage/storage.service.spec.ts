@@ -1,7 +1,8 @@
 import { TestBed } from '@angular/core/testing'
 import { Storage } from '@ionic/storage'
-import { StorageMock } from 'test-config/storage-mock'
-import { UnitHelper } from 'test-config/unit-test-helper'
+
+import { StorageMock } from '../../../../test-config/storage-mock'
+import { UnitHelper } from '../../../../test-config/unit-test-helper'
 
 import { StorageService } from './storage.service'
 
