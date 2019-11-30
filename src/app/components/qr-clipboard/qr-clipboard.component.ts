@@ -10,6 +10,9 @@ import { serializedDataToUrlString } from '../../utils/utils'
   styleUrls: ['./qr-clipboard.component.scss']
 })
 export class QrClipboardComponent implements OnDestroy {
+  private _rawValue: string | string[]
+  private _shouldPrefixSingleQrWithUrl: boolean = true
+
   @Input()
   public level: string = 'L'
 
@@ -17,8 +20,14 @@ export class QrClipboardComponent implements OnDestroy {
 
   @Input()
   set qrdata(value: string | string[]) {
-    const array: string[] = Array.isArray(value) ? value : [value]
-    this.qrdataArray = array.length === 1 ? [serializedDataToUrlString(array)] : array
+    this._rawValue = value
+    this.convertToDataArray()
+  }
+
+  @Input()
+  set shouldPrefixSingleQrWithUrl(value: boolean) {
+    this._shouldPrefixSingleQrWithUrl = value
+    this.convertToDataArray()
   }
 
   @Input()
@@ -33,8 +42,30 @@ export class QrClipboardComponent implements OnDestroy {
     }, this.serializerService.displayTimePerChunk)
   }
 
+  private convertToDataArray(): void {
+    const array: string[] = Array.isArray(this._rawValue) ? this._rawValue : [this._rawValue]
+    if (array.length === 1) {
+      const chunk: string = array[0]
+      const shouldPrefix: boolean = !chunk.includes('://') && this._shouldPrefixSingleQrWithUrl
+
+      this.qrdataArray = [shouldPrefix ? serializedDataToUrlString(chunk) : chunk]
+    } else {
+      this.qrdataArray = array
+    }
+  }
+
   public async copyToClipboard(): Promise<void> {
-    await this.clipboardService.copyAndShowToast(this.qrdataArray.join(','))
+    let copyString: string = ''
+    if (this._rawValue.length === 1) {
+      const chunk: string = this._rawValue[0]
+      const shouldPrefix: boolean = !chunk.includes('://') && this._shouldPrefixSingleQrWithUrl
+
+      copyString = shouldPrefix ? serializedDataToUrlString(chunk) : chunk
+    } else {
+      copyString = typeof this._rawValue === 'string' ? this._rawValue : this._rawValue.join(',')
+    }
+
+    await this.clipboardService.copyAndShowToast(copyString)
   }
 
   public ngOnDestroy(): void {
