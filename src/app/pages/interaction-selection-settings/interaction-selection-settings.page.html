@@ -1,0 +1,66 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      {{ 'interaction-selection-settings.title' | translate }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h3
+    *ngIf="selectedSetting === interactionSetting.SAME_DEVICE"
+    [innerHTML]="'interaction-selection-settings.same-device_heading' | translate"
+  ></h3>
+  <h3
+    *ngIf="selectedSetting === interactionSetting.OFFLINE_DEVICE"
+    [innerHTML]="'interaction-selection-settings.offline-device_heading' | translate"
+  ></h3>
+
+  <p>{{ 'interaction-selection-settings.text' | translate }}</p>
+
+  <ion-list lines="none" class="ion-padding-vertical">
+    <ion-radio-group [ngModel]="selectedSetting" (ngModelChange)="onSelectedSettingChange($event)">
+      <ion-item button="true" detail="false" class="ion-no-padding">
+        <ion-label color="white">{{ 'interaction-selection-settings.selector.always' | translate }}</ion-label>
+        <ion-radio
+          class="ion-no-margin"
+          slot="end"
+          [checked]="selectedSetting === interactionSetting.ALWAYS_ASK"
+          [value]="interactionSetting.ALWAYS_ASK"
+        ></ion-radio>
+      </ion-item>
+      <ion-item button="true" detail="false" class="ion-no-padding">
+        <ion-label color="white">{{ 'interaction-selection-settings.selector.same-device' | translate }}</ion-label>
+        <ion-radio
+          class="ion-no-margin"
+          slot="end"
+          [checked]="selectedSetting === interactionSetting.SAME_DEVICE"
+          [value]="interactionSetting.SAME_DEVICE"
+        ></ion-radio>
+      </ion-item>
+      <ion-item button="true" detail="false" class="ion-no-padding">
+        <ion-label color="white">{{ 'interaction-selection-settings.selector.offline-device' | translate }}</ion-label>
+        <ion-radio
+          class="ion-no-margin"
+          slot="end"
+          [checked]="selectedSetting === interactionSetting.OFFLINE_DEVICE"
+          [value]="interactionSetting.OFFLINE_DEVICE"
+        ></ion-radio>
+      </ion-item>
+    </ion-radio-group>
+  </ion-list>
+
+  <p *ngIf="!isEdit">{{ 'interaction-selection-settings.description' | translate }}</p>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-button color="primary" shape="round" (click)="goToNextPage()" *ngIf="!isEdit">
+      {{ 'interaction-selection-settings.continue_label' | translate }}
+    </ion-button>
+    <ion-button color="primary" shape="round" (click)="goBack()" *ngIf="isEdit">
+      {{ 'interaction-selection-settings.continue_label' | translate }}
+    </ion-button>
+  </ion-fab>
+</ion-content>

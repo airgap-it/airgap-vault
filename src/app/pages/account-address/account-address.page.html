@@ -1,0 +1,47 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab-accounts"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'wallet-address.title' | translate }}</ion-title>
+
+    <ion-buttons slot="primary">
+      <ion-button (click)="presentEditPopover($event)"><ion-icon slot="icon-only" name="more"></ion-icon></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-row class="ion-padding">
+    <ion-col>
+      <ion-avatar><airgap-identicon [address]="wallet.receivingPublicAddress"></airgap-identicon></ion-avatar>
+      <airgap-currency-symbol [symbol]="wallet.coinProtocol.symbol"></airgap-currency-symbol>
+    </ion-col>
+    <ion-col>
+      <h2 class="ion-no-margin">{{ wallet.coinProtocol.name }} {{ wallet.coinProtocol.symbol }}</h2>
+      <p>
+        {{ 'wallet-address.address_label' | translate }}
+        <br />
+        <span class="selectable typography--mono" (click)="copyAddressToClipboard()">{{ wallet.receivingPublicAddress }}</span>
+      </p>
+      <p>
+        {{ 'wallet-address.path_label' | translate }}
+        <br />
+        <span class="selectable typography--mono">{{ wallet.derivationPath }}</span>
+      </p>
+    </ion-col>
+  </ion-row>
+
+  <ion-row class="ion-justify-content-center ion-padding-bottom">
+    <airgap-qr-clipboard [qrdata]="wallet.receivingPublicAddress" [shouldPrefixSingleQrWithUrl]="false" [level]="'L'" [size]="300"></airgap-qr-clipboard>
+  </ion-row>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-button color="light" (click)="share()" shape="round">
+      {{ 'wallet-address.sync_label' | translate }}
+    </ion-button>
+    <ion-button color="primary" (click)="done()" shape="round">
+      {{ 'wallet-address.done_label' | translate }}
+    </ion-button>
+  </ion-fab>
+</ion-content>

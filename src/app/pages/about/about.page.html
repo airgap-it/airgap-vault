@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab-settings"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>{{ 'about.label' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-item>{{ appName }}</ion-item>
+  <ion-item>{{ packageName }}</ion-item>
+  <ion-item>{{ versionCode }}</ion-item>
+  <ion-item>{{ versionNumber }}</ion-item>
+</ion-content>

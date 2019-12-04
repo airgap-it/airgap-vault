@@ -1,0 +1,28 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-title>
+      {{ 'social-recovery-validate-share.title' | translate }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <p class="ion-padding-horizontal">{{ 'social-recovery-validate-share.text' | translate }}</p>
+  <airgap-verify-key
+    *ngIf="shares"
+    #verify
+    [secret]="shares[currentShare]"
+    (onComplete)="onComplete($event)"
+    (onContinue)="onContinue()"
+  ></airgap-verify-key>
+</ion-content>
+
+<ion-footer no-border color="primary">
+  <airgap-progress-footer
+    [rightEnabled]="validated"
+    [progress]="currentShare * 2 + 1"
+    [maxProgress]="shares.length * 2"
+    [rightAction]="next.bind(this)"
+    [rightLabel]="shares.length - 1 === this.currentShare ? 'Finish' : 'Next'"
+  ></airgap-progress-footer>
+</ion-footer>

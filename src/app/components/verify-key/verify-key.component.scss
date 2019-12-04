@@ -1,0 +1,20 @@
+.secret--container-60 {
+  height: calc(60% - 36px);
+}
+.secret--container-40 {
+  height: calc(40%- 36px);
+}
+hr {
+  border: 2px dashed var(--ion-color-primary);
+  border-style: none none dashed;
+  margin: 8px 0;
+}
+.word-placeholder {
+  min-width: 48px;
+}
+.size__xs {
+  font-size: 11px;
+}
+.typography--mono {
+  text-transform: lowercase;
+}

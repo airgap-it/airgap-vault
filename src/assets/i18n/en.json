@@ -51,7 +51,8 @@
     "fee_label":"FEE",
     "from_label": "From",
     "data_label": "Data",
-    "to_label": "To"
+    "to_label": "To",
+    "transaction-details_label": "Display extra transaction details"
   },
 
   "signed-transaction": {
@@ -104,14 +105,14 @@
   "secret-edit":{
     "title":" Your Secret",
     "text":"Give your secret a name and select the security level.",
-    "secret_input_label":"Secret Name",
+    "secret_input_label":"Label of your secret",
     "security-level": {
       "heading":"Security Level",
-      "text":"You can encrypt your key additionally using a passcode."
+      "text":"You can encrypt your secret additionally using a passcode."
     },
     "passcode": {
       "label":"Passcode",
-      "text":"Set a passcode for your accounts."
+      "text":"Set a passcode for your secret. This is an optional setting."
     },
     "secret-recovery": {
       "heading":"Secret Recovery",
@@ -125,7 +126,7 @@
       "label": "Vault and Wallet interaction",
       "text": "Select whether Vault and Wallet are installed on the same device or on separate devices."
     },
-    "confirm_label":"confirm"
+    "confirm_label":"Confirm"
   },
 
   "secret-edit-delete-popover":{
@@ -195,7 +196,7 @@
       "same-device":"Vault and Wallet on the same device",
       "offline-device":"Vault is an offline device"
     },
-    "continue_label":"continue",
+    "continue_label":"Continue",
     "description":"You can always change your preference in the Settings Tab"
   },
 
@@ -224,17 +225,14 @@
     },
     "shares-number_label": "Number of secret shares",
     "shares-recovery_label":"Number of shares needed for recovery",
-    "start":"Start",
+    "start_label":"Start",
     "back_label":"Back",
     "next_label":"Next"
   },
 
   "social-recovery-show-share":{
     "title":"Social Recovery",
-    "secret-shares": {
-      "label_p1": "Secret Share",
-      "label_p2": "of"
-    },
+    "secret-shares_label": "Secret Share {{currentShare}} of {{shareLength}}",
     "text":"Write down each word on a piece of paper, remember to follow all the rules."
   },
 
@@ -246,6 +244,7 @@
   "tab-scan":{
     "title":"QR Code Scanner",
     "text":"Scan a QR Code from AirGap Wallet",
+    "multi-qr_text": "This transaction consists of multiple QR codes. Keep your camera on the changing QRs and wait until all codes are scanned.",
     "empty-state_heading": "In order to scan QR codes, AirGap Vault needs the <span class=\"style__strong color__primary\">camera permission</span>.",
     "grant-permission_label":"Grant permission"
   },
@@ -256,7 +255,13 @@
     "information_label": "Information",
     "secrets_label": "Secrets",
     "add-settings_label":"Add Secret",
-    "paste-from-clipboard_label": "Paste code from clipboard"
+    "paste-from-clipboard_label": "Paste code from clipboard",
+    "qr": {
+      "settings_label": "QR Settings",
+      "enable-new-serializer_label": "Enable new serializer",
+      "page-time_label": "QR Page Time",
+      "page-size_label": "QR Max Size"
+    }
   },
 
   "tab-wallets":{
@@ -297,7 +302,7 @@
 
   "transaction-detail":{
     "title":"Sign Transaction",
-    "text":"You're about to send:",
+    "text":"You're about to sign:",
     "sign-tx_label":"Sign Transaction"
   },
 
@@ -371,6 +376,23 @@
   },
 
   "warnings-modal":{
+    "root": {
+      "title": "Your device is rooted",
+      "description": "It seems like you have rooted your device. While we think this is neat, it weakens the security of your device significantly and we multiple mechanisms of AirGap can be circumvented by other apps. Therefore, AirGap is not able to run on this device."
+    },
+    "screenshot": {
+      "title": "Screenshot detected",
+      "description": "Looks like you just took a screenshot. Make sure that you never take a screenshot you might expose your secret key."
+    },
+    "secure-storage": {
+      "title": "Device Unsecure",
+      "description": "Your lockscreen needs to be setup in order to properly encrypt and protect your secrets. After securing your device, please close and restart AirGap.",
+      "button-text_label": "Secure Device"
+    },
+    "network": {
+      "title": "Network Connection detected",
+      "description": "Looks like you have connected this device to a network. The AirGap App has no network priviledges but it is best to disconnect the device entierly from any network."
+    },
     "disclaimer": {
       "title": "AirGap Disclaimer",
       "text": "You as the user hereby accept and acknowledge this protocol and all the information provided within to the fullest extent. You as the user confirm that the content this document has been reviewed, tested and understood on their own behalf.",

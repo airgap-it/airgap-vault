@@ -1,69 +1,54 @@
-import { Component, ViewChild, NgZone } from '@angular/core'
-import { Platform, Nav } from 'ionic-angular'
-import { StatusBar } from '@ionic-native/status-bar'
-import { SplashScreen } from '@ionic-native/splash-screen'
-import { TabsPage } from '../pages/tabs/tabs'
-import { Deeplinks } from '@ionic-native/deeplinks'
-import { StartupChecksProvider } from '../providers/startup-checks/startup-checks.provider'
-import { SchemeRoutingProvider } from '../providers/scheme-routing/scheme-routing'
+import { AfterViewInit, Component, NgZone } from '@angular/core'
+import { DeeplinkMatch, Deeplinks } from '@ionic-native/deeplinks/ngx'
+import { SplashScreen } from '@ionic-native/splash-screen/ngx'
+import { StatusBar } from '@ionic-native/status-bar/ngx'
+import { Platform } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
-import { ProtocolsProvider } from '../providers/protocols/protocols'
-import { SecretsProvider } from '../providers/secrets/secrets.provider'
-import { handleErrorLocal, ErrorCategory } from '../providers/error-handler/error-handler'
-import { WalletSelectCoinsPage } from '../pages/wallet-select-coins/wallet-select-coins'
-import { SecretCreatePage } from '../pages/secret-create/secret-create'
+import { first } from 'rxjs/operators'
 
-const DEEPLINK_VAULT_PREFIX = `airgap-vault://`
-const DEEPLINK_VAULT_ADD_ACCOUNT = `${DEEPLINK_VAULT_PREFIX}add-account/`
+import { DEEPLINK_VAULT_ADD_ACCOUNT, DEEPLINK_VAULT_PREFIX } from './constants/constants'
+import { ExposedPromise, exposedPromise } from './functions/exposed-promise'
+import { Secret } from './models/secret'
+import { ErrorCategory, handleErrorLocal } from './services/error-handler/error-handler.service'
+import { NavigationService } from './services/navigation/navigation.service'
+import { ProtocolsService } from './services/protocols/protocols.service'
+import { SchemeRoutingService } from './services/scheme-routing/scheme-routing.service'
+import { SecretsService } from './services/secrets/secrets.service'
+import { StartupChecksService } from './services/startup-checks/startup-checks.service'
 
-interface ExposedPromise<T> {
-  promise: Promise<T>
-  resolve: (value?: any | PromiseLike<void>) => void
-  reject: (reason?: any) => void
-}
-
-function exposedPromise<T>(): ExposedPromise<T> {
-  let resolve, reject
-
-  // tslint:disable-next-line:promise-must-complete
-  const promise = new Promise<T>((res, rej) => {
-    resolve = res
-    reject = rej
-  })
-
-  return { promise, resolve, reject }
-}
+declare let window: Window & { airGapHasStarted: boolean }
+declare var SecurityUtils: any
 
 @Component({
-  templateUrl: 'app.html'
+  selector: 'airgap-root',
+  templateUrl: 'app.component.html'
 })
-export class MyApp {
-  @ViewChild(Nav) nav: Nav
-
-  rootPage: any = null
-
+export class AppComponent implements AfterViewInit {
   // Sometimes the deeplink was registered before the root page was set
   // This resulted in the root page "overwriting" the deep-linked page
-  isInitialized: ExposedPromise<void> = exposedPromise<void>()
+  public isInitialized: ExposedPromise<void> = exposedPromise<void>()
 
   constructor(
-    private platform: Platform,
-    private statusBar: StatusBar,
-    private splashScreen: SplashScreen,
-    private deepLinks: Deeplinks,
-    private startupChecks: StartupChecksProvider,
-    private schemeRoutingProvider: SchemeRoutingProvider,
-    private translate: TranslateService,
-    private protocolsProvider: ProtocolsProvider,
-    private secretsProvider: SecretsProvider,
-    private ngZone: NgZone
+    private readonly platform: Platform,
+    private readonly statusBar: StatusBar,
+    private readonly splashScreen: SplashScreen,
+    private readonly deepLinks: Deeplinks,
+    private readonly startupChecks: StartupChecksService,
+    private readonly schemeRoutingService: SchemeRoutingService,
+    private readonly translate: TranslateService,
+    private readonly protocolsService: ProtocolsService,
+    private readonly secretsService: SecretsService,
+    private readonly ngZone: NgZone,
+    private readonly navigationService: NavigationService
   ) {
-    window['airGapHasStarted'] = true
+    // We set the app as started so no "error alert" will be shown in case the app fails to load. See error-check.js for details.
+    window.airGapHasStarted = true
+
     this.initializeApp().catch(handleErrorLocal(ErrorCategory.OTHER))
   }
 
-  async initializeApp() {
-    const supportedLanguages = ['en', 'de', 'zh-cn']
+  public async initializeApp(): Promise<void> {
+    const supportedLanguages: string[] = ['en', 'de', 'zh-cn']
     for (const lang of supportedLanguages) {
       // We bundle languages so we don't have to load it over http
       // and we don't have to add a CSP / whitelist rule for it.
@@ -73,7 +58,7 @@ export class MyApp {
     }
 
     this.loadLanguages(supportedLanguages)
-    this.protocolsProvider.addProtocols()
+    this.protocolsService.addProtocols()
 
     await this.platform.ready()
 
@@ -81,19 +66,21 @@ export class MyApp {
       this.statusBar.styleLightContent()
       this.statusBar.backgroundColorByHexString('#311B58')
       this.splashScreen.hide()
+
+      SecurityUtils.LocalAuthentication.toggleAutomaticAuthentication(true)
     }
 
     this.initChecks()
   }
 
-  loadLanguages(supportedLanguages: string[]) {
+  public loadLanguages(supportedLanguages: string[]): void {
     this.translate.setDefaultLang('en')
 
-    const language = this.translate.getBrowserLang()
+    const language: string = this.translate.getBrowserLang()
 
     if (language) {
-      const lowerCaseLanguage = language.toLowerCase()
-      supportedLanguages.forEach(supportedLanguage => {
+      const lowerCaseLanguage: string = language.toLowerCase()
+      supportedLanguages.forEach((supportedLanguage: string) => {
         if (supportedLanguage.startsWith(lowerCaseLanguage)) {
           this.translate.use(supportedLanguage)
         }
@@ -101,14 +88,13 @@ export class MyApp {
     }
   }
 
-  async initChecks() {
+  public async initChecks(): Promise<void> {
     await this.startupChecks.initChecks()
 
-    await this.nav.setRoot(TabsPage)
     this.isInitialized.resolve()
   }
 
-  async ngAfterViewInit() {
+  public async ngAfterViewInit(): Promise<void> {
     await this.platform.ready()
     if (this.platform.is('cordova')) {
       this.deepLinks
@@ -116,39 +102,44 @@ export class MyApp {
           '/': undefined
         })
         .subscribe(
-          match => {
+          async (match: DeeplinkMatch): Promise<void> => {
             // match.$route - the route we matched, which is the matched entry from the arguments to route()
             // match.$args - the args passed in the link
             // match.$link - the full link data
             if (match && match.$link && match.$link.url) {
-              this.isInitialized.promise
-                .then(async () => {
-                  console.log('Successfully matched route', match.$link.url)
+              await this.isInitialized.promise
+              console.log('Successfully matched route', match.$link.url)
 
-                  if (match.$link.url === DEEPLINK_VAULT_PREFIX || match.$link.url.startsWith(DEEPLINK_VAULT_ADD_ACCOUNT)) {
-                    if (this.secretsProvider.currentSecretsList.getValue().length > 0) {
-                      this.ngZone.run(async () => {
-                        await this.nav.popToRoot()
-                        const protocol = match.$link.url.substr(DEEPLINK_VAULT_ADD_ACCOUNT.length)
-                        if (protocol.length > 0) {
-                          this.nav
-                            .push(WalletSelectCoinsPage, {
-                              protocol: protocol
-                            })
-                            .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-                        } else {
-                          this.nav.push(WalletSelectCoinsPage).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-                        }
-                      })
+              if (match.$link.url === DEEPLINK_VAULT_PREFIX || match.$link.url.startsWith(DEEPLINK_VAULT_ADD_ACCOUNT)) {
+                this.secretsService
+                  .getSecretsObservable()
+                  .pipe(first())
+                  .subscribe((secrets: Secret[]) => {
+                    if (secrets.length > 0) {
+                      this.ngZone
+                        .run(async () => {
+                          this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+
+                          const protocol: string = match.$link.url.substr(DEEPLINK_VAULT_ADD_ACCOUNT.length)
+                          if (protocol.length > 0) {
+                            this.navigationService
+                              .routeWithState('account-add', { protocol })
+                              .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+                          } else {
+                            this.navigationService.route('account-add').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+                          }
+                        })
+                        .catch(handleErrorLocal(ErrorCategory.OTHER))
                     }
-                  } else {
-                    this.schemeRoutingProvider.handleNewSyncRequest(this.nav, match.$link.url).catch(console.error)
-                  }
+                  })
+              } else {
+                this.ngZone.run(async () => {
+                  this.schemeRoutingService.handleNewSyncRequest(match.$link.url).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
                 })
-                .catch(console.error)
+              }
             }
           },
-          nomatch => {
+          (nomatch: any): void => {
             // nomatch.$link - the full link data
             if (nomatch && nomatch.$link && nomatch.$link.url) {
               console.error("Got a deeplink that didn't match", nomatch.$link.url)

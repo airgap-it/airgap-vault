@@ -1,0 +1,19 @@
+/** Empty **/
+.empty-list {
+  ion-icon {
+    font-size: 8rem;
+  }
+
+  img {
+    height: 40vh;
+  }
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  font-weight: 100;
+  font-size: 1.4rem;
+  height: 100%;
+}

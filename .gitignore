@@ -13,12 +13,13 @@ log.txt
 npm-debug.log*
 
 .idea/
+.ionic/
 .sourcemaps/
 .sass-cache/
 .tmp/
 .versions/
 coverage/
-dist/
+www/
 node_modules/
 tmp/
 temp/
@@ -26,19 +27,10 @@ platforms/
 plugins/
 plugins/android.json
 plugins/ios.json
-www/
 $RECYCLE.BIN/
-lintReport.json
-lcov.info
-reports/
 
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
-e2e-reports/*
 
-build.json
-exportOptions.plist
-
-airgap_cordova_secure_storage_deploy
-airgap_cordova_secure_storage_deploy.pub
+src/assets/libs/airgap-coin-lib.browserify.js

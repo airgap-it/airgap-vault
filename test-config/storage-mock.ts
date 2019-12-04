@@ -1,32 +1,36 @@
 export class StorageMock {
-  private data = {
-    'airgap-secret-list': [
+  private readonly data: any = {
+    wallets: [
       {
-        id: '3e14638e-319b-4280-8c34-6e6f0a10df6e',
-        label: 'asdsad',
-        isParanoia: false,
-        wallets: [
-          {
-            protocolIdentifier: 'eth',
-            publicKey: '03ea568e601e6e949a3e5c60e0f4ee94383e4b083c5ab64b66e70372df008cbbe6',
-            isExtendedPublicKey: false,
-            derivationPath: "m/44'/60'/0'/0/0",
-            addresses: []
-          }
-        ]
+        protocolIdentifier: 'btc',
+        publicKey: 'xpub6EWbRuGLw9bTVVU9HE2MqT5QQ7zm9G64QgeZ5SY7qPWbciM7FyyG9BP2id1ewqZipXVWx2racXMMRvF1jB8S4syc1RzYRjnBhuq425KKYx5',
+        isExtendedPublicKey: true,
+        derivationPath: "m/44'/0'/0'",
+        addresses: [],
+        marketSample: [],
+        minuteMarketSample: [],
+        dailyMarketSample: [],
+        hourlyMarketSample: []
       }
     ]
   }
 
-  get(key: string) {
-    return new Promise((resolve, reject) => {
+  public get(key: string): Promise<any> {
+    return new Promise((resolve, _reject) => {
       resolve(this.data[key])
     })
   }
 
-  set(key: string, value: any) {
-    return new Promise((resolve, reject) => {
+  public set(key: string, value: any): Promise<void> {
+    return new Promise((resolve, _reject) => {
       this.data[key] = value
+      resolve()
+    })
+  }
+
+  public remove(key: string): Promise<void> {
+    return new Promise((resolve, _reject) => {
+      delete this.data[key]
       resolve()
     })
   }

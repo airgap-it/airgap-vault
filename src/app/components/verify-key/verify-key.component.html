@@ -1,0 +1,61 @@
+<ion-row class="secret--container-60 ion-align-items-center">
+  <ion-col>
+    <ion-row class="secret--container__inner ion-justify-content-center">
+      <ng-container *ngFor="let word of splittedSecret; index as i">
+        <ion-button
+          shape="round"
+          size="small"
+          class="typography--mono"
+          [class.size__xs]="splittedSecret.length > 10"
+          [color]="selectedWordIndex === i ? 'primary' : 'tertiary'"
+          *ngIf="currentWords[i]"
+          (click)="selectWord(i)"
+        >
+          {{ currentWords[i] }}
+        </ion-button>
+        <ion-button
+          shape="round"
+          fill="outline"
+          size="small"
+          class="typography--mono"
+          [class.size__xs]="splittedSecret.length > 10"
+          [color]="i === emptySpot(currentWords) ? 'primary' : 'tertiary'"
+          class="word-placeholder"
+          *ngIf="!currentWords[i]"
+          (click)="selectEmptySpot()"
+        >
+          {{ i + 1 }}
+        </ion-button>
+      </ng-container>
+    </ion-row>
+  </ion-col>
+</ion-row>
+<hr />
+<ion-row class="secret--container-40 ion-align-items-center">
+  <ion-col id="error" class="ion-padding" *ngIf="!isCompleted && !isCorrect() && promptedWords.length === 0">
+    <p [innerHTML]="'verify-key.incorrect_text' | translate"></p>
+  </ion-col>
+
+  <ion-col id="message" class="ion-padding-top ion-padding-horizontal" *ngIf="isCompleted && isCorrect() && promptedWords.length === 0">
+    <p class="ion-padding-bottom">{{ 'verify-key.success_text' | translate }}</p>
+    <ion-button color="primary" expand="block" shape="round" (click)="continue()">
+      {{ 'verify-key.continue_label' | translate }}
+    </ion-button>
+  </ion-col>
+
+  <ion-col id="wordSelector" class="ion-padding-top" *ngIf="promptedWords.length > 0">
+    <ion-row class="ion-padding-horizontal" *ngFor="let word of promptedWords">
+      <ion-col>
+        <ion-button
+          expand="block"
+          shape="round"
+          [color]="isSelectedWord(word) ? 'primary' : 'tertiary'"
+          class="typography--mono"
+          (click)="useWord(word)"
+        >
+          {{ word }}
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-col>
+</ion-row>

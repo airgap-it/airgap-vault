@@ -1,186 +1,81 @@
-// http://ionicframework.com/docs/theming/
+// App Styles
+// ----------------------------------------------------------------------------
+// Put style rules here that you want to apply to the entire application. These
+// styles are for the entire app and not just one component. Additionally, this
+// file can hold Sass mixins, functions, and placeholder classes to be imported
+// and used throughout the application.
 
-// App Global Sass
-// --------------------------------------------------
-// Put style rules here that you want to apply globally. These
-// styles are for the entire app and not just one component.
-// Additionally, this file can be also used as an entry point
-// to import other Sass files to be included in the output CSS.
-//
-// Shared Sass variables, which can be used to adjust Ionic's
-// default Sass variables, belong in "theme/variables.scss".
-//
-// To declare rules for a specific mode, create a child rule
-// for the .md, .ios, or .wp mode classes. The mode class is
-// automatically applied to the <body> element in the app.
-
+/* styling for translations */
 .style__strong {
   font-weight: bold;
 }
-
 .color__primary {
-  color: color($colors, primary);
+  color: var(--ion-color-primary);
 }
-
-.colored-background {
-  color: color($colors, white);
-  background: color($colors, secondary);
-
-  p,
-  h1,
-  h2,
-  h3,
-  .select-text {
-    color: color($colors, white);
-  }
-}
-
-.background--color__gradient {
-  background: linear-gradient(#6f53a1, color($colors, secondary, base));
-}
-
-.item {
-  background-color: transparent;
-}
-
-/* List styling */
-ul {
-  list-style: none;
-  li:before {
-    content: '\00AC';
-    padding-right: 4px;
-  }
-}
-
-/* Secret typography styling */
-.secret--typography {
-  line-height: 32px;
-  font-size: 16px;
-  text-transform: lowercase;
+/* monotype */
+.typography--mono {
   font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
-  font-style: normal;
   font-weight: 600;
+  word-wrap: break-word;
 }
-
-/* small button for secrets with less padding */
-verify-key {
-  .button-round-md,
-  .button-round-ios {
-    padding: 0 1.5rem;
-  }
-}
-
 /* font weight - medium */
 .font--weight__med {
   font-weight: 500;
 }
-
-.typography--mono {
-  font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
-  font-weight: 600;
-  font-size: 1.4rem;
-  word-wrap: break-word;
+/* forces the paragraph size */
+p {
+  font-size: 14px;
 }
-
-ion-input,
-ion-textarea {
-  color: white;
-
-  textarea {
-    border: 1px solid color($colors, secondary);
-    padding: 10px;
+/* List styling */
+airgap-warning-modal,
+airgap-secret-rules {
+  ul {
+    padding-inline-start: 0;
+    list-style: none;
+    li:before {
+      content: '\00AC';
+      padding-right: 4px;
+    }
   }
 }
-
-.button--rounded {
-  width: 32px;
-  height: 32px;
+/* ion-textarea height fix */
+airgap-secret-import ion-textarea textarea {
+  height: inherit;
 }
-
-.transparent-bg {
-  background-color: transparent !important;
-
-  .ion-app,
-  ion-content,
-  ion-app.md,
-  ion-app.ios,
-  ion-app,
-  .colored-background {
-    background-color: transparent !important;
-    color: white;
+/* sets the identicon component size */
+airgap-identicon {
+  width: inherit;
+  height: inherit;
+  min-width: 48px;
+  min-height: 48px;
+}
+/* clipboard compomnent styling */
+airgap-qr-clipboard {
+  padding: 24px;
+  background-color: var(--ion-color-secondary-contrast);
+}
+/* removes padding and adds it only if used in the tabs-accounts toolbar */
+airgap-current-secret {
+  ion-item {
+    --padding-start: 0;
   }
 }
-
-// back btn
-ion-icon,
-.toolbar-title {
-  color: white;
-}
-
-.fab-action {
-  position: absolute;
-  bottom: 64px;
-  z-index: 10;
-  right: 12px;
-}
-
-qr-clipboard {
-  padding: 20px;
-  background-color: white;
-}
-
-/** Alert Dialogs **/
-.alert-title {
-  color: color($colors, dark);
-}
-
-.alert-message {
-  color: color($colors, dark);
-}
-
-/** Empty **/
-.empty-list {
-  ion-icon {
-    font-size: 8rem;
-  }
-
-  img {
-    height: 40vh;
-  }
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  text-align: center;
-  font-weight: 100;
-  font-size: 1.4rem;
-  height: 100%;
-}
-
-.hide-tabbar {
-  .show-tabbar {
-    opacity: 0;
+airgap-tab-accounts {
+  airgap-current-secret ion-item {
+    --padding-start: 16px;
   }
 }
-
-html,
-body,
-ion-app,
-div.nav-decor,
-.ion-content,
-.app-root {
-  background-color: transparent !important;
-}
-
-.nav-decor,
-ion-app {
-  background-color: transparent !important;
-}
-
-/* Center content vertically and horizontally */
-.content--align__center-center {
-  justify-content: center;
-  align-items: center;
-  display: flex;
+/* ios specific styling */
+.ios {
+  airgap-account-item {
+    ion-item {
+      --padding-bottom: 4px;
+      --padding-top: 4px;
+    }
+  }
+  airgap-tab-accounts {
+    ion-list {
+      padding-top: 8px;
+    }
+  }
 }

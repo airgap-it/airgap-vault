@@ -1,0 +1,36 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      {{ 'interaction-selection.title' | translate }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h3 class="ion-padding-bottom" [innerHTML]="'interaction-selection.heading' | translate"></h3>
+
+  <ion-row class="ion-justify-content-center"><img src="./assets/img/send-one-device.svg" /></ion-row>
+
+  <ion-row>
+    <ion-col size="12">
+      <ion-button color="primary" shape="round" expand="block" (click)="selectSameDevice()">
+        {{ 'interaction-selection.same-device_label' | translate }}
+      </ion-button>
+      <p>{{ 'interaction-selection.same-device_info' | translate }}</p>
+    </ion-col>
+  </ion-row>
+
+  <ion-row class="ion-justify-content-center ion-padding-top"><img src="./assets/img/send-two-device.svg" /></ion-row>
+
+  <ion-row>
+    <ion-col size="12">
+      <ion-button color="primary" shape="round" expand="block" (click)="selectOfflineDevice()">
+        {{ 'interaction-selection.offline-device_label' | translate }}
+      </ion-button>
+      <p>{{ 'interaction-selection.offline-device_info' | translate }}</p>
+    </ion-col>
+  </ion-row>
+</ion-content>

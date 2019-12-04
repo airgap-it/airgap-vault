@@ -1,0 +1,71 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-title>{{ 'introduction.title' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-segment [(ngModel)]="security">
+    <ion-segment-button value="highest">{{ 'introduction.highest.label' | translate }}</ion-segment-button>
+    <ion-segment-button value="medium">{{ 'introduction.medium.label' | translate }}</ion-segment-button>
+  </ion-segment>
+
+  <ng-container *ngIf="security === 'highest'">
+    <ion-row><p [innerHTML]="'introduction.highest.text' | translate"></p></ion-row>
+
+    <ion-row class="ion-align-items-center">
+      <ion-col size="5"><img src="assets/img/AirGap_Onboarding_Vault.svg" /></ion-col>
+      <ion-col size="7">
+        <h5>{{ 'introduction.vault.heading' | translate }}</h5>
+        <p [innerHTML]="'introduction.vault.text' | translate"></p>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-padding-vertical ion-align-items-center">
+      <ion-col size="5" text-center><img class="connector--img" src="assets/img/qrcode.svg" /></ion-col>
+      <ion-col size="7">
+        <strong>{{ 'introduction.communication.highest_text' | translate }}</strong>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-padding-top ion-align-items-center">
+      <ion-col size="5"><img src="assets/img/AirGap_Onboarding_Wallet.svg" /></ion-col>
+      <ion-col size="7">
+        <h5>{{ 'introduction.wallet.heading' | translate }}</h5>
+        <p>{{ 'introduction.wallet.text' | translate }}</p>
+      </ion-col>
+    </ion-row>
+  </ng-container>
+
+  <ng-container *ngIf="security === 'medium'">
+    <ion-row><p [innerHTML]="'introduction.medium.text' | translate"></p></ion-row>
+
+    <ion-row class="ion-align-items-center">
+      <ion-col size="5"><img src="assets/img/AirGap_Onboarding_Vault.svg" /></ion-col>
+      <ion-col size="7">
+        <h5>{{ 'introduction.vault.heading' | translate }}</h5>
+        <p [innerHTML]="'introduction.vault.text' | translate"></p>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-padding-vertical ion-align-items-center">
+      <ion-col size="5" text-center><img class="connector--img" src="assets/img/clone.svg" /></ion-col>
+      <ion-col size="7">
+        <strong>{{ 'introduction.communication.medium_text' | translate }}</strong>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-padding-top ion-align-items-center">
+      <ion-col size="5"><img src="assets/img/AirGap_Onboarding_Wallet.svg" /></ion-col>
+      <ion-col size="7">
+        <h5>{{ 'introduction.wallet.heading' | translate }}</h5>
+        <p>{{ 'introduction.wallet.text' | translate }}</p>
+      </ion-col>
+    </ion-row>
+  </ng-container>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-button shape="round" color="light" (click)="downloadApp()">{{ 'introduction.wallet_install_label' | translate }}</ion-button>
+    <ion-button shape="round" color="primary" (click)="accept()">{{ 'introduction.continue_label' | translate }}</ion-button>
+  </ion-fab>
+</ion-content>

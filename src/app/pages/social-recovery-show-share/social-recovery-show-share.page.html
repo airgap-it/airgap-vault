@@ -1,0 +1,23 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-title>
+      {{ 'social-recovery-show-share.title' | translate }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <p class="font--weight__med ion-padding-bottom">
+    {{ 'social-recovery-show-share.secret-shares_label' | translate: { currentShare: currentShare + 1, shareLength: shares?.length } }}
+  </p>
+  <p class="ion-padding-bottom">{{ 'social-recovery-show-share.text' | translate }}</p>
+  <h6 class="typography--mono" *ngIf="shares">{{ shares[currentShare] }}</h6>
+</ion-content>
+
+<ion-footer no-border color="primary">
+  <airgap-progress-footer
+    [progress]="currentShare * 2"
+    [maxProgress]="shares.length * 2"
+    [rightAction]="next.bind(this)"
+  ></airgap-progress-footer>
+</ion-footer>

@@ -1,0 +1,24 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab-accounts"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      {{ 'wallet-share.title' | translate }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h3 class="ion-padding-bottom" [innerHTML]="'wallet-share.heading' | translate"></h3>
+
+  <ion-row class="ion-justify-content-center ion-padding-bottom">
+    <airgap-qr-clipboard *ngIf="splits" [qrdata]="splits" [level]="'L'" [size]="300"></airgap-qr-clipboard>
+  </ion-row>
+
+  <ion-row><p [innerHTML]="'wallet-share.text' | translate"></p></ion-row>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-button color="primary" shape="round" (click)="done()">{{ 'wallet-share.done_label' | translate }}</ion-button>
+  </ion-fab>
+</ion-content>

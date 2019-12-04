@@ -1,75 +1,94 @@
+import { NgModule, RendererFactory2 } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
-import { NgModule, RendererFactory2, NgZone } from '@angular/core'
-import { IonicApp, IonicModule, Platform } from 'ionic-angular'
-import { SplashScreen } from '@ionic-native/splash-screen'
-import { StatusBar } from '@ionic-native/status-bar'
-import { Deeplinks } from '@ionic-native/deeplinks'
-import { HttpClient, HttpClientModule } from '@angular/common/http'
-import { TranslateModule } from '@ngx-translate/core'
-import { MyApp } from './app.component'
-import { CameraPreview } from '@ionic-native/camera-preview'
-import { Clipboard } from '@ionic-native/clipboard'
-import { Diagnostic } from '@ionic-native/diagnostic'
-import { AppVersion } from '@ionic-native/app-version'
-import { MaterialIconsModule } from 'ionic2-material-icons'
-import { SecretsProvider } from '../providers/secrets/secrets.provider'
-import { SecureStorageService } from '../providers/storage/secure-storage'
-import { SecureStorageFactory } from '../providers/storage/secure-storage.factory'
-import { DeviceProvider } from '../providers/device/device'
-import { CameraNativeService } from '../providers/camera/camera.native.service'
-import { CameraFactory } from '../providers/camera/camera.factory'
-import { AudioNativeService } from '../providers/audio/audio.native.service'
-import { AudioServiceFactory } from '../providers/audio/audio.factory'
-import { EntropyService } from '../providers/entropy/entropy.service'
-import { GyroscopeNativeService } from '../providers/gyroscope/gyroscope.native.service'
-import { GyroscopeServiceFactory } from '../providers/gyroscope/gyroscope.factory'
-import { ComponentsModule } from '../components/components.module'
-import { PagesModule } from '../pages/pages.module'
-import { ScannerProvider } from '../providers/scanner/scanner'
+import { RouteReuseStrategy } from '@angular/router'
+import { AppVersion } from '@ionic-native/app-version/ngx'
+import { CameraPreview } from '@ionic-native/camera-preview/ngx'
+import { Clipboard } from '@ionic-native/clipboard/ngx'
+import { Deeplinks } from '@ionic-native/deeplinks/ngx'
+import { DeviceMotion } from '@ionic-native/device-motion/ngx'
+import { Diagnostic } from '@ionic-native/diagnostic/ngx'
+import { SplashScreen } from '@ionic-native/splash-screen/ngx'
+import { StatusBar } from '@ionic-native/status-bar/ngx'
+import { IonicModule, IonicRouteStrategy, Platform } from '@ionic/angular'
 import { IonicStorageModule } from '@ionic/storage'
-import { DeviceMotion } from '@ionic-native/device-motion'
-import { StartupChecksProvider } from '../providers/startup-checks/startup-checks.provider'
-import { SchemeRoutingProvider } from '../providers/scheme-routing/scheme-routing'
-import { ClipboardProvider } from '../providers/clipboard/clipboard'
-import { PermissionsProvider } from '../providers/permissions/permissions'
-import { ShareUrlProvider } from '../providers/share-url/share-url'
-import { ErrorHandlerProvider } from '../providers/error-handler/error-handler'
-import { InteractionProvider } from '../providers/interaction/interaction'
-import { DeepLinkProvider } from '../providers/deep-link/deep-link'
-import { ProtocolsProvider } from '../providers/protocols/protocols'
+import { TranslateModule } from '@ngx-translate/core'
+
+import { AppRoutingModule } from './app-routing.module'
+import { AppComponent } from './app.component'
+import { DistributionOnboardingPageModule } from './pages/distribution-onboarding/distribution-onboarding.module'
+import { IntroductionPageModule } from './pages/introduction/introduction.module'
+import { LocalAuthenticationOnboardingPageModule } from './pages/local-authentication-onboarding/local-authentication-onboarding.module'
+import { WarningModalPageModule } from './pages/warning-modal/warning-modal.module'
+import { AudioServiceFactory } from './services/audio/audio.factory'
+import { AudioNativeService } from './services/audio/audio.native.servive'
+import { CameraFactory } from './services/camera/camera.factory'
+import { CameraNativeService } from './services/camera/camera.native.service'
+import { ClipboardService } from './services/clipboard/clipboard.service'
+import { DeepLinkService } from './services/deep-link/deep-link.service'
+import { DeviceService } from './services/device/device.service'
+import { EntropyService } from './services/entropy/entropy.service'
+import { ErrorHandlerService } from './services/error-handler/error-handler.service'
+import { GyroscopeServiceFactory } from './services/gyroscope/gyroscope.factory'
+import { GyroscopeNativeService } from './services/gyroscope/gyroscope.native.service'
+import { InteractionService } from './services/interaction/interaction.service'
+import { PermissionsService } from './services/permissions/permissions.service'
+import { ProtocolsService } from './services/protocols/protocols.service'
+import { ScannerService } from './services/scanner/scanner.service'
+import { SchemeRoutingService } from './services/scheme-routing/scheme-routing.service'
+import { SecretsService } from './services/secrets/secrets.service'
+import { SecureStorageFactory } from './services/secure-storage/secure-storage.factory'
+import { SecureStorageService } from './services/secure-storage/secure-storage.service'
+import { SerializerService } from './services/serializer/serializer.service'
+import { ShareUrlService } from './services/share-url/share-url.service'
+import { StartupChecksService } from './services/startup-checks/startup-checks.service'
+import { StorageService } from './services/storage/storage.service'
 
 @NgModule({
-  declarations: [MyApp],
+  declarations: [AppComponent],
+  entryComponents: [],
   imports: [
     BrowserModule,
-    MaterialIconsModule,
-    HttpClientModule,
+    IonicModule.forRoot(),
+    AppRoutingModule,
     TranslateModule.forRoot(),
-    IonicModule.forRoot(MyApp, {
-      tabsHideOnSubPages: true
-    }),
-    ComponentsModule,
-    PagesModule,
     IonicStorageModule.forRoot({
       name: '__airgap_storage',
       driverOrder: ['sqlite', 'localstorage']
-    })
+    }),
+    WarningModalPageModule,
+    IntroductionPageModule,
+    DistributionOnboardingPageModule,
+    LocalAuthenticationOnboardingPageModule
   ],
-  bootstrap: [IonicApp],
-  entryComponents: [MyApp],
   providers: [
+    AppVersion,
+    Clipboard,
+    Deeplinks,
+    Diagnostic,
     StatusBar,
     SplashScreen,
-    AppVersion,
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    AudioNativeService,
+    SecretsService,
+    SecureStorageService,
+    DeviceService,
+    CameraNativeService,
     CameraPreview,
-    Deeplinks,
-    DeviceMotion,
-    Diagnostic,
-    SecretsProvider,
     EntropyService,
-    StartupChecksProvider,
-    ScannerProvider,
-    Clipboard,
+    GyroscopeNativeService,
+    ScannerService,
+    StartupChecksService,
+    DeviceMotion,
+    SchemeRoutingService,
+    ClipboardService,
+    PermissionsService,
+    ShareUrlService,
+    ErrorHandlerService,
+    InteractionService,
+    DeepLinkService,
+    ProtocolsService,
+    SerializerService,
+    StorageService,
     {
       provide: SecureStorageService,
       useFactory: SecureStorageFactory,
@@ -78,27 +97,19 @@ import { ProtocolsProvider } from '../providers/protocols/protocols'
     {
       provide: CameraNativeService,
       useFactory: CameraFactory,
-      deps: [Platform, CameraPreview, RendererFactory2, PermissionsProvider]
+      deps: [Platform, CameraPreview, RendererFactory2, PermissionsService]
     },
     {
       provide: AudioNativeService,
       useFactory: AudioServiceFactory,
-      deps: [Platform, PermissionsProvider]
+      deps: [Platform, PermissionsService]
     },
     {
       provide: GyroscopeNativeService,
       useFactory: GyroscopeServiceFactory,
       deps: [Platform, DeviceMotion]
-    },
-    ClipboardProvider,
-    DeviceProvider,
-    SchemeRoutingProvider,
-    PermissionsProvider,
-    InteractionProvider,
-    ShareUrlProvider,
-    ErrorHandlerProvider,
-    DeepLinkProvider,
-    ProtocolsProvider
-  ]
+    }
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}

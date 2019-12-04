@@ -1,0 +1,38 @@
+ion-content {
+  --background: none transparent;
+}
+
+.transparent {
+  background: none !important;
+}
+
+p {
+  background: var(--ion-color-primary);
+}
+
+.row--height__100 {
+  height: calc(100% - 48px);
+  img {
+    height: 45vh;
+  }
+}
+
+.guides--container {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  .guides--container__img {
+    width: 60%;
+    max-width: 400px;
+    margin-top: 3em;
+    max-height: 50%;
+  }
+}
+
+video {
+  min-height: 705px;
+  min-width: 100vw;
+  object-fit: contain;
+}

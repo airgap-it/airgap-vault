@@ -1,0 +1,28 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      {{ 'transaction-signed.title' | translate }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h3 [innerHTML]="'transaction-signed.heading' | translate"></h3>
+
+  <ion-row class="ion-justify-content-center ion-padding-top">
+    <airgap-qr-clipboard *ngIf="interactionUrl && qrType === 0" [level]="'L'" [qrdata]="splits" [size]="300"></airgap-qr-clipboard>
+    <airgap-qr-clipboard *ngIf="signedTx && qrType === 1" [level]="'L'" [qrdata]="signedTx" [size]="300"></airgap-qr-clipboard>
+  </ion-row>
+
+  <ion-item lines="none">
+    <ion-label class="ion-text-wrap">{{ 'transaction-signed.raw-tx_label' | translate }}</ion-label>
+    <ion-toggle slot="end" (ionChange)="switchQR()"></ion-toggle>
+  </ion-item>
+  <airgap-signed-transaction [syncProtocolString]="interactionUrl"></airgap-signed-transaction>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-button color="primary" shape="round" (click)="done()">{{ 'transaction-signed.done_label' | translate }}</ion-button>
+  </ion-fab>
+</ion-content>
