@@ -117,7 +117,7 @@
     <plugin name="cordova-android-support-gradle-release" spec="3.0.1">
         <variable name="ANDROID_SUPPORT_VERSION" value="28.+" />
     </plugin>
-    <plugin name="cordova-plugin-camera-preview" spec="git+https://github.com/cordova-plugin-camera-preview/cordova-plugin-camera-preview.git">
+    <plugin name="cordova-plugin-camera-preview" spec="0.11.1">
         <variable name="ANDROID_SUPPORT_LIBRARY_VERSION" value="28.+" />
     </plugin>
     <plugin name="cordova-plugin-statusbar" spec="2.4.2" />

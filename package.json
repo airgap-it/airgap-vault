@@ -65,7 +65,7 @@
     "cordova-plugin-airgap-webview": "git+https://github.com/airgap-it/cordova-plugin-airgap-webview.git#content-filter",
     "cordova-plugin-app-version": "0.1.9",
     "cordova-plugin-audioinput": "1.0.1",
-    "cordova-plugin-camera-preview": "git+https://github.com/cordova-plugin-camera-preview/cordova-plugin-camera-preview.git",
+    "cordova-plugin-camera-preview": "0.11.1",
     "cordova-plugin-compat": "1.2.0",
     "cordova-plugin-device": "2.0.2",
     "cordova-plugin-device-motion": "2.0.1",
