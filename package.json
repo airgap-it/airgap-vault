@@ -56,8 +56,8 @@
     "bignumber.js": "^9.0.0",
     "bip39": "^2.4.0",
     "com.lampa.startapp": "6.1.6",
-    "cordova-android": "7.1.4",
-    "cordova-android-support-gradle-release": "1.4.7",
+    "cordova-android": "8.1.0",
+    "cordova-android-support-gradle-release": "3.0.1",
     "cordova-clipboard": "1.2.1",
     "cordova-ios": "5.0.1",
     "cordova-plugin-add-swift-support": "1.7.2",
@@ -65,7 +65,7 @@
     "cordova-plugin-airgap-webview": "git+https://github.com/airgap-it/cordova-plugin-airgap-webview.git#content-filter",
     "cordova-plugin-app-version": "0.1.9",
     "cordova-plugin-audioinput": "1.0.1",
-    "cordova-plugin-camera-preview": "git+https://github.com/cordova-plugin-camera-preview/cordova-plugin-camera-preview.git",
+    "cordova-plugin-camera-preview": "0.11.1",
     "cordova-plugin-compat": "1.2.0",
     "cordova-plugin-device": "2.0.2",
     "cordova-plugin-device-motion": "2.0.1",
@@ -181,10 +181,10 @@
       },
       "cordova-plugin-qrscanner": {},
       "cordova-android-support-gradle-release": {
-        "ANDROID_SUPPORT_VERSION": "26.1.0"
+        "ANDROID_SUPPORT_VERSION": "28.+"
       },
       "cordova-plugin-camera-preview": {
-        "ANDROID_SUPPORT_LIBRARY_VERSION": "26.1.0"
+        "ANDROID_SUPPORT_LIBRARY_VERSION": "28.+"
       },
       "cordova-plugin-statusbar": {},
       "ionic-plugin-deeplinks": {

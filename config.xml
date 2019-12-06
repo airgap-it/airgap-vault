@@ -114,11 +114,11 @@
         <variable name="PHOTOLIBRARY_ADD_USAGE_DESCRIPTION" value="This app needs write-access to photo library" />
         <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="This app needs read/write-access photo library access" />
     </plugin>
-    <plugin name="cordova-android-support-gradle-release" spec="1.4.7">
-        <variable name="ANDROID_SUPPORT_VERSION" value="26.1.0" />
+    <plugin name="cordova-android-support-gradle-release" spec="3.0.1">
+        <variable name="ANDROID_SUPPORT_VERSION" value="28.+" />
     </plugin>
-    <plugin name="cordova-plugin-camera-preview" spec="git+https://github.com/cordova-plugin-camera-preview/cordova-plugin-camera-preview.git">
-        <variable name="ANDROID_SUPPORT_LIBRARY_VERSION" value="26.1.0" />
+    <plugin name="cordova-plugin-camera-preview" spec="0.11.1">
+        <variable name="ANDROID_SUPPORT_LIBRARY_VERSION" value="28.+" />
     </plugin>
     <plugin name="cordova-plugin-statusbar" spec="2.4.2" />
     <plugin name="ionic-plugin-deeplinks" spec="https://github.com/airgap-it/ionic-plugin-deeplinks#cordova-ios-v5.0.0-fix">
@@ -152,5 +152,5 @@
     <plugin name="cordova-plugin-qrscanner" spec="3.0.1" />
     <plugin name="cordova-plugin-airgap-security-utils" spec="0.3.6" />
     <engine name="ios" spec="5.0.1" />
-    <engine name="android" spec="7.1.4" />
+    <engine name="android" spec="8.1.0" />
 </widget>

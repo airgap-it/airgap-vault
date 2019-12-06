@@ -56,14 +56,14 @@ build_android:
     - sed -i -e "s/version=\"0.0.0\"/version=\"$VERSION\"/g" config.xml
     - docker build -f build/android/Dockerfile -t $IMAGE_TAG_ANDROID_CURRENT --build-arg BUILD_NR="$CI_PIPELINE_ID" --build-arg VERSION="$VERSION" .
     - docker run --name $CI_PIPELINE_ID $IMAGE_TAG_ANDROID_CURRENT echo "container ran."
-    - docker cp $CI_PIPELINE_ID:/app/android-release-unsigned.apk android-release-unsigned-$CI_PIPELINE_ID.apk
-    - docker cp $CI_PIPELINE_ID:/app/android-debug.apk android-debug-$CI_PIPELINE_ID.apk
+    - docker cp $CI_PIPELINE_ID:/app/android-release-unsigned.apk airgap-vault-release-unsigned-$CI_PIPELINE_ID.apk
+    - docker cp $CI_PIPELINE_ID:/app/android-debug.apk airgap-vault-debug-$CI_PIPELINE_ID.apk
   after_script:
     - docker rm -f $CI_PIPELINE_ID || true
   artifacts:
     paths:
-      - android-release-unsigned-$CI_PIPELINE_ID.apk
-      - android-debug-$CI_PIPELINE_ID.apk
+      - airgap-vault-release-unsigned-$CI_PIPELINE_ID.apk
+      - airgap-vault-debug-$CI_PIPELINE_ID.apk
 
 build_ios:
   stage: native_build
