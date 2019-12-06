@@ -8,7 +8,7 @@ RUN apt-get update -y && apt-get install -y \
     libcairo2-dev 
 
 # android build tools version
-RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --all --no-ui --filter build-tools-26.0.2,android-27"]
+RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --all --no-ui --filter build-tools-28.0.3,android-28"]
 
 # create app directory
 RUN mkdir /app
