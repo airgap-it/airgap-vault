@@ -100,6 +100,22 @@ $ npm test
 
 If you discover a security vulnerability within this application, please send an e-mail to hi@airgap.it. All security vulnerabilities will be promptly addressed.
 
+## Verifiability
+
+The builds of AirGap Vault are reproducible, which means anybody can verify the contents of the signed apk by comparing them to their locally built version. To build the Vault, please refer to the chapter "Release Build" in this readme. The reproducible builds have been verified by a third party [WalletScrutiny](https://walletscrutiny.com/posts/it.airgap.vault/).
+
+## Release build
+
+To build a release version of the Vault, you have to clone this project and run the following commands in the root directory. (Docker has to be installed)
+
+```
+sed -i -e "s/version=\"0.0.0\"/version=\"0.0.1\"/g" config.xml
+docker build -f build/android/Dockerfile -t airgap-vault --build-arg BUILD_NR="1" --build-arg VERSION="0.0.1" .
+docker run --name "airgap-vault-build" airgap-vault echo "container ran."
+docker cp airgap-vault-build:/app/android-release-unsigned.apk airgap-vault-release-unsigned.apk
+docker cp airgap-vault-build:/app/android-debug.apk airgap-vault-debug.apk
+```
+
 ## Contributing
 
 - If you find any bugs, submit an [issue](../../issues) or open [pull-request](../../pulls), helping us catch and fix them.
