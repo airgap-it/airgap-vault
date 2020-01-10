@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { AlertController, LoadingController } from '@ionic/angular'
+import { AlertController, LoadingController, Platform } from '@ionic/angular'
 import { AirGapWallet, getProtocolByIdentifier, ICoinProtocol } from 'airgap-coin-lib'
 import * as bip39 from 'bip39'
 import { Observable, ReplaySubject } from 'rxjs'
@@ -8,6 +8,7 @@ import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { SecureStorage, SecureStorageService } from '../secure-storage/secure-storage.service'
 import { SettingsKey, StorageService } from '../storage/storage.service'
+import { ClipboardService } from '../clipboard/clipboard.service'
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,9 @@ export class SecretsService {
     private readonly secureStorageService: SecureStorageService,
     private readonly storageService: StorageService,
     private readonly loadingCtrl: LoadingController,
-    private readonly alertCtrl: AlertController
+    private readonly alertCtrl: AlertController,
+    private readonly platform: Platform,
+    private readonly clipboardService: ClipboardService
   ) {
     this.ready = this.init()
   }
@@ -89,6 +92,11 @@ export class SecretsService {
 
       await secureStorage.setItem(secret.id, secret.secretHex)
 
+      if (this.platform.is('android')) {
+        const recoveryString = await secureStorage.setRecoverableItem(secret.id, secret.secretHex)
+        this.showKeyAlert('Recovery Key', recoveryString)
+      }
+
       secret.flushSecret()
 
       // It's a new secret, push to array
@@ -118,6 +126,12 @@ export class SecretsService {
     const secureStorage: SecureStorage = await this.secureStorageService.get(secret.id, secret.isParanoia)
 
     return secureStorage.getItem(secret.id)
+  }
+
+  public async recoverSecret(secret: Secret, recoveryKey: string): Promise<void> {
+    const secureStorage: SecureStorage = await this.secureStorageService.get(secret.id, secret.isParanoia)
+
+    return secureStorage.recoverItem(secret.id, recoveryKey)
   }
 
   public findByPublicKey(pubKey: string): Secret | undefined {
@@ -264,6 +278,27 @@ export class SecretsService {
       message,
       backdropDismiss: false,
       buttons: [
+        {
+          text: 'Okay!',
+          role: 'cancel'
+        }
+      ]
+    })
+    alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
+  }
+
+  public async showKeyAlert(title: string, key: string): Promise<void> {
+    const alert: HTMLIonAlertElement = await this.alertCtrl.create({
+      header: title,
+      message: key,
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: 'Copy',
+          handler: async () => {
+            await this.clipboardService.copyAndShowToast(key)
+          }
+        },
         {
           text: 'Okay!',
           role: 'cancel'
