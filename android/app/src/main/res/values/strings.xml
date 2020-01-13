@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">AirGap Vault</string>
+    <string name="title_activity_main">AirGap Vault</string>
+    <string name="package_name">it.airgap.vault</string>
+    <string name="custom_url_scheme">it.airgap.vault</string>
+</resources>
