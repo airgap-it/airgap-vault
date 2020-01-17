@@ -1,9 +1,9 @@
-package it.airgap.vault.appinfo
+package it.airgap.vault.plugin.appinfo
 
 import com.getcapacitor.*
 import it.airgap.vault.BuildConfig
-import it.airgap.vault.utils.applicationContext
-import it.airgap.vault.utils.resolveWithData
+import it.airgap.vault.util.applicationContext
+import it.airgap.vault.util.resolveWithData
 
 @NativePlugin
 class AppInfo : Plugin() {

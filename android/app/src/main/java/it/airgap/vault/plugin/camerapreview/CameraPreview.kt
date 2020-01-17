@@ -1,4 +1,4 @@
-package it.airgap.vault.camera
+package it.airgap.vault.plugin.camerapreview
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -14,13 +14,14 @@ import com.getcapacitor.NativePlugin
 import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
-import it.airgap.vault.camera.CameraFragment.CameraPreviewListener
-import it.airgap.vault.utils.requiresPermissions
-import it.airgap.vault.utils.resolveWithData
+import it.airgap.vault.plugin.camerapreview.CameraFragment.CameraPreviewListener
+import it.airgap.vault.util.requiresPermissions
+import it.airgap.vault.util.resolveWithData
 
 /**
  * Forked from: https://github.com/arielhernandezmusa/capacitor-camera-preview
  */
+
 @NativePlugin(permissions = [Manifest.permission.CAMERA])
 class CameraPreview : Plugin(), CameraPreviewListener {
 

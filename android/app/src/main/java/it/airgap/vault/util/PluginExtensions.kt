@@ -1,4 +1,4 @@
-package it.airgap.vault.utils
+package it.airgap.vault.util
 
 import android.content.Context
 import com.getcapacitor.JSObject

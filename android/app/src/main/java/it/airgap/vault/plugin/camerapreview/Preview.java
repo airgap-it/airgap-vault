@@ -1,4 +1,4 @@
-package it.airgap.vault.camera;
+package it.airgap.vault.plugin.camerapreview;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,6 +12,10 @@ import android.widget.RelativeLayout;
 
 import java.io.IOException;
 import java.util.List;
+
+/**
+ * Forked from: https://github.com/arielhernandezmusa/capacitor-camera-preview
+ */
 
 class Preview extends RelativeLayout implements SurfaceHolder.Callback {
   private final String TAG = "Preview";

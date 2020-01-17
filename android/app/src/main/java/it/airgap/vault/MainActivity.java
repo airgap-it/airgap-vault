@@ -7,8 +7,8 @@ import com.getcapacitor.Plugin;
 
 import java.util.ArrayList;
 
-import it.airgap.vault.appinfo.AppInfo;
-import it.airgap.vault.camera.CameraPreview;
+import it.airgap.vault.plugin.appinfo.AppInfo;
+import it.airgap.vault.plugin.camerapreview.CameraPreview;
 
 public class MainActivity extends BridgeActivity {
   @Override

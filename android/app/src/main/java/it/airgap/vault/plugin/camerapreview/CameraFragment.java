@@ -1,4 +1,4 @@
-package it.airgap.vault.camera;
+package it.airgap.vault.plugin.camerapreview;
 
 import android.app.Activity;
 import android.content.pm.PackageManager;
@@ -34,6 +34,10 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+
+/**
+ * Forked from: https://github.com/arielhernandezmusa/capacitor-camera-preview
+ */
 
 public class CameraFragment extends Fragment {
 
