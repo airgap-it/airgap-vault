@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-        <string>AirGap Vault</string>
+	<string>AirGap Vault</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -21,16 +21,22 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.getcapacitor.capacitor</string>
+			<string>it.airgap.vault</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>capacitor</string>
+				<string>airgap-vault</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -39,13 +45,17 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>To Take Photos and Video</string>
+	<string>AirGap uses your camera to scan QR Codes of transactions, and to generate entropy for the secure key generation.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>AirGap uses Face ID to save your keys to the secure storage.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Always allow Geolocation?</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Allow Geolocation?</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>To Record Audio With Video</string>
+	<string>AirGap uses your microphone to generate entropy for the secure key generation.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>AirGap uses the motion sensor to generate entropy for the secure key generation.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Store camera photos to camera</string>
 	<key>NSPhotoLibraryUsageDescription</key>

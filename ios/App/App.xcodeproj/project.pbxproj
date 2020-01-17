@@ -14,6 +14,12 @@
 		504EC30F1FED79650016851F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 504EC30E1FED79650016851F /* Assets.xcassets */; };
 		504EC3121FED79650016851F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC3101FED79650016851F /* LaunchScreen.storyboard */; };
 		50B271D11FEDC1A000F3C39B /* public in Resources */ = {isa = PBXBuildFile; fileRef = 50B271D01FEDC1A000F3C39B /* public */; };
+		88F9F14423D058DD008351D0 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88F9F14323D058DD008351D0 /* AppInfo.swift */; };
+		88F9F14723D059AE008351D0 /* AppInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 88F9F14623D059AE008351D0 /* AppInfo.m */; };
+		88F9F14F23D065F2008351D0 /* UIApplication+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88F9F14E23D065F2008351D0 /* UIApplication+Additions.swift */; };
+		88F9F15223D069E9008351D0 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88F9F15123D069E9008351D0 /* CameraController.swift */; };
+		88F9F15423D06A00008351D0 /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88F9F15323D06A00008351D0 /* CameraPreview.swift */; };
+		88F9F15623D06A76008351D0 /* CameraPreview.m in Sources */ = {isa = PBXBuildFile; fileRef = 88F9F15523D06A76008351D0 /* CameraPreview.m */; };
 		A084ECDBA7D38E1E42DFC39D /* Pods_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF277DCFFFF123FFC6DF26C7 /* Pods_App.framework */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +33,13 @@
 		504EC3111FED79650016851F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		504EC3131FED79650016851F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		50B271D01FEDC1A000F3C39B /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = SOURCE_ROOT; };
+		88F9F14323D058DD008351D0 /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
+		88F9F14523D059AE008351D0 /* App-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "App-Bridging-Header.h"; sourceTree = "<group>"; };
+		88F9F14623D059AE008351D0 /* AppInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppInfo.m; sourceTree = "<group>"; };
+		88F9F14E23D065F2008351D0 /* UIApplication+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Additions.swift"; sourceTree = "<group>"; };
+		88F9F15123D069E9008351D0 /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
+		88F9F15323D06A00008351D0 /* CameraPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
+		88F9F15523D06A76008351D0 /* CameraPreview.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CameraPreview.m; sourceTree = "<group>"; };
 		AF277DCFFFF123FFC6DF26C7 /* Pods_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF51FD2D460BCFE21FA515B2 /* Pods-App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App.release.xcconfig"; path = "Pods/Target Support Files/Pods-App/Pods-App.release.xcconfig"; sourceTree = "<group>"; };
 		FC68EB0AF532CFC21C3344DD /* Pods-App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App.debug.xcconfig"; path = "Pods/Target Support Files/Pods-App/Pods-App.debug.xcconfig"; sourceTree = "<group>"; };
@@ -73,7 +86,10 @@
 		504EC3061FED79650016851F /* App */ = {
 			isa = PBXGroup;
 			children = (
+				88F9F15023D069AA008351D0 /* Camera */,
+				88F9F14223D0582D008351D0 /* AppInfo */,
 				50379B222058CBB4000EE86E /* capacitor.config.json */,
+				88F9F14523D059AE008351D0 /* App-Bridging-Header.h */,
 				504EC3071FED79650016851F /* AppDelegate.swift */,
 				504EC30B1FED79650016851F /* Main.storyboard */,
 				504EC30E1FED79650016851F /* Assets.xcassets */,
@@ -92,6 +108,26 @@
 				AF51FD2D460BCFE21FA515B2 /* Pods-App.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		88F9F14223D0582D008351D0 /* AppInfo */ = {
+			isa = PBXGroup;
+			children = (
+				88F9F14323D058DD008351D0 /* AppInfo.swift */,
+				88F9F14623D059AE008351D0 /* AppInfo.m */,
+				88F9F14E23D065F2008351D0 /* UIApplication+Additions.swift */,
+			);
+			path = AppInfo;
+			sourceTree = "<group>";
+		};
+		88F9F15023D069AA008351D0 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				88F9F15123D069E9008351D0 /* CameraController.swift */,
+				88F9F15323D06A00008351D0 /* CameraPreview.swift */,
+				88F9F15523D06A76008351D0 /* CameraPreview.m */,
+			);
+			path = Camera;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -127,6 +163,7 @@
 				TargetAttributes = {
 					504EC3031FED79650016851F = {
 						CreatedOnToolsVersion = 9.2;
+						LastSwiftMigration = 1130;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -206,7 +243,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				88F9F14723D059AE008351D0 /* AppInfo.m in Sources */,
+				88F9F15623D06A76008351D0 /* CameraPreview.m in Sources */,
+				88F9F14F23D065F2008351D0 /* UIApplication+Additions.swift in Sources */,
 				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
+				88F9F15423D06A00008351D0 /* CameraPreview.swift in Sources */,
+				88F9F14423D058DD008351D0 /* AppInfo.swift in Sources */,
+				88F9F15223D069E9008351D0 /* CameraController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,7 +387,9 @@
 			baseConfigurationReference = FC68EB0AF532CFC21C3344DD /* Pods-App.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7VLXNQ52UC;
 				INFOPLIST_FILE = App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -352,7 +397,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = it.airgap.vault;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG USE_PUSH";
-				SWIFT_VERSION = 4.2;
+				SWIFT_OBJC_BRIDGING_HEADER = "App/App-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -362,14 +409,17 @@
 			baseConfigurationReference = AF51FD2D460BCFE21FA515B2 /* Pods-App.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7VLXNQ52UC;
 				INFOPLIST_FILE = App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = it.airgap.vault;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = USE_PUSH;
-				SWIFT_VERSION = 4.2;
+				SWIFT_OBJC_BRIDGING_HEADER = "App/App-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

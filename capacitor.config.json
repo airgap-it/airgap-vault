@@ -5,9 +5,6 @@
   "npmClient": "npm",
   "webDir": "www",
   "server": {
-    "hostname": "vault.airgap.it",
-    "iosScheme": "https",
-    "androidScheme": "https",
     "allowNavigation": [
       "https://github.com/*",
       "https://play.google.com/*",

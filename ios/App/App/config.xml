@@ -2,53 +2,17 @@
 <widget version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <access origin="*" />
   
-  <feature name="startApp">
-    <param name="ios-package" value="startApp"/>
-  </feature>
-
-  <feature name="Clipboard">
-    <param name="ios-package" value="CDVClipboard"/>
-  </feature>
-
   <feature name="SecurityUtils">
     <param name="ios-package" value="SecurityUtilsPlugin"/>
     <param name="onload" value="true"/>
-  </feature>
-
-  <feature name="AirGapWebView">
-    <param name="ios-package" value="CDVWKWebViewEngine"/>
-  </feature>
-
-  <feature name="AppVersion">
-    <param name="ios-package" value="AppVersion"/>
   </feature>
 
   <feature name="AudioInputCapture">
     <param name="ios-package" value="CDVAudioInputCapture"/>
   </feature>
 
-  <feature name="CameraPreview">
-    <param name="ios-package" value="CameraPreview" onload="true"/>
-  </feature>
-
-  <feature name="Device">
-    <param name="ios-package" value="CDVDevice"/>
-  </feature>
-
-  <feature name="Accelerometer">
-    <param name="ios-package" value="CDVAccelerometer"/>
-  </feature>
-
-  <feature name="Gyroscope">
-    <param name="ios-package" value="CDVGyroscope"/>
-  </feature>
-
   <feature name="QRScanner">
     <param name="ios-package" value="QRScanner"/>
-  </feature>
-
-  <feature name="SQLitePlugin">
-    <param name="ios-package" value="SQLitePlugin"/>
   </feature>
 
   <feature name="Diagnostic">
@@ -64,10 +28,6 @@
   <feature name="Diagnostic_Microphone">
     <param name="ios-package" value="Diagnostic_Microphone"/>
     <param name="onload" value="true"/>
-  </feature>
-
-  <feature name="IonicDeeplinkPlugin">
-    <param name="ios-package" value="IonicDeeplinkPlugin" onload="true"/>
   </feature>
 
   
