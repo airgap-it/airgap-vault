@@ -98,8 +98,6 @@ export class CameraNativeService implements IEntropyGenerator {
         .start(
           Object.assign(
             { 
-              width: window.screen.width,
-              height: window.screen.height,
               camera: 'front',
               disableExifHeaderStripping: true
             } as any, 

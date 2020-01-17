@@ -3,5 +3,5 @@
     <string name="app_name">AirGap Vault</string>
     <string name="title_activity_main">AirGap Vault</string>
     <string name="package_name">it.airgap.vault</string>
-    <string name="custom_url_scheme">it.airgap.vault</string>
+    <string name="custom_url_scheme">airgap-vault</string>
 </resources>
