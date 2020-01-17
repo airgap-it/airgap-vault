@@ -1,7 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { Deeplinks } from '@ionic-native/deeplinks/ngx'
-import { SplashScreen } from '@ionic-native/splash-screen/ngx'
 import { StatusBar } from '@ionic-native/status-bar/ngx'
 import { Platform } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
@@ -18,7 +16,6 @@ import { StartupChecksService } from './services/startup-checks/startup-checks.s
 
 describe('AppComponent', () => {
   let statusBarSpy: StatusBar
-  let splashScreenSpy: SplashScreen
   let platformReadySpy: Promise<void>
   let platformSpy: Platform
   // let component: AppComponent
@@ -26,7 +23,6 @@ describe('AppComponent', () => {
   let unitHelper: UnitHelper
   beforeEach(() => {
     statusBarSpy = jasmine.createSpyObj('StatusBar', ['styleDefault'])
-    splashScreenSpy = jasmine.createSpyObj('SplashScreen', ['hide'])
     platformReadySpy = Promise.resolve()
     platformSpy = jasmine.createSpyObj('Platform', { ready: platformReadySpy })
 
@@ -38,9 +34,7 @@ describe('AppComponent', () => {
         providers: [
           { provide: SecureStorageService, useClass: SecureStorageServiceMock },
           { provide: StatusBar, useValue: statusBarSpy },
-          { provide: SplashScreen, useValue: splashScreenSpy },
           { provide: Platform, useValue: platformSpy },
-          Deeplinks,
           StartupChecksService,
           SchemeRoutingService,
           TranslateService,

@@ -1,7 +1,7 @@
 import { ElementRef, Injectable, Renderer2, RendererFactory2, ViewChild } from '@angular/core'
-import { CameraPreview } from '@ionic-native/camera-preview/ngx'
 import { Platform } from '@ionic/angular'
 import { Observable } from 'rxjs'
+import { Plugins } from '@capacitor/core'
 
 import workerJS from '../../../assets/workers/entropyCalculatorWorker'
 import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
@@ -10,6 +10,8 @@ import { ErrorCategory, handleErrorLocal } from './../error-handler/error-handle
 import { PermissionsService, PermissionStatus } from './../permissions/permissions.service'
 const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
 const entropyCalculatorWorker = new Worker(blobURL)
+
+const { CameraPreview } = Plugins
 
 @Injectable({ providedIn: 'root' })
 export class CameraNativeService implements IEntropyGenerator {
@@ -39,7 +41,6 @@ export class CameraNativeService implements IEntropyGenerator {
 
   constructor(
     private readonly platform: Platform,
-    private readonly cameraPreview: CameraPreview,
     private readonly rendererFactory: RendererFactory2,
     private readonly permissionsService: PermissionsService
   ) {
@@ -93,28 +94,19 @@ export class CameraNativeService implements IEntropyGenerator {
     console.log('initCamera')
 
     return new Promise(resolve => {
-      this.cameraPreview
-        .startCamera(
+      CameraPreview
+        .start(
           Object.assign(
-            {
-              x: 0,
-              y: 0,
+            { 
               width: window.screen.width,
               height: window.screen.height,
-              toBack: true,
-              tapPhoto: false,
-              previewDrag: false,
+              camera: 'front',
               disableExifHeaderStripping: true
-            } as any,
-            this.cameraOptions
-          )
+            } as any, 
+            this.cameraOptions)
         )
         .then(() => {
           this.cameraIsRunning = true
-          if (this.platform.is('ios')) {
-            return this.cameraPreview.setFlashMode('off')
-          }
-
           return Promise.resolve()
         })
         .then(
@@ -135,8 +127,8 @@ export class CameraNativeService implements IEntropyGenerator {
             // start camera interval
             this.cameraInterval = window.setInterval(() => {
               this.cameraIsTakingPhoto = true
-              this.cameraPreview
-                .takePicture({
+              CameraPreview
+                .capture({
                   width: this.VIDEO_SIZE,
                   height: this.VIDEO_SIZE,
                   quality: this.VIDEO_QUALITY
@@ -144,7 +136,7 @@ export class CameraNativeService implements IEntropyGenerator {
                 .then(result => {
                   this.cameraIsTakingPhoto = false
                   if (this.handler) {
-                    this.handler(result)
+                    this.handler(result.value)
                   }
                 })
                 .catch(err => {
@@ -197,7 +189,7 @@ export class CameraNativeService implements IEntropyGenerator {
     }
 
     return new Promise((_resolve, reject) => {
-      this.cameraPreview.stopCamera().then(
+      CameraPreview.stop().then(
         () => {
           this.cameraIsRunning = false
           console.log('camera stopped.')

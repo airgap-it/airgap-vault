@@ -41,11 +41,11 @@ export class TabScanPage {
     private readonly permissionsService: PermissionsService,
     private readonly ngZone: NgZone
   ) {
-    this.isBrowser = !this.platform.is('cordova')
+    this.isBrowser = !this.platform.is('hybrid')
   }
 
   public async ionViewWillEnter(): Promise<void> {
-    if (this.platform.is('cordova')) {
+    if (this.platform.is('hybrid')) {
       await this.platform.ready()
       await this.checkCameraPermissionsAndActivate()
     }
@@ -74,7 +74,7 @@ export class TabScanPage {
   }
 
   public ionViewDidEnter(): void {
-    if (!this.platform.is('cordova')) {
+    if (!this.platform.is('hybrid')) {
       this.hasCameraPermission = true
       this.zxingScanner.camerasNotFound.pipe(first()).subscribe((_devices: MediaDeviceInfo[]) => {
         console.error('An error has occurred when trying to enumerate your video-stream-enabled devices.')
@@ -92,7 +92,7 @@ export class TabScanPage {
   }
 
   public ionViewWillLeave(): void {
-    if (this.platform.is('cordova')) {
+    if (this.platform.is('hybrid')) {
       this.scanner.destroy()
     } else {
       ;(this.zxingScanner as any).resetCodeReader()
@@ -100,7 +100,7 @@ export class TabScanPage {
   }
 
   public startScan(): void {
-    if (this.platform.is('cordova')) {
+    if (this.platform.is('hybrid')) {
       this.scanner.show()
       this.scanner.scan(
         (text: string) => {

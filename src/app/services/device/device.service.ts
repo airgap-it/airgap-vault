@@ -65,7 +65,7 @@ export class DeviceService {
 
   public checkForRoot(): Promise<boolean> {
     return new Promise(resolve => {
-      if (this.platform.is('cordova')) {
+      if (this.platform.is('hybrid')) {
         SecurityUtils.DeviceIntegrity.assess(result => {
           resolve(!result)
         })
@@ -77,7 +77,7 @@ export class DeviceService {
   }
 
   public onScreenCaptureStateChanged(callback: (captured: boolean) => void): void {
-    if (this.platform.is('ios') && this.platform.is('cordova')) {
+    if (this.platform.is('ios') && this.platform.is('hybrid')) {
       SecurityUtils.SecureScreen.onScreenCaptureStateChanged((captured: boolean) => {
         this.ngZone.run(() => {
           callback(captured)
@@ -87,25 +87,25 @@ export class DeviceService {
   }
 
   public setSecureWindow(): void {
-    if (this.platform.is('android') && this.platform.is('cordova')) {
+    if (this.platform.is('android') && this.platform.is('hybrid')) {
       SecurityUtils.SecureScreen.setWindowSecureFlag()
     }
   }
 
   public clearSecureWindow(): void {
-    if (this.platform.is('android') && this.platform.is('cordova')) {
+    if (this.platform.is('android') && this.platform.is('hybrid')) {
       SecurityUtils.SecureScreen.clearWindowSecureFlag()
     }
   }
 
   public removeScreenCaptureObservers(): void {
-    if (this.platform.is('ios') && this.platform.is('cordova')) {
+    if (this.platform.is('ios') && this.platform.is('hybrid')) {
       SecurityUtils.SecureScreen.removeScreenCaptureObservers()
     }
   }
 
   public onScreenshotTaken(callback: () => void): void {
-    if (this.platform.is('ios') && this.platform.is('cordova')) {
+    if (this.platform.is('ios') && this.platform.is('hybrid')) {
       SecurityUtils.SecureScreen.onScreenshotTaken(() => {
         this.ngZone.run(() => {
           callback()
@@ -115,7 +115,7 @@ export class DeviceService {
   }
 
   public removeScreenshotObservers(): void {
-    if (this.platform.is('ios') && this.platform.is('cordova')) {
+    if (this.platform.is('ios') && this.platform.is('hybrid')) {
       SecurityUtils.SecureScreen.removeScreenshotObservers()
     }
   }

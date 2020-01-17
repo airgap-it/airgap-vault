@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core'
-import { AlertController, Platform } from '@ionic/angular'
+import { Plugins } from '@capacitor/core'
+import { AlertController } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 import { first } from 'rxjs/operators'
 
 import { serializedDataToUrlString } from '../../utils/utils'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 
-declare let window: any
+const { App } = Plugins
 
 @Injectable({
   providedIn: 'root'
 })
 export class DeepLinkService {
   constructor(
-    private readonly platform: Platform,
     private readonly alertCtrl: AlertController,
     private readonly translateService: TranslateService
   ) {}
@@ -22,35 +22,18 @@ export class DeepLinkService {
     const deeplinkUrl: string = url.includes('://') ? url : serializedDataToUrlString(url)
 
     return new Promise((resolve, reject) => {
-      let sApp
-
-      if (this.platform.is('android')) {
-        sApp = window.startApp.set({
-          action: 'ACTION_VIEW',
-          uri: deeplinkUrl,
-          flags: ['FLAG_ACTIVITY_NEW_TASK']
-        })
-      } else if (this.platform.is('ios')) {
-        sApp = window.startApp.set(deeplinkUrl)
-      } else {
-        this.showDeeplinkOnlyOnDevicesAlert()
-
-        return reject()
-      }
-
-      sApp.start(
-        () => {
+      App.openUrl({ url: deeplinkUrl })
+        .then(() => {
           console.log('Deeplink called')
           resolve()
-        },
-        error => {
+        })
+        .catch(error => {
           console.error('deeplink used', deeplinkUrl)
           console.error(error)
           this.showAppNotFoundAlert()
 
-          return reject()
-        }
-      )
+          reject()
+        })
     })
   }
 

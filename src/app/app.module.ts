@@ -1,14 +1,8 @@
-import { NgModule, RendererFactory2 } from '@angular/core'
+import { NgModule, RendererFactory2, NgZone } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { RouteReuseStrategy } from '@angular/router'
-import { AppVersion } from '@ionic-native/app-version/ngx'
-import { CameraPreview } from '@ionic-native/camera-preview/ngx'
-import { Clipboard } from '@ionic-native/clipboard/ngx'
-import { Deeplinks } from '@ionic-native/deeplinks/ngx'
-import { DeviceMotion } from '@ionic-native/device-motion/ngx'
+
 import { Diagnostic } from '@ionic-native/diagnostic/ngx'
-import { SplashScreen } from '@ionic-native/splash-screen/ngx'
-import { StatusBar } from '@ionic-native/status-bar/ngx'
 import { IonicModule, IonicRouteStrategy, Platform } from '@ionic/angular'
 import { IonicStorageModule } from '@ionic/storage'
 import { TranslateModule } from '@ngx-translate/core'
@@ -61,24 +55,17 @@ import { StorageService } from './services/storage/storage.service'
     LocalAuthenticationOnboardingPageModule
   ],
   providers: [
-    AppVersion,
-    Clipboard,
-    Deeplinks,
     Diagnostic,
-    StatusBar,
-    SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     AudioNativeService,
     SecretsService,
     SecureStorageService,
     DeviceService,
     CameraNativeService,
-    CameraPreview,
     EntropyService,
     GyroscopeNativeService,
     ScannerService,
     StartupChecksService,
-    DeviceMotion,
     SchemeRoutingService,
     ClipboardService,
     PermissionsService,
@@ -97,7 +84,7 @@ import { StorageService } from './services/storage/storage.service'
     {
       provide: CameraNativeService,
       useFactory: CameraFactory,
-      deps: [Platform, CameraPreview, RendererFactory2, PermissionsService]
+      deps: [Platform, RendererFactory2, PermissionsService]
     },
     {
       provide: AudioNativeService,
@@ -107,7 +94,7 @@ import { StorageService } from './services/storage/storage.service'
     {
       provide: GyroscopeNativeService,
       useFactory: GyroscopeServiceFactory,
-      deps: [Platform, DeviceMotion]
+      deps: [Platform, NgZone]
     }
   ],
   bootstrap: [AppComponent]

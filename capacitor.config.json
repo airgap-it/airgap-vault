@@ -4,6 +4,22 @@
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
+  "server": {
+    "hostname": "vault.airgap.it",
+    "iosScheme": "https",
+    "androidScheme": "https",
+    "allowNavigation": [
+      "https://github.com/*",
+      "https://play.google.com/*",
+      "https://airgap.it/*"
+    ]
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchAutoHide": false,
+      "androidSplashResourceName": "screen"
+    }
+  },
   "cordova": {
     "preferences": {
       "ScrollEnabled": "false",

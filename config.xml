@@ -4,9 +4,6 @@
     <description>A secure crypto wallet</description>
     <author email="contact@papers.ch" href="https://papers.ch/">Papers.ch Team</author>
     <content src="index.html" />
-    <allow-intent href="https://github.com/*" />
-    <allow-intent href="https://play.google.com/*" />
-    <allow-intent href="https://airgap.it/*" />
     <preference name="ScrollEnabled" value="false" />
     <preference name="android-minSdkVersion" value="19" />
     <preference name="BackupWebStorage" value="none" />
@@ -103,52 +100,8 @@
         <splash height="480" src="resources/ios/splash/Default~iphone.png" width="320" />
         <splash height="2732" src="resources/ios/splash/Default@2x~universal~anyany.png" width="2732" />
     </platform>
-    <plugin name="cordova-plugin-whitelist" spec="1.3.3" />
-    <plugin name="cordova-plugin-device" spec="2.0.2" />
-    <plugin name="cordova-plugin-splashscreen" spec="5.0.2" />
     <plugin name="cordova-plugin-audioinput" spec="1.0.1" />
-    <plugin name="cordova-plugin-gyroscope" spec="0.1.4" />
-    <plugin name="cordova-plugin-ios-camera-permissions" spec="1.2.0">
-        <variable name="CAMERA_USAGE_DESCRIPTION" value="AirGap uses your camera to scan QR Codes of transactions, and to generate entropy for the secure key generation." />
-        <variable name="MICROPHONE_USAGE_DESCRIPTION" value="AirGap uses your microphone to generate entropy for the secure key generation." />
-        <variable name="PHOTOLIBRARY_ADD_USAGE_DESCRIPTION" value="This app needs write-access to photo library" />
-        <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="This app needs read/write-access photo library access" />
-    </plugin>
-    <plugin name="cordova-android-support-gradle-release" spec="3.0.1">
-        <variable name="ANDROID_SUPPORT_VERSION" value="28.+" />
-    </plugin>
-    <plugin name="cordova-plugin-camera-preview" spec="0.11.1">
-        <variable name="ANDROID_SUPPORT_LIBRARY_VERSION" value="28.+" />
-    </plugin>
-    <plugin name="cordova-plugin-statusbar" spec="2.4.2" />
-    <plugin name="ionic-plugin-deeplinks" spec="https://github.com/airgap-it/ionic-plugin-deeplinks#cordova-ios-v5.0.0-fix">
-        <variable name="URL_SCHEME" value="airgap-vault" />
-        <variable name="DEEPLINK_HOST" value="vault.airgap.it" />
-        <variable name="DEEPLINK_SCHEME" value="https" />
-        <variable name="ANDROID_PATH_PREFIX" value="/" />
-        <variable name="ANDROID_2_PATH_PREFIX" value="/" />
-        <variable name="ANDROID_3_PATH_PREFIX" value="/" />
-        <variable name="ANDROID_4_PATH_PREFIX" value="/" />
-        <variable name="ANDROID_5_PATH_PREFIX" value="/" />
-        <variable name="DEEPLINK_2_SCHEME" value=" " />
-        <variable name="DEEPLINK_2_HOST" value=" " />
-        <variable name="DEEPLINK_3_SCHEME" value=" " />
-        <variable name="DEEPLINK_3_HOST" value=" " />
-        <variable name="DEEPLINK_4_SCHEME" value=" " />
-        <variable name="DEEPLINK_4_HOST" value=" " />
-        <variable name="DEEPLINK_5_SCHEME" value=" " />
-        <variable name="DEEPLINK_5_HOST" value=" " />
-    </plugin>
-    <plugin name="cordova-sqlite-storage" spec="2.5.1" />
-    <plugin name="cordova-plugin-device-motion" spec="2.0.1" />
-    <plugin name="com.lampa.startapp" spec="6.1.6" />
-    <plugin name="cordova-plugin-add-swift-support" spec="1.7.2" />
-    <plugin name="cordova-plugin-ionic-keyboard" spec="2.1.3" />
-    <plugin name="cordova-plugin-airgap-webview" spec="git+https://github.com/airgap-it/cordova-plugin-airgap-webview.git#content-filter" />
-    <plugin name="cordova-clipboard" spec="1.2.1" />
     <plugin name="cordova.plugins.diagnostic" spec="4.0.10" />
-    <plugin name="cordova-plugin-app-version" spec="0.1.9" />
-    <plugin name="cordova-clipboard" spec="1.2.1" />
     <plugin name="cordova-plugin-qrscanner" spec="3.0.1" />
     <plugin name="cordova-plugin-airgap-security-utils" spec="0.3.6" />
     <engine name="ios" spec="5.0.1" />
