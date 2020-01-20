@@ -41,6 +41,7 @@
     "@capacitor/ios": "^1.4.0",
     "@download/blockies": "^1.0.3",
     "@ionic-native/core": "^5.0.0",
+    "@ionic-native/device-motion": "^5.19.1",
     "@ionic-native/diagnostic": "^5.7.0",
     "@ionic/angular": "4.11.2",
     "@ionic/storage": "^2.2.0",
@@ -56,6 +57,7 @@
     "cordova-plugin-airgap-security-utils": "0.4.0",
     "cordova-plugin-audioinput": "1.0.1",
     "cordova-plugin-compat": "1.2.0",
+    "cordova-plugin-device-motion": "^2.0.1",
     "cordova-plugin-qrscanner": "3.0.1",
     "cordova.plugins.diagnostic": "4.0.10",
     "core-js": "^2.5.4",
@@ -151,7 +153,8 @@
       "cordova-plugin-audioinput": {},
       "cordova-plugin-qrscanner": {},
       "cordova.plugins.diagnostic": {},
-      "cordova-plugin-airgap-security-utils": {}
+      "cordova-plugin-airgap-security-utils": {},
+      "cordova-plugin-device-motion": {}
     }
   }
 }

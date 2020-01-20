@@ -14,37 +14,6 @@ export class SecretGenerateOnboardingPage {
 
   public async continue(): Promise<void> {
     await this.storageService.set(SettingsKey.DISCLAIMER_GENERATE_INITIAL, true)
-    const permissionsGranted = await this.askPermissions()
-
-    if (permissionsGranted) {
-      this.navigationService.route('secret-generate').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-    } else {
-      // TODO: handle permission denial
-      console.log()
-    }
-  }
-
-  private async askPermissions(): Promise<boolean> {
-    // iOS 13 requires an additional permission for device motion events
-    const deviceMotionPermissionGranted = await this.askDeviceMotionPermission()
-
-    return deviceMotionPermissionGranted
-  }
-
-  private async askDeviceMotionPermission(): Promise<boolean> {
-    // a proper function should be available if the permission request is required, 
-    // otherwise permission should be treated as granted by default
-    if (typeof (DeviceMotionEvent as any).requestPermission === 'function') {
-      try {
-        const permissionStatus = await (DeviceMotionEvent as any).requestPermission()
-        return permissionStatus === 'granted'
-      } catch (error) {
-        // TODO: inform the user of an error
-        console.log(error)
-        return false
-      }
-    } else {
-      return true
-    }
+    this.navigationService.route('secret-generate').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

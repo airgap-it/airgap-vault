@@ -11,6 +11,10 @@
     <param name="ios-package" value="CDVAudioInputCapture"/>
   </feature>
 
+  <feature name="Accelerometer">
+    <param name="ios-package" value="CDVAccelerometer"/>
+  </feature>
+
   <feature name="QRScanner">
     <param name="ios-package" value="QRScanner"/>
   </feature>

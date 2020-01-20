@@ -1,16 +1,16 @@
 import { Platform } from '@ionic/angular'
+import { DeviceMotion } from '@ionic-native/device-motion/ngx'
 
 import { DummyEntropyService } from '../entropy/dummy.entropy.service'
 import { IEntropyGenerator } from '../entropy/IEntropyGenerator'
 
 import { GyroscopeNativeService } from './gyroscope.native.service'
-import { NgZone } from '@angular/core'
 
 export interface GyroscopeService {}
 
-export function GyroscopeServiceFactory(platform: Platform, zone: NgZone): IEntropyGenerator {
+export function GyroscopeServiceFactory(platform: Platform, deviceMotion: DeviceMotion): IEntropyGenerator {
   if (platform.is('hybrid')) {
-    return new GyroscopeNativeService(platform, zone)
+    return new GyroscopeNativeService(platform, deviceMotion)
   } else {
     return new DummyEntropyService()
   }

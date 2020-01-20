@@ -11,6 +11,10 @@
     <param name="android-package" value="com.exelerus.cordova.audioinputcapture.AudioInputCapture"/>
   </feature>
 
+  <feature name="Accelerometer">
+    <param name="android-package" value="org.apache.cordova.devicemotion.AccelListener"/>
+  </feature>
+
   <feature name="QRScanner">
     <param name="android-package" value="com.bitpay.cordova.qrscanner.QRScanner"/>
   </feature>

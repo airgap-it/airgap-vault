@@ -1,7 +1,8 @@
-import { NgModule, RendererFactory2, NgZone } from '@angular/core'
+import { NgModule, RendererFactory2 } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { RouteReuseStrategy } from '@angular/router'
 
+import { DeviceMotion } from '@ionic-native/device-motion/ngx'
 import { Diagnostic } from '@ionic-native/diagnostic/ngx'
 import { IonicModule, IonicRouteStrategy, Platform } from '@ionic/angular'
 import { IonicStorageModule } from '@ionic/storage'
@@ -57,6 +58,7 @@ import { StorageService } from './services/storage/storage.service'
   providers: [
     Diagnostic,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    DeviceMotion,
     AudioNativeService,
     SecretsService,
     SecureStorageService,
@@ -94,7 +96,7 @@ import { StorageService } from './services/storage/storage.service'
     {
       provide: GyroscopeNativeService,
       useFactory: GyroscopeServiceFactory,
-      deps: [Platform, NgZone]
+      deps: [Platform, DeviceMotion]
     }
   ],
   bootstrap: [AppComponent]

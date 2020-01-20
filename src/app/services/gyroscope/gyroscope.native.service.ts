@@ -1,8 +1,7 @@
-import { Injectable, NgZone } from '@angular/core'
+import { Injectable } from '@angular/core'
+import { DeviceMotion, DeviceMotionAccelerationData } from '@ionic-native/device-motion/ngx'
 import { Platform } from '@ionic/angular'
-import { Plugins, PluginListenerHandle, MotionEventResult } from '@capacitor/core'
 import { Observable, Subscription } from 'rxjs'
-import { auditTime } from 'rxjs/operators'
 
 import entropyCalculatorWorkerJS from '../../../assets/workers/entropyCalculatorWorker'
 import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
@@ -11,20 +10,17 @@ import { GyroscopeService } from './gyroscope.factory'
 const blobURL: string = window.URL.createObjectURL(new Blob([entropyCalculatorWorkerJS]))
 const entropyCalculatorWorker: Worker = new Worker(blobURL)
 
-const { Motion } = Plugins
-
 @Injectable({
   providedIn: 'root'
 })
 export class GyroscopeNativeService implements GyroscopeService, IEntropyGenerator {
   private collectedEntropyPercentage: number = 0
 
-  private accelListenerHandle: PluginListenerHandle
-  private accelSubscription: Subscription
+  private gyroSubscription: Subscription
 
   private entropyObservable: Observable<Entropy>
 
-  constructor(private readonly platform: Platform, private readonly zone: NgZone) {}
+  constructor(private readonly platform: Platform, private readonly deviceMotion: DeviceMotion) {}
 
   public start(): Promise<void> {
     this.collectedEntropyPercentage = 0
@@ -39,10 +35,10 @@ export class GyroscopeNativeService implements GyroscopeService, IEntropyGenerat
           })
         }
 
-        this.accelSubscription = this.getAccelObservable()
-          .pipe(auditTime(500))
-          .subscribe((event: MotionEventResult) => {
-            const entropyBuffer = this.arrayBufferFromIntArray([event.acceleration.x, event.acceleration.y, event.acceleration.z])
+        this.gyroSubscription = this.deviceMotion
+          .watchAcceleration({ frequency: 500 })
+          .subscribe((acceleration: DeviceMotionAccelerationData) => {
+            const entropyBuffer = this.arrayBufferFromIntArray([acceleration.x, acceleration.y, acceleration.z])
             entropyCalculatorWorker.postMessage({ entropyBuffer }, [entropyBuffer])
           })
       })
@@ -51,24 +47,13 @@ export class GyroscopeNativeService implements GyroscopeService, IEntropyGenerat
   }
 
   public stop(): Promise<void> {
-    this.accelListenerHandle.remove()
-    this.accelSubscription.unsubscribe()
+    this.gyroSubscription.unsubscribe()
 
     return Promise.resolve()
   }
 
   public getEntropyUpdateObservable(): Observable<Entropy> {
     return this.entropyObservable
-  }
-
-  private getAccelObservable(): Observable<MotionEventResult> {
-    return new Observable<MotionEventResult>(observer => {
-        this.accelListenerHandle = Motion.addListener('accel', (event: MotionEventResult) => {
-          this.zone.run(() => {
-            observer.next(event)
-          })
-        })
-    })
   }
 
   private arrayBufferFromIntArray(array: number[]): ArrayBuffer {

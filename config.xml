@@ -106,4 +106,5 @@
     <plugin name="cordova-plugin-airgap-security-utils" spec="0.3.6" />
     <engine name="ios" spec="5.0.1" />
     <engine name="android" spec="8.1.0" />
+    <plugin name="cordova-plugin-device-motion" spec="^2.0.1" />
 </widget>
