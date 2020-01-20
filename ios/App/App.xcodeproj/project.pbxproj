@@ -14,9 +14,16 @@
 		504EC30F1FED79650016851F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 504EC30E1FED79650016851F /* Assets.xcassets */; };
 		504EC3121FED79650016851F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC3101FED79650016851F /* LaunchScreen.storyboard */; };
 		50B271D11FEDC1A000F3C39B /* public in Resources */ = {isa = PBXBuildFile; fileRef = 50B271D01FEDC1A000F3C39B /* public */; };
+		88AE2EE823D5C7A500428560 /* SecurityUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AE2EE723D5C7A500428560 /* SecurityUtils.swift */; };
+		88AE2EED23D5CB3200428560 /* PluginCall+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AE2EEC23D5CB3200428560 /* PluginCall+Additions.swift */; };
+		88AE2EEF23D5D7B300428560 /* SecurityUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 88AE2EEE23D5D7B300428560 /* SecurityUtils.m */; };
+		88AE2EF123D5DC2400428560 /* DeviceIntegrity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AE2EF023D5DC2400428560 /* DeviceIntegrity.swift */; };
+		88AE2EF323D5DC3900428560 /* KeyChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AE2EF223D5DC3900428560 /* KeyChain.swift */; };
+		88AE2EF523D5DC5100428560 /* LocalAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AE2EF423D5DC5100428560 /* LocalAuthentication.swift */; };
+		88AE2EF723D5DC7400428560 /* SecureScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AE2EF623D5DC7400428560 /* SecureScreen.swift */; };
+		88AE2EF923D5DC8300428560 /* SecureStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AE2EF823D5DC8300428560 /* SecureStorage.swift */; };
 		88F9F14423D058DD008351D0 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88F9F14323D058DD008351D0 /* AppInfo.swift */; };
 		88F9F14723D059AE008351D0 /* AppInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 88F9F14623D059AE008351D0 /* AppInfo.m */; };
-		88F9F14F23D065F2008351D0 /* UIApplication+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88F9F14E23D065F2008351D0 /* UIApplication+Additions.swift */; };
 		88F9F15223D069E9008351D0 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88F9F15123D069E9008351D0 /* CameraController.swift */; };
 		88F9F15423D06A00008351D0 /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88F9F15323D06A00008351D0 /* CameraPreview.swift */; };
 		88F9F15623D06A76008351D0 /* CameraPreview.m in Sources */ = {isa = PBXBuildFile; fileRef = 88F9F15523D06A76008351D0 /* CameraPreview.m */; };
@@ -33,10 +40,17 @@
 		504EC3111FED79650016851F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		504EC3131FED79650016851F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		50B271D01FEDC1A000F3C39B /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = SOURCE_ROOT; };
+		88AE2EE723D5C7A500428560 /* SecurityUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityUtils.swift; sourceTree = "<group>"; };
+		88AE2EEC23D5CB3200428560 /* PluginCall+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PluginCall+Additions.swift"; sourceTree = "<group>"; };
+		88AE2EEE23D5D7B300428560 /* SecurityUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecurityUtils.m; sourceTree = "<group>"; };
+		88AE2EF023D5DC2400428560 /* DeviceIntegrity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceIntegrity.swift; sourceTree = "<group>"; };
+		88AE2EF223D5DC3900428560 /* KeyChain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChain.swift; sourceTree = "<group>"; };
+		88AE2EF423D5DC5100428560 /* LocalAuthentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalAuthentication.swift; sourceTree = "<group>"; };
+		88AE2EF623D5DC7400428560 /* SecureScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureScreen.swift; sourceTree = "<group>"; };
+		88AE2EF823D5DC8300428560 /* SecureStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureStorage.swift; sourceTree = "<group>"; };
 		88F9F14323D058DD008351D0 /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		88F9F14523D059AE008351D0 /* App-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "App-Bridging-Header.h"; sourceTree = "<group>"; };
 		88F9F14623D059AE008351D0 /* AppInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppInfo.m; sourceTree = "<group>"; };
-		88F9F14E23D065F2008351D0 /* UIApplication+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Additions.swift"; sourceTree = "<group>"; };
 		88F9F15123D069E9008351D0 /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 		88F9F15323D06A00008351D0 /* CameraPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
 		88F9F15523D06A76008351D0 /* CameraPreview.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CameraPreview.m; sourceTree = "<group>"; };
@@ -86,6 +100,8 @@
 		504EC3061FED79650016851F /* App */ = {
 			isa = PBXGroup;
 			children = (
+				88AE2EEA23D5CB1300428560 /* Helpers */,
+				88AE2EDC23D5C40800428560 /* SecurityUtils */,
 				88F9F15023D069AA008351D0 /* Camera */,
 				88F9F14223D0582D008351D0 /* AppInfo */,
 				50379B222058CBB4000EE86E /* capacitor.config.json */,
@@ -110,12 +126,41 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		88AE2EDC23D5C40800428560 /* SecurityUtils */ = {
+			isa = PBXGroup;
+			children = (
+				88AE2EE723D5C7A500428560 /* SecurityUtils.swift */,
+				88AE2EEE23D5D7B300428560 /* SecurityUtils.m */,
+				88AE2EF023D5DC2400428560 /* DeviceIntegrity.swift */,
+				88AE2EF223D5DC3900428560 /* KeyChain.swift */,
+				88AE2EF423D5DC5100428560 /* LocalAuthentication.swift */,
+				88AE2EF623D5DC7400428560 /* SecureScreen.swift */,
+				88AE2EF823D5DC8300428560 /* SecureStorage.swift */,
+			);
+			path = SecurityUtils;
+			sourceTree = "<group>";
+		};
+		88AE2EEA23D5CB1300428560 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				88AE2EEB23D5CB1C00428560 /* Extensions */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		88AE2EEB23D5CB1C00428560 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				88AE2EEC23D5CB3200428560 /* PluginCall+Additions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		88F9F14223D0582D008351D0 /* AppInfo */ = {
 			isa = PBXGroup;
 			children = (
 				88F9F14323D058DD008351D0 /* AppInfo.swift */,
 				88F9F14623D059AE008351D0 /* AppInfo.m */,
-				88F9F14E23D065F2008351D0 /* UIApplication+Additions.swift */,
 			);
 			path = AppInfo;
 			sourceTree = "<group>";
@@ -243,13 +288,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				88AE2EF323D5DC3900428560 /* KeyChain.swift in Sources */,
 				88F9F14723D059AE008351D0 /* AppInfo.m in Sources */,
+				88AE2EF923D5DC8300428560 /* SecureStorage.swift in Sources */,
 				88F9F15623D06A76008351D0 /* CameraPreview.m in Sources */,
-				88F9F14F23D065F2008351D0 /* UIApplication+Additions.swift in Sources */,
+				88AE2EF523D5DC5100428560 /* LocalAuthentication.swift in Sources */,
 				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
+				88AE2EEF23D5D7B300428560 /* SecurityUtils.m in Sources */,
 				88F9F15423D06A00008351D0 /* CameraPreview.swift in Sources */,
+				88AE2EF123D5DC2400428560 /* DeviceIntegrity.swift in Sources */,
+				88AE2EED23D5CB3200428560 /* PluginCall+Additions.swift in Sources */,
 				88F9F14423D058DD008351D0 /* AppInfo.swift in Sources */,
+				88AE2EE823D5C7A500428560 /* SecurityUtils.swift in Sources */,
 				88F9F15223D069E9008351D0 /* CameraController.swift in Sources */,
+				88AE2EF723D5DC7400428560 /* SecureScreen.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

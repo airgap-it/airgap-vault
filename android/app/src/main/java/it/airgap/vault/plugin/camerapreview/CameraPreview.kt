@@ -34,7 +34,7 @@ class CameraPreview : Plugin(), CameraPreviewListener {
     @PluginMethod
     fun start(call: PluginCall) {
         saveCall(call)
-        requiresPermissions(REQUEST_CAMERA_PERMISSION, Manifest.permission.CAMERA) {
+        requiresPermissions(REQUEST_CODE_CAMERA_PERMISSION, Manifest.permission.CAMERA) {
             startCamera(call)
         }
     }
@@ -71,7 +71,7 @@ class CameraPreview : Plugin(), CameraPreviewListener {
         super.handleRequestPermissionsResult(requestCode, permissions, grantResults)
 
         when (requestCode) {
-            REQUEST_CAMERA_PERMISSION -> {
+            REQUEST_CODE_CAMERA_PERMISSION -> {
                 val permissionsGranted = grantResults
                         .map { it == PackageManager.PERMISSION_GRANTED }
                         .reduce(Boolean::and)
@@ -220,6 +220,6 @@ class CameraPreview : Plugin(), CameraPreviewListener {
     }
 
     companion object {
-        private const val REQUEST_CAMERA_PERMISSION = 101
+        private const val REQUEST_CODE_CAMERA_PERMISSION = 101
     }
 }

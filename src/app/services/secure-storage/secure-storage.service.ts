@@ -1,15 +1,7 @@
 import { Injectable } from '@angular/core'
+import { Plugins } from '@capacitor/core'
 
-declare var window
-
-interface CordovaSecureStorage {
-  init(successCallback: Function, errorCallback: Function)
-  setItem(key: string, value: string, successCallback: Function, errorCallback: Function)
-  getItem(key: string, successCallback: Function, errorCallback: Function)
-  removeItem(key: string, successCallback: Function, errorCallback: Function)
-  isDeviceSecure(successCallback: Function, errorCallback: Function)
-  secureDevice(successCallback: Function, errorCallback: Function)
-}
+const { SecurityUtils } = Plugins
 
 export interface SecureStorage {
   init(): Promise<void>
@@ -22,55 +14,56 @@ export interface SecureStorage {
   providedIn: 'root'
 })
 export class SecureStorageService {
-  private create(alias: string, isParanoia: boolean): CordovaSecureStorage {
-    return new window.SecurityUtils.SecureStorage(alias, isParanoia)
-  }
 
-  public isDeviceSecure(): Promise<number> {
-    return new Promise<number>((resolve, reject) => {
-      this.create('airgap-secure-storage', false).isDeviceSecure(resolve, reject)
+  public isDeviceSecure(): Promise<any> {
+    return SecurityUtils.isDeviceSecure({
+      alias: 'airgap-secure-storage',
+      isParanoia: false
     })
   }
 
   public secureDevice(): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      this.create('airgap-secure-storage', false).secureDevice(resolve, reject)
+    return SecurityUtils.secureDevice({
+      alias: 'airgap-secure-storage',
+      isParanoia: false
     })
   }
 
-  public get(alias: string, isParanoia: boolean): Promise<SecureStorage> {
-    const secureStorage = this.create(alias, isParanoia)
-
-    return new Promise<SecureStorage>((resolve, reject) => {
-      secureStorage.init(
-        () => {
-          resolve({
-            init() {
-              return new Promise<void>((resolve, reject) => {
-                secureStorage.init(resolve, reject)
-              })
-            },
-            setItem(key, value) {
-              return new Promise<void>((resolve, reject) => {
-                secureStorage.setItem(key, value, resolve, reject)
-              })
-            },
-            getItem(key) {
-              return new Promise<any>((resolve, reject) => {
-                secureStorage.getItem(key, resolve, reject)
-              })
-            },
-            removeItem(key) {
-              return new Promise<void>((resolve, reject) => {
-                secureStorage.removeItem(key, resolve, reject)
-              })
-            }
-          })
-        },
-        err => {
-          reject(err)
-        }
-      )
+  public async get(alias: string, isParanoia: boolean): Promise<SecureStorage> {
+    await SecurityUtils.initStorage({
+      alias,
+      isParanoia
     })
+
+    return {
+      init() {
+        return SecurityUtils.initStorage({
+          alias,
+          isParanoia
+        })
+      },
+      setItem(key, value) {
+        return SecurityUtils.setItem({
+          alias,
+          isParanoia,
+          key,
+          value
+        })
+      },
+      getItem(key) {
+        return SecurityUtils.getItem({
+          alias,
+          isParanoia,
+          key
+        })
+      },
+      removeItem(key) {
+        return SecurityUtils.removeItem({
+          alias,
+          isParanoia,
+          key
+        })
+      }
+    }
   }
 }

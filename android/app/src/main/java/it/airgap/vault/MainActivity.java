@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import it.airgap.vault.plugin.appinfo.AppInfo;
 import it.airgap.vault.plugin.camerapreview.CameraPreview;
+import it.airgap.vault.plugin.securityutils.SecurityUtils;
 
 public class MainActivity extends BridgeActivity {
   @Override
@@ -21,6 +22,7 @@ public class MainActivity extends BridgeActivity {
       // Ex: add(TotallyAwesomePlugin.class);
       add(CameraPreview.class);
       add(AppInfo.class);
+      add(SecurityUtils.class);
     }});
   }
 }

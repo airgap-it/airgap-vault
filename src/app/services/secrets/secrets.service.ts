@@ -116,8 +116,9 @@ export class SecretsService {
 
   public async retrieveEntropyForSecret(secret: Secret): Promise<string> {
     const secureStorage: SecureStorage = await this.secureStorageService.get(secret.id, secret.isParanoia)
+    const result = await secureStorage.getItem(secret.id)
 
-    return secureStorage.getItem(secret.id)
+    return result.value
   }
 
   public findByPublicKey(pubKey: string): Secret | undefined {
