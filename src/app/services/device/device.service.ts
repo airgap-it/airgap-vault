@@ -1,12 +1,13 @@
 import { Injectable, NgZone } from '@angular/core'
 import { ModalController, Platform } from '@ionic/angular'
 import { ComponentRef, ModalOptions } from '@ionic/core'
+import { Plugins } from '@capacitor/core'
 
 import { Warning, WarningModalPage } from '../../pages/warning-modal/warning-modal.page'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { NavigationService } from '../navigation/navigation.service'
 
-declare var SecurityUtils: any
+const { SecurityUtils } = Plugins
 
 @Injectable({
   providedIn: 'root'
@@ -63,17 +64,14 @@ export class DeviceService {
       .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 
-  public checkForRoot(): Promise<boolean> {
-    return new Promise(resolve => {
-      if (this.platform.is('hybrid')) {
-        SecurityUtils.DeviceIntegrity.assess(result => {
-          resolve(!result)
-        })
-      } else {
-        console.warn('root detection skipped - no supported platform')
-        resolve(false)
-      }
-    })
+  public async checkForRoot(): Promise<boolean> {
+    if (this.platform.is('hybrid')) {
+      const result = await SecurityUtils.assessDeviceIntegrity()
+      return !result.value
+    } else {
+      console.warn('root detection skipped - no supported platform')
+      return false
+    }
   }
 
   public onScreenCaptureStateChanged(callback: (captured: boolean) => void): void {

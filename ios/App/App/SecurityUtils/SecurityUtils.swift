@@ -21,6 +21,14 @@ public class SecurityUtils: CAPPlugin {
         return queue
     }()
     
+    // MARK: - Device Integrity
+    
+    @objc func assessDeviceIntegrity(_ call: CAPPluginCall) {
+        DeviceIntegrity.assess { assessment in
+            call.resolve([Key.VALUE: assessment == .ok])
+        }
+    }
+    
     // MARK: - Local Authentication
     
     @objc func authenticate(_ call: CAPPluginCall) {

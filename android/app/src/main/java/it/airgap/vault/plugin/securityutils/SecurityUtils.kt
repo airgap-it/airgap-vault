@@ -48,6 +48,14 @@ class SecurityUtils : Plugin() {
     private val needsAuthentication: Boolean
         get() = lastBackgroundDate?.exceededTimeout ?: !isAuthenticated
 
+    private val integrityAssessment: Boolean
+        get() {
+            val isRooted = RootBeer(context).isRootedWithoutBusyBoxCheck
+            val nonDebuggable = BuildConfig.DEBUG || (context.applicationContext.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) == 0
+
+            return !isRooted && nonDebuggable
+        }
+
     /*
      * SecureStorage
      */
@@ -209,6 +217,15 @@ class SecurityUtils : Plugin() {
         call.resolve()
     }
 
+    /*
+     * DeviceIntegrity
+     */
+
+    @PluginMethod
+    fun assessDeviceIntegrity(call: PluginCall) {
+        call.resolveWithData(Key.VALUE to integrityAssessment)
+    }
+
     override fun handleOnResume() {
         super.handleOnResume()
         if (automaticLocalAuthentication) {
@@ -279,10 +296,7 @@ class SecurityUtils : Plugin() {
         get() = getBoolean(Param.AUTOMATIC_AUTHENTICATION)
 
     private fun PluginCall.assessIntegrity() {
-        val isRooted = RootBeer(context).isRootedWithoutBusyBoxCheck
-        val debuggable = !BuildConfig.DEBUG && (context.applicationContext.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
-
-        if (isRooted || debuggable) {
+        if (!integrityAssessment) {
             reject("Invalid state")
         }
     }

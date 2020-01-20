@@ -9,6 +9,8 @@
 #import <Capacitor/Capacitor.h>
 
 CAP_PLUGIN(SecurityUtils, "SecurityUtils",
+           CAP_PLUGIN_METHOD(assessDeviceIntegrity, CAPPluginReturnPromise);
+           
            CAP_PLUGIN_METHOD(authenticate, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(setInvalidationTimeout, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(invalidate, CAPPluginReturnPromise);
