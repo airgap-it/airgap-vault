@@ -15,9 +15,8 @@ import { SecretsService } from './services/secrets/secrets.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
 
 declare let window: Window & { airGapHasStarted: boolean }
-declare var SecurityUtils: any
 
-const { App, SplashScreen, StatusBar } = Plugins
+const { App, SplashScreen, StatusBar, SecurityUtils } = Plugins
 
 @Component({
   selector: 'airgap-root',
@@ -64,7 +63,7 @@ export class AppComponent implements AfterViewInit {
       StatusBar.setBackgroundColor({ 'color': '#311B58' })
       SplashScreen.hide()
 
-      SecurityUtils.LocalAuthentication.toggleAutomaticAuthentication(true)
+      await SecurityUtils.toggleAutomaticAuthentication({ automatic: true })
     }
 
     this.initChecks()

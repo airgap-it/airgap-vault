@@ -21,9 +21,48 @@ public class SecurityUtils: CAPPlugin {
         return queue
     }()
     
+    // MARK: - Local Authentication
+    
+    @objc func authenticate(_ call: CAPPluginCall) {
+        LocalAuthentication.shared.authenticate(localizedReason: call.reason) { result in
+            switch result {
+            case .success(_):
+                call.resolve()
+            case let .failure(error):
+                call.reject(error.localizedDescription)
+            }
+        }
+    }
+    
+    @objc func setInvalidationTimeout(_ call: CAPPluginCall) {
+        call.assertReceived(forMethod: "LocalAuthentication_setInvalidTimeout", requiredParams: Param.TIMEOUT)
+        LocalAuthentication.shared.invalidateAfter = TimeInterval(call.timeout)
+        call.resolve()
+    }
+    
+    @objc func invalidate(_ call: CAPPluginCall) {
+        LocalAuthentication.shared.invalidate {
+            call.resolve()
+        }
+    }
+    
+    @objc func toggleAutomaticAuthentication(_ call: CAPPluginCall) {
+        call.assertReceived(forMethod: "LocalAuthentication_toggleAutomaticAuthentication", requiredParams: Param.AUTOMATIC_AUTHENTICATION)
+        LocalAuthentication.shared.automatic = call.automaticAuthentication
+        call.resolve()
+    }
+    
+    @objc func setAuthenticationReason(_ call: CAPPluginCall) {
+        call.assertReceived(forMethod: "LocalAuthentication_setAuthenticationReason", requiredParams: Param.REASON)
+        LocalAuthentication.shared.localizedAuthenticationReason = call.reason!
+        call.resolve()
+    }
+    
+    // MARK: - Secure Storage
+    
     @objc func initStorage(_ call: CAPPluginCall) {
         queue.addOperation {
-            call.assertReceived(forMethod: "init", requiredParams: Param.ALIAS, Param.IS_PARANOIA)
+            call.assertReceived(forMethod: "SecureStorage_initStorage", requiredParams: Param.ALIAS, Param.IS_PARANOIA)
             _ = self.storage(forAlias: call.alias, isParanoia: call.isParanoia)
             
             call.resolve()
@@ -56,7 +95,7 @@ public class SecurityUtils: CAPPlugin {
     
     @objc func removeAll(_ call: CAPPluginCall) {
         queue.addOperation {
-            call.assertReceived(forMethod: "removeAll", requiredParams: Param.ALIAS, Param.IS_PARANOIA)
+            call.assertReceived(forMethod: "SecureStorage_removeAll", requiredParams: Param.ALIAS, Param.IS_PARANOIA)
             
             let secureStorage = self.storage(forAlias: call.alias, isParanoia: call.isParanoia)
             _ = secureStorage.dropSecuredKey()
@@ -67,7 +106,7 @@ public class SecurityUtils: CAPPlugin {
     
     @objc func removeItem(_ call: CAPPluginCall) {
         queue.addOperation {
-            call.assertReceived(forMethod: "removeItem", requiredParams: Param.ALIAS, Param.IS_PARANOIA, Param.KEY)
+            call.assertReceived(forMethod: "SecureStorage_removeItem", requiredParams: Param.ALIAS, Param.IS_PARANOIA, Param.KEY)
             
             let secureStorage = self.storage(forAlias: call.alias, isParanoia: call.isParanoia)
             do {
@@ -81,7 +120,7 @@ public class SecurityUtils: CAPPlugin {
     
     @objc func setItem(_ call: CAPPluginCall) {
         queue.addOperation {
-            call.assertReceived(forMethod: "setItem", requiredParams: Param.ALIAS, Param.IS_PARANOIA, Param.KEY, Param.VALUE)
+            call.assertReceived(forMethod: "SecureStorage_setItem", requiredParams: Param.ALIAS, Param.IS_PARANOIA, Param.KEY, Param.VALUE)
             
             let secureStorage = self.storage(forAlias: call.alias, isParanoia: call.isParanoia)
             secureStorage.store(key: call.key, value: call.value) { error in
@@ -96,7 +135,7 @@ public class SecurityUtils: CAPPlugin {
     
     @objc func getItem(_ call: CAPPluginCall) {
         queue.addOperation {
-            call.assertReceived(forMethod: "getItem", requiredParams: Param.ALIAS, Param.IS_PARANOIA, Param.KEY)
+            call.assertReceived(forMethod: "SecureStorage_getItem", requiredParams: Param.ALIAS, Param.IS_PARANOIA, Param.KEY)
             
             let secureStorage = self.storage(forAlias: call.alias, isParanoia: call.isParanoia)
             secureStorage.retrieve(key: call.key) { result in
@@ -116,6 +155,10 @@ public class SecurityUtils: CAPPlugin {
     }
     
     struct Param {
+        static let REASON = "reason"
+        static let TIMEOUT = "timeout"
+        static let AUTOMATIC_AUTHENTICATION = "automatic"
+        
         static let ALIAS = "alias"
         static let IS_PARANOIA = "isParanoia"
         static let KEY = "key"
@@ -134,6 +177,10 @@ extension AppDelegate {
 }
 
 private extension CAPPluginCall {
+    var reason: String? { return getString(SecurityUtils.Param.REASON) }
+    var timeout: Int { return getInt(SecurityUtils.Param.TIMEOUT)! }
+    var automaticAuthentication: Bool { return getBool(SecurityUtils.Param.AUTOMATIC_AUTHENTICATION)! }
+    
     var alias: String { return getString(SecurityUtils.Param.ALIAS)! }
     var isParanoia: Bool { return getBool(SecurityUtils.Param.IS_PARANOIA)! }
     var key: String { return getString(SecurityUtils.Param.KEY)! }

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.ApplicationInfo
 import android.provider.Settings
 import ch.papers.securestorage.Storage
@@ -17,6 +18,7 @@ import it.airgap.vault.plugin.securityutils.SecurityUtils.Companion.REQUEST_CODE
 import it.airgap.vault.util.assertReceived
 import it.airgap.vault.util.logDebug
 import it.airgap.vault.util.resolveWithData
+import java.util.*
 
 @NativePlugin(
         requestCodes = [REQUEST_CODE_CONFIRM_DEVICE_CREDENTIALS]
@@ -27,8 +29,28 @@ class SecurityUtils : Plugin() {
         activity.getSystemService(Context.KEYGUARD_SERVICE) as? KeyguardManager
     }
 
+    private val sharedPreferences: SharedPreferences by lazy {
+        context.getSharedPreferences("ch.airgap.securityutils", Context.MODE_PRIVATE)
+    }
+
     private var onAuthSuccess: (() -> Unit)? = null
     private var onAuthFailure: (() -> Unit)? = null
+
+    private var isAuthenticated: Boolean = false
+    private var lastBackgroundDate: Date? = null
+
+    private var automaticLocalAuthentication: Boolean
+        get() = sharedPreferences.getBoolean(PREFERENCES_KEY_AUTOMATIC_AUTHENTICATION, false)
+        set(value) { sharedPreferences.edit().putBoolean(PREFERENCES_KEY_AUTOMATIC_AUTHENTICATION, value).apply() }
+
+    private var invalidateAfterSeconds: Int = 10
+
+    private val needsAuthentication: Boolean
+        get() = lastBackgroundDate?.exceededTimeout ?: !isAuthenticated
+
+    /*
+     * SecureStorage
+     */
 
     @PluginMethod
     fun initStorage(call: PluginCall) {
@@ -142,6 +164,63 @@ class SecurityUtils : Plugin() {
         }
     }
 
+    /*
+     * LocalAuthentication
+     */
+
+    @PluginMethod
+    fun authenticate(call: PluginCall) {
+        authenticate(call) {
+            if (it) {
+                call.resolve()
+            } else {
+                call.reject("Authentication failed")
+            }
+        }
+    }
+
+    @PluginMethod
+    fun setInvalidationTimeout(call: PluginCall) {
+        with (call) {
+            assertReceived(Param.TIMEOUT)
+            invalidateAfterSeconds = timeout
+            resolve()
+        }
+    }
+
+    @PluginMethod
+    fun invalidate(call: PluginCall) {
+        isAuthenticated = false
+        lastBackgroundDate = null
+        call.resolve()
+    }
+
+    @PluginMethod
+    fun toggleAutomaticAuthentication(call: PluginCall) {
+        with (call) {
+            assertReceived(Param.AUTOMATIC_AUTHENTICATION)
+            automaticLocalAuthentication = automaticAuthentication
+            resolve()
+        }
+    }
+
+    @PluginMethod
+    fun setAuthenticationReason(call: PluginCall) {
+        call.resolve()
+    }
+
+    override fun handleOnResume() {
+        super.handleOnResume()
+        if (automaticLocalAuthentication) {
+            authenticate()
+        }
+    }
+
+    override fun handleOnPause() {
+        lastBackgroundDate = Date()
+        super.handleOnPause()
+    }
+
     override fun handleOnActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.handleOnActivityResult(requestCode, resultCode, data)
 
@@ -156,12 +235,28 @@ class SecurityUtils : Plugin() {
         }
     }
 
-    private fun showAuthenticationScreen(call: PluginCall, onAuthenticated: () -> Unit, onFailure: (() -> Unit)? = null) {
+    private fun showAuthenticationScreen(call: PluginCall? = null, onAuthenticated: (() -> Unit)? = null, onFailure: (() -> Unit)? = null) {
         val intent = keyguardManager?.createConfirmDeviceCredentialIntent(null, null)
         if (intent != null) {
             onAuthSuccess = onAuthenticated
             onAuthFailure = onFailure
             startActivityForResult(call, intent, REQUEST_CODE_CONFIRM_DEVICE_CREDENTIALS)
+        }
+    }
+
+    private fun authenticate(call: PluginCall? = null, onResult: ((Boolean) -> Unit)? = null) {
+        if (!needsAuthentication) {
+            onResult?.invoke(true)
+        } else {
+            showAuthenticationScreen(call, onAuthenticated = {
+                    isAuthenticated = true
+                    lastBackgroundDate = null
+                    onResult?.invoke(true)
+                }, onFailure = {
+                    isAuthenticated = false
+                    lastBackgroundDate = null
+                    onResult?.invoke(false)
+                })
         }
     }
 
@@ -177,6 +272,12 @@ class SecurityUtils : Plugin() {
     private val PluginCall.value: String
         get() = getString(Param.VALUE)
 
+    private val PluginCall.timeout: Int
+        get() = getInt(Param.TIMEOUT)
+
+    private val PluginCall.automaticAuthentication: Boolean
+        get() = getBoolean(Param.AUTOMATIC_AUTHENTICATION)
+
     private fun PluginCall.assessIntegrity() {
         val isRooted = RootBeer(context).isRootedWithoutBusyBoxCheck
         val debuggable = !BuildConfig.DEBUG && (context.applicationContext.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
@@ -186,11 +287,17 @@ class SecurityUtils : Plugin() {
         }
     }
 
+    private val Date.exceededTimeout: Boolean
+        get() = time + (invalidateAfterSeconds * 1000L) >= Date().time
+
     private object Param {
         const val ALIAS = "alias"
         const val IS_PARANOIA = "isParanoia"
         const val FILE_KEY = "key"
         const val VALUE = "value"
+
+        const val TIMEOUT = "timeout"
+        const val AUTOMATIC_AUTHENTICATION = "automatic"
     }
 
     private object Key {
@@ -199,5 +306,7 @@ class SecurityUtils : Plugin() {
 
     companion object {
         const val REQUEST_CODE_CONFIRM_DEVICE_CREDENTIALS = 1
+
+        private const val PREFERENCES_KEY_AUTOMATIC_AUTHENTICATION = "autoauth"
     }
 }
