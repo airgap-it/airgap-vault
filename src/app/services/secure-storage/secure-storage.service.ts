@@ -1,7 +1,6 @@
-import { Injectable } from '@angular/core'
-import { Plugins } from '@capacitor/core'
-
-const { SecurityUtils } = Plugins
+import { Injectable, Inject } from '@angular/core'
+import { SecurityUtilsPlugin } from 'src/app/capacitor-plugins/definitions'
+import { SECURITY_UTILS_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
 
 export interface SecureStorage {
   init(): Promise<void>
@@ -15,35 +14,39 @@ export interface SecureStorage {
 })
 export class SecureStorageService {
 
+  constructor(@Inject(SECURITY_UTILS_PLUGIN) private readonly securityUtils: SecurityUtilsPlugin) {}
+
   public isDeviceSecure(): Promise<any> {
-    return SecurityUtils.isDeviceSecure({
+    return this.securityUtils.isDeviceSecure({
       alias: 'airgap-secure-storage',
       isParanoia: false
     })
   }
 
   public secureDevice(): Promise<void> {
-    return SecurityUtils.secureDevice({
+    return this.securityUtils.secureDevice({
       alias: 'airgap-secure-storage',
       isParanoia: false
     })
   }
 
   public async get(alias: string, isParanoia: boolean): Promise<SecureStorage> {
-    await SecurityUtils.initStorage({
+    const securityUtils = this.securityUtils
+
+    await securityUtils.initStorage({
       alias,
       isParanoia
     })
 
     return {
       init() {
-        return SecurityUtils.initStorage({
+        return securityUtils.initStorage({
           alias,
           isParanoia
         })
       },
       setItem(key, value) {
-        return SecurityUtils.setItem({
+        return securityUtils.setItem({
           alias,
           isParanoia,
           key,
@@ -51,14 +54,14 @@ export class SecureStorageService {
         })
       },
       getItem(key) {
-        return SecurityUtils.getItem({
+        return securityUtils.getItem({
           alias,
           isParanoia,
           key
         })
       },
       removeItem(key) {
-        return SecurityUtils.removeItem({
+        return securityUtils.removeItem({
           alias,
           isParanoia,
           key

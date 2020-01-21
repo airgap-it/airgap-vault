@@ -1,13 +1,12 @@
-import { Injectable } from '@angular/core'
-import { Plugins } from '@capacitor/core'
+import { Injectable, Inject } from '@angular/core'
+import { AppPlugin } from '@capacitor/core'
 import { AlertController } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 import { first } from 'rxjs/operators'
 
 import { serializedDataToUrlString } from '../../utils/utils'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
-
-const { App } = Plugins
+import { APP_PLUGIN } from '../..//capacitor-plugins/injection-tokens'
 
 @Injectable({
   providedIn: 'root'
@@ -15,14 +14,15 @@ const { App } = Plugins
 export class DeepLinkService {
   constructor(
     private readonly alertCtrl: AlertController,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    @Inject(APP_PLUGIN) private readonly app: AppPlugin
   ) {}
 
   public sameDeviceDeeplink(url: string = 'airgap-wallet://'): Promise<void> {
     const deeplinkUrl: string = url.includes('://') ? url : serializedDataToUrlString(url)
 
     return new Promise((resolve, reject) => {
-      App.openUrl({ url: deeplinkUrl })
+      this.app.openUrl({ url: deeplinkUrl })
         .then(() => {
           console.log('Deeplink called')
           resolve()

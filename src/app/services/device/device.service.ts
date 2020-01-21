@@ -1,13 +1,13 @@
-import { Injectable, NgZone } from '@angular/core'
+import { Injectable, NgZone, Inject } from '@angular/core'
 import { ModalController, Platform } from '@ionic/angular'
 import { ComponentRef, ModalOptions } from '@ionic/core'
-import { Plugins, PluginListenerHandle } from '@capacitor/core'
+import { PluginListenerHandle } from '@capacitor/core'
 
 import { Warning, WarningModalPage } from '../../pages/warning-modal/warning-modal.page'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { NavigationService } from '../navigation/navigation.service'
-
-const { SecurityUtils } = Plugins
+import { SECURITY_UTILS_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
+import { SecurityUtilsPlugin } from 'src/app/capacitor-plugins/definitions'
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,8 @@ export class DeviceService {
     private readonly ngZone: NgZone,
     private readonly platform: Platform,
     private readonly modalController: ModalController,
-    protected readonly navigationService: NavigationService
+    protected readonly navigationService: NavigationService,
+    @Inject(SECURITY_UTILS_PLUGIN) private readonly securityUtils: SecurityUtilsPlugin
   ) {}
 
   public enableScreenshotProtection(): void {
@@ -69,7 +70,7 @@ export class DeviceService {
 
   public async checkForRoot(): Promise<boolean> {
     if (this.platform.is('hybrid')) {
-      const result = await SecurityUtils.assessDeviceIntegrity()
+      const result = await this.securityUtils.assessDeviceIntegrity()
       return !result.value
     } else {
       console.warn('root detection skipped - no supported platform')
@@ -79,7 +80,7 @@ export class DeviceService {
 
   public onScreenCaptureStateChanged(callback: (captured: boolean) => void): void {
     if (this.platform.is('ios') && this.platform.is('hybrid')) {
-      const listener = SecurityUtils.addListener('screenCaptureStateChanged', event => {
+      const listener = this.securityUtils.addListener('screenCaptureStateChanged', event => {
         this.ngZone.run(() => {
           callback(event.captured)
         })
@@ -90,13 +91,13 @@ export class DeviceService {
 
   public setSecureWindow(): void {
     if (this.platform.is('android') && this.platform.is('hybrid')) {
-      SecurityUtils.setWindowSecureFlag()
+      this.securityUtils.setWindowSecureFlag()
     }
   }
 
   public clearSecureWindow(): void {
     if (this.platform.is('android') && this.platform.is('hybrid')) {
-      SecurityUtils.clearWindowSecureFlag()
+      this.securityUtils.clearWindowSecureFlag()
     }
   }
 
@@ -109,7 +110,7 @@ export class DeviceService {
 
   public onScreenshotTaken(callback: () => void): void {
     if (this.platform.is('ios') && this.platform.is('hybrid')) {
-      const listener = SecurityUtils.addListener('screenshotTaken', () => {
+      const listener = this.securityUtils.addListener('screenshotTaken', () => {
         this.ngZone.run(() => {
           callback()
         })

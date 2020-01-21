@@ -1,17 +1,16 @@
-import { Injectable } from '@angular/core'
-import { Plugins } from '@capacitor/core'
+import { Injectable, Inject } from '@angular/core'
+import { ClipboardPlugin } from '@capacitor/core'
 import { ToastController } from '@ionic/angular'
 
 import { ErrorCategory, handleErrorLocal } from './../error-handler/error-handler.service'
-
-const { Clipboard } = Plugins
+import { CLIPBOARD_PLUGIN } from '../../capacitor-plugins/injection-tokens'
 
 @Injectable({ providedIn: 'root' })
 export class ClipboardService {
-  constructor(private readonly toastController: ToastController) {}
+  constructor(private readonly toastController: ToastController, @Inject(CLIPBOARD_PLUGIN) private readonly clipboard: ClipboardPlugin) {}
 
   public async copy(text: string): Promise<void> {
-    return Clipboard.write({
+    return this.clipboard.write({
       string: text
     })
   }
@@ -27,7 +26,7 @@ export class ClipboardService {
 
   public async paste(): Promise<string> {
     try {
-      const text = await Clipboard.read({ 
+      const text = await this.clipboard.read({ 
         type: 'string'
       })
       return text.value

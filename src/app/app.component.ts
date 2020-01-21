@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, NgZone } from '@angular/core'
-import { Plugins, StatusBarStyle, AppUrlOpen } from '@capacitor/core'
+import { AfterViewInit, Component, NgZone, Inject } from '@angular/core'
+import { AppPlugin, SplashScreenPlugin, StatusBarPlugin, StatusBarStyle, AppUrlOpen } from '@capacitor/core'
 import { Platform } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 import { first } from 'rxjs/operators'
@@ -13,10 +13,10 @@ import { ProtocolsService } from './services/protocols/protocols.service'
 import { SchemeRoutingService } from './services/scheme-routing/scheme-routing.service'
 import { SecretsService } from './services/secrets/secrets.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
+import { SPLASH_SCREEN_PLUGIN, STATUS_BAR_PLUGIN, APP_PLUGIN, SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
+import { SecurityUtilsPlugin } from './capacitor-plugins/definitions'
 
 declare let window: Window & { airGapHasStarted: boolean }
-
-const { App, SplashScreen, StatusBar, SecurityUtils } = Plugins
 
 @Component({
   selector: 'airgap-root',
@@ -35,7 +35,11 @@ export class AppComponent implements AfterViewInit {
     private readonly protocolsService: ProtocolsService,
     private readonly secretsService: SecretsService,
     private readonly ngZone: NgZone,
-    private readonly navigationService: NavigationService
+    private readonly navigationService: NavigationService,
+    @Inject(APP_PLUGIN) private readonly app: AppPlugin,
+    @Inject(SECURITY_UTILS_PLUGIN) private readonly securityUtils: SecurityUtilsPlugin,
+    @Inject(SPLASH_SCREEN_PLUGIN) private readonly splashScreen: SplashScreenPlugin,
+    @Inject(STATUS_BAR_PLUGIN) private readonly statusBar: StatusBarPlugin
   ) {
     // We set the app as started so no "error alert" will be shown in case the app fails to load. See error-check.js for details.
     window.airGapHasStarted = true
@@ -59,11 +63,11 @@ export class AppComponent implements AfterViewInit {
     await this.platform.ready()
 
     if (this.platform.is('hybrid')) {
-      StatusBar.setStyle({ 'style': StatusBarStyle.Dark })
-      StatusBar.setBackgroundColor({ 'color': '#311B58' })
-      SplashScreen.hide()
+      this.statusBar.setStyle({ 'style': StatusBarStyle.Dark })
+      this.statusBar.setBackgroundColor({ 'color': '#311B58' })
+      this.splashScreen.hide()
 
-      await SecurityUtils.toggleAutomaticAuthentication({ automatic: true })
+      await this.securityUtils.toggleAutomaticAuthentication({ automatic: true })
     }
 
     this.initChecks()
@@ -92,7 +96,7 @@ export class AppComponent implements AfterViewInit {
 
   public async ngAfterViewInit(): Promise<void> {
     await this.platform.ready()
-    App.addListener("appUrlOpen", async (data: AppUrlOpen) => {
+    this.app.addListener("appUrlOpen", async (data: AppUrlOpen) => {
       await this.isInitialized.promise
       if (data.url === DEEPLINK_VAULT_PREFIX || data.url.startsWith(DEEPLINK_VAULT_ADD_ACCOUNT)) {
         console.log('Successfully matched route', data.url)

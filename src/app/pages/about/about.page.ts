@@ -1,9 +1,8 @@
-import { Component } from '@angular/core'
-import { Plugins } from '@capacitor/core'
+import { Component, Inject } from '@angular/core'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
-
-const { AppInfo } = Plugins
+import { AppInfoPlugin } from 'src/app/capacitor-plugins/definitions'
+import { APP_INFO_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
 
 @Component({
   selector: 'airgap-about',
@@ -16,16 +15,16 @@ export class AboutPage {
   public versionName: string = 'VERSION_NUMBER'
   public versionCode: string | number = 'VERSION_CODE'
 
-  constructor() {
+  constructor(@Inject(APP_INFO_PLUGIN) private readonly appInfo: AppInfoPlugin) {
     this.updateVersions().catch(handleErrorLocal(ErrorCategory.CORDOVA_PLUGIN))
   }
 
   public async updateVersions(): Promise<void> {
-    const appInfo = await AppInfo.get()
+    const appInfo = await this.appInfo.get()
     
     this.appName = appInfo.appName
     this.packageName = appInfo.packageName
     this.versionName = appInfo.versionName
-    this.versionCode = String(appInfo.versionCode)
+    this.versionCode = appInfo.versionCode
   }
 }

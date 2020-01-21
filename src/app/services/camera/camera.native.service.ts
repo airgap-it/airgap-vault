@@ -1,17 +1,16 @@
-import { ElementRef, Injectable, Renderer2, RendererFactory2, ViewChild } from '@angular/core'
+import { ElementRef, Injectable, Renderer2, RendererFactory2, ViewChild, Inject } from '@angular/core'
 import { Platform } from '@ionic/angular'
 import { Observable } from 'rxjs'
-import { Plugins } from '@capacitor/core'
 
 import workerJS from '../../../assets/workers/entropyCalculatorWorker'
 import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
 
 import { ErrorCategory, handleErrorLocal } from './../error-handler/error-handler.service'
 import { PermissionsService, PermissionStatus } from './../permissions/permissions.service'
+import { CameraPreviewPlugin } from 'src/app/capacitor-plugins/definitions'
+import { CAMERA_PREVIEW_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
 const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
 const entropyCalculatorWorker = new Worker(blobURL)
-
-const { CameraPreview } = Plugins
 
 @Injectable({ providedIn: 'root' })
 export class CameraNativeService implements IEntropyGenerator {
@@ -42,7 +41,8 @@ export class CameraNativeService implements IEntropyGenerator {
   constructor(
     private readonly platform: Platform,
     private readonly rendererFactory: RendererFactory2,
-    private readonly permissionsService: PermissionsService
+    private readonly permissionsService: PermissionsService,
+    @Inject(CAMERA_PREVIEW_PLUGIN) private readonly cameraPreview: CameraPreviewPlugin
   ) {
     this.renderer = this.rendererFactory.createRenderer(null, null)
     this.entropyObservable = Observable.create(observer => {
@@ -94,7 +94,7 @@ export class CameraNativeService implements IEntropyGenerator {
     console.log('initCamera')
 
     return new Promise(resolve => {
-      CameraPreview
+      this.cameraPreview
         .start(
           Object.assign(
             { 
@@ -125,7 +125,7 @@ export class CameraNativeService implements IEntropyGenerator {
             // start camera interval
             this.cameraInterval = window.setInterval(() => {
               this.cameraIsTakingPhoto = true
-              CameraPreview
+              this.cameraPreview
                 .capture({
                   width: this.VIDEO_SIZE,
                   height: this.VIDEO_SIZE,
@@ -187,7 +187,7 @@ export class CameraNativeService implements IEntropyGenerator {
     }
 
     return new Promise((_resolve, reject) => {
-      CameraPreview.stop().then(
+      this.cameraPreview.stop().then(
         () => {
           this.cameraIsRunning = false
           console.log('camera stopped.')
