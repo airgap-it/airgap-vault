@@ -4,4 +4,11 @@
     <string name="title_activity_main">AirGap Vault</string>
     <string name="package_name">it.airgap.vault</string>
     <string name="custom_url_scheme">airgap-vault</string>
+
+    <string name="paranoia_input_alert_title">Enter your Password</string>
+    <string name="paranoia_input_alert_setup_message">Choose a password with at least 4 characters.</string>
+    <string name="paranoia_input_alert_positive_button">Set Password</string>
+    <string name="paranoia_input_alert_unlock_button">Unlock</string>
+    <string name="paranoia_input_alert_hint">Your Password</string>
+    <string name="paranoia_input_alert_confirmation_hint">Confirm Your Password</string>
 </resources>

@@ -54,7 +54,6 @@
     "bip39": "^2.4.0",
     "cordova-android": "8.1.0",
     "cordova-ios": "5.0.1",
-    "cordova-plugin-airgap-security-utils": "0.4.0",
     "cordova-plugin-audioinput": "1.0.1",
     "cordova-plugin-compat": "1.2.0",
     "cordova-plugin-device-motion": "^2.0.1",
@@ -153,7 +152,6 @@
       "cordova-plugin-audioinput": {},
       "cordova-plugin-qrscanner": {},
       "cordova.plugins.diagnostic": {},
-      "cordova-plugin-airgap-security-utils": {},
       "cordova-plugin-device-motion": {}
     }
   }

@@ -8,7 +8,7 @@ import android.content.SharedPreferences
 import android.content.pm.ApplicationInfo
 import android.provider.Settings
 import android.view.WindowManager
-import ch.papers.securestorage.Storage
+import it.airgap.vault.plugin.securityutils.storage.Storage
 import com.getcapacitor.NativePlugin
 import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall

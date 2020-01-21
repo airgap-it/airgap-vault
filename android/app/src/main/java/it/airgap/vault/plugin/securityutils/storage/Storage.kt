@@ -1,4 +1,4 @@
-package ch.papers.securestorage
+package it.airgap.vault.plugin.securityutils.storage
 
 import android.app.Activity
 import android.content.Context
@@ -13,6 +13,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.EditText
+import it.airgap.vault.R
 import java.io.*
 import java.math.BigInteger
 import java.nio.ByteBuffer

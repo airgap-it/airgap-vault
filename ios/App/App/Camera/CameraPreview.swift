@@ -68,6 +68,7 @@ public class CameraPreview: CAPPlugin {
     }
 
     @objc func capture(_ call: CAPPluginCall) {
+        // TODO: custom capture size
         let width = call.getInt(Param.WIDTH) ?? 0
         let height = call.getInt(Param.HEIGHT) ?? 0
         let quality = (call.getInt(Param.QUALITY) ?? 85) / 100

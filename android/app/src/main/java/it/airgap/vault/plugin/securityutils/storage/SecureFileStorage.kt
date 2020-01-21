@@ -1,4 +1,4 @@
-package ch.papers.securestorage
+package it.airgap.vault.plugin.securityutils.storage
 
 import android.os.Build
 import android.security.keystore.UserNotAuthenticatedException
