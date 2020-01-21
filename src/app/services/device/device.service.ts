@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from '@angular/core'
 import { ModalController, Platform } from '@ionic/angular'
 import { ComponentRef, ModalOptions } from '@ionic/core'
-import { Plugins } from '@capacitor/core'
+import { Plugins, PluginListenerHandle } from '@capacitor/core'
 
 import { Warning, WarningModalPage } from '../../pages/warning-modal/warning-modal.page'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
@@ -13,6 +13,9 @@ const { SecurityUtils } = Plugins
   providedIn: 'root'
 })
 export class DeviceService {
+  private screenCaptureStateChangedListeners: PluginListenerHandle[] = []
+  private screenshotTakenListeners: PluginListenerHandle[] = []
+
   constructor(
     private readonly ngZone: NgZone,
     private readonly platform: Platform,
@@ -76,49 +79,57 @@ export class DeviceService {
 
   public onScreenCaptureStateChanged(callback: (captured: boolean) => void): void {
     if (this.platform.is('ios') && this.platform.is('hybrid')) {
-      SecurityUtils.SecureScreen.onScreenCaptureStateChanged((captured: boolean) => {
+      const listener = SecurityUtils.addListener('screenCaptureStateChanged', event => {
         this.ngZone.run(() => {
-          callback(captured)
+          callback(event.captured)
         })
       })
+      this.screenCaptureStateChangedListeners.push(listener)
     }
   }
 
   public setSecureWindow(): void {
     if (this.platform.is('android') && this.platform.is('hybrid')) {
-      SecurityUtils.SecureScreen.setWindowSecureFlag()
+      SecurityUtils.setWindowSecureFlag()
     }
   }
 
   public clearSecureWindow(): void {
     if (this.platform.is('android') && this.platform.is('hybrid')) {
-      SecurityUtils.SecureScreen.clearWindowSecureFlag()
+      SecurityUtils.clearWindowSecureFlag()
     }
   }
 
   public removeScreenCaptureObservers(): void {
     if (this.platform.is('ios') && this.platform.is('hybrid')) {
-      SecurityUtils.SecureScreen.removeScreenCaptureObservers()
+      this.removeListeners(this.screenCaptureStateChangedListeners)
+      this.screenCaptureStateChangedListeners = []
     }
   }
 
   public onScreenshotTaken(callback: () => void): void {
     if (this.platform.is('ios') && this.platform.is('hybrid')) {
-      SecurityUtils.SecureScreen.onScreenshotTaken(() => {
+      const listener = SecurityUtils.addListener('screenshotTaken', () => {
         this.ngZone.run(() => {
           callback()
         })
       })
+      this.screenCaptureStateChangedListeners.push(listener)
     }
   }
 
   public removeScreenshotObservers(): void {
     if (this.platform.is('ios') && this.platform.is('hybrid')) {
-      SecurityUtils.SecureScreen.removeScreenshotObservers()
+      this.removeListeners(this.screenshotTakenListeners)
+      this.screenshotTakenListeners = []
     }
   }
 
   public async checkForElectron(): Promise<boolean> {
     return typeof navigator === 'object' && typeof navigator.userAgent === 'string' && navigator.userAgent.indexOf('Electron') >= 0
+  }
+
+  private removeListeners(listeners: PluginListenerHandle[]) {
+    listeners.forEach(listener => { listener.remove() })
   }
 }

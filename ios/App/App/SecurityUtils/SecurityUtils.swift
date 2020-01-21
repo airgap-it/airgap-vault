@@ -13,13 +13,40 @@ import LocalAuthentication
 @objc(SecurityUtils)
 public class SecurityUtils: CAPPlugin {
     
-    private lazy var queue: OperationQueue = {
-        let queue = OperationQueue()
+    private var secureScreen: SecureScreen!
+    private var screenCaptureObserver: Observer?
+    private var screenshotObserver: Observer?
+    
+    private var queue: OperationQueue!
+    
+    public override func load() {
+        secureScreen = SecureScreen()
+        
+        queue = OperationQueue()
         queue.maxConcurrentOperationCount = 1
         queue.name = "it.airgap.SecureStorageQueue"
         
-        return queue
-    }()
+        LocalAuthentication.shared.updateAutomaticAuthenticationIfNeeded()
+        
+        initOnScreenCaptureStateChangedEvent()
+        initOnScreenshotTakenEvent()
+    }
+    
+    // MARK: - Secure Screen
+    
+    private func initOnScreenCaptureStateChangedEvent() {
+        screenCaptureObserver = secureScreen.addScreenCaptureObserver { [unowned self] (captured) in
+            self.notifyListeners(Event.SCREEN_CAPTURE_STATE_CHANGED, data: [Key.CAPTURED: captured])
+        }
+        // deliver the first initial state
+        self.notifyListeners(Event.SCREEN_CAPTURE_STATE_CHANGED, data: [Key.CAPTURED: secureScreen.isCaptured])
+    }
+    
+    private func initOnScreenshotTakenEvent() {
+        screenshotObserver = secureScreen.addScreenshotObserver { [unowned self] in
+            self.notifyListeners(Event.SCREENSHOT_TAKEN, data: [:])
+        }
+    }
     
     // MARK: - Device Integrity
     
@@ -174,7 +201,13 @@ public class SecurityUtils: CAPPlugin {
     }
     
     struct Key {
+        static let CAPTURED = "captured"
         static let VALUE = "value"
+    }
+    
+    struct Event {
+        static let SCREEN_CAPTURE_STATE_CHANGED = "screenCaptureStateChanged"
+        static let SCREENSHOT_TAKEN = "screenshotTaken"
     }
 }
 

@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ApplicationInfo
 import android.provider.Settings
+import android.view.WindowManager
 import ch.papers.securestorage.Storage
 import com.getcapacitor.NativePlugin
 import com.getcapacitor.Plugin
@@ -224,6 +225,26 @@ class SecurityUtils : Plugin() {
     @PluginMethod
     fun assessDeviceIntegrity(call: PluginCall) {
         call.resolveWithData(Key.VALUE to integrityAssessment)
+    }
+
+    /*
+     * Secure Screen
+     */
+
+    @PluginMethod
+    fun setWindowSecureFlag(call: PluginCall) {
+        with (activity) {
+            runOnUiThread { window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE) }
+        }
+        call.resolve()
+    }
+
+    @PluginMethod
+    fun clearWindowSecureFlag(call: PluginCall) {
+        with (activity) {
+            runOnUiThread { window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE) }
+        }
+        call.resolve()
     }
 
     override fun handleOnResume() {
