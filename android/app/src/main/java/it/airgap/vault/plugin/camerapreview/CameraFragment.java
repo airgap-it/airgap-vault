@@ -628,6 +628,10 @@ public class CameraFragment extends Fragment {
   public void takePicture(final int width, final int height, final int quality){
     Log.d(TAG, "CameraPreview takePicture width: " + width + ", height: " + height + ", quality: " + quality);
 
+    if (mCamera == null) {
+      return;
+    }
+
     if(mPreview != null) {
       if(!canTakePicture){
         return;

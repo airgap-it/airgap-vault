@@ -47,7 +47,10 @@ class SecurityUtils : Plugin() {
     private var invalidateAfterSeconds: Int = 10
 
     private val needsAuthentication: Boolean
-        get() = lastBackgroundDate?.exceededTimeout ?: !isAuthenticated
+        get() {
+            lastBackgroundDate?.let { isAuthenticated = !it.exceededTimeout }
+            return !isAuthenticated
+        }
 
     private val integrityAssessment: Boolean
         get() {
@@ -323,7 +326,7 @@ class SecurityUtils : Plugin() {
     }
 
     private val Date.exceededTimeout: Boolean
-        get() = time + (invalidateAfterSeconds * 1000L) >= Date().time
+        get() = time + (invalidateAfterSeconds * 1000L) <= Date().time
 
     private object Param {
         const val ALIAS = "alias"
