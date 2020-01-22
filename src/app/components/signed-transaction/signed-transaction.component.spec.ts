@@ -4,6 +4,8 @@ import { IACMessageType, Serializer } from 'airgap-coin-lib'
 import { UnitHelper } from '../../../../test-config/unit-test-helper'
 
 import { SignedTransactionComponent } from './signed-transaction.component'
+import { STORAGE_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
+import { StoragePluginMock } from 'test-config/plugins-mocks'
 
 describe('SignedTransactionComponent', () => {
   let signedTransactionFixture: ComponentFixture<SignedTransactionComponent>
@@ -14,7 +16,10 @@ describe('SignedTransactionComponent', () => {
     unitHelper = new UnitHelper()
     TestBed.configureTestingModule(
       unitHelper.testBed({
-        declarations: []
+        declarations: [],
+        providers: [
+          { provide: STORAGE_PLUGIN, useClass: StoragePluginMock }
+        ]
       })
     )
       .compileComponents()

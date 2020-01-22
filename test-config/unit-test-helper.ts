@@ -4,7 +4,7 @@ import { TestModuleMetadata } from '@angular/core/testing'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterTestingModule } from '@angular/router/testing'
 import { AlertController, IonicModule, NavController, Platform, ToastController } from '@ionic/angular'
-import { IonicStorageModule, Storage } from '@ionic/storage'
+import { IonicStorageModule } from '@ionic/storage'
 import { TranslateFakeLoader, TranslateLoader, TranslateModule } from '@ngx-translate/core'
 
 import { ComponentsModule } from '../src/app/components/components.module'
@@ -12,21 +12,19 @@ import { PipesModule } from '../src/app/pipes/pipes.module'
 
 import {
   AlertControllerMock,
-  AppVersionMock,
   DeeplinkMock,
   LoadingControllerMock,
   ModalControllerMock,
   NavControllerMock,
   PlatformMock,
-  SplashScreenMock,
-  StatusBarMock,
   ToastControllerMock
 } from './ionic-mocks'
-import { StorageMock } from './storage-mock'
+import { AppInfoPluginMock, SplashScreenMock, StatusBarMock, StoragePluginMock } from './plugins-mocks'
+import { STORAGE_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
 
 export class UnitHelper {
   public readonly mockRefs = {
-    appVersion: new AppVersionMock(),
+    appInfo: new AppInfoPluginMock(),
     platform: new PlatformMock(),
     statusBar: new StatusBarMock(),
     splashScreen: new SplashScreenMock(),
@@ -63,7 +61,7 @@ export class UnitHelper {
     ]
 
     if (!useIonicOnlyTestBed) {
-      mandatoryProviders.push({ provide: Storage, useClass: StorageMock })
+      mandatoryProviders.push({ provide: STORAGE_PLUGIN, useClass: StoragePluginMock })
       mandatoryDeclarations.push()
       mandatoryImports.push(PipesModule)
     }
@@ -75,3 +73,6 @@ export class UnitHelper {
     return testBed
   }
 }
+
+export const newSpy: (name: string, returnValue: any) => jasmine.Spy = (name: string, returnValue: any): jasmine.Spy =>
+  jasmine.createSpy(name).and.returnValue(returnValue)
