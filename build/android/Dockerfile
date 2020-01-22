@@ -15,7 +15,7 @@ RUN mkdir /app
 WORKDIR /app
 
 # using npm 6.5.0 to fix installing certain cordova/ionic plugins
-RUN npm install -g npm@6.5.0 ionic@4.6.0
+RUN npm install -g npm@6.5.0 ionic@4.6.0 @capacitor/core@1.4.0 @capacitor/cli@1.4.0
 RUN npm cache clean -f
 RUN npm install -g n
 RUN n 10.14.1
@@ -40,9 +40,6 @@ RUN ionic info
 # Copy hooks (used to remove permissions)
 COPY ./hooks /app/hooks
 
-# add android platform
-RUN ionic cordova platforms add android
-
 # Bundle app source
 COPY . /app
 
@@ -51,7 +48,7 @@ RUN node config/patch_crypto.js
 
 # set version code
 ARG BUILD_NR
-RUN sed -i -e "s/android-versionCode=\"1\"/android-versionCode=\"$BUILD_NR\"/g" config.xml
+RUN sed -i -e "s/versionCode 1/versionCode $BUILD_NR/g" /app/android/app/build.gradle
 
 # disable pure getters due to https://github.com/angular/angular-cli/issues/11439 
 RUN npm run disable-pure-getters
@@ -59,11 +56,20 @@ RUN npm run disable-pure-getters
 # configure mangle (keep_fnames) for bitcoinjs https://github.com/bitcoinjs/bitcoinjs-lib/issues/959
 RUN npm run configure-mangle
 
+# build ionic
+RUN ionic build
+
+# copy ionic build
+RUN cap update android
+
+# clean project
+RUN /app/android/gradlew --project-dir /app/android clean
+
 # build apk
-RUN ionic cordova build android --prod --release --no-interactive
+RUN /app/android/gradlew --project-dir /app/android build
 
 # copy release-apk
-RUN cp /app/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk android-release-unsigned.apk
+RUN cp /app/android/app/build/outputs/apk/release/app-release-unsigned.apk android-release-unsigned.apk
 
 RUN cp android-release-unsigned.apk android-debug.apk
 
