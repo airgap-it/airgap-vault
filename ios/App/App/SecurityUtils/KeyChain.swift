@@ -1,4 +1,3 @@
-import Cordova
 //
 //  Keychain.swift
 //  AGUtilities

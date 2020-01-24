@@ -1,4 +1,3 @@
-import Cordova
 //
 //  SecureStorage.swift
 //  SecureStorage

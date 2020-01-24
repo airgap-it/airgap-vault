@@ -1,4 +1,3 @@
-import Cordova
 //
 //  LocalAuthentication.swift
 //  AGUtilities
@@ -9,6 +8,7 @@ import Cordova
 
 import Foundation
 import LocalAuthentication
+import UIKit
 
 public class LocalAuthentication {
 

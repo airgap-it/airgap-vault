@@ -73,7 +73,6 @@ build_ios:
     - echo "$IOS_EXPORT_OPTIONS" > exportOptions.plist
   script:
     - export DEVELOPER_DIR=$XCODE_PATH
-    - sed -i -e "s/ios-CFBundleVersion=\"0.0.0\"/ios-CFBundleVersion=\"1.0.$CI_PIPELINE_ID\"/g" /app/ios/App/App/Info.plist
     - nvm use v10.13.0
     - npm install
     - npm run disable-pure-getters
@@ -81,10 +80,9 @@ build_ios:
     - ionic build
     - cap copy ios
     - find ./resources/ -name "*.png" -exec convert "{}" -alpha off "{}" \;
-    - xcodebuild -workspace platforms/ios/AirGap\ Vault.xcworkspace -scheme "AirGap Vault" -destination generic/platform=iOS build -allowProvisioningUpdates
-    - xcodebuild -workspace platforms/ios/AirGap\ Vault.xcworkspace -scheme "AirGap Vault" -sdk iphoneos -configuration AppStoreDistribution archive -archivePath platforms/ios/AirGap\ Vault.xcarchive
-    - xcodebuild -exportArchive -archivePath platforms/ios/AirGap\ Vault.xcarchive -exportOptionsPlist exportOptions.plist -exportPath platforms/ios/ -allowProvisioningUpdates
-    - xcrun altool --upload-app -f platforms/ios/AirGap\ Vault.ipa -u $IOS_USERNAME -p $IOS_PASSWORD
+    - xcodebuild -workspace ios/App/App.xcworkspace -scheme "App" -destination generic/platform=iOS -configuration Release archive -archivePath ios/AirGap\ Vault.xcarchive CURRENT_PROJECT_VERSION=1.0.$CI_PIPELINE_ID
+    - xcodebuild -exportArchive -archivePath ios/AirGap\ Vault.xcarchive -exportOptionsPlist exportOptions.plist -exportPath ios/ -allowProvisioningUpdates
+    - xcrun altool --upload-app -f ios/AirGap\ Vault.ipa -u $IOS_USERNAME -p $IOS_PASSWORD
   artifacts:
     paths:
       - platforms/ios/AirGap\ Vault.ipa
