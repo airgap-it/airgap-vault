@@ -58,6 +58,9 @@ RUN ionic build
 # copy ionic build
 RUN cap sync android
 
+# remove unused cordova-diagnostic-plugin features
+RUN npm run remove-diagnostic-modules
+
 # clean project
 RUN /app/android/gradlew --project-dir /app/android clean
 
