@@ -17,6 +17,9 @@
       "androidSplashResourceName": "screen"
     }
   },
+  "ios": {
+    "cordovaSwiftVersion": "5.0"
+  },
   "cordova": {
     "preferences": {
       "cordova.plugins.diagnostic.modules": "CAMERA MICROPHONE"

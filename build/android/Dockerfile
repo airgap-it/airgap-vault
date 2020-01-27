@@ -56,7 +56,7 @@ RUN npm run configure-mangle
 RUN ionic build
 
 # copy ionic build
-RUN cap update android
+RUN cap sync android
 
 # clean project
 RUN /app/android/gradlew --project-dir /app/android clean

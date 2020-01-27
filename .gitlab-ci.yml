@@ -78,7 +78,7 @@ build_ios:
     - npm run disable-pure-getters
     - npm run configure-mangle
     - ionic build
-    - cap copy ios
+    - cap sync ios
     - find ./resources/ -name "*.png" -exec convert "{}" -alpha off "{}" \;
     - xcodebuild -workspace ios/App/App.xcworkspace -scheme "App" -destination generic/platform=iOS -configuration Release archive -archivePath ios/AirGap\ Vault.xcarchive CURRENT_PROJECT_VERSION=1.0.$CI_PIPELINE_ID
     - xcodebuild -exportArchive -archivePath ios/AirGap\ Vault.xcarchive -exportOptionsPlist exportOptions.plist -exportPath ios/ -allowProvisioningUpdates
