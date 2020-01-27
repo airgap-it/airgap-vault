@@ -79,14 +79,13 @@ build_ios:
     - npm run configure-mangle
     - ionic build
     - cap sync ios
-    - npm run remove-diagnostic-modules
-    - find ./resources/ -name "*.png" -exec convert "{}" -alpha off "{}" \;
+    - npm run remove-diagnostic-modules # manually remove unused cordova-diagnostic-plugin modules
     - xcodebuild -workspace ios/App/App.xcworkspace -scheme "App" -destination generic/platform=iOS -configuration Release archive -archivePath ios/AirGap\ Vault.xcarchive CURRENT_PROJECT_VERSION=1.0.$CI_PIPELINE_ID
     - xcodebuild -exportArchive -archivePath ios/AirGap\ Vault.xcarchive -exportOptionsPlist exportOptions.plist -exportPath ios/ -allowProvisioningUpdates
     - xcrun altool --upload-app -f ios/AirGap\ Vault.ipa -u $IOS_USERNAME -p $IOS_PASSWORD
   artifacts:
     paths:
-      - platforms/ios/AirGap\ Vault.ipa
+      - ios/AirGap\ Vault.ipa
   tags:
     - ios
 
