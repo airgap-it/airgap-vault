@@ -19,22 +19,41 @@
     <param name="onload" value="true"/>
   </feature>
 
+  <feature name="Diagnostic_Location">
+    <param name="android-package" value="cordova.plugins.Diagnostic_Location"/>
+    <param name="onload" value="true"/>
+  </feature>
+
+  <feature name="Diagnostic_Bluetooth">
+    <param name="android-package" value="cordova.plugins.Diagnostic_Bluetooth"/>
+    <param name="onload" value="true"/>
+  </feature>
+
+  <feature name="Diagnostic_Wifi">
+    <param name="android-package" value="cordova.plugins.Diagnostic_Wifi"/>
+    <param name="onload" value="true"/>
+  </feature>
+
   <feature name="Diagnostic_Camera">
     <param name="android-package" value="cordova.plugins.Diagnostic_Camera"/>
     <param name="onload" value="true"/>
   </feature>
 
+  <feature name="Diagnostic_Notifications">
+    <param name="android-package" value="cordova.plugins.Diagnostic_Notifications"/>
+    <param name="onload" value="true"/>
+  </feature>
+
+  <feature name="Diagnostic_NFC">
+    <param name="android-package" value="cordova.plugins.Diagnostic_NFC"/>
+    <param name="onload" value="true"/>
+  </feature>
+
+  <feature name="Diagnostic_External_Storage">
+    <param name="android-package" value="cordova.plugins.Diagnostic_External_Storage"/>
+    <param name="onload" value="true"/>
+  </feature>
+
   
-  <preference name="ScrollEnabled" value="false" />
-  <preference name="android-minSdkVersion" value="19" />
-  <preference name="BackupWebStorage" value="none" />
-  <preference name="SplashMaintainAspectRatio" value="true" />
-  <preference name="FadeSplashScreenDuration" value="300" />
-  <preference name="SplashShowOnlyFirstTime" value="false" />
-  <preference name="SplashScreen" value="screen" />
-  <preference name="SplashScreenDelay" value="3000" />
-  <preference name="Orientation" value="portrait" />
-  <preference name="deployment-target" value="11.0" />
-  <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
   <preference name="cordova.plugins.diagnostic.modules" value="CAMERA MICROPHONE" />
 </widget>

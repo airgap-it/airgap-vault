@@ -4,6 +4,7 @@
 //
 //  Created by Julia Samol on 16.01.20.
 //
+//  Forked from https://github.com/arielhernandezmusa/capacitor-camera-preview
 
 import AVFoundation
 import UIKit

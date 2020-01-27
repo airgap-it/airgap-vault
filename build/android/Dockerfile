@@ -27,18 +27,14 @@ COPY package-lock.json /app/package-lock.json
 # install dependencies
 RUN npm ci
 
-# copy config.xml, ionic configs and resources to allow plugin installation
-COPY config.xml /app/config.xml
+# copy capacitor configs and ionic configs
+COPY capacitor.config.json /app/capacitor.config.json
 COPY ionic.config.json /app/ionic.config.json
-COPY ./resources /app/resources
 
 RUN mkdir www
 
 # run ionic android build
 RUN ionic info
-
-# Copy hooks (used to remove permissions)
-COPY ./hooks /app/hooks
 
 # Bundle app source
 COPY . /app
