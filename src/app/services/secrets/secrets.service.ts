@@ -222,7 +222,7 @@ export class SecretsService {
       const seed: string = bip39.mnemonicToSeedHex(bip39.entropyToMnemonic(entropy))
       const wallet: AirGapWallet = new AirGapWallet(
         protocol.identifier,
-        protocol.getPublicKeyFromHexSecret(seed, customDerivationPath),
+        await protocol.getPublicKeyFromHexSecret(seed, customDerivationPath),
         isHDWallet,
         customDerivationPath
       )

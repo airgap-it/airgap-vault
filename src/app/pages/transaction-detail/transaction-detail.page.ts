@@ -100,14 +100,14 @@ export class TransactionDetailPage {
       throw new Error('no secret found for this public key')
     }
 
-    return this.secretsService.retrieveEntropyForSecret(secret).then((entropy: string) => {
+    return this.secretsService.retrieveEntropyForSecret(secret).then(async (entropy: string) => {
       const seed: string = bip39.mnemonicToSeedHex(bip39.entropyToMnemonic(entropy))
       if (wallet.isExtendedPublicKey) {
-        const extendedPrivateKey: string = wallet.coinProtocol.getExtendedPrivateKeyFromHexSecret(seed, wallet.derivationPath)
+        const extendedPrivateKey: string = await wallet.coinProtocol.getExtendedPrivateKeyFromHexSecret(seed, wallet.derivationPath)
 
         return wallet.coinProtocol.signWithExtendedPrivateKey(extendedPrivateKey, transaction.transaction)
       } else {
-        const privateKey: Buffer = wallet.coinProtocol.getPrivateKeyFromHexSecret(seed, wallet.derivationPath)
+        const privateKey: Buffer = await wallet.coinProtocol.getPrivateKeyFromHexSecret(seed, wallet.derivationPath)
 
         return wallet.coinProtocol.signWithPrivateKey(privateKey, transaction.transaction)
       }
