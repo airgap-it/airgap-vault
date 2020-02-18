@@ -101,13 +101,13 @@ export class TransactionDetailPage {
     }
 
     return this.secretsService.retrieveEntropyForSecret(secret).then(async (entropy: string) => {
-      const seed: string = bip39.mnemonicToSeedHex(bip39.entropyToMnemonic(entropy))
+      const mnemonic: string = bip39.entropyToMnemonic(entropy)
       if (wallet.isExtendedPublicKey) {
-        const extendedPrivateKey: string = await wallet.coinProtocol.getExtendedPrivateKeyFromHexSecret(seed, wallet.derivationPath)
+        const extendedPrivateKey: string = await wallet.coinProtocol.getExtendedPrivateKeyFromMnemonic(mnemonic, wallet.derivationPath)
 
         return wallet.coinProtocol.signWithExtendedPrivateKey(extendedPrivateKey, transaction.transaction)
       } else {
-        const privateKey: Buffer = await wallet.coinProtocol.getPrivateKeyFromHexSecret(seed, wallet.derivationPath)
+        const privateKey: Buffer = await wallet.coinProtocol.getPrivateKeyFromMnemonic(mnemonic, wallet.derivationPath)
 
         return wallet.coinProtocol.signWithPrivateKey(privateKey, transaction.transaction)
       }

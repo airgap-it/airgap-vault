@@ -219,10 +219,10 @@ export class SecretsService {
     try {
       const entropy: string = await this.retrieveEntropyForSecret(secret)
 
-      const seed: string = bip39.mnemonicToSeedHex(bip39.entropyToMnemonic(entropy))
+      const mnemonic: string = bip39.entropyToMnemonic(entropy)
       const wallet: AirGapWallet = new AirGapWallet(
         protocol.identifier,
-        await protocol.getPublicKeyFromHexSecret(seed, customDerivationPath),
+        await protocol.getPublicKeyFromMnemonic(mnemonic, customDerivationPath),
         isHDWallet,
         customDerivationPath
       )
