@@ -19,10 +19,10 @@
     <param name="onload" value="true"/>
   </feature>
 
-        <feature name="Diagnostic_Camera">
+  <feature name="Diagnostic_Camera">
     <param name="android-package" value="cordova.plugins.Diagnostic_Camera"/>
     <param name="onload" value="true"/>
   </feature>
 
-        
+  
 </widget>

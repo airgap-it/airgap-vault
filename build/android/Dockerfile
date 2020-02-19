@@ -52,14 +52,14 @@ RUN npm run disable-pure-getters
 # configure mangle (keep_fnames) for bitcoinjs https://github.com/bitcoinjs/bitcoinjs-lib/issues/959
 RUN npm run configure-mangle
 
+# remove unused cordova-diagnostic-plugin features
+RUN npm run apply-diagnostic-modules
+
 # build ionic
 RUN ionic build
 
 # copy ionic build
 RUN cap sync android
-
-# remove unused cordova-diagnostic-plugin features
-RUN npm run remove-diagnostic-modules
 
 # clean project
 RUN /app/android/gradlew --project-dir /app/android clean

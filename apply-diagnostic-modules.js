@@ -4,15 +4,18 @@ const fs = require('fs')
 const path = require('path')
 
 const rootdir = ''
-const iosConfig = path.join(rootdir, 'ios/App/App/config.xml')
-const androidConfig = path.join(rootdir, 'android/app/src/main/res/xml/config.xml')
+const pluginConfig = path.join(rootdir, 'node_modules/cordova.plugins.diagnostic/plugin.xml')
 
-const configFiles = [iosConfig, androidConfig]
+const configFiles = [pluginConfig]
 const usedModules = ['CAMERA', 'MICROPHONE']
-const diagnosticModuleRegex = getModuleFeatureRegex('.+')
+const diagnosticModuleStartRegex = getModuleFeatureStartRegex('.+')
 
-function getModuleFeatureRegex(module) {
-    return RegExp(`<feature name=\"Diagnostic_(?<moduleName>${module})\">([\\s\\S]*?)<\/feature>(\n\r?)*`, 'gm')
+function getModuleFeatureStartRegex(module) {
+    return RegExp(`(<!--BEGIN_MODULE (?<moduleName>${module.toUpperCase()})-->)`, 'g')
+}
+
+function getModuleFeatureEndRegex(module) {
+    return RegExp(`(<!--END_MODULE (?<moduleName>${module.toUpperCase()})-->)`, 'g')
 }
 
 function removeUnusedModules(configFile) {
@@ -22,9 +25,8 @@ function removeUnusedModules(configFile) {
         }
 
         let result = data
-
         let unusedModules = []
-        while (match = diagnosticModuleRegex.exec(result)) {
+        while (match = diagnosticModuleStartRegex.exec(result)) {
             const moduleName = match.groups.moduleName
             const isUsed = usedModules.map(function (item) { return item.toUpperCase() }).indexOf(moduleName.toUpperCase()) > -1
 
@@ -34,7 +36,8 @@ function removeUnusedModules(configFile) {
         }
 
         if (unusedModules.length > 0) {
-            result = result.replace(getModuleFeatureRegex(unusedModules.join('|')), '\r')
+            result = result.replace(getModuleFeatureStartRegex(unusedModules.join('|')), '$1 <!--')
+            result = result.replace(getModuleFeatureEndRegex(unusedModules.join('|')), '--> $1')
 
             fs.writeFile(configFile, result, 'utf8', function (err) {
                 if (err) {

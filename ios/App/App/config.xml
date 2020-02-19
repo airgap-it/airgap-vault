@@ -19,15 +19,15 @@
     <param name="onload" value="true"/>
   </feature>
 
-        <feature name="Diagnostic_Camera">
+  <feature name="Diagnostic_Camera">
     <param name="ios-package" value="Diagnostic_Camera"/>
     <param name="onload" value="true"/>
   </feature>
 
-    <feature name="Diagnostic_Microphone">
+  <feature name="Diagnostic_Microphone">
     <param name="ios-package" value="Diagnostic_Microphone"/>
     <param name="onload" value="true"/>
   </feature>
 
-          
+  
 </widget>
