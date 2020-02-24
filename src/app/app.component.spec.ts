@@ -12,17 +12,16 @@ import { SecretsService } from './services/secrets/secrets.service'
 import { SecureStorageServiceMock } from './services/secure-storage/secure-storage.mock'
 import { SecureStorageService } from './services/secure-storage/secure-storage.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
-import { StatusBarPlugin, SplashScreenPlugin, AppPlugin, StoragePlugin } from '@capacitor/core'
-import { STATUS_BAR_PLUGIN, SECURITY_UTILS_PLUGIN, STORAGE_PLUGIN, APP_PLUGIN, SPLASH_SCREEN_PLUGIN } from './capacitor-plugins/injection-tokens'
+import { StatusBarPlugin, SplashScreenPlugin, AppPlugin } from '@capacitor/core'
+import { STATUS_BAR_PLUGIN, SECURITY_UTILS_PLUGIN, APP_PLUGIN, SPLASH_SCREEN_PLUGIN } from './capacitor-plugins/injection-tokens'
 import { SecurityUtilsPlugin } from './capacitor-plugins/definitions'
-import { createAppSpy, createSecurityUtilsSpy, createStorageSpy, createSplashScreenSpy, createStatusBarSpy } from 'test-config/plugins-mocks'
+import { createAppSpy, createSecurityUtilsSpy, createSplashScreenSpy, createStatusBarSpy } from 'test-config/plugins-mocks'
 
 describe('AppComponent', () => {
   let appSpy: AppPlugin
   let securityUtilsSpy: SecurityUtilsPlugin
   let statusBarSpy: StatusBarPlugin
   let splashScreenSpy: SplashScreenPlugin
-  let storageSpy: StoragePlugin
   let platformReadySpy: Promise<void>
   let platformSpy: Platform
   // let component: AppComponent
@@ -33,7 +32,6 @@ describe('AppComponent', () => {
     securityUtilsSpy = createSecurityUtilsSpy()
     statusBarSpy = createStatusBarSpy()
     splashScreenSpy = createSplashScreenSpy()
-    storageSpy = createStorageSpy()
     platformReadySpy = Promise.resolve()
     platformSpy = jasmine.createSpyObj('Platform', { ready: platformReadySpy })
 
@@ -48,7 +46,6 @@ describe('AppComponent', () => {
           { provide: SECURITY_UTILS_PLUGIN, useValue: securityUtilsSpy },
           { provide: STATUS_BAR_PLUGIN, useValue: statusBarSpy },
           { provide: SPLASH_SCREEN_PLUGIN, useValue: splashScreenSpy },
-          { provide: STORAGE_PLUGIN, useValue: storageSpy },
           { provide: Platform, useValue: platformSpy },
           StartupChecksService,
           SchemeRoutingService,

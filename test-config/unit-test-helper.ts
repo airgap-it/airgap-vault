@@ -4,7 +4,7 @@ import { TestModuleMetadata } from '@angular/core/testing'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterTestingModule } from '@angular/router/testing'
 import { AlertController, IonicModule, NavController, Platform, ToastController } from '@ionic/angular'
-import { IonicStorageModule } from '@ionic/storage'
+import { IonicStorageModule, Storage } from '@ionic/storage'
 import { TranslateFakeLoader, TranslateLoader, TranslateModule } from '@ngx-translate/core'
 
 import { ComponentsModule } from '../src/app/components/components.module'
@@ -19,8 +19,8 @@ import {
   PlatformMock,
   ToastControllerMock
 } from './ionic-mocks'
-import { AppInfoPluginMock, SplashScreenMock, StatusBarMock, StoragePluginMock } from './plugins-mocks'
-import { STORAGE_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
+import { AppInfoPluginMock, SplashScreenMock, StatusBarMock } from './plugins-mocks'
+import { StorageMock } from './storage-mock'
 
 export class UnitHelper {
   public readonly mockRefs = {
@@ -61,7 +61,7 @@ export class UnitHelper {
     ]
 
     if (!useIonicOnlyTestBed) {
-      mandatoryProviders.push({ provide: STORAGE_PLUGIN, useClass: StoragePluginMock })
+      mandatoryProviders.push({ provide: Storage, useClass: StorageMock })
       mandatoryDeclarations.push()
       mandatoryImports.push(PipesModule)
     }

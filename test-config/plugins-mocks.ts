@@ -1,4 +1,4 @@
-import { AppPlugin, ClipboardPlugin, SplashScreenPlugin, StatusBarPlugin, StoragePlugin } from '@capacitor/core';
+import { AppPlugin, ClipboardPlugin, SplashScreenPlugin, StatusBarPlugin } from '@capacitor/core';
 import { newSpy } from './unit-test-helper';
 import { SecurityUtilsPlugin, AppInfoPlugin } from 'src/app/capacitor-plugins/definitions';
 
@@ -44,10 +44,6 @@ export function createStatusBarSpy(): StatusBarPlugin {
     return jasmine.createSpyObj('StatusBarPlugin', ['setStyle', 'setBackgroundColor'])
 }
 
-export function createStorageSpy(): StoragePlugin {
-    return jasmine.createSpyObj('StoragePlugin', ['get', 'set', ])
-}
-
 export class AppInfoPluginMock {
     public get: jasmine.Spy = newSpy('set', Promise.resolve({
       appName: 'AirGap.UnitTest',
@@ -64,32 +60,4 @@ export class AppInfoPluginMock {
   
   export class SplashScreenMock {
     public hide: jasmine.Spy = newSpy('hide', Promise.resolve())
-  }
-
-  export class StoragePluginMock {
-    private readonly data: any = {}
-    
-      public get(options: { key: string }): Promise<{ value: any }> {
-        return new Promise((resolve, _reject) => {
-          let value = this.data[options.key]
-          if (!value) {
-            value = 'null'
-          }
-          resolve({ value })
-        })
-      }
-    
-      public set(options: { key: string, value: any }): Promise<void> {
-        return new Promise((resolve, _reject) => {
-          this.data[options.key] = options.value
-          resolve()
-        })
-      }
-    
-      public remove(options: { key: string }): Promise<void> {
-        return new Promise((resolve, _reject) => {
-          delete this.data[options.key]
-          resolve()
-        })
-      }
   }

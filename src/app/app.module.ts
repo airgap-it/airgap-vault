@@ -6,6 +6,7 @@ import { Plugins } from '@capacitor/core'
 import { DeviceMotion } from '@ionic-native/device-motion/ngx'
 import { Diagnostic } from '@ionic-native/diagnostic/ngx'
 import { IonicModule, IonicRouteStrategy, Platform } from '@ionic/angular'
+import { IonicStorageModule } from '@ionic/storage'
 import { TranslateModule } from '@ngx-translate/core'
 
 import { AppRoutingModule } from './app-routing.module'
@@ -38,9 +39,9 @@ import { ShareUrlService } from './services/share-url/share-url.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
 import { StorageService } from './services/storage/storage.service'
 
-import { APP_PLUGIN, APP_INFO_PLUGIN, CLIPBOARD_PLUGIN, SPLASH_SCREEN_PLUGIN, STATUS_BAR_PLUGIN, STORAGE_PLUGIN, CAMERA_PREVIEW_PLUGIN, SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
+import { APP_PLUGIN, APP_INFO_PLUGIN, CLIPBOARD_PLUGIN, SPLASH_SCREEN_PLUGIN, STATUS_BAR_PLUGIN, CAMERA_PREVIEW_PLUGIN, SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
 
-const { App, AppInfo, CameraPreview, Clipboard, SecurityUtils, SplashScreen, StatusBar, Storage } = Plugins
+const { App, AppInfo, CameraPreview, Clipboard, SecurityUtils, SplashScreen, StatusBar } = Plugins
 
 @NgModule({
   declarations: [AppComponent],
@@ -50,6 +51,10 @@ const { App, AppInfo, CameraPreview, Clipboard, SecurityUtils, SplashScreen, Sta
     IonicModule.forRoot(),
     AppRoutingModule,
     TranslateModule.forRoot(),
+    IonicStorageModule.forRoot({
+      name: '__airgap_storage',
+      driverOrder: ['sqlite', 'localstorage']
+    }),
     WarningModalPageModule,
     IntroductionPageModule,
     DistributionOnboardingPageModule,
@@ -63,7 +68,6 @@ const { App, AppInfo, CameraPreview, Clipboard, SecurityUtils, SplashScreen, Sta
     { provide: SECURITY_UTILS_PLUGIN, useValue: SecurityUtils },
     { provide: SPLASH_SCREEN_PLUGIN, useValue: SplashScreen },
     { provide: STATUS_BAR_PLUGIN, useValue: StatusBar },
-    { provide: STORAGE_PLUGIN, useValue: Storage },
     Diagnostic,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     DeviceMotion,

@@ -14,6 +14,10 @@
     <param name="ios-package" value="QRScanner"/>
   </feature>
 
+  <feature name="SQLitePlugin">
+    <param name="ios-package" value="SQLitePlugin"/>
+  </feature>
+
   <feature name="Diagnostic">
     <param name="ios-package" value="Diagnostic"/>
     <param name="onload" value="true"/>

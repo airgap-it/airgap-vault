@@ -1,6 +1,5 @@
-import { Injectable, Inject } from '@angular/core'
-import { StoragePlugin } from '@capacitor/core'
-import { STORAGE_PLUGIN } from '../..//capacitor-plugins/injection-tokens'
+import { Injectable } from '@angular/core'
+import { Storage } from '@ionic/storage'
 
 export enum SettingsKey {
   DISCLAIMER_GENERATE_INITIAL = 'DISCLAIMER_GENERATE_INITIAL',
@@ -44,10 +43,10 @@ const defaultValues: SettingsKeyReturnDefaults = {
   providedIn: 'root'
 })
 export class StorageService {
-  constructor(@Inject(STORAGE_PLUGIN) private readonly storage: StoragePlugin) {}
+  constructor(private readonly storage: Storage) {}
 
   public async get<K extends SettingsKey>(key: K): Promise<SettingsKeyReturnType[K]> {
-    const value: SettingsKeyReturnType[K] = JSON.parse((await this.storage.get({ key })).value) || defaultValues[key]
+    const value: SettingsKeyReturnType[K] = (await this.storage.get(key)) || defaultValues[key]
     console.log(`[SETTINGS_SERVICE:get] ${key}, returned: ${value}`)
 
     return value
@@ -56,15 +55,12 @@ export class StorageService {
   public async set<K extends SettingsKey>(key: K, value: SettingsKeyReturnType[K]): Promise<any> {
     console.log(`[SETTINGS_SERVICE:set] ${key}, ${value}`)
 
-    return this.storage.set({ 
-      key, 
-      value: JSON.stringify(value)
-    })
+    return this.storage.set(key, value)
   }
 
   public async delete<K extends SettingsKey>(key: K): Promise<boolean> {
     try {
-      await this.storage.remove({ key })
+      await this.storage.remove(key)
 
       return true
     } catch (error) {

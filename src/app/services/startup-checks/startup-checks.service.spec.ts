@@ -1,5 +1,6 @@
 import { async, TestBed } from '@angular/core/testing'
 import { ModalController, NavController, NavParams, Platform } from '@ionic/angular'
+import { Storage } from '@ionic/storage'
 
 import {
   DeviceProviderMock,
@@ -8,6 +9,7 @@ import {
   NavParamsMock,
   PlatformMock,
 } from '../../../../test-config/ionic-mocks'
+import { StorageMock } from '../../../../test-config/storage-mock'
 import { UnitHelper } from '../../../../test-config/unit-test-helper'
 import { DeviceService } from '../device/device.service'
 import { SecretsService } from '../secrets/secrets.service'
@@ -15,13 +17,12 @@ import { SecureStorageServiceMock } from '../secure-storage/secure-storage.mock'
 import { SecureStorageService } from '../secure-storage/secure-storage.service'
 
 import { StartupChecksService } from './startup-checks.service'
-import { STATUS_BAR_PLUGIN, SPLASH_SCREEN_PLUGIN, STORAGE_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
-import { StoragePlugin } from '@capacitor/core'
-import { StatusBarMock, SplashScreenMock, StoragePluginMock } from 'test-config/plugins-mocks'
+import { STATUS_BAR_PLUGIN, SPLASH_SCREEN_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
+import { StatusBarMock, SplashScreenMock } from 'test-config/plugins-mocks'
 
 describe('StartupCheck Service', () => {
   let startupChecksService: StartupChecksService
-  let storageProvider: StoragePlugin
+  let storageProvider: Storage
   let secureStorage: SecureStorageServiceMock
   let deviceProvider: DeviceProviderMock
 
@@ -37,7 +38,7 @@ describe('StartupCheck Service', () => {
           { provide: DeviceService, useClass: DeviceProviderMock },
           { provide: ModalController, useClass: ModalControllerMock },
           { provide: SecureStorageService, useClass: SecureStorageServiceMock },
-          { provide: STORAGE_PLUGIN, useClass: StoragePluginMock },
+          { provide: Storage, useClass: StorageMock },
           { provide: NavController, useClass: NavControllerMock },
           { provide: NavParams, useClass: NavParamsMock },
           { provide: STATUS_BAR_PLUGIN, useClass: StatusBarMock },
@@ -52,21 +53,15 @@ describe('StartupCheck Service', () => {
 
   beforeEach(async () => {
     startupChecksService = TestBed.get(StartupChecksService)
-    storageProvider = TestBed.get(STORAGE_PLUGIN)
+    storageProvider = TestBed.get(Storage)
     deviceProvider = TestBed.get(DeviceService)
     secureStorage = TestBed.get(SecureStorageService)
 
     secureStorage.isSecure = 1
     deviceProvider.isRooted = false
     deviceProvider.isElectron = false
-    await storageProvider.set({ 
-      key: 'DISCLAIMER_INITIAL', 
-      value: JSON.stringify(true)
-    })
-    await storageProvider.set({
-      key: 'INTRODUCTION_INITIAL', 
-      value: JSON.stringify(true)
-    })
+    await storageProvider.set('DISCLAIMER_INITIAL', true)
+    await storageProvider.set('INTRODUCTION_INITIAL', true)
   })
 
   it('should be created', () => {
@@ -82,10 +77,7 @@ describe('StartupCheck Service', () => {
   }))
 
   it('should show disclaimer modal if the disclaimer has not been accepted yet', async(async () => {
-    await storageProvider.set({
-      key: 'DISCLAIMER_INITIAL', 
-      value: JSON.stringify(false)
-    })
+    await storageProvider.set('DISCLAIMER_INITIAL', false)
 
     startupChecksService.checks = startupChecksService.checks.map(check => {
       check.failureConsequence = jasmine.createSpy('failureConsequence', async () => {
@@ -107,10 +99,7 @@ describe('StartupCheck Service', () => {
   }))
 
   it('should show the introduction modal if the introduction has not been accepted yet', async(async () => {
-    await storageProvider.set({
-      key: 'INTRODUCTION_INITIAL', 
-      value: JSON.stringify(false)
-    })
+    await storageProvider.set('INTRODUCTION_INITIAL', false)
 
     startupChecksService.checks = startupChecksService.checks.map(check => {
       check.failureConsequence = jasmine.createSpy('failureConsequence', async () => {
@@ -154,14 +143,8 @@ describe('StartupCheck Service', () => {
   }))
 
   it('should resolve if everything is ok', async(async () => {
-    await storageProvider.set({
-      key: 'DISCLAIMER_INITIAL', 
-      value: JSON.stringify(true)
-    })
-    await storageProvider.set({
-      key: 'INTRODUCTION_INITIAL', 
-      value: JSON.stringify(true)
-    })
+    await storageProvider.set('DISCLAIMER_INITIAL', true)
+    await storageProvider.set('INTRODUCTION_INITIAL', true)
 
     secureStorage.isSecure = 1
     deviceProvider.isRooted = false
