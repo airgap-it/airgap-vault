@@ -21,6 +21,7 @@ public class SecurityUtils: CAPPlugin {
     
     public override func load() {
         secureScreen = SecureScreen()
+        secureScreen.startOverlayProtection()
         
         queue = OperationQueue()
         queue.maxConcurrentOperationCount = 1
