@@ -149,7 +149,7 @@ public class LocalAuthentication {
                     }
                 }
             }
-            didEnterBackgroundObserver = Observer(name: UIApplication.didBecomeActiveNotification, object: UIApplication.shared, queue: queue) { [unowned self] _ in
+            didEnterBackgroundObserver = Observer(name: UIApplication.didEnterBackgroundNotification, object: UIApplication.shared, queue: queue) { [unowned self] _ in
                 self.lastBackground = Date()
             }
         } else if !automatic && didBecomeActiveObserver != nil {
