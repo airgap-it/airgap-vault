@@ -49,10 +49,6 @@ export class CameraBrowserService implements IEntropyGenerator {
     // empty
   }
 
-  public viewDidLeave() {
-    // empty
-  }
-
   public viewWillEnter() {
     // empty
   }

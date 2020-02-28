@@ -245,7 +245,6 @@ export class CameraNativeService implements IEntropyGenerator {
 
   private injectCSS() {
     // inject css
-    console.log(this.transparentElements)
     this.transparentElements.forEach(element => this.renderer.addClass(element, this.transparentHTMLClass))
   }
 
