@@ -22,7 +22,7 @@ export class SecretValidatePage {
   }
 
   public ionViewDidEnter(): void {
-    this.deviceService.enableScreenshotProtection()
+    this.deviceService.enableScreenshotProtection({ routeBack: 'secret-create' })
   }
 
   public ionViewWillLeave(): void {
