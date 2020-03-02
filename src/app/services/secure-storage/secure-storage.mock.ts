@@ -45,15 +45,6 @@ export class SecureStorageServiceMock {
           resolve()
         })
       },
-      setRecoverableItem(key: string, value: string): Promise<any> {
-        console.warn('SecureStorageServiceMock - setRecoverableItem', key, value)
-        const recoverString = '' // TODO: mock it
-        localStorage.setItem(alias + '-' + key + '_' + recoverString, value)
-
-        return new Promise<any>(resolve => {
-          resolve(recoverString)
-        })
-      },
       getItem(key: string): Promise<any> {
         console.warn('SecureStorageServiceMock - getItem', key)
         const result = localStorage.getItem(alias + '-' + key)
@@ -62,12 +53,13 @@ export class SecureStorageServiceMock {
           resolve(result)
         })
       },
-      recoverItem(key: string, recoveryKey: string): Promise<any> {
-        console.warn('SecureStorageServiceMock - recoverItem', key)
-        const result = localStorage.getItem(alias + '-' + key + '_' + recoveryKey)
+      setupRecoveryPassword(key: string, value: string): Promise<any> {
+        console.warn('SecureStorageServiceMock - setupRecoveryPassword', key, value)
+        const recoverString = '' // TODO: mock it
+        localStorage.setItem(alias + '-' + key + '_' + recoverString, value)
 
         return new Promise<any>(resolve => {
-          resolve(result)
+          resolve(recoverString)
         })
       },
       removeItem(key) {

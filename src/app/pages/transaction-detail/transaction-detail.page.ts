@@ -3,12 +3,11 @@ import { AirGapWallet, IACMessageDefinitionObject, IACMessageType, IAirGapTransa
 import * as bip39 from 'bip39'
 
 import { Secret } from '../../models/secret'
-import { handleErrorLocal, ErrorCategory } from '../../services/error-handler/error-handler.service'
+import { handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { InteractionOperationType, InteractionService } from '../../services/interaction/interaction.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
 import { SerializerService } from '../../services/serializer/serializer.service'
-import { AlertController } from '@ionic/angular'
 
 @Component({
   selector: 'airgap-transaction-detail',
@@ -27,8 +26,7 @@ export class TransactionDetailPage {
     private readonly navigationService: NavigationService,
     private readonly secretsService: SecretsService,
     private readonly interactionService: InteractionService,
-    private readonly serializerService: SerializerService,
-    private readonly alertCtrl: AlertController
+    private readonly serializerService: SerializerService
   ) {}
 
   public async ionViewWillEnter(): Promise<void> {
@@ -58,9 +56,9 @@ export class TransactionDetailPage {
         },
         this.secretsService.getActiveSecret()
       )
-      } catch (error) {
-        console.log("Caught error: ", error)
-      }
+    } catch (error) {
+      console.log('Caught error: ', error)
+    }
   }
 
   public async generateBroadcastUrl(wallet: AirGapWallet, signedTx: string, unsignedTransaction: UnsignedTransaction): Promise<string> {
@@ -106,49 +104,17 @@ export class TransactionDetailPage {
       throw new Error('no secret found for this public key')
     }
 
-    try {
-      const entropy = await this.secretsService.retrieveEntropyForSecret(secret)
+    const entropy = await this.secretsService.retrieveEntropyForSecret(secret)
 
-      const seed: string = bip39.mnemonicToSeedHex(bip39.entropyToMnemonic(entropy))
-      if (wallet.isExtendedPublicKey) {
-        const extendedPrivateKey: string = wallet.coinProtocol.getExtendedPrivateKeyFromHexSecret(seed, wallet.derivationPath)
+    const seed: string = bip39.mnemonicToSeedHex(bip39.entropyToMnemonic(entropy))
+    if (wallet.isExtendedPublicKey) {
+      const extendedPrivateKey: string = wallet.coinProtocol.getExtendedPrivateKeyFromHexSecret(seed, wallet.derivationPath)
 
-        return wallet.coinProtocol.signWithExtendedPrivateKey(extendedPrivateKey, transaction.transaction)
-      } else {
-        const privateKey: Buffer = wallet.coinProtocol.getPrivateKeyFromHexSecret(seed, wallet.derivationPath)
+      return wallet.coinProtocol.signWithExtendedPrivateKey(extendedPrivateKey, transaction.transaction)
+    } else {
+      const privateKey: Buffer = wallet.coinProtocol.getPrivateKeyFromHexSecret(seed, wallet.derivationPath)
 
-        return wallet.coinProtocol.signWithPrivateKey(privateKey, transaction.transaction)
-      }
-    } catch(error) {
-       // TODO: test if secret recovery is working and set up a better UI
-       console.log(error)
-       if (typeof error === 'string' && error.includes('Wrong master key')) {
-          this.showRecoveryAlert(secret)
-        }
-        throw error
+      return wallet.coinProtocol.signWithPrivateKey(privateKey, transaction.transaction)
     }
-  }
-
-  private async showRecoveryAlert(secret: Secret): Promise<void> {
-    const alert: HTMLIonAlertElement = await this.alertCtrl.create({
-      header: 'Secret recovery',
-      message: '',
-      backdropDismiss: false,
-      inputs: [
-        {
-          name: 'recoveryKey',
-          placeholder: 'Recovery Key'
-        }
-      ],
-      buttons: [
-        {
-          text: 'Okay!',
-          handler: async data => {
-            await this.secretsService.recoverSecret(secret, data.recoveryKey)
-          }
-        }
-      ]
-    })
-    alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
   }
 }

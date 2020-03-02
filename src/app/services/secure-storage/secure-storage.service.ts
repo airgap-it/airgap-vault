@@ -5,9 +5,8 @@ declare var window
 interface CordovaSecureStorage {
   init(successCallback: Function, errorCallback: Function)
   setItem(key: string, value: string, successCallback: Function, errorCallback: Function)
-  setRecoverableItem(key: string, value: string, successCallback: Function, errorCallback: Function)
   getItem(key: string, successCallback: Function, errorCallback: Function)
-  recoverItem(key: string, recoveryKey: string, successCallback: Function, errorCallback: Function)
+  setupRecoveryPassword(key: string, value: string, successCallback: Function, errorCallback: Function)
   removeItem(key: string, successCallback: Function, errorCallback: Function)
   isDeviceSecure(successCallback: Function, errorCallback: Function)
   secureDevice(successCallback: Function, errorCallback: Function)
@@ -16,9 +15,8 @@ interface CordovaSecureStorage {
 export interface SecureStorage {
   init(): Promise<void>
   setItem(key: string, value: string): Promise<void>
-  setRecoverableItem(key: string, value: string): Promise<any>
   getItem(key: string): Promise<any>
-  recoverItem(key: string, recoveryString: string): Promise<void>
+  setupRecoveryPassword(key: string, value: string): Promise<any>
   removeItem(key: string): Promise<void>
 }
 
@@ -59,19 +57,14 @@ export class SecureStorageService {
                 secureStorage.setItem(key, value, resolve, reject)
               })
             },
-            setRecoverableItem(key, value) {
+            setupRecoveryPassword(key, value) {
               return new Promise<any>((resolve, reject) => {
-                secureStorage.setRecoverableItem(key, value, resolve, reject)
+                secureStorage.setupRecoveryPassword(key, value, resolve, reject)
               })
             },
             getItem(key) {
               return new Promise<any>((resolve, reject) => {
                 secureStorage.getItem(key, resolve, reject)
-              })
-            },
-            recoverItem(key, recoveryKey) {
-              return new Promise<void>((resolve, reject) => {
-                secureStorage.recoverItem(key, recoveryKey, resolve, reject)
               })
             },
             removeItem(key) {
