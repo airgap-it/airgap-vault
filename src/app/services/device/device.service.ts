@@ -19,18 +19,18 @@ export class DeviceService {
     protected readonly navigationService: NavigationService
   ) {}
 
-  public enableScreenshotProtection(): void {
+  public enableScreenshotProtection(options?: { routeBack: string }): void {
     this.setSecureWindow()
     this.onScreenCaptureStateChanged((captured: boolean) => {
       if (captured) {
         this.presentModal(WarningModalPage, { errorType: Warning.SCREENSHOT }, () => {
-          this.navigationService.routeBack('/secret-create')
+          options ? this.navigationService.routeBack(options.routeBack) : this.navigationService.back()
         }).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
       }
     })
     this.onScreenshotTaken(() => {
       this.presentModal(WarningModalPage, { errorType: Warning.SCREENSHOT }, () => {
-        this.navigationService.routeBack('/secret-create')
+        options ? this.navigationService.routeBack(options.routeBack) : this.navigationService.back()
       }).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
     })
   }
