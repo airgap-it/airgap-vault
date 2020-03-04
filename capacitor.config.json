@@ -4,13 +4,6 @@
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
-  "server": {
-    "allowNavigation": [
-      "https://github.com/*",
-      "https://play.google.com/*",
-      "https://airgap.it/*"
-    ]
-  },
   "plugins": {
     "SplashScreen": {
       "launchAutoHide": false,
