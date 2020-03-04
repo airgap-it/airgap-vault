@@ -24,6 +24,19 @@ export class CameraNativeService implements IEntropyGenerator {
   private readonly VIDEO_FREQUENCY = 2000
 
   private readonly renderer: Renderer2
+  private readonly transparentHTMLClass = 'transparent'
+
+  private transparentTags: string[] = []
+  private get transparentElements(): any[] {
+    const elementsByTags = this.transparentTags
+      .map(tag => Array.from(document.getElementsByTagName(tag)))
+      .reduce((flatten, toFlatten) => flatten.concat(toFlatten))
+
+    return [
+      ...elementsByTags, 
+      document.body // fallback if no tags
+    ]
+  }
 
   @ViewChild('cameraCanvas', { static: false }) public cameraCanvas: ElementRef
   public canvasElement: HTMLCanvasElement
@@ -63,11 +76,15 @@ export class CameraNativeService implements IEntropyGenerator {
     })
   }
 
+  public setTransparentElementsByTags(...tags: string[]) {
+    this.transparentTags = tags
+  }
+
   public setCameraOptions(opts) {
     this.cameraOptions = opts
   }
 
-  public viewDidLeave() {
+  public viewWillLeave() {
     this.disabled = true
     this.uninjectCSS()
   }
@@ -227,13 +244,13 @@ export class CameraNativeService implements IEntropyGenerator {
   }
 
   private injectCSS() {
-    // inject css to html, body, .ion-app, ion-content
-    this.renderer.addClass(document.body, 'transparent-bg')
+    // inject css
+    this.transparentElements.forEach(element => this.renderer.addClass(element, this.transparentHTMLClass))
   }
 
   private uninjectCSS() {
     // removes injected css
-    this.renderer.removeClass(document.body, 'transparent-bg')
+    this.transparentElements.forEach(element => this.renderer.removeClass(element, this.transparentHTMLClass))
   }
 
   public getCollectedEntropyPercentage(): number {
