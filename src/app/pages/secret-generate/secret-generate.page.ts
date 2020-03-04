@@ -26,7 +26,7 @@ export class SecretGeneratePage implements OnInit {
   @ViewChild('touchEntropy', { static: true })
   public touchEntropy: TouchEntropyComponent
 
-  public cameraEnabled: boolean = false
+  public cameraEnabled: boolean = true
   public audioEnabled: boolean = true
   public gyroEnabled: boolean = true
   public touchEnabled: boolean = true
@@ -49,6 +49,9 @@ export class SecretGeneratePage implements OnInit {
     private readonly permissionsService: PermissionsService
   ) {
     this.isBrowser = !this.platform.is('hybrid')
+    if (!this.isBrowser) {
+      this.cameraService.setTransparentElementsByTags('ion-toolbar', 'ion-content')
+    }
     setTimeout(() => {
       this.startupTimeWaited = true
       this.checkEntropySourceStatus()
@@ -113,8 +116,11 @@ export class SecretGeneratePage implements OnInit {
     }
   }
 
+  public ionViewWillLeave(): void {
+    this.cameraService.viewWillLeave()
+  }
+
   public ionViewDidLeave(): void {
-    this.cameraService.viewDidLeave()
     this.entropyService.stopEntropyCollection().catch(handleErrorLocal(ErrorCategory.ENTROPY_COLLECTION))
   }
 

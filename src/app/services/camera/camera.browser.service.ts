@@ -41,7 +41,11 @@ export class CameraBrowserService implements IEntropyGenerator {
     })
   }
 
-  public viewDidLeave() {
+  public setTransparentElementsByTags(..._: string[]) {
+    // empty
+  }
+
+  public viewWillLeave() {
     // empty
   }
 
