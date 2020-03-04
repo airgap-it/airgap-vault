@@ -126,6 +126,10 @@
       "label": "Vault and Wallet interaction",
       "text": "Select whether Vault and Wallet are installed on the same device or on separate devices."
     },
+    "storage-recovery": {
+      "label": "Storage Recovery Password",
+      "text": "Reset the storage recovery password for your secret"
+    },
     "confirm_label":"Confirm"
   },
 

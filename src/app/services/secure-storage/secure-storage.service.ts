@@ -65,6 +65,12 @@ export class SecureStorageService {
             getItem(key) {
               return new Promise<any>((resolve, reject) => {
                 secureStorage.getItem(key, resolve, reject)
+              }).catch((error: string) => {
+                if (error.toLowerCase().includes('item corrupted')) {
+                  throw new Error('Could not read from the secure storage.')
+                }
+
+                throw error
               })
             },
             removeItem(key) {

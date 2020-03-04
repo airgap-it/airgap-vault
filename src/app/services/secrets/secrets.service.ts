@@ -114,10 +114,33 @@ export class SecretsService {
     await this.persist()
   }
 
+  public async resetRecoveryPassword(secret: Secret): Promise<void> {
+    const secureStorage: SecureStorage = await this.secureStorageService.get(secret.id, secret.isParanoia)
+    try {
+      const secretHex = await secureStorage.getItem(secret.id)
+
+      await secureStorage.setupRecoveryPassword(secret.id, secretHex)
+    } catch (error) {
+      if (error.message.startsWith('Could not read from the secure storage.')) {
+        error.message += ' Re-import your secret.'
+        this.remove(secret)
+      }
+
+      throw error
+    }
+  }
+
   public async retrieveEntropyForSecret(secret: Secret): Promise<string> {
     const secureStorage: SecureStorage = await this.secureStorageService.get(secret.id, secret.isParanoia)
 
-    return secureStorage.getItem(secret.id)
+    return secureStorage.getItem(secret.id).catch(error => {
+      if (error.message.startsWith('Could not read from the secure storage.')) {
+        error.message += ' Re-import your secret.'
+        this.remove(secret)
+      }
+
+      throw error
+    })
   }
 
   public findByPublicKey(pubKey: string): Secret | undefined {
