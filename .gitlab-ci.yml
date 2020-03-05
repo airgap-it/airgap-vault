@@ -78,7 +78,7 @@ build_ios:
     - npm run disable-pure-getters
     - npm run configure-mangle
     - npm run apply-diagnostic-modules # manually remove unused cordova-diagnostic-plugin modules
-    - ionic build
+    - ionic build --prod
     - npx cap sync ios
     - xcodebuild -workspace ios/App/App.xcworkspace -scheme "App" -destination generic/platform=iOS -configuration Release archive -archivePath ios/AirGap\ Vault.xcarchive CURRENT_PROJECT_VERSION=1.0.$CI_PIPELINE_ID -allowProvisioningUpdates
     - xcodebuild -exportArchive -archivePath ios/AirGap\ Vault.xcarchive -exportOptionsPlist exportOptions.plist -exportPath ios/ -allowProvisioningUpdates

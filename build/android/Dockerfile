@@ -56,7 +56,7 @@ RUN npm run configure-mangle
 RUN npm run apply-diagnostic-modules
 
 # build ionic
-RUN ionic build
+RUN ionic build --prod
 
 # copy ionic build
 RUN cap sync android
