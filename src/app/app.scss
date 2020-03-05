@@ -79,3 +79,7 @@ airgap-tab-accounts {
     }
   }
 }
+
+.transparent {
+  --background: none transparent !important;
+}
