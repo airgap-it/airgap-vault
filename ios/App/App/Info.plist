@@ -37,6 +37,11 @@
 	<false/>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>airgap-wallet</string>
+		<string>aepp-base</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -48,18 +53,10 @@
 	<string>AirGap uses your camera to scan QR Codes of transactions, and to generate entropy for the secure key generation.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>AirGap uses Face ID to save your keys to the secure storage.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Always allow Geolocation?</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Allow Geolocation?</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>AirGap uses your microphone to generate entropy for the secure key generation.</string>
 	<key>NSMotionUsageDescription</key>
 	<string>AirGap uses the motion sensor to generate entropy for the secure key generation.</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>This app needs write-access to photo library</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app needs read/write-access photo library access</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -78,11 +75,6 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>airgap-wallet</string>
-		<string>aepp-base</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
