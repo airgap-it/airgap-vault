@@ -16,13 +16,15 @@ import { SecretsService } from '../../services/secrets/secrets.service'
   styleUrls: ['./interaction-selection.page.scss']
 })
 export class InteractionSelectionPage {
-  private readonly interactionOptions: IInteractionOptions
+  private interactionOptions: IInteractionOptions
 
   constructor(
     private readonly navigationService: NavigationService,
     private readonly secretsService: SecretsService,
     private readonly interactionService: InteractionService
-  ) {
+  ) {}
+
+  public ionViewDidEnter(): void {
     this.interactionOptions = this.navigationService.getState().interactionOptions
   }
 
