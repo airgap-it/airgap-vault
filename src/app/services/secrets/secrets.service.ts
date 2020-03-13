@@ -111,6 +111,10 @@ export class SecretsService {
     this.secretsList.splice(this.secretsList.indexOf(secret), 1)
     this.secrets$.next(this.secretsList)
 
+    if (this.activeSecret === secret) {
+      this.setActiveSecret(this.secretsList[0])
+    }
+
     await this.persist()
   }
 
