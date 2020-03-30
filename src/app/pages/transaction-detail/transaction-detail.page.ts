@@ -42,19 +42,23 @@ export class TransactionDetailPage {
   }
 
   public async signAndGoToNextPage(): Promise<void> {
-    const signedTx: string = await this.signTransaction(this.transaction, this.wallet)
-    this.broadcastUrl = await this.generateBroadcastUrl(this.wallet, signedTx, this.transaction)
+    try {
+      const signedTx: string = await this.signTransaction(this.transaction, this.wallet)
+      this.broadcastUrl = await this.generateBroadcastUrl(this.wallet, signedTx, this.transaction)
 
-    this.interactionService.startInteraction(
-      {
-        operationType: InteractionOperationType.TRANSACTION_BROADCAST,
-        url: this.broadcastUrl,
-        wallet: this.wallet,
-        signedTx,
-        transaction: this.transaction
-      },
-      this.secretsService.getActiveSecret()
-    )
+      this.interactionService.startInteraction(
+        {
+          operationType: InteractionOperationType.TRANSACTION_BROADCAST,
+          url: this.broadcastUrl,
+          wallet: this.wallet,
+          signedTx,
+          transaction: this.transaction
+        },
+        this.secretsService.getActiveSecret()
+      )
+    } catch (error) {
+      console.log('Caught error: ', error)
+    }
   }
 
   public async generateBroadcastUrl(wallet: AirGapWallet, signedTx: string, unsignedTransaction: UnsignedTransaction): Promise<string> {
@@ -91,7 +95,7 @@ export class TransactionDetailPage {
     }
   }
 
-  public signTransaction(transaction: UnsignedTransaction, wallet: AirGapWallet): Promise<string> {
+  public async signTransaction(transaction: UnsignedTransaction, wallet: AirGapWallet): Promise<string> {
     const secret: Secret | undefined = this.secretsService.findByPublicKey(wallet.publicKey)
 
     // we should handle this case here as well
@@ -100,17 +104,17 @@ export class TransactionDetailPage {
       throw new Error('no secret found for this public key')
     }
 
-    return this.secretsService.retrieveEntropyForSecret(secret).then((entropy: string) => {
-      const seed: string = bip39.mnemonicToSeedHex(bip39.entropyToMnemonic(entropy))
-      if (wallet.isExtendedPublicKey) {
-        const extendedPrivateKey: string = wallet.coinProtocol.getExtendedPrivateKeyFromHexSecret(seed, wallet.derivationPath)
+    const entropy = await this.secretsService.retrieveEntropyForSecret(secret)
 
-        return wallet.coinProtocol.signWithExtendedPrivateKey(extendedPrivateKey, transaction.transaction)
-      } else {
-        const privateKey: Buffer = wallet.coinProtocol.getPrivateKeyFromHexSecret(seed, wallet.derivationPath)
+    const seed: string = bip39.mnemonicToSeedHex(bip39.entropyToMnemonic(entropy))
+    if (wallet.isExtendedPublicKey) {
+      const extendedPrivateKey: string = wallet.coinProtocol.getExtendedPrivateKeyFromHexSecret(seed, wallet.derivationPath)
 
-        return wallet.coinProtocol.signWithPrivateKey(privateKey, transaction.transaction)
-      }
-    })
+      return wallet.coinProtocol.signWithExtendedPrivateKey(extendedPrivateKey, transaction.transaction)
+    } else {
+      const privateKey: Buffer = wallet.coinProtocol.getPrivateKeyFromHexSecret(seed, wallet.derivationPath)
+
+      return wallet.coinProtocol.signWithPrivateKey(privateKey, transaction.transaction)
+    }
   }
 }

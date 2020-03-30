@@ -53,6 +53,15 @@ export class SecureStorageServiceMock {
           resolve({ value: result })
         })
       },
+      setupRecoveryPassword(key: string, value: string): Promise<any> {
+        console.warn('SecureStorageServiceMock - setupRecoveryPassword', key, value)
+        const recoverString = '' // TODO: mock it
+        localStorage.setItem(alias + '-' + key + '_' + recoverString, value)
+
+        return new Promise<any>(resolve => {
+          resolve(recoverString)
+        })
+      },
       removeItem(key) {
         console.warn('SecureStorageServiceMock - removeItem', key)
         localStorage.removeItem(alias + '-' + key)
