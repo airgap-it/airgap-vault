@@ -284,28 +284,30 @@ class Storage(private val context: Context, private val storageAlias: String, pr
             success: (String) -> Unit,
             cancel: () -> Unit = {}
     ) {
-        val editView = LayoutInflater.from(context).inflate(R.layout.alert_setup_dialog, null)
+        (context as? Activity)?.runOnUiThread {
+            val editView = LayoutInflater.from(context).inflate(R.layout.alert_setup_dialog, null)
 
-        val passwordText = editView.findViewById<EditText>(R.id.password)
-        val confirmText = editView.findViewById<EditText>(R.id.password_confirmation)
+            val passwordText = editView.findViewById<EditText>(R.id.password)
+            val confirmText = editView.findViewById<EditText>(R.id.password_confirmation)
 
-        val dialog = AlertDialog.Builder(context, R.style.AirgapAlertDialogStyle).apply {
-            setTitle(title)
-            setMessage(message)
+            val dialog = AlertDialog.Builder(context, R.style.AirgapAlertDialogStyle).apply {
+                setTitle(title)
+                setMessage(message)
 
-            setView(editView)
-            setPositiveButton(positiveText) { dialog, _ ->
-                dialog.dismiss()
-                if (passwordText.text.toString() == confirmText.text.toString()) {
-                    success(passwordText.text.toString())
+                setView(editView)
+                setPositiveButton(positiveText) { dialog, _ ->
+                    dialog.dismiss()
+                    if (passwordText.text.toString() == confirmText.text.toString()) {
+                        success(passwordText.text.toString())
+                    }
                 }
-            }
-        }.create()
+            }.create()
 
-        passwordText.afterTextChanged { dialog.isPositiveEnabled = it.assert(confirmText.text.toString(), minLength = 4) }
-        confirmText.afterTextChanged { dialog.isPositiveEnabled = it.assert(passwordText.text.toString(), minLength = 4) }
+            passwordText.afterTextChanged { dialog.isPositiveEnabled = it.assert(confirmText.text.toString(), minLength = 4) }
+            confirmText.afterTextChanged { dialog.isPositiveEnabled = it.assert(passwordText.text.toString(), minLength = 4) }
 
-        dialog.show()
+            dialog.show()
+        }
     }
 
     private fun showParanoiaAlert(success: (String) -> Unit, error: (Exception) -> Unit) {
@@ -335,29 +337,31 @@ class Storage(private val context: Context, private val storageAlias: String, pr
             success: (String) -> Unit,
             cancel: () -> Unit = {}
     ) {
-        val dialog = AlertDialog.Builder(context, R.style.AirgapAlertDialogStyle).apply {
-            setTitle(title)
+        (context as? Activity)?.runOnUiThread {
+            val dialog = AlertDialog.Builder(context, R.style.AirgapAlertDialogStyle).apply {
+                setTitle(title)
 
-            val editView = LayoutInflater.from(context).inflate(R.layout.alert_input_dialog, null)
-            val editText = editView.findViewById<EditText>(R.id.password)
+                val editView = LayoutInflater.from(context).inflate(R.layout.alert_input_dialog, null)
+                val editText = editView.findViewById<EditText>(R.id.password)
 
-            setView(editView)
-            message?.let { setMessage(it) }
+                setView(editView)
+                message?.let { setMessage(it) }
 
-            setPositiveButton(positiveText) { dialog, _ ->
-                dialog.dismiss()
-                success(editText.text.toString())
-            }
-
-            negativeText?.let {
-                setNegativeButton(it) { dialog, _ ->
+                setPositiveButton(positiveText) { dialog, _ ->
                     dialog.dismiss()
-                    cancel()
+                    success(editText.text.toString())
                 }
-            }
-        }.create()
 
-        dialog.show()
+                negativeText?.let {
+                    setNegativeButton(it) { dialog, _ ->
+                        dialog.dismiss()
+                        cancel()
+                    }
+                }
+            }.create()
+
+            dialog.show()
+        }
     }
 
     private fun generateSalt(saltFile: File) {
