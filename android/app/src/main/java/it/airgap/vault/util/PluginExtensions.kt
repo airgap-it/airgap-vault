@@ -37,7 +37,7 @@ fun PluginCall.resolveWithData(vararg keyValuePairs: Pair<String, Any>) {
 }
 
 fun PluginCall.assertReceived(vararg params: String, acceptEmpty: Boolean = false) {
-    val hasAll = params.map(data::has).all { it }
+    val hasAll = params.map { data.isNull(it) }.all { !it }
     val hasEmpty = !acceptEmpty && params.mapNotNull { getString(it)?.isBlank() }.any { it }
 
     if (!hasAll || hasEmpty) {

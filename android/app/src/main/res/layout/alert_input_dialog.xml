@@ -19,7 +19,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:fontFamily="sans-serif"
-            android:hint="@string/paranoia_input_alert_hint"/>
+            android:hint="@string/password_input_alert_hint"/>
 
     </android.support.design.widget.TextInputLayout>
 

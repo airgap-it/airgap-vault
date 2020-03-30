@@ -176,6 +176,21 @@ class SecurityUtils : Plugin() {
         }
     }
 
+    @PluginMethod
+    fun setupRecoveryPassword(call: PluginCall) {
+        with (call) {
+            assertReceived(Param.ALIAS, Param.IS_PARANOIA, Param.FILE_KEY, Param.VALUE)
+
+            Storage(context, alias, isParanoia).writeRecoverableString(key, value, {
+                logDebug("written recoverable: success")
+                resolve()
+            }, {
+                logDebug("written recoverable: failure")
+                reject(it.toString())
+            }, { showAuthenticationScreen(call, it) })
+        }
+    }
+
     /*
      * LocalAuthentication
      */
