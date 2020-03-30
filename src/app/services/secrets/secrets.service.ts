@@ -119,7 +119,7 @@ export class SecretsService {
   public async resetRecoveryPassword(secret: Secret): Promise<void> {
     const secureStorage: SecureStorage = await this.secureStorageService.get(secret.id, secret.isParanoia)
     try {
-      const secretHex = await secureStorage.getItem(secret.id)
+      const secretHex = await secureStorage.getItem(secret.id).then(result => result.value)
 
       await secureStorage.setupRecoveryPassword(secret.id, secretHex)
     } catch (error) {

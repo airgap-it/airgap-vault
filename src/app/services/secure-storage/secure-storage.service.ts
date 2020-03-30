@@ -55,11 +55,11 @@ export class SecureStorageService {
         })
       },
       setupRecoveryPassword(key, value) {
-          return securityUtils.setupRecoveryPassword({
-            alias,
-            isParanoia,
-            key, 
-            value
+        return securityUtils.setupRecoveryPassword({
+          alias,
+          isParanoia,
+          key, 
+          value
         })
       },
       getItem(key) {
