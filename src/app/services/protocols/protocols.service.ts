@@ -10,6 +10,7 @@ import {
   UnsignedTransaction
 } from 'airgap-coin-lib'
 import { AeternityERC20Token } from 'airgap-coin-lib/dist/protocols/ethereum/erc20/AeToken'
+import { TezosBTC } from 'airgap-coin-lib/dist/protocols/tezos/fa/TezosBTC'
 
 import { tokens } from './tokens'
 export interface Token {
@@ -53,6 +54,7 @@ export class ProtocolsService {
   public addProtocols() {
     addSupportedProtocol(AeternityERC20Token)
     addSubProtocol('xtz', new TezosKtProtocol())
+    addSubProtocol('xtz', new TezosBTC())
 
     this.subProtocols.forEach(supportedSubAccount => {
       supportedSubAccount.subProtocols.forEach(subProtocol => {
