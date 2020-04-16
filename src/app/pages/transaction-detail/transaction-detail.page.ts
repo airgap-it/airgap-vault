@@ -1,5 +1,7 @@
 import { Component } from '@angular/core'
-import { AirGapWallet, IACMessageDefinitionObject, IACMessageType, IAirGapTransaction, UnsignedTransaction } from 'airgap-coin-lib'
+import { AirGapWallet, IACMessageDefinitionObject, 
+  IACMessageType, 
+  IAirGapTransaction, UnsignedTransaction } from 'airgap-coin-lib'
 import * as bip39 from 'bip39'
 
 import { Secret } from '../../models/secret'
@@ -9,6 +11,7 @@ import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
 import { SerializerService } from '../../services/serializer/serializer.service'
 
+// TODO: refactor multiple transactions
 @Component({
   selector: 'airgap-transaction-detail',
   templateUrl: './transaction-detail.page.html',
@@ -17,8 +20,7 @@ import { SerializerService } from '../../services/serializer/serializer.service'
 export class TransactionDetailPage {
   public broadcastUrl?: string
 
-  public transaction: UnsignedTransaction
-  public wallet: AirGapWallet
+  public transactionsWithWallets: [UnsignedTransaction, AirGapWallet][]
   public airGapTxs: IAirGapTransaction[]
   public deserializedSync: IACMessageDefinitionObject[]
 
@@ -30,62 +32,67 @@ export class TransactionDetailPage {
   ) {}
 
   public async ionViewWillEnter(): Promise<void> {
-    this.transaction = this.navigationService.getState().transaction
-    this.wallet = this.navigationService.getState().wallet
-    this.deserializedSync = [this.navigationService.getState().deserializedSync]
+    this.transactionsWithWallets = this.navigationService.getState().transactionsWithWallets
+    this.deserializedSync = this.navigationService.getState().deserializedSync
     console.log('deserialized sync', this.deserializedSync)
     try {
-      this.airGapTxs = await this.wallet.coinProtocol.getTransactionDetails(this.transaction)
+      this.airGapTxs = (await Promise.all(
+        this.transactionsWithWallets.map((pair: [UnsignedTransaction, AirGapWallet]) => pair[1].coinProtocol.getTransactionDetails(pair[0]))
+      )).reduce((flatten, toFlatten) => flatten.concat(toFlatten), [])
     } catch (e) {
       console.log('cannot read tx details', e)
     }
   }
 
   public async signAndGoToNextPage(): Promise<void> {
-    const signedTx: string = await this.signTransaction(this.transaction, this.wallet)
-    this.broadcastUrl = await this.generateBroadcastUrl(this.wallet, signedTx, this.transaction)
+    const signedTxs: string[] = await Promise.all(this.transactionsWithWallets.map((pair: [UnsignedTransaction, AirGapWallet]) => this.signTransaction(pair[0], pair[1])) )
+    this.broadcastUrl = await this.generateBroadcastUrl(this.transactionsWithWallets, signedTxs)
 
     this.interactionService.startInteraction(
       {
         operationType: InteractionOperationType.TRANSACTION_BROADCAST,
         url: this.broadcastUrl,
-        wallet: this.wallet,
-        signedTx,
-        transaction: this.transaction
+        wallets: this.transactionsWithWallets.map(pair => pair[1]),
+        signedTxs,
+        transactions: this.transactionsWithWallets.map(pair => pair[0])
       },
       this.secretsService.getActiveSecret()
     )
   }
 
-  public async generateBroadcastUrl(wallet: AirGapWallet, signedTx: string, unsignedTransaction: UnsignedTransaction): Promise<string> {
-    let txDetails: IAirGapTransaction | undefined
+  public async generateBroadcastUrl(transactionsWithWallets: [UnsignedTransaction, AirGapWallet][], signedTxs: string[]): Promise<string> {
+    let txDetails: IAirGapTransaction[] | undefined
 
     try {
-      const transactions = await wallet.coinProtocol.getTransactionDetails(unsignedTransaction) // TODO: Look at all transactions
+      const transactions = (await Promise.all(
+        transactionsWithWallets.map((pair: [UnsignedTransaction, AirGapWallet]) => pair[1].coinProtocol.getTransactionDetails(pair[0]))
+      )).reduce((flatten, toFlatten) => flatten.concat(toFlatten), [])
       console.log(transactions)
 
-      txDetails = transactions[0]
+      txDetails = transactions
     } catch (e) {
       handleErrorLocal(e)
     }
 
-    if (txDetails) {
-      const deserializedTxSigningRequest: IACMessageDefinitionObject = {
-        protocol: this.wallet.protocolIdentifier,
-        type: IACMessageType.TransactionSignResponse,
-        payload: {
-          accountIdentifier: wallet.publicKey.substr(-6),
-          transaction: signedTx,
-          from: txDetails.from,
-          amount: txDetails.amount,
-          fee: txDetails.fee,
-          to: txDetails.to
+    if (txDetails && txDetails.length > 0) {
+      const deserializedTxSigningRequests: IACMessageDefinitionObject[] = transactionsWithWallets.map((pair: [UnsignedTransaction, AirGapWallet], index: number) => (
+        {
+          protocol: pair[1].protocolIdentifier,
+          type: IACMessageType.TransactionSignResponse,
+          payload: {
+            accountIdentifier: pair[1].publicKey.substr(-6),
+            transaction: signedTxs[index],
+            from: txDetails[index].from,
+            amount: txDetails[index].amount,
+            fee: txDetails[index].fee,
+            to: txDetails[index].to
+          }
         }
-      }
+      ))
 
-      const serializedTx: string[] = await this.serializerService.serialize([deserializedTxSigningRequest])
+      const serializedTx: string[] = await this.serializerService.serialize(deserializedTxSigningRequests)
 
-      return `${unsignedTransaction.callback || 'airgap-wallet://?d='}${serializedTx.join(',')}`
+      return `${transactionsWithWallets[0][0].callback || 'airgap-wallet://?d='}${serializedTx.join(',')}`
     } else {
       throw new Error('Could not get transaction details')
     }
@@ -100,14 +107,14 @@ export class TransactionDetailPage {
       throw new Error('no secret found for this public key')
     }
 
-    return this.secretsService.retrieveEntropyForSecret(secret).then((entropy: string) => {
-      const seed: string = bip39.mnemonicToSeedHex(bip39.entropyToMnemonic(entropy))
+    return this.secretsService.retrieveEntropyForSecret(secret).then(async (entropy: string) => {
+      const mnemonic: string = bip39.entropyToMnemonic(entropy)
       if (wallet.isExtendedPublicKey) {
-        const extendedPrivateKey: string = wallet.coinProtocol.getExtendedPrivateKeyFromHexSecret(seed, wallet.derivationPath)
+        const extendedPrivateKey: string = await wallet.coinProtocol.getExtendedPrivateKeyFromMnemonic(mnemonic, wallet.derivationPath)
 
         return wallet.coinProtocol.signWithExtendedPrivateKey(extendedPrivateKey, transaction.transaction)
       } else {
-        const privateKey: Buffer = wallet.coinProtocol.getPrivateKeyFromHexSecret(seed, wallet.derivationPath)
+        const privateKey: Buffer = await wallet.coinProtocol.getPrivateKeyFromMnemonic(mnemonic, wallet.derivationPath)
 
         return wallet.coinProtocol.signWithPrivateKey(privateKey, transaction.transaction)
       }
