@@ -3,6 +3,8 @@ package it.airgap.vault.plugin.securityutils.storage
 import android.os.Build
 import android.security.keystore.UserNotAuthenticatedException
 import java.io.*
+import java.nio.ByteBuffer
+import java.nio.charset.*
 import java.security.Key
 import java.security.MessageDigest
 import javax.crypto.Cipher
@@ -17,47 +19,42 @@ import kotlin.concurrent.thread
  */
 class SecureFileStorage(private val masterSecret: Key?, private val salt: ByteArray, private val baseDir: File) {
 
-    fun read(fileKey: String, secret: ByteArray = "".toByteArray(), success: (InputStream) -> Unit, error: (error: Exception) -> Unit, requestAuthentication: (() -> Unit) -> Unit) {
+    fun read(fileKey: String, secret: ByteArray = "".toByteArray(), success: (String) -> Unit, error: (Exception) -> Unit, requestAuthentication: (() -> Unit) -> Unit) {
         thread {
             try {
-                val fileInputStream = FileInputStream(fileForHashedKey(hashForKey(fileKey)))
-
-                val fsCipherInputStream = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                SecureFile(baseDir, hashForKey(fileKey)).input { fileInputStream ->
                     val fsCipher =
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                val iv = ByteArray(16)
-                                fileInputStream.read(iv)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            val iv = ByteArray(16)
+                            fileInputStream.read(iv)
 
-                                val fsCipher = Cipher.getInstance(Constants.FILESYSTEM_CIPHER_ALGORITHM)
-                                fsCipher.init(Cipher.DECRYPT_MODE, masterSecret, IvParameterSpec(iv))
-                                fsCipher
-                            } else {
-                                val fsCipher = Cipher.getInstance(Constants.FILESYSTEM_FALLBACK_CIPHER_ALGORITHM)
-                                fsCipher.init(Cipher.DECRYPT_MODE, masterSecret)
-                                fsCipher
-                            }
+                            val fsCipher = Cipher.getInstance(Constants.FILESYSTEM_CIPHER_ALGORITHM)
+                            fsCipher.init(Cipher.DECRYPT_MODE, masterSecret, IvParameterSpec(iv))
+                            fsCipher
+                        } else {
+                            val fsCipher = Cipher.getInstance(Constants.FILESYSTEM_FALLBACK_CIPHER_ALGORITHM)
+                            fsCipher.init(Cipher.DECRYPT_MODE, masterSecret)
+                            fsCipher
+                        }
 
-                    CipherInputStream(fileInputStream, fsCipher)
-                } else {
-                    fileInputStream
+                    val fsCipherInputStream = CipherInputStream(fileInputStream, fsCipher)
+
+                    val encryptionSecret = encryptionSecret(secret, hashForKey(fileKey))
+
+                    val specificSecretKey = SecretKeySpec(encryptionSecret, 0, encryptionSecret.size, "AES")
+                    val specificSecretCipher = Cipher.getInstance(Constants.FILESYSTEM_CIPHER_ALGORITHM)
+
+                    specificSecretCipher.init(Cipher.DECRYPT_MODE, specificSecretKey, IvParameterSpec(ivForKey(fileKey)))
+
+                    val secretCipherInputStream = CipherInputStream(fsCipherInputStream, specificSecretCipher)
+
+                    val fileValue = secretCipherInputStream.readTextAndClose()
+                    success(fileValue)
                 }
-
-                val encryptionSecret = encryptionSecret(secret, hashForKey(fileKey))
-
-                val specificSecretKey = SecretKeySpec(encryptionSecret, 0, encryptionSecret.size, "AES")
-                val specificSecretCipher = Cipher.getInstance(Constants.FILESYSTEM_CIPHER_ALGORITHM)
-
-                specificSecretCipher.init(Cipher.DECRYPT_MODE, specificSecretKey, IvParameterSpec(ivForKey(fileKey)))
-
-                val secretCipherInputStream = CipherInputStream(fsCipherInputStream, specificSecretCipher)
-
-                success(secretCipherInputStream)
             } catch (e: Exception) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (e is UserNotAuthenticatedException) {
-                        requestAuthentication({
-                            read(fileKey, secret, success, error, requestAuthentication)
-                        })
+                        requestAuthentication { read(fileKey, secret, success, error, requestAuthentication) }
                     } else {
                         error(e)
                     }
@@ -68,18 +65,10 @@ class SecureFileStorage(private val masterSecret: Key?, private val salt: ByteAr
         }
     }
 
-    fun write(fileKey: String, secret: ByteArray = "".toByteArray(), success: (OutputStream) -> Unit, error: (error: Exception) -> Unit, requestAuthentication: (() -> Unit) -> Unit) {
+    fun write(fileKey: String, fileData: String, secret: ByteArray = "".toByteArray(), success: () -> Unit, error: (Exception) -> Unit, requestAuthentication: (() -> Unit) -> Unit) {
         thread {
             try {
-                val file = fileForHashedKey(hashForKey(fileKey))
-
-                if (!file.exists()) {
-                    file.createNewFile()
-                }
-
-                val fileOutputStream = FileOutputStream(file)
-
-                val fsCipherOutputStream = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                SecureFile(baseDir, hashForKey(fileKey)).output { fileOutputStream ->
                     val fsCipher =
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                 Cipher.getInstance(Constants.FILESYSTEM_CIPHER_ALGORITHM)
@@ -90,27 +79,26 @@ class SecureFileStorage(private val masterSecret: Key?, private val salt: ByteAr
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         fileOutputStream.write(fsCipher.iv)
                     }
-                    CipherOutputStream(fileOutputStream, fsCipher)
-                } else {
-                    fileOutputStream
+                    val fsCipherOutputStream = CipherOutputStream(fileOutputStream, fsCipher)
+
+                    val encryptionSecret = encryptionSecret(secret, hashForKey(fileKey))
+
+                    val specificSecretKey = SecretKeySpec(encryptionSecret, 0, encryptionSecret.size, "AES")
+                    val specificSecretCipher = Cipher.getInstance(Constants.FILESYSTEM_CIPHER_ALGORITHM)
+
+                    specificSecretCipher.init(Cipher.ENCRYPT_MODE, specificSecretKey, IvParameterSpec(ivForKey(fileKey)))
+
+                    CipherOutputStream(fsCipherOutputStream, specificSecretCipher).use {
+                        it.write(fileData.toByteArray())
+                        it.flush()
+                    }
+
+                    success()
                 }
-
-                val encryptionSecret = encryptionSecret(secret, hashForKey(fileKey))
-
-                val specificSecretKey = SecretKeySpec(encryptionSecret, 0, encryptionSecret.size, "AES")
-                val specificSecretCipher = Cipher.getInstance(Constants.FILESYSTEM_CIPHER_ALGORITHM)
-
-                specificSecretCipher.init(Cipher.ENCRYPT_MODE, specificSecretKey, IvParameterSpec(ivForKey(fileKey)))
-
-                val secretCipherOutputStream = CipherOutputStream(fsCipherOutputStream, specificSecretCipher)
-
-                success(secretCipherOutputStream)
             } catch (e: Exception) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (e is UserNotAuthenticatedException) {
-                        requestAuthentication({
-                            write(fileKey, secret, success, error, requestAuthentication)
-                        })
+                        requestAuthentication { write(fileKey, fileData, secret, success, error, requestAuthentication) }
                     } else {
                         error(e)
                     }
@@ -124,12 +112,12 @@ class SecureFileStorage(private val masterSecret: Key?, private val salt: ByteAr
     fun remove(fileKey: String, success: () -> Unit, error: (error: Exception) -> Unit) {
         thread {
             try {
-                val file = fileForHashedKey(hashForKey(fileKey))
+                val file = SecureFile(baseDir, hashForKey(fileKey))
                 val result = file.delete()
                 if (result) {
                     success()
                 } else {
-                    throw Exception("could not delete file")
+                    throw Exception(Errors.CANNOT_DELETE_FILE)
                 }
             } catch (e: Exception) {
                 error(e)
@@ -149,16 +137,26 @@ class SecureFileStorage(private val masterSecret: Key?, private val salt: ByteAr
         return MessageDigest.getInstance(Constants.DIGEST_ALGORITHM).digest(salt + key.toByteArray())
     }
 
-    private fun fileForHashedKey(hashedKey: ByteArray): File {
-        return File(baseDir, hexForByteArray(hashedKey))
-    }
+    @Throws(Exception::class)
+    private fun InputStream.readTextAndClose(charset: Charset = Charsets.UTF_8): String {
+        val bytes = use { it.readBytes() }
 
-    private fun hexForByteArray(hash: ByteArray): String {
-        val stringBuilder = StringBuilder(hash.size * 2)
-        for (b in hash) {
-            stringBuilder.append(String.format("%02x", b))
+        try {
+            val decoder = charset.newDecoder().apply {
+                onMalformedInput(CodingErrorAction.REPORT)
+                onUnmappableCharacter(CodingErrorAction.REPORT)
+            }
+
+            return decoder.decode(bytes)
+        } catch (e: CharacterCodingException) {
+            throw Exception(Errors.ITEM_CORRUPTED)
         }
-        return stringBuilder.toString()
     }
 
+    private fun CharsetDecoder.decode(bytes: ByteArray): String {
+        val byteBuffer = ByteBuffer.wrap(bytes)
+        val stringBuffer = StringBuffer(decode(byteBuffer))
+
+        return stringBuffer.toString()
+    }
 }

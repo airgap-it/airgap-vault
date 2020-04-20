@@ -6,6 +6,7 @@ export interface SecureStorage {
   init(): Promise<void>
   setItem(key: string, value: string): Promise<void>
   getItem(key: string): Promise<any>
+  setupRecoveryPassword(key: string, value: string): Promise<any>
   removeItem(key: string): Promise<void>
 }
 
@@ -53,11 +54,25 @@ export class SecureStorageService {
           value
         })
       },
+      setupRecoveryPassword(key, value) {
+        return securityUtils.setupRecoveryPassword({
+          alias,
+          isParanoia,
+          key, 
+          value
+        })
+      },
       getItem(key) {
         return securityUtils.getItem({
           alias,
           isParanoia,
           key
+        }).catch((error: string) => {
+          if (error.toLowerCase().includes('item corrupted')) {
+            throw new Error('Could not read from the secure storage.')
+          }
+
+          throw error
         })
       },
       removeItem(key) {
