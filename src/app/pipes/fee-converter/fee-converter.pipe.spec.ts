@@ -45,15 +45,14 @@ describe('FeeConverter Pipe', () => {
   }
 
   function makeTests(argsArray) {
-    argsArray.forEach(v => {
+    argsArray.forEach((v) => {
       getTest(v)
     })
   }
 
   const truthyProtocolIdentifiers = [
     { value: '1', protocolIdentifier: 'btc', expected: '0.00000001 BTC' },
-    { value: '1', protocolIdentifier: 'eth', expected: '0.000000000000000001 ETH' },
-    { value: '1', protocolIdentifier: 'eth-erc20-ae', expected: '0.000000000000000001 ETH' }
+    { value: '1', protocolIdentifier: 'eth', expected: '0.000000000000000001 ETH' }
   ]
   makeTests(truthyProtocolIdentifiers)
 
