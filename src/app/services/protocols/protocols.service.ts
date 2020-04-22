@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core'
 import {
   addSubProtocol,
-  addSupportedProtocol,
   GenericERC20,
   GenericERC20Configuration,
   IAirGapTransaction,
@@ -9,7 +8,7 @@ import {
   TezosKtProtocol,
   UnsignedTransaction
 } from 'airgap-coin-lib'
-import { AeternityERC20Token } from 'airgap-coin-lib/dist/protocols/ethereum/erc20/AeToken'
+import { TezosBTC } from 'airgap-coin-lib/dist/protocols/tezos/fa/TezosBTC'
 
 import { tokens } from './tokens'
 export interface Token {
@@ -30,32 +29,18 @@ interface SubAccount {
   providedIn: 'root'
 })
 export class ProtocolsService {
-  public subProtocols: SubAccount[] = [
-    {
-      protocol: 'eth',
-      subProtocols: [
-        {
-          symbol: 'AE-ERC20',
-          name: 'æternity Ethereum Token',
-          marketSymbol: 'ae',
-          identifier: 'eth-erc20-ae',
-          contractAddress: '0x5ca9a71b1d01849c0a95490cc00559717fcf0d1d',
-          decimals: 18
-        }
-      ]
-    }
-  ]
+  public subProtocols: SubAccount[] = []
 
   constructor() {
     /* */
   }
 
   public addProtocols() {
-    addSupportedProtocol(AeternityERC20Token)
     addSubProtocol('xtz', new TezosKtProtocol())
+    addSubProtocol('xtz', new TezosBTC())
 
-    this.subProtocols.forEach(supportedSubAccount => {
-      supportedSubAccount.subProtocols.forEach(subProtocol => {
+    this.subProtocols.forEach((supportedSubAccount) => {
+      supportedSubAccount.subProtocols.forEach((subProtocol) => {
         addSubProtocol(
           supportedSubAccount.protocol,
           new GenericERC20({
@@ -70,7 +55,7 @@ export class ProtocolsService {
       })
     })
 
-    tokens.forEach(token => {
+    tokens.forEach((token) => {
       addSubProtocol(
         'eth',
         new GenericERC20({
