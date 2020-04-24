@@ -28,9 +28,9 @@ export interface IInteractionOptions {
   operationType: InteractionOperationType
   url: string
   communicationType?: InteractionCommunicationType
-  signedTx?: string
-  wallet?: AirGapWallet
-  transaction?: UnsignedTransaction
+  signedTxs?: string[]
+  wallets?: AirGapWallet[]
+  transactions?: UnsignedTransaction[]
 }
 
 @Injectable({
@@ -91,9 +91,9 @@ export class InteractionService {
       this.navigationService
         .routeWithState('/transaction-signed', {
           interactionUrl: interactionOptions.url,
-          wallet: interactionOptions.wallet,
-          signedTx: interactionOptions.signedTx,
-          transaction: interactionOptions.transaction
+          wallets: interactionOptions.wallets,
+          signedTxs: interactionOptions.signedTxs,
+          transactions: interactionOptions.transactions
         })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } else {

@@ -21,7 +21,7 @@ export enum IACResult {
 })
 export class SchemeRoutingService {
   private readonly syncSchemeHandlers: {
-    [key in IACMessageType]: (deserializedSync: IACMessageDefinitionObject, scanAgainCallback: Function) => Promise<boolean>
+    [key in IACMessageType]: (deserializedSync: IACMessageDefinitionObject[], scanAgainCallback: Function) => Promise<boolean>
   }
 
   constructor(
@@ -36,7 +36,7 @@ export class SchemeRoutingService {
       [IACMessageType.MetadataResponse]: this.syncTypeNotSupportedAlert.bind(this),
       [IACMessageType.AccountShareRequest]: this.syncTypeNotSupportedAlert.bind(this),
       [IACMessageType.AccountShareResponse]: this.syncTypeNotSupportedAlert.bind(this),
-      [IACMessageType.TransactionSignRequest]: this.handleUnsignedTransaction.bind(this),
+      [IACMessageType.TransactionSignRequest]: this.handleUnsignedTransactions.bind(this),
       [IACMessageType.TransactionSignResponse]: this.syncTypeNotSupportedAlert.bind(this),
       [IACMessageType.MessageSignRequest]: this.syncTypeNotSupportedAlert.bind(this),
       [IACMessageType.MessageSignResponse]: this.syncTypeNotSupportedAlert.bind(this)
@@ -75,17 +75,23 @@ export class SchemeRoutingService {
       return IACResult.ERROR
     }
     if (deserializedSync && deserializedSync.length > 0) {
-      const firstMessage: IACMessageDefinitionObject = deserializedSync[0]
+      const groupedByType = deserializedSync.reduce((grouped, message) =>
+        Object.assign(
+          grouped, 
+          { [message.type]: (grouped[message.type] || []).concat(message) }
+        ), {})
 
-      if (firstMessage.type in IACMessageType) {
-        this.syncSchemeHandlers[firstMessage.type](firstMessage, scanAgainCallback).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
+      for (let type in groupedByType) {
+        if (type in IACMessageType) {
+          this.syncSchemeHandlers[type](groupedByType[type], scanAgainCallback).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
+        } else {
+          this.syncTypeNotSupportedAlert(groupedByType[type], scanAgainCallback).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
 
-        return IACResult.SUCCESS
-      } else {
-        this.syncTypeNotSupportedAlert(firstMessage, scanAgainCallback).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
-
-        return IACResult.ERROR
+          return IACResult.ERROR
+        }
       }
+
+      return IACResult.SUCCESS
     } else {
       console.warn('No message found')
       scanAgainCallback()
@@ -94,50 +100,59 @@ export class SchemeRoutingService {
     }
   }
 
-  private async handleUnsignedTransaction(
-    deserializedSyncProtocol: IACMessageDefinitionObject,
+  private async handleUnsignedTransactions(
+    deserializedSyncProtocols: IACMessageDefinitionObject[],
     scanAgainCallback: Function
   ): Promise<boolean> {
-    const unsignedTransaction: UnsignedTransaction = deserializedSyncProtocol.payload as UnsignedTransaction
+    const transactionsWithWallets: [UnsignedTransaction, AirGapWallet][] = deserializedSyncProtocols
+      .map(deserializedSyncProtocol => {
+        const unsignedTransaction: UnsignedTransaction = deserializedSyncProtocol.payload as UnsignedTransaction
 
-    let correctWallet = this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(
-      unsignedTransaction.publicKey,
-      deserializedSyncProtocol.protocol
-    )
+        let correctWallet = this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(
+          unsignedTransaction.publicKey,
+          deserializedSyncProtocol.protocol
+        )
 
-    // If we can't find a wallet for a protocol, we will try to find the "base" wallet and then create a new
-    // wallet with the right protocol. This way we can sign all ERC20 transactions, but show the right amount
-    // and fee for all tokens we support.
-    if (!correctWallet) {
-      const baseWallet: AirGapWallet | undefined = this.secretsService.findBaseWalletByPublicKeyAndProtocolIdentifier(
-        unsignedTransaction.publicKey,
-        deserializedSyncProtocol.protocol
-      )
-
-      if (baseWallet) {
-        // If the protocol is not supported, use the base protocol for signing
-        try {
-          correctWallet = new AirGapWallet(
-            deserializedSyncProtocol.protocol,
-            baseWallet.publicKey,
-            baseWallet.isExtendedPublicKey,
-            baseWallet.derivationPath
+        // If we can't find a wallet for a protocol, we will try to find the "base" wallet and then create a new
+        // wallet with the right protocol. This way we can sign all ERC20 transactions, but show the right amount
+        // and fee for all tokens we support.
+        if (!correctWallet) {
+          const baseWallet: AirGapWallet | undefined = this.secretsService.findBaseWalletByPublicKeyAndProtocolIdentifier(
+            unsignedTransaction.publicKey,
+            deserializedSyncProtocol.protocol
           )
-          correctWallet.addresses = baseWallet.addresses
-        } catch (e) {
-          if (e.message === 'PROTOCOL_NOT_SUPPORTED') {
-            correctWallet = baseWallet
+
+          if (baseWallet) {
+            // If the protocol is not supported, use the base protocol for signing
+            try {
+              correctWallet = new AirGapWallet(
+                deserializedSyncProtocol.protocol,
+                baseWallet.publicKey,
+                baseWallet.isExtendedPublicKey,
+                baseWallet.derivationPath
+              )
+              correctWallet.addresses = baseWallet.addresses
+            } catch (e) {
+              if (e.message === 'PROTOCOL_NOT_SUPPORTED') {
+                correctWallet = baseWallet
+              }
+            }
           }
         }
-      }
-    }
 
-    if (correctWallet) {
+        return [unsignedTransaction, correctWallet] as [UnsignedTransaction, AirGapWallet]
+      })
+      .filter((pair: [UnsignedTransaction, AirGapWallet]) => pair[1])
+
+    if (transactionsWithWallets.length > 0) {
+      if (transactionsWithWallets.length !== deserializedSyncProtocols.length) {
+        // TODO: probably show error
+      }
+
       this.navigationService
         .routeWithState('transaction-detail', {
-          transaction: unsignedTransaction,
-          wallet: correctWallet,
-          deserializedSync: deserializedSyncProtocol
+          transactionsWithWallets: transactionsWithWallets,
+          deserializedSync: deserializedSyncProtocols
         })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
 
@@ -157,7 +172,7 @@ export class SchemeRoutingService {
   }
 
   private async syncTypeNotSupportedAlert(
-    _deserializedSyncProtocol: IACMessageDefinitionObject,
+    _deserializedSyncProtocols: IACMessageDefinitionObject[],
     scanAgainCallback: Function
   ): Promise<boolean> {
     // TODO: Log error locally

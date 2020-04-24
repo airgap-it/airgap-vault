@@ -47,6 +47,7 @@
   },
 
   "from-to":{
+    "type_label": "Type",
     "amount_label":"AMOUNT",
     "fee_label":"FEE",
     "from_label": "From",

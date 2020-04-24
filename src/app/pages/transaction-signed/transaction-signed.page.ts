@@ -15,12 +15,12 @@ enum TransactionQRType {
   styleUrls: ['./transaction-signed.page.scss']
 })
 export class TransactionSignedPage {
-  public signedTx: string
+  public signedTxs: string[]
   public interactionUrl: string
 
   public splits: string[]
 
-  public wallet: AirGapWallet
+  public wallets: AirGapWallet[]
   public qrType: TransactionQRType = 0
 
   public signedTransactionSync: any // TODO: Types
@@ -28,8 +28,8 @@ export class TransactionSignedPage {
   constructor(public navigationService: NavigationService) {
     this.interactionUrl = this.navigationService.getState().interactionUrl
     this.splits = this.interactionUrl.substr('airgap-wallet://?d='.length).split(',')
-    this.wallet = this.navigationService.getState().interactionUrl
-    this.signedTx = this.navigationService.getState().interactionUrl
+    this.wallets = this.navigationService.getState().wallets
+    this.signedTxs = this.navigationService.getState().signedTxs
   }
 
   public switchQR(): void {
