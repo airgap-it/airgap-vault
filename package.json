@@ -8,6 +8,7 @@
   "main": "electron/main.js",
   "scripts": {
     "ng": "ng",
+    "serve": "ionic serve --external",
     "start": "ng serve",
     "build": "ng build",
     "build:stats": "ng build --stats-json",
