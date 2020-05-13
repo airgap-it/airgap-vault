@@ -30,6 +30,7 @@ COPY package-lock.json /app
 RUN npm run install-test-dependencies
 
 # install dependencies
+RUN npm install -g @ionic/cli@6.9.1
 RUN npm install
 
 # install static webserver
