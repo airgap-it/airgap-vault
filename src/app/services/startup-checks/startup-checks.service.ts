@@ -42,9 +42,9 @@ export class StartupChecksService {
         name: 'deviceSecureCheck',
         expectedOutcome: true,
         check: async (): Promise<boolean> => {
-          const result: number = await this.secureStorageService.isDeviceSecure()
+          const result = await this.secureStorageService.isDeviceSecure()
 
-          return Boolean(result).valueOf()
+          return Boolean(result.value).valueOf()
         },
         failureConsequence: async (): Promise<void> => {
           await this.presentModal(WarningModalPage, { errorType: Warning.SECURE_STORAGE }).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))

@@ -1,7 +1,8 @@
 {
   "name": "AirGap Vault",
   "integrations": {
-    "cordova": {}
+    "cordova": {},
+    "capacitor": {}
   },
   "type": "angular"
 }

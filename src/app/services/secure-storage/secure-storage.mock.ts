@@ -13,10 +13,10 @@ export class SecureStorageServiceMock {
     console.log('SecureStorageServiceMock constructor')
   }
 
-  public isDeviceSecure(): Promise<number> {
-    return new Promise<number>(resolve => {
+  public isDeviceSecure(): Promise<any> {
+    return new Promise<any>(resolve => {
       console.warn('SecureStorageServiceMock - This Device is NOT secured')
-      resolve(this.isSecure)
+      resolve({ value: this.isSecure })
     })
   }
 
@@ -50,7 +50,16 @@ export class SecureStorageServiceMock {
         const result = localStorage.getItem(alias + '-' + key)
 
         return new Promise<any>(resolve => {
-          resolve(result)
+          resolve({ value: result })
+        })
+      },
+      setupRecoveryPassword(key: string, value: string): Promise<any> {
+        console.warn('SecureStorageServiceMock - setupRecoveryPassword', key, value)
+        const recoverString = '' // TODO: mock it
+        localStorage.setItem(alias + '-' + key + '_' + recoverString, value)
+
+        return new Promise<any>(resolve => {
+          resolve(recoverString)
         })
       },
       removeItem(key) {
