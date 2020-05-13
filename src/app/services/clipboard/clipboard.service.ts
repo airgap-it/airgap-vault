@@ -1,23 +1,18 @@
-import { Injectable } from '@angular/core'
-import { Clipboard } from '@ionic-native/clipboard/ngx'
-import { Platform, ToastController } from '@ionic/angular'
+import { Injectable, Inject } from '@angular/core'
+import { ClipboardPlugin } from '@capacitor/core'
+import { ToastController } from '@ionic/angular'
 
 import { ErrorCategory, handleErrorLocal } from './../error-handler/error-handler.service'
+import { CLIPBOARD_PLUGIN } from '../../capacitor-plugins/injection-tokens'
 
 @Injectable({ providedIn: 'root' })
 export class ClipboardService {
-  constructor(
-    private readonly platform: Platform,
-    private readonly clipboard: Clipboard,
-    private readonly toastController: ToastController
-  ) {}
+  constructor(private readonly toastController: ToastController, @Inject(CLIPBOARD_PLUGIN) private readonly clipboard: ClipboardPlugin) {}
 
   public async copy(text: string): Promise<void> {
-    if (this.platform.is('cordova')) {
-      return this.clipboard.copy(text)
-    } else {
-      return (navigator as any).clipboard.writeText(text)
-    }
+    return this.clipboard.write({
+      string: text
+    })
   }
 
   public async copyAndShowToast(text: string, toastMessage: string = 'Successfully copied to your clipboard!'): Promise<void> {
@@ -31,11 +26,10 @@ export class ClipboardService {
 
   public async paste(): Promise<string> {
     try {
-      if (this.platform.is('cordova')) {
-        return this.clipboard.paste()
-      } else {
-        return (navigator as any).clipboard.readText()
-      }
+      const text = await this.clipboard.read({ 
+        type: 'string'
+      })
+      return text.value
     } catch (err) {
       console.error('Failed to paste: ', err)
       throw err

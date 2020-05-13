@@ -48,7 +48,7 @@ export class SecretGeneratePage implements OnInit {
     private readonly changeDetectorRef: ChangeDetectorRef,
     private readonly permissionsService: PermissionsService
   ) {
-    this.isBrowser = !this.platform.is('cordova')
+    this.isBrowser = !this.platform.is('hybrid')
     if (!this.isBrowser) {
       this.cameraService.setTransparentElementsByTags('ion-toolbar', 'ion-content')
     }

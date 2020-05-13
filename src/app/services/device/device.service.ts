@@ -1,22 +1,27 @@
-import { Injectable, NgZone } from '@angular/core'
+import { Injectable, NgZone, Inject } from '@angular/core'
 import { ModalController, Platform } from '@ionic/angular'
 import { ComponentRef, ModalOptions } from '@ionic/core'
+import { PluginListenerHandle } from '@capacitor/core'
 
 import { Warning, WarningModalPage } from '../../pages/warning-modal/warning-modal.page'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { NavigationService } from '../navigation/navigation.service'
-
-declare var SecurityUtils: any
+import { SECURITY_UTILS_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
+import { SecurityUtilsPlugin } from 'src/app/capacitor-plugins/definitions'
 
 @Injectable({
   providedIn: 'root'
 })
 export class DeviceService {
+  private screenCaptureStateChangedListeners: PluginListenerHandle[] = []
+  private screenshotTakenListeners: PluginListenerHandle[] = []
+
   constructor(
     private readonly ngZone: NgZone,
     private readonly platform: Platform,
     private readonly modalController: ModalController,
-    protected readonly navigationService: NavigationService
+    protected readonly navigationService: NavigationService,
+    @Inject(SECURITY_UTILS_PLUGIN) private readonly securityUtils: SecurityUtilsPlugin
   ) {}
 
   public enableScreenshotProtection(options?: { routeBack: string }): void {
@@ -63,64 +68,71 @@ export class DeviceService {
       .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 
-  public checkForRoot(): Promise<boolean> {
-    return new Promise(resolve => {
-      if (this.platform.is('cordova')) {
-        SecurityUtils.DeviceIntegrity.assess(result => {
-          resolve(!result)
-        })
-      } else {
-        console.warn('root detection skipped - no supported platform')
-        resolve(false)
-      }
-    })
+  public async checkForRoot(): Promise<boolean> {
+    if (this.platform.is('hybrid')) {
+      const result = await this.securityUtils.assessDeviceIntegrity()
+      return !result.value
+    } else {
+      console.warn('root detection skipped - no supported platform')
+      return false
+    }
   }
 
   public onScreenCaptureStateChanged(callback: (captured: boolean) => void): void {
-    if (this.platform.is('ios') && this.platform.is('cordova')) {
-      SecurityUtils.SecureScreen.onScreenCaptureStateChanged((captured: boolean) => {
+    if (this.platform.is('ios') && this.platform.is('hybrid')) {
+      const listener = this.securityUtils.addListener('screenCaptureStateChanged', event => {
         this.ngZone.run(() => {
-          callback(captured)
+          callback(event.captured)
         })
       })
+      this.screenCaptureStateChangedListeners.push(listener)
     }
   }
 
   public setSecureWindow(): void {
-    if (this.platform.is('android') && this.platform.is('cordova')) {
-      SecurityUtils.SecureScreen.setWindowSecureFlag()
+    if (this.platform.is('android') && this.platform.is('hybrid')) {
+      this.securityUtils.setWindowSecureFlag()
     }
   }
 
   public clearSecureWindow(): void {
-    if (this.platform.is('android') && this.platform.is('cordova')) {
-      SecurityUtils.SecureScreen.clearWindowSecureFlag()
+    if (this.platform.is('android') && this.platform.is('hybrid')) {
+      this.securityUtils.clearWindowSecureFlag()
     }
   }
 
   public removeScreenCaptureObservers(): void {
-    if (this.platform.is('ios') && this.platform.is('cordova')) {
-      SecurityUtils.SecureScreen.removeScreenCaptureObservers()
+    if (this.platform.is('ios') && this.platform.is('hybrid')) {
+      this.removeListeners(this.screenCaptureStateChangedListeners)
+      this.screenCaptureStateChangedListeners = []
     }
   }
 
   public onScreenshotTaken(callback: () => void): void {
-    if (this.platform.is('ios') && this.platform.is('cordova')) {
-      SecurityUtils.SecureScreen.onScreenshotTaken(() => {
+    if (this.platform.is('ios') && this.platform.is('hybrid')) {
+      const listener = this.securityUtils.addListener('screenshotTaken', () => {
         this.ngZone.run(() => {
           callback()
         })
       })
+      this.screenCaptureStateChangedListeners.push(listener)
     }
   }
 
   public removeScreenshotObservers(): void {
-    if (this.platform.is('ios') && this.platform.is('cordova')) {
-      SecurityUtils.SecureScreen.removeScreenshotObservers()
+    if (this.platform.is('ios') && this.platform.is('hybrid')) {
+      this.removeListeners(this.screenshotTakenListeners)
+      this.screenshotTakenListeners = []
     }
   }
 
   public async checkForElectron(): Promise<boolean> {
     return typeof navigator === 'object' && typeof navigator.userAgent === 'string' && navigator.userAgent.indexOf('Electron') >= 0
+  }
+
+  private removeListeners(listeners: PluginListenerHandle[]) {
+    listeners.forEach(listener => {
+      listener.remove()
+    })
   }
 }

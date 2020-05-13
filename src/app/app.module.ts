@@ -1,14 +1,10 @@
-import { NgModule, RendererFactory2 } from '@angular/core'
+import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { RouteReuseStrategy } from '@angular/router'
-import { AppVersion } from '@ionic-native/app-version/ngx'
-import { CameraPreview } from '@ionic-native/camera-preview/ngx'
-import { Clipboard } from '@ionic-native/clipboard/ngx'
-import { Deeplinks } from '@ionic-native/deeplinks/ngx'
+import { Plugins } from '@capacitor/core'
+
 import { DeviceMotion } from '@ionic-native/device-motion/ngx'
 import { Diagnostic } from '@ionic-native/diagnostic/ngx'
-import { SplashScreen } from '@ionic-native/splash-screen/ngx'
-import { StatusBar } from '@ionic-native/status-bar/ngx'
 import { IonicModule, IonicRouteStrategy, Platform } from '@ionic/angular'
 import { IonicStorageModule } from '@ionic/storage'
 import { TranslateModule } from '@ngx-translate/core'
@@ -21,7 +17,7 @@ import { LocalAuthenticationOnboardingPageModule } from './pages/local-authentic
 import { WarningModalPageModule } from './pages/warning-modal/warning-modal.module'
 import { AudioServiceFactory } from './services/audio/audio.factory'
 import { AudioNativeService } from './services/audio/audio.native.servive'
-import { CameraFactory } from './services/camera/camera.factory'
+import { CameraFactory, CameraFactoryDepHolder } from './services/camera/camera.factory'
 import { CameraNativeService } from './services/camera/camera.native.service'
 import { ClipboardService } from './services/clipboard/clipboard.service'
 import { DeepLinkService } from './services/deep-link/deep-link.service'
@@ -36,12 +32,16 @@ import { ProtocolsService } from './services/protocols/protocols.service'
 import { ScannerService } from './services/scanner/scanner.service'
 import { SchemeRoutingService } from './services/scheme-routing/scheme-routing.service'
 import { SecretsService } from './services/secrets/secrets.service'
-import { SecureStorageFactory } from './services/secure-storage/secure-storage.factory'
+import { SecureStorageFactory, SecureStorageFactoryDepHolder } from './services/secure-storage/secure-storage.factory'
 import { SecureStorageService } from './services/secure-storage/secure-storage.service'
 import { SerializerService } from './services/serializer/serializer.service'
 import { ShareUrlService } from './services/share-url/share-url.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
 import { StorageService } from './services/storage/storage.service'
+
+import { APP_PLUGIN, APP_INFO_PLUGIN, CLIPBOARD_PLUGIN, SPLASH_SCREEN_PLUGIN, STATUS_BAR_PLUGIN, CAMERA_PREVIEW_PLUGIN, SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
+
+const { App, AppInfo, CameraPreview, Clipboard, SecurityUtils, SplashScreen, StatusBar } = Plugins
 
 @NgModule({
   declarations: [AppComponent],
@@ -61,24 +61,25 @@ import { StorageService } from './services/storage/storage.service'
     LocalAuthenticationOnboardingPageModule
   ],
   providers: [
-    AppVersion,
-    Clipboard,
-    Deeplinks,
+    { provide: APP_PLUGIN, useValue: App },
+    { provide: APP_INFO_PLUGIN, useValue: AppInfo },
+    { provide: CAMERA_PREVIEW_PLUGIN, useValue: CameraPreview },
+    { provide: CLIPBOARD_PLUGIN, useValue: Clipboard },
+    { provide: SECURITY_UTILS_PLUGIN, useValue: SecurityUtils },
+    { provide: SPLASH_SCREEN_PLUGIN, useValue: SplashScreen },
+    { provide: STATUS_BAR_PLUGIN, useValue: StatusBar },
     Diagnostic,
-    StatusBar,
-    SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    DeviceMotion,
     AudioNativeService,
     SecretsService,
     SecureStorageService,
     DeviceService,
     CameraNativeService,
-    CameraPreview,
     EntropyService,
     GyroscopeNativeService,
     ScannerService,
     StartupChecksService,
-    DeviceMotion,
     SchemeRoutingService,
     ClipboardService,
     PermissionsService,
@@ -89,15 +90,17 @@ import { StorageService } from './services/storage/storage.service'
     ProtocolsService,
     SerializerService,
     StorageService,
+    SecureStorageFactoryDepHolder,
+    CameraFactoryDepHolder,
     {
       provide: SecureStorageService,
       useFactory: SecureStorageFactory,
-      deps: [Platform]
+      deps: [SecureStorageFactoryDepHolder]
     },
     {
       provide: CameraNativeService,
       useFactory: CameraFactory,
-      deps: [Platform, CameraPreview, RendererFactory2, PermissionsService]
+      deps: [CameraFactoryDepHolder]
     },
     {
       provide: AudioNativeService,

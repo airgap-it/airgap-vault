@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <access origin="*" />
+  
+  <feature name="AudioInputCapture">
+    <param name="android-package" value="com.exelerus.cordova.audioinputcapture.AudioInputCapture"/>
+  </feature>
+
+  <feature name="Accelerometer">
+    <param name="android-package" value="org.apache.cordova.devicemotion.AccelListener"/>
+  </feature>
+
+  <feature name="QRScanner">
+    <param name="android-package" value="com.bitpay.cordova.qrscanner.QRScanner"/>
+  </feature>
+
+  <feature name="SQLitePlugin">
+    <param name="android-package" value="io.sqlc.SQLitePlugin"/>
+  </feature>
+
+  <feature name="Diagnostic">
+    <param name="android-package" value="cordova.plugins.Diagnostic"/>
+    <param name="onload" value="true"/>
+  </feature>
+
+  <feature name="Diagnostic_Camera">
+    <param name="android-package" value="cordova.plugins.Diagnostic_Camera"/>
+    <param name="onload" value="true"/>
+  </feature>
+
+  
+</widget>

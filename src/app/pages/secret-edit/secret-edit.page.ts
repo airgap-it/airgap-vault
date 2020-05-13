@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { PopoverController } from '@ionic/angular'
+import { PopoverController, Platform, ToastController } from '@ionic/angular'
 
 import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
@@ -18,17 +18,23 @@ export class SecretEditPage {
   public isGenerating: boolean = false
   public interactionSetting: boolean = false
 
+  public isAndroid: boolean = false
+
   public secret: Secret
 
   constructor(
     private readonly popoverCtrl: PopoverController,
+    private readonly toastCtrl: ToastController,
     private readonly secretsService: SecretsService,
-    private readonly navigationService: NavigationService
+    private readonly navigationService: NavigationService,
+    private readonly platform: Platform
   ) {
     if (this.navigationService.getState()) {
       this.isGenerating = this.navigationService.getState().isGenerating
       this.secret = this.navigationService.getState().secret
       this.interactionSetting = this.secret.interactionSetting !== InteractionSetting.UNDETERMINED
+
+      this.isAndroid = this.platform.is('android')
     }
   }
 
@@ -68,6 +74,15 @@ export class SecretEditPage {
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
+  public async resetRecoveryPassword(): Promise<void> {
+    try {
+      await this.secretsService.resetRecoveryPassword(this.secret)
+      this.showToast('Recovery password changed.')
+    } catch (e) {
+      this.showToast('Could not reset the recovery password.')
+    }
+  }
+
   public async presentEditPopover(event: Event): Promise<void> {
     const popover: HTMLIonPopoverElement = await this.popoverCtrl.create({
       component: SecretEditPopoverComponent,
@@ -82,5 +97,16 @@ export class SecretEditPage {
     })
 
     popover.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+  }
+
+  private async showToast(message: string) {
+    const toast: HTMLIonToastElement = await this.toastCtrl.create({
+      message,
+      duration: 1000,
+      position: 'top',
+      showCloseButton: true,
+      closeButtonText: 'Ok'
+    })
+    toast.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
   }
 }

@@ -1,6 +1,4 @@
 import { async, TestBed } from '@angular/core/testing'
-import { SplashScreen } from '@ionic-native/splash-screen'
-import { StatusBar } from '@ionic-native/status-bar'
 import { ModalController, NavController, NavParams, Platform } from '@ionic/angular'
 import { Storage } from '@ionic/storage'
 
@@ -10,8 +8,6 @@ import {
   NavControllerMock,
   NavParamsMock,
   PlatformMock,
-  SplashScreenMock,
-  StatusBarMock
 } from '../../../../test-config/ionic-mocks'
 import { StorageMock } from '../../../../test-config/storage-mock'
 import { UnitHelper } from '../../../../test-config/unit-test-helper'
@@ -21,6 +17,8 @@ import { SecureStorageServiceMock } from '../secure-storage/secure-storage.mock'
 import { SecureStorageService } from '../secure-storage/secure-storage.service'
 
 import { StartupChecksService } from './startup-checks.service'
+import { STATUS_BAR_PLUGIN, SPLASH_SCREEN_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
+import { StatusBarMock, SplashScreenMock } from 'test-config/plugins-mocks'
 
 describe('StartupCheck Service', () => {
   let startupChecksService: StartupChecksService
@@ -43,8 +41,8 @@ describe('StartupCheck Service', () => {
           { provide: Storage, useClass: StorageMock },
           { provide: NavController, useClass: NavControllerMock },
           { provide: NavParams, useClass: NavParamsMock },
-          { provide: StatusBar, useClass: StatusBarMock },
-          { provide: SplashScreen, useClass: SplashScreenMock },
+          { provide: STATUS_BAR_PLUGIN, useClass: StatusBarMock },
+          { provide: SPLASH_SCREEN_PLUGIN, useClass: SplashScreenMock },
           { provide: Platform, useClass: PlatformMock }
         ]
       })
@@ -70,7 +68,7 @@ describe('StartupCheck Service', () => {
     expect(startupChecksService instanceof StartupChecksService).toBe(true)
   })
 
-  it('should should show root modal if device is rooted', async(() => {
+  it('should show root modal if device is rooted', async(() => {
     deviceProvider.isRooted = true
 
     startupChecksService.initChecks().catch(consequence => {
@@ -78,7 +76,7 @@ describe('StartupCheck Service', () => {
     })
   }))
 
-  it('should should show disclaimer modal if the disclaimer has not been accepted yet', async(async () => {
+  it('should show disclaimer modal if the disclaimer has not been accepted yet', async(async () => {
     await storageProvider.set('DISCLAIMER_INITIAL', false)
 
     startupChecksService.checks = startupChecksService.checks.map(check => {
@@ -100,7 +98,7 @@ describe('StartupCheck Service', () => {
     })
   }))
 
-  it('should should show the introduction modal if the introduction has not been accepted yet', async(async () => {
+  it('should show the introduction modal if the introduction has not been accepted yet', async(async () => {
     await storageProvider.set('INTRODUCTION_INITIAL', false)
 
     startupChecksService.checks = startupChecksService.checks.map(check => {
@@ -122,7 +120,7 @@ describe('StartupCheck Service', () => {
     })
   }))
 
-  it('should should show the device security modal if device is not secure', async(async () => {
+  it('should show the device security modal if device is not secure', async(async () => {
     secureStorage.isSecure = 0
 
     startupChecksService.checks = startupChecksService.checks.map(check => {
@@ -147,6 +145,7 @@ describe('StartupCheck Service', () => {
   it('should resolve if everything is ok', async(async () => {
     await storageProvider.set('DISCLAIMER_INITIAL', true)
     await storageProvider.set('INTRODUCTION_INITIAL', true)
+
     secureStorage.isSecure = 1
     deviceProvider.isRooted = false
     deviceProvider.isElectron = false
