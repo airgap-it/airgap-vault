@@ -25,12 +25,12 @@ export class CameraBrowserService implements IEntropyGenerator {
   private videoStream: any
 
   constructor() {
-    this.entropyObservable = Observable.create(observer => {
-      entropyCalculatorWorker.onmessage = event => {
+    this.entropyObservable = Observable.create((observer) => {
+      entropyCalculatorWorker.onmessage = (event) => {
         this.collectedEntropyPercentage += event.data.entropyMeasure
         observer.next({ entropyHex: event.data.entropyHex })
       }
-      this.handler = buffer1 => {
+      this.handler = (buffer1) => {
         const uintArray = this.arrayBufferFromUint8Array(buffer1)
         entropyCalculatorWorker.postMessage(
           {
@@ -55,7 +55,7 @@ export class CameraBrowserService implements IEntropyGenerator {
   }
 
   public start(): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const constraints = {
         video: true,
         audio: false
@@ -67,13 +67,13 @@ export class CameraBrowserService implements IEntropyGenerator {
 
       navigator.mediaDevices
         .getUserMedia(constraints)
-        .then(stream => {
+        .then((stream) => {
           this.videoStream = stream
           video.srcObject = stream
           video.play()
           resolve()
         })
-        .catch(err => {
+        .catch((err) => {
           console.log('error in camera.brower.service', err)
           resolve()
         })
@@ -103,7 +103,7 @@ export class CameraBrowserService implements IEntropyGenerator {
     }
 
     try {
-      this.videoStream.getTracks().forEach(function(track) {
+      this.videoStream.getTracks().forEach(function (track) {
         track.stop()
       })
     } catch (e) {

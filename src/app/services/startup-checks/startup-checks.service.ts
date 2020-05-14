@@ -85,7 +85,7 @@ export class StartupChecksService {
   }
 
   public async presentModal(page: ComponentRef, properties: ModalOptions['componentProps']): Promise<void> {
-    return new Promise(async resolve => {
+    return new Promise(async (resolve) => {
       const modal: HTMLIonModalElement = await this.modalController.create({
         component: page,
         componentProps: properties,
@@ -109,7 +109,7 @@ export class StartupChecksService {
   }
 
   public initChecks(): Promise<void> {
-    return new Promise(async resolve => {
+    return new Promise(async (resolve) => {
       for (const check of this.checks) {
         if (+(await check.check()) !== +check.expectedOutcome) {
           await check.failureConsequence()

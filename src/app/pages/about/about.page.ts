@@ -21,7 +21,7 @@ export class AboutPage {
 
   public async updateVersions(): Promise<void> {
     const appInfo = await this.appInfo.get()
-    
+
     this.appName = appInfo.appName
     this.packageName = appInfo.packageName
     this.versionName = appInfo.versionName

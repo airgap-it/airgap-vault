@@ -75,11 +75,10 @@ export class SchemeRoutingService {
       return IACResult.ERROR
     }
     if (deserializedSync && deserializedSync.length > 0) {
-      const groupedByType = deserializedSync.reduce((grouped, message) =>
-        Object.assign(
-          grouped, 
-          { [message.type]: (grouped[message.type] || []).concat(message) }
-        ), {})
+      const groupedByType = deserializedSync.reduce(
+        (grouped, message) => Object.assign(grouped, { [message.type]: (grouped[message.type] || []).concat(message) }),
+        {}
+      )
 
       for (let type in groupedByType) {
         if (type in IACMessageType) {
@@ -105,7 +104,7 @@ export class SchemeRoutingService {
     scanAgainCallback: Function
   ): Promise<boolean> {
     const transactionsWithWallets: [UnsignedTransaction, AirGapWallet][] = deserializedSyncProtocols
-      .map(deserializedSyncProtocol => {
+      .map((deserializedSyncProtocol) => {
         const unsignedTransaction: UnsignedTransaction = deserializedSyncProtocol.payload as UnsignedTransaction
 
         let correctWallet = this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(
@@ -193,9 +192,9 @@ export class SchemeRoutingService {
   }
 
   public showTranslatedAlert(title: string, message: string, buttons: AlertButton[]): void {
-    const translationKeys = [title, message, ...buttons.map(button => button.text)]
-    this.translateService.get(translationKeys).subscribe(async values => {
-      const translatedButtons = buttons.map(button => {
+    const translationKeys = [title, message, ...buttons.map((button) => button.text)]
+    this.translateService.get(translationKeys).subscribe(async (values) => {
+      const translatedButtons = buttons.map((button) => {
         button.text = values[button.text]
         return button
       })

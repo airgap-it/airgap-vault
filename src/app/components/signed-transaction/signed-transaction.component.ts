@@ -59,9 +59,11 @@ export class SignedTransactionComponent implements OnChanges {
       const protocol: ICoinProtocol = getProtocolByIdentifier(this.signedTxs[0].protocol)
       try {
         // tslint:disable-next-line:no-unnecessary-type-assertion
-        this.airGapTxs = (await Promise.all(
-          this.signedTxs.map(signedTx => protocol.getTransactionDetailsFromSigned(signedTx.payload as SignedTransaction))
-        )).reduce((flatten, toFlatten) => flatten.concat(toFlatten))
+        this.airGapTxs = (
+          await Promise.all(
+            this.signedTxs.map((signedTx) => protocol.getTransactionDetailsFromSigned(signedTx.payload as SignedTransaction))
+          )
+        ).reduce((flatten, toFlatten) => flatten.concat(toFlatten))
         if (
           this.airGapTxs.length > 1 &&
           this.airGapTxs.every((tx: IAirGapTransaction) => tx.protocolIdentifier === this.airGapTxs[0].protocolIdentifier)
@@ -76,7 +78,9 @@ export class SignedTransactionComponent implements OnChanges {
           if (this.airGapTxs.length !== 1) {
             throw Error('TokenTransferDetails returned more than 1 transaction!')
           }
-          this.airGapTxs = [await this.protocolsService.getTokenTransferDetailsFromSigned(this.airGapTxs[0], this.signedTxs[0].payload as SignedTransaction)]
+          this.airGapTxs = [
+            await this.protocolsService.getTokenTransferDetailsFromSigned(this.airGapTxs[0], this.signedTxs[0].payload as SignedTransaction)
+          ]
         } catch (error) {
           console.error('unable to parse token transaction, using ethereum transaction details instead')
         }
@@ -94,9 +98,9 @@ export class SignedTransactionComponent implements OnChanges {
       try {
         // tslint:disable-next-line:no-unnecessary-type-assertion
         const unsignedTransaction: UnsignedTransaction = this.unsignedTxs[0].payload as UnsignedTransaction
-        this.airGapTxs = (await Promise.all(
-          this.unsignedTxs.map(unsignedTx => protocol.getTransactionDetails(unsignedTx.payload as UnsignedTransaction)))
-          ).reduce((flatten, toFlatten) => flatten.concat(toFlatten), [])
+        this.airGapTxs = (
+          await Promise.all(this.unsignedTxs.map((unsignedTx) => protocol.getTransactionDetails(unsignedTx.payload as UnsignedTransaction)))
+        ).reduce((flatten, toFlatten) => flatten.concat(toFlatten), [])
         console.log(this.airGapTxs)
         if (
           this.airGapTxs.length > 1 &&

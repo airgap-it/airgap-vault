@@ -14,7 +14,6 @@ export interface SecureStorage {
   providedIn: 'root'
 })
 export class SecureStorageService {
-
   constructor(@Inject(SECURITY_UTILS_PLUGIN) private readonly securityUtils: SecurityUtilsPlugin) {}
 
   public isDeviceSecure(): Promise<any> {
@@ -58,33 +57,35 @@ export class SecureStorageService {
         return securityUtils.setupRecoveryPassword({
           alias,
           isParanoia,
-          key, 
+          key,
           value
         })
       },
       getItem(key) {
-        return securityUtils.getItem({
-          alias,
-          isParanoia,
-          key
-        }).catch((error: unknown) => {
-          let errorMessage: string | undefined
-          if (typeof error === 'string') {
-            errorMessage = error
-          } else if (error instanceof Object && typeof (error as any).message === 'string') {
-            errorMessage = (error as any).message
-          }
+        return securityUtils
+          .getItem({
+            alias,
+            isParanoia,
+            key
+          })
+          .catch((error: unknown) => {
+            let errorMessage: string | undefined
+            if (typeof error === 'string') {
+              errorMessage = error
+            } else if (error instanceof Object && typeof (error as any).message === 'string') {
+              errorMessage = (error as any).message
+            }
 
-          if (errorMessage && errorMessage.toLowerCase().includes('item corrupted')) {
-            throw new Error('Could not read from the secure storage.')
-          }
+            if (errorMessage && errorMessage.toLowerCase().includes('item corrupted')) {
+              throw new Error('Could not read from the secure storage.')
+            }
 
-          if (errorMessage && errorMessage.toLowerCase().includes('wrong paranoia password')) {
-            throw new Error('Wrong passcode.')
-          }
+            if (errorMessage && errorMessage.toLowerCase().includes('wrong paranoia password')) {
+              throw new Error('Wrong passcode.')
+            }
 
-          throw error
-        })
+            throw error
+          })
       },
       removeItem(key) {
         return securityUtils.removeItem({
