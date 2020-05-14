@@ -14,7 +14,6 @@ export interface SecureStorage {
   providedIn: 'root'
 })
 export class SecureStorageService {
-
   constructor(@Inject(SECURITY_UTILS_PLUGIN) private readonly securityUtils: SecurityUtilsPlugin) {}
 
   public isDeviceSecure(): Promise<any> {
@@ -58,22 +57,24 @@ export class SecureStorageService {
         return securityUtils.setupRecoveryPassword({
           alias,
           isParanoia,
-          key, 
+          key,
           value
         })
       },
       getItem(key) {
-        return securityUtils.getItem({
-          alias,
-          isParanoia,
-          key
-        }).catch((error: string) => {
-          if (error.toLowerCase().includes('item corrupted')) {
-            throw new Error('Could not read from the secure storage.')
-          }
+        return securityUtils
+          .getItem({
+            alias,
+            isParanoia,
+            key
+          })
+          .catch((error: string) => {
+            if (error.toLowerCase().includes('item corrupted')) {
+              throw new Error('Could not read from the secure storage.')
+            }
 
-          throw error
-        })
+            throw error
+          })
       },
       removeItem(key) {
         return securityUtils.removeItem({

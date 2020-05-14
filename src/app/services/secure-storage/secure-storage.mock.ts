@@ -14,14 +14,14 @@ export class SecureStorageServiceMock {
   }
 
   public isDeviceSecure(): Promise<any> {
-    return new Promise<any>(resolve => {
+    return new Promise<any>((resolve) => {
       console.warn('SecureStorageServiceMock - This Device is NOT secured')
       resolve({ value: this.isSecure })
     })
   }
 
   public secureDevice(): Promise<void> {
-    return new Promise<void>(resolve => {
+    return new Promise<void>((resolve) => {
       console.warn('SecureStorageServiceMock - This Device is NOT secured')
       resolve()
     })
@@ -33,7 +33,7 @@ export class SecureStorageServiceMock {
       init() {
         console.warn('SecureStorageServiceMock - init')
 
-        return new Promise<void>(resolve => {
+        return new Promise<void>((resolve) => {
           resolve()
         })
       },
@@ -41,7 +41,7 @@ export class SecureStorageServiceMock {
         console.warn('SecureStorageServiceMock - setItem', key, value)
         localStorage.setItem(alias + '-' + key, value)
 
-        return new Promise<void>(resolve => {
+        return new Promise<void>((resolve) => {
           resolve()
         })
       },
@@ -49,7 +49,7 @@ export class SecureStorageServiceMock {
         console.warn('SecureStorageServiceMock - getItem', key)
         const result = localStorage.getItem(alias + '-' + key)
 
-        return new Promise<any>(resolve => {
+        return new Promise<any>((resolve) => {
           resolve({ value: result })
         })
       },
@@ -58,7 +58,7 @@ export class SecureStorageServiceMock {
         const recoverString = '' // TODO: mock it
         localStorage.setItem(alias + '-' + key + '_' + recoverString, value)
 
-        return new Promise<any>(resolve => {
+        return new Promise<any>((resolve) => {
           resolve(recoverString)
         })
       },
@@ -66,13 +66,13 @@ export class SecureStorageServiceMock {
         console.warn('SecureStorageServiceMock - removeItem', key)
         localStorage.removeItem(alias + '-' + key)
 
-        return new Promise<any>(resolve => {
+        return new Promise<any>((resolve) => {
           resolve()
         })
       }
     }
 
-    return new Promise<SecureStorage>(resolve => {
+    return new Promise<SecureStorage>((resolve) => {
       secureStorage
         .init()
         .then(() => {

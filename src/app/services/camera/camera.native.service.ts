@@ -31,7 +31,7 @@ export class CameraNativeService implements IEntropyGenerator {
   private transparentTags: string[] = []
   private get transparentElements(): any[] {
     const elementsByTags = this.transparentTags
-      .map(tag => Array.from(document.getElementsByTagName(tag)))
+      .map((tag) => Array.from(document.getElementsByTagName(tag)))
       .reduce((flatten, toFlatten) => flatten.concat(toFlatten))
 
     return [
@@ -59,13 +59,13 @@ export class CameraNativeService implements IEntropyGenerator {
     @Inject(CAMERA_PREVIEW_PLUGIN) private readonly cameraPreview: CameraPreviewPlugin
   ) {
     this.renderer = this.rendererFactory.createRenderer(null, null)
-    this.entropyObservable = Observable.create(observer => {
-      entropyCalculatorWorker.onmessage = event => {
+    this.entropyObservable = Observable.create((observer) => {
+      entropyCalculatorWorker.onmessage = (event) => {
         this.collectedEntropyPercentage += event.data.entropyMeasure
         observer.next({ entropyHex: event.data.entropyHex })
       }
 
-      this.handler = base64ImagePayload => {
+      this.handler = (base64ImagePayload) => {
         const buffer1 = this.arrayBufferFromBase64(base64ImagePayload)
 
         entropyCalculatorWorker.postMessage(
@@ -111,7 +111,7 @@ export class CameraNativeService implements IEntropyGenerator {
   private initCamera(): Promise<void> {
     console.log('initCamera')
 
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this.cameraPreview
         .start(
           Object.assign(
@@ -150,13 +150,13 @@ export class CameraNativeService implements IEntropyGenerator {
                   height: this.VIDEO_SIZE,
                   quality: this.VIDEO_QUALITY
                 })
-                .then(result => {
+                .then((result) => {
                   this.cameraIsTakingPhoto = false
                   if (this.handler) {
                     this.handler(result.value)
                   }
                 })
-                .catch(err => {
+                .catch((err) => {
                   if (err === 'Camera not started') {
                     if (this.cameraInterval) {
                       clearInterval(this.cameraInterval)
@@ -167,7 +167,7 @@ export class CameraNativeService implements IEntropyGenerator {
 
             resolve()
           },
-          error => {
+          (error) => {
             console.warn('startCamera error: ', error)
             if (error === 'Camera already started!') {
               this.stop()
@@ -193,7 +193,7 @@ export class CameraNativeService implements IEntropyGenerator {
     if (this.cameraIsTakingPhoto) {
       this.uninjectCSS()
 
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         setTimeout(() => {
           console.log('CAMERA IS TAKING PHOTO, DELAYING')
           resolve(this.stop())
@@ -211,7 +211,7 @@ export class CameraNativeService implements IEntropyGenerator {
           this.cameraIsRunning = false
           console.log('camera stopped.')
         },
-        error => {
+        (error) => {
           console.log('camera could not be stopped.')
           reject(error)
         }
@@ -237,12 +237,12 @@ export class CameraNativeService implements IEntropyGenerator {
 
   private injectCSS() {
     // inject css
-    this.transparentElements.forEach(element => this.renderer.addClass(element, this.transparentHTMLClass))
+    this.transparentElements.forEach((element) => this.renderer.addClass(element, this.transparentHTMLClass))
   }
 
   private uninjectCSS() {
     // removes injected css
-    this.transparentElements.forEach(element => this.renderer.removeClass(element, this.transparentHTMLClass))
+    this.transparentElements.forEach((element) => this.renderer.removeClass(element, this.transparentHTMLClass))
   }
 
   public getCollectedEntropyPercentage(): number {

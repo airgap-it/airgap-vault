@@ -123,7 +123,7 @@ export class SecretsService {
   public async resetRecoveryPassword(secret: Secret): Promise<void> {
     const secureStorage: SecureStorage = await this.secureStorageService.get(secret.id, secret.isParanoia)
     try {
-      const secretHex = await secureStorage.getItem(secret.id).then(result => result.value)
+      const secretHex = await secureStorage.getItem(secret.id).then((result) => result.value)
 
       await secureStorage.setupRecoveryPassword(secret.id, secretHex)
     } catch (error) {
@@ -137,12 +137,13 @@ export class SecretsService {
   public async retrieveEntropyForSecret(secret: Secret): Promise<string> {
     const secureStorage: SecureStorage = await this.secureStorageService.get(secret.id, secret.isParanoia)
 
-    return secureStorage.getItem(secret.id)
-      .then(result => {
+    return secureStorage
+      .getItem(secret.id)
+      .then((result) => {
         console.log(result)
         return result.value
       })
-      .catch(error => {
+      .catch((error) => {
         if (error.message.startsWith('Could not read from the secure storage.')) {
           this.handleCorruptedSecret(secret, error)
         }

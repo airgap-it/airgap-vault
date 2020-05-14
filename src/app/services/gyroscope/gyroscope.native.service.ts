@@ -25,10 +25,10 @@ export class GyroscopeNativeService implements GyroscopeService, IEntropyGenerat
   public start(): Promise<void> {
     this.collectedEntropyPercentage = 0
 
-    return new Promise(async resolve => {
+    return new Promise(async (resolve) => {
       await this.platform.ready()
-      this.entropyObservable = new Observable(observer => {
-        entropyCalculatorWorker.onmessage = event => {
+      this.entropyObservable = new Observable((observer) => {
+        entropyCalculatorWorker.onmessage = (event) => {
           this.collectedEntropyPercentage += event.data.entropyMeasure
           observer.next({
             entropyHex: event.data.entropyHex

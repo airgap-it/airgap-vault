@@ -22,12 +22,13 @@ export class DeepLinkService {
     const deeplinkUrl: string = url.includes('://') ? url : serializedDataToUrlString(url)
 
     return new Promise((resolve, reject) => {
-      this.app.openUrl({ url: deeplinkUrl })
+      this.app
+        .openUrl({ url: deeplinkUrl })
         .then(() => {
           console.log('Deeplink called')
           resolve()
         })
-        .catch(error => {
+        .catch((error) => {
           console.error('deeplink used', deeplinkUrl)
           console.error(error)
           this.showAppNotFoundAlert()

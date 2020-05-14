@@ -63,8 +63,8 @@ export class AppComponent implements AfterViewInit {
     await this.platform.ready()
 
     if (this.platform.is('hybrid')) {
-      this.statusBar.setStyle({ 'style': StatusBarStyle.Dark })
-      this.statusBar.setBackgroundColor({ 'color': '#311B58' })
+      this.statusBar.setStyle({ style: StatusBarStyle.Dark })
+      this.statusBar.setBackgroundColor({ color: '#311B58' })
       this.splashScreen.hide()
 
       await this.securityUtils.toggleAutomaticAuthentication({ automatic: true })
@@ -96,7 +96,7 @@ export class AppComponent implements AfterViewInit {
 
   public async ngAfterViewInit(): Promise<void> {
     await this.platform.ready()
-    this.app.addListener("appUrlOpen", async (data: AppUrlOpen) => {
+    this.app.addListener('appUrlOpen', async (data: AppUrlOpen) => {
       await this.isInitialized.promise
       if (data.url === DEEPLINK_VAULT_PREFIX || data.url.startsWith(DEEPLINK_VAULT_ADD_ACCOUNT)) {
         console.log('Successfully matched route', data.url)
