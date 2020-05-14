@@ -25,30 +25,15 @@
     <ion-radio-group [ngModel]="selectedSetting" (ngModelChange)="onSelectedSettingChange($event)">
       <ion-item button="true" detail="false" class="ion-no-padding">
         <ion-label color="white">{{ 'interaction-selection-settings.selector.always' | translate }}</ion-label>
-        <ion-radio
-          class="ion-no-margin"
-          slot="end"
-          [checked]="selectedSetting === interactionSetting.ALWAYS_ASK"
-          [value]="interactionSetting.ALWAYS_ASK"
-        ></ion-radio>
+        <ion-radio class="ion-no-margin" slot="end" [value]="interactionSetting.ALWAYS_ASK"></ion-radio>
       </ion-item>
       <ion-item button="true" detail="false" class="ion-no-padding">
         <ion-label color="white">{{ 'interaction-selection-settings.selector.same-device' | translate }}</ion-label>
-        <ion-radio
-          class="ion-no-margin"
-          slot="end"
-          [checked]="selectedSetting === interactionSetting.SAME_DEVICE"
-          [value]="interactionSetting.SAME_DEVICE"
-        ></ion-radio>
+        <ion-radio class="ion-no-margin" slot="end" [value]="interactionSetting.SAME_DEVICE"></ion-radio>
       </ion-item>
       <ion-item button="true" detail="false" class="ion-no-padding">
         <ion-label color="white">{{ 'interaction-selection-settings.selector.offline-device' | translate }}</ion-label>
-        <ion-radio
-          class="ion-no-margin"
-          slot="end"
-          [checked]="selectedSetting === interactionSetting.OFFLINE_DEVICE"
-          [value]="interactionSetting.OFFLINE_DEVICE"
-        ></ion-radio>
+        <ion-radio class="ion-no-margin" slot="end" [value]="interactionSetting.OFFLINE_DEVICE"></ion-radio>
       </ion-item>
     </ion-radio-group>
   </ion-list>
