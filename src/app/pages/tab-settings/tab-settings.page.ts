@@ -51,11 +51,15 @@ export class TabSettingsPage {
             const toast: HTMLIonToastElement = await this.toastController.create({
               message: 'Secret deleted',
               duration: 5000,
-              showCloseButton: true,
-              closeButtonText: 'Undo'
+              buttons: [
+                {
+                  text: 'Undo',
+                  role: 'cancel'
+                }
+              ]
             })
 
-            toast.onDidDismiss().then(role => {
+            toast.onDidDismiss().then((role) => {
               if (role === 'close') {
                 this.secretsService.addOrUpdateSecret(secret).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
               }
