@@ -104,8 +104,12 @@ export class SecretEditPage {
       message,
       duration: 1000,
       position: 'top',
-      showCloseButton: true,
-      closeButtonText: 'Ok'
+      buttons: [
+        {
+          text: 'Ok',
+          role: 'cancel'
+        }
+      ]
     })
     toast.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
   }
