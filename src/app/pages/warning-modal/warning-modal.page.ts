@@ -1,4 +1,4 @@
-import { AfterViewInit, Component } from '@angular/core'
+import { Component, AfterContentInit } from '@angular/core'
 import { ModalController, NavParams } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 import { first } from 'rxjs/operators'
@@ -20,7 +20,7 @@ export enum Warning {
   templateUrl: './warning-modal.page.html',
   styleUrls: ['./warning-modal.page.scss']
 })
-export class WarningModalPage implements AfterViewInit {
+export class WarningModalPage implements AfterContentInit {
   private readonly errorType: Warning
 
   public title: string
@@ -35,9 +35,9 @@ export class WarningModalPage implements AfterViewInit {
     private readonly modalController: ModalController,
     private readonly storageService: StorageService,
     private readonly translateService: TranslateService
-  ) {}
+  ) { }
 
-  public ngAfterViewInit(): void {
+  public ngAfterContentInit(): void {
     if (this.errorType === Warning.ROOT) {
       this.translateService.get(['warnings-modal.root.title', 'warnings-modal.root.description']).subscribe((values) => {
         this.title = values['warnings-modal.root.title']
