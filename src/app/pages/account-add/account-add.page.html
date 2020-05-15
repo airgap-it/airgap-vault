@@ -17,7 +17,7 @@
       <ion-list-header class="ion-no-padding">
         <ion-label class="font--weight__med">{{ 'wallet-select-coins.text' | translate }}</ion-label>
       </ion-list-header>
-      <ion-item button="true" detail="false" class="ion-no-padding" *ngFor="let protocol of coinProtocols">
+      <ion-item detail="false" class="ion-no-padding" *ngFor="let protocol of coinProtocols">
         <ion-avatar slot="start" class="ion-align-items-center">
           <airgap-currency-symbol [symbol]="protocol.symbol"></airgap-currency-symbol>
         </ion-avatar>
@@ -33,18 +33,17 @@
   </ion-list>
 
   <ion-list lines="none" class="ion-padding-top">
-
-
     <ion-item class="ion-no-padding">
       <ion-label class="font--weight__med">{{ 'wallet-select-coins.advanced_label' | translate }}</ion-label>
       <ion-toggle color="primary" slot="end" [(ngModel)]="isAdvancedMode"></ion-toggle>
     </ion-item>
 
     <ion-item class="ion-no-padding" *ngIf="isAdvancedMode" lines="full">
-      <ion-label position="stacked" color="primary">{{ 'wallet-select-coins.custom-path.label' | translate }}
-      </ion-label>
-      <ion-input [(ngModel)]="customDerivationPath"
-        placeholder="{{ 'wallet-select-coins.custom-path.placeholder' | translate }}"></ion-input>
+      <ion-label position="stacked" color="primary">{{ 'wallet-select-coins.custom-path.label' | translate }}</ion-label>
+      <ion-input
+        [(ngModel)]="customDerivationPath"
+        placeholder="{{ 'wallet-select-coins.custom-path.placeholder' | translate }}"
+      ></ion-input>
     </ion-item>
   </ion-list>
 
