@@ -1,5 +1,7 @@
 <ion-list lines="none" class="ion-no-padding ion-no-margin">
-  <ion-list-header>{{ 'wallet-edit-delete-popover.settings_label' | translate }}</ion-list-header>
+  <ion-list-header>
+    <ion-label>{{ 'wallet-edit-delete-popover.settings_label' | translate }}</ion-label>
+  </ion-list-header>
   <ion-item button detail="false" (click)="copyAddressToClipboard()">
     <ion-icon name="clipboard-outline" color="dark" slot="end"></ion-icon>
     {{ 'wallet-edit-delete-popover.copy_label' | translate }}
