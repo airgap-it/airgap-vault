@@ -10,28 +10,24 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <h3
-    *ngIf="selectedSetting === interactionSetting.SAME_DEVICE"
-    [innerHTML]="'interaction-selection-settings.same-device_heading' | translate"
-  ></h3>
-  <h3
-    *ngIf="selectedSetting === interactionSetting.OFFLINE_DEVICE"
-    [innerHTML]="'interaction-selection-settings.offline-device_heading' | translate"
-  ></h3>
+  <h3 *ngIf="selectedSetting === interactionSetting.SAME_DEVICE"
+    [innerHTML]="'interaction-selection-settings.same-device_heading' | translate"></h3>
+  <h3 *ngIf="selectedSetting === interactionSetting.OFFLINE_DEVICE"
+    [innerHTML]="'interaction-selection-settings.offline-device_heading' | translate"></h3>
 
   <p>{{ 'interaction-selection-settings.text' | translate }}</p>
 
   <ion-list lines="none" class="ion-padding-vertical">
     <ion-radio-group [ngModel]="selectedSetting" (ngModelChange)="onSelectedSettingChange($event)">
-      <ion-item button="true" detail="false" class="ion-no-padding">
+      <ion-item detail="false" class="ion-no-padding">
         <ion-label color="white">{{ 'interaction-selection-settings.selector.always' | translate }}</ion-label>
         <ion-radio class="ion-no-margin" slot="end" [value]="interactionSetting.ALWAYS_ASK"></ion-radio>
       </ion-item>
-      <ion-item button="true" detail="false" class="ion-no-padding">
+      <ion-item detail="false" class="ion-no-padding">
         <ion-label color="white">{{ 'interaction-selection-settings.selector.same-device' | translate }}</ion-label>
         <ion-radio class="ion-no-margin" slot="end" [value]="interactionSetting.SAME_DEVICE"></ion-radio>
       </ion-item>
-      <ion-item button="true" detail="false" class="ion-no-padding">
+      <ion-item detail="false" class="ion-no-padding">
         <ion-label color="white">{{ 'interaction-selection-settings.selector.offline-device' | translate }}</ion-label>
         <ion-radio class="ion-no-margin" slot="end" [value]="interactionSetting.OFFLINE_DEVICE"></ion-radio>
       </ion-item>
