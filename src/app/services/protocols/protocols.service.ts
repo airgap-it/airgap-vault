@@ -6,7 +6,8 @@ import {
   IAirGapTransaction,
   SignedTransaction,
   TezosKtProtocol,
-  UnsignedTransaction
+  UnsignedTransaction,
+  TezosStaker
 } from 'airgap-coin-lib'
 import { TezosBTC } from 'airgap-coin-lib/dist/protocols/tezos/fa/TezosBTC'
 
@@ -38,6 +39,7 @@ export class ProtocolsService {
   public addProtocols() {
     addSubProtocol('xtz', new TezosKtProtocol())
     addSubProtocol('xtz', new TezosBTC())
+    addSubProtocol('xtz', new TezosStaker())
 
     this.subProtocols.forEach((supportedSubAccount) => {
       supportedSubAccount.subProtocols.forEach((subProtocol) => {
