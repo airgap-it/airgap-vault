@@ -53,10 +53,14 @@
 	<string>AirGap uses your camera to scan QR Codes of transactions, and to generate entropy for the secure key generation.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>AirGap uses Face ID to save your keys to the secure storage.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>AirGap does not need your location data.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>AirGap uses your microphone to generate entropy for the secure key generation.</string>
 	<key>NSMotionUsageDescription</key>
 	<string>AirGap uses the motion sensor to generate entropy for the secure key generation.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>AirGap does not need access to your photo library.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
