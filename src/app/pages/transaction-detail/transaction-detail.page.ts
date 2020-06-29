@@ -34,15 +34,18 @@ export class TransactionDetailPage {
   ) { }
 
   public async ionViewWillEnter(): Promise<void> {
-    this.transactionsWithWallets = this.navigationService.getState().transactionsWithWallets
-    this.deserializedSync = this.navigationService.getState().deserializedSync
-    console.log('deserialized sync', this.deserializedSync)
-    try {
-      this.airGapTxs = (await Promise.all(
-        this.transactionsWithWallets.map((pair: [UnsignedTransaction, AirGapWallet]) => pair[1].coinProtocol.getTransactionDetails(pair[0]))
-      )).reduce((flatten, toFlatten) => flatten.concat(toFlatten), [])
-    } catch (e) {
-      console.log('cannot read tx details', e)
+    const state = this.navigationService.getState()
+    if (state.transactionsWithWallets) {
+      this.transactionsWithWallets = state.transactionsWithWallets
+      this.deserializedSync = state.deserializedSync
+      console.log('deserialized sync', this.deserializedSync)
+      try {
+        this.airGapTxs = (await Promise.all(
+          this.transactionsWithWallets.map((pair: [UnsignedTransaction, AirGapWallet]) => pair[1].coinProtocol.getTransactionDetails(pair[0]))
+        )).reduce((flatten, toFlatten) => flatten.concat(toFlatten), [])
+      } catch (e) {
+        console.log('cannot read tx details', e)
+      }
     }
   }
 
