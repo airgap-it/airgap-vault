@@ -10,6 +10,7 @@ import android.support.annotation.StringRes
 import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.EditText
@@ -24,6 +25,7 @@ import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
 import javax.security.auth.x500.X500Principal
+import kotlin.math.abs
 
 /**
  * Created by Dominik on 19.01.2018.
@@ -40,6 +42,10 @@ class Storage(private val context: Context, private val storageAlias: String, pr
     private val recoveryKeyFile by lazy { SecureFile(baseDir, Constants.RECOVERY_KEY_FILE_NAME, immediatelySave = false) }
 
     private val salt = ByteArray(Constants.KEY_SIZE / 8)
+
+    private val recoveryKeyCharacters: Array<Char> by lazy {
+        ('a'..'z' union 'A'..'Z' union '0'..'9').toTypedArray()
+    }
 
     init {
         baseDir.mkdirs()
@@ -95,39 +101,28 @@ class Storage(private val context: Context, private val storageAlias: String, pr
         }
     }
 
-    fun setupRecoveryPassword(success: (String) -> Unit, error: (Exception) -> Unit) {
-        showRecoverySetupAlert({
-            generatePasswordKey(recoveryKeyFile, it)
-            success(it)
-        }, error)
+    fun setupRecoveryPassword(): String {
+        return generatePassword().also { generatePasswordKey(recoveryKeyFile, it) }
     }
 
     fun writeString(fileKey: String, fileData: String, success: () -> Unit, error: (Exception) -> Unit, requestAuthentication: (() -> Unit) -> Unit) {
-        writeRecoverableString(
-                fileKey = fileKey,
-                fileData = fileData,
-                success = { writeToSecureStorage(fileKey, fileData, success, error, requestAuthentication) },
-                error = error,
-                requestAuthentication = requestAuthentication
-        )
+        writeToSecureStorage(fileKey, fileData, success, error, requestAuthentication)
     }
 
-    fun writeRecoverableString(fileKey: String, fileData: String, success: () -> Unit, error: (Exception) -> Unit, requestAuthentication: (() -> Unit) -> Unit) {
-        setupRecoveryPassword(
+    fun writeRecoverableString(fileKey: String, fileData: String, success: (String) -> Unit, error: (Exception) -> Unit, requestAuthentication: (() -> Unit) -> Unit) {
+        val recoveryPassword = setupRecoveryPassword()
+        val recoveryKey = retrieveRecoveryKey(recoveryPassword)
+        val recoverySecureFileStorage = SecureFileStorage(recoveryKey, salt, baseDir)
+
+        recoverySecureFileStorage.write(
+                fileKey = "${fileKey}${Constants.RECOVERY_KEY_SUFFIX}",
+                fileData = fileData,
                 success = {
-                    val recoveryKey = retrieveRecoveryKey(it)
-                    val recoverySecureFileStorage = SecureFileStorage(recoveryKey, salt, baseDir)
-                    recoverySecureFileStorage.write(
-                            fileKey = "${fileKey}${Constants.RECOVERY_KEY_SUFFIX}",
-                            fileData = fileData,
-                            success = {
-                                recoveryKeyFile.save()
-                                success()
-                            },
-                            error = error,
-                            requestAuthentication = requestAuthentication
-                    )
-                }, error = error
+                    recoveryKeyFile.save()
+                    success(recoveryPassword)
+                },
+                error = error,
+                requestAuthentication = requestAuthentication
         )
     }
 
@@ -175,6 +170,7 @@ class Storage(private val context: Context, private val storageAlias: String, pr
 
         showRecoveryAlert(
                 success = { password ->
+                    println(password)
                     requestAuthentication {
                         try {
                             val recoveryKey = retrieveRecoveryKey(password)
@@ -194,6 +190,7 @@ class Storage(private val context: Context, private val storageAlias: String, pr
                                     requestAuthentication = requestAuthentication
                             )
                         } catch (e: Exception) {
+                            e.printStackTrace()
                             error(e)
                         }
                     }
@@ -264,15 +261,6 @@ class Storage(private val context: Context, private val storageAlias: String, pr
                 title = R.string.paranoia_input_alert_title,
                 message = R.string.paranoia_input_alert_setup_message,
                 positiveText = R.string.paranoia_input_alert_positive_button,
-                success = success
-        )
-    }
-
-    private fun showRecoverySetupAlert(success: (String) -> Unit, error: (Exception) -> Unit) {
-        showPasswordSetupAlert(
-                title = R.string.recovery_input_alert_title,
-                message = R.string.recovery_input_alert_setup_message,
-                positiveText = R.string.recovery_input_alert_positive_button,
                 success = success
         )
     }
@@ -394,6 +382,17 @@ class Storage(private val context: Context, private val storageAlias: String, pr
         }
 
 
+    }
+
+    private fun generatePassword(): String {
+        val recoveryBytes = ByteArray(Constants.RECOVERY_PASSWORD_SIZE).also { SecureRandom().nextBytes(it) }
+        val messageDigest = MessageDigest.getInstance(Constants.RECOVERY_PASSWORD_ALGORITHM)
+
+        return messageDigest.digest(recoveryBytes)
+                .joinToString("") { recoveryKeyCharacters[abs(it.toInt()) % recoveryKeyCharacters.size].toString() }
+                .chunked(Constants.RECOVERY_PASSWORD_SEGMENT_SIZE)
+                .take(Constants.RECOVERY_PASSWORD_SEGMENTS)
+                .joinToString("-")
     }
 
     private fun generatePasswordKey(passwordFile: SecureFile, passphraseOrPin: String) {
