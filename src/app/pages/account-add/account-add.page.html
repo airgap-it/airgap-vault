@@ -15,7 +15,7 @@
   <ion-list lines="none">
     <ion-radio-group [ngModel]="selectedProtocol" (ngModelChange)="onSelectedProtocolChange($event)">
       <ion-list-header class="ion-no-padding">
-        <ion-label class="font--weight__med">{{ 'wallet-select-coins.text' | translate }}</ion-label>
+        <ion-label class="font--weight__med white">{{ 'wallet-select-coins.text' | translate }}</ion-label>
       </ion-list-header>
       <ion-item detail="false" class="ion-no-padding" *ngFor="let protocol of coinProtocols">
         <ion-avatar slot="start" class="ion-align-items-center">
@@ -36,10 +36,8 @@
     <ion-item class="ion-no-padding" *ngIf="selectedProtocol && selectedProtocol.supportsHD">
       <ion-label class="font--weight__med">{{ 'wallet-select-coins.select-type.label' | translate }}</ion-label>
       <ion-select [(ngModel)]="isHDWallet" (ngModelChange)="onIsHDWalletChange($event)">
-        <ion-select-option [value]="false">{{ 'wallet-select-coins.select-type.single-address_label' | translate }}
-        </ion-select-option>
-        <ion-select-option [value]="true" selected>{{ 'wallet-select-coins.select-type.hd-wallet_label' | translate }}
-        </ion-select-option>
+        <ion-select-option [value]="false">{{ 'wallet-select-coins.select-type.single-address_label' | translate }}</ion-select-option>
+        <ion-select-option [value]="true" selected>{{ 'wallet-select-coins.select-type.hd-wallet_label' | translate }}</ion-select-option>
       </ion-select>
     </ion-item>
 
@@ -49,10 +47,11 @@
     </ion-item>
 
     <ion-item class="ion-no-padding" *ngIf="isAdvancedMode" lines="full">
-      <ion-label position="stacked" color="primary">{{ 'wallet-select-coins.custom-path.label' | translate }}
-      </ion-label>
-      <ion-input [(ngModel)]="customDerivationPath"
-        placeholder="{{ 'wallet-select-coins.custom-path.placeholder' | translate }}"></ion-input>
+      <ion-label position="stacked" color="primary">{{ 'wallet-select-coins.custom-path.label' | translate }}</ion-label>
+      <ion-input
+        [(ngModel)]="customDerivationPath"
+        placeholder="{{ 'wallet-select-coins.custom-path.placeholder' | translate }}"
+      ></ion-input>
     </ion-item>
   </ion-list>
 
