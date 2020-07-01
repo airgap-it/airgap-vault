@@ -15,7 +15,7 @@
   <ion-list lines="none">
     <ion-radio-group [ngModel]="selectedProtocol" (ngModelChange)="onSelectedProtocolChange($event)">
       <ion-list-header class="ion-no-padding">
-        <ion-label class="font--weight__med">{{ 'wallet-select-coins.text' | translate }}</ion-label>
+        <ion-label class="font--weight__med white">{{ 'wallet-select-coins.text' | translate }}</ion-label>
       </ion-list-header>
       <ion-item detail="false" class="ion-no-padding" *ngFor="let protocol of coinProtocols">
         <ion-avatar slot="start" class="ion-align-items-center">
