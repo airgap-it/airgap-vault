@@ -127,9 +127,17 @@
       "label": "Vault and Wallet interaction",
       "text": "Select whether Vault and Wallet are installed on the same device or on separate devices."
     },
-    "storage-recovery": {
-      "label": "Storage Recovery Password",
-      "text": "Reset the storage recovery password for your secret"
+    "secret-recovery-key": {
+      "label": "Secret Recovery Key",
+      "generate-text": "Generate a recovery key for your secret",
+      "reset-text": "Reset the recovery key for your secret",
+      "alert": {
+        "title": "Secret Recovery Key",
+        "done": "Done",
+        "copy": "Copy"
+      },
+      "copied": "Recovery key copied",
+      "reset-error": "Could not set the recovery key"
     },
     "confirm_label":"Confirm"
   },
