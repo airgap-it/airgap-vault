@@ -14,6 +14,7 @@ import { SecretsService } from '../../services/secrets/secrets.service'
 })
 export class TabAccountsPage implements OnInit {
   public readonly secrets: Observable<Secret[]>
+  public activeSecret: Secret
 
   public symbolFilter: string | undefined
 
@@ -26,6 +27,7 @@ export class TabAccountsPage implements OnInit {
   public async ngOnInit(): Promise<void> {
     this.secretsService.getActiveSecretObservable().subscribe((secret: Secret) => {
       if (secret && secret.wallets) {
+        this.activeSecret = secret
         this.wallets$.next(secret.wallets)
       }
     })

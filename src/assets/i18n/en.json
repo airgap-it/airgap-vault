@@ -282,6 +282,7 @@
     "search_placeholder":"Search Currency",
     "empty-state_text":"Create a new account by selecting a currency and sync it to AirGap Wallet.",
     "add-wallet_label":"Add Account",
+    "generate-recovery-key_label": "TODO",
     "incompatible-qr_alert": {
       "title": "Incompatible QR",
       "text": "This QR is not a raw transaction.",
