@@ -170,7 +170,6 @@ class Storage(private val context: Context, private val storageAlias: String, pr
 
         showRecoveryAlert(
                 success = { password ->
-                    println(password)
                     requestAuthentication {
                         try {
                             val recoveryKey = retrieveRecoveryKey(password)
@@ -190,7 +189,6 @@ class Storage(private val context: Context, private val storageAlias: String, pr
                                     requestAuthentication = requestAuthentication
                             )
                         } catch (e: Exception) {
-                            e.printStackTrace()
                             error(e)
                         }
                     }
