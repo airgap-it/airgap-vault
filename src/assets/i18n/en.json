@@ -129,6 +129,7 @@
     },
     "secret-recovery-key": {
       "label": "Secret Recovery Key",
+      "description": "This recovery key is guarantees the recovery of your secret from a corrupted secure storage. You will need the recovery key and your fingerprint, pin, pattern. Store it safely like your recovery phrase.",
       "generate-text": "Generate a recovery key for your secret",
       "reset-text": "Reset the recovery key for your secret",
       "alert": {
