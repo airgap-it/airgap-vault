@@ -127,6 +127,8 @@ export class SecretsService {
 
       return secureStorage.setupRecoveryPassword(secret.id, secretHex).then(result => {
         secret.hasRecoveryKey = true
+        this.addOrUpdateSecret(secret)
+        
         return result.recoveryKey
       })
     } catch (error) {
