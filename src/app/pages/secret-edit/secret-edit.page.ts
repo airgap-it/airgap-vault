@@ -132,6 +132,7 @@ export class SecretEditPage {
   private async showRecoveryKeyAlert(recoveryKey: string): Promise<void> {
     const alert: HTMLIonAlertElement = await this.alertCtrl.create({
       header: this.translateService.instant('secret-edit.secret-recovery-key.alert.title'),
+      subHeader: this.translateService.instant('secret-edit.secret-recovery-key.description'),
       message: recoveryKey,
       buttons: [
         {
