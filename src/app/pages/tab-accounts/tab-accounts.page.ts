@@ -6,6 +6,7 @@ import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
+import { Platform } from '@ionic/angular'
 
 @Component({
   selector: 'airgap-tab-accounts',
@@ -20,8 +21,11 @@ export class TabAccountsPage implements OnInit {
 
   public wallets$: BehaviorSubject<AirGapWallet[]> = new BehaviorSubject<AirGapWallet[]>([])
 
-  constructor(private readonly secretsService: SecretsService, private readonly navigationService: NavigationService) {
+  public readonly isAndroid: boolean
+
+  constructor(private readonly platform: Platform, private readonly secretsService: SecretsService, private readonly navigationService: NavigationService) {
     this.secrets = this.secretsService.getSecretsObservable()
+    this.isAndroid = this.platform.is('android')
   }
 
   public async ngOnInit(): Promise<void> {
