@@ -44,15 +44,15 @@ export class NavigationService {
     return this.state
   }
 
-  public routeToAccountsTab(): Promise<boolean> {
-    return this.router.navigateByUrl('/tabs/tab-accounts')
+  public routeToAccountsTab(clearStack: boolean = false): Promise<boolean> {
+    return this.router.navigateByUrl('/tabs/tab-accounts', { replaceUrl: clearStack })
   }
 
-  public routeToScanTab(): Promise<boolean> {
-    return this.router.navigateByUrl('/tabs/tab-scan')
+  public routeToScanTab(clearStack: boolean = false): Promise<boolean> {
+    return this.router.navigateByUrl('/tabs/tab-scan', { replaceUrl: clearStack })
   }
 
-  public routeToSettingsTab(): Promise<boolean> {
-    return this.router.navigateByUrl('/tabs/tab-settings')
+  public routeToSettingsTab(clearStack: boolean = false): Promise<boolean> {
+    return this.router.navigateByUrl('/tabs/tab-settings', { replaceUrl: clearStack })
   }
 }
