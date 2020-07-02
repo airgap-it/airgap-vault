@@ -13,7 +13,7 @@
 </ion-header>
 
 <ion-content *ngIf="wallets$" class="ion-padding-horizontal">
-  <ion-item *ngIf="isAndroid && activeSecret && !activeSecret.hasRecoveryKey" detail="true" class="ion-margin-vertical" color="warning" (click)="navigateToRecoverySettings()">
+  <ion-item detail="true" class="ion-margin-vertical" color="warning" (click)="navigateToRecoverySettings()">
     <ion-icon name="exit" slot="start" color="dark"></ion-icon>
     <ion-label color="dark" class="ion-text-wrap">
       <h3><strong>{{ 'tab-wallets.generate-recovery-key.title' | translate }}</strong></h3>
@@ -21,13 +21,12 @@
     </ion-label>
   </ion-item>
 
+  <ion-list>
+    <ng-container *ngFor="let wallet of wallets$ | async | walletFilter: { symbol: symbolFilter }">
+      <airgap-account-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></airgap-account-item>
+    </ng-container>
+  </ion-list>
   <ion-row>
-    <ion-list>
-      <ng-container *ngFor="let wallet of wallets$ | async | walletFilter: { symbol: symbolFilter }">
-        <airgap-account-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></airgap-account-item>
-      </ng-container>
-    </ion-list>
-
     <div class="empty-list" *ngIf="wallets$ && (wallets$ | async | walletFilter: { symbol: symbolFilter }).length === 0">
       <img src="./assets/img/no-wallet-added-onboarding.svg" />
       <p>
