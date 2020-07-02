@@ -13,9 +13,16 @@
 </ion-header>
 
 <ion-content *ngIf="wallets$" class="ion-padding-horizontal">
-  <ion-row *ngIf="!activeSecret.hasRecoveryKey">
-    <p>{{ 'tab-wallets.generate-recovery-key_label' | translate }}</p>
-  </ion-row>
+  <!--TODO: show only on Android-->
+  <!--TODO: route to Setting preferably with the dialog already shown-->
+  <ion-item *ngIf="!activeSecret.hasRecoveryKey" detail="true" class="ion-margin-vertical" color="warning">
+    <ion-icon name="exit" slot="start" color="dark"></ion-icon>
+    <ion-label color="dark" class="ion-text-wrap">
+      <h3><strong>{{ 'tab-wallets.generate-recovery-key.title' | translate }}</strong></h3>
+      <p>{{ 'tab-wallets.generate-recovery-key.description' | translate }}</p>
+    </ion-label>
+  </ion-item>
+
   <ion-row>
     <ion-list>
       <ng-container *ngFor="let wallet of wallets$ | async | walletFilter: { symbol: symbolFilter }">
