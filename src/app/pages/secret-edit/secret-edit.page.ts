@@ -11,6 +11,10 @@ import { SecretEditPopoverComponent } from './secret-edit-popover/secret-edit-po
 import { TranslateService } from '@ngx-translate/core'
 import { ClipboardService } from 'src/app/services/clipboard/clipboard.service'
 
+export enum SecretEditAction {
+  SET_RECOVERY_KEY
+}
+
 @Component({
   selector: 'airgap-secret-edit',
   templateUrl: './secret-edit.page.html',
@@ -40,6 +44,8 @@ export class SecretEditPage {
       this.interactionSetting = this.secret.interactionSetting !== InteractionSetting.UNDETERMINED
 
       this.isAndroid = this.platform.is('android')
+
+      this.perform(this.navigationService.getState().action)
     }
   }
 
@@ -102,6 +108,14 @@ export class SecretEditPage {
     })
 
     popover.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+  }
+
+  private perform(action: SecretEditAction | undefined): void {
+    switch (action) {
+      case SecretEditAction.SET_RECOVERY_KEY:
+        this.resetRecoveryPassword()
+        break
+    }
   }
 
   private async showToast(message: string) {

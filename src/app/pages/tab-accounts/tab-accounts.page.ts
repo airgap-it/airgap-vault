@@ -7,6 +7,7 @@ import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/er
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
 import { Platform } from '@ionic/angular'
+import { SecretEditAction } from '../secret-edit/secret-edit.page'
 
 @Component({
   selector: 'airgap-tab-accounts',
@@ -59,5 +60,15 @@ export class TabAccountsPage implements OnInit {
 
   public addWallet(): void {
     this.navigationService.route('/account-add').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
+  public navigateToRecoverySettings() {
+    this.navigationService.routeWithState(
+      '/secret-edit', 
+      { 
+        secret: this.activeSecret,
+        action: SecretEditAction.SET_RECOVERY_KEY
+      }
+    ).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }
