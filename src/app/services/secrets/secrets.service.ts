@@ -8,6 +8,7 @@ import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { SecureStorage, SecureStorageService } from '../secure-storage/secure-storage.service'
 import { SettingsKey, StorageService } from '../storage/storage.service'
+import { NavigationService } from '../navigation/navigation.service'
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,7 @@ export class SecretsService {
   constructor(
     private readonly secureStorageService: SecureStorageService,
     private readonly storageService: StorageService,
+    private readonly navigationService: NavigationService,
     private readonly loadingCtrl: LoadingController,
     private readonly alertCtrl: AlertController
   ) {
@@ -118,10 +120,39 @@ export class SecretsService {
     await this.persist()
   }
 
+  public async resetRecoveryPassword(secret: Secret): Promise<string> {
+    const secureStorage: SecureStorage = await this.secureStorageService.get(secret.id, secret.isParanoia)
+    try {
+      const secretHex = await secureStorage.getItem(secret.id).then(result => result.value)
+
+      return secureStorage.setupRecoveryPassword(secret.id, secretHex).then(result => {
+        secret.hasRecoveryKey = true
+        this.addOrUpdateSecret(secret)
+        
+        return result.recoveryKey
+      })
+    } catch (error) {
+      if (error.message.startsWith('Could not read from the secure storage.')) {
+        this.handleCorruptedSecret(secret, error)
+      }
+      throw error
+    }
+  }
+
   public async retrieveEntropyForSecret(secret: Secret): Promise<string> {
     const secureStorage: SecureStorage = await this.secureStorageService.get(secret.id, secret.isParanoia)
 
     return secureStorage.getItem(secret.id)
+      .then(result => {
+        console.log(result)
+        return result.value
+      })
+      .catch(error => {
+        if (error.message.startsWith('Could not read from the secure storage.')) {
+          this.handleCorruptedSecret(secret, error)
+        }
+        throw error
+      })
   }
 
   public findByPublicKey(pubKey: string): Secret | undefined {
@@ -257,7 +288,6 @@ export class SecretsService {
       }
 
       loading.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
-      this.showAlert('Error', error.message)
       throw error
     }
   }
@@ -275,5 +305,14 @@ export class SecretsService {
       ]
     })
     alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
+  }
+
+  private async handleCorruptedSecret(secret: Secret, error: any): Promise<void> {
+    error.message += ' Please, re-import your secret.'
+    error.ignore = true
+
+    await this.showAlert('Error', error.message)
+    await this.navigationService.routeToAccountsTab(true)
+    await this.remove(secret)
   }
 }

@@ -1,20 +1,12 @@
-import { Injectable } from '@angular/core'
-
-declare var window
-
-interface CordovaSecureStorage {
-  init(successCallback: Function, errorCallback: Function)
-  setItem(key: string, value: string, successCallback: Function, errorCallback: Function)
-  getItem(key: string, successCallback: Function, errorCallback: Function)
-  removeItem(key: string, successCallback: Function, errorCallback: Function)
-  isDeviceSecure(successCallback: Function, errorCallback: Function)
-  secureDevice(successCallback: Function, errorCallback: Function)
-}
+import { Injectable, Inject } from '@angular/core'
+import { SecurityUtilsPlugin } from 'src/app/capacitor-plugins/definitions'
+import { SECURITY_UTILS_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
 
 export interface SecureStorage {
   init(): Promise<void>
   setItem(key: string, value: string): Promise<void>
   getItem(key: string): Promise<any>
+  setupRecoveryPassword(key: string, value: string): Promise<any>
   removeItem(key: string): Promise<void>
 }
 
@@ -22,55 +14,81 @@ export interface SecureStorage {
   providedIn: 'root'
 })
 export class SecureStorageService {
-  private create(alias: string, isParanoia: boolean): CordovaSecureStorage {
-    return new window.SecurityUtils.SecureStorage(alias, isParanoia)
-  }
 
-  public isDeviceSecure(): Promise<number> {
-    return new Promise<number>((resolve, reject) => {
-      this.create('airgap-secure-storage', false).isDeviceSecure(resolve, reject)
+  constructor(@Inject(SECURITY_UTILS_PLUGIN) private readonly securityUtils: SecurityUtilsPlugin) {}
+
+  public isDeviceSecure(): Promise<any> {
+    return this.securityUtils.isDeviceSecure({
+      alias: 'airgap-secure-storage',
+      isParanoia: false
     })
   }
 
   public secureDevice(): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      this.create('airgap-secure-storage', false).secureDevice(resolve, reject)
+    return this.securityUtils.secureDevice({
+      alias: 'airgap-secure-storage',
+      isParanoia: false
     })
   }
 
-  public get(alias: string, isParanoia: boolean): Promise<SecureStorage> {
-    const secureStorage = this.create(alias, isParanoia)
+  public async get(alias: string, isParanoia: boolean): Promise<SecureStorage> {
+    const securityUtils = this.securityUtils
 
-    return new Promise<SecureStorage>((resolve, reject) => {
-      secureStorage.init(
-        () => {
-          resolve({
-            init() {
-              return new Promise<void>((resolve, reject) => {
-                secureStorage.init(resolve, reject)
-              })
-            },
-            setItem(key, value) {
-              return new Promise<void>((resolve, reject) => {
-                secureStorage.setItem(key, value, resolve, reject)
-              })
-            },
-            getItem(key) {
-              return new Promise<any>((resolve, reject) => {
-                secureStorage.getItem(key, resolve, reject)
-              })
-            },
-            removeItem(key) {
-              return new Promise<void>((resolve, reject) => {
-                secureStorage.removeItem(key, resolve, reject)
-              })
-            }
-          })
-        },
-        err => {
-          reject(err)
-        }
-      )
+    await securityUtils.initStorage({
+      alias,
+      isParanoia
     })
+
+    return {
+      init() {
+        return securityUtils.initStorage({
+          alias,
+          isParanoia
+        })
+      },
+      setItem(key, value) {
+        return securityUtils.setItem({
+          alias,
+          isParanoia,
+          key,
+          value
+        })
+      },
+      setupRecoveryPassword(key, value) {
+        return securityUtils.setupRecoveryPassword({
+          alias,
+          isParanoia,
+          key, 
+          value
+        })
+      },
+      getItem(key) {
+        return securityUtils.getItem({
+          alias,
+          isParanoia,
+          key
+        }).catch((error: unknown) => {
+          let errorMessage: string | undefined
+          if (typeof error === 'string') {
+            errorMessage = error
+          } else if (error instanceof Object && typeof (error as any).message === 'string') {
+            errorMessage = (error as any).message
+          }
+
+          if (errorMessage && errorMessage.toLowerCase().includes('item corrupted')) {
+            throw new Error('Could not read from the secure storage.')
+          }
+
+          throw error
+        })
+      },
+      removeItem(key) {
+        return securityUtils.removeItem({
+          alias,
+          isParanoia,
+          key
+        })
+      }
+    }
   }
 }

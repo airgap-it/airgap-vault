@@ -12,21 +12,19 @@ import { PipesModule } from '../src/app/pipes/pipes.module'
 
 import {
   AlertControllerMock,
-  AppVersionMock,
   DeeplinkMock,
   LoadingControllerMock,
   ModalControllerMock,
   NavControllerMock,
   PlatformMock,
-  SplashScreenMock,
-  StatusBarMock,
   ToastControllerMock
 } from './ionic-mocks'
+import { AppInfoPluginMock, SplashScreenMock, StatusBarMock } from './plugins-mocks'
 import { StorageMock } from './storage-mock'
 
 export class UnitHelper {
   public readonly mockRefs = {
-    appVersion: new AppVersionMock(),
+    appInfo: new AppInfoPluginMock(),
     platform: new PlatformMock(),
     statusBar: new StatusBarMock(),
     splashScreen: new SplashScreenMock(),
@@ -75,3 +73,6 @@ export class UnitHelper {
     return testBed
   }
 }
+
+export const newSpy: (name: string, returnValue: any) => jasmine.Spy = (name: string, returnValue: any): jasmine.Spy =>
+  jasmine.createSpy(name).and.returnValue(returnValue)

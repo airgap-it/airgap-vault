@@ -36,14 +36,6 @@ export class AccountAddPage {
     this.customDerivationPath = this.selectedProtocol.standardDerivationPath
   }
 
-  public onIsHDWalletChange(isHDWallet: boolean): void {
-    this.isHDWallet = isHDWallet
-
-    this.customDerivationPath = isHDWallet
-      ? this.selectedProtocol.standardDerivationPath
-      : `${this.selectedProtocol.standardDerivationPath}/0/1`
-  }
-
   public async addWallet(): Promise<void> {
     const value: boolean = await this.storageService.get(SettingsKey.DISCLAIMER_HIDE_LOCAL_AUTH_ONBOARDING)
     if (!value) {

@@ -1,0 +1,26 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AirgapAlertDialogStyle"
+        android:textColorHint="@android:color/darker_gray"
+        >
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/password"
+            android:inputType="textPassword"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:fontFamily="sans-serif"
+            android:hint="@string/password_input_alert_hint"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+</LinearLayout>

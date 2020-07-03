@@ -1,5 +1,4 @@
-import { RendererFactory2 } from '@angular/core'
-import { CameraPreview } from '@ionic-native/camera-preview/ngx'
+import { RendererFactory2, Injectable, Inject } from '@angular/core'
 import { Platform } from '@ionic/angular'
 
 import { IEntropyGenerator } from '../entropy/IEntropyGenerator'
@@ -7,15 +6,22 @@ import { IEntropyGenerator } from '../entropy/IEntropyGenerator'
 import { PermissionsService } from './../permissions/permissions.service'
 import { CameraBrowserService } from './camera.browser.service'
 import { CameraNativeService } from './camera.native.service'
+import { CAMERA_PREVIEW_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
+import { CameraPreviewPlugin } from 'src/app/capacitor-plugins/definitions'
 
-export function CameraFactory(
-  platform: Platform,
-  cameraPreview: CameraPreview,
-  rendererFactory: RendererFactory2,
-  permissionsService: PermissionsService
-): IEntropyGenerator {
-  if (platform.is('cordova')) {
-    return new CameraNativeService(platform, cameraPreview, rendererFactory, permissionsService)
+@Injectable()
+export class CameraFactoryDepHolder {
+  constructor(
+    readonly platform: Platform,
+    readonly rendererFactory: RendererFactory2,
+    readonly permissionsService: PermissionsService,
+    @Inject(CAMERA_PREVIEW_PLUGIN) readonly cameraPreview: CameraPreviewPlugin
+  ) {}
+}
+
+export function CameraFactory(depHolder: CameraFactoryDepHolder): IEntropyGenerator {
+  if (depHolder.platform.is('hybrid')) {
+    return new CameraNativeService(depHolder.platform, depHolder.rendererFactory, depHolder.permissionsService, depHolder.cameraPreview)
   } else {
     return new CameraBrowserService()
   }

@@ -111,8 +111,14 @@ airgap-local-authentication-onboarding {
   }
 }
 
+airgap-tab-accounts {
+  ion-item {
+    --detail-icon-color: var(--ion-color-dark);
+  }
+}
+
 .ios {
   ion-item {
-    --background-activated: transparent
+    --background-activated: transparent;
   }
 }
