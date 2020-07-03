@@ -120,12 +120,17 @@ export class SecretsService {
     await this.persist()
   }
 
-  public async resetRecoveryPassword(secret: Secret): Promise<void> {
+  public async resetRecoveryPassword(secret: Secret): Promise<string> {
     const secureStorage: SecureStorage = await this.secureStorageService.get(secret.id, secret.isParanoia)
     try {
       const secretHex = await secureStorage.getItem(secret.id).then(result => result.value)
 
-      await secureStorage.setupRecoveryPassword(secret.id, secretHex)
+      return secureStorage.setupRecoveryPassword(secret.id, secretHex).then(result => {
+        secret.hasRecoveryKey = true
+        this.addOrUpdateSecret(secret)
+        
+        return result.recoveryKey
+      })
     } catch (error) {
       if (error.message.startsWith('Could not read from the secure storage.')) {
         this.handleCorruptedSecret(secret, error)
@@ -306,9 +311,8 @@ export class SecretsService {
     error.message += ' Please, re-import your secret.'
     error.ignore = true
 
-    await this.remove(secret)
     await this.showAlert('Error', error.message)
-
-    this.navigationService.back()
+    await this.navigationService.routeToAccountsTab(true)
+    await this.remove(secret)
   }
 }

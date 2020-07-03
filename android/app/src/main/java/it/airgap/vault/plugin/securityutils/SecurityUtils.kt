@@ -183,7 +183,7 @@ class SecurityUtils : Plugin() {
 
             Storage(context, alias, isParanoia).writeRecoverableString(key, value, {
                 logDebug("written recoverable: success")
-                resolve()
+                resolveWithData("recoveryKey" to it)
             }, {
                 logDebug("written recoverable: failure")
                 reject(it.toString())

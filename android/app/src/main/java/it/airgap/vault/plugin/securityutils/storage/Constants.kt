@@ -24,6 +24,11 @@ object Constants {
 
     const val PARANOIA_KEY_FILE_NAME = "paranoia_key"
 
+    const val RECOVERY_PASSWORD_SIZE = 32
+    const val RECOVERY_PASSWORD_SEGMENT_SIZE = 4
+    const val RECOVERY_PASSWORD_SEGMENTS = 8
+    const val RECOVERY_PASSWORD_ALGORITHM = "SHA-256"
+
     const val RECOVERY_KEY_FILE_NAME = "recovery_key"
     const val RECOVERY_KEY_SUFFIX = "-recovery"
 }

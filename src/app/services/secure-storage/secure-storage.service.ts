@@ -67,8 +67,15 @@ export class SecureStorageService {
           alias,
           isParanoia,
           key
-        }).catch((error: string) => {
-          if (error.toLowerCase().includes('item corrupted')) {
+        }).catch((error: unknown) => {
+          let errorMessage: string | undefined
+          if (typeof error === 'string') {
+            errorMessage = error
+          } else if (error instanceof Object && typeof (error as any).message === 'string') {
+            errorMessage = (error as any).message
+          }
+
+          if (errorMessage && errorMessage.toLowerCase().includes('item corrupted')) {
             throw new Error('Could not read from the secure storage.')
           }
 
