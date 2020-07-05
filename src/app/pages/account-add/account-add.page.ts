@@ -7,6 +7,7 @@ import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
 import { SettingsKey, StorageService } from '../../services/storage/storage.service'
 import { LocalAuthenticationOnboardingPage } from '../local-authentication-onboarding/local-authentication-onboarding.page'
+import { BIP39_PASSPHRASE_ENABLED } from 'src/app/constants/constants'
 
 @Component({
   selector: 'airgap-account-add',
@@ -15,10 +16,13 @@ import { LocalAuthenticationOnboardingPage } from '../local-authentication-onboa
 })
 export class AccountAddPage {
   public selectedProtocol: ICoinProtocol
-  public customDerivationPath: string
   public coinProtocols: ICoinProtocol[]
   public isHDWallet: boolean = false
+
   public isAdvancedMode: boolean = false
+  public isBip39PassphraseEnabled: boolean = BIP39_PASSPHRASE_ENABLED
+  public customDerivationPath: string
+  public bip39Passphrase: string = ''
 
   constructor(
     private readonly secretsService: SecretsService,
@@ -66,7 +70,7 @@ export class AccountAddPage {
 
   private addWalletAndReturnToAddressPage(): void {
     this.secretsService
-      .addWallet(this.selectedProtocol.identifier, this.isHDWallet, this.customDerivationPath)
+      .addWallet(this.selectedProtocol.identifier, this.isHDWallet, this.customDerivationPath, this.bip39Passphrase)
       .then(() => {
         this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       })

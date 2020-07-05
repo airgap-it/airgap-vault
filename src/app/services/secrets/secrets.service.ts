@@ -237,7 +237,12 @@ export class SecretsService {
     return this.storageService.set(SettingsKey.AIRGAP_SECRET_LIST, this.secretsList)
   }
 
-  public async addWallet(protocolIdentifier: string, isHDWallet: boolean, customDerivationPath: string): Promise<void> {
+  public async addWallet(
+    protocolIdentifier: string,
+    isHDWallet: boolean,
+    customDerivationPath: string,
+    bip39Passphrase: string
+  ): Promise<void> {
     const loading: HTMLIonLoadingElement = await this.loadingCtrl.create({
       message: 'Deriving your wallet...'
     })
@@ -253,7 +258,7 @@ export class SecretsService {
       const mnemonic: string = bip39.entropyToMnemonic(entropy)
       const wallet: AirGapWallet = new AirGapWallet(
         protocol.identifier,
-        await protocol.getPublicKeyFromMnemonic(mnemonic, customDerivationPath),
+        await protocol.getPublicKeyFromMnemonic(mnemonic, customDerivationPath, bip39Passphrase),
         isHDWallet,
         customDerivationPath
       )

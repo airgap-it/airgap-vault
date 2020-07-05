@@ -53,6 +53,11 @@
         placeholder="{{ 'wallet-select-coins.custom-path.placeholder' | translate }}"
       ></ion-input>
     </ion-item>
+
+    <ion-item class="ion-no-padding" *ngIf="isAdvancedMode && isBip39PassphraseEnabled" lines="full">
+      <ion-label position="stacked" color="primary">BIP-39 Passphrase</ion-label>
+      <ion-input [(ngModel)]="bip39Passphrase" placeholder="BIP-39 Passphrase"></ion-input>
+    </ion-item>
   </ion-list>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
