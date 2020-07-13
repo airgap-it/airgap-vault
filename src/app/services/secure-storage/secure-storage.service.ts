@@ -79,6 +79,10 @@ export class SecureStorageService {
             throw new Error('Could not read from the secure storage.')
           }
 
+          if (errorMessage && errorMessage.toLowerCase().includes('wrong paranoia password')) {
+            throw new Error('Wrong passcode.')
+          }
+
           throw error
         })
       },
