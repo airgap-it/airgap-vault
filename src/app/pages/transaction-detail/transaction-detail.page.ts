@@ -7,11 +7,12 @@ import {
 import * as bip39 from 'bip39'
 
 import { Secret } from '../../models/secret'
-import { handleErrorLocal } from '../../services/error-handler/error-handler.service'
+import { handleErrorLocal, ErrorCategory } from '../../services/error-handler/error-handler.service'
 import { InteractionOperationType, InteractionService } from '../../services/interaction/interaction.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
 import { SerializerService } from '../../services/serializer/serializer.service'
+import { AlertController } from '@ionic/angular'
 
 // TODO: refactor multiple transactions
 @Component({
@@ -27,6 +28,7 @@ export class TransactionDetailPage {
   public deserializedSync: IACMessageDefinitionObject[]
 
   constructor(
+    private readonly alertCtrl: AlertController,
     private readonly navigationService: NavigationService,
     private readonly secretsService: SecretsService,
     private readonly interactionService: InteractionService,
@@ -66,6 +68,9 @@ export class TransactionDetailPage {
       )
     } catch (error) {
       console.log('Caught error: ', error)
+      if (error.message) {
+        this.showAlert('Error', error.message)
+      }
     }
   }
 
@@ -126,5 +131,20 @@ export class TransactionDetailPage {
       const privateKey: Buffer = await wallet.coinProtocol.getPrivateKeyFromMnemonic(mnemonic, wallet.derivationPath)
       return wallet.coinProtocol.signWithPrivateKey(privateKey, transaction.transaction)
     }
+  }
+
+  public async showAlert(title: string, message: string): Promise<void> {
+    const alert: HTMLIonAlertElement = await this.alertCtrl.create({
+      header: title,
+      message,
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: 'Okay!',
+          role: 'cancel'
+        }
+      ]
+    })
+    alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
   }
 }
