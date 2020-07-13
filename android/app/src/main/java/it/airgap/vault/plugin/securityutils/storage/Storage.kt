@@ -139,14 +139,18 @@ class Storage(private val context: Context, private val storageAlias: String, pr
                     success = {
                         showParanoiaAlert(
                                 success = {
-                                    val digest = retrieveParanoiaSecretDigest(it)
-                                    secureFileStorage.read(
-                                            fileKey = fileKey,
-                                            secret = digest,
-                                            success = success,
-                                            error = error,
-                                            requestAuthentication = requestAuthentication
-                                    )
+                                    try {
+                                        val digest = retrieveParanoiaSecretDigest(it)
+                                        secureFileStorage.read(
+                                                fileKey = fileKey,
+                                                secret = digest,
+                                                success = success,
+                                                error = error,
+                                                requestAuthentication = requestAuthentication
+                                        )
+                                    } catch (e: Exception) {
+                                        error(e)
+                                    }
                                 }, error = error)
                     }, error = error
             )
@@ -211,14 +215,18 @@ class Storage(private val context: Context, private val storageAlias: String, pr
                     success = {
                         showParanoiaAlert(
                                 success = {
-                                    val digest = retrieveParanoiaSecretDigest(it)
-                                    secureFileStorage.write(
-                                            fileKey = fileKey,
-                                            fileData = fileData,
-                                            secret = digest,
-                                            success = success,
-                                            error = error,
-                                            requestAuthentication = requestAuthentication)
+                                    try {
+                                        val digest = retrieveParanoiaSecretDigest(it)
+                                        secureFileStorage.write(
+                                                fileKey = fileKey,
+                                                fileData = fileData,
+                                                secret = digest,
+                                                success = success,
+                                                error = error,
+                                                requestAuthentication = requestAuthentication)
+                                    } catch (e: Exception) {
+                                        error(e)
+                                    }
                                 }, error = error)
                     }, error = error
             )
@@ -431,11 +439,15 @@ class Storage(private val context: Context, private val storageAlias: String, pr
     }
 
     private fun retrieveParanoiaSecretDigest(passphraseOrPin: String): ByteArray {
-        val secretKeySpec = retrievePasswordSecretKeySpec(paranoiaKeyFile, passphraseOrPin)
+        try {
+            val secretKeySpec = retrievePasswordSecretKeySpec(paranoiaKeyFile, passphraseOrPin)
 
-        return MessageDigest.getInstance(Constants.DIGEST_ALGORITHM).apply {
-            update(secretKeySpec.encoded)
-        }.digest()
+            return MessageDigest.getInstance(Constants.DIGEST_ALGORITHM).apply {
+                update(secretKeySpec.encoded)
+            }.digest()
+        } catch (e: BadPaddingException) {
+            throw Exception(Errors.WRONG_PARANOIA)
+        }
     }
 
     private fun retrieveRecoveryKey(passphraseOrPin: String): Key {
