@@ -37,6 +37,10 @@
       <ion-icon name="return-right" slot="start"></ion-icon>
       {{ 'tab-settings.paste-from-clipboard_label' | translate }}
     </ion-item>
+    <ion-item (click)="copyErrorHistory()">
+      <ion-icon name="return-right" slot="start"></ion-icon>
+      Copy Error History
+    </ion-item>
     <ion-item>
       {{ 'tab-settings.qr.enable-new-serializer_label' | translate }}
       <ion-toggle [(ngModel)]="serializerService.useV2" slot="end"></ion-toggle>
@@ -47,7 +51,8 @@
       </ion-label>
     </ion-item>
     <ion-item>
-      <ion-range [(ngModel)]="serializerService.displayTimePerChunk" min="100" max="2000" step="50" pin snaps="false" color="secondary">
+      <ion-range [(ngModel)]="serializerService.displayTimePerChunk" min="100" max="2000" step="50" pin snaps="false"
+        color="secondary">
         <ion-label slot="start">100 ms</ion-label>
         <ion-label slot="end">2000 ms</ion-label>
       </ion-range>
@@ -58,7 +63,8 @@
       </ion-label>
     </ion-item>
     <ion-item>
-      <ion-range [(ngModel)]="serializerService.chunkSize" min="10" max="500" step="10" pin snaps="false" color="secondary">
+      <ion-range [(ngModel)]="serializerService.chunkSize" min="10" max="500" step="10" pin snaps="false"
+        color="secondary">
         <ion-label slot="start">10 bytes</ion-label>
         <ion-label slot="end">500 bytes</ion-label>
       </ion-range>

@@ -16,12 +16,51 @@ export enum ErrorCategory {
   OTHER = 'other'
 }
 
+type ErrorHistoryObject = [ErrorCategory, string, string, string, string]
+
+export class LocalErrorLogger {
+  private readonly errorHistoryKey: string = 'ERROR_HISTORY'
+  constructor() { }
+
+  public async addLog(category: ErrorCategory, error: Error): Promise<void> {
+    const storedErrors: ErrorHistoryObject[] = (await this.getErrorHistory()).slice(0, 99)
+    storedErrors.unshift([
+      category,
+      error.name,
+      error.message,
+      error.stack,
+      new Date().toString(),
+    ])
+    localStorage.setItem(this.errorHistoryKey, JSON.stringify(storedErrors))
+  }
+
+  public async getErrorHistory(): Promise<ErrorHistoryObject[]> {
+    try {
+      return JSON.parse(localStorage.getItem(this.errorHistoryKey)) || []
+    } catch (e) {
+      return []
+    }
+  }
+
+  public async getErrorHistoryFormatted(): Promise<string> {
+    const errorHistory = await this.getErrorHistory()
+
+    return errorHistory.map(([category, name, message, stack, date]) => {
+      return `[${category}] ${name}: ${message} (${date})
+      ${stack}`
+    }).join('\n\n')
+  }
+}
+
+const errorLogger = new LocalErrorLogger()
+
 type ErrorCallback = (error: Error & { originalError?: Error }) => void
 
 const handleErrorLocal: (category: ErrorCategory) => ErrorCallback = (category?: ErrorCategory): ErrorCallback => {
   return (error: Error & { originalError?: Error }): void => {
     console.log('saving error locally, category', category)
     console.error(error.originalError || error)
+    errorLogger.addLog(category, error)
   }
 }
 

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs'
 
 import { Secret } from '../../models/secret'
 import { ClipboardService } from '../../services/clipboard/clipboard.service'
-import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
+import { ErrorCategory, handleErrorLocal, LocalErrorLogger } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SchemeRoutingService } from '../../services/scheme-routing/scheme-routing.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
@@ -36,6 +36,11 @@ export class TabSettingsPage {
 
   public goToEditSecret(secret: Secret): void {
     this.navigationService.routeWithState('/secret-edit', { secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
+  public async copyErrorHistory(): Promise<void> {
+    const errorHistory = await new LocalErrorLogger().getErrorHistoryFormatted()
+    this.clipboardService.copyAndShowToast(errorHistory, 'Local error history copied to clipboard')
   }
 
   public async deleteSecret(secret: Secret): Promise<void> {
