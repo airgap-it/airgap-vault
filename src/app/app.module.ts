@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core'
+import { NgModule, ErrorHandler } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { RouteReuseStrategy } from '@angular/router'
 import { Plugins } from '@capacitor/core'
@@ -76,6 +76,7 @@ const { App, AppInfo, CameraPreview, Clipboard, SecurityUtils, SplashScreen, Sta
     { provide: SECURITY_UTILS_PLUGIN, useValue: SecurityUtils },
     { provide: SPLASH_SCREEN_PLUGIN, useValue: SplashScreen },
     { provide: STATUS_BAR_PLUGIN, useValue: StatusBar },
+    { provide: ErrorHandler, useClass: ErrorHandlerService },
     Diagnostic,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     DeviceMotion,
@@ -92,7 +93,6 @@ const { App, AppInfo, CameraPreview, Clipboard, SecurityUtils, SplashScreen, Sta
     ClipboardService,
     PermissionsService,
     ShareUrlService,
-    ErrorHandlerService,
     InteractionService,
     DeepLinkService,
     ProtocolsService,
@@ -123,4 +123,4 @@ const { App, AppInfo, CameraPreview, Clipboard, SecurityUtils, SplashScreen, Sta
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }
