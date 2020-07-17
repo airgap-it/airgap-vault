@@ -3,11 +3,12 @@ import { AirGapWallet, IACMessageDefinitionObject, IACMessageType, IAirGapTransa
 import * as bip39 from 'bip39'
 
 import { Secret } from '../../models/secret'
-import { handleErrorLocal } from '../../services/error-handler/error-handler.service'
+import { handleErrorLocal, ErrorCategory } from '../../services/error-handler/error-handler.service'
 import { InteractionOperationType, InteractionService } from '../../services/interaction/interaction.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
 import { SerializerService } from '../../services/serializer/serializer.service'
+import { AlertController } from '@ionic/angular'
 
 // TODO: refactor multiple transactions
 @Component({
@@ -23,6 +24,7 @@ export class TransactionDetailPage {
   public deserializedSync: IACMessageDefinitionObject[]
 
   constructor(
+    private readonly alertCtrl: AlertController,
     private readonly navigationService: NavigationService,
     private readonly secretsService: SecretsService,
     private readonly interactionService: InteractionService,
@@ -30,19 +32,22 @@ export class TransactionDetailPage {
   ) {}
 
   public async ionViewWillEnter(): Promise<void> {
-    this.transactionsWithWallets = this.navigationService.getState().transactionsWithWallets
-    this.deserializedSync = this.navigationService.getState().deserializedSync
-    console.log('deserialized sync', this.deserializedSync)
-    try {
-      this.airGapTxs = (
-        await Promise.all(
-          this.transactionsWithWallets.map((pair: [UnsignedTransaction, AirGapWallet]) =>
-            pair[1].coinProtocol.getTransactionDetails(pair[0])
+    const state = this.navigationService.getState()
+    if (state.transactionsWithWallets) {
+      this.transactionsWithWallets = state.transactionsWithWallets
+      this.deserializedSync = state.deserializedSync
+      console.log('deserialized sync', this.deserializedSync)
+      try {
+        this.airGapTxs = (
+          await Promise.all(
+            this.transactionsWithWallets.map((pair: [UnsignedTransaction, AirGapWallet]) =>
+              pair[1].coinProtocol.getTransactionDetails(pair[0])
+            )
           )
-        )
-      ).reduce((flatten, toFlatten) => flatten.concat(toFlatten), [])
-    } catch (e) {
-      console.log('cannot read tx details', e)
+        ).reduce((flatten, toFlatten) => flatten.concat(toFlatten), [])
+      } catch (e) {
+        console.log('cannot read tx details', e)
+      }
     }
   }
 
@@ -65,6 +70,9 @@ export class TransactionDetailPage {
       )
     } catch (error) {
       console.log('Caught error: ', error)
+      if (error.message) {
+        this.showAlert('Error', error.message)
+      }
     }
   }
 
@@ -127,5 +135,20 @@ export class TransactionDetailPage {
       const privateKey: Buffer = await wallet.coinProtocol.getPrivateKeyFromMnemonic(mnemonic, wallet.derivationPath)
       return wallet.coinProtocol.signWithPrivateKey(privateKey, transaction.transaction)
     }
+  }
+
+  public async showAlert(title: string, message: string): Promise<void> {
+    const alert: HTMLIonAlertElement = await this.alertCtrl.create({
+      header: title,
+      message,
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: 'Okay!',
+          role: 'cancel'
+        }
+      ]
+    })
+    alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
   }
 }

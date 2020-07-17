@@ -22,7 +22,7 @@ export interface SecurityUtilsPlugin {
   secureDevice({}): Promise<void>
   getItem({}): Promise<{ value: string }>
   setItem({}): Promise<void>
-  setupRecoveryPassword({}): Promise<void>
+  setupRecoveryPassword({}): Promise<{ recoveryKey: string }>
   removeItem({}): Promise<void>
   removeAll({}): Promise<void>
   destroy(): Promise<void>

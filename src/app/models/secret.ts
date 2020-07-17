@@ -17,6 +17,7 @@ export class Secret implements Identifiable {
   public isParanoia: boolean
   public hasSocialRecovery: boolean
   public interactionSetting: InteractionSetting
+  public hasRecoveryKey: boolean
 
   public wallets: AirGapWallet[]
 
@@ -26,11 +27,13 @@ export class Secret implements Identifiable {
     seed: string | null,
     label: string = '',
     isParanoia: boolean = false,
-    interactionSetting: InteractionSetting = InteractionSetting.UNDETERMINED
+    interactionSetting: InteractionSetting = InteractionSetting.UNDETERMINED,
+    hasRecoveryKey: boolean = false
   ) {
     this.label = label
     this.isParanoia = isParanoia
     this.interactionSetting = interactionSetting
+    this.hasRecoveryKey = hasRecoveryKey
 
     if (seed !== null) {
       this.secretHex = this.getEntropyFromMnemonic(seed)
