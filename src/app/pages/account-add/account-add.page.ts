@@ -16,7 +16,7 @@ import { LocalAuthenticationOnboardingPage } from '../local-authentication-onboa
 export class AccountAddPage {
   public selectedProtocol: ICoinProtocol
   public customDerivationPath: string
-  public coinProtocols: ICoinProtocol[]
+  public protocols: ICoinProtocol[]
   public isHDWallet: boolean = false
   public isAdvancedMode: boolean = false
 
@@ -26,8 +26,8 @@ export class AccountAddPage {
     private readonly modalController: ModalController,
     private readonly navigationService: NavigationService
   ) {
-    this.coinProtocols = supportedProtocols()
-    this.onSelectedProtocolChange(this.navigationService.getState().protocol || this.coinProtocols[0])
+    this.protocols = supportedProtocols()
+    this.onSelectedProtocolChange(this.navigationService.getState().protocol || this.protocols[0])
   }
 
   public onSelectedProtocolChange(selectedProtocol: ICoinProtocol): void {
