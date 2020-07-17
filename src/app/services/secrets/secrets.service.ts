@@ -123,12 +123,12 @@ export class SecretsService {
   public async resetRecoveryPassword(secret: Secret): Promise<string> {
     const secureStorage: SecureStorage = await this.secureStorageService.get(secret.id, secret.isParanoia)
     try {
-      const secretHex = await secureStorage.getItem(secret.id).then(result => result.value)
+      const secretHex = await secureStorage.getItem(secret.id).then((result) => result.value)
 
-      return secureStorage.setupRecoveryPassword(secret.id, secretHex).then(result => {
+      return secureStorage.setupRecoveryPassword(secret.id, secretHex).then((result) => {
         secret.hasRecoveryKey = true
         this.addOrUpdateSecret(secret)
-        
+
         return result.recoveryKey
       })
     } catch (error) {
@@ -142,12 +142,13 @@ export class SecretsService {
   public async retrieveEntropyForSecret(secret: Secret): Promise<string> {
     const secureStorage: SecureStorage = await this.secureStorageService.get(secret.id, secret.isParanoia)
 
-    return secureStorage.getItem(secret.id)
-      .then(result => {
+    return secureStorage
+      .getItem(secret.id)
+      .then((result) => {
         console.log(result)
         return result.value
       })
-      .catch(error => {
+      .catch((error) => {
         if (error.message.startsWith('Could not read from the secure storage.')) {
           this.handleCorruptedSecret(secret, error)
         }
@@ -246,6 +247,7 @@ export class SecretsService {
       message: 'Deriving your wallet...'
     })
     loading.present().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
+    setTimeout(() => {}, 50)
 
     const protocol: ICoinProtocol = getProtocolByIdentifier(protocolIdentifier)
 
