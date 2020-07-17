@@ -20,7 +20,7 @@ export class ShareUrlService {
     }
 
     const deserializedTxSigningRequest: IACMessageDefinitionObject = {
-      protocol: wallet.protocolIdentifier,
+      protocol: wallet.protocol.identifier,
       type: IACMessageType.AccountShareResponse,
       payload: accountShareResponse
     }
