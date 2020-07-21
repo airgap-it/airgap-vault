@@ -6,11 +6,13 @@
 
 > Self custody made simple and secure. Protect your crypto and store your private keys offline.
 
-[AirGap](https://airgap.it) is a crypto wallet system that let's you secure cypto assets with one secret on an offline device. The AirGap Vault application is installed on a dedicated device that has no connection to any network, thus it is air gapped. The [AirGap Wallet](https://github.com/airgap-it/airgap-wallet) is installed on your everyday smartphone.
+[AirGap](https://airgap.it) is a crypto wallet system that lets you secure cypto assets with one secret on an offline device. The AirGap Vault application is installed on a dedicated device that has no connection to any network, thus it is air gapped. The [AirGap Wallet](https://github.com/airgap-it/airgap-wallet) is installed on your everyday smartphone.
 
 ## Description
 
-AirGap Vault is responsible for secure key generation. Entropy from audio, video, touch and accelerometer are used together with the output of the hardware random number generator. The generated secret is saved in the secure enclave of the device, only accessible by biometric authentication. Accounts for multiple protcols can be created. Transactions are prepared by the AirGap Wallet and then transferred to the offline device via QR code. AirGap Vault is a hybrid application (using the same codebase for Android and iOS). Created using AirGap's protocol agnostic `airgap-coin-lib` library to interact with different protocols and our own secure storage implementation.
+AirGap Vault is responsible for secure key generation. Entropy from audio, video, touch and accelerometer are used together with the output of the hardware random number generator. The generated secret is saved in the secure enclave of the device, only accessible by biometric authentication. Accounts for multiple protcols can be created. Transactions are prepared by the AirGap Wallet and then transferred to the offline device via QR code, where it is signed and sent back to the Wallet using another QR code.
+
+AirGap Vault is a hybrid application (using the same codebase for Android and iOS). Created using AirGap's protocol agnostic `airgap-coin-lib` library to interact with different protocols and our own secure storage implementation.
 
 <p align="left">
     <img src="./devices.png" />
@@ -138,3 +140,6 @@ Before integrating a new feature, please quickly reach out to us in an issue so 
 
 - [AirGap Wallet](https://github.com/airgap-it/airgap-wallet)
 - [airgap-coin-lib](https://github.com/airgap-it/airgap-coin-lib)
+
+- [AirGap Linux Distribution](https://github.com/airgap-it/airgap-distro)
+- [apk-signer](https://github.com/airgap-it/airgap-raspberry-apk-signer)
