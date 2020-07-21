@@ -32,19 +32,22 @@ export class TransactionDetailPage {
   ) {}
 
   public async ionViewWillEnter(): Promise<void> {
-    this.transactionsWithWallets = this.navigationService.getState().transactionsWithWallets
-    this.deserializedSync = this.navigationService.getState().deserializedSync
-    console.log('deserialized sync', this.deserializedSync)
-    try {
-      this.airGapTxs = (
-        await Promise.all(
-          this.transactionsWithWallets.map((pair: [UnsignedTransaction, AirGapWallet]) =>
-            pair[1].coinProtocol.getTransactionDetails(pair[0])
+    const state = this.navigationService.getState()
+    if (state.transactionsWithWallets) {
+      this.transactionsWithWallets = state.transactionsWithWallets
+      this.deserializedSync = state.deserializedSync
+      console.log('deserialized sync', this.deserializedSync)
+      try {
+        this.airGapTxs = (
+          await Promise.all(
+            this.transactionsWithWallets.map((pair: [UnsignedTransaction, AirGapWallet]) =>
+              pair[1].coinProtocol.getTransactionDetails(pair[0])
+            )
           )
-        )
-      ).reduce((flatten, toFlatten) => flatten.concat(toFlatten), [])
-    } catch (e) {
-      console.log('cannot read tx details', e)
+        ).reduce((flatten, toFlatten) => flatten.concat(toFlatten), [])
+      } catch (e) {
+        console.log('cannot read tx details', e)
+      }
     }
   }
 
@@ -67,6 +70,9 @@ export class TransactionDetailPage {
       )
     } catch (error) {
       console.log('Caught error: ', error)
+      if (error.message) {
+        this.showAlert('Error', error.message)
+      }
     }
   }
 
@@ -199,6 +205,21 @@ export class TransactionDetailPage {
 
       return wallet.coinProtocol.signWithPrivateKey(privateKey, transaction.transaction)
     }
+  }
+
+  public async showAlert(title: string, message: string): Promise<void> {
+    const alert: HTMLIonAlertElement = await this.alertController.create({
+      header: title,
+      message,
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: 'Okay!',
+          role: 'cancel'
+        }
+      ]
+    })
+    alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
   }
 
   private async checkIfPublicKeysMatch(

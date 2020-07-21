@@ -26,7 +26,7 @@ AirGap Vault is responsible for secure key generation, for this entropy like aud
 - Secure secret generation with added entropy like audio, video, touch and device accelerator
 - Secure storage in the secure enclave of the mobile operating system, accessible only by biometric authenticaiton
 - Secure Communication with AirGap Wallet over URL schemes, QR codes or app switching
-- Create accounts for all supported currencies like Aeternity, Ethereum, Bitcoin etc.
+- Create accounts for all supported currencies like Aeternity, Ethereum, Bitcoin, Tezos, Cosmos, Kusama, Polkadot etc.
 - Sign transactions created by AirGap Wallet
 
 ## Security
