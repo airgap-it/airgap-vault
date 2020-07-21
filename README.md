@@ -65,6 +65,24 @@ function seedEntropy(additionalEntropyArray) {
 }
 ```
 
+### Supply Chain Attacks
+
+In the past years, mutliple cryptocurrency wallets have been targeted by attackers to try and steal users funds. One common attack vector is the supply chain attack. In this attack, the attacker tries to compromise a dependency that is used in the wallet and use it to inject malicious code. At AirGap, we take utmost care of evaluating the dependencies we use. We have also introduced a system that separates the dependencies used during testing and development from the dependencies that are used to build and run the project. This reduces the risk of malicious code injection during the build and test steps.
+
+### Verifiable Builds
+
+A very important property of any open source wallet is reprucibility. This means that executable that is downloaded from the Play Store or App Store can be exactly reproduced by compiling the open source code. If this is not the case, it means that there is hidden or removed code in the published version that is not visible in the published source code.
+
+The project [WalletScrutiny](https://walletscrutiny.com/posts/it.airgap.vault/) examines a wide variedy of cryptocurrency wallets to determine their reproducibility. We're happy to say that **AirGap Vault** was one of the first wallets to be marked as "reproducible".
+
+### Security Audits
+
+The application as a whole, as well as multiple components, have been audited by different third party companies.
+
+**All audits have found no way of extracting the private key from AirGap Vault.**
+
+The reports will be released once all the findings have been resolved.
+
 ## Build
 
 First follow the steps below to install the dependencies:
@@ -110,5 +128,13 @@ If you discover a security vulnerability within this application, please send an
 
 ## Contributing
 
+Before integrating a new feature, please quickly reach out to us in an issue so we can discuss and coordinate the change.
+
 - If you find any bugs, submit an [issue](../../issues) or open [pull-request](../../pulls).
+- If you want to integrate a new blockchain, please read the contributing guidelines in the [airgap-coin-lib](https://github.com/airgap-it/airgap-coin-lib) project.
 - Engage with other users and developers on the [AirGap Telegram](https://t.me/AirGap).
+
+## Related Projects
+
+- [AirGap Wallet](https://github.com/airgap-it/airgap-wallet)
+- [airgap-coin-lib](https://github.com/airgap-it/airgap-coin-lib)
