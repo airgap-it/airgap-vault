@@ -37,7 +37,7 @@ describe('FeeConverter Pipe', () => {
   })
 
   it('should return an empty string when protocolIdentifier unknown', () => {
-    expect(feeConverterPipe.transform('1', { protocolIdentifier: 'FeeConverterPipe' })).toEqual('')
+    expect(feeConverterPipe.transform('1', { protocolIdentifier: 'FeeConverterPipe' as any })).toEqual('')
   })
 
   function getTest(args) {
