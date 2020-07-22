@@ -1,0 +1,22 @@
+{
+  "appId": "it.airgap.vault",
+  "appName": "AirGap Vault",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "plugins": {
+    "PushNotifications": {
+      "presentationOptions": ["alert"]
+    },
+    "SplashScreen": {
+      "launchAutoHide": false,
+      "androidSplashResourceName": "screen"
+    }
+  },
+  "android": {
+    "allowMixedContent": true
+  },
+  "ios": {
+    "cordovaSwiftVersion": "5.0"
+  }
+}

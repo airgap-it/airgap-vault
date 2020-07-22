@@ -35,3 +35,5 @@ Thumbs.db
 UserInterfaceState.xcuserstate
 
 src/assets/libs/airgap-coin-lib.browserify.js
+
+electron/build/

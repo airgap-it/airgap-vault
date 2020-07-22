@@ -1,0 +1,41 @@
+{
+  "name": "airgap-vault",
+  "productName": "AirGap Vault",
+  "version": "0.0.1",
+  "author": "Papers GmbH <contact@papers.ch> (https://papers.ch)",
+  "homepage": "https://www.airgap.it",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "start": "electron ./",
+    "build:mac": "electron-builder --mac --publish=never",
+    "build:linux": "electron-builder --linux --publish=never",
+    "build:windows": "electron-builder --win --publish=never"
+  },
+  "build": {
+    "appId": "it.airgap.vault",
+    "directories": {
+      "output": "build",
+      "buildResources": "resources"
+    },
+    "artifactName": "${name}-${version}.${ext}",
+    "linux": {
+      "target": [
+        {
+          "target": "deb",
+          "arch": [
+            "ia32"
+          ]
+        }
+      ]
+    }
+  },
+  "dependencies": {
+    "@capacitor/electron": "^2.0.1",
+    "electron-is-dev": "^1.1.0"
+  },
+  "devDependencies": {
+    "electron": "^7.0.0",
+    "electron-builder": "^22.5.1"
+  }
+}

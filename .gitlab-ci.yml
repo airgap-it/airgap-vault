@@ -89,6 +89,59 @@ build_ios:
   tags:
     - ios
 
+build_mac:
+  stage: native_build
+  when: manual
+  script:
+    - 'sed -i -e "s/\"version\": \"0.0.1\"/\"version\": \"${VERSION}\"/g" electron/package.json'
+    - npm install
+    - npm --prefix electron/ install
+    - npm run build:electron
+    - npx cap sync electron
+    - npm --prefix electron/ run build:mac
+  artifacts:
+    name: 'electron_macos'
+    paths:
+      - electron/build/airgap-vault-$VERSION.dmg
+      - electron/build/airgap-vault-$VERSION.dmg.blockmap
+      - electron/build/airgap-vault-$VERSION-mac.zip
+  tags:
+    - ios
+
+build_linux:
+  stage: native_build
+  when: manual
+  tags:
+    - docker
+  script:
+    - docker build -f build/electron/linux/Dockerfile -t $GOOGLE_TAG_ELECTRON_LINUX_CURRENT --build-arg VERSION="$VERSION" .
+    - docker run --name $CI_PIPELINE_ID $GOOGLE_TAG_ELECTRON_LINUX_CURRENT echo "container ran."
+    - docker cp $CI_PIPELINE_ID:/app/electron/build/airgap-vault-$VERSION.deb electron/airgap-vault-$VERSION.deb
+  after_script:
+    - docker rm -f $CI_PIPELINE_ID || true
+  artifacts:
+    name: 'electron_linux'
+    paths:
+      - electron/airgap-vault-$VERSION.deb
+
+build_windows:
+  stage: native_build
+  when: manual
+  tags:
+    - docker
+  script:
+    - docker build -f build/electron/windows/Dockerfile -t $GOOGLE_TAG_ELECTRON_WINDOWS_CURRENT --build-arg VERSION="$VERSION" .
+    - docker run --name $CI_PIPELINE_ID $GOOGLE_TAG_ELECTRON_WINDOWS_CURRENT echo "container ran."
+    - docker cp $CI_PIPELINE_ID:/app/electron/build/airgap-vault-$VERSION.exe electron/airgap-vault-$VERSION.exe
+    - docker cp $CI_PIPELINE_ID:/app/electron/build/airgap-vault-$VERSION.exe.blockmap electron/airgap-vault-$VERSION.exe.blockmap
+  after_script:
+    - docker rm -f $CI_PIPELINE_ID || true
+  artifacts:
+    name: 'electron_windows'
+    paths:
+      - electron/airgap-vault-$VERSION.exe
+      - electron/airgap-vault-$VERSION.exe.blockmap
+
 qa:
   stage: qa
   before_script:
