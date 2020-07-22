@@ -8,7 +8,6 @@ import android.content.SharedPreferences
 import android.content.pm.ApplicationInfo
 import android.provider.Settings
 import android.view.WindowManager
-import it.airgap.vault.plugin.securityutils.storage.Storage
 import com.getcapacitor.NativePlugin
 import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
@@ -16,6 +15,7 @@ import com.getcapacitor.PluginMethod
 import com.scottyab.rootbeer.RootBeer
 import it.airgap.vault.BuildConfig
 import it.airgap.vault.plugin.securityutils.SecurityUtils.Companion.REQUEST_CODE_CONFIRM_DEVICE_CREDENTIALS
+import it.airgap.vault.plugin.securityutils.storage.Storage
 import it.airgap.vault.util.assertReceived
 import it.airgap.vault.util.logDebug
 import it.airgap.vault.util.resolveWithData
@@ -67,11 +67,15 @@ class SecurityUtils : Plugin() {
     @PluginMethod
     fun initStorage(call: PluginCall) {
         with (call) {
-            assertReceived(Param.ALIAS, Param.IS_PARANOIA)
-            if (isParanoia) {
-                setupParanoiaPassword(call)
-            } else {
-                resolve()
+            try {
+                assertReceived(Param.ALIAS, Param.IS_PARANOIA)
+                if (isParanoia) {
+                    setupParanoiaPassword(call)
+                } else {
+                    resolve()
+                }
+            } catch (e: Exception) {
+                reject(e.toString())
             }
         }
     }
@@ -93,45 +97,57 @@ class SecurityUtils : Plugin() {
     @PluginMethod
     fun getItem(call: PluginCall) {
         with (call) {
-            assessIntegrity()
-            assertReceived(Param.ALIAS, Param.IS_PARANOIA, Param.FILE_KEY)
+            try {
+                assessIntegrity()
+                assertReceived(Param.ALIAS, Param.IS_PARANOIA, Param.FILE_KEY)
 
-            Storage(context, alias, isParanoia).readString(key, {
-                logDebug("getItem: success")
-                resolveWithData(Key.VALUE to it)
-            }, {
-                logDebug("getItem: failure")
-                reject(it.toString())
-            }, { showAuthenticationScreen(call, it) })
+                Storage(context, alias, isParanoia).readString(key, {
+                    logDebug("getItem: success")
+                    resolveWithData(Key.VALUE to it)
+                }, {
+                    logDebug("getItem: failure")
+                    reject(it.toString())
+                }, { showAuthenticationScreen(call, it) })
+            } catch (e: Exception) {
+                reject(e.toString())
+            }
         }
     }
 
     @PluginMethod
     fun setItem(call: PluginCall) {
         with (call) {
-            assessIntegrity()
-            assertReceived(Param.ALIAS, Param.IS_PARANOIA, Param.FILE_KEY, Param.VALUE)
+            try {
+                assessIntegrity()
+                assertReceived(Param.ALIAS, Param.IS_PARANOIA, Param.FILE_KEY, Param.VALUE)
 
-            Storage(context, alias, isParanoia).writeString(key, value, {
-                logDebug("setItem: success")
-                resolve()
-            }, {
-                logDebug("setItem: failure")
-                reject(it.toString())
-            }, { showAuthenticationScreen(call, it) })
+                Storage(context, alias, isParanoia).writeString(key, value, {
+                    logDebug("setItem: success")
+                    resolve()
+                }, {
+                    logDebug("setItem: failure")
+                    reject(it.toString())
+                }, { showAuthenticationScreen(call, it) })
+            } catch (e: Exception) {
+                reject(e.toString())
+            }
         }
     }
 
     @PluginMethod
     fun removeAll(call: PluginCall) {
         with (call) {
-            assertReceived(Param.ALIAS)
+            try {
+                assertReceived(Param.ALIAS)
 
-            val result = Storage.removeAll(activity, alias)
-            if (result) {
-                resolve()
-            } else {
-                reject("removeAll: failure")
+                val result = Storage.removeAll(activity, alias)
+                if (result) {
+                    resolve()
+                } else {
+                    reject("removeAll: failure")
+                }
+            } catch (e: Exception) {
+                reject(e.toString())
             }
         }
     }
@@ -139,55 +155,73 @@ class SecurityUtils : Plugin() {
     @PluginMethod
     fun removeItem(call: PluginCall) {
         with (call) {
-            assertReceived(Param.ALIAS, Param.IS_PARANOIA, Param.FILE_KEY)
+            try {
+                assertReceived(Param.ALIAS, Param.IS_PARANOIA, Param.FILE_KEY)
 
-            Storage(context, alias, isParanoia).removeString(key, {
-                logDebug("delete: success")
-                resolve()
-            }, {
-                logDebug("delete: failure")
-                reject(it.toString())
-            })
+                Storage(context, alias, isParanoia).removeString(key, {
+                    logDebug("delete: success")
+                    resolve()
+                }, {
+                    logDebug("delete: failure")
+                    reject(it.toString())
+                })
+            } catch (e: Exception) {
+                reject(e.toString())
+            }
         }
     }
 
     @PluginMethod
     fun destroy(call: PluginCall) {
-        val result = Storage.destroy(activity)
-        if (result) {
-            call.resolve()
-        } else {
-            call.reject("destroy: failure")
+        with (call) {
+            try {
+                val result = Storage.destroy(activity)
+                if (result) {
+                    resolve()
+                } else {
+                    reject("destroy: failure")
+                }
+            } catch (e: Exception) {
+                reject(e.toString())
+            }
         }
     }
 
     @PluginMethod
     fun setupParanoiaPassword(call: PluginCall) {
         with (call) {
-            assertReceived(Param.ALIAS, Param.IS_PARANOIA)
+            try {
+                assertReceived(Param.ALIAS, Param.IS_PARANOIA)
 
-            Storage(context, alias, isParanoia).setupParanoiaPassword({
-                logDebug("paranoia setup: success")
-                resolve()
-            }, {
-                logDebug("paranoia setup: failure")
-                reject(it.toString())
-            })
+                Storage(context, alias, isParanoia).setupParanoiaPassword({
+                    logDebug("paranoia setup: success")
+                    resolve()
+                }, {
+                    logDebug("paranoia setup: failure")
+                    reject(it.toString())
+                })
+            } catch (e: Exception) {
+                reject(e.toString())
+            }
         }
     }
 
     @PluginMethod
     fun setupRecoveryPassword(call: PluginCall) {
         with (call) {
-            assertReceived(Param.ALIAS, Param.IS_PARANOIA, Param.FILE_KEY, Param.VALUE)
+            try {
+                assertReceived(Param.ALIAS, Param.IS_PARANOIA, Param.FILE_KEY, Param.VALUE)
 
-            Storage(context, alias, isParanoia).writeRecoverableString(key, value, {
-                logDebug("written recoverable: success")
-                resolveWithData("recoveryKey" to it)
-            }, {
-                logDebug("written recoverable: failure")
-                reject(it.toString())
-            }, { showAuthenticationScreen(call, it) })
+                Storage(context, alias, isParanoia).writeRecoverableString(key, value, {
+                    logDebug("written recoverable: success")
+                    resolveWithData("recoveryKey" to it)
+                }, {
+                    logDebug("written recoverable: failure")
+                    reject(it.toString())
+                }, { showAuthenticationScreen(call, it) })
+            } catch (e: Exception) {
+                reject(e.toString())
+            }
         }
     }
 

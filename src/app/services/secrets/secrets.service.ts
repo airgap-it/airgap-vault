@@ -133,7 +133,7 @@ export class SecretsService {
       })
     } catch (error) {
       if (error.message.startsWith('Could not read from the secure storage.')) {
-        this.handleCorruptedSecret(secret, error)
+        this.handleCorruptedSecret(error)
       }
       throw error
     }
@@ -150,7 +150,7 @@ export class SecretsService {
       })
       .catch((error) => {
         if (error.message.startsWith('Could not read from the secure storage.')) {
-          this.handleCorruptedSecret(secret, error)
+          this.handleCorruptedSecret(error)
         }
         throw error
       })
@@ -290,6 +290,9 @@ export class SecretsService {
       }
 
       loading.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
+      if (error.message) {
+        this.showAlert('Error', error.message)
+      }
       throw error
     }
   }
@@ -309,12 +312,11 @@ export class SecretsService {
     alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
   }
 
-  private async handleCorruptedSecret(secret: Secret, error: any): Promise<void> {
+  private async handleCorruptedSecret(error: any): Promise<void> {
     error.message += ' Please, re-import your secret.'
     error.ignore = true
 
     await this.showAlert('Error', error.message)
     await this.navigationService.routeToAccountsTab(true)
-    await this.remove(secret)
   }
 }
