@@ -188,7 +188,7 @@
     "too-fast_alert": {
       "title": "That was fast!",
       "heading": "Are you sure you are not a super human?",
-      "text": "Make sure that you followed all the rules and didn't do anything other than writing your secret on paper.",
+      "text": "Make sure that you followed all the rules and didn't do anything other than writing down your secret on paper.",
       "wait_label_p1": "Please wait until at least ",
       "wait_label_p2": "s are over."
     }
