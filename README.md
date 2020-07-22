@@ -40,7 +40,7 @@ The security concept behind air-gapped systems is to work with two physically se
 The entropy seeder uses the native secure random generator provided by the device and concatenates this with the sha3 hash of the additional entropy (audio, video, touch, accelerometer). The rationale behind this is:
 
 - The sha3 hashing algorithm is cryptographically secure, such that the following holds: `entropy(sha3(secureRandom())) >= entropy(secureRandom())`
-- Adding bytes to the sha3 function will never lover entropy but only add to it, such that the following holds: `entropy(sha3(secureRandom() + additionaEntropy)) >= entropy(sha3(secureRandom()))`
+- Adding bytes to the sha3 function will never lower entropy but only add to it, such that the following holds: `entropy(sha3(secureRandom() + additionaEntropy)) >= entropy(sha3(secureRandom()))`
 - By reusing the hash of an earlier "round" as a salt, we can incorporate the entire collected entropy of the previous round
 - Native secure random cannot be fully trusted because there is no API to check the entropy pool it's using
 
@@ -75,7 +75,7 @@ In the past years, mutliple cryptocurrency wallets have been targeted by attacke
 
 A very important property of any open source wallet is reprucibility. This means that executable that is downloaded from the Play Store or App Store can be exactly reproduced by compiling the open source code. If this is not the case, it means that there is hidden or removed code in the published version that is not visible in the published source code.
 
-The project [WalletScrutiny](https://walletscrutiny.com/posts/it.airgap.vault/) examines a wide variedy of cryptocurrency wallets to determine their reproducibility. We're happy to say that **AirGap Vault** was one of the first wallets to be marked as "reproducible".
+The project [WalletScrutiny](https://walletscrutiny.com/posts/it.airgap.vault/) examines a wide variety of cryptocurrency wallets to determine their reproducibility. We're happy to say that **AirGap Vault** was one of the first wallets to be marked as "reproducible".
 
 ### Security Audits
 
