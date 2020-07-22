@@ -1,10 +1,10 @@
 image: docker:latest
 
 variables:
-  GOOGLE_TAG: eu.gcr.io/papers-kubernetes/airgap-wallet:$CI_COMMIT_SHA
-  GOOGLE_TAG_ANDROID_CURRENT: eu.gcr.io/papers-kubernetes/airgap-wallet:android-$CI_COMMIT_SHA
-  GOOGLE_TAG_ELECTRON_LINUX_CURRENT: eu.gcr.io/papers-kubernetes/airgap-wallet:electron-linux-$CI_COMMIT_SHA
-  GOOGLE_TAG_ELECTRON_WINDOWS_CURRENT: eu.gcr.io/papers-kubernetes/airgap-wallet:electron-windows-$CI_COMMIT_SHA
+  GOOGLE_TAG: eu.gcr.io/papers-kubernetes/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:$CI_COMMIT_SHA
+  GOOGLE_TAG_ANDROID_CURRENT: eu.gcr.io/papers-kubernetes/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:android-$CI_COMMIT_SHA
+  GOOGLE_TAG_ELECTRON_LINUX_CURRENT: eu.gcr.io/papers-kubernetes/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:electron-linux-$CI_COMMIT_SHA
+  GOOGLE_TAG_ELECTRON_WINDOWS_CURRENT: eu.gcr.io/papers-kubernetes/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:electron-windows-$CI_COMMIT_SHA
 
 stages:
   - build
