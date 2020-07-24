@@ -18,10 +18,7 @@ export class AlertService {
     _subHeader?: string
   ): Promise<void> {
     return new Promise((reject) => {
-      const translationKeys = _subHeader
-        ? [title, message, ...buttons.map((button) => button.text), _subHeader]
-        : [title, message, ...buttons.map((button) => button.text)]
-
+      const translationKeys = [title, message, ...buttons.map((button) => button.text), _subHeader].filter((key) => key !== undefined)
       this.translateService.get(translationKeys).subscribe(async (values) => {
         const translatedButtons = buttons.map((button) => {
           button.text = values[button.text]
