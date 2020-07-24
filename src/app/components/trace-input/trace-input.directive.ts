@@ -6,7 +6,7 @@ interface Point {
 }
 
 @Directive({
-  selector: ''
+  selector: 'traceInput'
 })
 export class TraceInputDirective implements OnInit {
   private readonly canvas: HTMLCanvasElement
