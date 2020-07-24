@@ -21,6 +21,7 @@ export class AccountAddPage {
 
   public isAdvancedMode: boolean = false
   public isBip39PassphraseEnabled: boolean = BIP39_PASSPHRASE_ENABLED
+  public revealBip39Passphrase: boolean = false
   public customDerivationPath: string
   public bip39Passphrase: string = ''
 

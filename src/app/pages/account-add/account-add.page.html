@@ -38,18 +38,31 @@
       <ion-toggle color="primary" slot="end" [(ngModel)]="isAdvancedMode"></ion-toggle>
     </ion-item>
 
-    <ion-item class="ion-no-padding" *ngIf="isAdvancedMode" lines="full">
-      <ion-label position="stacked" color="primary">{{ 'wallet-select-coins.custom-path.label' | translate }}</ion-label>
-      <ion-input
-        [(ngModel)]="customDerivationPath"
-        placeholder="{{ 'wallet-select-coins.custom-path.placeholder' | translate }}"
-      ></ion-input>
-    </ion-item>
+    <ng-container *ngIf="isAdvancedMode">
+      <ion-item class="ion-no-padding" *ngIf="isAdvancedMode" lines="full">
+        <ion-label position="stacked" color="primary">{{ 'wallet-select-coins.custom-path.label' | translate }}</ion-label>
+        <ion-input
+          [(ngModel)]="customDerivationPath"
+          placeholder="{{ 'wallet-select-coins.custom-path.placeholder' | translate }}"
+        ></ion-input>
+      </ion-item>
 
-    <ion-item class="ion-no-padding" *ngIf="isAdvancedMode && isBip39PassphraseEnabled" lines="full">
-      <ion-label position="stacked" color="primary">BIP-39 Passphrase</ion-label>
-      <ion-input [(ngModel)]="bip39Passphrase" placeholder="BIP-39 Passphrase"></ion-input>
-    </ion-item>
+      <ng-container *ngIf="isBip39PassphraseEnabled">
+        <ion-item class="ion-no-padding" *ngIf="isBip39PassphraseEnabled" lines="full">
+          <ion-label position="stacked" color="primary">BIP-39 Passphrase</ion-label>
+          <ion-input
+            [type]="revealBip39Passphrase ? 'text' : 'password'"
+            [(ngModel)]="bip39Passphrase"
+            placeholder="BIP-39 Passphrase"
+          ></ion-input>
+        </ion-item>
+
+        <ion-item>
+          Reveal Passphrase
+          <ion-checkbox [(ngModel)]="revealBip39Passphrase" slot="end"></ion-checkbox>
+        </ion-item>
+      </ng-container>
+    </ng-container>
   </ion-list>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
