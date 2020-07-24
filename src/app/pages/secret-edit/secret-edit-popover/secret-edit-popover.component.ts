@@ -22,6 +22,21 @@ export class SecretEditPopoverComponent {
   ) {}
 
   public delete(): void {
+    const buttons = [
+      {
+        text: 'secret-edit-delete-popover.cancel_label',
+        role: 'cancel',
+        handler: (): void => {
+          reject()
+        }
+      },
+      {
+        text: 'secret-edit-delete-popover.delete_label',
+        handler: (): void => {
+          resolve()
+        }
+      }
+    ]
     const resolve = () => {
       this.secretsService.remove(this.secret).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
       this.popoverController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
@@ -31,6 +46,6 @@ export class SecretEditPopoverComponent {
       }
     }
     const reject = () => this.popoverController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
-    this.alertService.deleteServiceAlert().then(resolve, reject)
+    this.alertService.showTranslatedAlert('secret-edit-delete-popover.title', 'secret-edit-delete-popover.text', true, buttons)
   }
 }

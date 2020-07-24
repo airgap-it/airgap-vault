@@ -1,12 +1,14 @@
 import { AlertService } from './../../services/alert/alert.service'
 import { Component } from '@angular/core'
-import { PopoverController, Platform } from '@ionic/angular'
+import { PopoverController, Platform, ToastController } from '@ionic/angular'
 import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { InteractionSetting } from '../../services/interaction/interaction.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
 import { SecretEditPopoverComponent } from './secret-edit-popover/secret-edit-popover.component'
+import { ClipboardService } from 'src/app/services/clipboard/clipboard.service'
+import { TranslateService } from '@ngx-translate/core'
 
 export enum SecretEditAction {
   SET_RECOVERY_KEY
@@ -30,7 +32,10 @@ export class SecretEditPage {
     private readonly alertService: AlertService,
     private readonly secretsService: SecretsService,
     private readonly navigationService: NavigationService,
-    private readonly platform: Platform
+    private readonly platform: Platform,
+    private readonly translateService: TranslateService,
+    private readonly toastCtrl: ToastController,
+    private readonly clipboardService: ClipboardService
   ) {
     if (this.navigationService.getState()) {
       this.isGenerating = this.navigationService.getState().isGenerating
@@ -82,10 +87,43 @@ export class SecretEditPage {
   public async resetRecoveryPassword(): Promise<void> {
     try {
       const recoveryKey = await this.secretsService.resetRecoveryPassword(this.secret)
-      this.alertService.showRecoveryKeyAlert(recoveryKey)
+      const buttons = [
+        {
+          text: 'secret-edit.secret-recovery-key.alert.copy',
+          handler: () => {
+            this.clipboardService.copy(recoveryKey)
+            this.showToast('secret-edit.secret-recovery-key.copied')
+          }
+        },
+        {
+          text: 'secret-edit.secret-recovery-key.alert.done',
+          handler: () => {}
+        }
+      ]
+      this.alertService.showTranslatedAlert(
+        'secret-edit.secret-recovery-key.alert.title',
+        recoveryKey,
+        true,
+        buttons,
+        'secret-edit.secret-recovery-key.description'
+      )
     } catch (e) {
-      this.alertService.showToast('secret-edit.secret-recovery-key.reset-error')
+      this.showToast('secret-edit.secret-recovery-key.reset-error')
     }
+  }
+  public async showToast(message: string) {
+    const toast: HTMLIonToastElement = await this.toastCtrl.create({
+      message: this.translateService.instant(message),
+      duration: 1000,
+      position: 'top',
+      buttons: [
+        {
+          text: 'Ok',
+          role: 'cancel'
+        }
+      ]
+    })
+    toast.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
   }
 
   public async presentEditPopover(event: Event): Promise<void> {
@@ -105,6 +143,8 @@ export class SecretEditPage {
   }
 
   private perform(action: SecretEditAction | undefined): void {
+    this.resetRecoveryPassword()
+
     switch (action) {
       case SecretEditAction.SET_RECOVERY_KEY:
         this.resetRecoveryPassword()

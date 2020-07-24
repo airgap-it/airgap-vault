@@ -45,6 +45,21 @@ export class AccountEditPopoverComponent {
   }
 
   public delete(): void {
+    const buttons = [
+      {
+        text: 'wallet-edit-delete-popover.account-removal_alert.cancel_label',
+        role: 'cancel',
+        handler: (): void => {
+          reject()
+        }
+      },
+      {
+        text: 'wallet-edit-delete-popover.account-removal_alert.delete_label',
+        handler: (): void => {
+          resolve()
+        }
+      }
+    ]
     const resolve = () => {
       this.secretsService
         .removeWallet(this.wallet)
@@ -58,6 +73,13 @@ export class AccountEditPopoverComponent {
     }
     const reject = () => this.popoverController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
 
-    this.alertService.deleteAccountAlert().then(resolve, reject)
+    this.alertService
+      .showTranslatedAlert(
+        'wallet-edit-delete-popover.account-removal_alert.title',
+        'wallet-edit-delete-popover.account-removal_alert.text',
+        true,
+        buttons
+      )
+      .then(resolve, reject)
   }
 }

@@ -6,12 +6,14 @@ import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
 const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
 const entropyCalculatorWorker = new Worker(blobURL)
 
-@Directive()
+@Directive({
+  selector: '[airgapTraceInput]'
+})
 @Injectable({ providedIn: 'root' })
 export class CameraBrowserService implements IEntropyGenerator {
   private readonly VIDEO_FREQUENCY = 2000
 
-  @ViewChild('cameraCanvas') public cameraCanvas: ElementRef
+  @ViewChild('cameraCanvas', { static: true }) public cameraCanvas: ElementRef
   public canvasElement: HTMLCanvasElement
 
   private collectedEntropyPercentage: number = 0

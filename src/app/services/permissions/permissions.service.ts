@@ -1,8 +1,10 @@
+import { AlertButton } from '@ionic/core'
 import { Injectable } from '@angular/core'
 import { Diagnostic } from '@ionic-native/diagnostic/ngx'
 import { Platform } from '@ionic/angular'
 
 import { AlertService } from '../alert/alert.service'
+import { handleErrorLocal, ErrorCategory } from '../error-handler/error-handler.service'
 
 export enum PermissionStatus {
   GRANTED = 'GRANTED',
@@ -21,7 +23,7 @@ export enum PermissionTypes {
   providedIn: 'root'
 })
 export class PermissionsService {
-  constructor(private readonly platform: Platform, private readonly diagnostic: Diagnostic, private alertService: AlertService) {}
+  constructor(private readonly platform: Platform, private readonly diagnostic: Diagnostic, private readonly alertService: AlertService) {}
 
   public async hasCameraPermission(): Promise<PermissionStatus> {
     const permission: string = await this.diagnostic.getCameraAuthorizationStatus(false)
@@ -73,7 +75,20 @@ export class PermissionsService {
   }
 
   public showSettingsAlert() {
-    this.alertService.showPermissionsAlert('Settings', 'You can enable the missing permissions in the device settings.')
+    const buttons: AlertButton[] = [
+      {
+        text: 'Cancel',
+        role: 'cancel',
+        handler: () => {}
+      },
+      {
+        text: 'Open settings',
+        handler: () => {
+          this.diagnostic.switchToSettings().catch(handleErrorLocal(ErrorCategory.CORDOVA_PLUGIN))
+        }
+      }
+    ]
+    this.alertService.showTranslatedAlert('Settings', 'You can enable the missing permissions in the device settings.', true, buttons)
   }
 
   private async canAskForPermission(permission: PermissionTypes): Promise<boolean> {

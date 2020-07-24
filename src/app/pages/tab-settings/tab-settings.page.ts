@@ -1,6 +1,5 @@
 import { Component } from '@angular/core'
 import { Observable } from 'rxjs'
-
 import { Secret } from '../../models/secret'
 import { ClipboardService } from '../../services/clipboard/clipboard.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'

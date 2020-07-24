@@ -23,7 +23,11 @@ export class DeepLinkService {
         .catch((error) => {
           console.error('deeplink used', deeplinkUrl)
           console.error(error)
-          this.alertService.showAppNotFoundAlert()
+          const cancelButton = {
+            text: 'deep-link.app-not-found.ok',
+            role: 'cancel'
+          }
+          this.alertService.showTranslatedAlert('deep-link.app-not-found.title', 'deep-link.app-not-found.message', true, [cancelButton])
           reject()
         })
     })

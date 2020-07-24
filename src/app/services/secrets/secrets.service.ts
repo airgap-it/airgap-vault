@@ -1,3 +1,4 @@
+import { AlertButton } from '@ionic/core'
 import { AlertService } from './../alert/alert.service'
 import { Injectable } from '@angular/core'
 import { LoadingController } from '@ionic/angular'
@@ -18,6 +19,10 @@ export class SecretsService {
   private readonly ready: Promise<void>
   private readonly secretsList: Secret[] = []
   private activeSecret: Secret
+  private cancelButton: AlertButton = {
+    text: 'Okay!',
+    role: 'cancel'
+  }
 
   private readonly activeSecret$: ReplaySubject<Secret> = new ReplaySubject(1)
   private readonly secrets$: ReplaySubject<Secret[]> = new ReplaySubject(1)
@@ -27,7 +32,7 @@ export class SecretsService {
     private readonly storageService: StorageService,
     private readonly navigationService: NavigationService,
     private readonly loadingCtrl: LoadingController,
-    private alertService: AlertService
+    private readonly alertService: AlertService
   ) {
     this.ready = this.init()
   }
@@ -278,9 +283,11 @@ export class SecretsService {
         this.addOrUpdateSecret(secret)
       } else {
         loading.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
-        this.alertService.showErrorAlert(
+        this.alertService.showTranslatedAlert(
           'Wallet already exists',
-          'You already have added this specific wallet. Please change its derivation path to add another address (advanced mode).'
+          'You already have added this specific wallet. Please change its derivation path to add another address (advanced mode).',
+          false,
+          [this.cancelButton]
         )
       }
     } catch (error) {
@@ -291,7 +298,7 @@ export class SecretsService {
 
       loading.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
       if (error.message) {
-        this.alertService.showErrorAlert('Error', error.message)
+        this.alertService.showTranslatedAlert('Error', error.message, false, [this.cancelButton])
       }
       throw error
     }
@@ -301,7 +308,7 @@ export class SecretsService {
     error.message += ' Please, re-import your secret.'
     error.ignore = true
 
-    await this.alertService.showErrorAlert('Error', error.message)
+    await this.alertService.showTranslatedAlert('Error', error.message, false, [this.cancelButton])
     await this.navigationService.routeToAccountsTab(true)
   }
 }

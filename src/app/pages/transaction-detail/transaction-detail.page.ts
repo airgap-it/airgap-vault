@@ -28,7 +28,7 @@ export class TransactionDetailPage {
     private readonly secretsService: SecretsService,
     private readonly interactionService: InteractionService,
     private readonly serializerService: SerializerService,
-    private alertService: AlertService
+    private readonly alertService: AlertService
   ) {}
 
   public async ionViewWillEnter(): Promise<void> {
@@ -71,7 +71,11 @@ export class TransactionDetailPage {
     } catch (error) {
       console.log('Caught error: ', error)
       if (error.message) {
-        this.alertService.showErrorAlert('Error', error.message)
+        const cancelButton = {
+          text: 'Okay!',
+          role: 'cancel'
+        }
+        this.alertService.showTranslatedAlert('Error', error.message, false, [cancelButton])
       }
     }
   }

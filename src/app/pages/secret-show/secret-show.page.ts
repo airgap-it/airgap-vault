@@ -22,7 +22,7 @@ export class SecretShowPage {
     private readonly deviceService: DeviceService,
     private readonly navigationService: NavigationService,
     private readonly translateService: TranslateService,
-    private alertService: AlertService
+    private readonly alertService: AlertService
   ) {
     this.secret = this.navigationService.getState().secret
   }
@@ -53,7 +53,11 @@ export class SecretShowPage {
           const waitLabelP1: string = values['secret-show.too-fast_alert.wait_label_p1']
           const waitLabelP2: string = values['secret-show.too-fast_alert.wait_label_p2']
 
-          this.alertService.showConfirmOnlyAlert(
+          const cancelButton = {
+            text: 'Okay!',
+            role: 'cancel'
+          }
+          this.alertService.showTranslatedAlert(
             title,
             [
               heading,
@@ -65,7 +69,9 @@ export class SecretShowPage {
               SHOW_SECRET_MIN_TIME_IN_SECONDS.toString(),
               waitLabelP2,
               '</strong>'
-            ].join('')
+            ].join(''),
+            true,
+            [cancelButton]
           )
         })
     } else {

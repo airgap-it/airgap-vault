@@ -12,7 +12,9 @@ import { CAMERA_PREVIEW_PLUGIN } from 'src/app/capacitor-plugins/injection-token
 const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
 const entropyCalculatorWorker = new Worker(blobURL)
 
-@Directive()
+@Directive({
+  selector: '[airgapTraceInput]'
+})
 @Injectable({ providedIn: 'root' })
 export class CameraNativeService implements IEntropyGenerator {
   private disabled = false
@@ -40,7 +42,7 @@ export class CameraNativeService implements IEntropyGenerator {
     ]
   }
 
-  @ViewChild('cameraCanvas') public cameraCanvas: ElementRef
+  @ViewChild('cameraCanvas', { static: true }) public cameraCanvas: ElementRef
   public canvasElement: HTMLCanvasElement
 
   private collectedEntropyPercentage: number = 0

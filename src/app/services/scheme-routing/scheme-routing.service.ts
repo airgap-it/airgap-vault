@@ -25,7 +25,7 @@ export class SchemeRoutingService {
   constructor(
     private readonly navigationService: NavigationService,
     private readonly secretsService: SecretsService,
-    private alertService: AlertService,
+    private readonly alertService: AlertService,
     private readonly serializerService: SerializerService
   ) {
     this.syncSchemeHandlers = {
@@ -68,6 +68,7 @@ export class SchemeRoutingService {
       this.alertService.showTranslatedAlert(
         'tab-wallets.invalid-sync-operation_alert.title',
         'tab-wallets.invalid-sync-operation_alert.text',
+        false,
         [cancelButton]
       )
 
@@ -163,7 +164,7 @@ export class SchemeRoutingService {
           scanAgainCallback()
         }
       }
-      this.alertService.showTranslatedAlert('tab-wallets.no-secret_alert.title', 'tab-wallets.no-secret_alert.text', [cancelButton])
+      this.alertService.showTranslatedAlert('tab-wallets.no-secret_alert.title', 'tab-wallets.no-secret_alert.text', false, [cancelButton])
 
       return false
     }
@@ -184,6 +185,7 @@ export class SchemeRoutingService {
     this.alertService.showTranslatedAlert(
       'tab-wallets.sync-operation-not-supported_alert.title',
       'tab-wallets.sync-operation-not-supported_alert.text',
+      false,
       [cancelButton]
     )
 
