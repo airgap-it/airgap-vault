@@ -32,24 +32,4 @@ export class DeepLinkService {
         })
     })
   }
-
-  // public showDeeplinkOnlyOnDevicesAlert(): void {
-  //   this.translateService
-  //     .get(['deep-link.not-supported-alert.title', 'deep-link.not-supported-alert.message', 'deep-link.not-supported-alert.ok'])
-  //     .pipe(first())
-  //     .subscribe(async (translated: string[]) => {
-  //       const alert: HTMLIonAlertElement = await this.alertCtrl.create({
-  //         header: translated['deep-link.not-supported-alert.title'],
-  //         message: translated['deep-link.not-supported-alert.message'],
-  //         backdropDismiss: false,
-  //         buttons: [
-  //           {
-  //             text: translated['deep-link.not-supported-alert.ok'],
-  //             role: 'cancel'
-  //           }
-  //         ]
-  //       })
-  //       alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
-  //     })
-  // }
 }

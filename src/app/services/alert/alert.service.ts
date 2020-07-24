@@ -44,13 +44,3 @@ export class AlertService {
     })
   }
 }
-
-// scheme-routing.service.ts
-// deep-link.service.ts
-// secret-show.page.ts
-// secret.service.ts
-// transaction-detail.page.ts
-// permissions.service.ts
-// secret-edit.page.ts
-
-// secret-edit.page.ts
