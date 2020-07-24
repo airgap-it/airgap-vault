@@ -7,7 +7,7 @@ const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
 const entropyCalculatorWorker = new Worker(blobURL)
 
 @Directive({
-  selector: '[airgapTraceInput]'
+  selector: ''
 })
 @Injectable({ providedIn: 'root' })
 export class CameraBrowserService implements IEntropyGenerator {
