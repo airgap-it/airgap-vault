@@ -1,7 +1,6 @@
+import { AlertService } from './../../../services/alert/alert.service'
 import { Component } from '@angular/core'
-import { AlertController, PopoverController } from '@ionic/angular'
-import { TranslateService } from '@ngx-translate/core'
-import { first } from 'rxjs/operators'
+import { PopoverController } from '@ionic/angular'
 
 import { Secret } from '../../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../../services/error-handler/error-handler.service'
@@ -17,52 +16,21 @@ export class SecretEditPopoverComponent {
   private readonly onDelete: Function
 
   constructor(
-    private readonly alertCtrl: AlertController,
+    private readonly alertService: AlertService,
     private readonly secretsService: SecretsService,
-    private readonly popoverController: PopoverController,
-    private readonly translateService: TranslateService
+    private readonly popoverController: PopoverController
   ) {}
 
   public delete(): void {
-    this.translateService
-      .get([
-        'secret-edit-delete-popover.title',
-        'secret-edit-delete-popover.text',
-        'secret-edit-delete-popover.cancel_label',
-        'secret-edit-delete-popover.delete_label'
-      ])
-      .pipe(first())
-      .subscribe(async (values: string[]) => {
-        const title: string = values['secret-edit-delete-popover.title']
-        const message: string = values['secret-edit-delete-popover.text']
-        const cancelButton: string = values['secret-edit-delete-popover.cancel_label']
-        const deleteButton: string = values['secret-edit-delete-popover.delete_label']
+    const resolve = () => {
+      this.secretsService.remove(this.secret).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
+      this.popoverController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
 
-        const alert: HTMLIonAlertElement = await this.alertCtrl.create({
-          header: title,
-          message,
-          buttons: [
-            {
-              text: cancelButton,
-              role: 'cancel',
-              handler: (): void => {
-                this.popoverController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
-              }
-            },
-            {
-              text: deleteButton,
-              handler: (): void => {
-                this.secretsService.remove(this.secret).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
-                this.popoverController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
-
-                if (this.onDelete) {
-                  this.onDelete()
-                }
-              }
-            }
-          ]
-        })
-        alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
-      })
+      if (this.onDelete) {
+        this.onDelete()
+      }
+    }
+    const reject = () => this.popoverController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+    this.alertService.deleteServiceAlert().then(resolve, reject)
   }
 }
