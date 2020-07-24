@@ -38,6 +38,7 @@ import { SerializerService } from './services/serializer/serializer.service'
 import { ShareUrlService } from './services/share-url/share-url.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
 import { StorageService } from './services/storage/storage.service'
+import { AlertService } from './services/alert/alert.service'
 
 import {
   APP_PLUGIN,
@@ -48,7 +49,6 @@ import {
   CAMERA_PREVIEW_PLUGIN,
   SECURITY_UTILS_PLUGIN
 } from './capacitor-plugins/injection-tokens'
-import { AlertService } from './services/alert/alert.service'
 
 const { App, AppInfo, CameraPreview, Clipboard, SecurityUtils, SplashScreen, StatusBar } = Plugins
 

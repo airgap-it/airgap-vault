@@ -14,7 +14,7 @@ describe('SignedTransactionComponent', () => {
     unitHelper = new UnitHelper()
     TestBed.configureTestingModule(
       unitHelper.testBed({
-        declarations: [],
+        declarations: []
       })
     )
       .compileComponents()

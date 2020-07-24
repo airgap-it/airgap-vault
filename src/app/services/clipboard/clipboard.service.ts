@@ -26,7 +26,7 @@ export class ClipboardService {
 
   public async paste(): Promise<string> {
     try {
-      const text = await this.clipboard.read({ 
+      const text = await this.clipboard.read({
         type: 'string'
       })
       return text.value
@@ -41,8 +41,12 @@ export class ClipboardService {
       message,
       duration: 1000,
       position: 'top',
-      showCloseButton: true,
-      closeButtonText: 'Ok'
+      buttons: [
+        {
+          text: 'Ok',
+          role: 'cancel'
+        }
+      ]
     })
     toast.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
   }

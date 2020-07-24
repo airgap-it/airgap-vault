@@ -50,12 +50,12 @@ describe('SchemeRoutingService Service', () => {
     expect(schemeRoutingService instanceof SchemeRoutingService).toBe(true)
   })
 
-  it('should show alert', async done => {
+  it('should show alert', async (done) => {
     await schemeRoutingService.showTranslatedAlert('Test', 'Message', [])
     done()
   })
 
-  it('should throw for invalid URL', async done => {
+  it('should throw for invalid URL', async (done) => {
     // TODO: Fix this test. Currently errors are caught inside "handleNewSyncRequest".
     const text: string = 'test'
     const callback = () => undefined
