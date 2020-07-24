@@ -143,8 +143,6 @@ export class SecretEditPage {
   }
 
   private perform(action: SecretEditAction | undefined): void {
-    this.resetRecoveryPassword()
-
     switch (action) {
       case SecretEditAction.SET_RECOVERY_KEY:
         this.resetRecoveryPassword()
