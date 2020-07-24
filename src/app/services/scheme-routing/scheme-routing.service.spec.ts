@@ -4,7 +4,6 @@ import { Platform } from '@ionic/angular'
 import { StorageMock } from '../../../../test-config/storage-mock'
 import { UnitHelper } from '../../../../test-config/unit-test-helper'
 import { StorageService } from '../storage/storage.service'
-
 import { PlatformMock } from './../../../../test-config/ionic-mocks'
 import { SchemeRoutingService } from './scheme-routing.service'
 import { STATUS_BAR_PLUGIN, SPLASH_SCREEN_PLUGIN, SECURITY_UTILS_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
@@ -48,11 +47,6 @@ describe('SchemeRoutingService Service', () => {
 
   it('should be created', () => {
     expect(schemeRoutingService instanceof SchemeRoutingService).toBe(true)
-  })
-
-  it('should show alert', async (done) => {
-    await schemeRoutingService.showTranslatedAlert('Test', 'Message', [])
-    done()
   })
 
   it('should throw for invalid URL', async (done) => {
