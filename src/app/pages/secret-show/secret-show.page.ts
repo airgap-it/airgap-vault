@@ -1,5 +1,5 @@
+import { AlertService } from './../../services/alert/alert.service'
 import { Component } from '@angular/core'
-import { AlertController } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 import { first } from 'rxjs/operators'
 
@@ -21,8 +21,8 @@ export class SecretShowPage {
   constructor(
     private readonly deviceService: DeviceService,
     private readonly navigationService: NavigationService,
-    private readonly alertController: AlertController,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    private alertService: AlertService
   ) {
     this.secret = this.navigationService.getState().secret
   }
@@ -53,9 +53,9 @@ export class SecretShowPage {
           const waitLabelP1: string = values['secret-show.too-fast_alert.wait_label_p1']
           const waitLabelP2: string = values['secret-show.too-fast_alert.wait_label_p2']
 
-          const alert: HTMLIonAlertElement = await this.alertController.create({
-            header: title,
-            message: [
+          this.alertService.showConfirmOnlyAlert(
+            title,
+            [
               heading,
               '<br/>',
               text,
@@ -65,10 +65,8 @@ export class SecretShowPage {
               SHOW_SECRET_MIN_TIME_IN_SECONDS.toString(),
               waitLabelP2,
               '</strong>'
-            ].join(''),
-            buttons: ['Okay']
-          })
-          alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
+            ].join('')
+          )
         })
     } else {
       this.navigationService

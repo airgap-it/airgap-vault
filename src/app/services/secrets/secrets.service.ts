@@ -1,5 +1,6 @@
+import { AlertService } from './../alert/alert.service'
 import { Injectable } from '@angular/core'
-import { AlertController, LoadingController } from '@ionic/angular'
+import { LoadingController } from '@ionic/angular'
 import { AirGapWallet, getProtocolByIdentifier, ICoinProtocol } from 'airgap-coin-lib'
 import * as bip39 from 'bip39'
 import { Observable, ReplaySubject } from 'rxjs'
@@ -26,7 +27,7 @@ export class SecretsService {
     private readonly storageService: StorageService,
     private readonly navigationService: NavigationService,
     private readonly loadingCtrl: LoadingController,
-    private readonly alertCtrl: AlertController
+    private alertService: AlertService
   ) {
     this.ready = this.init()
   }
@@ -123,12 +124,12 @@ export class SecretsService {
   public async resetRecoveryPassword(secret: Secret): Promise<string> {
     const secureStorage: SecureStorage = await this.secureStorageService.get(secret.id, secret.isParanoia)
     try {
-      const secretHex = await secureStorage.getItem(secret.id).then(result => result.value)
+      const secretHex = await secureStorage.getItem(secret.id).then((result) => result.value)
 
-      return secureStorage.setupRecoveryPassword(secret.id, secretHex).then(result => {
+      return secureStorage.setupRecoveryPassword(secret.id, secretHex).then((result) => {
         secret.hasRecoveryKey = true
         this.addOrUpdateSecret(secret)
-        
+
         return result.recoveryKey
       })
     } catch (error) {
@@ -142,12 +143,13 @@ export class SecretsService {
   public async retrieveEntropyForSecret(secret: Secret): Promise<string> {
     const secureStorage: SecureStorage = await this.secureStorageService.get(secret.id, secret.isParanoia)
 
-    return secureStorage.getItem(secret.id)
-      .then(result => {
+    return secureStorage
+      .getItem(secret.id)
+      .then((result) => {
         console.log(result)
         return result.value
       })
-      .catch(error => {
+      .catch((error) => {
         if (error.message.startsWith('Could not read from the secure storage.')) {
           this.handleCorruptedSecret(error)
         }
@@ -276,7 +278,7 @@ export class SecretsService {
         this.addOrUpdateSecret(secret)
       } else {
         loading.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
-        this.showAlert(
+        this.alertService.showErrorAlert(
           'Wallet already exists',
           'You already have added this specific wallet. Please change its derivation path to add another address (advanced mode).'
         )
@@ -289,32 +291,17 @@ export class SecretsService {
 
       loading.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
       if (error.message) {
-        this.showAlert('Error', error.message)
+        this.alertService.showErrorAlert('Error', error.message)
       }
       throw error
     }
-  }
-
-  public async showAlert(title: string, message: string): Promise<void> {
-    const alert: HTMLIonAlertElement = await this.alertCtrl.create({
-      header: title,
-      message,
-      backdropDismiss: false,
-      buttons: [
-        {
-          text: 'Okay!',
-          role: 'cancel'
-        }
-      ]
-    })
-    alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
   }
 
   private async handleCorruptedSecret(error: any): Promise<void> {
     error.message += ' Please, re-import your secret.'
     error.ignore = true
 
-    await this.showAlert('Error', error.message)
+    await this.alertService.showErrorAlert('Error', error.message)
     await this.navigationService.routeToAccountsTab(true)
   }
 }

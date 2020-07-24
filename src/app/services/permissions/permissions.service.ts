@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core'
 import { Diagnostic } from '@ionic-native/diagnostic/ngx'
-import { AlertController, Platform } from '@ionic/angular'
+import { Platform } from '@ionic/angular'
 
-import { ErrorCategory, handleErrorLocal } from './../error-handler/error-handler.service'
+import { AlertService } from '../alert/alert.service'
 
 export enum PermissionStatus {
   GRANTED = 'GRANTED',
@@ -21,7 +21,7 @@ export enum PermissionTypes {
   providedIn: 'root'
 })
 export class PermissionsService {
-  constructor(private readonly platform: Platform, private readonly diagnostic: Diagnostic, private readonly alertCtrl: AlertController) {}
+  constructor(private readonly platform: Platform, private readonly diagnostic: Diagnostic, private alertService: AlertService) {}
 
   public async hasCameraPermission(): Promise<PermissionStatus> {
     const permission: string = await this.diagnostic.getCameraAuthorizationStatus(false)
@@ -73,7 +73,7 @@ export class PermissionsService {
   }
 
   public showSettingsAlert() {
-    this.showAlert('Settings', 'You can enable the missing permissions in the device settings.')
+    this.alertService.showPermissionsAlert('Settings', 'You can enable the missing permissions in the device settings.')
   }
 
   private async canAskForPermission(permission: PermissionTypes): Promise<boolean> {
@@ -111,27 +111,6 @@ export class PermissionsService {
     } else {
       return PermissionStatus.UNKNOWN
     }
-  }
-
-  private async showAlert(title: string, message: string): Promise<void> {
-    const alert: HTMLIonAlertElement = await this.alertCtrl.create({
-      header: title,
-      message,
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => {}
-        },
-        {
-          text: 'Open settings',
-          handler: () => {
-            this.diagnostic.switchToSettings().catch(handleErrorLocal(ErrorCategory.CORDOVA_PLUGIN))
-          }
-        }
-      ]
-    })
-    alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
   }
 
   private isGranted(permission: string): boolean {

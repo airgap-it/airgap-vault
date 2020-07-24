@@ -1,7 +1,5 @@
+import { AlertService } from './../alert/alert.service'
 import { Injectable } from '@angular/core'
-import { AlertController } from '@ionic/angular'
-import { AlertButton } from '@ionic/core'
-import { TranslateService } from '@ngx-translate/core'
 import { AirGapWallet, IACMessageDefinitionObject, IACMessageType, UnsignedTransaction } from 'airgap-coin-lib'
 
 import { SerializerService } from '../../services/serializer/serializer.service'
@@ -27,8 +25,7 @@ export class SchemeRoutingService {
   constructor(
     private readonly navigationService: NavigationService,
     private readonly secretsService: SecretsService,
-    private readonly alertController: AlertController,
-    private readonly translateService: TranslateService,
+    private alertService: AlertService,
     private readonly serializerService: SerializerService
   ) {
     this.syncSchemeHandlers = {
@@ -68,18 +65,19 @@ export class SchemeRoutingService {
           scanAgainCallback()
         }
       }
-      this.showTranslatedAlert('tab-wallets.invalid-sync-operation_alert.title', 'tab-wallets.invalid-sync-operation_alert.text', [
-        cancelButton
-      ])
+      this.alertService.showTranslatedAlert(
+        'tab-wallets.invalid-sync-operation_alert.title',
+        'tab-wallets.invalid-sync-operation_alert.text',
+        [cancelButton]
+      )
 
       return IACResult.ERROR
     }
     if (deserializedSync && deserializedSync.length > 0) {
-      const groupedByType = deserializedSync.reduce((grouped, message) =>
-        Object.assign(
-          grouped, 
-          { [message.type]: (grouped[message.type] || []).concat(message) }
-        ), {})
+      const groupedByType = deserializedSync.reduce(
+        (grouped, message) => Object.assign(grouped, { [message.type]: (grouped[message.type] || []).concat(message) }),
+        {}
+      )
 
       for (let type in groupedByType) {
         if (type in IACMessageType) {
@@ -105,7 +103,7 @@ export class SchemeRoutingService {
     scanAgainCallback: Function
   ): Promise<boolean> {
     const transactionsWithWallets: [UnsignedTransaction, AirGapWallet][] = deserializedSyncProtocols
-      .map(deserializedSyncProtocol => {
+      .map((deserializedSyncProtocol) => {
         const unsignedTransaction: UnsignedTransaction = deserializedSyncProtocol.payload as UnsignedTransaction
 
         let correctWallet = this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(
@@ -165,7 +163,7 @@ export class SchemeRoutingService {
           scanAgainCallback()
         }
       }
-      this.showTranslatedAlert('tab-wallets.no-secret_alert.title', 'tab-wallets.no-secret_alert.text', [cancelButton])
+      this.alertService.showTranslatedAlert('tab-wallets.no-secret_alert.title', 'tab-wallets.no-secret_alert.text', [cancelButton])
 
       return false
     }
@@ -183,31 +181,12 @@ export class SchemeRoutingService {
         scanAgainCallback()
       }
     }
-    this.showTranslatedAlert(
+    this.alertService.showTranslatedAlert(
       'tab-wallets.sync-operation-not-supported_alert.title',
       'tab-wallets.sync-operation-not-supported_alert.text',
       [cancelButton]
     )
 
     return false
-  }
-
-  public showTranslatedAlert(title: string, message: string, buttons: AlertButton[]): void {
-    const translationKeys = [title, message, ...buttons.map(button => button.text)]
-    this.translateService.get(translationKeys).subscribe(async values => {
-      const translatedButtons = buttons.map(button => {
-        button.text = values[button.text]
-        return button
-      })
-
-      const alert = await this.alertController.create({
-        header: values[title],
-        message: values[message],
-        backdropDismiss: true,
-        buttons: translatedButtons
-      })
-
-      alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
-    })
   }
 }
