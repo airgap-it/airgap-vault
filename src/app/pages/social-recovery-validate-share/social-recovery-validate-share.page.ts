@@ -13,7 +13,7 @@ import { SecretsService } from '../../services/secrets/secrets.service'
   styleUrls: ['./social-recovery-validate-share.page.scss']
 })
 export class SocialRecoveryValidateSharePage {
-  @ViewChild('verify', { static: true })
+  @ViewChild('verify')
   public verify: VerifyKeyComponent
 
   public validated: boolean = false

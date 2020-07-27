@@ -42,7 +42,7 @@ export class CameraNativeService implements IEntropyGenerator {
     ]
   }
 
-  @ViewChild('cameraCanvas', { static: true }) public cameraCanvas: ElementRef
+  @ViewChild('cameraCanvas') public cameraCanvas: ElementRef
   public canvasElement: HTMLCanvasElement
 
   private collectedEntropyPercentage: number = 0
