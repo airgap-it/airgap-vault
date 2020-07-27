@@ -58,7 +58,7 @@ export class AccountAddPage {
 
   private addWalletAndReturnToAddressPage(): void {
     this.secretsService
-      .addWallet(this.selectedProtocol.identifier, this.isHDWallet, this.customDerivationPath)
+      .addWallet('identifier', this.isHDWallet, this.customDerivationPath)
       .then(() => {
         this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       })
