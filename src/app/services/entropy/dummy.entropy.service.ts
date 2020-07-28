@@ -16,7 +16,7 @@ export class DummyEntropyService implements IEntropyGenerator {
   }
 
   public getEntropyUpdateObservable(): Observable<Entropy> {
-    return new Observable(observer => {
+    return new Observable((observer) => {
       observer.next({
         entropyHex: ''
       })

@@ -1,4 +1,4 @@
-import { ElementRef, Injectable, ViewChild } from '@angular/core'
+import { ElementRef, Injectable, ViewChild, Directive } from '@angular/core'
 import { Observable } from 'rxjs'
 
 import workerJS from '../../../assets/workers/entropyCalculatorWorker'
@@ -6,11 +6,12 @@ import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
 const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
 const entropyCalculatorWorker = new Worker(blobURL)
 
+@Directive()
 @Injectable({ providedIn: 'root' })
 export class CameraBrowserService implements IEntropyGenerator {
   private readonly VIDEO_FREQUENCY = 2000
 
-  @ViewChild('cameraCanvas', { static: false }) public cameraCanvas: ElementRef
+  @ViewChild('cameraCanvas') public cameraCanvas: ElementRef
   public canvasElement: HTMLCanvasElement
 
   private collectedEntropyPercentage: number = 0
@@ -24,12 +25,12 @@ export class CameraBrowserService implements IEntropyGenerator {
   private videoStream: any
 
   constructor() {
-    this.entropyObservable = Observable.create(observer => {
-      entropyCalculatorWorker.onmessage = event => {
+    this.entropyObservable = Observable.create((observer) => {
+      entropyCalculatorWorker.onmessage = (event) => {
         this.collectedEntropyPercentage += event.data.entropyMeasure
         observer.next({ entropyHex: event.data.entropyHex })
       }
-      this.handler = buffer1 => {
+      this.handler = (buffer1) => {
         const uintArray = this.arrayBufferFromUint8Array(buffer1)
         entropyCalculatorWorker.postMessage(
           {
@@ -54,7 +55,7 @@ export class CameraBrowserService implements IEntropyGenerator {
   }
 
   public start(): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const constraints = {
         video: true,
         audio: false
@@ -66,13 +67,13 @@ export class CameraBrowserService implements IEntropyGenerator {
 
       navigator.mediaDevices
         .getUserMedia(constraints)
-        .then(stream => {
+        .then((stream) => {
           this.videoStream = stream
           video.srcObject = stream
           video.play()
           resolve()
         })
-        .catch(err => {
+        .catch((err) => {
           console.log('error in camera.brower.service', err)
           resolve()
         })
@@ -102,7 +103,7 @@ export class CameraBrowserService implements IEntropyGenerator {
     }
 
     try {
-      this.videoStream.getTracks().forEach(function(track) {
+      this.videoStream.getTracks().forEach(function (track) {
         track.stop()
       })
     } catch (e) {

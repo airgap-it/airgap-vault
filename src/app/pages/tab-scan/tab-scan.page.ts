@@ -14,7 +14,7 @@ import { IACResult, SchemeRoutingService } from '../../services/scheme-routing/s
   styleUrls: ['./tab-scan.page.scss']
 })
 export class TabScanPage {
-  @ViewChild('scanner', { static: false })
+  @ViewChild('scanner')
   public zxingScanner: ZXingScannerComponent
   public availableDevices: MediaDeviceInfo[]
   public selectedDevice: MediaDeviceInfo

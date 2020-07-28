@@ -60,9 +60,9 @@ export class SerializerService {
   }
 
   private async loadSettings() {
-    this.storageService.get(SettingsKey.SETTINGS_SERIALIZER_ENABLE_V2).then(setting => (this._useV2 = setting))
-    this.storageService.get(SettingsKey.SETTINGS_SERIALIZER_CHUNK_TIME).then(setting => (this._displayTimePerChunk = setting))
-    this.storageService.get(SettingsKey.SETTINGS_SERIALIZER_CHUNK_SIZE).then(setting => (this._chunkSize = setting))
+    this.storageService.get(SettingsKey.SETTINGS_SERIALIZER_ENABLE_V2).then((setting) => (this._useV2 = setting))
+    this.storageService.get(SettingsKey.SETTINGS_SERIALIZER_CHUNK_TIME).then((setting) => (this._displayTimePerChunk = setting))
+    this.storageService.get(SettingsKey.SETTINGS_SERIALIZER_CHUNK_SIZE).then((setting) => (this._chunkSize = setting))
   }
 
   public async serialize(chunks: IACMessageDefinitionObject[]): Promise<string[]> {
