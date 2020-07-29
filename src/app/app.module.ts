@@ -39,7 +39,15 @@ import { ShareUrlService } from './services/share-url/share-url.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
 import { StorageService } from './services/storage/storage.service'
 
-import { APP_PLUGIN, APP_INFO_PLUGIN, CLIPBOARD_PLUGIN, SPLASH_SCREEN_PLUGIN, STATUS_BAR_PLUGIN, CAMERA_PREVIEW_PLUGIN, SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
+import {
+  APP_PLUGIN,
+  APP_INFO_PLUGIN,
+  CLIPBOARD_PLUGIN,
+  SPLASH_SCREEN_PLUGIN,
+  STATUS_BAR_PLUGIN,
+  CAMERA_PREVIEW_PLUGIN,
+  SECURITY_UTILS_PLUGIN
+} from './capacitor-plugins/injection-tokens'
 
 const { App, AppInfo, CameraPreview, Clipboard, SecurityUtils, SplashScreen, StatusBar } = Plugins
 

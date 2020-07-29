@@ -8,9 +8,7 @@ describe('SerializerService', () => {
   beforeEach(() => {
     let unitHelper: UnitHelper
     unitHelper = new UnitHelper()
-    TestBed.configureTestingModule(unitHelper.testBed({}))
-      .compileComponents()
-      .catch(console.error)
+    TestBed.configureTestingModule(unitHelper.testBed({})).compileComponents().catch(console.error)
   })
 
   it('should be created', () => {

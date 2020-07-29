@@ -1,11 +1,10 @@
 image: docker:latest
 
 variables:
-  IMAGE_TAG: $CI_REGISTRY_IMAGE
-  IMAGE_TAG_CURRENT: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
-  IMAGE_TAG_LATEST: $CI_REGISTRY_IMAGE:latest
-  IMAGE_TAG_ANDROID_CURRENT: $CI_REGISTRY_IMAGE:android-$CI_COMMIT_SHA
-  IMAGE_TAG_ANDROID_LATEST: $CI_REGISTRY_IMAGE:android-latest
+  GOOGLE_TAG: eu.gcr.io/papers-kubernetes/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:$CI_COMMIT_SHA
+  GOOGLE_TAG_ANDROID_CURRENT: eu.gcr.io/papers-kubernetes/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:android-$CI_COMMIT_SHA
+  GOOGLE_TAG_ELECTRON_LINUX_CURRENT: eu.gcr.io/papers-kubernetes/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:electron-linux-$CI_COMMIT_SHA
+  GOOGLE_TAG_ELECTRON_WINDOWS_CURRENT: eu.gcr.io/papers-kubernetes/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:electron-windows-$CI_COMMIT_SHA
 
 stages:
   - build
@@ -15,24 +14,16 @@ stages:
 
 build_ionic:
   stage: build
-  before_script:
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   script:
-    - docker build --cache-from $IMAGE_TAG_LATEST -t $IMAGE_TAG .
-    - docker tag $IMAGE_TAG $IMAGE_TAG_CURRENT
-    - docker tag $IMAGE_TAG $IMAGE_TAG_LATEST
-    - docker push $IMAGE_TAG_CURRENT
-    - docker push $IMAGE_TAG_LATEST
+    - docker build -t $GOOGLE_TAG .
   tags:
     - docker
 
 unit:
   stage: test
-  before_script:
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   script:
-    - docker run --name unit-$CI_COMMIT_SHA $IMAGE_TAG_CURRENT npm run test-ci
-    - docker run --name lint-$CI_COMMIT_SHA $IMAGE_TAG_CURRENT npm run lint-ci
+    - docker run --name unit-$CI_COMMIT_SHA $GOOGLE_TAG npm run test-ci
+    - docker run --name lint-$CI_COMMIT_SHA $GOOGLE_TAG npm run lint-ci
     - docker cp unit-$CI_COMMIT_SHA:/app/coverage/lcov.info lcov.info
     - docker cp lint-$CI_COMMIT_SHA:/app/lintReport.json lintReport.json
   after_script:
@@ -54,8 +45,8 @@ build_android:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   script:
     - sed -i -e "s/versionName \"0.0.0\"/versionName \"$VERSION\"/g" android/app/build.gradle
-    - docker build -f build/android/Dockerfile -t $IMAGE_TAG_ANDROID_CURRENT --build-arg BUILD_NR="$CI_PIPELINE_ID" --build-arg VERSION="$VERSION" .
-    - docker run --name $CI_PIPELINE_ID $IMAGE_TAG_ANDROID_CURRENT echo "container ran."
+    - docker build -f build/android/Dockerfile -t $GOOGLE_TAG_ANDROID_CURRENT --build-arg BUILD_NR="$CI_PIPELINE_ID" --build-arg VERSION="$VERSION" .
+    - docker run --name $CI_PIPELINE_ID $GOOGLE_TAG_ANDROID_CURRENT echo "container ran."
     - docker cp $CI_PIPELINE_ID:/app/android-release-unsigned.apk airgap-vault-release-unsigned-$CI_PIPELINE_ID.apk
     - docker cp $CI_PIPELINE_ID:/app/android-debug.apk airgap-vault-debug-$CI_PIPELINE_ID.apk
   after_script:
@@ -85,16 +76,14 @@ build_ios:
     - xcrun altool --upload-app -f ios/App.ipa -u $IOS_USERNAME -p $IOS_PASSWORD
   artifacts:
     paths:
-      - ios/AirGap\ Vault.ipa
+      - ios/App.ipa
   tags:
     - ios
 
 qa:
   stage: qa
-  before_script:
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   script:
-    - docker create --name qa-$CI_PIPELINE_ID $IMAGE_TAG_CURRENT npm run sonar-scanner -- -X
+    - docker create --name qa-$CI_PIPELINE_ID $GOOGLE_TAG npm run sonar-scanner -- -X
       -Dsonar.typescript.lcov.reportPaths=lcov.info
       -Dsonar.typescript.tslint.reportPaths=lintReport.json
       -Dsonar.test.inclusions=**/*.spec.ts

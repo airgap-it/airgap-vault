@@ -20,7 +20,7 @@ import { PermissionsService, PermissionTypes } from '../../services/permissions/
 export class SecretGeneratePage implements OnInit {
   public isBrowser: boolean = false
 
-  @ViewChild('videoElement', { static: false })
+  @ViewChild('videoElement')
   public videoElement: ElementRef
 
   @ViewChild('touchEntropy', { static: true })
