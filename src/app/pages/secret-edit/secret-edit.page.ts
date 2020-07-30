@@ -38,15 +38,27 @@ export class SecretEditPage {
     private readonly navigationService: NavigationService,
     private readonly platform: Platform
   ) {
-    if (this.navigationService.getState()) {
+    //TODO: refactor with Guards
+    console.log('secret edit page')
+    if (this.validateState() && this.navigationService.getState()) {
       this.isGenerating = this.navigationService.getState().isGenerating
       this.secret = this.navigationService.getState().secret
+      console.log('this secret: ', this.secret)
       this.interactionSetting = this.secret.interactionSetting !== InteractionSetting.UNDETERMINED
 
       this.isAndroid = this.platform.is('android')
 
       this.perform(this.navigationService.getState().action)
+    } else {
+      this.navigationService.routeBack('/')
+      throw new Error('asdf')
     }
+  }
+
+  private validateState(): boolean {
+    const actualState = this.navigationService.getState()
+    console.log(true === actualState.isGenerating)
+    return true === actualState.isGenerating
   }
 
   public async confirm(): Promise<void> {
