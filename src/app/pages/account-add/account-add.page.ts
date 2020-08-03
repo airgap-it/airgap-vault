@@ -16,7 +16,7 @@ import { BIP39_PASSPHRASE_ENABLED } from 'src/app/constants/constants'
 })
 export class AccountAddPage {
   public selectedProtocol: ICoinProtocol
-  public coinProtocols: ICoinProtocol[]
+  public protocols: ICoinProtocol[]
   public isHDWallet: boolean = false
 
   public isAdvancedMode: boolean = false
@@ -32,8 +32,8 @@ export class AccountAddPage {
     private readonly navigationService: NavigationService,
     private readonly alertController: AlertController
   ) {
-    this.coinProtocols = supportedProtocols()
-    this.onSelectedProtocolChange(this.navigationService.getState().protocol || this.coinProtocols[0])
+    this.protocols = supportedProtocols()
+    this.onSelectedProtocolChange(this.navigationService.getState().protocol || this.protocols[0])
   }
 
   public onSelectedProtocolChange(selectedProtocol: ICoinProtocol): void {
