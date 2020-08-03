@@ -145,7 +145,7 @@
 
   "secret-edit-delete-popover":{
     "title":"Confirm Secret Removal",
-    "text":"Do you really want to remove this secret? You won't be able to restore it without backup!",
+    "text":"Do you really want to remove this secret? You won't be able to restore it without a backup!",
     "cancel_label":"Cancel",
     "delete_label":"Delete"
   },
@@ -363,7 +363,7 @@
     "confirm_sync_code_copy": "Sync code was copied to your clipboard",
     "account-removal_alert":{
       "title":"Confirm Account Removal",
-      "text":"Do you want to remove this account? You can always add it back later, only if you know its correct derivation path/coin!",
+      "text":"Do you want to remove this account? You can always add it back later if you know its correct derivation path!",
       "cancel_label":"Cancel",
       "delete_label":"Delete"
     }
