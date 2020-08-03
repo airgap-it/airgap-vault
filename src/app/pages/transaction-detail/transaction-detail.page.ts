@@ -226,7 +226,7 @@ export class TransactionDetailPage {
     mnemonic: string,
     bip39Passphrase: string = ''
   ) {
-    const publicKey: string = await wallet.coinProtocol.getPublicKeyFromMnemonic(mnemonic, wallet.derivationPath, bip39Passphrase)
+    const publicKey: string = await wallet.protocol.getPublicKeyFromMnemonic(mnemonic, wallet.derivationPath, bip39Passphrase)
 
     return transaction.publicKey === publicKey
   }
