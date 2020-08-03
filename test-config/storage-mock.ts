@@ -1,8 +1,10 @@
+import { MainProtocolSymbols } from 'airgap-coin-lib/dist/utils/ProtocolSymbols'
+
 export class StorageMock {
   private readonly data: any = {
     wallets: [
       {
-        protocolIdentifier: 'btc',
+        protocolIdentifier: MainProtocolSymbols.BTC,
         publicKey: 'xpub6EWbRuGLw9bTVVU9HE2MqT5QQ7zm9G64QgeZ5SY7qPWbciM7FyyG9BP2id1ewqZipXVWx2racXMMRvF1jB8S4syc1RzYRjnBhuq425KKYx5',
         isExtendedPublicKey: true,
         derivationPath: "m/44'/0'/0'",
