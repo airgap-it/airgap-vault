@@ -1,9 +1,16 @@
-import { AirGapMarketWallet, IAirGapTransaction } from 'airgap-coin-lib'
+import { AirGapMarketWallet, IAirGapTransaction, getProtocolByIdentifier } from 'airgap-coin-lib'
 import BigNumber from 'bignumber.js'
+import { MainProtocolSymbols } from 'airgap-coin-lib/dist/utils/ProtocolSymbols'
 
 class WalletMock {
   public ethWallet: AirGapMarketWallet = Object.assign(
-    new AirGapMarketWallet('eth', '03ea568e601e6e949a3e5c60e0f4ee94383e4b083c5ab64b66e70372df008cbbe6', false, "m/44'/60'/0'/0/0"),
+    new AirGapMarketWallet(
+      getProtocolByIdentifier(MainProtocolSymbols.ETH),
+      '03ea568e601e6e949a3e5c60e0f4ee94383e4b083c5ab64b66e70372df008cbbe6',
+      false,
+      "m/44'/60'/0'/0/0",
+      undefined
+    ),
     {
       currentMarketPrice: new BigNumber('100')
     }
@@ -13,7 +20,7 @@ class WalletMock {
     to: ['0x579D75370dd53C59e09E6F51F4D935220D7EEcF8'],
     amount: '10000000000000',
     fee: '0',
-    protocolIdentifier: 'eth',
+    protocolIdentifier: MainProtocolSymbols.ETH,
     publicKey: '03ea568e601e6e949a3e5c60e0f4ee94383e4b083c5ab64b66e70372df008cbbe6',
     payload: {
       none: '3',
@@ -27,17 +34,18 @@ class WalletMock {
   } as any
 
   public btcWallet: AirGapMarketWallet = new AirGapMarketWallet(
-    'btc',
+    getProtocolByIdentifier(MainProtocolSymbols.BTC),
     'xpub6CcLgL3yuTNxguFdSikacKj93R77GMToq1488BKLdZMAQ2BfrVQrx31phHwqhx4kRUTNCeyiWiqvppaykiXM9w8RWJFbhj1etsCgBckA2bF',
     false,
-    "m/44'/0'/0'"
+    "m/44'/0'/0'",
+    undefined
   )
   public btcTransaction: IAirGapTransaction = {
     from: ['1JzeZaZwb1gLxQEwexUn4XmZ3tmSfuesBo'],
     to: ['1JzeZaZwb1gLxQEwexUn4XmZ3tmSfuesBo'],
     amount: '10000000000000',
     fee: '0',
-    protocolIdentifier: 'btc',
+    protocolIdentifier: MainProtocolSymbols.BTC,
     payload: {
       ins: [
         {

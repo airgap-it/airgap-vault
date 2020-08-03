@@ -40,9 +40,7 @@ export class TransactionDetailPage {
       try {
         this.airGapTxs = (
           await Promise.all(
-            this.transactionsWithWallets.map((pair: [UnsignedTransaction, AirGapWallet]) =>
-              pair[1].coinProtocol.getTransactionDetails(pair[0])
-            )
+            this.transactionsWithWallets.map((pair: [UnsignedTransaction, AirGapWallet]) => pair[1].protocol.getTransactionDetails(pair[0]))
           )
         ).reduce((flatten, toFlatten) => flatten.concat(toFlatten), [])
       } catch (e) {
@@ -82,7 +80,7 @@ export class TransactionDetailPage {
     try {
       const transactions = (
         await Promise.all(
-          transactionsWithWallets.map((pair: [UnsignedTransaction, AirGapWallet]) => pair[1].coinProtocol.getTransactionDetails(pair[0]))
+          transactionsWithWallets.map((pair: [UnsignedTransaction, AirGapWallet]) => pair[1].protocol.getTransactionDetails(pair[0]))
         )
       ).reduce((flatten, toFlatten) => flatten.concat(toFlatten), [])
       console.log(transactions)
@@ -95,7 +93,7 @@ export class TransactionDetailPage {
     if (txDetails && txDetails.length > 0) {
       const deserializedTxSigningRequests: IACMessageDefinitionObject[] = transactionsWithWallets.map(
         (pair: [UnsignedTransaction, AirGapWallet], index: number) => ({
-          protocol: pair[1].protocolIdentifier,
+          protocol: pair[1].protocol.identifier,
           type: IACMessageType.TransactionSignResponse,
           payload: {
             accountIdentifier: pair[1].publicKey.substr(-6),
@@ -129,11 +127,11 @@ export class TransactionDetailPage {
 
     const mnemonic: string = bip39.entropyToMnemonic(entropy)
     if (wallet.isExtendedPublicKey) {
-      const extendedPrivateKey: string = await wallet.coinProtocol.getExtendedPrivateKeyFromMnemonic(mnemonic, wallet.derivationPath)
-      return wallet.coinProtocol.signWithExtendedPrivateKey(extendedPrivateKey, transaction.transaction)
+      const extendedPrivateKey: string = await wallet.protocol.getExtendedPrivateKeyFromMnemonic(mnemonic, wallet.derivationPath)
+      return wallet.protocol.signWithExtendedPrivateKey(extendedPrivateKey, transaction.transaction)
     } else {
-      const privateKey: Buffer = await wallet.coinProtocol.getPrivateKeyFromMnemonic(mnemonic, wallet.derivationPath)
-      return wallet.coinProtocol.signWithPrivateKey(privateKey, transaction.transaction)
+      const privateKey: Buffer = await wallet.protocol.getPrivateKeyFromMnemonic(mnemonic, wallet.derivationPath)
+      return wallet.protocol.signWithPrivateKey(privateKey, transaction.transaction)
     }
   }
 
