@@ -21,6 +21,7 @@ import {
   SignedTransaction
 } from 'airgap-coin-lib'
 import { TezosBTC } from 'airgap-coin-lib/dist/protocols/tezos/fa/TezosBTC'
+import { TezosETH } from 'airgap-coin-lib/dist/protocols/tezos/fa/TezosETH'
 
 import { tokens } from './tokens'
 import { SubProtocolSymbols, ProtocolSymbols } from 'airgap-coin-lib/dist/utils/ProtocolSymbols'
@@ -61,6 +62,7 @@ export class ProtocolsService {
 
     addSubProtocol(new TezosProtocol(), new TezosKtProtocol())
     addSubProtocol(new TezosProtocol(), new TezosBTC())
+    addSubProtocol(new TezosProtocol(), new TezosETH())
 
     this.subProtocols.forEach((supportedSubAccount) => {
       supportedSubAccount.subProtocols.forEach((subProtocol) => {
