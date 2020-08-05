@@ -24,7 +24,11 @@ export class TabAccountsPage implements OnInit {
 
   public readonly isAndroid: boolean
 
-  constructor(private readonly platform: Platform, private readonly secretsService: SecretsService, private readonly navigationService: NavigationService) {
+  constructor(
+    private readonly platform: Platform,
+    private readonly secretsService: SecretsService,
+    private readonly navigationService: NavigationService
+  ) {
     this.secrets = this.secretsService.getSecretsObservable()
     this.isAndroid = this.platform.is('android')
   }
@@ -45,7 +49,12 @@ export class TabAccountsPage implements OnInit {
   }
 
   public goToReceiveAddress(wallet: AirGapWallet): void {
-    this.navigationService.routeWithState('/account-address', { wallet }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    // this.navigationService.routeWithState('/account-address', { wallet }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    const secretId = this.activeSecret.id
+    const protocol = wallet.protocolIdentifier
+    const publicKey = wallet.publicKey
+
+    this.navigationService.route(`/account-address/${secretId}/${protocol}/${publicKey}`)
   }
 
   public filterItems(event: any): void {
@@ -63,12 +72,11 @@ export class TabAccountsPage implements OnInit {
   }
 
   public navigateToRecoverySettings() {
-    this.navigationService.routeWithState(
-      '/secret-edit', 
-      { 
+    this.navigationService
+      .routeWithState('/secret-edit', {
         secret: this.activeSecret,
         action: SecretEditAction.SET_RECOVERY_KEY
-      }
-    ).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+      })
+      .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

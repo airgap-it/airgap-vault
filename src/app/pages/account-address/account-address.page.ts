@@ -10,6 +10,7 @@ import { SecretsService } from '../../services/secrets/secrets.service'
 import { ShareUrlService } from '../../services/share-url/share-url.service'
 
 import { AccountEditPopoverComponent } from './account-edit-popover/account-edit-popover.component'
+import { ActivatedRoute } from '@angular/router'
 
 @Component({
   selector: 'airgap-account-address',
@@ -20,15 +21,26 @@ export class AccountAddressPage implements OnInit {
   public wallet: AirGapWallet
   private walletShareUrl: string
 
+  private secretID: string
+  private protocolID: string
+  private publicKey: string
+
   constructor(
     private readonly popoverCtrl: PopoverController,
     private readonly clipboardService: ClipboardService,
     private readonly secretsService: SecretsService,
     private readonly shareUrlService: ShareUrlService,
     private readonly interactionService: InteractionService,
-    private readonly navigationService: NavigationService
+    private readonly navigationService: NavigationService,
+    private activatedRoute: ActivatedRoute
   ) {
-    this.wallet = this.navigationService.getState().wallet
+    this.activatedRoute.params.subscribe((params) => {
+      this.secretID = params['secretID']
+      this.protocolID = params['protocol']
+      this.publicKey = params['publicKey']
+
+      this.wallet = this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(this.publicKey, this.protocolID)
+    })
   }
 
   public async ngOnInit(): Promise<void> {

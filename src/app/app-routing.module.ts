@@ -24,7 +24,7 @@ const routes: Routes = [
   },
   { path: 'account-share', loadChildren: () => import('./pages/account-share/account-share.module').then((m) => m.AccountSharePageModule) },
   {
-    path: 'account-address',
+    path: 'account-address/:secretID/:protocol/:publicKey',
     loadChildren: () => import('./pages/account-address/account-address.module').then((m) => m.AccountAddressPageModule)
   },
   {

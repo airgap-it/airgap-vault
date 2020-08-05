@@ -51,7 +51,7 @@ export class SecretEditPage {
       this.perform(this.navigationService.getState().action)
     } else {
       this.navigationService.routeBack('/')
-      throw new Error('asdf')
+      // throw new Error('asdf')
     }
   }
 
