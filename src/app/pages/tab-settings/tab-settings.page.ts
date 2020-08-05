@@ -35,7 +35,11 @@ export class TabSettingsPage {
   }
 
   public goToEditSecret(secret: Secret): void {
-    this.navigationService.routeWithState('/secret-edit', { secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    const state = {
+      secret,
+      isEditing: true
+    }
+    this.navigationService.routeWithState('secret-edit', state).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public async deleteSecret(secret: Secret): Promise<void> {

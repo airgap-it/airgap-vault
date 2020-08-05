@@ -21,7 +21,6 @@ export class AccountAddressPage implements OnInit {
   public wallet: AirGapWallet
   private walletShareUrl: string
 
-  private secretID: string
   private protocolID: string
   private publicKey: string
 
@@ -35,7 +34,6 @@ export class AccountAddressPage implements OnInit {
     private activatedRoute: ActivatedRoute
   ) {
     this.activatedRoute.params.subscribe((params) => {
-      this.secretID = params['secretID']
       this.protocolID = params['protocol']
       this.publicKey = params['publicKey']
 

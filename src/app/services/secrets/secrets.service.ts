@@ -125,10 +125,10 @@ export class SecretsService {
     try {
       const secretHex = await secureStorage.getItem(secret.id).then((result) => result.value)
 
-      return secureStorage.setupRecoveryPassword(secret.id, secretHex).then(result => {
+      return secureStorage.setupRecoveryPassword(secret.id, secretHex).then((result) => {
         secret.hasRecoveryKey = true
         this.addOrUpdateSecret(secret)
-        
+
         return result.recoveryKey
       })
     } catch (error) {
@@ -312,7 +312,7 @@ export class SecretsService {
   }
 
   private async handleCorruptedSecret(error: any): Promise<void> {
-    error.message += ' Please, re-import your secret.'
+    error.message += ' Please re-import your secret.'
     error.ignore = true
 
     await this.showAlert('Error', error.message)
