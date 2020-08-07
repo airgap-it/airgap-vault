@@ -11,11 +11,11 @@ const usedModules = ['CAMERA', 'MICROPHONE']
 const diagnosticModuleStartRegex = getModuleFeatureStartRegex('.+')
 
 function getModuleFeatureStartRegex(module) {
-    return RegExp(`(<!--BEGIN_MODULE (?<moduleName>${module.toUpperCase()})-->)`, 'g')
+    return RegExp(`(<!--BEGIN_MODULE (?<moduleName>${module.toUpperCase()})-->).*`, 'g')
 }
 
 function getModuleFeatureEndRegex(module) {
-    return RegExp(`(<!--END_MODULE (?<moduleName>${module.toUpperCase()})-->)`, 'g')
+    return RegExp(`.*(<!--END_MODULE (?<moduleName>${module.toUpperCase()})-->)`, 'g')
 }
 
 function removeUnusedModules(configFile) {
