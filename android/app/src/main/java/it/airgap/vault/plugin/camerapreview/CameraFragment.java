@@ -11,9 +11,7 @@ import android.graphics.YuvImage;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.ShutterCallback;
-import android.media.ExifInterface;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Base64;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -25,6 +23,9 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+
+import androidx.exifinterface.media.ExifInterface;
+import androidx.fragment.app.Fragment;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
