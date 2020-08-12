@@ -3,6 +3,8 @@ import { Component } from '@angular/core'
 import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
+import { ActivatedRoute } from '@angular/router'
+import { SecretsService } from 'src/app/services/secrets/secrets.service'
 
 @Component({
   selector: 'airgap-secret-rules',
@@ -10,13 +12,25 @@ import { NavigationService } from '../../services/navigation/navigation.service'
   styleUrls: ['./secret-rules.page.scss']
 })
 export class SecretRulesPage {
-  private readonly secret: Secret
+  private secret: Secret
+  private secretID: string
 
-  constructor(private readonly navigationService: NavigationService) {
+  constructor(
+    private readonly navigationService: NavigationService,
+    private activatedRoute: ActivatedRoute,
+    private secretService: SecretsService
+  ) {
     this.secret = this.navigationService.getState().secret
+    if (!this.secret) {
+      this.secret = this.secretService.getActiveSecret()
+    }
+    this.activatedRoute.params.subscribe((params) => {
+      this.secretID = params['secretID']
+      this.secret = this.secretService.getSecretById(this.secretID)
+    })
   }
 
   public goToShowSecret(): void {
-    this.navigationService.routeWithState('secret-show', { secret: this.secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.navigationService.route(`secret-show/${this.secretID}`).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

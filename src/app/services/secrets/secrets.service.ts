@@ -90,7 +90,6 @@ export class SecretsService {
       const secureStorage: SecureStorage = await this.secureStorageService.get(secret.id, secret.isParanoia)
 
       await secureStorage.setItem(secret.id, secret.secretHex)
-
       secret.flushSecret()
 
       // It's a new secret, push to array
@@ -118,6 +117,12 @@ export class SecretsService {
     }
 
     await this.persist()
+  }
+
+  public getSecretById(secretID: string) {
+    const secret = this.secretsList[this.secretsList.findIndex((item: Secret) => item.id === secretID)]
+
+    return secret
   }
 
   public async resetRecoveryPassword(secret: Secret): Promise<string> {

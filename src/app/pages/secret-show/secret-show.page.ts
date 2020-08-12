@@ -8,6 +8,8 @@ import { Secret } from '../../models/secret'
 import { DeviceService } from '../../services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
+import { ActivatedRoute } from '@angular/router'
+import { SecretsService } from 'src/app/services/secrets/secrets.service'
 
 @Component({
   selector: 'airgap-secret-show',
@@ -15,16 +17,26 @@ import { NavigationService } from '../../services/navigation/navigation.service'
   styleUrls: ['./secret-show.page.scss']
 })
 export class SecretShowPage {
-  public readonly secret: Secret
+  public secret: Secret
   public readonly startTime: Date = new Date()
+  private secretID: string
+  private mnemonic: string
 
   constructor(
     private readonly deviceService: DeviceService,
     private readonly navigationService: NavigationService,
     private readonly alertController: AlertController,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    private activatedRoute: ActivatedRoute,
+    private readonly secretsService: SecretsService
   ) {
-    this.secret = this.navigationService.getState().secret
+    this.activatedRoute.params.subscribe(async (params) => {
+      this.secretID = params['secretID']
+      this.secret = this.secretsService.getSecretById(this.secretID)
+      this.mnemonic = await this.secretsService.retrieveEntropyForSecret(this.secret).then((entropy: string) => {
+        return this.secret.recoverMnemonicFromHex(entropy)
+      })
+    })
   }
 
   public ionViewDidEnter(): void {
@@ -72,7 +84,7 @@ export class SecretShowPage {
         })
     } else {
       this.navigationService
-        .routeWithState('secret-validate', { secret: this.secret })
+        .routeWithState(`secret-validate/${this.secretID}`, { secret: this.secret })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     }
   }

@@ -10,6 +10,7 @@ import { SecretsService } from '../../services/secrets/secrets.service'
 import { SecretEditPopoverComponent } from './secret-edit-popover/secret-edit-popover.component'
 import { TranslateService } from '@ngx-translate/core'
 import { ClipboardService } from 'src/app/services/clipboard/clipboard.service'
+import { ActivatedRoute } from '@angular/router'
 
 export enum SecretEditAction {
   SET_RECOVERY_KEY
@@ -27,6 +28,7 @@ export class SecretEditPage {
   public isAndroid: boolean = false
 
   public secret: Secret
+  private secretID: string
 
   constructor(
     private readonly popoverCtrl: PopoverController,
@@ -36,27 +38,23 @@ export class SecretEditPage {
     private readonly clipboardService: ClipboardService,
     private readonly secretsService: SecretsService,
     private readonly navigationService: NavigationService,
-    private readonly platform: Platform
+    private readonly platform: Platform,
+    private activatedRoute: ActivatedRoute
   ) {
     //TODO: refactor with Guards
-    if (this.validateState() && this.navigationService.getState()) {
-      this.isGenerating = this.navigationService.getState().isGenerating
-      this.secret = this.navigationService.getState().secret
+
+    this.activatedRoute.params.subscribe((params) => {
+      this.secretID = params['secretID']
+      this.isGenerating = params['isGenerating']
+
+      this.secret = this.secretsService.getSecretById(this.secretID)
+
       this.interactionSetting = this.secret.interactionSetting !== InteractionSetting.UNDETERMINED
 
       this.isAndroid = this.platform.is('android')
 
       this.perform(this.navigationService.getState().action)
-    } else {
-      this.navigationService.routeBack('/')
-      throw new Error('refreshing')
-    }
-  }
-
-  private validateState(): boolean {
-    const editingState = this.navigationService.getState().isEditing
-    const generatingState = this.navigationService.getState().isGenerating
-    return editingState || generatingState
+    })
   }
 
   public async confirm(): Promise<void> {
@@ -70,7 +68,7 @@ export class SecretEditPage {
     }
 
     await this.dismiss()
-    if (this.isGenerating) {
+    if (this.isGenerating === true) {
       this.navigationService.route('/account-add').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     }
   }

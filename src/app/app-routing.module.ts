@@ -31,13 +31,22 @@ const routes: Routes = [
     path: 'secret-generate',
     loadChildren: () => import('./pages/secret-generate/secret-generate.module').then((m) => m.SecretGeneratePageModule)
   },
-  { path: 'secret-rules', loadChildren: () => import('./pages/secret-rules/secret-rules.module').then((m) => m.SecretRulesPageModule) },
-  { path: 'secret-show', loadChildren: () => import('./pages/secret-show/secret-show.module').then((m) => m.SecretShowPageModule) },
   {
-    path: 'secret-validate',
+    path: 'secret-rules/:secretID',
+    loadChildren: () => import('./pages/secret-rules/secret-rules.module').then((m) => m.SecretRulesPageModule)
+  },
+  {
+    path: 'secret-show/:secretID',
+    loadChildren: () => import('./pages/secret-show/secret-show.module').then((m) => m.SecretShowPageModule)
+  },
+  {
+    path: 'secret-validate/:secretID',
     loadChildren: () => import('./pages/secret-validate/secret-validate.module').then((m) => m.SecretValidatePageModule)
   },
-  { path: 'secret-edit', loadChildren: () => import('./pages/secret-edit/secret-edit.module').then((m) => m.SecretEditPageModule) },
+  {
+    path: 'secret-edit/:secretID/:isGenerating',
+    loadChildren: () => import('./pages/secret-edit/secret-edit.module').then((m) => m.SecretEditPageModule)
+  },
   { path: 'about', loadChildren: () => import('./pages/about/about.module').then((m) => m.AboutPageModule) },
   {
     path: 'interaction-selection',

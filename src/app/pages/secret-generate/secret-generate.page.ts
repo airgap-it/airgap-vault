@@ -11,6 +11,7 @@ import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/er
 import { GyroscopeNativeService } from '../../services/gyroscope/gyroscope.native.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { PermissionsService, PermissionTypes } from '../../services/permissions/permissions.service'
+import { SecretsService } from 'src/app/services/secrets/secrets.service'
 
 @Component({
   selector: 'airgap-secret-generate',
@@ -46,7 +47,8 @@ export class SecretGeneratePage implements OnInit {
     private readonly navigationService: NavigationService,
     private readonly platform: Platform,
     private readonly changeDetectorRef: ChangeDetectorRef,
-    private readonly permissionsService: PermissionsService
+    private readonly permissionsService: PermissionsService,
+    private readonly secretsService: SecretsService
   ) {
     this.isBrowser = !this.platform.is('hybrid')
     if (!this.isBrowser) {
@@ -129,8 +131,18 @@ export class SecretGeneratePage implements OnInit {
       .getEntropyAsHex()
       .then((hashHex: string) => {
         const secret: Secret = new Secret(hashHex)
+        try {
+          this.secretsService.addOrUpdateSecret(secret).catch()
+        } catch (error) {
+          handleErrorLocal(ErrorCategory.SECURE_STORAGE)(error)
 
-        this.navigationService.routeWithState('secret-rules', { secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+          // TODO: Show error
+          return
+        }
+        const activeSecret = this.secretsService.getActiveSecret()
+        this.navigationService
+          .routeWithState(`secret-rules/${activeSecret.id}`, { secret })
+          .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       })
       .catch(handleErrorLocal(ErrorCategory.ENTROPY_COLLECTION))
   }

@@ -5,6 +5,8 @@ import { Secret } from '../../models/secret'
 import { DeviceService } from '../../services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
+import { ActivatedRoute } from '@angular/router'
+import { SecretsService } from 'src/app/services/secrets/secrets.service'
 
 @Component({
   selector: 'airgap-secret-validate',
@@ -15,10 +17,23 @@ export class SecretValidatePage {
   @ViewChild('verify', { static: true })
   public verify: VerifyKeyComponent
 
-  public readonly secret: Secret
+  public secret: Secret
+  private secretID: string
+  private mnemonic: string
 
-  constructor(private readonly deviceService: DeviceService, private readonly navigationService: NavigationService) {
-    this.secret = this.navigationService.getState().secret
+  constructor(
+    private readonly deviceService: DeviceService,
+    private readonly navigationService: NavigationService,
+    private activatedRoute: ActivatedRoute,
+    private readonly secretsService: SecretsService
+  ) {
+    this.activatedRoute.params.subscribe(async (params) => {
+      this.secretID = params['secretID']
+      this.secret = this.secretsService.getSecretById(this.secretID)
+      this.mnemonic = await this.secretsService.retrieveEntropyForSecret(this.secret).then((entropy: string) => {
+        return this.secret.recoverMnemonicFromHex(entropy)
+      })
+    })
   }
 
   public ionViewDidEnter(): void {
@@ -35,7 +50,7 @@ export class SecretValidatePage {
 
   public goToSecretEditPage(): void {
     this.navigationService
-      .routeWithState('secret-edit', { secret: this.secret, isGenerating: true })
+      .routeWithState(`secret-edit/${this.secretID}/${true}`, { secret: this.secret, isGenerating: true })
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }
