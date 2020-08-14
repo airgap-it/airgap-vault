@@ -18,7 +18,8 @@ import {
   EthereumProtocolNetwork,
   EthereumERC20ProtocolConfig,
   getProtocolByIdentifier,
-  SignedTransaction
+  SignedTransaction,
+  TezosUSD
 } from 'airgap-coin-lib'
 import { TezosBTC } from 'airgap-coin-lib/dist/protocols/tezos/fa/TezosBTC'
 
@@ -61,6 +62,7 @@ export class ProtocolsService {
 
     addSubProtocol(new TezosProtocol(), new TezosKtProtocol())
     addSubProtocol(new TezosProtocol(), new TezosBTC())
+    addSubProtocol(new TezosProtocol(), new TezosUSD())
 
     this.subProtocols.forEach((supportedSubAccount) => {
       supportedSubAccount.subProtocols.forEach((subProtocol) => {
