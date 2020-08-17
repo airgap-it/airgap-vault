@@ -1,4 +1,5 @@
-import { AirGapAngularCoreModule } from '@airgap/angular-core'
+import { AirGapAngularCoreModule, AirGapTranslateLoader } from '@airgap/angular-core'
+import { HttpClient, HttpClientModule } from '@angular/common/http'
 import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { RouteReuseStrategy } from '@angular/router'
@@ -7,7 +8,7 @@ import { DeviceMotion } from '@ionic-native/device-motion/ngx'
 import { Diagnostic } from '@ionic-native/diagnostic/ngx'
 import { IonicModule, IonicRouteStrategy, Platform } from '@ionic/angular'
 import { IonicStorageModule } from '@ionic/storage'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
 
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
@@ -48,6 +49,10 @@ import { ShareUrlService } from './services/share-url/share-url.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
 import { StorageService } from './services/storage/storage.service'
 
+export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
+  return new AirGapTranslateLoader(http, { prefix: './assets/i18n/', suffix: '.json' })
+}
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -55,7 +60,14 @@ import { StorageService } from './services/storage/storage.service'
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    TranslateModule.forRoot(),
+    HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: createTranslateLoader,
+        deps: [HttpClient]
+      }
+    }),
     IonicStorageModule.forRoot({
       name: '__airgap_storage',
       driverOrder: ['sqlite', 'localstorage']
