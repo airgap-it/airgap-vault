@@ -14,7 +14,6 @@ import { NavigationService } from './services/navigation/navigation.service'
 import { SchemeRoutingService } from './services/scheme-routing/scheme-routing.service'
 import { SecretsService } from './services/secrets/secrets.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
-import { ProtocolsService } from './services/protocols/protocols.service'
 
 declare let window: Window & { airGapHasStarted: boolean }
 
@@ -33,7 +32,6 @@ export class AppComponent implements AfterViewInit {
     private readonly schemeRoutingService: SchemeRoutingService,
     private readonly languageService: LanguageService,
     private readonly protocolService: ProtocolService,
-    private readonly protocolsService: ProtocolsService,
     private readonly secretsService: SecretsService,
     private readonly ngZone: NgZone,
     private readonly navigationService: NavigationService,
@@ -49,7 +47,6 @@ export class AppComponent implements AfterViewInit {
   }
 
   public async initializeApp(): Promise<void> {
-    this.protocolsService.addProtocols()
     await Promise.all([this.platform.ready(), this.initializeTranslations()])
 
     this.initializeProtocols()

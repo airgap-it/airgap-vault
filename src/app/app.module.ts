@@ -38,7 +38,6 @@ import { GyroscopeServiceFactory } from './services/gyroscope/gyroscope.factory'
 import { GyroscopeNativeService } from './services/gyroscope/gyroscope.native.service'
 import { InteractionService } from './services/interaction/interaction.service'
 import { PermissionsService } from './services/permissions/permissions.service'
-import { ProtocolsService } from './services/protocols/protocols.service'
 import { ScannerService } from './services/scanner/scanner.service'
 import { SchemeRoutingService } from './services/scheme-routing/scheme-routing.service'
 import { SecretsService } from './services/secrets/secrets.service'
@@ -105,7 +104,6 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
     ErrorHandlerService,
     InteractionService,
     DeepLinkService,
-    ProtocolsService,
     SerializerService,
     StorageService,
     SecureStorageFactoryDepHolder,

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core'
 import { ModalController, AlertController } from '@ionic/angular'
-import { ICoinProtocol, supportedProtocols } from 'airgap-coin-lib'
+import { ICoinProtocol } from 'airgap-coin-lib'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
@@ -8,6 +8,7 @@ import { SecretsService } from '../../services/secrets/secrets.service'
 import { SettingsKey, StorageService } from '../../services/storage/storage.service'
 import { LocalAuthenticationOnboardingPage } from '../local-authentication-onboarding/local-authentication-onboarding.page'
 import { BIP39_PASSPHRASE_ENABLED } from 'src/app/constants/constants'
+import { ProtocolService } from '@airgap/angular-core'
 
 @Component({
   selector: 'airgap-account-add',
@@ -28,12 +29,15 @@ export class AccountAddPage {
   constructor(
     private readonly secretsService: SecretsService,
     private readonly storageService: StorageService,
+    private readonly protocolService: ProtocolService,
     private readonly modalController: ModalController,
     private readonly navigationService: NavigationService,
     private readonly alertController: AlertController
   ) {
-    this.protocols = supportedProtocols()
-    this.onSelectedProtocolChange(this.navigationService.getState().protocol || this.protocols[0])
+    this.protocolService.getActiveProtocols().then((protocols: ICoinProtocol[]) => {
+      this.protocols = protocols
+      this.onSelectedProtocolChange(this.navigationService.getState().protocol || this.protocols[0])
+    })
   }
 
   public onSelectedProtocolChange(selectedProtocol: ICoinProtocol): void {
