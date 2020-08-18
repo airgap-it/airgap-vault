@@ -6,11 +6,10 @@ import android.os.Build
 import android.security.KeyPairGeneratorSpec
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
-import android.support.annotation.StringRes
-import android.support.v7.app.AlertDialog
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.EditText

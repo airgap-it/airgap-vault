@@ -4,6 +4,7 @@ import { IACMessageType, Serializer } from 'airgap-coin-lib'
 import { UnitHelper } from '../../../../test-config/unit-test-helper'
 
 import { SignedTransactionComponent } from './signed-transaction.component'
+import { MainProtocolSymbols } from 'airgap-coin-lib/dist/utils/ProtocolSymbols'
 
 describe('SignedTransactionComponent', () => {
   let signedTransactionFixture: ComponentFixture<SignedTransactionComponent>
@@ -14,7 +15,7 @@ describe('SignedTransactionComponent', () => {
     unitHelper = new UnitHelper()
     TestBed.configureTestingModule(
       unitHelper.testBed({
-        declarations: [],
+        declarations: []
       })
     )
       .compileComponents()
@@ -34,7 +35,7 @@ describe('SignedTransactionComponent', () => {
     const serializer: Serializer = new Serializer()
     const serializedTxs = await serializer.serialize([
       {
-        protocol: 'eth',
+        protocol: MainProtocolSymbols.ETH,
         type: IACMessageType.TransactionSignResponse,
         payload: {
           accountIdentifier: 'test',
@@ -60,7 +61,7 @@ describe('SignedTransactionComponent', () => {
     const syncProtocol = new SyncProtocolUtils()
     const serializedTx = await syncProtocol.serialize({
       version: 1,
-      protocol: 'eth',
+      protocol: MainProtocolSymbols.ETH,
       type: EncodedType.SIGNED_TRANSACTION,
       payload: {
         accountIdentifier: 'test',

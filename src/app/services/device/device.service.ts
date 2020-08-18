@@ -80,7 +80,7 @@ export class DeviceService {
 
   public onScreenCaptureStateChanged(callback: (captured: boolean) => void): void {
     if (this.platform.is('ios') && this.platform.is('hybrid')) {
-      const listener = this.securityUtils.addListener('screenCaptureStateChanged', event => {
+      const listener = this.securityUtils.addListener('screenCaptureStateChanged', (event) => {
         this.ngZone.run(() => {
           callback(event.captured)
         })
@@ -131,7 +131,7 @@ export class DeviceService {
   }
 
   private removeListeners(listeners: PluginListenerHandle[]) {
-    listeners.forEach(listener => {
+    listeners.forEach((listener) => {
       listener.remove()
     })
   }

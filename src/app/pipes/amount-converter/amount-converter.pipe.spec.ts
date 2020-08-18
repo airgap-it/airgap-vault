@@ -1,6 +1,8 @@
 import { BigNumber } from 'bignumber.js'
 
 import { AmountConverterPipe } from './amount-converter.pipe'
+import { MainProtocolSymbols } from 'airgap-coin-lib/dist/utils/ProtocolSymbols'
+
 const BN: typeof BigNumber = BigNumber.clone({
   FORMAT: {
     decimalSeparator: `.`,
@@ -81,13 +83,15 @@ describe('AmountConverter Pipe', () => {
   })
 
   it('should display very small ETH number to a non-scientific string representation', () => {
-    expect(amountConverterPipe.transform('1', { protocolIdentifier: 'eth', maxDigits: 0 })).toEqual('0.000000000000000001 ETH')
+    expect(amountConverterPipe.transform('1', { protocolIdentifier: MainProtocolSymbols.ETH, maxDigits: 0 })).toEqual(
+      '0.000000000000000001 ETH'
+    )
   })
 
   it('should display a normal ETH number to a non-scientific string representation', () => {
     expect(
       amountConverterPipe.transform('1000000000000000000', {
-        protocolIdentifier: 'eth',
+        protocolIdentifier: MainProtocolSymbols.ETH,
         maxDigits: 0
       })
     ).toEqual('1 ETH')
@@ -96,14 +100,14 @@ describe('AmountConverter Pipe', () => {
   it('should display a big ETH number to a non-scientific string representation', () => {
     expect(
       amountConverterPipe.transform('10000000000000000000000000000000000', {
-        protocolIdentifier: 'eth',
+        protocolIdentifier: MainProtocolSymbols.ETH,
         maxDigits: 0
       })
     ).toEqual(`10'000'000'000'000'000 ETH`)
   })
 
   it('should return a valid amount if value is 0', () => {
-    expect(amountConverterPipe.transform('0', { protocolIdentifier: 'eth', maxDigits: 0 })).toEqual('0 ETH')
+    expect(amountConverterPipe.transform('0', { protocolIdentifier: MainProtocolSymbols.ETH, maxDigits: 0 })).toEqual('0 ETH')
   })
 
   it('should return an empty string when protocolIdentifier is not set', () => {
@@ -111,20 +115,20 @@ describe('AmountConverter Pipe', () => {
   })
 
   it('should handle values that are not a number', () => {
-    expect(amountConverterPipe.transform('test', { protocolIdentifier: 'eth', maxDigits: 0 })).toEqual('')
+    expect(amountConverterPipe.transform('test', { protocolIdentifier: MainProtocolSymbols.ETH, maxDigits: 0 })).toEqual('')
   })
 
   it('should handle values that are undefined', () => {
-    expect(amountConverterPipe.transform(undefined, { protocolIdentifier: 'eth', maxDigits: 0 })).toEqual('')
+    expect(amountConverterPipe.transform(undefined, { protocolIdentifier: MainProtocolSymbols.ETH, maxDigits: 0 })).toEqual('')
   })
 
   it('should handle values that are null', () => {
-    expect(amountConverterPipe.transform(null, { protocolIdentifier: 'eth', maxDigits: 0 })).toEqual('')
+    expect(amountConverterPipe.transform(null, { protocolIdentifier: MainProtocolSymbols.ETH, maxDigits: 0 })).toEqual('')
   })
 
   it('should handle values that are empty object', () => {
     const value: any = {}
-    expect(amountConverterPipe.transform(value, { protocolIdentifier: 'eth', maxDigits: 0 })).toEqual('')
+    expect(amountConverterPipe.transform(value, { protocolIdentifier: MainProtocolSymbols.ETH, maxDigits: 0 })).toEqual('')
   })
 
   function getTest(args) {
@@ -142,18 +146,18 @@ describe('AmountConverter Pipe', () => {
   }
 
   const truthyProtocolIdentifiers = [
-    { value: '1', protocolIdentifier: 'btc', expected: '0.00000001 BTC' },
-    { value: '1', protocolIdentifier: 'eth', expected: '0.000000000000000001 ETH' }
+    { value: '1', protocolIdentifier: MainProtocolSymbols.BTC, expected: '0.00000001 BTC' },
+    { value: '1', protocolIdentifier: MainProtocolSymbols.ETH, expected: '0.000000000000000001 ETH' }
   ]
   makeTests(truthyProtocolIdentifiers)
 
   const falsyValues = [
-    { value: false, protocolIdentifier: 'eth', expected: '' },
-    { value: 0, protocolIdentifier: 'eth', expected: '0 ETH' },
-    { value: '', protocolIdentifier: 'eth', expected: '' },
-    { value: null, protocolIdentifier: 'eth', expected: '' },
-    { value: undefined, protocolIdentifier: 'eth', expected: '' },
-    { value: NaN, protocolIdentifier: 'eth', expected: '' }
+    { value: false, protocolIdentifier: MainProtocolSymbols.ETH, expected: '' },
+    { value: 0, protocolIdentifier: MainProtocolSymbols.ETH, expected: '0 ETH' },
+    { value: '', protocolIdentifier: MainProtocolSymbols.ETH, expected: '' },
+    { value: null, protocolIdentifier: MainProtocolSymbols.ETH, expected: '' },
+    { value: undefined, protocolIdentifier: MainProtocolSymbols.ETH, expected: '' },
+    { value: NaN, protocolIdentifier: MainProtocolSymbols.ETH, expected: '' }
   ]
   makeTests(falsyValues)
 

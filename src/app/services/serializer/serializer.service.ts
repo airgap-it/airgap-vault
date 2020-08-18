@@ -6,6 +6,8 @@ import BigNumber from 'bignumber.js'
 import { parseIACUrl } from '../../utils/utils'
 import { SettingsKey, StorageService } from '../storage/storage.service'
 
+import { MainProtocolSymbols } from 'airgap-coin-lib/dist/utils/ProtocolSymbols'
+
 @Injectable({
   providedIn: 'root'
 })
@@ -60,14 +62,14 @@ export class SerializerService {
   }
 
   private async loadSettings() {
-    this.storageService.get(SettingsKey.SETTINGS_SERIALIZER_ENABLE_V2).then(setting => (this._useV2 = setting))
-    this.storageService.get(SettingsKey.SETTINGS_SERIALIZER_CHUNK_TIME).then(setting => (this._displayTimePerChunk = setting))
-    this.storageService.get(SettingsKey.SETTINGS_SERIALIZER_CHUNK_SIZE).then(setting => (this._chunkSize = setting))
+    this.storageService.get(SettingsKey.SETTINGS_SERIALIZER_ENABLE_V2).then((setting) => (this._useV2 = setting))
+    this.storageService.get(SettingsKey.SETTINGS_SERIALIZER_CHUNK_TIME).then((setting) => (this._displayTimePerChunk = setting))
+    this.storageService.get(SettingsKey.SETTINGS_SERIALIZER_CHUNK_SIZE).then((setting) => (this._chunkSize = setting))
   }
 
   public async serialize(chunks: IACMessageDefinitionObject[]): Promise<string[]> {
-    if (!this.useV2 && !chunks.some((chunk: IACMessageDefinitionObject) => chunk.protocol === 'cosmos')) {
-      if (chunks[0].protocol === 'btc' && chunks[0].type === 6) {
+    if (!this.useV2 && !chunks.some((chunk: IACMessageDefinitionObject) => chunk.protocol === MainProtocolSymbols.COSMOS)) {
+      if (chunks[0].protocol === MainProtocolSymbols.BTC && chunks[0].type === 6) {
         // This expects a BigNumber, but we now have a string. So we need to convert it.
         const legacyPayload: any = chunks[0].payload
         legacyPayload.amount = new BigNumber(legacyPayload.amount)

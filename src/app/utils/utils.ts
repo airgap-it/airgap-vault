@@ -6,7 +6,7 @@ export function generateGUID(): string {
     // https://stackoverflow.com/questions/6906916/collisions-when-generating-uuids-in-javascript
     const buf = new Uint16Array(8)
     window.crypto.getRandomValues(buf)
-    const S4 = function(num) {
+    const S4 = function (num) {
       let ret = num.toString(16)
       while (ret.length < 4) {
         ret = '0' + ret
@@ -19,7 +19,7 @@ export function generateGUID(): string {
   } else {
     // Otherwise, just use Math.random
     // https://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/2117523#2117523
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
       const r = (Math.random() * 16) | 0
       const v = c === 'x' ? r : (r & 0x3) | 0x8
 

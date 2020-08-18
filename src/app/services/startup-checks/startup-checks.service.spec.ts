@@ -7,7 +7,7 @@ import {
   ModalControllerMock,
   NavControllerMock,
   NavParamsMock,
-  PlatformMock,
+  PlatformMock
 } from '../../../../test-config/ionic-mocks'
 import { StorageMock } from '../../../../test-config/storage-mock'
 import { UnitHelper } from '../../../../test-config/unit-test-helper'
@@ -71,7 +71,7 @@ describe('StartupCheck Service', () => {
   it('should show root modal if device is rooted', async(() => {
     deviceProvider.isRooted = true
 
-    startupChecksService.initChecks().catch(consequence => {
+    startupChecksService.initChecks().catch((consequence) => {
       expect(consequence.name).toBe('rootCheck')
     })
   }))
@@ -79,7 +79,7 @@ describe('StartupCheck Service', () => {
   it('should show disclaimer modal if the disclaimer has not been accepted yet', async(async () => {
     await storageProvider.set('DISCLAIMER_INITIAL', false)
 
-    startupChecksService.checks = startupChecksService.checks.map(check => {
+    startupChecksService.checks = startupChecksService.checks.map((check) => {
       check.failureConsequence = jasmine.createSpy('failureConsequence', async () => {
         await check.failureConsequence()
       })
@@ -88,7 +88,7 @@ describe('StartupCheck Service', () => {
     })
 
     await startupChecksService.initChecks().then(() => {
-      startupChecksService.checks.forEach(check => {
+      startupChecksService.checks.forEach((check) => {
         if (check.name === 'disclaimerAcceptedCheck') {
           expect(check.failureConsequence).toHaveBeenCalled()
         } else {
@@ -101,7 +101,7 @@ describe('StartupCheck Service', () => {
   it('should show the introduction modal if the introduction has not been accepted yet', async(async () => {
     await storageProvider.set('INTRODUCTION_INITIAL', false)
 
-    startupChecksService.checks = startupChecksService.checks.map(check => {
+    startupChecksService.checks = startupChecksService.checks.map((check) => {
       check.failureConsequence = jasmine.createSpy('failureConsequence', async () => {
         await check.failureConsequence()
       })
@@ -110,7 +110,7 @@ describe('StartupCheck Service', () => {
     })
 
     await startupChecksService.initChecks().then(() => {
-      startupChecksService.checks.forEach(check => {
+      startupChecksService.checks.forEach((check) => {
         if (check.name === 'introductionAcceptedCheck') {
           expect(check.failureConsequence).toHaveBeenCalled()
         } else {
@@ -123,7 +123,7 @@ describe('StartupCheck Service', () => {
   it('should show the device security modal if device is not secure', async(async () => {
     secureStorage.isSecure = 0
 
-    startupChecksService.checks = startupChecksService.checks.map(check => {
+    startupChecksService.checks = startupChecksService.checks.map((check) => {
       check.failureConsequence = jasmine.createSpy('failureConsequence', async () => {
         await check.failureConsequence()
       })
@@ -132,7 +132,7 @@ describe('StartupCheck Service', () => {
     })
 
     await startupChecksService.initChecks().then(() => {
-      startupChecksService.checks.forEach(check => {
+      startupChecksService.checks.forEach((check) => {
         if (check.name === 'deviceSecureCheck') {
           expect(check.failureConsequence).toHaveBeenCalled()
         } else {

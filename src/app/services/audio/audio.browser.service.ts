@@ -20,14 +20,14 @@ export class AudioBrowserService implements IEntropyGenerator {
   private readonly scriptProcessor
 
   constructor() {
-    this.entropyObservable = Observable.create(observer => {
-      entropyCalculatorWorker.onmessage = event => {
+    this.entropyObservable = Observable.create((observer) => {
+      entropyCalculatorWorker.onmessage = (event) => {
         this.collectedEntropyPercentage += event.data.entropyMeasure
         observer.next({
           entropyHex: event.data.entropyHex
         })
       }
-      this.handler = event => {
+      this.handler = (event) => {
         const data = event.inputBuffer.getChannelData(0)
         const buffer1 = this.arrayBufferFromIntArray(data)
         entropyCalculatorWorker.postMessage({ entropyBuffer: buffer1 }, [buffer1])
@@ -45,21 +45,21 @@ export class AudioBrowserService implements IEntropyGenerator {
   public start(): Promise<void> {
     this.collectedEntropyPercentage = 0
 
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       navigator.getUserMedia(
         { video: false, audio: true },
-        stream => {
+        (stream) => {
           const audioContext = new AudioContext()
           const microphoneStreamSource = audioContext.createMediaStreamSource(stream)
           const scriptProcessor = audioContext.createScriptProcessor(this.ENTROPY_SIZE, 1, 1)
-          scriptProcessor.onaudioprocess = event => {
+          scriptProcessor.onaudioprocess = (event) => {
             this.handler(event)
           }
           microphoneStreamSource.connect(scriptProcessor)
           scriptProcessor.connect(audioContext.destination)
           resolve()
         },
-        err => {
+        (err) => {
           console.log('error in audio.browser.service:', err)
           resolve()
         }
@@ -68,7 +68,7 @@ export class AudioBrowserService implements IEntropyGenerator {
   }
 
   public stop(): Promise<any> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (this.microphoneStreamSource) {
         this.microphoneStreamSource.stop()
         this.microphoneStreamSource.disconnect()

@@ -7,7 +7,7 @@
     },
     "account-exists_alert": {
       "heading":"Account already exists",
-      "text":"You already have added this specific account. Please change its derivation path to add another address (advanced mode)."
+      "text":"You have already added this specific account. Please change its derivation path to add another address (advanced mode)."
     },
     "okay_label":"Okay"
   },
@@ -21,7 +21,7 @@
   "distribution-onboarding":{
     "ask-permission": {
       "heading": "AirGap is <span class=\"style__strong color__primary\"> not persistent</span>, secrets generated will not be stored and need to be <span class=\"style__strong color__primary\">imported again</span> after a restart",
-      "text":"This Distribution is intended to securely generate secrets as well as to sign transactions offline, but not for secret storage."
+      "text":"This distribution is intended to securely generate secrets as well as to sign transactions offline, but not for secret storage."
     },
     "no-vm": {
       "heading": "AirGap Vault Distribution should <span class=\"style__strong color__primary\">not</span> be run on a <span class=\"style__strong color__primary\">virtual machine</span>, if the host has network connectivity even if the connectivity has been turned off temporarily. ",
@@ -37,7 +37,7 @@
   },
 
   "secret-generate-onboarding":{
-    "heading": "AirGap is going to ask you for <span class=\"style__strong color__primary\">camera</span> and <span class=\"style__strong color__primary\">microphone</span> permission, to allow a secure secret generation.",
+    "heading": "AirGap is going to ask you for <span class=\"style__strong color__primary\">camera</span> and <span class=\"style__strong color__primary\">microphone</span> permissions, to allow a secure secret generation.",
     "text": "Both permissions are used in order to generate a more secure secret for you.",
     "grant-permission_label": "Grant Permission"
   },
@@ -99,7 +99,7 @@
     },
     "social-recovery": {
       "label":"Social Recovery",
-      "text":"Recover a lost private key from your social contact's secret shares."
+      "text":"Recover a lost private key from your social contacts' secret shares."
     }
   },
 
@@ -145,7 +145,7 @@
 
   "secret-edit-delete-popover":{
     "title":"Confirm Secret Removal",
-    "text":"Do you want to remove this secret? You won't be able to restore it without backup!",
+    "text":"Do you really want to remove this secret? You won't be able to restore it without a backup!",
     "cancel_label":"Cancel",
     "delete_label":"Delete"
   },
@@ -153,7 +153,7 @@
   "secret-generate":{
     "heading":"We're generating your secret.",
     "text":"For this we use your video, audio, touch and device acceleration to add additional entropy to your secret.",
-    "description":"Move your device around to record audio, video & acceleration until all shields are full.",
+    "description":"Move your device around to record audio, video & device acceleration until all shields are full.",
     "continue_label":"Continue"
   },
 
@@ -188,7 +188,7 @@
     "too-fast_alert": {
       "title": "That was fast!",
       "heading": "Are you sure you are not a super human?",
-      "text": "Make sure that you followed all the rules and didn't do anything other than writing your secret on paper.",
+      "text": "Make sure that you followed all the rules and didn't do anything other than writing down your secret on paper.",
       "wait_label_p1": "Please wait until at least ",
       "wait_label_p2": "s are over."
     }
@@ -294,7 +294,7 @@
     },
     "no-secret_alert":{
       "title": "No account found",
-      "text": "You do not have any compatible account for this public key in AirGap. Please import your secret and create the corresponding account to sign this transaction.",
+      "text": "You do not have any compatible accounts for this public key in AirGap. Please import your secret and create the corresponding account to sign this transaction.",
       "okay_label": "Okay"
     },
     "sync-operation-not-supported_alert": {
@@ -363,7 +363,7 @@
     "confirm_sync_code_copy": "Sync code was copied to your clipboard",
     "account-removal_alert":{
       "title":"Confirm Account Removal",
-      "text":"Do you want to remove this account? You can always add it back later, if you know its correct derivation path/coin!",
+      "text":"Do you want to remove this account? You can always add it back later if you know its correct derivation path!",
       "cancel_label":"Cancel",
       "delete_label":"Delete"
     }
@@ -396,11 +396,11 @@
   "warnings-modal":{
     "root": {
       "title": "Your device is rooted",
-      "description": "It seems like you have rooted your device. While we think this is neat, it weakens the security of your device significantly and we multiple mechanisms of AirGap can be circumvented by other apps. Therefore, AirGap is not able to run on this device."
+      "description": "It seems like you have rooted your device. While we think this is neat, it weakens the security of your device significantly and multiple mechanisms of AirGap can be circumvented by other apps. Therefore, AirGap is not able to run on this device."
     },
     "screenshot": {
       "title": "Screenshot detected",
-      "description": "Looks like you just took a screenshot. Make sure that you never take a screenshot you might expose your secret key."
+      "description": "Looks like you just took a screenshot. Make sure that you never take a screenshot as you might expose your secret key."
     },
     "secure-storage": {
       "title": "Device Unsecure",

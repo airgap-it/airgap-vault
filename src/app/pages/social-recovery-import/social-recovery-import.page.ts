@@ -40,7 +40,7 @@ export class SocialRecoveryImportPage {
 
     const formGroup = {}
 
-    this.getNumberArray(i).forEach(i => {
+    this.getNumberArray(i).forEach((i) => {
       formGroup['share_' + i.toString()] = ['', Validators.compose([Validators.required, MnemonicValidator.isValidShare])]
       if (this.socialRecoveryForm && this.socialRecoveryForm.value['share_' + i.toString()]) {
         formGroup['share_' + i.toString()][0] = this.socialRecoveryForm.value['share_' + i.toString()]
