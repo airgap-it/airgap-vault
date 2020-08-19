@@ -1,12 +1,13 @@
 import { Pipe, PipeTransform } from '@angular/core'
 import { getProtocolByIdentifier } from 'airgap-coin-lib'
 import { BigNumber } from 'bignumber.js'
+import { ProtocolSymbols } from 'airgap-coin-lib/dist/utils/ProtocolSymbols'
 
 @Pipe({
   name: 'amountConverter'
 })
 export class AmountConverterPipe implements PipeTransform {
-  public transform(value: string | number, args: { protocolIdentifier: string; maxDigits: number }): string {
+  public transform(value: string | number, args: { protocolIdentifier: ProtocolSymbols; maxDigits: number }): string {
     if (!args.protocolIdentifier || (!value && value !== 0) || isNaN(Number(value)) || (args.maxDigits && isNaN(Number(args.maxDigits)))) {
       /* console.warn(
         `AmountConverterPipe: necessary properties missing!\n` +

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { ModalController } from '@ionic/angular'
+import { ModalController, AlertController } from '@ionic/angular'
 import { ICoinProtocol, supportedProtocols } from 'airgap-coin-lib'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
@@ -7,6 +7,7 @@ import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
 import { SettingsKey, StorageService } from '../../services/storage/storage.service'
 import { LocalAuthenticationOnboardingPage } from '../local-authentication-onboarding/local-authentication-onboarding.page'
+import { BIP39_PASSPHRASE_ENABLED } from 'src/app/constants/constants'
 
 @Component({
   selector: 'airgap-account-add',
@@ -15,19 +16,24 @@ import { LocalAuthenticationOnboardingPage } from '../local-authentication-onboa
 })
 export class AccountAddPage {
   public selectedProtocol: ICoinProtocol
-  public customDerivationPath: string
-  public coinProtocols: ICoinProtocol[]
+  public protocols: ICoinProtocol[]
   public isHDWallet: boolean = false
+
   public isAdvancedMode: boolean = false
+  public isBip39PassphraseEnabled: boolean = BIP39_PASSPHRASE_ENABLED
+  public revealBip39Passphrase: boolean = false
+  public customDerivationPath: string
+  public bip39Passphrase: string = ''
 
   constructor(
     private readonly secretsService: SecretsService,
     private readonly storageService: StorageService,
     private readonly modalController: ModalController,
-    private readonly navigationService: NavigationService
+    private readonly navigationService: NavigationService,
+    private readonly alertController: AlertController
   ) {
-    this.coinProtocols = supportedProtocols()
-    this.onSelectedProtocolChange(this.navigationService.getState().protocol || this.coinProtocols[0])
+    this.protocols = supportedProtocols()
+    this.onSelectedProtocolChange(this.navigationService.getState().protocol || this.protocols[0])
   }
 
   public onSelectedProtocolChange(selectedProtocol: ICoinProtocol): void {
@@ -56,12 +62,49 @@ export class AccountAddPage {
     }
   }
 
-  private addWalletAndReturnToAddressPage(): void {
-    this.secretsService
-      .addWallet(this.selectedProtocol.identifier, this.isHDWallet, this.customDerivationPath)
-      .then(() => {
-        this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  private async addWalletAndReturnToAddressPage(): Promise<void> {
+    const addAccount = () => {
+      this.secretsService
+        .addWallet(this.selectedProtocol.identifier, this.isHDWallet, this.customDerivationPath, this.bip39Passphrase)
+        .then(() => {
+          this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+        })
+        .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
+    }
+
+    if (this.bip39Passphrase.length > 0) {
+      const alert = await this.alertController.create({
+        header: 'BIP-39 Passphrase',
+        message:
+          'You set a BIP-39 Passphrase. You will need to enter this passphrase again when you import your secret. If you lose your passphrase, you will lose access to your account!',
+        backdropDismiss: false,
+        inputs: [
+          {
+            name: 'understood',
+            type: 'checkbox',
+            label: 'I understand',
+            value: 'understood',
+            checked: false
+          }
+        ],
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel'
+          },
+          {
+            text: 'Ok',
+            handler: async (result: string[]) => {
+              if (result.includes('understood')) {
+                addAccount()
+              }
+            }
+          }
+        ]
       })
-      .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
+      alert.present()
+    } else {
+      addAccount()
+    }
   }
 }
