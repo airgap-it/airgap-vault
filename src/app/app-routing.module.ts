@@ -76,7 +76,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/social-recovery-import/social-recovery-import.module').then((m) => m.SocialRecoveryImportPageModule)
   },
   {
-    path: 'social-recovery-setup',
+    path: 'social-recovery-setup/:secretID',
     loadChildren: () => import('./pages/social-recovery-setup/social-recovery-setup.module').then((m) => m.SocialRecoverySetupPageModule)
   },
   {

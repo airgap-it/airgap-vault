@@ -6,6 +6,7 @@ import { DeviceService } from '../../services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
+import { ActivatedRoute } from '@angular/router'
 
 @Component({
   selector: 'airgap-social-recovery-setup',
@@ -15,14 +16,19 @@ import { SecretsService } from '../../services/secrets/secrets.service'
 export class SocialRecoverySetupPage {
   public numberOfShares: number = 3
   public numberOfRequiredShares: number = 2
-  private readonly secret: Secret
+  private secret: Secret
+  private secretID: string
 
   constructor(
     private readonly secretService: SecretsService,
     private readonly deviceService: DeviceService,
-    private readonly navigationService: NavigationService
+    private readonly navigationService: NavigationService,
+    private activatedRoute: ActivatedRoute
   ) {
-    this.secret = this.navigationService.getState().secret
+    this.activatedRoute.params.subscribe(async (params) => {
+      this.secretID = params['secretID']
+      this.secret = this.secretService.getSecretById(this.secretID)
+    })
   }
 
   public ionViewDidEnter(): void {

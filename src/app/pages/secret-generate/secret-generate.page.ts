@@ -139,9 +139,8 @@ export class SecretGeneratePage implements OnInit {
           // TODO: Show error
           return
         }
-        const activeSecret = this.secretsService.getActiveSecret()
         this.navigationService
-          .routeWithState(`secret-rules/${activeSecret.id}`, { secret })
+          .routeWithState(`secret-rules/${secret.id}`, { secret })
           .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       })
       .catch(handleErrorLocal(ErrorCategory.ENTROPY_COLLECTION))

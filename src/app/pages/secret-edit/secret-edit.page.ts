@@ -82,7 +82,7 @@ export class SecretEditPage {
     }
 
     await this.dismiss()
-    if (this.isGenerating === true) {
+    if (this.isGenerating) {
       this.navigationService.route('/account-add').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     }
   }
@@ -97,7 +97,7 @@ export class SecretEditPage {
 
   public goToSocialRecoverySetup(): void {
     this.navigationService
-      .routeWithState('/social-recovery-setup', { secret: this.secret })
+      .routeWithState(`/social-recovery-setup/${this.secretID}`, { secret: this.secret })
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
