@@ -11,6 +11,7 @@ import { SecretEditPopoverComponent } from './secret-edit-popover/secret-edit-po
 import { TranslateService } from '@ngx-translate/core'
 import { ClipboardService } from 'src/app/services/clipboard/clipboard.service'
 import { ActivatedRoute } from '@angular/router'
+import { Observable } from 'rxjs'
 
 export enum SecretEditAction {
   SET_RECOVERY_KEY
@@ -29,6 +30,8 @@ export class SecretEditPage {
 
   public secret: Secret
   private secretID: string
+  public mnemonic: string
+  public readonly secrets$: Observable<Secret[]>
 
   constructor(
     private readonly popoverCtrl: PopoverController,
@@ -43,23 +46,34 @@ export class SecretEditPage {
   ) {
     //TODO: refactor with Guards
 
-    this.activatedRoute.params.subscribe((params) => {
+    this.activatedRoute.params.subscribe(async (params) => {
       this.secretID = params['secretID']
-      this.isGenerating = params['isGenerating']
+      this.isGenerating = Boolean(JSON.parse(params['isGenerating']))
 
       this.secret = this.secretsService.getSecretById(this.secretID)
-
       this.interactionSetting = this.secret.interactionSetting !== InteractionSetting.UNDETERMINED
 
       this.isAndroid = this.platform.is('android')
+      this.mnemonic = await this.secretsService.retrieveEntropyForSecret(this.secret).then((entropy: string) => {
+        return this.secret.recoverMnemonicFromHex(entropy)
+      })
 
       this.perform(this.navigationService.getState().action)
     })
+    this.secrets$ = this.secretsService.getSecretsObservable()
   }
 
   public async confirm(): Promise<void> {
     try {
       await this.secretsService.addOrUpdateSecret(this.secret).catch()
+      this.secrets$.subscribe((secrets) => {
+        secrets.forEach((secret) => {
+          //to remove the secret that was stored during creation
+          if (secret.label === '') {
+            this.secretsService.remove(secret)
+          }
+        })
+      })
     } catch (error) {
       handleErrorLocal(ErrorCategory.SECURE_STORAGE)(error)
 

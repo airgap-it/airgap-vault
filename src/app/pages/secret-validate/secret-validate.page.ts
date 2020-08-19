@@ -19,7 +19,7 @@ export class SecretValidatePage {
 
   public secret: Secret
   private secretID: string
-  private mnemonic: string
+  public mnemonic: string
 
   constructor(
     private readonly deviceService: DeviceService,

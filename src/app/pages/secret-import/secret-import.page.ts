@@ -7,6 +7,7 @@ import { DeviceService } from '../../services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { MnemonicValidator } from '../../validators/mnemonic.validator'
+import { SecretsService } from 'src/app/services/secrets/secrets.service'
 
 @Component({
   selector: 'airgap-secret-import',
@@ -20,7 +21,8 @@ export class SecretImportPage {
   constructor(
     private readonly deviceService: DeviceService,
     private readonly navigationService: NavigationService,
-    private readonly formBuilder: FormBuilder
+    private readonly formBuilder: FormBuilder,
+    private readonly secretsService: SecretsService
   ) {
     const formGroup: {
       [key: string]: any
@@ -29,10 +31,9 @@ export class SecretImportPage {
     }
 
     this.secretImportForm = this.formBuilder.group(formGroup)
-    this.secretImportForm.valueChanges.subscribe(formGroup => {
+    this.secretImportForm.valueChanges.subscribe((formGroup) => {
       this.mnemonic = formGroup.mnemonic
     })
-
   }
 
   public ionViewDidEnter(): void {
@@ -48,8 +49,17 @@ export class SecretImportPage {
 
     const secret: Secret = new Secret(signer.mnemonicToEntropy(BIP39Signer.prepareMnemonic(this.mnemonic)))
 
+    try {
+      this.secretsService.addOrUpdateSecret(secret).catch()
+    } catch (error) {
+      console.error('could not save it: ', error)
+      handleErrorLocal(ErrorCategory.SECURE_STORAGE)(error)
+    }
+
+    const activeSecret = this.secretsService.getActiveSecret()
+
     this.navigationService
-      .routeWithState('secret-edit', { secret, isGenerating: true })
+      .routeWithState(`secret-edit/${activeSecret.id}/${true}`, { secret, isGenerating: true })
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

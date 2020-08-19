@@ -20,7 +20,7 @@ export class SecretShowPage {
   public secret: Secret
   public readonly startTime: Date = new Date()
   private secretID: string
-  private mnemonic: string
+  public mnemonic: string
 
   constructor(
     private readonly deviceService: DeviceService,
