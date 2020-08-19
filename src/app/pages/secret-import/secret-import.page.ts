@@ -56,10 +56,10 @@ export class SecretImportPage {
       handleErrorLocal(ErrorCategory.SECURE_STORAGE)(error)
     }
 
-    const activeSecret = this.secretsService.getActiveSecret()
-
-    this.navigationService
-      .routeWithState(`secret-edit/${activeSecret.id}/${true}`, { secret, isGenerating: true })
-      .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    setTimeout(() => {
+      this.navigationService
+        .routeWithState(`secret-edit/${secret.id}/${true}`, { secret, isGenerating: true })
+        .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    }, 100)
   }
 }
