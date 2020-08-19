@@ -24,7 +24,7 @@ export class TransactionDetailPage {
   public deserializedSync: IACMessageDefinitionObject[]
 
   constructor(
-    private readonly alertCtrl: AlertController,
+    private readonly alertController: AlertController,
     private readonly navigationService: NavigationService,
     private readonly secretsService: SecretsService,
     private readonly interactionService: InteractionService,
@@ -124,19 +124,89 @@ export class TransactionDetailPage {
     }
 
     const entropy = await this.secretsService.retrieveEntropyForSecret(secret)
-
     const mnemonic: string = bip39.entropyToMnemonic(entropy)
+
+    if (await this.checkIfPublicKeysMatch(transaction, wallet, mnemonic, '')) {
+      // Public keys match, so no BIP-39 passphrase has been set
+      return this.sign(transaction, wallet, mnemonic, '')
+    }
+
+    return this.sign(transaction, wallet, mnemonic, await this.showBip39PassphraseAlert())
+  }
+
+  private async showBip39PassphraseAlert(): Promise<string> {
+    return new Promise(async (resolve) => {
+      const alert: HTMLIonAlertElement = await this.alertController.create({
+        header: 'BIP-39 Passphrase',
+        message: 'If you have set a BIP-39 passphrase, please enter it here.',
+        backdropDismiss: false,
+        inputs: [
+          {
+            name: 'bip39Passphrase',
+            type: 'password',
+            placeholder: 'Passphrase'
+          }
+        ],
+        buttons: [
+          {
+            text: 'Ok',
+            handler: async (result) => {
+              const bip39Passphrase = result.bip39Passphrase ?? ''
+
+              resolve(bip39Passphrase)
+            }
+          }
+        ]
+      })
+      alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
+    })
+  }
+
+  private async showBip39PassphraseMismatchAlert(): Promise<void> {
+    const alert: HTMLIonAlertElement = await this.alertController.create({
+      header: 'BIP-39 Passphrase',
+      message: 'Public keys do not match. Did you enter the correct BIP-39 Passphrase?',
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: 'Ok'
+        }
+      ]
+    })
+    alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
+    throw new Error('Public keys do not match. Did you enter the correct BIP-39 Passphrase?')
+  }
+
+  private async sign(
+    transaction: UnsignedTransaction,
+    wallet: AirGapWallet,
+    mnemonic: string,
+    bip39Passphrase: string = ''
+  ): Promise<string> {
     if (wallet.isExtendedPublicKey) {
-      const extendedPrivateKey: string = await wallet.protocol.getExtendedPrivateKeyFromMnemonic(mnemonic, wallet.derivationPath)
+      const extendedPrivateKey: string = await wallet.protocol.getExtendedPrivateKeyFromMnemonic(
+        mnemonic,
+        wallet.derivationPath,
+        bip39Passphrase
+      )
+      if (!(await this.checkIfPublicKeysMatch(transaction, wallet, mnemonic, bip39Passphrase))) {
+        throw this.showBip39PassphraseMismatchAlert()
+      }
+
       return wallet.protocol.signWithExtendedPrivateKey(extendedPrivateKey, transaction.transaction)
     } else {
-      const privateKey: Buffer = await wallet.protocol.getPrivateKeyFromMnemonic(mnemonic, wallet.derivationPath)
+      const privateKey: Buffer = await wallet.protocol.getPrivateKeyFromMnemonic(mnemonic, wallet.derivationPath, bip39Passphrase)
+
+      if (!(await this.checkIfPublicKeysMatch(transaction, wallet, mnemonic, bip39Passphrase))) {
+        throw this.showBip39PassphraseMismatchAlert()
+      }
+
       return wallet.protocol.signWithPrivateKey(privateKey, transaction.transaction)
     }
   }
 
   public async showAlert(title: string, message: string): Promise<void> {
-    const alert: HTMLIonAlertElement = await this.alertCtrl.create({
+    const alert: HTMLIonAlertElement = await this.alertController.create({
       header: title,
       message,
       backdropDismiss: false,
@@ -148,5 +218,16 @@ export class TransactionDetailPage {
       ]
     })
     alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
+  }
+
+  private async checkIfPublicKeysMatch(
+    transaction: UnsignedTransaction,
+    wallet: AirGapWallet,
+    mnemonic: string,
+    bip39Passphrase: string = ''
+  ) {
+    const publicKey: string = await wallet.protocol.getPublicKeyFromMnemonic(mnemonic, wallet.derivationPath, bip39Passphrase)
+
+    return transaction.publicKey === publicKey
   }
 }
