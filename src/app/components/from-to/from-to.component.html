@@ -21,6 +21,15 @@
         </div>
       </ng-container>
 
+      <ng-container *ngIf="transaction.extra && transaction.extra.assetID">
+        <ion-label position="stacked" class="ion-text-uppercase">{{ 'from-to.asset-id_label' | translate }}</ion-label>
+        <div class="ion-padding-bottom">
+          <span class="typography--mono">
+            {{ transaction.extra.assetID }}
+          </span>
+        </div>
+      </ng-container>
+
       <ion-label position="stacked" class="typography--uppercase">{{ 'from-to.amount_label' | translate }}</ion-label>
       <p class="typography--mono ion-no-margin ion-padding-bottom">
         {{ transaction.amount | amountConverter: { protocolIdentifier: transaction.protocolIdentifier, maxDigits: undefined } }}

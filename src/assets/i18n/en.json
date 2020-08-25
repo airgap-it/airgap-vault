@@ -48,6 +48,7 @@
 
   "from-to":{
     "type_label": "Type",
+    "asset-id_label": "Asset ID",
     "amount_label":"AMOUNT",
     "fee_label":"FEE",
     "from_label": "From",
