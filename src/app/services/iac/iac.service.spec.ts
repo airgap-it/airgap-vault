@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing'
 
-import { IacService } from './iac.service'
+import { IACService } from './iac.service'
 
-describe('IacService', () => {
-  let service: IacService
+describe('IACService', () => {
+  let service: IACService
 
   beforeEach(() => {
     TestBed.configureTestingModule({})
-    service = TestBed.inject(IacService)
+    service = TestBed.inject(IACService)
   })
 
   it('should be created', () => {
