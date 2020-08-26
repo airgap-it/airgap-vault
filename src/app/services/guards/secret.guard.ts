@@ -10,6 +10,7 @@ export class SecretGuard implements CanActivate {
     const secretID = route.params.secretID
 
     if (this.secretsService.getSecretById(secretID) === undefined) {
+      alert('The secret you are trying to access does not exist.')
       this.navigationService.route('/')
     }
     return this.secretsService.getSecretById(secretID) !== undefined
