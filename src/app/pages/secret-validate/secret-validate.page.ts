@@ -50,7 +50,7 @@ export class SecretValidatePage {
 
   public goToSecretEditPage(): void {
     this.navigationService
-      .routeWithState(`secret-edit/${this.secretID}/${true}`, { secret: this.secret, isGenerating: true })
+      .routeWithState(`secret-edit/${this.secretID}/${'generate'}`, { secret: this.secret, isGenerating: true })
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

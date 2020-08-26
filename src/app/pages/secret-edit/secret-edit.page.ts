@@ -23,14 +23,14 @@ export enum SecretEditAction {
   styleUrls: ['./secret-edit.page.scss']
 })
 export class SecretEditPage {
-  public isGenerating: boolean = false
+  public flow: string = 'edit'
   public interactionSetting: boolean = false
+  public isGenerating: boolean = false
 
   public isAndroid: boolean = false
 
   public secret: Secret
   private secretID: string
-  public mnemonic: string
   public readonly secrets$: Observable<Secret[]>
 
   constructor(
@@ -48,15 +48,14 @@ export class SecretEditPage {
 
     this.activatedRoute.params.subscribe(async (params) => {
       this.secretID = params['secretID']
-      this.isGenerating = Boolean(JSON.parse(params['isGenerating']))
+      this.flow = params['flow']
 
       this.secret = this.secretsService.getSecretById(this.secretID)
       this.interactionSetting = this.secret.interactionSetting !== InteractionSetting.UNDETERMINED
 
       this.isAndroid = this.platform.is('android')
-      this.mnemonic = await this.secretsService.retrieveEntropyForSecret(this.secret).then((entropy: string) => {
-        return this.secret.recoverMnemonicFromHex(entropy)
-      })
+
+      this.isGenerating ? this.flow === 'generate' : this.flow !== 'generate'
 
       this.perform(this.navigationService.getState().action)
     })
@@ -82,7 +81,7 @@ export class SecretEditPage {
     }
 
     await this.dismiss()
-    if (this.isGenerating) {
+    if (this.flow === 'generate') {
       this.navigationService.route('/account-add').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     }
   }

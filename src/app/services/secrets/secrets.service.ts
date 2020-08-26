@@ -120,7 +120,7 @@ export class SecretsService {
   }
 
   public getSecretById(secretID: string) {
-    const secret = this.secretsList[this.secretsList.findIndex((item: Secret) => item.id === secretID)]
+    const secret = this.secretsList.find((secret: Secret) => secret.id === secretID)
 
     return secret
   }

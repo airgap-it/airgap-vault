@@ -58,7 +58,7 @@ export class SecretImportPage {
 
     setTimeout(() => {
       this.navigationService
-        .routeWithState(`secret-edit/${secret.id}/${true}`, { secret, isGenerating: true })
+        .routeWithState(`secret-edit/${secret.id}/${'generate'}`, { secret, isGenerating: true })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     }, 100)
   }

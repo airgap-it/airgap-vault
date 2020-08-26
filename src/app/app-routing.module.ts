@@ -44,7 +44,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/secret-validate/secret-validate.module').then((m) => m.SecretValidatePageModule)
   },
   {
-    path: 'secret-edit/:secretID/:isGenerating',
+    path: 'secret-edit/:secretID/:flow',
     loadChildren: () => import('./pages/secret-edit/secret-edit.module').then((m) => m.SecretEditPageModule)
   },
   { path: 'about', loadChildren: () => import('./pages/about/about.module').then((m) => m.AboutPageModule) },
