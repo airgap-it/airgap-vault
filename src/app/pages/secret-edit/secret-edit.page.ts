@@ -30,7 +30,6 @@ export class SecretEditPage {
 
   public secret: Secret
   private secretID: string
-  public mnemonic: string
   public readonly secrets$: Observable<Secret[]>
 
   constructor(
@@ -54,9 +53,6 @@ export class SecretEditPage {
       this.interactionSetting = this.secret.interactionSetting !== InteractionSetting.UNDETERMINED
 
       this.isAndroid = this.platform.is('android')
-      this.mnemonic = await this.secretsService.retrieveEntropyForSecret(this.secret).then((entropy: string) => {
-        return this.secret.recoverMnemonicFromHex(entropy)
-      })
 
       this.perform(this.navigationService.getState().action)
     })
