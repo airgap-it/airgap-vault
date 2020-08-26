@@ -6,7 +6,7 @@ import { DeviceService } from '../../services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
-import { SettingsKey, StorageService } from '../../services/storage/storage.service'
+import { VaultStorageKey, VaultStorageService } from '../../services/storage/storage.service'
 
 @Component({
   selector: 'airgap-secret-create',
@@ -20,7 +20,7 @@ export class SecretCreatePage implements OnInit {
     private readonly navigationService: NavigationService,
     private readonly secretsService: SecretsService,
     private readonly deviceService: DeviceService,
-    private readonly storageService: StorageService
+    private readonly storageService: VaultStorageService
   ) {}
 
   public ngOnInit(): void {
@@ -43,7 +43,7 @@ export class SecretCreatePage implements OnInit {
   }
 
   public async goToGenerate(): Promise<void> {
-    const hasShownDisclaimer: boolean = await this.storageService.get(SettingsKey.DISCLAIMER_GENERATE_INITIAL)
+    const hasShownDisclaimer: boolean = await this.storageService.get(VaultStorageKey.DISCLAIMER_GENERATE_INITIAL)
     if (hasShownDisclaimer) {
       this.navigationService.route('/secret-generate').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } else {

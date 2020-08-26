@@ -1,3 +1,4 @@
+import { APP_PLUGIN } from '@airgap/angular-core'
 import { Injectable, Inject } from '@angular/core'
 import { AppPlugin } from '@capacitor/core'
 import { AlertController } from '@ionic/angular'
@@ -6,7 +7,6 @@ import { first } from 'rxjs/operators'
 
 import { serializedDataToUrlString } from '../../utils/utils'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
-import { APP_PLUGIN } from '../..//capacitor-plugins/injection-tokens'
 
 @Injectable({
   providedIn: 'root'

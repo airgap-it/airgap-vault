@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing'
 import { StorageMock } from 'test-config/storage-mock'
 
 import { SecureStorageService } from '../secure-storage/secure-storage.service'
-import { StorageService } from '../storage/storage.service'
+import { VaultStorageService } from '../storage/storage.service'
 
 import { UnitHelper } from './../../../../test-config/unit-test-helper'
 import { SecureStorageServiceMock } from './../secure-storage/secure-storage.mock'
@@ -19,7 +19,7 @@ describe('SecretsService', () => {
       unitHelper.testBed({
         providers: [
           SecretsService,
-          { provide: StorageService, useClass: StorageMock },
+          { provide: VaultStorageService, useClass: StorageMock },
           { provide: SecureStorageService, useClass: SecureStorageServiceMock }
         ]
       })

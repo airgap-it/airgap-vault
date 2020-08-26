@@ -1,17 +1,24 @@
-import { LanguageService, ProtocolService } from '@airgap/angular-core'
+import {
+  APP_PLUGIN,
+  IACMessageTransport,
+  LanguageService,
+  ProtocolService,
+  SPLASH_SCREEN_PLUGIN,
+  STATUS_BAR_PLUGIN
+} from '@airgap/angular-core'
 import { AfterViewInit, Component, Inject, NgZone } from '@angular/core'
 import { AppPlugin, AppUrlOpen, SplashScreenPlugin, StatusBarPlugin, StatusBarStyle } from '@capacitor/core'
 import { Platform } from '@ionic/angular'
 import { first } from 'rxjs/operators'
 
 import { SecurityUtilsPlugin } from './capacitor-plugins/definitions'
-import { APP_PLUGIN, SECURITY_UTILS_PLUGIN, SPLASH_SCREEN_PLUGIN, STATUS_BAR_PLUGIN } from './capacitor-plugins/injection-tokens'
+import { SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
 import { DEEPLINK_VAULT_ADD_ACCOUNT, DEEPLINK_VAULT_PREFIX } from './constants/constants'
 import { ExposedPromise, exposedPromise } from './functions/exposed-promise'
 import { Secret } from './models/secret'
 import { ErrorCategory, handleErrorLocal } from './services/error-handler/error-handler.service'
+import { IACService } from './services/iac/iac.service'
 import { NavigationService } from './services/navigation/navigation.service'
-import { SchemeRoutingService } from './services/scheme-routing/scheme-routing.service'
 import { SecretsService } from './services/secrets/secrets.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
 
@@ -29,7 +36,7 @@ export class AppComponent implements AfterViewInit {
   constructor(
     private readonly platform: Platform,
     private readonly startupChecks: StartupChecksService,
-    private readonly schemeRoutingService: SchemeRoutingService,
+    private readonly iacService: IACService,
     private readonly languageService: LanguageService,
     private readonly protocolService: ProtocolService,
     private readonly secretsService: SecretsService,
@@ -97,7 +104,7 @@ export class AppComponent implements AfterViewInit {
           })
       } else {
         this.ngZone.run(async () => {
-          this.schemeRoutingService.handleNewSyncRequest(data.url).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
+          this.iacService.handleRequest(data.url, IACMessageTransport.DEEPLINK).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
         })
       }
     })

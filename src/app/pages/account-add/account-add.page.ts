@@ -5,7 +5,7 @@ import { ICoinProtocol } from 'airgap-coin-lib'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
-import { SettingsKey, StorageService } from '../../services/storage/storage.service'
+import { VaultStorageKey, VaultStorageService } from '../../services/storage/storage.service'
 import { LocalAuthenticationOnboardingPage } from '../local-authentication-onboarding/local-authentication-onboarding.page'
 import { BIP39_PASSPHRASE_ENABLED } from 'src/app/constants/constants'
 import { ProtocolService } from '@airgap/angular-core'
@@ -28,7 +28,7 @@ export class AccountAddPage {
 
   constructor(
     private readonly secretsService: SecretsService,
-    private readonly storageService: StorageService,
+    private readonly storageService: VaultStorageService,
     private readonly protocolService: ProtocolService,
     private readonly modalController: ModalController,
     private readonly navigationService: NavigationService,
@@ -47,7 +47,7 @@ export class AccountAddPage {
   }
 
   public async addWallet(): Promise<void> {
-    const value: boolean = await this.storageService.get(SettingsKey.DISCLAIMER_HIDE_LOCAL_AUTH_ONBOARDING)
+    const value: boolean = await this.storageService.get(VaultStorageKey.DISCLAIMER_HIDE_LOCAL_AUTH_ONBOARDING)
     if (!value) {
       const modal: HTMLIonModalElement = await this.modalController.create({
         component: LocalAuthenticationOnboardingPage

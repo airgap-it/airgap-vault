@@ -5,8 +5,8 @@ import { first } from 'rxjs/operators'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { PermissionsService, PermissionStatus, PermissionTypes } from '../../services/permissions/permissions.service'
-import { ScannerService } from '../../services/scanner/scanner.service'
-import { IACResult, SchemeRoutingService } from '../../services/scheme-routing/scheme-routing.service'
+import { IACHanderStatus, IACMessageTransport, QrScannerService } from '@airgap/angular-core'
+import { IACService } from 'src/app/services/iac/iac.service'
 
 @Component({
   selector: 'airgap-tab-scan',
@@ -35,9 +35,9 @@ export class TabScanPage {
   private parts: Set<string> = new Set()
 
   constructor(
-    private readonly schemeRouting: SchemeRoutingService,
+    private readonly iacService: IACService,
     private readonly platform: Platform,
-    private readonly scanner: ScannerService,
+    private readonly scanner: QrScannerService,
     private readonly permissionsService: PermissionsService,
     private readonly ngZone: NgZone
   ) {
@@ -131,18 +131,25 @@ export class TabScanPage {
     console.log(`[SCAN:checkScan]: Trying to decode string ${data}`)
 
     this.ngZone.run(() => {
-      this.schemeRouting
-        .handleNewSyncRequest(Array.from(this.parts), (scanResult: { availablePages: number[]; totalPages: number }) => {
-          if (scanResult && scanResult.availablePages) {
-            this.isMultiQr = true
-            this.numberOfQrsScanned = scanResult.availablePages.length
-            this.numberOfQrsTotal = scanResult.totalPages
-            this.percentageScanned = Math.max(0, Math.min(1, scanResult.availablePages.length / scanResult.totalPages))
+      this.iacService
+        .handleRequest(
+          Array.from(this.parts),
+          IACMessageTransport.QR_SCANNER,
+          (scanResult?: Error | { currentPage: number; totalPageNumber: number }) => {
+            console.log('scan result', scanResult)
+
+            const typedScanResult = (scanResult as any) as { availablePages: number[]; totalPages: number }
+            if (scanResult && typedScanResult.availablePages) {
+              this.isMultiQr = true
+              this.numberOfQrsScanned = typedScanResult.availablePages.length
+              this.numberOfQrsTotal = typedScanResult.totalPages
+              this.percentageScanned = Math.max(0, Math.min(1, typedScanResult.availablePages.length / typedScanResult.totalPages))
+            }
+            this.startScan()
           }
-          this.startScan()
-        })
-        .then((result: IACResult) => {
-          if (result === IACResult.SUCCESS) {
+        )
+        .then((result: IACHanderStatus) => {
+          if (result === IACHanderStatus.SUCCESS) {
             this.resetScannerPage()
           }
         })

@@ -1,4 +1,16 @@
-import { AirGapAngularCoreModule, AirGapTranslateLoader } from '@airgap/angular-core'
+import {
+  APP_PLUGIN,
+  APP_INFO_PLUGIN,
+  CLIPBOARD_PLUGIN,
+  SPLASH_SCREEN_PLUGIN,
+  STATUS_BAR_PLUGIN,
+  AirGapAngularCoreModule,
+  AirGapTranslateLoader,
+  ClipboardService,
+  SerializerService,
+  QrScannerService,
+  UiEventService
+} from '@airgap/angular-core'
 import { HttpClient, HttpClientModule } from '@angular/common/http'
 import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
@@ -12,15 +24,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
 
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
-import {
-  APP_INFO_PLUGIN,
-  APP_PLUGIN,
-  CAMERA_PREVIEW_PLUGIN,
-  CLIPBOARD_PLUGIN,
-  SECURITY_UTILS_PLUGIN,
-  SPLASH_SCREEN_PLUGIN,
-  STATUS_BAR_PLUGIN
-} from './capacitor-plugins/injection-tokens'
+import { CAMERA_PREVIEW_PLUGIN, SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
 import { DistributionOnboardingPageModule } from './pages/distribution-onboarding/distribution-onboarding.module'
 import { IntroductionPageModule } from './pages/introduction/introduction.module'
 import { LocalAuthenticationOnboardingPageModule } from './pages/local-authentication-onboarding/local-authentication-onboarding.module'
@@ -29,24 +33,21 @@ import { AudioServiceFactory } from './services/audio/audio.factory'
 import { AudioNativeService } from './services/audio/audio.native.servive'
 import { CameraFactory, CameraFactoryDepHolder } from './services/camera/camera.factory'
 import { CameraNativeService } from './services/camera/camera.native.service'
-import { ClipboardService } from './services/clipboard/clipboard.service'
 import { DeepLinkService } from './services/deep-link/deep-link.service'
 import { DeviceService } from './services/device/device.service'
 import { EntropyService } from './services/entropy/entropy.service'
 import { ErrorHandlerService } from './services/error-handler/error-handler.service'
 import { GyroscopeServiceFactory } from './services/gyroscope/gyroscope.factory'
 import { GyroscopeNativeService } from './services/gyroscope/gyroscope.native.service'
+import { IACService } from './services/iac/iac.service'
 import { InteractionService } from './services/interaction/interaction.service'
 import { PermissionsService } from './services/permissions/permissions.service'
-import { ScannerService } from './services/scanner/scanner.service'
-import { SchemeRoutingService } from './services/scheme-routing/scheme-routing.service'
 import { SecretsService } from './services/secrets/secrets.service'
 import { SecureStorageFactory, SecureStorageFactoryDepHolder } from './services/secure-storage/secure-storage.factory'
 import { SecureStorageService } from './services/secure-storage/secure-storage.service'
-import { SerializerService } from './services/serializer/serializer.service'
 import { ShareUrlService } from './services/share-url/share-url.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
-import { StorageService } from './services/storage/storage.service'
+import { VaultStorageService } from './services/storage/storage.service'
 
 export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
   return new AirGapTranslateLoader(http, { prefix: './assets/i18n/', suffix: '.json' })
@@ -95,9 +96,9 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
     CameraNativeService,
     EntropyService,
     GyroscopeNativeService,
-    ScannerService,
+    QrScannerService,
     StartupChecksService,
-    SchemeRoutingService,
+    IACService,
     ClipboardService,
     PermissionsService,
     ShareUrlService,
@@ -105,7 +106,8 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
     InteractionService,
     DeepLinkService,
     SerializerService,
-    StorageService,
+    VaultStorageService,
+    UiEventService,
     SecureStorageFactoryDepHolder,
     CameraFactoryDepHolder,
     {

@@ -2,7 +2,7 @@ import { Component } from '@angular/core'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
-import { SettingsKey, StorageService } from '../../services/storage/storage.service'
+import { VaultStorageKey, VaultStorageService } from '../../services/storage/storage.service'
 
 @Component({
   selector: 'airgap-secret-generate-onboarding',
@@ -10,10 +10,10 @@ import { SettingsKey, StorageService } from '../../services/storage/storage.serv
   styleUrls: ['./secret-generate-onboarding.page.scss']
 })
 export class SecretGenerateOnboardingPage {
-  constructor(private readonly navigationService: NavigationService, private readonly storageService: StorageService) {}
+  constructor(private readonly navigationService: NavigationService, private readonly storageService: VaultStorageService) {}
 
   public async continue(): Promise<void> {
-    await this.storageService.set(SettingsKey.DISCLAIMER_GENERATE_INITIAL, true)
+    await this.storageService.set(VaultStorageKey.DISCLAIMER_GENERATE_INITIAL, true)
     this.navigationService.route('secret-generate').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

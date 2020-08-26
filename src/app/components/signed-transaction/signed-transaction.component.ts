@@ -3,7 +3,7 @@ import { Component, Input, OnChanges } from '@angular/core'
 import { IACMessageDefinitionObject, IAirGapTransaction, ICoinProtocol, SignedTransaction, UnsignedTransaction } from 'airgap-coin-lib'
 import BigNumber from 'bignumber.js'
 
-import { SerializerService } from '../../services/serializer/serializer.service'
+import { SerializerService } from '@airgap/angular-core'
 import { TokenService } from 'src/app/services/token/TokenService'
 
 @Component({
