@@ -20,10 +20,6 @@ export class SecretRulesPage {
     private activatedRoute: ActivatedRoute,
     private secretService: SecretsService
   ) {
-    this.secret = this.navigationService.getState().secret
-    if (!this.secret) {
-      this.secret = this.secretService.getActiveSecret()
-    }
     this.activatedRoute.params.subscribe((params) => {
       this.secretID = params['secretID']
       this.secret = this.secretService.getSecretById(this.secretID)
@@ -31,6 +27,6 @@ export class SecretRulesPage {
   }
 
   public goToShowSecret(): void {
-    this.navigationService.route(`secret-show/${this.secretID}`).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.navigationService.route(`secret-show/${this.secret.id}`).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }
