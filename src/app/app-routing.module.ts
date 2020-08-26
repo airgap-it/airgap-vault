@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core'
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router'
+import { SecretGuard } from './services/guards/secret.guard'
 
 const routes: Routes = [
   { path: '', loadChildren: () => import('./pages/tabs/tabs.module').then((m) => m.TabsPageModule) },
@@ -25,6 +26,7 @@ const routes: Routes = [
   { path: 'account-share', loadChildren: () => import('./pages/account-share/account-share.module').then((m) => m.AccountSharePageModule) },
   {
     path: 'account-address/:secretID/:protocol/:publicKey',
+    canActivate: [SecretGuard],
     loadChildren: () => import('./pages/account-address/account-address.module').then((m) => m.AccountAddressPageModule)
   },
   {
@@ -33,18 +35,22 @@ const routes: Routes = [
   },
   {
     path: 'secret-rules/:secretID',
+    canActivate: [SecretGuard],
     loadChildren: () => import('./pages/secret-rules/secret-rules.module').then((m) => m.SecretRulesPageModule)
   },
   {
     path: 'secret-show/:secretID',
+    canActivate: [SecretGuard],
     loadChildren: () => import('./pages/secret-show/secret-show.module').then((m) => m.SecretShowPageModule)
   },
   {
     path: 'secret-validate/:secretID',
+    canActivate: [SecretGuard],
     loadChildren: () => import('./pages/secret-validate/secret-validate.module').then((m) => m.SecretValidatePageModule)
   },
   {
     path: 'secret-edit/:secretID/:flow',
+    canActivate: [SecretGuard],
     loadChildren: () => import('./pages/secret-edit/secret-edit.module').then((m) => m.SecretEditPageModule)
   },
   { path: 'about', loadChildren: () => import('./pages/about/about.module').then((m) => m.AboutPageModule) },
@@ -77,6 +83,7 @@ const routes: Routes = [
   },
   {
     path: 'social-recovery-setup/:secretID',
+    canActivate: [SecretGuard],
     loadChildren: () => import('./pages/social-recovery-setup/social-recovery-setup.module').then((m) => m.SocialRecoverySetupPageModule)
   },
   {

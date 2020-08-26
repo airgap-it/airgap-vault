@@ -48,6 +48,7 @@ import {
   CAMERA_PREVIEW_PLUGIN,
   SECURITY_UTILS_PLUGIN
 } from './capacitor-plugins/injection-tokens'
+import { SecretGuard } from './services/guards/secret.guard'
 
 const { App, AppInfo, CameraPreview, Clipboard, SecurityUtils, SplashScreen, StatusBar } = Plugins
 
@@ -119,7 +120,8 @@ const { App, AppInfo, CameraPreview, Clipboard, SecurityUtils, SplashScreen, Sta
       provide: GyroscopeNativeService,
       useFactory: GyroscopeServiceFactory,
       deps: [Platform, DeviceMotion]
-    }
+    },
+    SecretGuard
   ],
   bootstrap: [AppComponent]
 })
