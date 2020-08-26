@@ -49,8 +49,6 @@ export class SecretValidatePage {
   }
 
   public goToSecretEditPage(): void {
-    this.navigationService
-      .routeWithState(`secret-edit/${this.secretID}/${'generate'}`, { secret: this.secret, isGenerating: true })
-      .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.navigationService.route(`secret-edit/${this.secretID}/${'generate'}`).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

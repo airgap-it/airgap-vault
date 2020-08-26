@@ -73,7 +73,7 @@ export class TabAccountsPage implements OnInit {
 
   public navigateToRecoverySettings() {
     this.navigationService
-      .routeWithState('/secret-edit', {
+      .routeWithState(`/secret-edit/${this.activeSecret.id}/${'edit'}`, {
         secret: this.activeSecret,
         action: SecretEditAction.SET_RECOVERY_KEY
       })

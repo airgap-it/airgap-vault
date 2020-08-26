@@ -83,9 +83,7 @@ export class SecretShowPage {
           alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
         })
     } else {
-      this.navigationService
-        .routeWithState(`secret-validate/${this.secretID}`, { secret: this.secret })
-        .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+      this.navigationService.route(`secret-validate/${this.secretID}`).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     }
   }
 }
