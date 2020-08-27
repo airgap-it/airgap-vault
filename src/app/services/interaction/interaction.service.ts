@@ -1,3 +1,4 @@
+import { IACHistoryService, IACMessageTransport } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
 import { AirGapWallet, UnsignedTransaction } from 'airgap-coin-lib'
 
@@ -37,7 +38,11 @@ export interface IInteractionOptions {
   providedIn: 'root'
 })
 export class InteractionService {
-  constructor(private readonly navigationService: NavigationService, private readonly deepLinkService: DeepLinkService) {}
+  constructor(
+    private readonly navigationService: NavigationService,
+    private readonly deepLinkService: DeepLinkService,
+    private readonly iacHistoryService: IACHistoryService
+  ) {}
 
   public startInteraction(interactionOptions: IInteractionOptions, secret: Secret): void {
     const interactionSetting: InteractionSetting = secret.interactionSetting
@@ -83,6 +88,7 @@ export class InteractionService {
   }
 
   private navigateToPageByOperationType(interactionOptions: IInteractionOptions): void {
+    this.iacHistoryService.add(interactionOptions.url, IACMessageTransport.QR_SCANNER, true)
     if (interactionOptions.operationType === InteractionOperationType.WALLET_SYNC) {
       this.navigationService
         .routeWithState('/account-share', { interactionUrl: interactionOptions.url })
@@ -102,6 +108,7 @@ export class InteractionService {
   }
 
   private startDeeplink(url: string): void {
+    this.iacHistoryService.add(url, IACMessageTransport.DEEPLINK, true)
     this.deepLinkService
       .sameDeviceDeeplink(url)
       .then(() => {

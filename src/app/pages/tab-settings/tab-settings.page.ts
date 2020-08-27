@@ -79,6 +79,10 @@ export class TabSettingsPage {
     this.navigationService.route('/about').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
+  public goToInteractionHistory(): void {
+    this.navigationService.route('/interaction-history').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
   public pasteClipboard(): void {
     this.clipboardService.paste().then(
       (text: string) => {

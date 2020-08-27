@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab-settings"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Communication History</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let entry of entries" (click)="openDetail(entry)">
+      {{entry.outgoing ? 'Outgoing' : 'Incoming'}}
+      <span *ngFor="let detail of entry.details">
+        {{ detail.type }} - {{ detail.protocol }} -
+        <span *ngIf="detail.amount">{{detail.amount | amountConverter: { protocol: detail.protocol, maxDigits: undefined } | async}}</span>
+      </span>
+      <br />
+      {{entry.date}}
+    </ion-item>
+  </ion-list>
+</ion-content>

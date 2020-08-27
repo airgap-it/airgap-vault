@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab-settings"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>History Detail</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="entry" class="ion-padding">
+  ID: {{entry.id}}
+  <br />
+  {{entry.outgoing ? 'Outgoing' : 'Incoming'}}
+  <br />
+  <ion-row class="ion-justify-content-center ion-padding-bottom">
+    <airgap-qr [qrdata]="entry.message" [shouldPrefixSingleQrWithUrl]="false" [level]="'L'" [size]="300"></airgap-qr>
+  </ion-row>
+  <br />
+  Transport: {{entry.transport}}
+  <br />
+  <br />
+  Date: {{entry.date}}
+  <br />
+  <br />
+  Message
+  <pre>{{entry.message}}</pre>
+  <ion-button (click)="copyMessage()">Copy</ion-button>
+  <br />
+  <br />
+  <pre *ngIf="details">{{details | json}}</pre>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-button color="light" (click)="handle()" shape="round">Handle Locally</ion-button>
+    <ion-button color="primary" (click)="send()" shape="round">Relay</ion-button>
+  </ion-fab>
+</ion-content>
