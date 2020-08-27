@@ -1,7 +1,7 @@
 FROM node:10
 
 # See https://crbug.com/795759
-RUN apt-get update && apt-get install -yq libgconf-2-4 bzip2 build-essential
+RUN apt-get update && apt-get install -yq libgconf-2-4 bzip2 build-essential libxtst6
 RUN apt-get install -yq git
 
 # Install latest chrome dev package and fonts to support major charsets (Chinese, Japanese, Arabic, Hebrew, Thai and a few others)
