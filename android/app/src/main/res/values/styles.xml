@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar.Bridge">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -11,7 +11,7 @@
         <item name="android:textColorHint">#b4b4b4</item>
     </style>
 
-    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppTheme.NoActionBar" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:background">@null</item>
@@ -22,18 +22,17 @@
         <item name="android:background">@drawable/screen</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
 
-    <style name="AirgapAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+    <style name="AirGapAlertDialogStyle" parent="Theme.MaterialComponents.Light.Dialog.Alert.Bridge">
         <!-- Used for the buttons -->
         <item name="colorAccent">#F7296E</item>
         <!-- Used for the title and text -->
         <item name="android:textColorPrimary">#838383</item>
-        <!-- Used for the background -->
-        <item name="android:background">#FAFAFA</item>
         <item name="android:textColorHint">#b4b4b4</item>
         <item name="android:textColor">#202020</item>>
     </style>
+
 </resources>
