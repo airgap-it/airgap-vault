@@ -19,7 +19,7 @@ import { SecretsService } from 'src/app/services/secrets/secrets.service'
 export class SecretShowPage {
   public secret: Secret
   public readonly startTime: Date = new Date()
-  private secretID: string
+  public secretID: string
   public mnemonic: string
 
   constructor(

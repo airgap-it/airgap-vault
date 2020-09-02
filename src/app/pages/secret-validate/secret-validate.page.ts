@@ -18,7 +18,7 @@ export class SecretValidatePage {
   public verify: VerifyKeyComponent
 
   public secret: Secret
-  private secretID: string
+  public secretID: string
   public mnemonic: string
 
   constructor(

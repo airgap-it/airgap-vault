@@ -30,7 +30,7 @@ export class SecretEditPage {
   public isAndroid: boolean = false
 
   public secret: Secret
-  private secretID: string
+  public secretID: string
   public readonly secrets$: Observable<Secret[]>
 
   constructor(

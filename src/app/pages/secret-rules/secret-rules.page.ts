@@ -10,7 +10,7 @@ import { ActivatedRoute } from '@angular/router'
   styleUrls: ['./secret-rules.page.scss']
 })
 export class SecretRulesPage {
-  private secretID: string
+  public secretID: string
 
   constructor(private readonly navigationService: NavigationService, private activatedRoute: ActivatedRoute) {
     this.activatedRoute.params.subscribe((params) => {

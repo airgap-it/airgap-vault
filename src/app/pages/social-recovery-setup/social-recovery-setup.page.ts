@@ -17,7 +17,7 @@ export class SocialRecoverySetupPage {
   public numberOfShares: number = 3
   public numberOfRequiredShares: number = 2
   private secret: Secret
-  private secretID: string
+  public secretID: string
 
   constructor(
     private readonly secretService: SecretsService,
