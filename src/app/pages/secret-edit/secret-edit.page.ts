@@ -55,9 +55,9 @@ export class SecretEditPage {
 
       this.isAndroid = this.platform.is('android')
 
-      this.isGenerating ? this.flow === 'generate' : this.flow !== 'generate'
-
       this.perform(this.navigationService.getState().action)
+
+      this.isGenerating = this.flow === 'generate'
     })
     this.secrets$ = this.secretsService.getSecretsObservable()
   }

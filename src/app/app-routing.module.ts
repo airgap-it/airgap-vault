@@ -36,7 +36,6 @@ const routes: Routes = [
   },
   {
     path: 'secret-rules/:secretID',
-    canActivate: [SecretGuard],
     loadChildren: () => import('./pages/secret-rules/secret-rules.module').then((m) => m.SecretRulesPageModule)
   },
   {
