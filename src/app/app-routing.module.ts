@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core'
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router'
 import { SecretGuard } from './services/guards/secret.guard'
+import { ProtocolandKeyGuard } from './services/guards/protocolandkey.guard'
 
 const routes: Routes = [
   { path: '', loadChildren: () => import('./pages/tabs/tabs.module').then((m) => m.TabsPageModule) },
@@ -26,7 +27,7 @@ const routes: Routes = [
   { path: 'account-share', loadChildren: () => import('./pages/account-share/account-share.module').then((m) => m.AccountSharePageModule) },
   {
     path: 'account-address/:secretID/:protocol/:publicKey',
-    canActivate: [SecretGuard],
+    canActivate: [SecretGuard, ProtocolandKeyGuard],
     loadChildren: () => import('./pages/account-address/account-address.module').then((m) => m.AccountAddressPageModule)
   },
   {
