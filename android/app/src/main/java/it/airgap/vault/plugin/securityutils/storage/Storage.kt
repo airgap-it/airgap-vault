@@ -283,7 +283,7 @@ class Storage(private val context: Context, private val storageAlias: String, pr
             val passwordText = editView.findViewById<EditText>(R.id.password)
             val confirmText = editView.findViewById<EditText>(R.id.password_confirmation)
 
-            val dialog = AlertDialog.Builder(context, R.style.AirgapAlertDialogStyle).apply {
+            val dialog = AlertDialog.Builder(context, R.style.AirGapAlertDialogStyle).apply {
                 setTitle(title)
                 setMessage(message)
 
@@ -331,7 +331,7 @@ class Storage(private val context: Context, private val storageAlias: String, pr
             cancel: () -> Unit = {}
     ) {
         (context as? Activity)?.runOnUiThread {
-            val dialog = AlertDialog.Builder(context, R.style.AirgapAlertDialogStyle).apply {
+            val dialog = AlertDialog.Builder(context, R.style.AirGapAlertDialogStyle).apply {
                 setTitle(title)
 
                 val editView = LayoutInflater.from(context).inflate(R.layout.alert_input_dialog, null)
