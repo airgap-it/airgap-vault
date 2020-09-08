@@ -1,16 +1,17 @@
+import { ProtocolService } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
 import { AlertController, LoadingController } from '@ionic/angular'
-import { AirGapWallet, getProtocolByIdentifier, ICoinProtocol } from 'airgap-coin-lib'
+import { AirGapWallet, ICoinProtocol } from 'airgap-coin-lib'
+import { ProtocolSymbols } from 'airgap-coin-lib/dist/utils/ProtocolSymbols'
+import { SerializedAirGapWallet } from 'airgap-coin-lib/dist/wallet/AirGapWallet'
 import * as bip39 from 'bip39'
 import { Observable, ReplaySubject } from 'rxjs'
 
 import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
+import { NavigationService } from '../navigation/navigation.service'
 import { SecureStorage, SecureStorageService } from '../secure-storage/secure-storage.service'
 import { SettingsKey, StorageService } from '../storage/storage.service'
-import { NavigationService } from '../navigation/navigation.service'
-import { ProtocolSymbols } from 'airgap-coin-lib/dist/utils/ProtocolSymbols'
-import { SerializedAirGapWallet } from 'airgap-coin-lib/dist/wallet/AirGapWallet'
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,7 @@ export class SecretsService {
   constructor(
     private readonly secureStorageService: SecureStorageService,
     private readonly storageService: StorageService,
+    private readonly protocolService: ProtocolService,
     private readonly navigationService: NavigationService,
     private readonly loadingCtrl: LoadingController,
     private readonly alertCtrl: AlertController
@@ -60,7 +62,7 @@ export class SecretsService {
       if (secret.wallets) {
         for (let i: number = 0; i < secret.wallets.length; i++) {
           const wallet: SerializedAirGapWallet = (secret.wallets[i] as any) as SerializedAirGapWallet
-          const protocol: ICoinProtocol = getProtocolByIdentifier(wallet.protocolIdentifier)
+          const protocol: ICoinProtocol = await this.protocolService.getProtocol(wallet.protocolIdentifier)
           const airGapWallet: AirGapWallet = new AirGapWallet(protocol, wallet.publicKey, wallet.isExtendedPublicKey, wallet.derivationPath)
           airGapWallet.addresses = wallet.addresses
           secret.wallets[i] = airGapWallet
@@ -251,7 +253,7 @@ export class SecretsService {
     })
     loading.present().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
 
-    const protocol: ICoinProtocol = getProtocolByIdentifier(protocolIdentifier)
+    const protocol: ICoinProtocol = await this.protocolService.getProtocol(protocolIdentifier)
 
     const secret: Secret = this.getActiveSecret()
 

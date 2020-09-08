@@ -1,3 +1,4 @@
+import { ProtocolService } from '@airgap/angular-core'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { Platform } from '@ionic/angular'
@@ -6,7 +7,6 @@ import { TranslateService } from '@ngx-translate/core'
 import { UnitHelper } from './../../test-config/unit-test-helper'
 import { AppComponent } from './app.component'
 import { NavigationService } from './services/navigation/navigation.service'
-import { ProtocolsService } from './services/protocols/protocols.service'
 import { SchemeRoutingService } from './services/scheme-routing/scheme-routing.service'
 import { SecretsService } from './services/secrets/secrets.service'
 import { SecureStorageServiceMock } from './services/secure-storage/secure-storage.mock'
@@ -50,7 +50,7 @@ describe('AppComponent', () => {
           StartupChecksService,
           SchemeRoutingService,
           TranslateService,
-          ProtocolsService,
+          ProtocolService,
           SecretsService,
           NavigationService
         ]
