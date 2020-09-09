@@ -1,3 +1,4 @@
+import { AirGapAngularCoreModule } from '@airgap/angular-core'
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { FormsModule } from '@angular/forms'
@@ -19,7 +20,15 @@ const routes: Routes = [
 
 @NgModule({
   entryComponents: [AccountEditPopoverComponent],
-  imports: [CommonModule, ComponentsModule, FormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule],
+  imports: [
+    CommonModule,
+    ComponentsModule,
+    FormsModule,
+    IonicModule,
+    RouterModule.forChild(routes),
+    TranslateModule,
+    AirGapAngularCoreModule
+  ],
   declarations: [AccountAddressPage, AccountEditPopoverComponent]
 })
 export class AccountAddressPageModule {}
