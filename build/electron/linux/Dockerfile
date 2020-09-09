@@ -1,4 +1,4 @@
-FROM electronuserland/builder:14
+FROM electronuserland/builder:12
 
 # set cache dirs
 ENV ELECTRON_CACHE "/root/.cache/electron"
