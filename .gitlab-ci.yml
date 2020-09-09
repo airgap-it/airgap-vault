@@ -84,6 +84,7 @@ build_mac:
   stage: native_build
   when: manual
   script:
+    - nvm use v14.10.0
     - 'sed -i -e "s/\"version\": \"0.0.1\"/\"version\": \"${VERSION}\"/g" electron/package.json'
     - npm install
     - npm --prefix electron/ install
