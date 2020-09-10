@@ -21,8 +21,6 @@ describe('IACService', () => {
 
   beforeEach(() => {
     unitHelper = new UnitHelper()
-    let appSpy = createAppSpy()
-
     TestBed.configureTestingModule(
       unitHelper.testBed({
         providers: [
@@ -34,7 +32,7 @@ describe('IACService', () => {
           { provide: Storage, useClass: StorageMock },
           { provide: NavController, useClass: NavControllerMock },
           { provide: NavParams, useClass: NavParamsMock },
-          { provide: APP_PLUGIN, useValue: appSpy },
+          { provide: APP_PLUGIN, useValue: createAppSpy() },
           { provide: STATUS_BAR_PLUGIN, useClass: StatusBarMock },
           { provide: SPLASH_SCREEN_PLUGIN, useClass: SplashScreenMock },
           { provide: Platform, useClass: PlatformMock }
