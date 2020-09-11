@@ -21,6 +21,8 @@ import {
 } from './ionic-mocks'
 import { AppInfoPluginMock, SplashScreenMock, StatusBarMock } from './plugins-mocks'
 import { StorageMock } from './storage-mock'
+import { APP_CONFIG } from '@airgap/angular-core/lib/config/app-config'
+import { appConfig } from 'src/app/config/app-config'
 
 export class UnitHelper {
   public readonly mockRefs = {
@@ -57,7 +59,8 @@ export class UnitHelper {
       { provide: NavController, useClass: NavControllerMock },
       { provide: Platform, useValue: this.mockRefs.platform },
       { provide: ToastController, useValue: this.mockRefs.toastController },
-      { provide: AlertController, useValue: this.mockRefs.alertController }
+      { provide: AlertController, useValue: this.mockRefs.alertController },
+      { provide: APP_CONFIG, useValue: appConfig }
     ]
 
     if (!useIonicOnlyTestBed) {
