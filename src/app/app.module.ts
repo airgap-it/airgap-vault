@@ -5,10 +5,12 @@ import {
   CLIPBOARD_PLUGIN,
   SPLASH_SCREEN_PLUGIN,
   STATUS_BAR_PLUGIN,
+  PERMISSIONS_PLUGIN,
   AirGapAngularCoreModule,
   AirGapTranslateLoader,
   ClipboardService,
   DeeplinkService,
+  PermissionsService,
   SerializerService,
   QrScannerService,
   UiEventService
@@ -42,7 +44,6 @@ import { GyroscopeServiceFactory } from './services/gyroscope/gyroscope.factory'
 import { GyroscopeNativeService } from './services/gyroscope/gyroscope.native.service'
 import { IACService } from './services/iac/iac.service'
 import { InteractionService } from './services/interaction/interaction.service'
-import { PermissionsService } from './services/permissions/permissions.service'
 import { SecretsService } from './services/secrets/secrets.service'
 import { SecureStorageFactory, SecureStorageFactoryDepHolder } from './services/secure-storage/secure-storage.factory'
 import { SecureStorageService } from './services/secure-storage/secure-storage.service'
@@ -85,6 +86,7 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
     { provide: APP_INFO_PLUGIN, useValue: Plugins.AppInfo },
     { provide: CAMERA_PREVIEW_PLUGIN, useValue: Plugins.CameraPreview },
     { provide: CLIPBOARD_PLUGIN, useValue: Plugins.Clipboard },
+    { provide: PERMISSIONS_PLUGIN, useValue: Plugins.Permissions },
     { provide: SECURITY_UTILS_PLUGIN, useValue: Plugins.SecurityUtils },
     { provide: SPLASH_SCREEN_PLUGIN, useValue: Plugins.SplashScreen },
     { provide: STATUS_BAR_PLUGIN, useValue: Plugins.StatusBar },

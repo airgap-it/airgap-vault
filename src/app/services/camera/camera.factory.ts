@@ -1,9 +1,9 @@
+import { PermissionsService } from '@airgap/angular-core'
 import { RendererFactory2, Injectable, Inject } from '@angular/core'
 import { Platform } from '@ionic/angular'
 
 import { IEntropyGenerator } from '../entropy/IEntropyGenerator'
 
-import { PermissionsService } from './../permissions/permissions.service'
 import { CameraBrowserService } from './camera.browser.service'
 import { CameraNativeService } from './camera.native.service'
 import { CAMERA_PREVIEW_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'

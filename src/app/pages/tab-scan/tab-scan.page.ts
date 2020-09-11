@@ -4,8 +4,14 @@ import { ZXingScannerComponent } from '@zxing/ngx-scanner'
 import { first } from 'rxjs/operators'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
-import { PermissionsService, PermissionStatus, PermissionTypes } from '../../services/permissions/permissions.service'
-import { IACHanderStatus, IACMessageTransport, QrScannerService } from '@airgap/angular-core'
+import {
+  IACHanderStatus,
+  IACMessageTransport,
+  PermissionsService,
+  PermissionStatus,
+  PermissionTypes,
+  QrScannerService
+} from '@airgap/angular-core'
 import { IACService } from 'src/app/services/iac/iac.service'
 
 @Component({
