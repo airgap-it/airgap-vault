@@ -1,7 +1,8 @@
+import { AppInfoPlugin } from '@airgap/angular-core'
 import { AppPlugin, ClipboardPlugin, SplashScreenPlugin, StatusBarPlugin } from '@capacitor/core'
+
 import { newSpy } from './unit-test-helper'
 import { SecurityUtilsPlugin } from 'src/app/capacitor-plugins/definitions'
-import { AppInfoPlugin } from '@airgap/angular-core'
 
 export function createAppSpy(): AppPlugin {
   return jasmine.createSpyObj('AppPlugin', ['addListener', 'openUrl'])
