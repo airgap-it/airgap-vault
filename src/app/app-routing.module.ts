@@ -89,14 +89,6 @@ const routes: Routes = [
   {
     path: 'transaction-signed',
     loadChildren: () => import('./pages/transaction-signed/transaction-signed.module').then((m) => m.TransactionSignedPageModule)
-  },
-  {
-    path: 'interaction-history',
-    loadChildren: () => import('./pages/iac-history/iac-history.module').then((m) => m.IacHistoryPageModule)
-  },
-  {
-    path: 'interaction-history-detail/:historyID',
-    loadChildren: () => import('./pages/iac-history-detail/iac-history-detail.module').then((m) => m.IacHistoryDetailPageModule)
   }
 ]
 

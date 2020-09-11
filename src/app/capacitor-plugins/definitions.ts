@@ -1,9 +1,5 @@
 import { PluginListenerHandle } from '@capacitor/core'
 
-export interface AppInfoPlugin {
-  get(): Promise<{ appName: string; packageName: string; versionName: string; versionCode: number }>
-}
-
 export interface CameraPreviewPlugin {
   start({}): Promise<void>
   stop(): Promise<void>

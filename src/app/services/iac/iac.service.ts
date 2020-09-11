@@ -1,4 +1,4 @@
-import { BaseIACService, IACHistoryService, ProtocolService, SerializerService, UiEventService } from '@airgap/angular-core'
+import { BaseIACService, ProtocolService, SerializerService, UiEventService, UiEventElementsService } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
 import { IACMessageDefinitionObject, UnsignedTransaction, AirGapWallet, IACMessageType } from 'airgap-coin-lib'
 import { handleErrorLocal, ErrorCategory } from '../error-handler/error-handler.service'
@@ -11,20 +11,20 @@ import { SecretsService } from '../secrets/secrets.service'
 })
 export class IACService extends BaseIACService {
   constructor(
-    uiEventService: UiEventService,
+    public readonly uiEventService: UiEventService,
+    uiEventElementsService: UiEventElementsService,
     serializerService: SerializerService,
-    iacHistoryService: IACHistoryService,
     private readonly protocolService: ProtocolService,
     private readonly navigationService: NavigationService,
     private readonly secretsService: SecretsService,
     private readonly interactionService: InteractionService
   ) {
-    super(uiEventService, serializerService, iacHistoryService, secretsService.isReady(), [])
+    super(uiEventElementsService, serializerService, secretsService.isReady(), [])
 
     this.serializerMessageHandlers[IACMessageType.TransactionSignRequest] = this.handleUnsignedTransactions.bind(this)
   }
 
-  protected async relay(data: string | string[]): Promise<void> {
+  public async relay(data: string | string[]): Promise<void> {
     this.interactionService.startInteraction(
       {
         operationType: InteractionOperationType.WALLET_SYNC,

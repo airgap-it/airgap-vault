@@ -1,8 +1,7 @@
 import { Component, Inject } from '@angular/core'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
-import { AppInfoPlugin } from 'src/app/capacitor-plugins/definitions'
-import { APP_INFO_PLUGIN } from '@airgap/angular-core'
+import { APP_INFO_PLUGIN, AppInfoPlugin } from '@airgap/angular-core'
 
 @Component({
   selector: 'airgap-about',

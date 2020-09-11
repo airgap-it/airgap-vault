@@ -1,10 +1,9 @@
-import { IACHistoryService, IACMessageTransport } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
 import { AirGapWallet, UnsignedTransaction } from 'airgap-coin-lib'
+import { DeeplinkService } from '@airgap/angular-core'
 
 import { Secret } from '../../models/secret'
 import { assertNever } from '../../utils/utils'
-import { DeepLinkService } from '../deep-link/deep-link.service'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { NavigationService } from '../navigation/navigation.service'
 
@@ -38,11 +37,7 @@ export interface IInteractionOptions {
   providedIn: 'root'
 })
 export class InteractionService {
-  constructor(
-    private readonly navigationService: NavigationService,
-    private readonly deepLinkService: DeepLinkService,
-    private readonly iacHistoryService: IACHistoryService
-  ) {}
+  constructor(private readonly navigationService: NavigationService, private readonly deeplinkService: DeeplinkService) {}
 
   public startInteraction(interactionOptions: IInteractionOptions, secret: Secret): void {
     const interactionSetting: InteractionSetting = secret.interactionSetting
@@ -88,7 +83,7 @@ export class InteractionService {
   }
 
   private navigateToPageByOperationType(interactionOptions: IInteractionOptions): void {
-    this.iacHistoryService.add(interactionOptions.url, IACMessageTransport.QR_SCANNER, true)
+    // this.iacHistoryService.add(interactionOptions.url, IACMessageTransport.QR_SCANNER, true)
     if (interactionOptions.operationType === InteractionOperationType.WALLET_SYNC) {
       this.navigationService
         .routeWithState('/account-share', { interactionUrl: interactionOptions.url })
@@ -108,8 +103,8 @@ export class InteractionService {
   }
 
   private startDeeplink(url: string): void {
-    this.iacHistoryService.add(url, IACMessageTransport.DEEPLINK, true)
-    this.deepLinkService
+    // this.iacHistoryService.add(url, IACMessageTransport.DEEPLINK, true)
+    this.deeplinkService
       .sameDeviceDeeplink(url)
       .then(() => {
         this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))

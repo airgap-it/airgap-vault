@@ -1,4 +1,5 @@
 import {
+  APP_CONFIG,
   APP_PLUGIN,
   APP_INFO_PLUGIN,
   CLIPBOARD_PLUGIN,
@@ -7,6 +8,7 @@ import {
   AirGapAngularCoreModule,
   AirGapTranslateLoader,
   ClipboardService,
+  DeeplinkService,
   SerializerService,
   QrScannerService,
   UiEventService
@@ -33,7 +35,6 @@ import { AudioServiceFactory } from './services/audio/audio.factory'
 import { AudioNativeService } from './services/audio/audio.native.servive'
 import { CameraFactory, CameraFactoryDepHolder } from './services/camera/camera.factory'
 import { CameraNativeService } from './services/camera/camera.native.service'
-import { DeepLinkService } from './services/deep-link/deep-link.service'
 import { DeviceService } from './services/device/device.service'
 import { EntropyService } from './services/entropy/entropy.service'
 import { ErrorHandlerService } from './services/error-handler/error-handler.service'
@@ -48,6 +49,7 @@ import { SecureStorageService } from './services/secure-storage/secure-storage.s
 import { ShareUrlService } from './services/share-url/share-url.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
 import { VaultStorageService } from './services/storage/storage.service'
+import { appConfig } from './config/app-config'
 
 export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
   return new AirGapTranslateLoader(http, { prefix: './assets/i18n/', suffix: '.json' })
@@ -86,6 +88,7 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
     { provide: SECURITY_UTILS_PLUGIN, useValue: Plugins.SecurityUtils },
     { provide: SPLASH_SCREEN_PLUGIN, useValue: Plugins.SplashScreen },
     { provide: STATUS_BAR_PLUGIN, useValue: Plugins.StatusBar },
+    { provide: APP_CONFIG, useValue: appConfig },
     Diagnostic,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     DeviceMotion,
@@ -104,7 +107,7 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
     ShareUrlService,
     ErrorHandlerService,
     InteractionService,
-    DeepLinkService,
+    DeeplinkService,
     SerializerService,
     VaultStorageService,
     UiEventService,
