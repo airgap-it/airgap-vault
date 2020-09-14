@@ -107,7 +107,6 @@ export class TabScanPage {
 
   public startScan(): void {
     if (this.platform.is('hybrid')) {
-      this.scanner.show()
       this.scanner.scan(
         (text: string) => {
           this.checkScan(text).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
