@@ -83,6 +83,7 @@
     "@angular/language-service": "~10.0.8",
     "@capacitor/cli": "^2.4.0",
     "@ionic/angular-toolkit": "2.2.0",
+    "@ionic/cli": "^6.11.8",
     "@types/node": "^12.11.1",
     "jetifier": "^1.6.6",
     "replace": "^1.1.0",
