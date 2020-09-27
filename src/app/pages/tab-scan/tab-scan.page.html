@@ -11,20 +11,20 @@
 <ion-content forceOverscroll="false" [class.transparent]="hasCameraPermission">
   <ion-text color="secondary">
     <p class="ion-padding ion-no-margin">
-      <ng-container *ngIf="!isMultiQr">
-        {{ 'tab-scan.text' | translate }}
-      </ng-container>
-      <ng-container *ngIf="isMultiQr">
-        {{ 'tab-scan.multi-qr_text' | translate }}
-      </ng-container>
+      <ng-container *ngIf="!isMultiQr">{{ 'tab-scan.text' | translate }}</ng-container>
+      <ng-container *ngIf="isMultiQr">{{ 'tab-scan.multi-qr_text' | translate }}</ng-container>
     </p>
   </ion-text>
 
   <ion-progress-bar *ngIf="isMultiQr" style="height: 8px" color="secondary" [value]="percentageScanned"></ion-progress-bar>
 
-  <ion-row [hidden]="!hasCameraPermission" class="row--height__100 ion-justify-content-center ion-align-items-center ">
+  <ion-row
+    (click)="swapCamera()"
+    [hidden]="!hasCameraPermission"
+    class="row--height__100 ion-justify-content-center ion-align-items-center"
+  >
     <ion-col class="guides--container content--align__center-center">
-      <img class="guides--container__img" src="assets/img/qr_code_guides.svg" />
+      <img class="guides--container__img" src="./assets/img/qr_code_guides.svg" />
     </ion-col>
     <zxing-scanner
       [hidden]="!isBrowser"

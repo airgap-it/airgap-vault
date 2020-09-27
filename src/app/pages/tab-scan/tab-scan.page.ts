@@ -22,11 +22,14 @@ import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/er
 export class TabScanPage {
   @ViewChild('scanner')
   public zxingScanner: ZXingScannerComponent
+
+  public activeDevice: number = 0
   public availableDevices: MediaDeviceInfo[]
   public selectedDevice: MediaDeviceInfo
   public scannerEnabled: boolean = true
 
   public isBrowser: boolean = false
+  public isElectron: boolean = false
 
   public hasCameras: boolean = false
 
@@ -160,5 +163,11 @@ export class TabScanPage {
         })
         .catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
     })
+  }
+
+  public swapCamera() {
+    console.log('selected device')
+    this.activeDevice = ++this.activeDevice % this.availableDevices.length
+    this.selectedDevice = this.availableDevices[this.activeDevice]
   }
 }
