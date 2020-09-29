@@ -1,0 +1,89 @@
+<p>
+  <ion-item class="ion-no-padding" lines="full">
+    <ion-label>MetadataRequest</ion-label>
+    <ion-toggle
+      slot="start"
+      name="MetadataRequest"
+      color="secondary"
+      (ionChange)="setToggle(messageTypes.MetadataRequest, $event)"
+      [checked]="messageThresholds[messageTypes.MetadataRequest]"
+    ></ion-toggle>
+  </ion-item>
+
+  <ion-item class="ion-no-padding" lines="full">
+    <ion-label>MetadataResponse</ion-label>
+    <ion-toggle
+      slot="start"
+      name="MetadataResponse"
+      color="secondary"
+      (ionChange)="setToggle(messageTypes.MetadataResponse, $event)"
+      [checked]="messageThresholds[messageTypes.MetadataResponse]"
+    ></ion-toggle>
+  </ion-item>
+
+  <ion-item class="ion-no-padding" lines="full">
+    <ion-label>AccountShareRequest</ion-label>
+    <ion-toggle
+      slot="start"
+      name="AccountShareRequest"
+      color="secondary"
+      (ionChange)="setToggle(messageTypes.AccountShareRequest, $event)"
+      [checked]="messageThresholds[messageTypes.AccountShareRequest]"
+    ></ion-toggle>
+  </ion-item>
+
+  <ion-item class="ion-no-padding" lines="full">
+    <ion-label>AccountShareResponse</ion-label>
+    <ion-toggle
+      slot="start"
+      name="AccountShareResponse"
+      color="secondary"
+      (ionChange)="setToggle(messageTypes.AccountShareResponse, $event)"
+      [checked]="messageThresholds[messageTypes.AccountShareResponse]"
+    ></ion-toggle>
+  </ion-item>
+
+  <ion-item class="ion-no-padding" lines="full">
+    <ion-label>TransactionSignRequest</ion-label>
+    <ion-toggle
+      slot="start"
+      name="TransactionSignRequest"
+      color="secondary"
+      (ionChange)="setToggle(messageTypes.TransactionSignRequest, $event)"
+      [checked]="messageThresholds[messageTypes.TransactionSignRequest]"
+    ></ion-toggle>
+  </ion-item>
+
+  <ion-item class="ion-no-padding" lines="full">
+    <ion-label>TransactionSignResponse</ion-label>
+    <ion-toggle
+      slot="start"
+      name="TransactionSignResponse"
+      color="secondary"
+      (ionChange)="setToggle(messageTypes.TransactionSignResponse, $event)"
+      [checked]="messageThresholds[messageTypes.TransactionSignResponse]"
+    ></ion-toggle>
+  </ion-item>
+
+  <ion-item class="ion-no-padding" lines="full">
+    <ion-label>MessageSignRequest</ion-label>
+    <ion-toggle
+      slot="start"
+      name="MessageSignRequest"
+      color="secondary"
+      (ionChange)="setToggle(messageTypes.MessageSignRequest, $event)"
+      [checked]="messageThresholds[messageTypes.MessageSignRequest]"
+    ></ion-toggle>
+  </ion-item>
+
+  <ion-item class="ion-no-padding" lines="full">
+    <ion-label>MessageSignResponse</ion-label>
+    <ion-toggle
+      slot="start"
+      name="MessageSignResponse"
+      color="secondary"
+      (ionChange)="setToggle(messageTypes.MessageSignResponse, $event)"
+      [checked]="messageThresholds[messageTypes.MessageSignResponse]"
+    ></ion-toggle>
+  </ion-item>
+</p>

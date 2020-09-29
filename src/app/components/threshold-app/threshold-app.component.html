@@ -1,0 +1,34 @@
+<p>
+  <ion-item class="ion-no-padding" lines="full">
+    <ion-label>Show Mnemonic Again</ion-label>
+    <ion-toggle
+      slot="start"
+      name="showMnemonicAgain"
+      color="secondary"
+      (ionChange)="setToggle('showMnemonicAgain', $event)"
+      [checked]="appThresholds.showMnemonicAgain"
+    ></ion-toggle>
+  </ion-item>
+
+  <ion-item class="ion-no-padding" lines="full">
+    <ion-label>BIP 39 Passphrase</ion-label>
+    <ion-toggle
+      slot="start"
+      name="bip39Passphrase"
+      color="secondary"
+      (ionChange)="setToggle('bip39Passphrase', $event)"
+      [checked]="appThresholds.bip39Passphrase"
+    ></ion-toggle>
+  </ion-item>
+
+  <ion-item class="ion-no-padding" lines="full">
+    <ion-label>Enable 2FA Code Support</ion-label>
+    <ion-toggle
+      slot="start"
+      name="twoFactorAuthCodes"
+      color="secondary"
+      (ionChange)="setToggle('twoFactorAuthCodes', $event)"
+      [checked]="appThresholds.twoFactorAuthCodes"
+    ></ion-toggle>
+  </ion-item>
+</p>

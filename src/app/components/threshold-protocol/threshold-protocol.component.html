@@ -1,0 +1,136 @@
+<p>
+  <ng-container *ngFor="let protocol of protocols">
+    <ion-item-divider></ion-item-divider>
+    <ion-item-group>{{ protocol }}</ion-item-group>
+    <ion-item (click)="elementClicked(protocol, 'txsPerDay', 'number')">
+      txsPerDay: {{ protocolThresholds[protocol].txsPerDay ? protocolThresholds[protocol].txsPerDay : 'not set' }}
+    </ion-item>
+    <ion-item (click)="elementClicked(protocol, 'txsPerMonth', 'number')">
+      txsPerMonth: {{ protocolThresholds[protocol].txsPerMonth ? protocolThresholds[protocol].txsPerMonth : 'not set' }}
+    </ion-item>
+    <ion-item (click)="elementClicked(protocol, 'maxAmountPerTx', 'number')">
+      maxAmountPerTx: {{ protocolThresholds[protocol].maxAmountPerTx ? protocolThresholds[protocol].maxAmountPerTx : 'not set' }}
+    </ion-item>
+    <ion-item (click)="elementClicked(protocol, 'amountPerDay', 'number')">
+      amountPerDay: {{ protocolThresholds[protocol].amountPerDay ? protocolThresholds[protocol].amountPerDay : 'not set' }}
+    </ion-item>
+    <ion-item (click)="elementClicked(protocol, 'amountPerMonth', 'number')">
+      amountPerMonth: {{ protocolThresholds[protocol].amountPerMonth ? protocolThresholds[protocol].amountPerMonth : 'not set' }}
+    </ion-item>
+    <ion-item (click)="elementClicked(protocol, 'allowedAddresses', 'stringArray')">
+      allowedAddresses: {{ protocolThresholds[protocol].allowedAddresses ? protocolThresholds[protocol].allowedAddresses : 'not set' }}
+    </ion-item>
+    <ion-item (click)="elementClicked(protocol, 'blockedAddresses', 'stringArray')">
+      blockedAddresses: {{ protocolThresholds[protocol].blockedAddresses ? protocolThresholds[protocol].blockedAddresses : 'not set' }}
+    </ion-item>
+
+    <ng-container *ngIf="protocol === protocolTypes.AE">
+      <ion-item (click)="elementClicked(protocol, 'maxFeesPerTx', 'number')">
+        maxFeesPerTx: {{ protocolThresholds[protocol].maxFeesPerTx ? protocolThresholds[protocol].maxFeesPerTx : 'not set' }}
+      </ion-item>
+      <ion-item class="ion-no-padding" lines="full">
+        <ion-label>Enable contract calls</ion-label>
+        <ion-toggle
+          slot="start"
+          name="enableContractCalls"
+          color="secondary"
+          (ionChange)="setToggle(protocol, 'enableContractCalls', $event)"
+          [checked]="protocolThresholds[protocol].enableContractCalls"
+        ></ion-toggle>
+      </ion-item>
+    </ng-container>
+
+    <ng-container *ngIf="protocol === protocolTypes.BTC || protocol === protocolTypes.GRS">
+      <ion-item (click)="elementClicked(protocol, 'maxFeesPerTx', 'number')">
+        maxFeesPerTx: {{ protocolThresholds[protocol].maxFeesPerTx ? protocolThresholds[protocol].maxFeesPerTx : 'not set' }}
+      </ion-item>
+      <ion-item (click)="elementClicked(protocol, 'maxInputs', 'number')">
+        maxInputs: {{ protocolThresholds[protocol].maxInputs ? protocolThresholds[protocol].maxInputs : 'not set' }}
+      </ion-item>
+      <ion-item (click)="elementClicked(protocol, 'maxOutputs', 'number')">
+        maxOutputs: {{ protocolThresholds[protocol].maxOutputs ? protocolThresholds[protocol].maxOutputs : 'not set' }}
+      </ion-item>
+    </ng-container>
+
+    <ng-container *ngIf="protocol === protocolTypes.COSMOS">
+      <ion-item (click)="elementClicked(protocol, 'maxFeesPerTx', 'number')">
+        maxFeesPerTx: {{ protocolThresholds[protocol].maxFeesPerTx ? protocolThresholds[protocol].maxFeesPerTx : 'not set' }}
+      </ion-item>
+      <ion-item class="ion-no-padding" lines="full">
+        <ion-label>Enable contract calls</ion-label>
+        <ion-toggle
+          slot="start"
+          name="enableContractCalls"
+          color="secondary"
+          (ionChange)="setToggle(protocol, 'enableContractCalls', $event)"
+          [checked]="protocolThresholds[protocol].enableContractCalls"
+        ></ion-toggle>
+      </ion-item>
+      <ion-item (click)="elementClicked(protocol, 'enabledTransactionTypes', 'enum')">
+        enabledTransactionTypes:
+        {{ protocolThresholds[protocol].enabledTransactionTypes ? protocolThresholds[protocol].enabledTransactionTypes : 'not set' }}
+      </ion-item>
+    </ng-container>
+
+    <ng-container *ngIf="protocol === protocolTypes.ETH">
+      <ion-item class="ion-no-padding" lines="full">
+        <ion-label>Enable contract calls</ion-label>
+        <ion-toggle
+          slot="start"
+          name="enableContractCalls"
+          color="secondary"
+          (ionChange)="setToggle(protocol, 'enableContractCalls', $event)"
+          [checked]="protocolThresholds[protocol].enableContractCalls"
+        ></ion-toggle>
+      </ion-item>
+      <ion-item (click)="elementClicked(protocol, 'maxGasPricePerTransaction', 'number')">
+        maxGasPricePerTransaction:
+        {{ protocolThresholds[protocol].maxGasPricePerTransaction ? protocolThresholds[protocol].maxGasPricePerTransaction : 'not set' }}
+      </ion-item>
+      <ion-item (click)="elementClicked(protocol, 'maxGasLimitPerTransaction', 'number')">
+        maxGasLimitPerTransaction:
+        {{ protocolThresholds[protocol].maxGasLimitPerTransaction ? protocolThresholds[protocol].maxGasLimitPerTransaction : 'not set' }}
+      </ion-item>
+    </ng-container>
+
+    <ng-container *ngIf="protocol === protocolTypes.KUSAMA || protocol === protocolTypes.POLKADOT">
+      <ion-item (click)="elementClicked(protocol, 'maxFeesPerTx', 'number')">
+        maxFeesPerTx: {{ protocolThresholds[protocol].maxFeesPerTx ? protocolThresholds[protocol].maxFeesPerTx : 'not set' }}
+      </ion-item>
+      <ion-item class="ion-no-padding" lines="full">
+        <ion-label>Enable contract calls</ion-label>
+        <ion-toggle
+          slot="start"
+          name="enableContractCalls"
+          color="secondary"
+          (ionChange)="setToggle(protocol, 'enableContractCalls', $event)"
+          [checked]="protocolThresholds[protocol].enableContractCalls"
+        ></ion-toggle>
+      </ion-item>
+      <ion-item (click)="elementClicked(protocol, 'enabledTransactionTypes', 'enum')">
+        enabledTransactionTypes:
+        {{ protocolThresholds[protocol].enabledTransactionTypes ? protocolThresholds[protocol].enabledTransactionTypes : 'not set' }}
+      </ion-item>
+    </ng-container>
+
+    <ng-container *ngIf="protocol === protocolTypes.XTZ">
+      <ion-item (click)="elementClicked(protocol, 'maxFeesPerTx', 'number')">
+        maxFeesPerTx: {{ protocolThresholds[protocol].maxFeesPerTx ? protocolThresholds[protocol].maxFeesPerTx : 'not set' }}
+      </ion-item>
+      <ion-item class="ion-no-padding" lines="full">
+        <ion-label>Enable contract calls</ion-label>
+        <ion-toggle
+          slot="start"
+          name="enableContractCalls"
+          color="secondary"
+          (ionChange)="setToggle(protocol, 'enableContractCalls', $event)"
+          [checked]="protocolThresholds[protocol].enableContractCalls"
+        ></ion-toggle>
+      </ion-item>
+      <ion-item (click)="elementClicked(protocol, 'enabledTransactionTypes', 'enum')">
+        enabledTransactionTypes:
+        {{ protocolThresholds[protocol].enabledTransactionTypes ? protocolThresholds[protocol].enabledTransactionTypes : 'not set' }}
+      </ion-item>
+    </ng-container>
+  </ng-container>
+</p>

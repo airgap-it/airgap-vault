@@ -1,0 +1,11 @@
+<p>
+  <ng-container *ngFor="let protocol of protocols">
+    <ion-item-divider></ion-item-divider>
+    <ion-item-group>{{ protocol }}</ion-item-group>
+    <ng-container *ngFor="let account of accountThresholdsArray[protocol]">
+      {{ account[0] }}
+      <airgap-threshold-message (valueChanged)="(valueChanged)" [messageThresholds]="account[1].message"></airgap-threshold-message>
+      <!-- <airgap-threshold-protocol (valueChanged)="(valueChanged)" [protocolThresholds]="account[1].spending"></airgap-threshold-protocol> -->
+    </ng-container>
+  </ng-container>
+</p>

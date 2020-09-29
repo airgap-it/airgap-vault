@@ -14,6 +14,10 @@ import { EntropyProgressComponent } from './entropy-progress/entropy-progress.co
 import { ProgressFooterComponent } from './progress-footer/progress-footer.component'
 import { SecretItemComponent } from './secret-item/secret-item.component'
 import { SignedTransactionComponent } from './signed-transaction/signed-transaction.component'
+import { ThresholdAccountComponent } from './threshold-account/threshold-account.component'
+import { ThresholdAppComponent } from './threshold-app/threshold-app.component'
+import { ThresholdMessageComponent } from './threshold-message/threshold-message.component'
+import { ThresholdProtocolComponent } from './threshold-protocol/threshold-protocol.component'
 import { TouchEntropyComponent } from './touch-entropy/touch-entropy.component'
 import { TraceInputDirective } from './trace-input/trace-input.directive'
 import { VerifyKeyComponent } from './verify-key/verify-key.component'
@@ -28,7 +32,11 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     TouchEntropyComponent,
     TraceInputDirective,
     VerifyKeyComponent,
-    AccountItemComponent
+    AccountItemComponent,
+    ThresholdAccountComponent,
+    ThresholdAppComponent,
+    ThresholdMessageComponent,
+    ThresholdProtocolComponent
   ],
   imports: [IonicModule, PipesModule, CommonModule, FormsModule, TranslateModule, QRCodeModule, AirGapAngularCoreModule],
   exports: [
@@ -40,7 +48,11 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     TouchEntropyComponent,
     TraceInputDirective,
     VerifyKeyComponent,
-    AccountItemComponent
+    AccountItemComponent,
+    ThresholdAccountComponent,
+    ThresholdAppComponent,
+    ThresholdMessageComponent,
+    ThresholdProtocolComponent
   ],
   entryComponents: []
 })

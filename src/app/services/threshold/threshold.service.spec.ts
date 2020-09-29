@@ -1,8 +1,9 @@
-import { BaseStorage } from '@airgap/angular-core'
-import { Injectable } from '@angular/core'
-import { Storage } from '@ionic/storage'
+import { TestBed } from '@angular/core/testing'
 import { IACMessageType } from 'airgap-coin-lib'
 import { MainProtocolSymbols } from 'airgap-coin-lib/dist/utils/ProtocolSymbols'
+
+import { StorageMock } from '../../../../test-config/storage-mock'
+import { UnitHelper } from '../../../../test-config/unit-test-helper'
 
 import {
   AeternitySpendingThresholds,
@@ -11,8 +12,9 @@ import {
   EthereumSpendingThresholds,
   SubstrateSpendingThresholds,
   TezosSpendingThresholds,
-  Thresholds
-} from '../threshold/threshold.service'
+  Thresholds,
+  ThresholdService
+} from './threshold.service'
 
 const defaultAeternityThresholds: AeternitySpendingThresholds = {
   txsPerDay: null,
@@ -146,21 +148,7 @@ const defaultObject: Thresholds = {
     [MainProtocolSymbols.XTZ]: defaultTezosThresholds
   },
   accounts: {
-    [MainProtocolSymbols.AE]: {
-      d956ac630bcc7faaf69fb3bfc0aaa43ff9958210df68c9a048056b7b3c85f6c9: {
-        message: {
-          [IACMessageType.AccountShareRequest]: true,
-          [IACMessageType.AccountShareResponse]: true,
-          [IACMessageType.MessageSignRequest]: true,
-          [IACMessageType.MessageSignResponse]: true,
-          [IACMessageType.MetadataRequest]: true,
-          [IACMessageType.MetadataResponse]: true,
-          [IACMessageType.TransactionSignRequest]: true,
-          [IACMessageType.TransactionSignResponse]: true
-        },
-        spending: defaultAeternityThresholds
-      }
-    },
+    [MainProtocolSymbols.AE]: {},
     [MainProtocolSymbols.BTC]: {},
     [MainProtocolSymbols.COSMOS]: {},
     [MainProtocolSymbols.ETH]: {},
@@ -171,46 +159,102 @@ const defaultObject: Thresholds = {
   }
 }
 
-export enum VaultStorageKey {
-  DISCLAIMER_GENERATE_INITIAL = 'DISCLAIMER_GENERATE_INITIAL',
-  DISCLAIMER_INITIAL = 'DISCLAIMER_INITIAL',
-  DISCLAIMER_HIDE_LOCAL_AUTH_ONBOARDING = 'DISCLAIMER_HIDE_LOCAL_AUTH_ONBOARDING',
-  DISCLAIMER_ELECTRON = 'DISCLAIMER_ELECTRON',
-  INTRODUCTION_INITIAL = 'INTRODUCTION_INITIAL',
-  AIRGAP_SECRET_LIST = 'airgap-secret-list',
-  THRESHOLDS = 'THRESHOLDS',
-  INTERNAL_KEYPAIR_SEED = 'INTERNAL_KEYPAIR_SEED'
+interface ThresholdTestCase {
+  input: Thresholds
+  key: string
+  value: any
+  output: Thresholds
+  error: string
 }
 
-interface VaultStorageKeyReturnType {
-  [VaultStorageKey.DISCLAIMER_GENERATE_INITIAL]: boolean
-  [VaultStorageKey.DISCLAIMER_INITIAL]: boolean
-  [VaultStorageKey.DISCLAIMER_HIDE_LOCAL_AUTH_ONBOARDING]: boolean
-  [VaultStorageKey.DISCLAIMER_ELECTRON]: boolean
-  [VaultStorageKey.INTRODUCTION_INITIAL]: boolean
-  [VaultStorageKey.AIRGAP_SECRET_LIST]: unknown
-  [VaultStorageKey.THRESHOLDS]: Thresholds
-  [VaultStorageKey.INTERNAL_KEYPAIR_SEED]: string | undefined
-}
-
-type VaultStorageKeyReturnDefaults = { [key in VaultStorageKey]: VaultStorageKeyReturnType[key] }
-
-const defaultValues: VaultStorageKeyReturnDefaults = {
-  [VaultStorageKey.DISCLAIMER_GENERATE_INITIAL]: false,
-  [VaultStorageKey.DISCLAIMER_INITIAL]: false,
-  [VaultStorageKey.DISCLAIMER_HIDE_LOCAL_AUTH_ONBOARDING]: false,
-  [VaultStorageKey.DISCLAIMER_ELECTRON]: false,
-  [VaultStorageKey.INTRODUCTION_INITIAL]: false,
-  [VaultStorageKey.AIRGAP_SECRET_LIST]: [],
-  [VaultStorageKey.THRESHOLDS]: defaultObject,
-  [VaultStorageKey.INTERNAL_KEYPAIR_SEED]: undefined
-}
-
-@Injectable({
-  providedIn: 'root'
-})
-export class VaultStorageService extends BaseStorage<VaultStorageKey, VaultStorageKeyReturnType> {
-  constructor(storage: Storage) {
-    super(storage, defaultValues)
+const cases: ThresholdTestCase[] = [
+  {
+    input: defaultObject,
+    key: 'global',
+    value: 'test',
+    output: undefined,
+    error: '"global":"test" - New value is not of the same type as the old value'
+  },
+  {
+    input: defaultObject,
+    key: 'global.app.showMnemonicAgain',
+    value: 'test',
+    output: undefined,
+    error: '"global.app.showMnemonicAgain":"test" - New value is not of the same type as the old value'
+  },
+  {
+    input: defaultObject,
+    key: 'global.app.showMnemonicAgain',
+    value: true,
+    output: { ...defaultObject, global: { ...defaultObject.global, app: { ...defaultObject.global.app, showMnemonicAgain: true } } },
+    error: undefined
+  },
+  {
+    input: defaultObject,
+    key: 'global.message.1',
+    value: false,
+    output: { ...defaultObject, global: { ...defaultObject.global, message: { ...defaultObject.global.message, '1': false } } },
+    error: undefined
+  },
+  {
+    input: defaultObject,
+    key: 'global.message.100',
+    value: false,
+    output: undefined,
+    error: `"global.message.100":"false" - New value is not of the same type as the old value`
+  },
+  {
+    input: defaultObject,
+    key: 'protocol.ae.txsPerDay',
+    value: 1,
+    output: { ...defaultObject, protocol: { ...defaultObject.protocol, ae: { ...defaultObject.protocol.ae, txsPerDay: 1 } } },
+    error: undefined
+  },
+  {
+    input: { ...defaultObject, protocol: { ...defaultObject.protocol, ae: { ...defaultObject.protocol.ae, txsPerDay: 1 } } },
+    key: 'protocol.ae.txsPerDay',
+    value: null,
+    output: defaultObject,
+    error: undefined
   }
-}
+]
+
+fdescribe('ThresholdService', () => {
+  let service: ThresholdService
+
+  beforeEach(() => {
+    let unitHelper: UnitHelper
+    unitHelper = new UnitHelper()
+    TestBed.configureTestingModule(
+      unitHelper.testBed({
+        providers: [{ provide: Storage, useClass: StorageMock }]
+      })
+    )
+      .compileComponents()
+      .catch(console.error)
+
+    service = TestBed.inject(ThresholdService)
+  })
+
+  it('should be created', () => {
+    expect(service).toBeTruthy()
+  })
+
+  cases.map((c) => {
+    it(`should${c.error ? ' not' : ''} set key "${c.key}" to "${c.value}"`, async () => {
+      try {
+        const result = await service.applyKeyToObject(c.input, c.key, c.value)
+
+        console.log('res', JSON.stringify(result))
+
+        expect(result).toEqual(c.output)
+      } catch (err) {
+        if (c.output === undefined && c.error) {
+          expect(err.message).toEqual(c.error)
+        } else {
+          throw err
+        }
+      }
+    })
+  })
+})

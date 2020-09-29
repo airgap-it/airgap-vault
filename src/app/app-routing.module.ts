@@ -89,6 +89,18 @@ const routes: Routes = [
   {
     path: 'transaction-signed',
     loadChildren: () => import('./pages/transaction-signed/transaction-signed.module').then((m) => m.TransactionSignedPageModule)
+  },
+  {
+    path: 'thresholds',
+    loadChildren: () => import('./pages/thresholds/thresholds.module').then((m) => m.ThresholdsPageModule)
+  },
+  {
+    path: 'thresholds-protocol',
+    loadChildren: () => import('./pages/thresholds-protocol/thresholds-protocol.module').then((m) => m.ThresholdsProtocolPageModule)
+  },
+  {
+    path: 'thresholds-account',
+    loadChildren: () => import('./pages/thresholds-account/thresholds-account.module').then((m) => m.ThresholdsAccountPageModule)
   }
 ]
 

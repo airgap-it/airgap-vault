@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab-settings"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Thresholds</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ng-container *ngIf="thresholds">
+    {{thresholds | json}}
+    <ion-item-divider></ion-item-divider>
+    <ion-item-group>Global</ion-item-group>
+    <airgap-threshold-app (valueChanged)="refresh()" [appThresholds]="thresholds.global.app"></airgap-threshold-app>
+    <ion-item-group>Enabled Messages</ion-item-group>
+    <airgap-threshold-message (valueChanged)="refresh()" [messageThresholds]="thresholds.global.message"></airgap-threshold-message>
+    <ion-item-group>Protocol</ion-item-group>
+    <airgap-threshold-protocol (valueChanged)="refresh()" [protocolThresholds]="thresholds.protocol"></airgap-threshold-protocol>
+    <ion-item-group>Accounts</ion-item-group>
+    <airgap-threshold-account (valueChanged)="refresh()" [accountThresholds]="thresholds.accounts"></airgap-threshold-account>
+  </ng-container>
+</ion-content>
