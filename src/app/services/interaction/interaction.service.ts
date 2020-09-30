@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core'
 import { AirGapWallet, UnsignedTransaction } from 'airgap-coin-lib'
-import { DeeplinkService } from '@airgap/angular-core'
+import { DeeplinkService, IACMessageTransport } from '@airgap/angular-core'
 
 import { Secret } from '../../models/secret'
 import { assertNever } from '../../utils/utils'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { NavigationService } from '../navigation/navigation.service'
+import { IACHistoryService } from '../iac-history/iac-history.service'
 
 export enum InteractionSetting {
   UNDETERMINED = 'undetermined',
@@ -37,7 +38,11 @@ export interface IInteractionOptions {
   providedIn: 'root'
 })
 export class InteractionService {
-  constructor(private readonly navigationService: NavigationService, private readonly deeplinkService: DeeplinkService) {}
+  constructor(
+    private readonly navigationService: NavigationService,
+    private readonly deeplinkService: DeeplinkService,
+    private readonly iacHistoryService: IACHistoryService
+  ) {}
 
   public startInteraction(interactionOptions: IInteractionOptions, secret: Secret): void {
     const interactionSetting: InteractionSetting = secret.interactionSetting
@@ -83,7 +88,7 @@ export class InteractionService {
   }
 
   private navigateToPageByOperationType(interactionOptions: IInteractionOptions): void {
-    // this.iacHistoryService.add(interactionOptions.url, IACMessageTransport.QR_SCANNER, true)
+    this.iacHistoryService.add(interactionOptions.url, IACMessageTransport.QR_SCANNER, true).catch(console.error)
     if (interactionOptions.operationType === InteractionOperationType.WALLET_SYNC) {
       this.navigationService
         .routeWithState('/account-share', { interactionUrl: interactionOptions.url })

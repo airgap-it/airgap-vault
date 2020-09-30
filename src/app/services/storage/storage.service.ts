@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core'
 import { Storage } from '@ionic/storage'
 import { IACMessageType } from 'airgap-coin-lib'
 import { MainProtocolSymbols } from 'airgap-coin-lib/dist/utils/ProtocolSymbols'
+import { IACHistoryEntry } from '../iac-history/iac-history.service'
 
 import {
   AeternitySpendingThresholds,
@@ -179,7 +180,8 @@ export enum VaultStorageKey {
   INTRODUCTION_INITIAL = 'INTRODUCTION_INITIAL',
   AIRGAP_SECRET_LIST = 'airgap-secret-list',
   THRESHOLDS = 'THRESHOLDS',
-  INTERNAL_KEYPAIR_SEED = 'INTERNAL_KEYPAIR_SEED'
+  INTERNAL_KEYPAIR_SEED = 'INTERNAL_KEYPAIR_SEED',
+  IAC_HISTORY = 'IAC_HISTORY'
 }
 
 interface VaultStorageKeyReturnType {
@@ -191,6 +193,7 @@ interface VaultStorageKeyReturnType {
   [VaultStorageKey.AIRGAP_SECRET_LIST]: unknown
   [VaultStorageKey.THRESHOLDS]: Thresholds
   [VaultStorageKey.INTERNAL_KEYPAIR_SEED]: string | undefined
+  [VaultStorageKey.IAC_HISTORY]: IACHistoryEntry[]
 }
 
 type VaultStorageKeyReturnDefaults = { [key in VaultStorageKey]: VaultStorageKeyReturnType[key] }
@@ -203,7 +206,8 @@ const defaultValues: VaultStorageKeyReturnDefaults = {
   [VaultStorageKey.INTRODUCTION_INITIAL]: false,
   [VaultStorageKey.AIRGAP_SECRET_LIST]: [],
   [VaultStorageKey.THRESHOLDS]: defaultObject,
-  [VaultStorageKey.INTERNAL_KEYPAIR_SEED]: undefined
+  [VaultStorageKey.INTERNAL_KEYPAIR_SEED]: undefined,
+  [VaultStorageKey.IAC_HISTORY]: []
 }
 
 @Injectable({

@@ -1,10 +1,21 @@
-import { BaseIACService, ProtocolService, SerializerService, UiEventService, UiEventElementsService } from '@airgap/angular-core'
+import {
+  BaseIACService,
+  IACHanderStatus,
+  IACMessageTransport,
+  ProtocolService,
+  SerializerService,
+  UiEventElementsService,
+  UiEventService
+} from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
-import { IACMessageDefinitionObject, UnsignedTransaction, AirGapWallet, IACMessageType } from 'airgap-coin-lib'
-import { handleErrorLocal, ErrorCategory } from '../error-handler/error-handler.service'
+import { AirGapWallet, IACMessageDefinitionObject, IACMessageType, UnsignedTransaction } from 'airgap-coin-lib'
+
+import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
+import { IACHistoryService } from '../iac-history/iac-history.service'
 import { InteractionOperationType, InteractionService } from '../interaction/interaction.service'
 import { NavigationService } from '../navigation/navigation.service'
 import { SecretsService } from '../secrets/secrets.service'
+import { ThresholdService } from '../threshold/threshold.service'
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +25,12 @@ export class IACService extends BaseIACService {
     public readonly uiEventService: UiEventService,
     uiEventElementsService: UiEventElementsService,
     serializerService: SerializerService,
+    protected readonly iacHistoryService: IACHistoryService,
     private readonly protocolService: ProtocolService,
     private readonly navigationService: NavigationService,
     private readonly secretsService: SecretsService,
-    private readonly interactionService: InteractionService
+    private readonly interactionService: InteractionService,
+    private readonly thresholdService: ThresholdService
   ) {
     super(uiEventElementsService, serializerService, secretsService.isReady(), [])
 
@@ -34,11 +47,38 @@ export class IACService extends BaseIACService {
     )
   }
 
+  public async storeResult(message: string | string[], status: IACHanderStatus, transport: IACMessageTransport): Promise<IACHanderStatus> {
+    this.iacHistoryService.add(message, transport, false).catch(console.error)
+
+    return super.storeResult(message, status, transport)
+  }
+
   private async handleUnsignedTransactions(
     _data: string | string[],
     deserializedSyncProtocols: IACMessageDefinitionObject[],
     scanAgainCallback: Function
   ): Promise<boolean> {
+    const thresholdResult = await this.thresholdService.checkThreshold(deserializedSyncProtocols)
+    if (!thresholdResult.allowed) {
+      const cancelButton = {
+        text: 'tab-wallets.no-secret_alert.okay_label',
+        role: 'cancel',
+        handler: () => {
+          scanAgainCallback()
+        }
+      }
+      this.uiEventService.showTranslatedAlert({
+        header: 'Threshold reached',
+        subHeader: 'A threshold limit has been reached. You are not allow to handle this transaction. ',
+        message: thresholdResult.message,
+        buttons: [cancelButton]
+      })
+
+      throw new Error('Threshold check failed')
+    } else {
+      console.log(`Message doesn't match any limits`)
+    }
+
     const transactionsWithWallets: [UnsignedTransaction, AirGapWallet][] = (
       await Promise.all(
         deserializedSyncProtocols.map(async (deserializedSyncProtocol) => {

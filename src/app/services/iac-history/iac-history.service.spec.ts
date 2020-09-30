@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing'
 
-import { IacHistoryService } from './iac-history.service'
+import { IACHistoryService } from './iac-history.service'
 
-describe('IacHistoryService', () => {
-  let service: IacHistoryService
+describe('IACHistoryService', () => {
+  let service: IACHistoryService
 
   beforeEach(() => {
     TestBed.configureTestingModule({})
-    service = TestBed.inject(IacHistoryService)
+    service = TestBed.inject(IACHistoryService)
   })
 
   it('should be created', () => {
