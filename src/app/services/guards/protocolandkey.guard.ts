@@ -2,6 +2,7 @@ import { CanActivate, ActivatedRouteSnapshot } from '@angular/router'
 import { Injectable } from '@angular/core'
 import { NavigationService } from '../navigation/navigation.service'
 import { SecretsService } from '../secrets/secrets.service'
+import { ProtocolSymbols } from 'airgap-coin-lib/dist/utils/ProtocolSymbols'
 
 @Injectable()
 export class ProtocolandKeyGuard implements CanActivate {
@@ -10,11 +11,11 @@ export class ProtocolandKeyGuard implements CanActivate {
     const protocol: string = route.params.protocol
     const publicKey: string = route.params.publicKey
 
-    if (this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(publicKey, protocol) === undefined) {
+    if (this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(publicKey, protocol as ProtocolSymbols) === undefined) {
       alert('The wallet you are trying to access does not exist.')
       this.navigationService.route('/')
     }
 
-    return this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(publicKey, protocol) !== undefined
+    return this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(publicKey, protocol as ProtocolSymbols) !== undefined
   }
 }

@@ -11,6 +11,7 @@ import { ShareUrlService } from '../../services/share-url/share-url.service'
 
 import { AccountEditPopoverComponent } from './account-edit-popover/account-edit-popover.component'
 import { ActivatedRoute } from '@angular/router'
+import { ProtocolSymbols } from 'airgap-coin-lib/dist/utils/ProtocolSymbols'
 
 @Component({
   selector: 'airgap-account-address',
@@ -37,7 +38,7 @@ export class AccountAddressPage implements OnInit {
       this.protocolID = params['protocol']
       this.publicKey = params['publicKey']
 
-      this.wallet = this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(this.publicKey, this.protocolID)
+      this.wallet = this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(this.publicKey, this.protocolID as ProtocolSymbols)
     })
   }
 

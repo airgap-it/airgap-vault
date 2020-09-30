@@ -51,7 +51,7 @@ export class TabAccountsPage implements OnInit {
   public goToReceiveAddress(wallet: AirGapWallet): void {
     // this.navigationService.routeWithState('/account-address', { wallet }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     const secretId = this.activeSecret.id
-    const protocol = wallet.protocolIdentifier
+    const protocol = wallet.protocol.identifier
     const publicKey = wallet.publicKey
 
     this.navigationService.route(`/account-address/${secretId}/${protocol}/${publicKey}`)
