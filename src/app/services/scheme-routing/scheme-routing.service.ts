@@ -1,3 +1,4 @@
+import { ProtocolService } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
 import { AlertController } from '@ionic/angular'
 import { AlertButton } from '@ionic/core'
@@ -29,7 +30,8 @@ export class SchemeRoutingService {
     private readonly secretsService: SecretsService,
     private readonly alertController: AlertController,
     private readonly translateService: TranslateService,
-    private readonly serializerService: SerializerService
+    private readonly serializerService: SerializerService,
+    private readonly protocolService: ProtocolService
   ) {
     this.syncSchemeHandlers = {
       [IACMessageType.MetadataRequest]: this.syncTypeNotSupportedAlert.bind(this),
@@ -103,45 +105,43 @@ export class SchemeRoutingService {
     deserializedSyncProtocols: IACMessageDefinitionObject[],
     scanAgainCallback: Function
   ): Promise<boolean> {
-    const transactionsWithWallets: [UnsignedTransaction, AirGapWallet][] = deserializedSyncProtocols
-      .map((deserializedSyncProtocol) => {
-        const unsignedTransaction: UnsignedTransaction = deserializedSyncProtocol.payload as UnsignedTransaction
+    const transactionsWithWallets: [UnsignedTransaction, AirGapWallet][] = (
+      await Promise.all(
+        deserializedSyncProtocols.map(async (deserializedSyncProtocol) => {
+          const unsignedTransaction: UnsignedTransaction = deserializedSyncProtocol.payload as UnsignedTransaction
 
-        let correctWallet = this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(
-          unsignedTransaction.publicKey,
-          deserializedSyncProtocol.protocol
-        )
-
-        // If we can't find a wallet for a protocol, we will try to find the "base" wallet and then create a new
-        // wallet with the right protocol. This way we can sign all ERC20 transactions, but show the right amount
-        // and fee for all tokens we support.
-        if (!correctWallet) {
-          const baseWallet: AirGapWallet | undefined = this.secretsService.findBaseWalletByPublicKeyAndProtocolIdentifier(
+          let correctWallet = this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(
             unsignedTransaction.publicKey,
             deserializedSyncProtocol.protocol
           )
 
-          if (baseWallet) {
-            // If the protocol is not supported, use the base protocol for signing
-            try {
-              correctWallet = new AirGapWallet(
-                deserializedSyncProtocol.protocol,
-                baseWallet.publicKey,
-                baseWallet.isExtendedPublicKey,
-                baseWallet.derivationPath
-              )
-              correctWallet.addresses = baseWallet.addresses
-            } catch (e) {
-              if (e.message === 'PROTOCOL_NOT_SUPPORTED') {
-                correctWallet = baseWallet
+          // If we can't find a wallet for a protocol, we will try to find the "base" wallet and then create a new
+          // wallet with the right protocol. This way we can sign all ERC20 transactions, but show the right amount
+          // and fee for all tokens we support.
+          if (!correctWallet) {
+            const baseWallet: AirGapWallet | undefined = this.secretsService.findBaseWalletByPublicKeyAndProtocolIdentifier(
+              unsignedTransaction.publicKey,
+              deserializedSyncProtocol.protocol
+            )
+
+            if (baseWallet) {
+              // If the protocol is not supported, use the base protocol for signing
+              const protocol = await this.protocolService.getProtocol(deserializedSyncProtocol.protocol)
+              try {
+                correctWallet = new AirGapWallet(protocol, baseWallet.publicKey, baseWallet.isExtendedPublicKey, baseWallet.derivationPath)
+                correctWallet.addresses = baseWallet.addresses
+              } catch (e) {
+                if (e.message === 'PROTOCOL_NOT_SUPPORTED') {
+                  correctWallet = baseWallet
+                }
               }
             }
           }
-        }
 
-        return [unsignedTransaction, correctWallet] as [UnsignedTransaction, AirGapWallet]
-      })
-      .filter((pair: [UnsignedTransaction, AirGapWallet]) => pair[1])
+          return [unsignedTransaction, correctWallet] as [UnsignedTransaction, AirGapWallet]
+        })
+      )
+    ).filter((pair: [UnsignedTransaction, AirGapWallet]) => pair[1])
 
     if (transactionsWithWallets.length > 0) {
       if (transactionsWithWallets.length !== deserializedSyncProtocols.length) {

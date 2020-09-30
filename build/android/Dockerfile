@@ -1,4 +1,4 @@
-FROM agileek/ionic-framework:3.19.1
+FROM beevelop/ionic:v5.2.3
 
 RUN apt-get update -y && apt-get install -y \
     bzip2 \
@@ -7,15 +7,12 @@ RUN apt-get update -y && apt-get install -y \
     libjpeg-dev \
     libcairo2-dev 
 
-# android build tools version
-RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --all --no-ui --filter build-tools-28.0.3,android-28"]
-
 # create app directory
 RUN mkdir /app
 WORKDIR /app
 
 # using npm 6.5.0 to fix installing certain cordova/ionic plugins
-RUN npm install -g npm@6.5.0 ionic@4.6.0 @capacitor/core@1.4.0 @capacitor/cli@1.4.0
+RUN npm install -g npm@6.5.0 ionic@5.4.0 @capacitor/core@2.4.0 @capacitor/cli@2.4.0
 RUN npm cache clean -f
 RUN npm install -g n
 RUN n 10.14.1
@@ -55,11 +52,17 @@ RUN npm run configure-mangle
 # remove unused cordova-diagnostic-plugin features
 RUN npm run apply-diagnostic-modules
 
+# jetify dependencies
+RUN npx jetifier
+
 # build ionic
 RUN ionic build --prod
 
 # copy ionic build
 RUN cap sync android
+
+# accept licenses
+RUN echo y | $ANDROID_HOME/tools/bin/sdkmanager --update
 
 # clean project
 RUN /app/android/gradlew --project-dir /app/android clean

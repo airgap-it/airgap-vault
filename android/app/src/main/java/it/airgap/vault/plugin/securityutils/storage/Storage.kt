@@ -6,11 +6,10 @@ import android.os.Build
 import android.security.KeyPairGeneratorSpec
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
-import android.support.annotation.StringRes
-import android.support.v7.app.AlertDialog
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.EditText
@@ -284,7 +283,7 @@ class Storage(private val context: Context, private val storageAlias: String, pr
             val passwordText = editView.findViewById<EditText>(R.id.password)
             val confirmText = editView.findViewById<EditText>(R.id.password_confirmation)
 
-            val dialog = AlertDialog.Builder(context, R.style.AirgapAlertDialogStyle).apply {
+            val dialog = AlertDialog.Builder(context, R.style.AirGapAlertDialogStyle).apply {
                 setTitle(title)
                 setMessage(message)
 
@@ -332,7 +331,7 @@ class Storage(private val context: Context, private val storageAlias: String, pr
             cancel: () -> Unit = {}
     ) {
         (context as? Activity)?.runOnUiThread {
-            val dialog = AlertDialog.Builder(context, R.style.AirgapAlertDialogStyle).apply {
+            val dialog = AlertDialog.Builder(context, R.style.AirGapAlertDialogStyle).apply {
                 setTitle(title)
 
                 val editView = LayoutInflater.from(context).inflate(R.layout.alert_input_dialog, null)
