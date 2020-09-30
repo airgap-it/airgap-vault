@@ -40,7 +40,6 @@ const routes: Routes = [
   },
   {
     path: 'secret-show/:secretID',
-    canActivate: [SecretGuard],
     loadChildren: () => import('./pages/secret-show/secret-show.module').then((m) => m.SecretShowPageModule)
   },
   {

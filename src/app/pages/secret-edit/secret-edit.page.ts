@@ -44,8 +44,6 @@ export class SecretEditPage {
     private readonly platform: Platform,
     private activatedRoute: ActivatedRoute
   ) {
-    //TODO: refactor with Guards
-
     this.activatedRoute.params.subscribe(async (params) => {
       this.secretID = params['secretID']
       this.flow = params['flow']
