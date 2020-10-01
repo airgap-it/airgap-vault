@@ -116,7 +116,7 @@ export class CameraNativeService implements IEntropyGenerator {
         .start(
           Object.assign(
             {
-              camera: 'front',
+              camera: 'back',
               disableExifHeaderStripping: true
             } as any,
             this.cameraOptions
