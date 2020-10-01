@@ -41,16 +41,16 @@ build_android:
   when: manual
   tags:
     - docker
-  before_script:
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  variables:
+    LOCAL_ANDROID: "android-$CI_PIPELINE_ID"
   script:
     - sed -i -e "s/versionName \"0.0.0\"/versionName \"$VERSION\"/g" android/app/build.gradle
     - docker build -f build/android/Dockerfile -t $GOOGLE_TAG_ANDROID_CURRENT --build-arg BUILD_NR="$CI_PIPELINE_ID" --build-arg VERSION="$VERSION" .
-    - docker run --name $CI_PIPELINE_ID $GOOGLE_TAG_ANDROID_CURRENT echo "container ran."
-    - docker cp $CI_PIPELINE_ID:/app/android-release-unsigned.apk airgap-vault-release-unsigned-$CI_PIPELINE_ID.apk
-    - docker cp $CI_PIPELINE_ID:/app/android-debug.apk airgap-vault-debug-$CI_PIPELINE_ID.apk
+    - docker run --name $LOCAL_ANDROID $GOOGLE_TAG_ANDROID_CURRENT echo "container ran."
+    - docker cp $LOCAL_ANDROID:/app/android-release-unsigned.apk airgap-vault-release-unsigned-$CI_PIPELINE_ID.apk
+    - docker cp $LOCAL_ANDROID:/app/android-debug.apk airgap-vault-debug-$CI_PIPELINE_ID.apk
   after_script:
-    - docker rm -f $CI_PIPELINE_ID || true
+    - docker rm -f $LOCAL_ANDROID || true
   artifacts:
     paths:
       - airgap-vault-release-unsigned-$CI_PIPELINE_ID.apk
