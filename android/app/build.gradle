@@ -50,13 +50,10 @@ dependencies {
     implementation 'com.scottyab:rootbeer-lib:0.0.7'
 }
 
+
 apply from: 'capacitor.build.gradle'
 
-try {
-    def servicesJSON = file('google-services.json')
-    if (servicesJSON.text) {
-        apply plugin: 'com.google.gms.google-services'
-    }
-} catch(Exception e) {
-    logger.warn("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
+configurations.all {
+    exclude group: 'com.google.firebase', module: ''
+    exclude group: 'com.google.android.gms', module: ''
 }
