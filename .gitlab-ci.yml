@@ -42,7 +42,7 @@ build_android:
   tags:
     - docker
   variables:
-    LOCAL_ANDROID: "android-$CI_PIPELINE_ID"
+    LOCAL_ANDROID: 'android-$CI_PIPELINE_ID'
   script:
     - sed -i -e "s/versionName \"0.0.0\"/versionName \"$VERSION\"/g" android/app/build.gradle
     - docker build -f build/android/Dockerfile -t $GOOGLE_TAG_ANDROID_CURRENT --build-arg BUILD_NR="$CI_PIPELINE_ID" --build-arg VERSION="$VERSION" .
@@ -64,12 +64,12 @@ build_ios:
     - echo "$IOS_EXPORT_OPTIONS" > exportOptions.plist
   script:
     - export DEVELOPER_DIR=$XCODE_PATH
-    - nvm use v10.13.0
+    - nvm use 14
     - npm install
     - npm run disable-pure-getters
     - npm run configure-mangle
     - npm run apply-diagnostic-modules # manually remove unused cordova-diagnostic-plugin modules
-    - ionic build --prod
+    - npx ionic build --prod
     - npx cap sync ios
     - xcodebuild -workspace ios/App/App.xcworkspace -scheme "App" -destination generic/platform=iOS -configuration Release archive -archivePath ios/AirGap\ Vault.xcarchive MARKETING_VERSION=$VERSION CURRENT_PROJECT_VERSION=1.0.$CI_PIPELINE_ID -allowProvisioningUpdates
     - xcodebuild -exportArchive -archivePath ios/AirGap\ Vault.xcarchive -exportOptionsPlist exportOptions.plist -exportPath ios/ -allowProvisioningUpdates
