@@ -1,11 +1,10 @@
-import { IACHanderStatus, IACMessageTransport, PermissionsService, QrScannerService } from '@airgap/angular-core'
+import { IACHanderStatus, IACMessageTransport, PermissionsService, QrScannerService, ScanBasePage } from '@airgap/angular-core'
 import { Component, NgZone, ViewChild } from '@angular/core'
 import { Platform } from '@ionic/angular'
 import { ZXingScannerComponent } from '@zxing/ngx-scanner'
 import { IACService } from 'src/app/services/iac/iac.service'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
-import { ScanBasePage } from '../scan-base/scan-base'
 
 @Component({
   selector: 'airgap-tab-scan',
