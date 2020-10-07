@@ -1,8 +1,9 @@
 import { PermissionsService, PermissionStatus, PermissionTypes, QrScannerService } from '@airgap/angular-core'
+import { OnInit } from '@angular/core'
 import { Platform } from '@ionic/angular'
 import { ZXingScannerComponent } from '@zxing/ngx-scanner'
 
-export class ScanBasePage {
+export class ScanBasePage implements OnInit {
   public zxingScanner?: ZXingScannerComponent
   public availableDevices: MediaDeviceInfo[]
   public selectedDevice: MediaDeviceInfo | null = null
@@ -21,11 +22,15 @@ export class ScanBasePage {
     this.isBrowser = !(this.isMobile || this.isElectron)
   }
 
-  public async ionViewWillEnter(): Promise<void> {
+  public async ngOnInit(): Promise<void> {
     if (this.isMobile || this.isElectron) {
       await this.platform.ready()
       await this.checkCameraPermissionsAndActivate()
     }
+  }
+
+  public async ionViewWillEnter(): Promise<void> {
+    
   }
 
   public async requestPermission(): Promise<void> {
