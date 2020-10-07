@@ -70,6 +70,7 @@ build_ios:
     - npm run disable-pure-getters
     - npm run configure-mangle
     - npm run apply-diagnostic-modules # manually remove unused cordova-diagnostic-plugin modules
+    - npx ionic info
     - npx ionic build --prod
     - npx cap sync ios
     - xcodebuild -workspace ios/App/App.xcworkspace -scheme "App" -destination generic/platform=iOS -configuration Release archive -archivePath ios/App.xcarchive MARKETING_VERSION=$VERSION CURRENT_PROJECT_VERSION=$CI_PIPELINE_ID -allowProvisioningUpdates
