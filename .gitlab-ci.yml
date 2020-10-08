@@ -11,7 +11,6 @@ stages:
   - test
   - qa
   - native_build
-  - publish
 
 build_ionic:
   stage: build
@@ -57,45 +56,6 @@ build_android:
       - airgap-vault-release-unsigned-$CI_PIPELINE_ID.apk
       - airgap-vault-debug-$CI_PIPELINE_ID.apk
 
-build_ios:
-  stage: native_build
-  when: manual
-  before_script:
-    - echo "$IOS_BUILD_JSON" > build.json
-    - echo "$IOS_EXPORT_OPTIONS" > exportOptions.plist
-  script:
-    - export DEVELOPER_DIR=$XCODE_PATH
-    - nvm use 14
-    - npm install
-    - npm run disable-pure-getters
-    - npm run configure-mangle
-    - npm run apply-diagnostic-modules # manually remove unused cordova-diagnostic-plugin modules
-    - npx ionic info
-    - npx ionic build --prod
-    - npx cap sync ios
-    - xcodebuild -workspace ios/App/App.xcworkspace -scheme "App" -destination generic/platform=iOS -configuration Release archive -archivePath ios/App.xcarchive MARKETING_VERSION=$VERSION CURRENT_PROJECT_VERSION=$CI_PIPELINE_ID -allowProvisioningUpdates
-    - xcodebuild -exportArchive -archivePath ios/App.xcarchive -exportOptionsPlist exportOptions.plist -exportPath ios/ -allowProvisioningUpdates
-  artifacts:
-    paths:
-      - ios/App.ipa
-      - ios/App.xcarchive
-  tags:
-    - ios
-
-publish_ios:
-  stage: publish
-  when: manual
-  needs:
-    - job: build_ios
-      artifacts: true
-  before_script:
-    - echo "$IOS_EXPORT_OPTIONS" > exportOptions.plist
-  script:
-    - export DEVELOPER_DIR=$XCODE_PATH
-    - xcrun altool --upload-app -f ios/App.ipa -u $IOS_USERNAME -p $IOS_PASSWORD
-  tags:
-    - ios
-
 qa:
   stage: qa
   script:
@@ -119,3 +79,29 @@ qa:
     - docker rm -f qa-$CI_PIPELINE_ID || true
   tags:
     - docker
+
+build_ios:
+  stage: native_build
+  when: manual
+  before_script:
+    - echo "$IOS_BUILD_JSON" > build.json
+    - echo "$IOS_EXPORT_OPTIONS" > exportOptions.plist
+  script:
+    - export DEVELOPER_DIR=$XCODE_PATH
+    - nvm use 14
+    - npm install
+    - npm run disable-pure-getters
+    - npm run configure-mangle
+    - npm run apply-diagnostic-modules # manually remove unused cordova-diagnostic-plugin modules
+    - npx ionic info
+    - npx ionic build --prod
+    - npx cap sync ios
+    - xcodebuild -workspace ios/App/App.xcworkspace -scheme "App" -destination generic/platform=iOS -configuration Release archive -archivePath ios/App.xcarchive MARKETING_VERSION=$VERSION CURRENT_PROJECT_VERSION=$CI_PIPELINE_ID -allowProvisioningUpdates
+    - xcodebuild -exportArchive -archivePath ios/App.xcarchive -exportOptionsPlist exportOptions.plist -exportPath ios/ -allowProvisioningUpdates
+    - xcrun altool --upload-app -f ios/App.ipa -u $IOS_USERNAME -p $IOS_PASSWORD
+  artifacts:
+    paths:
+      - ios/App.ipa
+      - ios/App.xcarchive
+  tags:
+    - ios
