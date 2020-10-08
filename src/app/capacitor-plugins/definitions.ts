@@ -7,6 +7,7 @@ export interface CameraPreviewPlugin {
 }
 
 export interface SecurityUtilsPlugin {
+  waitForOverlayDismiss(): Promise<void>
   assessDeviceIntegrity(): Promise<{ value: boolean }>
   authenticate(): Promise<void>
   setInvalidationTimeout({}): Promise<void>

@@ -34,7 +34,8 @@ export function createSecurityUtilsSpy(): SecurityUtilsPlugin {
     'destroy',
     'setWindowSecureFlag',
     'clearWindowSecureFlag',
-    'addListener'
+    'addListener',
+    'waitForOverlayDismiss'
   ])
 }
 

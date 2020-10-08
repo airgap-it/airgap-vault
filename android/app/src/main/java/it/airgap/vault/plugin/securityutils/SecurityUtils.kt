@@ -284,6 +284,11 @@ class SecurityUtils : Plugin() {
      */
 
     @PluginMethod
+    fun waitForOverlayDismiss(call: PluginCall) {
+        call.resolve()
+    }
+
+    @PluginMethod
     fun setWindowSecureFlag(call: PluginCall) {
         with (activity) {
             runOnUiThread { window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE) }

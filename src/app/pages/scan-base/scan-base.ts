@@ -1,6 +1,9 @@
 import { PermissionsService, PermissionStatus, PermissionTypes, QrScannerService } from '@airgap/angular-core'
+import { Inject } from '@angular/core'
 import { Platform } from '@ionic/angular'
 import { ZXingScannerComponent } from '@zxing/ngx-scanner'
+import { SecurityUtilsPlugin } from 'src/app/capacitor-plugins/definitions'
+import { SECURITY_UTILS_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
 
 export class ScanBasePage {
   public zxingScanner?: ZXingScannerComponent
@@ -15,7 +18,12 @@ export class ScanBasePage {
   public readonly isElectron: boolean
   public readonly isBrowser: boolean
 
-  constructor(protected platform: Platform, protected scanner: QrScannerService, protected permissionsProvider: PermissionsService) {
+  constructor(
+    protected platform: Platform, 
+    protected scanner: QrScannerService, 
+    protected permissionsProvider: PermissionsService,
+    @Inject(SECURITY_UTILS_PLUGIN) private readonly securityUtils: SecurityUtilsPlugin
+  ) {
     this.isMobile = this.platform.is('hybrid')
     this.isElectron = this.platform.is('electron')
     this.isBrowser = !(this.isMobile || this.isElectron)
@@ -31,6 +39,7 @@ export class ScanBasePage {
   public async requestPermission(): Promise<void> {
     if (this.isMobile) {
       await this.permissionsProvider.userRequestsPermissions([PermissionTypes.CAMERA])
+      await this.securityUtils.waitForOverlayDismiss()
       await this.checkCameraPermissionsAndActivate()
     } else if (this.isElectron) {
       this.startScanBrowser()
@@ -74,7 +83,7 @@ export class ScanBasePage {
     console.error(`The checkScan method needs to be overwritten. Ignoring text ${resultString}`)
   }
 
-  private startScanMobile() {
+  private async startScanMobile() {
     this.scanner.scan(
       (text) => {
         this.checkScan(text)

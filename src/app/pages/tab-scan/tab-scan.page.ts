@@ -1,10 +1,13 @@
-import { IACHanderStatus, IACMessageTransport, PermissionsService, QrScannerService, ScanBasePage } from '@airgap/angular-core'
-import { Component, NgZone, ViewChild } from '@angular/core'
+import { IACHanderStatus, IACMessageTransport, PermissionsService, QrScannerService } from '@airgap/angular-core'
+import { Component, Inject, NgZone, ViewChild } from '@angular/core'
 import { Platform } from '@ionic/angular'
 import { ZXingScannerComponent } from '@zxing/ngx-scanner'
+import { SecurityUtilsPlugin } from 'src/app/capacitor-plugins/definitions'
+import { SECURITY_UTILS_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
 import { IACService } from 'src/app/services/iac/iac.service'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
+import { ScanBasePage } from '../scan-base/scan-base'
 
 @Component({
   selector: 'airgap-tab-scan',
@@ -24,13 +27,14 @@ export class TabScanPage extends ScanBasePage {
   public isMultiQr: boolean = false
 
   constructor(
-    protected platform: Platform,
-    protected scanner: QrScannerService,
-    protected permissionsProvider: PermissionsService,
+    platform: Platform,
+    scanner: QrScannerService,
+    permissionsProvider: PermissionsService,
+    @Inject(SECURITY_UTILS_PLUGIN) securityUtils: SecurityUtilsPlugin,
     private readonly iacService: IACService,
     private readonly ngZone: NgZone
   ) {
-    super(platform, scanner, permissionsProvider)
+    super(platform, scanner, permissionsProvider, securityUtils)
   }
 
   public async ionViewWillEnter(): Promise<void> {

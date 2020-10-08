@@ -49,7 +49,7 @@ export class AppComponent implements AfterViewInit {
   ) {
     // We set the app as started so no "error alert" will be shown in case the app fails to load. See error-check.js for details.
     window.airGapHasStarted = true
-
+    console.log('IS THIS HERE???')
     this.initializeApp().catch(handleErrorLocal(ErrorCategory.OTHER))
   }
 

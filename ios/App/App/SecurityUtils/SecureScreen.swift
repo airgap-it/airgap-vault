@@ -28,6 +28,8 @@ public final class SecureScreen {
     private weak var presentedViewController: UIViewController?
     private var willResignActiveObserver: Observer?
     private var didBecomeActiveObserver: Observer?
+    
+    private var overlayDismissObservers: [() -> ()] = []
 
     let screen: UIScreen
 
@@ -54,6 +56,21 @@ public final class SecureScreen {
     public func stopOverlayProtection() {
         willResignActiveObserver = nil
         didBecomeActiveObserver = nil
+    }
+    
+    public func waitForOverlayDismiss(completion: @escaping () -> ()) {
+        guard let _ = presentedViewController else {
+            completion()
+            return
+        }
+        overlayDismissObservers.append(completion)
+    }
+    
+    private func notifyOverlayDismiss() {
+        for observer in overlayDismissObservers {
+            observer()
+        }
+        overlayDismissObservers = []
     }
 
     public func addScreenCaptureObserver(using block: @escaping (Bool) -> ()) -> Observer {
@@ -89,9 +106,11 @@ public final class SecureScreen {
         }
         let controllers = presentedControllers(from: presented)
         presenting.dismiss(animated: false) {
-            self.present(controllers, from: presenting)
+            self.present(controllers, from: presenting) {
+                self.presentedViewController = nil
+                self.notifyOverlayDismiss()
+            }
         }
-        presentedViewController = nil
     }
 
     private func controllerToPresent() -> UIViewController? {
@@ -102,10 +121,18 @@ public final class SecureScreen {
         return storyboard.instantiateInitialViewController()
     }
 
-    private func present(_ controllers: [UIViewController], from presenting: UIViewController) {
-        guard let toPresent = controllers.first else { return }
+    private func present(_ controllers: [UIViewController], from presenting: UIViewController, completion: (() -> ())? = nil) {
+        guard let toPresent = controllers.first else {
+            completion?()
+            return
+        }
         presenting.present(toPresent, animated: false) {
-            self.present(Array(controllers.dropFirst()), from: toPresent)
+            let remaining = Array(controllers.dropFirst())
+            guard !remaining.isEmpty else {
+                completion?()
+                return
+            }
+            self.present(remaining, from: toPresent, completion: completion)
         }
     }
 
