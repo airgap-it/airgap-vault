@@ -1,3 +1,4 @@
+import { STATUS_BAR_PLUGIN, SPLASH_SCREEN_PLUGIN } from '@airgap/angular-core'
 import { async, TestBed } from '@angular/core/testing'
 import { ModalController, NavController, NavParams, Platform } from '@ionic/angular'
 import { Storage } from '@ionic/storage'
@@ -17,7 +18,6 @@ import { SecureStorageServiceMock } from '../secure-storage/secure-storage.mock'
 import { SecureStorageService } from '../secure-storage/secure-storage.service'
 
 import { StartupChecksService } from './startup-checks.service'
-import { STATUS_BAR_PLUGIN, SPLASH_SCREEN_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
 import { StatusBarMock, SplashScreenMock } from 'test-config/plugins-mocks'
 
 describe('StartupCheck Service', () => {

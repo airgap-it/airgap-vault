@@ -7,7 +7,7 @@ import { handleErrorLocal, ErrorCategory } from '../../services/error-handler/er
 import { InteractionOperationType, InteractionService } from '../../services/interaction/interaction.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
-import { SerializerService } from '../../services/serializer/serializer.service'
+import { SerializerService } from '@airgap/angular-core'
 import { AlertController } from '@ionic/angular'
 
 // TODO: refactor multiple transactions

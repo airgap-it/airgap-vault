@@ -11,7 +11,7 @@ import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { NavigationService } from '../navigation/navigation.service'
 import { SecureStorage, SecureStorageService } from '../secure-storage/secure-storage.service'
-import { SettingsKey, StorageService } from '../storage/storage.service'
+import { VaultStorageKey, VaultStorageService } from '../storage/storage.service'
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +26,7 @@ export class SecretsService {
 
   constructor(
     private readonly secureStorageService: SecureStorageService,
-    private readonly storageService: StorageService,
+    private readonly storageService: VaultStorageService,
     private readonly protocolService: ProtocolService,
     private readonly navigationService: NavigationService,
     private readonly loadingCtrl: LoadingController,
@@ -48,7 +48,7 @@ export class SecretsService {
   }
 
   private async read(): Promise<Secret[]> {
-    const rawSecretsPayload: unknown = await this.storageService.get(SettingsKey.AIRGAP_SECRET_LIST)
+    const rawSecretsPayload: unknown = await this.storageService.get(VaultStorageKey.AIRGAP_SECRET_LIST)
 
     // necessary due to double serialization bug we had
     let secrets: Secret[] = typeof rawSecretsPayload === 'string' ? JSON.parse(rawSecretsPayload) : rawSecretsPayload
@@ -239,7 +239,7 @@ export class SecretsService {
       secret.flushSecret()
     })
 
-    return this.storageService.set(SettingsKey.AIRGAP_SECRET_LIST, this.secretsList)
+    return this.storageService.set(VaultStorageKey.AIRGAP_SECRET_LIST, this.secretsList)
   }
 
   public async addWallet(

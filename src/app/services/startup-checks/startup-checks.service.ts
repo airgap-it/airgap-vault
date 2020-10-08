@@ -8,7 +8,7 @@ import { Warning, WarningModalPage } from '../../pages/warning-modal/warning-mod
 import { DeviceService } from '../device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { SecureStorageService } from '../secure-storage/secure-storage.service'
-import { SettingsKey, StorageService } from '../storage/storage.service'
+import { VaultStorageKey, VaultStorageService } from '../storage/storage.service'
 
 export interface Check {
   name: string
@@ -27,7 +27,7 @@ export class StartupChecksService {
     private readonly secureStorageService: SecureStorageService,
     private readonly deviceService: DeviceService,
     private readonly modalController: ModalController,
-    private readonly storageService: StorageService
+    private readonly storageService: VaultStorageService
   ) {
     this.checks = [
       {
@@ -53,7 +53,7 @@ export class StartupChecksService {
       {
         name: 'disclaimerAcceptedCheck',
         expectedOutcome: true,
-        check: (): Promise<boolean> => this.storageService.get(SettingsKey.DISCLAIMER_INITIAL),
+        check: (): Promise<boolean> => this.storageService.get(VaultStorageKey.DISCLAIMER_INITIAL),
         failureConsequence: async (): Promise<void> => {
           await this.presentModal(WarningModalPage, { errorType: Warning.INITIAL_DISCLAIMER }).catch(
             handleErrorLocal(ErrorCategory.INIT_CHECK)
@@ -63,7 +63,7 @@ export class StartupChecksService {
       {
         name: 'introductionAcceptedCheck',
         expectedOutcome: true,
-        check: (): Promise<boolean> => this.storageService.get(SettingsKey.INTRODUCTION_INITIAL),
+        check: (): Promise<boolean> => this.storageService.get(VaultStorageKey.INTRODUCTION_INITIAL),
         failureConsequence: async (): Promise<void> => {
           await this.presentModal(IntroductionPage, {}).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
         }
@@ -73,7 +73,7 @@ export class StartupChecksService {
         expectedOutcome: true,
         check: async (): Promise<boolean> => {
           const isElectron: boolean = await deviceService.checkForElectron()
-          const hasShownDisclaimer: boolean = await this.storageService.get(SettingsKey.DISCLAIMER_ELECTRON)
+          const hasShownDisclaimer: boolean = await this.storageService.get(VaultStorageKey.DISCLAIMER_ELECTRON)
 
           return !isElectron || hasShownDisclaimer
         },

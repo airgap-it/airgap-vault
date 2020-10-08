@@ -1,3 +1,4 @@
+import { PermissionsService, PermissionStatus } from '@airgap/angular-core'
 import { ElementRef, Injectable, Renderer2, RendererFactory2, ViewChild, Inject, Directive } from '@angular/core'
 import { Platform } from '@ionic/angular'
 import { Observable } from 'rxjs'
@@ -6,7 +7,6 @@ import workerJS from '../../../assets/workers/entropyCalculatorWorker'
 import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
 
 import { ErrorCategory, handleErrorLocal } from './../error-handler/error-handler.service'
-import { PermissionsService, PermissionStatus } from './../permissions/permissions.service'
 import { CameraPreviewPlugin } from 'src/app/capacitor-plugins/definitions'
 import { CAMERA_PREVIEW_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
 const blobURL = window.URL.createObjectURL(new Blob([workerJS]))

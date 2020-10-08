@@ -1,11 +1,10 @@
+import { PermissionsService, PermissionStatus } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
 import { Platform } from '@ionic/angular'
 import { Observable } from 'rxjs'
 
 import entropyCalculatorWorkerJS from '../../../assets/workers/entropyCalculatorWorker'
 import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
-
-import { PermissionsService, PermissionStatus } from './../permissions/permissions.service'
 
 declare var window: any
 

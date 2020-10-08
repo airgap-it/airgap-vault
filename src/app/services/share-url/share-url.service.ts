@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { AccountShareResponse, AirGapWallet, IACMessageDefinitionObject, IACMessageType } from 'airgap-coin-lib'
 
-import { SerializerService } from '../../services/serializer/serializer.service'
+import { SerializerService } from '@airgap/angular-core'
 import { serializedDataToUrlString } from '../../utils/utils'
 
 @Injectable({
