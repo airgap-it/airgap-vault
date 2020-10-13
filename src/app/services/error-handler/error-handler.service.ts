@@ -1,4 +1,4 @@
-import { ErrorHandler } from '@angular/core'
+import { ErrorHandler, Injectable } from '@angular/core'
 
 export enum ErrorCategory {
   CORDOVA_PLUGIN = 'cordova_plugin',
@@ -32,6 +32,7 @@ const handleErrorIgnore: ErrorCallback = (error: { originalError?: Error }): voi
 
 export { handleErrorIgnore, handleErrorLocal }
 
+@Injectable()
 export class ErrorHandlerService extends ErrorHandler {
   public handleError(error: Error): void {
     super.handleError(error)

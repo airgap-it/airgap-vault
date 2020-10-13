@@ -1,11 +1,10 @@
+import { PermissionsService, PermissionStatus } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
 import { Platform } from '@ionic/angular'
 import { Observable } from 'rxjs'
 
 import entropyCalculatorWorkerJS from '../../../assets/workers/entropyCalculatorWorker'
 import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
-
-import { PermissionsService, PermissionStatus } from './../permissions/permissions.service'
 
 declare var window: any
 
@@ -22,14 +21,14 @@ export class AudioNativeService implements IEntropyGenerator {
   private readonly entropyObservable: Observable<Entropy>
 
   constructor(private readonly platform: Platform, private readonly permissionsService: PermissionsService) {
-    this.entropyObservable = Observable.create(observer => {
-      entropyCalculatorWorker.onmessage = event => {
+    this.entropyObservable = Observable.create((observer) => {
+      entropyCalculatorWorker.onmessage = (event) => {
         this.collectedEntropyPercentage += event.data.entropyMeasure
         observer.next({
           entropyHex: event.data.entropyHex
         })
       }
-      this.handler = audioStream => {
+      this.handler = (audioStream) => {
         const buffer1 = this.arrayBufferFromIntArray(audioStream.data)
         entropyCalculatorWorker.postMessage(
           {
@@ -62,7 +61,7 @@ export class AudioNativeService implements IEntropyGenerator {
   }
 
   public stop(): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       console.log('removed audioinput listener')
       window.audioinput.stop()
       window.removeEventListener('audioinput', this.handler)

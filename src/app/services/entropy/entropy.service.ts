@@ -47,7 +47,7 @@ export class EntropyService {
         generator
           .start()
           .then(() => {
-            const entropySubscription = generator.getEntropyUpdateObservable().subscribe(result => {
+            const entropySubscription = generator.getEntropyUpdateObservable().subscribe((result) => {
               try {
                 hashWorker.postMessage({ entropyHex: result.entropyHex, call: 'update' })
               } catch (error) {
@@ -63,7 +63,7 @@ export class EntropyService {
 
             return
           })
-          .catch(error => {
+          .catch((error) => {
             console.warn('generator start error', error)
           })
       )
@@ -75,7 +75,7 @@ export class EntropyService {
   public stopEntropyCollection(): Promise<void> {
     const promises: Promise<void>[] = []
 
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       // clear collection interval
       for (let i = 0; i < this.entropySubscriptions.length; i++) {
         this.entropySubscriptions[i].unsubscribe()
@@ -100,8 +100,8 @@ export class EntropyService {
   }
 
   public getEntropyAsHex(): Promise<string> {
-    return new Promise(resolve => {
-      hashWorker.onmessage = event => {
+    return new Promise((resolve) => {
+      hashWorker.onmessage = (event) => {
         const secureRandomArray = new Uint8Array(this.ENTROPY_SIZE)
         window.crypto.getRandomValues(secureRandomArray)
 

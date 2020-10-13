@@ -88,7 +88,7 @@ export class TouchEntropyComponent implements AfterViewInit, IEntropyGenerator {
   public start(): Promise<void> {
     this.collectedEntropyPercentage = 0
 
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this.renderer.listen(this.canvas, 'mousedown', () => {
         this.isDrawing = true
       })
@@ -122,7 +122,7 @@ export class TouchEntropyComponent implements AfterViewInit, IEntropyGenerator {
   }
 
   public stop(): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this.isDrawing = false
       resolve()
     })

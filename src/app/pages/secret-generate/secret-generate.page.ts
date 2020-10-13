@@ -1,3 +1,4 @@
+import { PermissionsService, PermissionTypes } from '@airgap/angular-core'
 import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { Platform } from '@ionic/angular'
 import { auditTime } from 'rxjs/operators'
@@ -10,7 +11,6 @@ import { EntropyService } from '../../services/entropy/entropy.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { GyroscopeNativeService } from '../../services/gyroscope/gyroscope.native.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
-import { PermissionsService, PermissionTypes } from '../../services/permissions/permissions.service'
 
 @Component({
   selector: 'airgap-secret-generate',
@@ -20,7 +20,7 @@ import { PermissionsService, PermissionTypes } from '../../services/permissions/
 export class SecretGeneratePage implements OnInit {
   public isBrowser: boolean = false
 
-  @ViewChild('videoElement', { static: false })
+  @ViewChild('videoElement')
   public videoElement: ElementRef
 
   @ViewChild('touchEntropy', { static: true })

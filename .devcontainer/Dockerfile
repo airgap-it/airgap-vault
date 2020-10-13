@@ -1,41 +1,39 @@
-#-------------------------------------------------------------------------------------------------------------
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# Licensed under the MIT License. See https://go.microsoft.com/fwlink/?linkid=2090316 for license information.
-#-------------------------------------------------------------------------------------------------------------
+# See here for image contents: https://github.com/microsoft/vscode-dev-containers/tree/v0.134.1/containers/typescript-node/.devcontainer/base.Dockerfile
+ARG VARIANT="14"
+FROM mcr.microsoft.com/vscode/devcontainers/typescript-node:0-${VARIANT}
 
-FROM node:12
+# [Optional] Uncomment this section to install additional OS packages.
+# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+#     && apt-get -y install --no-install-recommends <your-package-list-here>
 
-# Avoid warnings by switching to noninteractive
-ENV DEBIAN_FRONTEND=noninteractive
-
-# The node image includes a non-root user with sudo access. Use the "remoteUser"
-# property in devcontainer.json to use it. On Linux, the container user's GID/UIDs
-# will be updated to match your local UID/GID (when using the dockerFile property).
-# See https://aka.ms/vscode-remote/containers/non-root-user for details.
-ARG USERNAME=node
-ARG USER_UID=1000
-ARG USER_GID=$USER_UID
-
-# Configure apt and install packages
-RUN apt-get update \
-    && apt-get -y install --no-install-recommends apt-utils dialog 2>&1 \ 
-    #
-    # Verify git and needed tools are installed
-    && apt-get -y install git iproute2 procps \
-    #
-    # Install zsh
+RUN  apt-get update \
+    && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
     && apt-get update \
-    && apt-get install -y zsh \
-    && wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true \
-    #
-    # Install ionic
-    && npm install -g ionic \
+    # install libraries
+    && apt-get install -yyq libappindicator1 libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 \
+    # tools
+    && apt-get install -yyq gconf-service lsb-release wget xdg-utils \
+    # and fonts
+    && apt-get install -yyq fonts-liberation \
+    # We install Chrome to get all the OS level dependencies, but Chrome itself
+    # is not actually used as it's packaged in the node puppeteer library.
+    # Alternatively, we could could include the entire dep list ourselves
+    # (https://github.com/puppeteer/puppeteer/blob/master/docs/troubleshooting.md#chrome-headless-doesnt-launch-on-unix)
+    # but that seems too easy to get out of date.
+    && apt-get install -y google-chrome-stable \
+    && rm -rf /var/lib/apt/lists/* \
+    && wget --quiet https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh -O /usr/sbin/wait-for-it.sh \
+    && chmod +x /usr/sbin/wait-for-it.sh \
     #
     # Clean up
     && apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
+# [Optional] Uncomment if you want to install an additional version of node using nvm
+# ARG EXTRA_NODE_VERSION=10
+# RUN su node -c "source /usr/local/share/nvm/nvm.sh && nvm install ${EXTRA_NODE_VERSION}"
 
-# Switch back to dialog for any ad-hoc use of apt-get
-ENV DEBIAN_FRONTEND=dialog
+# [Optional] Uncomment if you want to install more global node packages
+RUN sudo -u node npm install -g @ionic/cli

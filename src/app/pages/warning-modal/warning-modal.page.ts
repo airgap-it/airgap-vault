@@ -1,11 +1,11 @@
-import { AfterViewInit, Component } from '@angular/core'
+import { Component, AfterContentInit } from '@angular/core'
 import { ModalController, NavParams } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 import { first } from 'rxjs/operators'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { SecureStorageService } from '../../services/secure-storage/secure-storage.service'
-import { SettingsKey, StorageService } from '../../services/storage/storage.service'
+import { VaultStorageKey, VaultStorageService } from '../../services/storage/storage.service'
 
 export enum Warning {
   SECURE_STORAGE,
@@ -20,7 +20,7 @@ export enum Warning {
   templateUrl: './warning-modal.page.html',
   styleUrls: ['./warning-modal.page.scss']
 })
-export class WarningModalPage implements AfterViewInit {
+export class WarningModalPage implements AfterContentInit {
   private readonly errorType: Warning
 
   public title: string
@@ -33,13 +33,13 @@ export class WarningModalPage implements AfterViewInit {
     public navParams: NavParams,
     private readonly secureStorageService: SecureStorageService,
     private readonly modalController: ModalController,
-    private readonly storageService: StorageService,
+    private readonly storageService: VaultStorageService,
     private readonly translateService: TranslateService
   ) {}
 
-  public ngAfterViewInit(): void {
+  public ngAfterContentInit(): void {
     if (this.errorType === Warning.ROOT) {
-      this.translateService.get(['warnings-modal.root.title', 'warnings-modal.root.description']).subscribe(values => {
+      this.translateService.get(['warnings-modal.root.title', 'warnings-modal.root.description']).subscribe((values) => {
         this.title = values['warnings-modal.root.title']
         this.description = values['warnings-modal.root.description']
       })
@@ -48,7 +48,7 @@ export class WarningModalPage implements AfterViewInit {
     }
 
     if (this.errorType === Warning.SCREENSHOT) {
-      this.translateService.get(['warnings-modal.screenshot.title', 'warnings-modal.screenshot.description']).subscribe(values => {
+      this.translateService.get(['warnings-modal.screenshot.title', 'warnings-modal.screenshot.description']).subscribe((values) => {
         this.title = values['warnings-modal.screenshot.title']
         this.description = values['warnings-modal.screenshot.description']
       })
@@ -60,10 +60,12 @@ export class WarningModalPage implements AfterViewInit {
     }
 
     if (this.errorType === Warning.SECURE_STORAGE) {
-      this.translateService.get(['warnings-modal.secure-storage.title', 'warnings-modal.secure-storage.description']).subscribe(values => {
-        this.title = values['warnings-modal.secure-storage.title']
-        this.description = values['warnings-modal.secure-storage.description']
-      })
+      this.translateService
+        .get(['warnings-modal.secure-storage.title', 'warnings-modal.secure-storage.description'])
+        .subscribe((values) => {
+          this.title = values['warnings-modal.secure-storage.title']
+          this.description = values['warnings-modal.secure-storage.description']
+        })
       this.imageUrl = './assets/img/screenshot_detected.svg'
       this.buttonText = 'warnings-modal.secure-storage.button-text_label'
       this.handler = (): void => {
@@ -72,7 +74,7 @@ export class WarningModalPage implements AfterViewInit {
     }
 
     if (this.errorType === Warning.NETWORK) {
-      this.translateService.get(['warnings-modal.network.title', 'warnings-modal.network.description']).subscribe(values => {
+      this.translateService.get(['warnings-modal.network.title', 'warnings-modal.network.description']).subscribe((values) => {
         this.title = values['warnings-modal.network.title']
         this.description = values['warnings-modal.network.description']
       })
@@ -119,7 +121,7 @@ export class WarningModalPage implements AfterViewInit {
           this.buttonText = understoodLabel
           this.handler = (): void => {
             this.storageService
-              .set(SettingsKey.DISCLAIMER_INITIAL, true)
+              .set(VaultStorageKey.DISCLAIMER_INITIAL, true)
               .then(() => {
                 this.modalController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
               })

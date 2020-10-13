@@ -1,3 +1,4 @@
+import { APP_PLUGIN, ProtocolService, SPLASH_SCREEN_PLUGIN, STATUS_BAR_PLUGIN } from '@airgap/angular-core'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { Platform } from '@ionic/angular'
@@ -6,16 +7,15 @@ import { TranslateService } from '@ngx-translate/core'
 import { UnitHelper } from './../../test-config/unit-test-helper'
 import { AppComponent } from './app.component'
 import { NavigationService } from './services/navigation/navigation.service'
-import { ProtocolsService } from './services/protocols/protocols.service'
-import { SchemeRoutingService } from './services/scheme-routing/scheme-routing.service'
 import { SecretsService } from './services/secrets/secrets.service'
 import { SecureStorageServiceMock } from './services/secure-storage/secure-storage.mock'
 import { SecureStorageService } from './services/secure-storage/secure-storage.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
 import { StatusBarPlugin, SplashScreenPlugin, AppPlugin } from '@capacitor/core'
-import { STATUS_BAR_PLUGIN, SECURITY_UTILS_PLUGIN, APP_PLUGIN, SPLASH_SCREEN_PLUGIN } from './capacitor-plugins/injection-tokens'
+import { SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
 import { SecurityUtilsPlugin } from './capacitor-plugins/definitions'
 import { createAppSpy, createSecurityUtilsSpy, createSplashScreenSpy, createStatusBarSpy } from 'test-config/plugins-mocks'
+import { IACService } from './services/iac/iac.service'
 
 describe('AppComponent', () => {
   let appSpy: AppPlugin
@@ -48,9 +48,9 @@ describe('AppComponent', () => {
           { provide: SPLASH_SCREEN_PLUGIN, useValue: splashScreenSpy },
           { provide: Platform, useValue: platformSpy },
           StartupChecksService,
-          SchemeRoutingService,
+          IACService,
           TranslateService,
-          ProtocolsService,
+          ProtocolService,
           SecretsService,
           NavigationService
         ]

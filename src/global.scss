@@ -28,3 +28,10 @@
 ion-label {
   font-size: 12px;
 }
+
+/* Common Components styling */
+
+// from-to.component
+.from-to-line {
+  border-left: 1px solid var(--ion-color-light) !important;
+}

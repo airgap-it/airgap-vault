@@ -51,7 +51,7 @@ export class SocialRecoverySetupPage {
   public next(): void {
     this.secretService
       .retrieveEntropyForSecret(this.secret)
-      .then(entropy => {
+      .then((entropy) => {
         const shares: string[] = Secret.generateSocialRecover(
           bip39.entropyToMnemonic(entropy),
           this.numberOfShares,
@@ -61,7 +61,7 @@ export class SocialRecoverySetupPage {
           .routeWithState('/social-recovery-show-share', { shares, currentShare: 0, secret: this.secret })
           .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       })
-      .catch(error => {
+      .catch((error) => {
         console.warn(error)
       })
   }

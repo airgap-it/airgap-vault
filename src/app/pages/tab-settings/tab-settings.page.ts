@@ -3,12 +3,11 @@ import { AlertController, ToastController } from '@ionic/angular'
 import { Observable } from 'rxjs'
 
 import { Secret } from '../../models/secret'
-import { ClipboardService } from '../../services/clipboard/clipboard.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
-import { SchemeRoutingService } from '../../services/scheme-routing/scheme-routing.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
-import { SerializerService } from '../../services/serializer/serializer.service'
+import { ClipboardService, IACMessageTransport, SerializerService } from '@airgap/angular-core'
+import { IACService } from 'src/app/services/iac/iac.service'
 
 @Component({
   selector: 'airgap-tab-settings',
@@ -23,7 +22,7 @@ export class TabSettingsPage {
     private readonly secretsService: SecretsService,
     private readonly alertController: AlertController,
     private readonly toastController: ToastController,
-    private readonly schemeRoutingService: SchemeRoutingService,
+    private readonly iacService: IACService,
     private readonly clipboardService: ClipboardService,
     private readonly navigationService: NavigationService
   ) {
@@ -51,11 +50,15 @@ export class TabSettingsPage {
             const toast: HTMLIonToastElement = await this.toastController.create({
               message: 'Secret deleted',
               duration: 5000,
-              showCloseButton: true,
-              closeButtonText: 'Undo'
+              buttons: [
+                {
+                  text: 'Undo',
+                  role: 'cancel'
+                }
+              ]
             })
 
-            toast.onDidDismiss().then(role => {
+            toast.onDidDismiss().then((role) => {
               if (role === 'close') {
                 this.secretsService.addOrUpdateSecret(secret).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
               }
@@ -76,10 +79,14 @@ export class TabSettingsPage {
     this.navigationService.route('/about').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
+  public goToInteractionHistory(): void {
+    this.navigationService.route('/interaction-history').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
   public pasteClipboard(): void {
     this.clipboardService.paste().then(
       (text: string) => {
-        this.schemeRoutingService.handleNewSyncRequest(text).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
+        this.iacService.handleRequest(text, IACMessageTransport.PASTE).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
       },
       (err: string) => {
         console.error('Error: ' + err)

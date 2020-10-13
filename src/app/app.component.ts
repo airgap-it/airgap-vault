@@ -1,20 +1,26 @@
-import { AfterViewInit, Component, NgZone, Inject } from '@angular/core'
-import { AppPlugin, SplashScreenPlugin, StatusBarPlugin, StatusBarStyle, AppUrlOpen } from '@capacitor/core'
+import {
+  APP_PLUGIN,
+  IACMessageTransport,
+  LanguageService,
+  ProtocolService,
+  SPLASH_SCREEN_PLUGIN,
+  STATUS_BAR_PLUGIN
+} from '@airgap/angular-core'
+import { AfterViewInit, Component, Inject, NgZone } from '@angular/core'
+import { AppPlugin, AppUrlOpen, SplashScreenPlugin, StatusBarPlugin, StatusBarStyle } from '@capacitor/core'
 import { Platform } from '@ionic/angular'
-import { TranslateService } from '@ngx-translate/core'
 import { first } from 'rxjs/operators'
 
+import { SecurityUtilsPlugin } from './capacitor-plugins/definitions'
+import { SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
 import { DEEPLINK_VAULT_ADD_ACCOUNT, DEEPLINK_VAULT_PREFIX } from './constants/constants'
 import { ExposedPromise, exposedPromise } from './functions/exposed-promise'
 import { Secret } from './models/secret'
 import { ErrorCategory, handleErrorLocal } from './services/error-handler/error-handler.service'
+import { IACService } from './services/iac/iac.service'
 import { NavigationService } from './services/navigation/navigation.service'
-import { ProtocolsService } from './services/protocols/protocols.service'
-import { SchemeRoutingService } from './services/scheme-routing/scheme-routing.service'
 import { SecretsService } from './services/secrets/secrets.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
-import { SPLASH_SCREEN_PLUGIN, STATUS_BAR_PLUGIN, APP_PLUGIN, SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
-import { SecurityUtilsPlugin } from './capacitor-plugins/definitions'
 
 declare let window: Window & { airGapHasStarted: boolean }
 
@@ -30,9 +36,9 @@ export class AppComponent implements AfterViewInit {
   constructor(
     private readonly platform: Platform,
     private readonly startupChecks: StartupChecksService,
-    private readonly schemeRoutingService: SchemeRoutingService,
-    private readonly translate: TranslateService,
-    private readonly protocolsService: ProtocolsService,
+    private readonly iacService: IACService,
+    private readonly languageService: LanguageService,
+    private readonly protocolService: ProtocolService,
     private readonly secretsService: SecretsService,
     private readonly ngZone: NgZone,
     private readonly navigationService: NavigationService,
@@ -43,49 +49,24 @@ export class AppComponent implements AfterViewInit {
   ) {
     // We set the app as started so no "error alert" will be shown in case the app fails to load. See error-check.js for details.
     window.airGapHasStarted = true
-
+    console.log('IS THIS HERE???')
     this.initializeApp().catch(handleErrorLocal(ErrorCategory.OTHER))
   }
 
   public async initializeApp(): Promise<void> {
-    const supportedLanguages: string[] = ['en', 'de', 'zh-cn']
-    for (const lang of supportedLanguages) {
-      // We bundle languages so we don't have to load it over http
-      // and we don't have to add a CSP / whitelist rule for it.
-      this.translate.setTranslation(lang, require(`../assets/i18n/${lang}.json`))
-      // TODO: Once we add more languages, we probably should not all languages by default
-      // (we have to check if we can optimize that)
-    }
+    await Promise.all([this.platform.ready(), this.initializeTranslations()])
 
-    this.loadLanguages(supportedLanguages)
-    this.protocolsService.addProtocols()
-
-    await this.platform.ready()
+    this.initializeProtocols()
 
     if (this.platform.is('hybrid')) {
-      this.statusBar.setStyle({ 'style': StatusBarStyle.Dark })
-      this.statusBar.setBackgroundColor({ 'color': '#311B58' })
+      this.statusBar.setStyle({ style: StatusBarStyle.Dark })
+      this.statusBar.setBackgroundColor({ color: '#311B58' })
       this.splashScreen.hide()
 
       await this.securityUtils.toggleAutomaticAuthentication({ automatic: true })
     }
 
     this.initChecks()
-  }
-
-  public loadLanguages(supportedLanguages: string[]): void {
-    this.translate.setDefaultLang('en')
-
-    const language: string = this.translate.getBrowserLang()
-
-    if (language) {
-      const lowerCaseLanguage: string = language.toLowerCase()
-      supportedLanguages.forEach((supportedLanguage: string) => {
-        if (supportedLanguage.startsWith(lowerCaseLanguage)) {
-          this.translate.use(supportedLanguage)
-        }
-      })
-    }
   }
 
   public async initChecks(): Promise<void> {
@@ -96,7 +77,7 @@ export class AppComponent implements AfterViewInit {
 
   public async ngAfterViewInit(): Promise<void> {
     await this.platform.ready()
-    this.app.addListener("appUrlOpen", async (data: AppUrlOpen) => {
+    this.app.addListener('appUrlOpen', async (data: AppUrlOpen) => {
       await this.isInitialized.promise
       if (data.url === DEEPLINK_VAULT_PREFIX || data.url.startsWith(DEEPLINK_VAULT_ADD_ACCOUNT)) {
         console.log('Successfully matched route', data.url)
@@ -123,9 +104,20 @@ export class AppComponent implements AfterViewInit {
           })
       } else {
         this.ngZone.run(async () => {
-          this.schemeRoutingService.handleNewSyncRequest(data.url).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
+          this.iacService.handleRequest(data.url, IACMessageTransport.DEEPLINK).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
         })
       }
     })
+  }
+
+  private async initializeTranslations(): Promise<void> {
+    return this.languageService.init({
+      supportedLanguages: ['en', 'de', 'zh-cn'],
+      defaultLanguage: 'en'
+    })
+  }
+
+  private initializeProtocols(): void {
+    this.protocolService.init()
   }
 }

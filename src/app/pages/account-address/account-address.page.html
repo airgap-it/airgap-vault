@@ -6,7 +6,9 @@
     <ion-title>{{ 'wallet-address.title' | translate }}</ion-title>
 
     <ion-buttons slot="primary">
-      <ion-button (click)="presentEditPopover($event)"><ion-icon slot="icon-only" name="more"></ion-icon></ion-button>
+      <ion-button (click)="presentEditPopover($event)">
+        <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -14,11 +16,13 @@
 <ion-content class="ion-padding">
   <ion-row class="ion-padding">
     <ion-col>
-      <ion-avatar><airgap-identicon [address]="wallet.receivingPublicAddress"></airgap-identicon></ion-avatar>
-      <airgap-currency-symbol [symbol]="wallet.coinProtocol.symbol"></airgap-currency-symbol>
+      <ion-avatar>
+        <airgap-identicon [address]="wallet.receivingPublicAddress"></airgap-identicon>
+      </ion-avatar>
+      <airgap-currency-symbol [symbol]="wallet.protocol.symbol"></airgap-currency-symbol>
     </ion-col>
     <ion-col>
-      <h2 class="ion-no-margin">{{ wallet.coinProtocol.name }} {{ wallet.coinProtocol.symbol }}</h2>
+      <h2 class="ion-no-margin">{{ wallet.protocol.name }} {{ wallet.protocol.symbol }}</h2>
       <p>
         {{ 'wallet-address.address_label' | translate }}
         <br />
@@ -33,7 +37,7 @@
   </ion-row>
 
   <ion-row class="ion-justify-content-center ion-padding-bottom">
-    <airgap-qr-clipboard [qrdata]="wallet.receivingPublicAddress" [shouldPrefixSingleQrWithUrl]="false" [level]="'L'" [size]="300"></airgap-qr-clipboard>
+    <airgap-qr [qrdata]="wallet.receivingPublicAddress" [shouldPrefixSingleQrWithUrl]="false" [level]="'L'" [size]="300"></airgap-qr>
   </ion-row>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">

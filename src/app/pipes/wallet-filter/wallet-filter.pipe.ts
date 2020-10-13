@@ -14,8 +14,7 @@ export class WalletFilterPipe implements PipeTransform {
       return items
     } else {
       return items.filter(
-        wallet =>
-          wallet.coinProtocol.symbol.toLowerCase().includes(args.symbol) || wallet.coinProtocol.name.toLowerCase().includes(args.symbol)
+        (wallet) => wallet.protocol.symbol.toLowerCase().includes(args.symbol) || wallet.protocol.name.toLowerCase().includes(args.symbol)
       )
     }
   }

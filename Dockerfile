@@ -1,7 +1,7 @@
-FROM node:10
+FROM node:14
 
 # See https://crbug.com/795759
-RUN apt-get update && apt-get install -yq libgconf-2-4 bzip2 build-essential python
+RUN apt-get update && apt-get install -yq libgconf-2-4 bzip2 build-essential libxtst6
 RUN apt-get install -yq git
 
 # Install latest chrome dev package and fonts to support major charsets (Chinese, Japanese, Arabic, Hebrew, Thai and a few others)
@@ -30,8 +30,8 @@ COPY package-lock.json /app
 RUN npm run install-test-dependencies
 
 # install dependencies
-RUN npm install -g @ionic/cli@6.9.1
 RUN npm install
+RUN npm install @ionic/cli@6.9.1
 
 # install static webserver
 RUN npm install node-static -g
