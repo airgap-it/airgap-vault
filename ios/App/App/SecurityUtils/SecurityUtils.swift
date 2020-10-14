@@ -49,6 +49,12 @@ public class SecurityUtils: CAPPlugin {
         }
     }
     
+    @objc func waitForOverlayDismiss(_ call: CAPPluginCall) {
+        secureScreen.waitForOverlayDismiss {
+            call.resolve()
+        }
+    }
+    
     // MARK: - Device Integrity
     
     @objc func assessDeviceIntegrity(_ call: CAPPluginCall) {

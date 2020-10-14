@@ -5,7 +5,7 @@ import { first } from 'rxjs/operators'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { SecureStorageService } from '../../services/secure-storage/secure-storage.service'
-import { SettingsKey, StorageService } from '../../services/storage/storage.service'
+import { VaultStorageKey, VaultStorageService } from '../../services/storage/storage.service'
 
 export enum Warning {
   SECURE_STORAGE,
@@ -33,9 +33,9 @@ export class WarningModalPage implements AfterContentInit {
     public navParams: NavParams,
     private readonly secureStorageService: SecureStorageService,
     private readonly modalController: ModalController,
-    private readonly storageService: StorageService,
+    private readonly storageService: VaultStorageService,
     private readonly translateService: TranslateService
-  ) { }
+  ) {}
 
   public ngAfterContentInit(): void {
     if (this.errorType === Warning.ROOT) {
@@ -121,7 +121,7 @@ export class WarningModalPage implements AfterContentInit {
           this.buttonText = understoodLabel
           this.handler = (): void => {
             this.storageService
-              .set(SettingsKey.DISCLAIMER_INITIAL, true)
+              .set(VaultStorageKey.DISCLAIMER_INITIAL, true)
               .then(() => {
                 this.modalController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
               })

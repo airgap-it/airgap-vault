@@ -1,6 +1,8 @@
+import { PermissionsService, PermissionTypes } from '@airgap/angular-core'
 import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { Platform } from '@ionic/angular'
 import { auditTime } from 'rxjs/operators'
+import { SecretsService } from 'src/app/services/secrets/secrets.service'
 
 import { TouchEntropyComponent } from '../../components/touch-entropy/touch-entropy.component'
 import { Secret } from '../../models/secret'
@@ -10,8 +12,6 @@ import { EntropyService } from '../../services/entropy/entropy.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { GyroscopeNativeService } from '../../services/gyroscope/gyroscope.native.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
-import { PermissionsService, PermissionTypes } from '../../services/permissions/permissions.service'
-import { SecretsService } from 'src/app/services/secrets/secrets.service'
 
 @Component({
   selector: 'airgap-secret-generate',

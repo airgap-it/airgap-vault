@@ -1,8 +1,8 @@
+import { PermissionsService } from '@airgap/angular-core'
 import { Platform } from '@ionic/angular'
 
 import { IEntropyGenerator } from '../entropy/IEntropyGenerator'
 
-import { PermissionsService } from './../permissions/permissions.service'
 import { AudioBrowserService } from './audio.browser.service'
 import { AudioNativeService } from './audio.native.servive'
 

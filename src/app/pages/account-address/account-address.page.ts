@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { PopoverController } from '@ionic/angular'
 import { AirGapWallet } from 'airgap-coin-lib'
 
-import { ClipboardService } from '../../services/clipboard/clipboard.service'
+import { ClipboardService } from '@airgap/angular-core'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { InteractionOperationType, InteractionService } from '../../services/interaction/interaction.service'
 import { NavigationService } from '../../services/navigation/navigation.service'

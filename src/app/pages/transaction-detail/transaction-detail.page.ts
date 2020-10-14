@@ -7,8 +7,9 @@ import { handleErrorLocal, ErrorCategory } from '../../services/error-handler/er
 import { InteractionOperationType, InteractionService } from '../../services/interaction/interaction.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
-import { SerializerService } from '../../services/serializer/serializer.service'
+import { SerializerService } from '@airgap/angular-core'
 import { AlertController } from '@ionic/angular'
+import { SignTransactionInfo } from 'src/app/models/sign-transaction-info'
 
 // TODO: refactor multiple transactions
 @Component({
@@ -19,9 +20,8 @@ import { AlertController } from '@ionic/angular'
 export class TransactionDetailPage {
   public broadcastUrl?: string
 
-  public transactionsWithWallets: [UnsignedTransaction, AirGapWallet][]
+  public transactionInfos: SignTransactionInfo[]
   public airGapTxs: IAirGapTransaction[]
-  public deserializedSync: IACMessageDefinitionObject[]
 
   constructor(
     private readonly alertController: AlertController,
@@ -31,20 +31,23 @@ export class TransactionDetailPage {
     private readonly serializerService: SerializerService
   ) {}
 
+  get signTransactionRequests(): IACMessageDefinitionObject[] {
+    return this.transactionInfos.map(info => info.signTransactionRequest)
+  }
+
   public async ionViewWillEnter(): Promise<void> {
     const state = this.navigationService.getState()
-    if (state.transactionsWithWallets) {
-      this.transactionsWithWallets = state.transactionsWithWallets
-      this.deserializedSync = state.deserializedSync
-      console.log('deserialized sync', this.deserializedSync)
+    if (state.transactionInfos) {
+      this.transactionInfos = state.transactionInfos
+      
       try {
         this.airGapTxs = (
           await Promise.all(
-            this.transactionsWithWallets.map((pair: [UnsignedTransaction, AirGapWallet]) => pair[1].protocol.getTransactionDetails(pair[0]))
+            this.transactionInfos.map(info => info.wallet.protocol.getTransactionDetails(info.signTransactionRequest.payload as UnsignedTransaction))
           )
         ).reduce((flatten, toFlatten) => flatten.concat(toFlatten), [])
       } catch (e) {
-        console.log('cannot read tx details', e)
+        console.error('cannot read tx details', e)
       }
     }
   }
@@ -52,17 +55,17 @@ export class TransactionDetailPage {
   public async signAndGoToNextPage(): Promise<void> {
     try {
       const signedTxs: string[] = await Promise.all(
-        this.transactionsWithWallets.map((pair: [UnsignedTransaction, AirGapWallet]) => this.signTransaction(pair[0], pair[1]))
+        this.transactionInfos.map(info => this.signTransaction(info.signTransactionRequest.payload as UnsignedTransaction, info.wallet))
       )
-      this.broadcastUrl = await this.generateBroadcastUrl(this.transactionsWithWallets, signedTxs)
+      this.broadcastUrl = await this.generateBroadcastUrl(this.transactionInfos, signedTxs)
 
       this.interactionService.startInteraction(
         {
           operationType: InteractionOperationType.TRANSACTION_BROADCAST,
           url: this.broadcastUrl,
-          wallets: this.transactionsWithWallets.map((pair) => pair[1]),
+          wallets: this.transactionInfos.map(info => info.wallet),
           signedTxs,
-          transactions: this.transactionsWithWallets.map((pair) => pair[0])
+          transactions: this.transactionInfos.map(info => info.signTransactionRequest.payload as UnsignedTransaction)
         },
         this.secretsService.getActiveSecret()
       )
@@ -74,13 +77,13 @@ export class TransactionDetailPage {
     }
   }
 
-  public async generateBroadcastUrl(transactionsWithWallets: [UnsignedTransaction, AirGapWallet][], signedTxs: string[]): Promise<string> {
+  private async generateBroadcastUrl(transactionInfos: SignTransactionInfo[], signedTxs: string[]): Promise<string> {
     let txDetails: IAirGapTransaction[] | undefined
 
     try {
       const transactions = (
         await Promise.all(
-          transactionsWithWallets.map((pair: [UnsignedTransaction, AirGapWallet]) => pair[1].protocol.getTransactionDetails(pair[0]))
+          transactionInfos.map(info => info.wallet.protocol.getTransactionDetails(info.signTransactionRequest.payload as UnsignedTransaction))
         )
       ).reduce((flatten, toFlatten) => flatten.concat(toFlatten), [])
       console.log(transactions)
@@ -91,12 +94,13 @@ export class TransactionDetailPage {
     }
 
     if (txDetails && txDetails.length > 0) {
-      const deserializedTxSigningRequests: IACMessageDefinitionObject[] = transactionsWithWallets.map(
-        (pair: [UnsignedTransaction, AirGapWallet], index: number) => ({
-          protocol: pair[1].protocol.identifier,
+      const deserializedTxSigningRequests: IACMessageDefinitionObject[] = transactionInfos.map(
+        (info, index) => ({
+          id: info.signTransactionRequest.id,
+          protocol: info.wallet.protocol.identifier,
           type: IACMessageType.TransactionSignResponse,
           payload: {
-            accountIdentifier: pair[1].publicKey.substr(-6),
+            accountIdentifier: info.wallet.publicKey.substr(-6),
             transaction: signedTxs[index],
             from: txDetails[index].from,
             amount: txDetails[index].amount,
@@ -107,8 +111,8 @@ export class TransactionDetailPage {
       )
 
       const serializedTx: string[] = await this.serializerService.serialize(deserializedTxSigningRequests)
-
-      return `${transactionsWithWallets[0][0].callback || 'airgap-wallet://?d='}${serializedTx.join(',')}`
+      const unsignedTransaction = transactionInfos[0].signTransactionRequest.payload as UnsignedTransaction
+      return `${unsignedTransaction.callbackURL || 'airgap-wallet://?d='}${serializedTx.join(',')}`
     } else {
       throw new Error('Could not get transaction details')
     }

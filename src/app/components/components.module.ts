@@ -12,7 +12,6 @@ import { AccountItemComponent } from './account-item/account-item.component'
 import { CurrentSecretComponent } from './current-secret/current-secret.component'
 import { EntropyProgressComponent } from './entropy-progress/entropy-progress.component'
 import { ProgressFooterComponent } from './progress-footer/progress-footer.component'
-import { QrClipboardComponent } from './qr-clipboard/qr-clipboard.component'
 import { SecretItemComponent } from './secret-item/secret-item.component'
 import { SignedTransactionComponent } from './signed-transaction/signed-transaction.component'
 import { TouchEntropyComponent } from './touch-entropy/touch-entropy.component'
@@ -24,7 +23,6 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     CurrentSecretComponent,
     EntropyProgressComponent,
     ProgressFooterComponent,
-    QrClipboardComponent,
     SecretItemComponent,
     SignedTransactionComponent,
     TouchEntropyComponent,
@@ -37,7 +35,6 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     CurrentSecretComponent,
     EntropyProgressComponent,
     ProgressFooterComponent,
-    QrClipboardComponent,
     SecretItemComponent,
     SignedTransactionComponent,
     TouchEntropyComponent,
