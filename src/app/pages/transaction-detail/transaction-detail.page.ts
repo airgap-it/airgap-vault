@@ -22,6 +22,7 @@ export class TransactionDetailPage {
 
   public transactionInfos: SignTransactionInfo[]
   public airGapTxs: IAirGapTransaction[]
+  public signTransactionRequests: IACMessageDefinitionObject[]
 
   constructor(
     private readonly alertController: AlertController,
@@ -29,18 +30,15 @@ export class TransactionDetailPage {
     private readonly secretsService: SecretsService,
     private readonly interactionService: InteractionService,
     private readonly serializerService: SerializerService
-  ) {}
+  ) { }
 
-  get signTransactionRequests(): IACMessageDefinitionObject[] {
-    return this.transactionInfos.map(info => info.signTransactionRequest)
-  }
 
 
   public async ionViewWillEnter(): Promise<void> {
     const state = this.navigationService.getState()
     if (state.transactionInfos) {
       this.transactionInfos = state.transactionInfos
-      
+      this.signTransactionRequests = this.transactionInfos.map(info => info.signTransactionRequest)
       try {
         this.airGapTxs = (
           await Promise.all(
