@@ -63,17 +63,8 @@ export class SecretEditPage {
   public async confirm(): Promise<void> {
     try {
       await this.secretsService.addOrUpdateSecret(this.secret).catch()
-      this.secrets$.subscribe((secrets) => {
-        secrets.forEach((secret) => {
-          //to remove the secret that was stored during creation
-          if (secret.label === '') {
-            this.secretsService.remove(secret)
-          }
-        })
-      })
     } catch (error) {
       handleErrorLocal(ErrorCategory.SECURE_STORAGE)(error)
-
       // TODO: Show error
       return
     }

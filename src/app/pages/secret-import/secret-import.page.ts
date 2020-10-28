@@ -44,13 +44,13 @@ export class SecretImportPage {
     this.deviceService.disableScreenshotProtection()
   }
 
-  public goToSecretCreatePage(): void {
+  public async goToSecretCreatePage(): Promise<void> {
     const signer: BIP39Signer = new BIP39Signer()
 
     const secret: Secret = new Secret(signer.mnemonicToEntropy(BIP39Signer.prepareMnemonic(this.mnemonic)))
 
     try {
-      this.secretsService.addOrUpdateSecret(secret).catch()
+      await this.secretsService.addOrUpdateSecret(secret).catch()
     } catch (error) {
       console.error('could not save it: ', error)
       handleErrorLocal(ErrorCategory.SECURE_STORAGE)(error)
@@ -58,6 +58,6 @@ export class SecretImportPage {
 
     setTimeout(() => {
       this.navigationService.route(`secret-edit/${secret.id}/${'generate'}`).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-    }, 100)
+    }, 500)
   }
 }
