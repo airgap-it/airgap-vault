@@ -19,4 +19,8 @@
     <string name="recovery_input_alert_recover_message">Your secret is missing. Recover it using Recovery Password or re-import.</string>
     <string name="recovery_input_alert_reimport_button">Import</string>
     <string name="recovery_input_alert_recover_button">Recover</string>
+    <string name="crash_title">Crash detected</string>
+    <string name="crash_text">Crash log file:</string>
+    <string name="crash_dialog_text">Please send us the crash log</string>
+    <string name="crash_comments">Additional comments:</string>
 </resources>

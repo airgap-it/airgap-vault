@@ -48,6 +48,11 @@ dependencies {
 
     implementation 'com.google.android.material:material:1.2.0'
     implementation 'com.scottyab:rootbeer-lib:0.0.7'
+
+    def acraVersion = '5.7.0'
+
+    implementation "ch.acra:acra-mail:$acraVersion"
+    implementation "ch.acra:acra-dialog:$acraVersion"
 }
 
 
