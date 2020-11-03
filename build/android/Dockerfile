@@ -61,6 +61,8 @@ RUN ionic build --prod
 # copy ionic build
 RUN cap sync android
 
+RUN npm run patch-ionic
+
 # accept licenses
 RUN echo y | $ANDROID_HOME/tools/bin/sdkmanager --update
 

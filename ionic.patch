@@ -1,0 +1,11 @@
+--- ./airgap-vault-2/node_modules/@capacitor/android/capacitor/src/main/java/com/getcapacitor/Splash.java	1985-10-26 09:15:00.000000000 +0100
++++ ./airgap-vault/node_modules/@capacitor/android/capacitor/src/main/java/com/getcapacitor/Splash.java	2020-11-02 17:28:11.000000000 +0100
+@@ -236,7 +236,7 @@
+ 
+     buildViews(a, config);
+ 
+-    if (isVisible) {
++    if (isVisible && splashListener != null) {
+       splashListener.completed();
+       return;
+     }

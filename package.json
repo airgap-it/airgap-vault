@@ -29,7 +29,8 @@
     "electron:release": "electron-builder -l --publish=never",
     "install-test-dependencies": "node install-test-deps.js",
     "install-build-dependencies": "node install-build-deps.js",
-    "apply-diagnostic-modules": "node apply-diagnostic-modules.js"
+    "apply-diagnostic-modules": "node apply-diagnostic-modules.js",
+    "patch-ionic": "./ionic-patch.sh"
   },
   "dependencies": {
     "@airgap/angular-core": "0.0.5-beta.1",
