@@ -51,7 +51,7 @@
     "@ionic/storage": "2.2.0",
     "@ngx-translate/core": "^13.0.0",
     "@zxing/ngx-scanner": "3.0.0",
-    "airgap-coin-lib": "0.9.8-beta.5",
+    "airgap-coin-lib": "0.9.8-beta.6",
     "angular2-uuid": "^1.1.1",
     "angularx-qrcode": "^1.5.3",
     "bignumber.js": "^9.0.0",
