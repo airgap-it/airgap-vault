@@ -1,0 +1,1 @@
+AirGap Vault is a secure cryptocurrency wallet for Bitcoin, Ethereum and others
