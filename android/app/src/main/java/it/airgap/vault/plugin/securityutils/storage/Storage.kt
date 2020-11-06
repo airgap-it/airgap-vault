@@ -367,7 +367,7 @@ class Storage(private val context: Context, private val storageAlias: String, pr
             val keyBuilder = KeyGenParameterSpec.Builder(alias,
                     KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
                     .setDigests(KeyProperties.DIGEST_SHA512)
-                    .setUserAuthenticationRequired(true)
+                    .setUserAuthenticationRequired(false)
                     .setUserAuthenticationValidityDurationSeconds(15) // TODO: should this be a parameter for users to choose?
                     .setRandomizedEncryptionRequired(true)
                     .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
@@ -385,8 +385,6 @@ class Storage(private val context: Context, private val storageAlias: String, pr
             keyGenerator.initialize(spec)
             keyGenerator.generateKeyPair()
         }
-
-
     }
 
     private fun generatePassword(): String {

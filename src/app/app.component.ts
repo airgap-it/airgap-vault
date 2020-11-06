@@ -11,8 +11,8 @@ import { AppPlugin, AppUrlOpen, SplashScreenPlugin, StatusBarPlugin, StatusBarSt
 import { Platform } from '@ionic/angular'
 import { first } from 'rxjs/operators'
 
-import { SecurityUtilsPlugin } from './capacitor-plugins/definitions'
-import { SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
+// import { SecurityUtilsPlugin } from './capacitor-plugins/definitions'
+// import { SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
 import { DEEPLINK_VAULT_ADD_ACCOUNT, DEEPLINK_VAULT_PREFIX } from './constants/constants'
 import { ExposedPromise, exposedPromise } from './functions/exposed-promise'
 import { Secret } from './models/secret'
@@ -43,7 +43,7 @@ export class AppComponent implements AfterViewInit {
     private readonly ngZone: NgZone,
     private readonly navigationService: NavigationService,
     @Inject(APP_PLUGIN) private readonly app: AppPlugin,
-    @Inject(SECURITY_UTILS_PLUGIN) private readonly securityUtils: SecurityUtilsPlugin,
+    // @Inject(SECURITY_UTILS_PLUGIN) private readonly securityUtils: SecurityUtilsPlugin,
     @Inject(SPLASH_SCREEN_PLUGIN) private readonly splashScreen: SplashScreenPlugin,
     @Inject(STATUS_BAR_PLUGIN) private readonly statusBar: StatusBarPlugin
   ) {
@@ -62,7 +62,7 @@ export class AppComponent implements AfterViewInit {
       this.statusBar.setBackgroundColor({ color: '#311B58' })
       this.splashScreen.hide()
 
-      await this.securityUtils.toggleAutomaticAuthentication({ automatic: true })
+      // await this.securityUtils.toggleAutomaticAuthentication({ automatic: true })
     }
 
     this.initChecks()
