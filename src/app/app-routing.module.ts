@@ -89,6 +89,18 @@ const routes: Routes = [
   {
     path: 'transaction-signed',
     loadChildren: () => import('./pages/transaction-signed/transaction-signed.module').then((m) => m.TransactionSignedPageModule)
+  },
+  {
+    path: 'bip85-generate',
+    loadChildren: () => import('./pages/bip85-generate/bip85-generate.module').then((m) => m.Bip85GeneratePageModule)
+  },
+  {
+    path: 'bip85-show',
+    loadChildren: () => import('./pages/bip85-show/bip85-show.module').then((m) => m.Bip85ShowPageModule)
+  },
+  {
+    path: 'bip85-verify',
+    loadChildren: () => import('./pages/bip85-verify/bip85-verify.module').then((m) => m.Bip85VerifyPageModule)
   }
 ]
 

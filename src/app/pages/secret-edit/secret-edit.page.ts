@@ -85,6 +85,12 @@ export class SecretEditPage {
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
+  public goToBip85ChildSeed(): void {
+    this.navigationService
+      .routeWithState('/bip85-generate', { secret: this.secret })
+      .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
   public async resetRecoveryPassword(): Promise<void> {
     try {
       const recoveryKey = await this.secretsService.resetRecoveryPassword(this.secret)
