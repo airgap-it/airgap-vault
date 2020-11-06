@@ -26,10 +26,10 @@ export class SignedTransactionComponent implements OnChanges {
 
   public aggregatedInfo:
     | {
-        numberOfTxs: number
-        totalAmount: BigNumber
-        totalFees: BigNumber
-      }
+      numberOfTxs: number
+      totalAmount: BigNumber
+      totalFees: BigNumber
+    }
     | undefined
 
   public rawTxData: string
@@ -106,9 +106,10 @@ export class SignedTransactionComponent implements OnChanges {
         ) {
           this.aggregatedInfo = {
             numberOfTxs: this.airGapTxs.length,
-            totalAmount: this.airGapTxs.reduce((pv: BigNumber, cv: IAirGapTransaction) => pv.plus(cv.amount), new BigNumber(0)),
-            totalFees: this.airGapTxs.reduce((pv: BigNumber, cv: IAirGapTransaction) => pv.plus(cv.fee), new BigNumber(0))
+            totalAmount: this.airGapTxs.reduce((pv: BigNumber, cv: IAirGapTransaction) => pv.plus(cv.amount ? cv.amount : 0), new BigNumber(0)),
+            totalFees: this.airGapTxs.reduce((pv: BigNumber, cv: IAirGapTransaction) => pv.plus(cv.fee ? cv.fee : 0), new BigNumber(0))
           }
+          return
         }
 
         try {
