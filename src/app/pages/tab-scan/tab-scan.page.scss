@@ -1,3 +1,5 @@
+@import '../../../theme/variables.scss';
+
 ion-content {
   --background: none transparent;
 }
@@ -31,8 +33,12 @@ p {
   }
 }
 
-video {
-  min-height: 705px;
-  min-width: 100vw;
-  object-fit: contain;
+ion-grid {
+  height: 100%;
 }
+
+// video {
+//   min-height: 705px;
+//   min-width: 100vw;
+//   object-fit: contain;
+// }

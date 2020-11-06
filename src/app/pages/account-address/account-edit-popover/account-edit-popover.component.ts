@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core'
 import { AirGapWallet } from 'airgap-coin-lib'
 import { first } from 'rxjs/operators'
 
-import { ClipboardService } from '../../../services/clipboard/clipboard.service'
+import { ClipboardService } from '@airgap/angular-core'
 import { ErrorCategory, handleErrorLocal } from '../../../services/error-handler/error-handler.service'
 import { SecretsService } from '../../../services/secrets/secrets.service'
 

@@ -27,6 +27,11 @@
                 "output": "assets"
               },
               {
+                "glob": "**/*",
+                "input": "node_modules/@airgap/angular-core/src/assets",
+                "output": "assets"
+              },
+              {
                 "glob": "**/*.svg",
                 "input": "node_modules/ionicons/dist/ionicons/svg",
                 "output": "./svg"
@@ -43,8 +48,7 @@
                 "input": "src/app/app.scss"
               }
             ],
-            "scripts": [],
-            "es5BrowserSupport": true
+            "scripts": []
           },
           "configurations": {
             "production": {

@@ -1,16 +1,34 @@
+import {
+  APP_CONFIG,
+  APP_PLUGIN,
+  APP_INFO_PLUGIN,
+  CLIPBOARD_PLUGIN,
+  SPLASH_SCREEN_PLUGIN,
+  STATUS_BAR_PLUGIN,
+  PERMISSIONS_PLUGIN,
+  AirGapAngularCoreModule,
+  AirGapTranslateLoader,
+  ClipboardService,
+  DeeplinkService,
+  PermissionsService,
+  SerializerService,
+  QrScannerService,
+  UiEventService
+} from '@airgap/angular-core'
+import { HttpClient, HttpClientModule } from '@angular/common/http'
 import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { RouteReuseStrategy } from '@angular/router'
 import { Plugins } from '@capacitor/core'
-
 import { DeviceMotion } from '@ionic-native/device-motion/ngx'
 import { Diagnostic } from '@ionic-native/diagnostic/ngx'
 import { IonicModule, IonicRouteStrategy, Platform } from '@ionic/angular'
 import { IonicStorageModule } from '@ionic/storage'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
 
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
+import { CAMERA_PREVIEW_PLUGIN, SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
 import { DistributionOnboardingPageModule } from './pages/distribution-onboarding/distribution-onboarding.module'
 import { IntroductionPageModule } from './pages/introduction/introduction.module'
 import { LocalAuthenticationOnboardingPageModule } from './pages/local-authentication-onboarding/local-authentication-onboarding.module'
@@ -19,37 +37,24 @@ import { AudioServiceFactory } from './services/audio/audio.factory'
 import { AudioNativeService } from './services/audio/audio.native.servive'
 import { CameraFactory, CameraFactoryDepHolder } from './services/camera/camera.factory'
 import { CameraNativeService } from './services/camera/camera.native.service'
-import { ClipboardService } from './services/clipboard/clipboard.service'
-import { DeepLinkService } from './services/deep-link/deep-link.service'
 import { DeviceService } from './services/device/device.service'
 import { EntropyService } from './services/entropy/entropy.service'
 import { ErrorHandlerService } from './services/error-handler/error-handler.service'
 import { GyroscopeServiceFactory } from './services/gyroscope/gyroscope.factory'
 import { GyroscopeNativeService } from './services/gyroscope/gyroscope.native.service'
+import { IACService } from './services/iac/iac.service'
 import { InteractionService } from './services/interaction/interaction.service'
-import { PermissionsService } from './services/permissions/permissions.service'
-import { ProtocolsService } from './services/protocols/protocols.service'
-import { ScannerService } from './services/scanner/scanner.service'
-import { SchemeRoutingService } from './services/scheme-routing/scheme-routing.service'
 import { SecretsService } from './services/secrets/secrets.service'
 import { SecureStorageFactory, SecureStorageFactoryDepHolder } from './services/secure-storage/secure-storage.factory'
 import { SecureStorageService } from './services/secure-storage/secure-storage.service'
-import { SerializerService } from './services/serializer/serializer.service'
 import { ShareUrlService } from './services/share-url/share-url.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
-import { StorageService } from './services/storage/storage.service'
+import { VaultStorageService } from './services/storage/storage.service'
+import { appConfig } from './config/app-config'
 
-import {
-  APP_PLUGIN,
-  APP_INFO_PLUGIN,
-  CLIPBOARD_PLUGIN,
-  SPLASH_SCREEN_PLUGIN,
-  STATUS_BAR_PLUGIN,
-  CAMERA_PREVIEW_PLUGIN,
-  SECURITY_UTILS_PLUGIN
-} from './capacitor-plugins/injection-tokens'
-
-const { App, AppInfo, CameraPreview, Clipboard, SecurityUtils, SplashScreen, StatusBar } = Plugins
+export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
+  return new AirGapTranslateLoader(http, { prefix: './assets/i18n/', suffix: '.json' })
+}
 
 @NgModule({
   declarations: [AppComponent],
@@ -58,7 +63,14 @@ const { App, AppInfo, CameraPreview, Clipboard, SecurityUtils, SplashScreen, Sta
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    TranslateModule.forRoot(),
+    HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: createTranslateLoader,
+        deps: [HttpClient]
+      }
+    }),
     IonicStorageModule.forRoot({
       name: '__airgap_storage',
       driverOrder: ['sqlite', 'localstorage']
@@ -66,16 +78,19 @@ const { App, AppInfo, CameraPreview, Clipboard, SecurityUtils, SplashScreen, Sta
     WarningModalPageModule,
     IntroductionPageModule,
     DistributionOnboardingPageModule,
-    LocalAuthenticationOnboardingPageModule
+    LocalAuthenticationOnboardingPageModule,
+    AirGapAngularCoreModule
   ],
   providers: [
-    { provide: APP_PLUGIN, useValue: App },
-    { provide: APP_INFO_PLUGIN, useValue: AppInfo },
-    { provide: CAMERA_PREVIEW_PLUGIN, useValue: CameraPreview },
-    { provide: CLIPBOARD_PLUGIN, useValue: Clipboard },
-    { provide: SECURITY_UTILS_PLUGIN, useValue: SecurityUtils },
-    { provide: SPLASH_SCREEN_PLUGIN, useValue: SplashScreen },
-    { provide: STATUS_BAR_PLUGIN, useValue: StatusBar },
+    { provide: APP_PLUGIN, useValue: Plugins.App },
+    { provide: APP_INFO_PLUGIN, useValue: Plugins.AppInfo },
+    { provide: CAMERA_PREVIEW_PLUGIN, useValue: Plugins.CameraPreview },
+    { provide: CLIPBOARD_PLUGIN, useValue: Plugins.Clipboard },
+    { provide: PERMISSIONS_PLUGIN, useValue: Plugins.Permissions },
+    { provide: SECURITY_UTILS_PLUGIN, useValue: Plugins.SecurityUtils },
+    { provide: SPLASH_SCREEN_PLUGIN, useValue: Plugins.SplashScreen },
+    { provide: STATUS_BAR_PLUGIN, useValue: Plugins.StatusBar },
+    { provide: APP_CONFIG, useValue: appConfig },
     Diagnostic,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     DeviceMotion,
@@ -86,18 +101,18 @@ const { App, AppInfo, CameraPreview, Clipboard, SecurityUtils, SplashScreen, Sta
     CameraNativeService,
     EntropyService,
     GyroscopeNativeService,
-    ScannerService,
+    QrScannerService,
     StartupChecksService,
-    SchemeRoutingService,
+    IACService,
     ClipboardService,
     PermissionsService,
     ShareUrlService,
     ErrorHandlerService,
     InteractionService,
-    DeepLinkService,
-    ProtocolsService,
+    DeeplinkService,
     SerializerService,
-    StorageService,
+    VaultStorageService,
+    UiEventService,
     SecureStorageFactoryDepHolder,
     CameraFactoryDepHolder,
     {

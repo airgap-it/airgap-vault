@@ -1,0 +1,24 @@
+AirGap is a crypto wallet, that allows you to store your crypto funds securely on your mobile phone.
+
+AirGap supports the following currencies:
+- Bitcoin
+- Ethereum
+- Tezos
+- Polkadot
+- Kusama
+- Cosmos
+- xCHF
+- Æternity
+- Groestlcoin
+
+AirGap has a two app approach, that gives you added security while handling your crypto funds. You get the highest security if you install AirGap Vault on a separate smartphone, and never connect that phone with any network again.
+
+HIGHEST SECURITY - two apps, two devices
+The private key is generated and securely stored on another device with the AirGap Vault app.
+
+One-way communication with QR codes.
+
+AirGap Wallet, deals only with public information and is responsible for broadcasting transactions to the blockchain.
+
+MEDIUM SECURITY - two apps, one device
+Both apps are installed on the same device, the private key is generated and securely stored in the AirGap Vault app, the app has no network permissions. AirGap Wallet broadcasts the transactions to the blockchain. Secure communication of the two applications through app switching.

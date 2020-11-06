@@ -2,7 +2,7 @@ import { Component } from '@angular/core'
 import { ModalController, Platform } from '@ionic/angular'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
-import { SettingsKey, StorageService } from '../../services/storage/storage.service'
+import { VaultStorageKey, VaultStorageService } from '../../services/storage/storage.service'
 
 declare let cordova: any
 
@@ -17,12 +17,12 @@ export class IntroductionPage {
   constructor(
     private readonly modalController: ModalController,
     private readonly platform: Platform,
-    private readonly storageService: StorageService
+    private readonly storageService: VaultStorageService
   ) {}
 
   public accept() {
     this.storageService
-      .set(SettingsKey.INTRODUCTION_INITIAL, true)
+      .set(VaultStorageKey.INTRODUCTION_INITIAL, true)
       .then(() => {
         this.modalController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
       })

@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing'
-import { IACMessageType, Serializer } from 'airgap-coin-lib'
+import { generateId, IACMessageType, Serializer } from 'airgap-coin-lib'
 
 import { UnitHelper } from '../../../../test-config/unit-test-helper'
 
@@ -35,6 +35,7 @@ describe('SignedTransactionComponent', () => {
     const serializer: Serializer = new Serializer()
     const serializedTxs = await serializer.serialize([
       {
+        id: generateId(10),
         protocol: MainProtocolSymbols.ETH,
         type: IACMessageType.TransactionSignResponse,
         payload: {

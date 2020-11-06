@@ -46,16 +46,6 @@
     "label": "Active Secret:"
   },
 
-  "from-to":{
-    "type_label": "Type",
-    "amount_label":"AMOUNT",
-    "fee_label":"FEE",
-    "from_label": "From",
-    "data_label": "Data",
-    "to_label": "To",
-    "transaction-details_label": "Display extra transaction details"
-  },
-
   "signed-transaction": {
     "transaction-unreadable": "We were not able to extract information from this transaction. This does not mean that the transaction is invalid - Please make sure that you know what you are doing, and you can verify that you know that this transaction contains the correct data."
   },
@@ -297,16 +287,6 @@
       "text": "You do not have any compatible accounts for this public key in AirGap. Please import your secret and create the corresponding account to sign this transaction.",
       "okay_label": "Okay"
     },
-    "sync-operation-not-supported_alert": {
-      "title": "Sync operation not supported",
-      "text": "Please use AirGap Wallet to scan this QR.",
-      "okay_label": "Okay"
-    },
-    "invalid-sync-operation_alert": {
-      "title": "Incompatible Sync code",
-      "text": "Could not parse sync code. Please make sure this is a valid AirGap sync code.",
-      "okay_label": "Okay"
-    },
     "raw-tx_alert":{
       "title": "Select Account",
       "okay_label": "Okay"
@@ -421,18 +401,6 @@
       },
       "description": "You understand the risks involved in this software, including but no limited to losing your secret, thus private keys and access to your funds.",
       "understood_label": "I understand and accept"
-    }
-  },
-  "deep-link": {
-    "not-supported-alert": {
-      "title": "Oops",
-      "message": "Deeplinking is only supported on mobile devices.",
-      "ok": "Ok"
-    },
-    "app-not-found": {
-      "title": "Oops",
-      "message": "It looks like you don't have {{otherAppName}} installed on this device.",
-      "ok": "Ok"
     }
   }
 }

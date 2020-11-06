@@ -16,6 +16,7 @@
 .typography--mono {
   font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
   font-weight: 600;
+  font-size: 14px;
   word-wrap: break-word;
 }
 /* font weight - medium */
@@ -50,7 +51,7 @@ airgap-identicon {
   min-height: 48px;
 }
 /* clipboard compomnent styling */
-airgap-qr-clipboard {
+airgap-qr {
   padding: 24px;
   background-color: var(--ion-color-secondary-contrast);
 }
