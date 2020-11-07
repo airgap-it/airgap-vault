@@ -8,7 +8,31 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  asdf
+  <ion-item>
+    <ion-label>Mnemonic Length</ion-label>
+    <ion-select [(ngModel)]="mnemonicLength">
+      <ion-select-option value="12">12</ion-select-option>
+      <ion-select-option value="18">18</ion-select-option>
+      <ion-select-option value="24">24</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Index</ion-label>
+    <ion-select [(ngModel)]="index">
+      <ion-select-option value="0">0</ion-select-option>
+      <ion-select-option value="1">1</ion-select-option>
+      <ion-select-option value="2">2</ion-select-option>
+      <ion-select-option value="3">3</ion-select-option>
+      <ion-select-option value="4">4</ion-select-option>
+      <ion-select-option value="5">5</ion-select-option>
+      <ion-select-option value="6">6</ion-select-option>
+      <ion-select-option value="7">7</ion-select-option>
+      <ion-select-option value="8">8</ion-select-option>
+      <ion-select-option value="9">9</ion-select-option>
+    </ion-select>
+  </ion-item>
+
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-button color="primary" shape="round" (click)="generateChildSeed()">{{ 'create' | translate }}</ion-button>
   </ion-fab>

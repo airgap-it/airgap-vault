@@ -11,9 +11,9 @@ import { NavigationService } from 'src/app/services/navigation/navigation.servic
 export class Bip85GeneratePage {
   public secret: Secret
 
-  public mnemonicLength: 12 | 18 | 24 = 24
+  public mnemonicLength: '12' | '18' | '24' = '24'
 
-  public index: number = 0
+  public index: string = '0'
 
   constructor(private readonly navigationService: NavigationService) {
     if (this.navigationService.getState()) {
@@ -24,7 +24,7 @@ export class Bip85GeneratePage {
 
   generateChildSeed() {
     this.navigationService
-      .routeWithState('/bip85-show', { secret: this.secret, mnemonicLength: this.mnemonicLength, index: this.index })
+      .routeWithState('/bip85-show', { secret: this.secret, mnemonicLength: Number(this.mnemonicLength), index: Number(this.index) })
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }
