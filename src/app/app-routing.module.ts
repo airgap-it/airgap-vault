@@ -99,8 +99,8 @@ const routes: Routes = [
     loadChildren: () => import('./pages/bip85-show/bip85-show.module').then((m) => m.Bip85ShowPageModule)
   },
   {
-    path: 'bip85-verify',
-    loadChildren: () => import('./pages/bip85-verify/bip85-verify.module').then((m) => m.Bip85VerifyPageModule)
+    path: 'bip85-validate',
+    loadChildren: () => import('./pages/bip85-validate/bip85-validate.module').then((m) => m.Bip85ValidatePageModule)
   }
 ]
 

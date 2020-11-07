@@ -55,7 +55,7 @@
     "angularx-qrcode": "^1.5.3",
     "bignumber.js": "^9.0.0",
     "bip39": "^2.4.0",
-    "bip85": "0.0.1",
+    "bip85": "0.0.3",
     "cordova-plugin-audioinput": "1.0.1",
     "cordova-plugin-compat": "1.2.0",
     "cordova-plugin-device-motion": "^2.0.1",

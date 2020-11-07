@@ -1,5 +1,6 @@
-import { Component } from '@angular/core'
+import { Component, ViewChild } from '@angular/core'
 import { BIP85 } from 'bip85'
+import { VerifyKeyComponent } from 'src/app/components/verify-key/verify-key.component'
 import { Secret } from 'src/app/models/secret'
 import { DeviceService } from 'src/app/services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
@@ -7,12 +8,15 @@ import { NavigationService } from 'src/app/services/navigation/navigation.servic
 import { SecureStorage, SecureStorageService } from 'src/app/services/secure-storage/secure-storage.service'
 
 @Component({
-  selector: 'airgap-bip85-show',
-  templateUrl: './bip85-show.page.html',
-  styleUrls: ['./bip85-show.page.scss']
+  selector: 'airgap-bip85-validate',
+  templateUrl: './bip85-validate.page.html',
+  styleUrls: ['./bip85-validate.page.scss']
 })
-export class Bip85ShowPage {
-  private secret: Secret
+export class Bip85ValidatePage {
+  @ViewChild('verify', { static: true })
+  public verify: VerifyKeyComponent
+
+  public readonly secret: Secret
   public mnemonicLength: 12 | 18 | 24
   public index: number
 
@@ -40,9 +44,13 @@ export class Bip85ShowPage {
     this.deviceService.disableScreenshotProtection()
   }
 
-  public goToValidateSecret(): void {
+  public onContinue(): void {
+    this.goToSecretEditPage()
+  }
+
+  public goToSecretEditPage(): void {
     this.navigationService
-      .routeWithState('bip85-validate', { secret: this.secret, mnemonicLength: this.mnemonicLength, index: this.index })
+      .routeWithState('secret-edit', { secret: this.secret, isGenerating: false })
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
@@ -51,6 +59,8 @@ export class Bip85ShowPage {
 
     try {
       const secretHex = await secureStorage.getItem(secret.id).then((result) => result.value)
+
+      console.log('secretHex', secretHex, length, index)
 
       const masterSeed = BIP85.fromEntropy(secretHex)
 

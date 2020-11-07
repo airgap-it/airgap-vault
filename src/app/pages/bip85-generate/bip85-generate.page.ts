@@ -24,7 +24,7 @@ export class Bip85GeneratePage {
 
   generateChildSeed() {
     this.navigationService
-      .routeWithState('/bip85-show', { secret: this.secret, length: this.mnemonicLength, index: this.index })
+      .routeWithState('/bip85-show', { secret: this.secret, mnemonicLength: this.mnemonicLength, index: this.index })
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }
