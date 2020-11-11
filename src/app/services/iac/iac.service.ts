@@ -1,6 +1,7 @@
 import { BaseIACService, ProtocolService, SerializerService, UiEventService, UiEventElementsService } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
 import { IACMessageDefinitionObject, UnsignedTransaction, AirGapWallet, IACMessageType } from 'airgap-coin-lib'
+import { SignTransactionInfo } from 'src/app/models/sign-transaction-info'
 import { handleErrorLocal, ErrorCategory } from '../error-handler/error-handler.service'
 import { InteractionOperationType, InteractionService } from '../interaction/interaction.service'
 import { NavigationService } from '../navigation/navigation.service'
@@ -36,17 +37,17 @@ export class IACService extends BaseIACService {
 
   private async handleUnsignedTransactions(
     _data: string | string[],
-    deserializedSyncProtocols: IACMessageDefinitionObject[],
+    signTransactionRequests: IACMessageDefinitionObject[],
     scanAgainCallback: Function
   ): Promise<boolean> {
-    const transactionsWithWallets: [UnsignedTransaction, AirGapWallet][] = (
+    const transactionInfos: SignTransactionInfo[] = (
       await Promise.all(
-        deserializedSyncProtocols.map(async (deserializedSyncProtocol) => {
-          const unsignedTransaction: UnsignedTransaction = deserializedSyncProtocol.payload as UnsignedTransaction
+        signTransactionRequests.map(async (signTransactionRequest): Promise<SignTransactionInfo> => {
+          const unsignedTransaction: UnsignedTransaction = signTransactionRequest.payload as UnsignedTransaction
 
           let correctWallet = this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(
             unsignedTransaction.publicKey,
-            deserializedSyncProtocol.protocol
+            signTransactionRequest.protocol
           )
 
           // If we can't find a wallet for a protocol, we will try to find the "base" wallet and then create a new
@@ -55,12 +56,12 @@ export class IACService extends BaseIACService {
           if (!correctWallet) {
             const baseWallet: AirGapWallet | undefined = this.secretsService.findBaseWalletByPublicKeyAndProtocolIdentifier(
               unsignedTransaction.publicKey,
-              deserializedSyncProtocol.protocol
+              signTransactionRequest.protocol
             )
 
             if (baseWallet) {
               // If the protocol is not supported, use the base protocol for signing
-              const protocol = await this.protocolService.getProtocol(deserializedSyncProtocol.protocol)
+              const protocol = await this.protocolService.getProtocol(signTransactionRequest.protocol)
               try {
                 correctWallet = new AirGapWallet(protocol, baseWallet.publicKey, baseWallet.isExtendedPublicKey, baseWallet.derivationPath)
                 correctWallet.addresses = baseWallet.addresses
@@ -72,21 +73,24 @@ export class IACService extends BaseIACService {
             }
           }
 
-          return [unsignedTransaction, correctWallet] as [UnsignedTransaction, AirGapWallet]
+          return {
+            wallet: correctWallet,
+            signTransactionRequest
+          }
         })
       )
-    ).filter((pair: [UnsignedTransaction, AirGapWallet]) => pair[1])
+    ).filter( signTransactionDetails => signTransactionDetails.wallet !== undefined)
 
-    if (transactionsWithWallets.length > 0) {
-      if (transactionsWithWallets.length !== deserializedSyncProtocols.length) {
+    if (transactionInfos.length > 0) {
+      if (transactionInfos.length !== signTransactionRequests.length) {
         // TODO: probably show error
       }
 
       this.navigationService
         .routeWithState('transaction-detail', {
-          transactionsWithWallets: transactionsWithWallets,
-          deserializedSync: deserializedSyncProtocols
+          transactionInfos: transactionInfos
         })
+
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
 
       return true
