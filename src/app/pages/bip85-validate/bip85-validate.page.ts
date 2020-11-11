@@ -22,6 +22,8 @@ export class Bip85ValidatePage {
 
   public childMnemonic: string | undefined
 
+  public bip39Passphrase: string = ''
+
   constructor(
     private readonly deviceService: DeviceService,
     private readonly navigationService: NavigationService,
@@ -31,6 +33,7 @@ export class Bip85ValidatePage {
       this.secret = this.navigationService.getState().secret
       this.mnemonicLength = this.navigationService.getState().mnemonicLength
       this.index = this.navigationService.getState().index
+      this.bip39Passphrase = this.navigationService.getState().bip39Passphrase
 
       this.generateChildMnemonic(this.secret, this.mnemonicLength, this.index)
     }
@@ -62,7 +65,7 @@ export class Bip85ValidatePage {
 
       console.log('secretHex', secretHex, length, index)
 
-      const masterSeed = BIP85.fromEntropy(secretHex)
+      const masterSeed = BIP85.fromEntropy(secretHex, this.bip39Passphrase)
 
       const childEntropy = masterSeed.deriveBIP39(0, length, index)
 

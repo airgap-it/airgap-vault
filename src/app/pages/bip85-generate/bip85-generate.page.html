@@ -3,37 +3,62 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ 'BIP85 Generate' | translate }}</ion-title>
+    <ion-title>{{ 'bip85-generate.title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-item>
-    <ion-label>Mnemonic Length</ion-label>
-    <ion-select [(ngModel)]="mnemonicLength">
-      <ion-select-option value="12">12</ion-select-option>
-      <ion-select-option value="18">18</ion-select-option>
-      <ion-select-option value="24">24</ion-select-option>
-    </ion-select>
-  </ion-item>
+  <p class="ion-padding-bottom">{{ 'bip85-generate.text' | translate }}</p>
 
-  <ion-item>
-    <ion-label>Index</ion-label>
-    <ion-select [(ngModel)]="index">
-      <ion-select-option value="0">0</ion-select-option>
-      <ion-select-option value="1">1</ion-select-option>
-      <ion-select-option value="2">2</ion-select-option>
-      <ion-select-option value="3">3</ion-select-option>
-      <ion-select-option value="4">4</ion-select-option>
-      <ion-select-option value="5">5</ion-select-option>
-      <ion-select-option value="6">6</ion-select-option>
-      <ion-select-option value="7">7</ion-select-option>
-      <ion-select-option value="8">8</ion-select-option>
-      <ion-select-option value="9">9</ion-select-option>
-    </ion-select>
-  </ion-item>
+  <ion-list>
+    <ion-item>
+      <ion-label>{{ 'bip85-generate.mnemonic-length' | translate }}</ion-label>
+      <ion-select [(ngModel)]="mnemonicLength">
+        <ion-select-option value="12">12</ion-select-option>
+        <ion-select-option value="18">18</ion-select-option>
+        <ion-select-option value="24">24</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>{{ 'bip85-generate.index' | translate }}</ion-label>
+      <ion-select [(ngModel)]="index">
+        <ion-select-option value="0">0</ion-select-option>
+        <ion-select-option value="1">1</ion-select-option>
+        <ion-select-option value="2">2</ion-select-option>
+        <ion-select-option value="3">3</ion-select-option>
+        <ion-select-option value="4">4</ion-select-option>
+        <ion-select-option value="5">5</ion-select-option>
+        <ion-select-option value="6">6</ion-select-option>
+        <ion-select-option value="7">7</ion-select-option>
+        <ion-select-option value="8">8</ion-select-option>
+        <ion-select-option value="9">9</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+  <ion-list>
+    <ion-item>
+      <ion-label>{{ 'bip85-generate.advanced_label' | translate }}</ion-label>
+      <ion-toggle color="primary" slot="end" [(ngModel)]="isAdvancedMode"></ion-toggle>
+    </ion-item>
+
+    <ng-container *ngIf="isAdvancedMode">
+      <ion-item lines="full">
+        <ion-label position="stacked" color="primary">{{ 'bip85-generate.bip39-passphrase' | translate }}</ion-label>
+        <ion-input
+          [type]="revealBip39Passphrase ? 'text' : 'password'"
+          [(ngModel)]="bip39Passphrase"
+          placeholder="{{'bip85-generate.bip39-passphrase' | translate}}"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        {{ 'bip85-generate.bip39-passphrase-reveal' | translate }}
+        <ion-checkbox [(ngModel)]="revealBip39Passphrase" slot="end"></ion-checkbox>
+      </ion-item>
+    </ng-container>
+  </ion-list>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-button color="primary" shape="round" (click)="generateChildSeed()">{{ 'create' | translate }}</ion-button>
+    <ion-button color="primary" shape="round" (click)="generateChildSeed()">{{ 'bip85-generate.generate' | translate }}</ion-button>
   </ion-fab>
 </ion-content>

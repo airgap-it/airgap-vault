@@ -18,6 +18,8 @@ export class Bip85ShowPage {
 
   public childMnemonic: string | undefined
 
+  public bip39Passphrase: string = ''
+
   constructor(
     private readonly deviceService: DeviceService,
     private readonly navigationService: NavigationService,
@@ -27,6 +29,7 @@ export class Bip85ShowPage {
       this.secret = this.navigationService.getState().secret
       this.mnemonicLength = this.navigationService.getState().mnemonicLength
       this.index = this.navigationService.getState().index
+      this.bip39Passphrase = this.navigationService.getState().bip39Passphrase
 
       this.generateChildMnemonic(this.secret, this.mnemonicLength, this.index)
     }
@@ -42,7 +45,12 @@ export class Bip85ShowPage {
 
   public goToValidateSecret(): void {
     this.navigationService
-      .routeWithState('bip85-validate', { secret: this.secret, mnemonicLength: this.mnemonicLength, index: this.index })
+      .routeWithState('bip85-validate', {
+        secret: this.secret,
+        bip39Passphrase: this.bip39Passphrase,
+        mnemonicLength: this.mnemonicLength,
+        index: this.index
+      })
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
@@ -52,7 +60,7 @@ export class Bip85ShowPage {
     try {
       const secretHex = await secureStorage.getItem(secret.id).then((result) => result.value)
 
-      const masterSeed = BIP85.fromEntropy(secretHex)
+      const masterSeed = BIP85.fromEntropy(secretHex, this.bip39Passphrase)
 
       const childEntropy = masterSeed.deriveBIP39(0, length, index)
 

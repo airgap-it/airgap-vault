@@ -3,13 +3,13 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ 'BIP85 Validate' | translate }}</ion-title>
+    <ion-title>{{ 'bip85-validate.title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
   <ng-container *ngIf="childMnemonic">
-    <p class="ion-padding-horizontal">{{ 'secret-validate.text' | translate }}</p>
+    <p class="ion-padding-horizontal">{{ 'bip85-validate.text' | translate }}</p>
     <airgap-verify-key #verify [secret]="childMnemonic" (onContinue)="onContinue()"></airgap-verify-key>
   </ng-container>
 </ion-content>
