@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core'
-import { AirGapWallet, UnsignedTransaction } from 'airgap-coin-lib'
 import { DeeplinkService } from '@airgap/angular-core'
+import { Injectable } from '@angular/core'
+import { AirGapWallet, UnsignedTransaction, MessageSignResponse } from 'airgap-coin-lib'
 
 import { Secret } from '../../models/secret'
 import { assertNever } from '../../utils/utils'
@@ -21,7 +21,8 @@ export enum InteractionCommunicationType {
 
 export enum InteractionOperationType {
   WALLET_SYNC = 'walletSync',
-  TRANSACTION_BROADCAST = 'transactionBroadcast'
+  TRANSACTION_BROADCAST = 'transactionBroadcast',
+  MESSAGE_SIGN_REQUEST = 'messageSignRequest'
 }
 
 export interface IInteractionOptions {
@@ -31,13 +32,14 @@ export interface IInteractionOptions {
   signedTxs?: string[]
   wallets?: AirGapWallet[]
   transactions?: UnsignedTransaction[]
+  messageSignResponse?: MessageSignResponse
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class InteractionService {
-  constructor(private readonly navigationService: NavigationService, private readonly deeplinkService: DeeplinkService) {}
+  constructor(private readonly navigationService: NavigationService, private readonly deepLinkService: DeeplinkService) { }
 
   public startInteraction(interactionOptions: IInteractionOptions, secret: Secret): void {
     const interactionSetting: InteractionSetting = secret.interactionSetting
@@ -83,10 +85,9 @@ export class InteractionService {
   }
 
   private navigateToPageByOperationType(interactionOptions: IInteractionOptions): void {
-    // this.iacHistoryService.add(interactionOptions.url, IACMessageTransport.QR_SCANNER, true)
     if (interactionOptions.operationType === InteractionOperationType.WALLET_SYNC) {
       this.navigationService
-        .routeWithState('/account-share', { interactionUrl: interactionOptions.url })
+        .routeWithState('/transaction-signed', { interactionUrl: interactionOptions.url, translationKey: 'wallet-share' })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } else if (interactionOptions.operationType === InteractionOperationType.TRANSACTION_BROADCAST) {
       this.navigationService
@@ -94,7 +95,16 @@ export class InteractionService {
           interactionUrl: interactionOptions.url,
           wallets: interactionOptions.wallets,
           signedTxs: interactionOptions.signedTxs,
-          transactions: interactionOptions.transactions
+          transactions: interactionOptions.transactions,
+          translationKey: 'transaction-signed'
+        })
+        .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    } else if (interactionOptions.operationType === InteractionOperationType.MESSAGE_SIGN_REQUEST) {
+      this.navigationService
+        .routeWithState('/transaction-signed', {
+          interactionUrl: interactionOptions.url,
+          translationKey: 'message-signing-request',
+          messageSignResponse: interactionOptions.messageSignResponse
         })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } else {
@@ -103,8 +113,7 @@ export class InteractionService {
   }
 
   private startDeeplink(url: string): void {
-    // this.iacHistoryService.add(url, IACMessageTransport.DEEPLINK, true)
-    this.deeplinkService
+    this.deepLinkService
       .sameDeviceDeeplink(url)
       .then(() => {
         this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))

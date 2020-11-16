@@ -89,6 +89,10 @@ const routes: Routes = [
   {
     path: 'transaction-signed',
     loadChildren: () => import('./pages/transaction-signed/transaction-signed.module').then((m) => m.TransactionSignedPageModule)
+  },
+  {
+    path: 'select-account',
+    loadChildren: () => import('./pages/select-account/select-account.module').then((m) => m.SelectAccountPageModule)
   }
 ]
 
@@ -96,4 +100,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

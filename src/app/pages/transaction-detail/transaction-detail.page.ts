@@ -21,8 +21,11 @@ export class TransactionDetailPage {
   public broadcastUrl?: string
 
   public transactionInfos: SignTransactionInfo[]
+  public type: IACMessageType
   public airGapTxs: IAirGapTransaction[]
   public signTransactionRequests: IACMessageDefinitionObject[]
+
+  public iacMessageType: IACMessageType
 
   constructor(
     private readonly alertController: AlertController,
@@ -36,8 +39,12 @@ export class TransactionDetailPage {
 
   public async ionViewWillEnter(): Promise<void> {
     const state = this.navigationService.getState()
+    console.log('state', state)
     if (state.transactionInfos) {
       this.transactionInfos = state.transactionInfos
+      this.type = state.type
+
+      this.iacMessageType = this.transactionInfos[0].signTransactionRequest.type
       this.signTransactionRequests = this.transactionInfos.map(info => info.signTransactionRequest)
       try {
         this.airGapTxs = (
