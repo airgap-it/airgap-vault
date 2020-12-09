@@ -30,19 +30,19 @@ export class TransactionDetailPage {
     private readonly secretsService: SecretsService,
     private readonly interactionService: InteractionService,
     private readonly serializerService: SerializerService
-  ) { }
-
-
+  ) {}
 
   public async ionViewWillEnter(): Promise<void> {
     const state = this.navigationService.getState()
     if (state.transactionInfos) {
       this.transactionInfos = state.transactionInfos
-      this.signTransactionRequests = this.transactionInfos.map(info => info.signTransactionRequest)
+      this.signTransactionRequests = this.transactionInfos.map((info) => info.signTransactionRequest)
       try {
         this.airGapTxs = (
           await Promise.all(
-            this.transactionInfos.map(info => info.wallet.protocol.getTransactionDetails(info.signTransactionRequest.payload as UnsignedTransaction))
+            this.transactionInfos.map((info) =>
+              info.wallet.protocol.getTransactionDetails(info.signTransactionRequest.payload as UnsignedTransaction)
+            )
           )
         ).reduce((flatten, toFlatten) => flatten.concat(toFlatten), [])
       } catch (e) {
@@ -51,11 +51,10 @@ export class TransactionDetailPage {
     }
   }
 
-
   public async signAndGoToNextPage(): Promise<void> {
     try {
       const signedTxs: string[] = await Promise.all(
-        this.transactionInfos.map(info => this.signTransaction(info.signTransactionRequest.payload as UnsignedTransaction, info.wallet))
+        this.transactionInfos.map((info) => this.signTransaction(info.signTransactionRequest.payload as UnsignedTransaction, info.wallet))
       )
       this.broadcastUrl = await this.generateBroadcastUrl(this.transactionInfos, signedTxs)
 
@@ -63,10 +62,9 @@ export class TransactionDetailPage {
         {
           operationType: InteractionOperationType.TRANSACTION_BROADCAST,
           url: this.broadcastUrl,
-          wallets: this.transactionInfos.map(info => info.wallet),
+          wallets: this.transactionInfos.map((info) => info.wallet),
           signedTxs,
-          transactions: this.transactionInfos.map(info => info.signTransactionRequest.payload as UnsignedTransaction)
-
+          transactions: this.transactionInfos.map((info) => info.signTransactionRequest.payload as UnsignedTransaction)
         },
         this.secretsService.getActiveSecret()
       )
@@ -84,7 +82,9 @@ export class TransactionDetailPage {
     try {
       const transactions = (
         await Promise.all(
-          transactionInfos.map(info => info.wallet.protocol.getTransactionDetails(info.signTransactionRequest.payload as UnsignedTransaction))
+          transactionInfos.map((info) =>
+            info.wallet.protocol.getTransactionDetails(info.signTransactionRequest.payload as UnsignedTransaction)
+          )
         )
       ).reduce((flatten, toFlatten) => flatten.concat(toFlatten), [])
       console.log(transactions)
@@ -95,23 +95,22 @@ export class TransactionDetailPage {
     }
 
     if (txDetails && txDetails.length > 0) {
-      const deserializedTxSigningRequests: IACMessageDefinitionObject[] = transactionInfos.map(
-        (info, index) => ({
-          id: info.signTransactionRequest.id,
-          protocol: info.wallet.protocol.identifier,
-          type: IACMessageType.TransactionSignResponse,
-          payload: {
-            accountIdentifier: info.wallet.publicKey.substr(-6),
-            transaction: signedTxs[index],
-            from: txDetails[index].from,
-            amount: txDetails[index].amount,
-            fee: txDetails[index].fee,
-            to: txDetails[index].to
-          }
-        })
-      )
+      const deserializedTxSigningRequests: IACMessageDefinitionObject[] = transactionInfos.map((info, index) => ({
+        id: info.signTransactionRequest.id,
+        protocol: info.wallet.protocol.identifier,
+        type: IACMessageType.TransactionSignResponse,
+        payload: {
+          accountIdentifier: info.wallet.publicKey.substr(-6),
+          transaction: signedTxs[index],
+          from: txDetails[index].from,
+          amount: txDetails[index].amount,
+          fee: txDetails[index].fee,
+          to: txDetails[index].to
+        }
+      }))
 
       const serializedTx: string[] = await this.serializerService.serialize(deserializedTxSigningRequests)
+      console.log('#### SERIALIZED LENGTH ####', serializedTx.length)
       const unsignedTransaction = transactionInfos[0].signTransactionRequest.payload as UnsignedTransaction
       return `${unsignedTransaction.callbackURL || 'airgap-wallet://?d='}${serializedTx.join(',')}`
     } else {

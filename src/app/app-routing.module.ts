@@ -89,6 +89,10 @@ const routes: Routes = [
   {
     path: 'transaction-signed',
     loadChildren: () => import('./pages/transaction-signed/transaction-signed.module').then((m) => m.TransactionSignedPageModule)
+  },
+  {
+    path: 'qr-settings',
+    loadChildren: () => import('./lazy.module').then((m) => m.LazyModule)
   }
 ]
 
