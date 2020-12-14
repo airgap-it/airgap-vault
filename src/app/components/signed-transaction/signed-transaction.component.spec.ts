@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing'
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
 import { generateId, IACMessageType, Serializer } from 'airgap-coin-lib'
 
 import { UnitHelper } from '../../../../test-config/unit-test-helper'
@@ -31,7 +31,7 @@ describe('SignedTransactionComponent', () => {
     expect(signedTransaction instanceof SignedTransactionComponent).toBe(true)
   })
 
-  it('should load the from-to component if a valid tx is given', async(async () => {
+  it('should load the from-to component if a valid tx is given', waitForAsync(async () => {
     const serializer: Serializer = new Serializer()
     const serializedTxs = await serializer.serialize([
       {
@@ -57,7 +57,7 @@ describe('SignedTransactionComponent', () => {
     expect(signedTransaction.fallbackActivated).toBe(false)
   }))
 
-  it('should load fallback if something about the TX is wrong', async(async () => {
+  it('should load fallback if something about the TX is wrong', waitForAsync(async () => {
     /*
     const syncProtocol = new SyncProtocolUtils()
     const serializedTx = await syncProtocol.serialize({

@@ -1,5 +1,5 @@
 import { STATUS_BAR_PLUGIN, SPLASH_SCREEN_PLUGIN } from '@airgap/angular-core'
-import { async, TestBed } from '@angular/core/testing'
+import { TestBed, waitForAsync } from '@angular/core/testing'
 import { ModalController, NavController, NavParams, Platform } from '@ionic/angular'
 import { Storage } from '@ionic/storage'
 
@@ -68,7 +68,7 @@ describe('StartupCheck Service', () => {
     expect(startupChecksService instanceof StartupChecksService).toBe(true)
   })
 
-  it('should show root modal if device is rooted', async(() => {
+  it('should show root modal if device is rooted', waitForAsync(() => {
     deviceProvider.isRooted = true
 
     startupChecksService.initChecks().catch((consequence) => {
@@ -76,7 +76,7 @@ describe('StartupCheck Service', () => {
     })
   }))
 
-  it('should show disclaimer modal if the disclaimer has not been accepted yet', async(async () => {
+  it('should show disclaimer modal if the disclaimer has not been accepted yet', waitForAsync(async () => {
     await storageProvider.set('DISCLAIMER_INITIAL', false)
 
     startupChecksService.checks = startupChecksService.checks.map((check) => {
@@ -98,7 +98,7 @@ describe('StartupCheck Service', () => {
     })
   }))
 
-  it('should show the introduction modal if the introduction has not been accepted yet', async(async () => {
+  it('should show the introduction modal if the introduction has not been accepted yet', waitForAsync(async () => {
     await storageProvider.set('INTRODUCTION_INITIAL', false)
 
     startupChecksService.checks = startupChecksService.checks.map((check) => {
@@ -120,7 +120,7 @@ describe('StartupCheck Service', () => {
     })
   }))
 
-  it('should show the device security modal if device is not secure', async(async () => {
+  it('should show the device security modal if device is not secure', waitForAsync(async () => {
     secureStorage.isSecure = 0
 
     startupChecksService.checks = startupChecksService.checks.map((check) => {
@@ -142,7 +142,7 @@ describe('StartupCheck Service', () => {
     })
   }))
 
-  it('should resolve if everything is ok', async(async () => {
+  it('should resolve if everything is ok', waitForAsync(async () => {
     await storageProvider.set('DISCLAIMER_INITIAL', true)
     await storageProvider.set('INTRODUCTION_INITIAL', true)
 
