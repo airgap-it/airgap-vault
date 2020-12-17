@@ -1,6 +1,6 @@
 import { ProtocolService } from '@airgap/angular-core'
 import { Component, Input, OnChanges } from '@angular/core'
-import { IACMessageDefinitionObject, IAirGapTransaction, ICoinProtocol, SignedTransaction, UnsignedTransaction } from 'airgap-coin-lib'
+import { IACMessageDefinitionObject, IAirGapTransaction, ICoinProtocol, SignedTransaction, UnsignedTransaction } from '@airgap/coinlib-core'
 import BigNumber from 'bignumber.js'
 
 import { SerializerService } from '@airgap/angular-core'
@@ -26,10 +26,10 @@ export class SignedTransactionComponent implements OnChanges {
 
   public aggregatedInfo:
     | {
-      numberOfTxs: number
-      totalAmount: BigNumber
-      totalFees: BigNumber
-    }
+        numberOfTxs: number
+        totalAmount: BigNumber
+        totalFees: BigNumber
+      }
     | undefined
 
   public rawTxData: string
@@ -106,7 +106,10 @@ export class SignedTransactionComponent implements OnChanges {
         ) {
           this.aggregatedInfo = {
             numberOfTxs: this.airGapTxs.length,
-            totalAmount: this.airGapTxs.reduce((pv: BigNumber, cv: IAirGapTransaction) => pv.plus(cv.amount ? cv.amount : 0), new BigNumber(0)),
+            totalAmount: this.airGapTxs.reduce(
+              (pv: BigNumber, cv: IAirGapTransaction) => pv.plus(cv.amount ? cv.amount : 0),
+              new BigNumber(0)
+            ),
             totalFees: this.airGapTxs.reduce((pv: BigNumber, cv: IAirGapTransaction) => pv.plus(cv.fee ? cv.fee : 0), new BigNumber(0))
           }
           return
