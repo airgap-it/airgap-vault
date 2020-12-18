@@ -83,12 +83,20 @@ const routes: Routes = [
       )
   },
   {
-    path: 'transaction-detail',
-    loadChildren: () => import('./pages/transaction-detail/transaction-detail.module').then((m) => m.TransactionDetailPageModule)
+    path: 'deserialized-detail',
+    loadChildren: () => import('./pages/deserialized-detail/deserialized-detail.module').then((m) => m.DeserializedDetailPageModule)
   },
   {
     path: 'transaction-signed',
     loadChildren: () => import('./pages/transaction-signed/transaction-signed.module').then((m) => m.TransactionSignedPageModule)
+  },
+  {
+    path: 'select-account',
+    loadChildren: () => import('./pages/select-account/select-account.module').then((m) => m.SelectAccountPageModule)
+  },
+  {
+    path: 'qr-settings',
+    loadChildren: () => import('./lazy.module').then((m) => m.LazyModule)
   }
 ]
 
@@ -97,3 +105,10 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule {}
+
+declare module '@angular/core' {
+  interface ModuleWithProviders<T = any> {
+    ngModule: Type<T>
+    providers?: Provider[]
+  }
+}

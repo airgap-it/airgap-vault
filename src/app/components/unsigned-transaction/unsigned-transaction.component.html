@@ -1,0 +1,47 @@
+<ng-container *ngIf="airGapTxs && airGapTxs.length > 1">
+  <ion-row class="ion-padding-bottom ion-text-center">
+    <ion-col size="4" class="content--align__center-center">
+      <h5>
+        {{ aggregatedInfo.totalAmount.toFixed() | amountConverter: { protocol: airGapTxs[0].protocolIdentifier, maxDigits: undefined } }}
+      </h5>
+    </ion-col>
+    <ion-col size="4" class="content--align__center-center">
+      <h5>{{ aggregatedInfo.numberOfTxs }}</h5>
+    </ion-col>
+    <ion-col size="4" class="content--align__center-center">
+      <h5>{{ aggregatedInfo.totalFees.toFixed() | feeConverter: { protocol: airGapTxs[0].protocolIdentifier } }}</h5>
+    </ion-col>
+    <ion-col size="4">
+      <small>Amount</small>
+    </ion-col>
+    <ion-col size="4">
+      <small>Operations</small>
+    </ion-col>
+    <ion-col size="4">
+      <small>Fee</small>
+    </ion-col>
+  </ion-row>
+</ng-container>
+
+<airgap-from-to *ngFor="let airGapTx of airGapTxs" [transaction]="airGapTx"></airgap-from-to>
+
+<ng-container *ngIf="fallbackActivated">
+  <ion-row>
+    <ion-col size="2" class="ion-margin-top">
+      <ion-icon color="white" src="assets/icons/md-warning.svg" class="warning-icon"></ion-icon>
+    </ion-col>
+    <ion-col size="10">{{ 'signed-transaction.transaction-unreadable' | translate }}</ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-text>
+      <p class="text--selectable typography--mono word-break__all">{{ rawTxData }}</p>
+    </ion-text>
+  </ion-row>
+</ng-container>
+
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-button color="primary" shape="round" (click)="signAndGoToNextPage()">
+    <ion-icon slot="start" src="assets/icons/md-check.svg"></ion-icon>
+    {{ 'unsigned-transaction.sign-tx_label' | translate }}
+  </ion-button>
+</ion-fab>

@@ -1,0 +1,11 @@
+<ng-container *ngIf="messageSignResponse">
+  <ion-row class="rawdata--container">
+    <ion-col class="ion-no-padding">
+      <ion-item class="ion-no-padding" lines="none">
+        <ion-label>{{ 'message-signing-response.text' | translate }}</ion-label>
+        <ion-toggle [checked]="displayRawData" (ionChange)="toggleDisplayRawData()" slot="end"></ion-toggle>
+      </ion-item>
+      <pre *ngIf="displayRawData" class="ion-no-margin">{{ messageSignResponse | json }}</pre>
+    </ion-col>
+  </ion-row>
+</ng-container>

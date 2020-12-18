@@ -1,9 +1,7 @@
-import { ProtocolService } from '@airgap/angular-core'
-import { Component, Input, OnChanges } from '@angular/core'
-import { IACMessageDefinitionObject, IAirGapTransaction, ICoinProtocol, SignedTransaction, UnsignedTransaction } from 'airgap-coin-lib'
+import { ProtocolService, SerializerService } from '@airgap/angular-core'
+import { Component, Input } from '@angular/core'
+import { IACMessageDefinitionObject, IAirGapTransaction, ICoinProtocol, SignedTransaction } from 'airgap-coin-lib'
 import BigNumber from 'bignumber.js'
-
-import { SerializerService } from '@airgap/angular-core'
 import { TokenService } from 'src/app/services/token/TokenService'
 
 @Component({
@@ -11,19 +9,16 @@ import { TokenService } from 'src/app/services/token/TokenService'
   templateUrl: './signed-transaction.component.html',
   styleUrls: ['./signed-transaction.component.scss']
 })
-export class SignedTransactionComponent implements OnChanges {
+export class SignedTransactionComponent {
   @Input()
   public signedTxs: IACMessageDefinitionObject[] | undefined // TODO: Type
-
-  @Input()
-  public unsignedTxs: IACMessageDefinitionObject[] | undefined // TODO: Type
 
   @Input()
   public syncProtocolString: string
 
   public airGapTxs: IAirGapTransaction[]
   public fallbackActivated: boolean = false
-
+  public rawTxData: string
   public aggregatedInfo:
     | {
       numberOfTxs: number
@@ -31,8 +26,6 @@ export class SignedTransactionComponent implements OnChanges {
       totalFees: BigNumber
     }
     | undefined
-
-  public rawTxData: string
 
   constructor(
     private readonly protocolService: ProtocolService,
@@ -88,44 +81,6 @@ export class SignedTransactionComponent implements OnChanges {
         this.fallbackActivated = true
         // tslint:disable-next-line:no-unnecessary-type-assertion
         this.rawTxData = (this.signedTxs[0].payload as SignedTransaction).transaction
-      }
-    }
-
-    if (this.unsignedTxs && this.unsignedTxs.length > 0) {
-      const protocol: ICoinProtocol = await this.protocolService.getProtocol(this.unsignedTxs[0].protocol)
-      try {
-        // tslint:disable-next-line:no-unnecessary-type-assertion
-        const unsignedTransaction: UnsignedTransaction = this.unsignedTxs[0].payload as UnsignedTransaction
-        this.airGapTxs = (
-          await Promise.all(this.unsignedTxs.map((unsignedTx) => protocol.getTransactionDetails(unsignedTx.payload as UnsignedTransaction)))
-        ).reduce((flatten, toFlatten) => flatten.concat(toFlatten), [])
-        console.log(this.airGapTxs)
-        if (
-          this.airGapTxs.length > 1 &&
-          this.airGapTxs.every((tx: IAirGapTransaction) => tx.protocolIdentifier === this.airGapTxs[0].protocolIdentifier)
-        ) {
-          this.aggregatedInfo = {
-            numberOfTxs: this.airGapTxs.length,
-            totalAmount: this.airGapTxs.reduce((pv: BigNumber, cv: IAirGapTransaction) => pv.plus(cv.amount ? cv.amount : 0), new BigNumber(0)),
-            totalFees: this.airGapTxs.reduce((pv: BigNumber, cv: IAirGapTransaction) => pv.plus(cv.fee ? cv.fee : 0), new BigNumber(0))
-          }
-          return
-        }
-
-        try {
-          if (this.airGapTxs.length !== 1) {
-            throw Error('TokenTransferDetails returned more than 1 transaction!')
-          }
-          this.airGapTxs = [await this.tokenService.getTokenTransferDetails(this.airGapTxs[0], unsignedTransaction)]
-        } catch (error) {
-          console.error('unable to parse token transaction, using ethereum transaction details instead')
-        }
-
-        this.fallbackActivated = false
-      } catch (e) {
-        this.fallbackActivated = true
-        // tslint:disable-next-line:no-unnecessary-type-assertion
-        this.rawTxData = JSON.stringify((this.unsignedTxs[0].payload as UnsignedTransaction).transaction)
       }
     }
   }

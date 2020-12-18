@@ -7,17 +7,17 @@ import { TranslateModule } from '@ngx-translate/core'
 
 import { ComponentsModule } from '../../components/components.module'
 
-import { TransactionDetailPage } from './transaction-detail.page'
+import { DeserializedDetailPage } from './deserialized-detail.page'
 
 const routes: Routes = [
   {
     path: '',
-    component: TransactionDetailPage
+    component: DeserializedDetailPage
   }
 ]
 
 @NgModule({
   imports: [CommonModule, ComponentsModule, FormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule],
-  declarations: [TransactionDetailPage]
+  declarations: [DeserializedDetailPage]
 })
-export class TransactionDetailPageModule {}
+export class DeserializedDetailPageModule { }
