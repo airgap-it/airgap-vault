@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { IACMessageDefinitionObject, IACMessageType } from 'airgap-coin-lib'
+import { IACMessageDefinitionObject, IACMessageType } from '@airgap/coinlib-core'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SignTransactionInfo } from 'src/app/models/sign-transaction-info'
 import { TranslateService } from '@ngx-translate/core'

@@ -7,7 +7,7 @@ import {
   ICoinProtocol,
   IACMessageType,
   ProtocolSymbols
-} from 'airgap-coin-lib'
+} from '@airgap/coinlib-core'
 import { InteractionService, InteractionOperationType } from 'src/app/services/interaction/interaction.service'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
 import { handleErrorLocal, ErrorCategory } from 'src/app/services/error-handler/error-handler.service'
@@ -37,7 +37,7 @@ export class MessageSignRequestComponent {
     private readonly serializerService: SerializerService,
     private readonly alertCtrl: AlertController,
     private readonly modalController: ModalController
-  ) {}
+  ) { }
 
   public async signAndGoToNextPage(): Promise<void> {
     try {

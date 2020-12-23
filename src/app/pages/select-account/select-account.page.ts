@@ -1,7 +1,7 @@
 import { TranslateService } from '@ngx-translate/core'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
 import { Component } from '@angular/core'
-import { AirGapWallet } from 'airgap-coin-lib'
+import { AirGapWallet } from '@airgap/coinlib-core'
 import { NavParams, ModalController } from '@ionic/angular'
 import { Secret } from 'src/app/models/secret'
 
@@ -23,7 +23,7 @@ export class SelectAccountPage {
     private readonly translateService: TranslateService,
     private readonly navParams: NavParams,
     private readonly modalController: ModalController
-  ) {}
+  ) { }
 
   public async ngOnInit(): Promise<void> {
     const type = this.navParams.get('type')
