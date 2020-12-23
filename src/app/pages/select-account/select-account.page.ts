@@ -23,7 +23,7 @@ export class SelectAccountPage {
     private readonly translateService: TranslateService,
     private readonly navParams: NavParams,
     private readonly modalController: ModalController
-  ) { }
+  ) {}
 
   public async ngOnInit(): Promise<void> {
     const type = this.navParams.get('type')

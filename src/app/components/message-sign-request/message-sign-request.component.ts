@@ -37,7 +37,7 @@ export class MessageSignRequestComponent {
     private readonly serializerService: SerializerService,
     private readonly alertCtrl: AlertController,
     private readonly modalController: ModalController
-  ) { }
+  ) {}
 
   public async signAndGoToNextPage(): Promise<void> {
     try {

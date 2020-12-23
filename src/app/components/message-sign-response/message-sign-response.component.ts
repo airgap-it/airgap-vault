@@ -12,7 +12,7 @@ export class MessageSignResponseComponent {
 
   public displayRawData: boolean = false
 
-  constructor() { }
+  constructor() {}
 
   public toggleDisplayRawData(): void {
     this.displayRawData = !this.displayRawData

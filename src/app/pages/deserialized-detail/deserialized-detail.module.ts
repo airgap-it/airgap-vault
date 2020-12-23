@@ -20,4 +20,4 @@ const routes: Routes = [
   imports: [CommonModule, ComponentsModule, FormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule],
   declarations: [DeserializedDetailPage]
 })
-export class DeserializedDetailPageModule { }
+export class DeserializedDetailPageModule {}

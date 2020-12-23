@@ -53,4 +53,4 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
   ],
   entryComponents: []
 })
-export class ComponentsModule { }
+export class ComponentsModule {}

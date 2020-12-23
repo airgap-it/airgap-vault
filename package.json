@@ -21,7 +21,7 @@
     "e2e": "ng e2e",
     "postinstall": "jetifier && node apply-diagnostic-modules.js && node config/patch_crypto.js || true",
     "sonar-scanner": "sonar-scanner",
-    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\" \"test/**/*.js\"",
+    "prettier": "prettier --write \"src/**/*.ts\" \"src/**/*.js\" \"test/**/*.js\"",
     "prepare-prod-build": "npm run disable-pure-getters && npm run configure-mangle",
     "disable-pure-getters": "replace 'pure_getters: buildOptions.buildOptimizer' 'pure_getters: false' ./node_modules/@angular-devkit/build-angular/src/webpack/configs/common.js ",
     "configure-mangle": "replace 'safari10: true' 'safari10: true, keep_fnames: true' ./node_modules/@angular-devkit/build-angular/src/webpack/configs/common.js ",
@@ -86,6 +86,7 @@
     "@ionic/cli": "^6.11.8",
     "@types/node": "^12.11.1",
     "jetifier": "^1.6.6",
+    "prettier": "^2.2.1",
     "replace": "^1.1.0",
     "sonarqube-scanner": "2.6.0",
     "typescript": "~4.0.5"

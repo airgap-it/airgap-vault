@@ -19,8 +19,8 @@ export class ScanBasePage {
   public readonly isBrowser: boolean
 
   constructor(
-    protected platform: Platform, 
-    protected scanner: QrScannerService, 
+    protected platform: Platform,
+    protected scanner: QrScannerService,
     protected permissionsProvider: PermissionsService,
     @Inject(SECURITY_UTILS_PLUGIN) private readonly securityUtils: SecurityUtilsPlugin
   ) {
@@ -33,7 +33,7 @@ export class ScanBasePage {
     if (this.isMobile || this.isElectron) {
       await this.platform.ready()
       await this.checkCameraPermissionsAndActivate()
-    } 
+    }
   }
 
   public async requestPermission(): Promise<void> {

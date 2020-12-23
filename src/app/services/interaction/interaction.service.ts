@@ -39,7 +39,7 @@ export interface IInteractionOptions {
   providedIn: 'root'
 })
 export class InteractionService {
-  constructor(private readonly navigationService: NavigationService, private readonly deepLinkService: DeeplinkService) { }
+  constructor(private readonly navigationService: NavigationService, private readonly deepLinkService: DeeplinkService) {}
 
   public startInteraction(interactionOptions: IInteractionOptions, secret: Secret): void {
     const interactionSetting: InteractionSetting = secret.interactionSetting
@@ -89,7 +89,6 @@ export class InteractionService {
       this.navigationService
         .routeWithState('/account-share', { interactionUrl: interactionOptions.url })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-
     } else if (interactionOptions.operationType === InteractionOperationType.TRANSACTION_BROADCAST) {
       this.navigationService
         .routeWithState('/transaction-signed', {
