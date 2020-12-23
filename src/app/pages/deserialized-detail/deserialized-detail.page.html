@@ -1,0 +1,21 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      {{ title }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <airgap-unsigned-transaction [unsignedTxs]="signTransactionRequests" [transactionInfos]="transactionInfos"
+    *ngIf="type !== 7">
+  </airgap-unsigned-transaction>
+
+  <airgap-message-sign-request [messageDefinitionObject]="signTransactionRequests[0]" *ngIf="type === 7">
+  </airgap-message-sign-request>
+
+
+</ion-content>

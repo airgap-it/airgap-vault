@@ -1,8 +1,9 @@
 import { Component } from '@angular/core'
-import { AirGapWallet } from 'airgap-coin-lib'
+import { AirGapWallet, MessageSignResponse } from 'airgap-coin-lib'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
+import { TranslateService } from '@ngx-translate/core'
 
 enum TransactionQRType {
   SignedAirGap = 0,
@@ -20,16 +21,29 @@ export class TransactionSignedPage {
 
   public splits: string[]
 
+  public pageTitle: string
+  public heading: string
+  public translationKey: string
+
+  public messageSignResponse: MessageSignResponse
   public wallets: AirGapWallet[]
   public qrType: TransactionQRType = 0
 
   public signedTransactionSync: any // TODO: Types
 
-  constructor(public navigationService: NavigationService) {
+  constructor(public navigationService: NavigationService, private readonly translateService: TranslateService) {
     this.interactionUrl = this.navigationService.getState().interactionUrl
     this.splits = this.interactionUrl.substr('airgap-wallet://?d='.length).split(',')
     this.wallets = this.navigationService.getState().wallets
     this.signedTxs = this.navigationService.getState().signedTxs
+    this.translationKey = this.navigationService.getState().translationKey
+    this.pageTitle = this.translateService.instant(`${this.translationKey}.title`)
+    this.heading = this.translateService.instant(`${this.translationKey}.heading`)
+    this.messageSignResponse = this.navigationService.getState().messageSignResponse
+
+    console.log('interactionUrl', this.interactionUrl)
+    console.log('qrType', this.qrType)
+
   }
 
   public switchQR(): void {

@@ -4,25 +4,35 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title>
-      {{ 'transaction-signed.title' | translate }}
+      {{ pageTitle }}
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <h3 [innerHTML]="'transaction-signed.heading' | translate"></h3>
+  <h3 [innerHTML]="heading"></h3>
 
   <ion-row class="ion-justify-content-center ion-padding-top">
-    <airgap-qr *ngIf="interactionUrl && qrType === 0" [level]="'L'" [qrdata]="splits" [size]="300"></airgap-qr>
-    <airgap-qr *ngIf="signedTxs && qrType === 1" [level]="'L'" [qrdata]="signedTxs" [size]="300"></airgap-qr>
+    <airgap-qr *ngIf="interactionUrl && qrType === 0" [level]="'L'" [qrdata]="splits" [size]="300">
+    </airgap-qr>
+    <airgap-qr *ngIf="signedTxs && qrType === 1" [level]="'L'" [qrdata]="signedTxs" [size]="300">
+    </airgap-qr>
   </ion-row>
 
-  <ion-item lines="none">
-    <ion-label class="ion-text-wrap">{{ 'transaction-signed.raw-tx_label' | translate }}</ion-label>
-    <ion-toggle slot="end" (ionChange)="switchQR()"></ion-toggle>
-  </ion-item>
-  <airgap-signed-transaction [syncProtocolString]="interactionUrl"></airgap-signed-transaction>
+  <ng-container *ngIf="messageSignResponse">
+    <airgap-message-sign-response [messageSignResponse]="messageSignResponse"></airgap-message-sign-response>
+  </ng-container>
+
+  <ng-container *ngIf="signedTxs">
+    <ion-item lines="none">
+      <ion-label class="ion-text-wrap">{{ 'transaction-signed.raw-tx_label' | translate }}</ion-label>
+      <ion-toggle slot="end" (ionChange)="switchQR()"></ion-toggle>
+    </ion-item>
+    <airgap-signed-transaction [syncProtocolString]="interactionUrl"></airgap-signed-transaction>
+  </ng-container>
+
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-button color="primary" shape="round" (click)="done()">{{ 'transaction-signed.done_label' | translate }}</ion-button>
+    <ion-button color="primary" shape="round" (click)="done()">{{ 'transaction-signed.done_label' | translate }}
+    </ion-button>
   </ion-fab>
 </ion-content>
