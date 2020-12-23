@@ -1,6 +1,6 @@
 import { DeeplinkService } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
-import { AirGapWallet, UnsignedTransaction, MessageSignResponse } from 'airgap-coin-lib'
+import { AirGapWallet, UnsignedTransaction, MessageSignResponse } from '@airgap/coinlib-core'
 
 import { Secret } from '../../models/secret'
 import { assertNever } from '../../utils/utils'

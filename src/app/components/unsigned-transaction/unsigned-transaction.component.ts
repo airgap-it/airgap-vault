@@ -2,11 +2,11 @@ import { Component, Input, OnChanges } from '@angular/core'
 import {
   IACMessageDefinitionObject,
   IAirGapTransaction,
-  ICoinProtocol,
   UnsignedTransaction,
   AirGapWallet,
-  IACMessageType
-} from 'airgap-coin-lib'
+  IACMessageType,
+  ICoinProtocol
+} from '@airgap/coinlib-core'
 import BigNumber from 'bignumber.js'
 import * as bip39 from 'bip39'
 import { ProtocolService, SerializerService } from '@airgap/angular-core'

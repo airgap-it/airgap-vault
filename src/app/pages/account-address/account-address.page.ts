@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { PopoverController } from '@ionic/angular'
-import { AirGapWallet } from 'airgap-coin-lib'
+import { AirGapWallet } from '@airgap/coinlib-core'
 
 import { ClipboardService } from '@airgap/angular-core'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'

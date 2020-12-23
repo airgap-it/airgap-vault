@@ -32,7 +32,8 @@
     "apply-diagnostic-modules": "node apply-diagnostic-modules.js"
   },
   "dependencies": {
-    "@airgap/angular-core": "0.0.7-beta.1",
+    "@airgap/angular-core": "0.0.7-beta.2",
+    "@airgap/coinlib-core": "^0.10.0-beta.2",
     "@angular/common": "^11.0.4",
     "@angular/core": "^11.0.4",
     "@angular/forms": "^11.0.4",
@@ -50,7 +51,6 @@
     "@ionic/storage": "2.2.0",
     "@ngx-translate/core": "^13.0.0",
     "@zxing/ngx-scanner": "3.0.0",
-    "airgap-coin-lib": "^0.9.15-beta.0",
     "angular2-uuid": "^1.1.1",
     "angularx-qrcode": "^1.5.3",
     "bignumber.js": "^9.0.0",

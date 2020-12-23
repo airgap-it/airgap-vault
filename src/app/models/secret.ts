@@ -1,4 +1,4 @@
-import { AirGapWallet } from 'airgap-coin-lib'
+import { AirGapWallet } from '@airgap/coinlib-core'
 import { UUID } from 'angular2-uuid'
 
 import { toBoolean } from '../utils/utils'

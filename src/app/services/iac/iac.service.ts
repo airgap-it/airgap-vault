@@ -1,6 +1,6 @@
 import { BaseIACService, ProtocolService, SerializerService, UiEventService, UiEventElementsService } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
-import { IACMessageDefinitionObject, UnsignedTransaction, AirGapWallet, IACMessageType, MessageSignRequest } from 'airgap-coin-lib'
+import { IACMessageDefinitionObject, UnsignedTransaction, AirGapWallet, IACMessageType, MessageSignRequest } from '@airgap/coinlib-core'
 import { SignTransactionInfo } from 'src/app/models/sign-transaction-info'
 import { handleErrorLocal, ErrorCategory } from '../error-handler/error-handler.service'
 import { InteractionOperationType, InteractionService } from '../interaction/interaction.service'
@@ -43,44 +43,51 @@ export class IACService extends BaseIACService {
   ): Promise<boolean> {
     const transactionInfos: SignTransactionInfo[] = (
       await Promise.all(
-        signTransactionRequests.map(async (signTransactionRequest): Promise<SignTransactionInfo> => {
-          const unsignedTransaction: UnsignedTransaction = signTransactionRequest.payload as UnsignedTransaction
+        signTransactionRequests.map(
+          async (signTransactionRequest): Promise<SignTransactionInfo> => {
+            const unsignedTransaction: UnsignedTransaction = signTransactionRequest.payload as UnsignedTransaction
 
-          let correctWallet = this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(
-            unsignedTransaction.publicKey,
-            signTransactionRequest.protocol
-          )
-
-          // If we can't find a wallet for a protocol, we will try to find the "base" wallet and then create a new
-          // wallet with the right protocol. This way we can sign all ERC20 transactions, but show the right amount
-          // and fee for all tokens we support.
-          if (!correctWallet) {
-            const baseWallet: AirGapWallet | undefined = this.secretsService.findBaseWalletByPublicKeyAndProtocolIdentifier(
+            let correctWallet = this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(
               unsignedTransaction.publicKey,
               signTransactionRequest.protocol
             )
 
-            if (baseWallet) {
-              // If the protocol is not supported, use the base protocol for signing
-              const protocol = await this.protocolService.getProtocol(signTransactionRequest.protocol)
-              try {
-                correctWallet = new AirGapWallet(protocol, baseWallet.publicKey, baseWallet.isExtendedPublicKey, baseWallet.derivationPath)
-                correctWallet.addresses = baseWallet.addresses
-              } catch (e) {
-                if (e.message === 'PROTOCOL_NOT_SUPPORTED') {
-                  correctWallet = baseWallet
+            // If we can't find a wallet for a protocol, we will try to find the "base" wallet and then create a new
+            // wallet with the right protocol. This way we can sign all ERC20 transactions, but show the right amount
+            // and fee for all tokens we support.
+            if (!correctWallet) {
+              const baseWallet: AirGapWallet | undefined = this.secretsService.findBaseWalletByPublicKeyAndProtocolIdentifier(
+                unsignedTransaction.publicKey,
+                signTransactionRequest.protocol
+              )
+
+              if (baseWallet) {
+                // If the protocol is not supported, use the base protocol for signing
+                const protocol = await this.protocolService.getProtocol(signTransactionRequest.protocol)
+                try {
+                  correctWallet = new AirGapWallet(
+                    protocol,
+                    baseWallet.publicKey,
+                    baseWallet.isExtendedPublicKey,
+                    baseWallet.derivationPath
+                  )
+                  correctWallet.addresses = baseWallet.addresses
+                } catch (e) {
+                  if (e.message === 'PROTOCOL_NOT_SUPPORTED') {
+                    correctWallet = baseWallet
+                  }
                 }
               }
             }
-          }
 
-          return {
-            wallet: correctWallet,
-            signTransactionRequest
+            return {
+              wallet: correctWallet,
+              signTransactionRequest
+            }
           }
-        })
+        )
       )
-    ).filter(signTransactionDetails => signTransactionDetails.wallet !== undefined)
+    ).filter((signTransactionDetails) => signTransactionDetails.wallet !== undefined)
 
     if (transactionInfos.length > 0) {
       if (transactionInfos.length !== signTransactionRequests.length) {

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core'
 import { AlertController, PopoverController } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
-import { AirGapWallet } from 'airgap-coin-lib'
+import { AirGapWallet } from '@airgap/coinlib-core'
 import { first } from 'rxjs/operators'
 
 import { ClipboardService } from '@airgap/angular-core'
