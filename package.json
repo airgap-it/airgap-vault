@@ -86,7 +86,6 @@
     "@ionic/cli": "^6.11.8",
     "@types/node": "^12.11.1",
     "jetifier": "^1.6.6",
-    "prettier": "^2.2.1",
     "replace": "^1.1.0",
     "sonarqube-scanner": "2.6.0",
     "typescript": "~4.0.5"
