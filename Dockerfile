@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:14.5.0
 
 # See https://crbug.com/795759
 RUN apt-get update && apt-get install -yq libgconf-2-4 bzip2 build-essential libxtst6
@@ -31,7 +31,6 @@ RUN npm run install-test-dependencies
 
 # install dependencies
 RUN npm install
-RUN npm install @ionic/cli@6.9.1
 
 # install static webserver
 RUN npm install node-static -g

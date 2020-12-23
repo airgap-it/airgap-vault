@@ -1,0 +1,11 @@
+<ion-row class="rawdata--container">
+  <ion-col class="ion-no-padding">
+    <pre class="ion-no-margin">{{ messageDefinitionObject | json }}</pre>
+  </ion-col>
+</ion-row>
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-button color="primary" shape="round" (click)="signAndGoToNextPage()">
+    <ion-icon slot="start" src="assets/icons/md-check.svg"></ion-icon>
+    {{ 'message-signing-request.sign_button' | translate }}
+  </ion-button>
+</ion-fab>

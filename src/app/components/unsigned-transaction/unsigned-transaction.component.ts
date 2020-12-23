@@ -1,52 +1,110 @@
-import { Component } from '@angular/core'
-import { AirGapWallet, IACMessageDefinitionObject, IACMessageType, IAirGapTransaction, UnsignedTransaction } from '@airgap/coinlib-core'
+import { Component, Input, OnChanges } from '@angular/core'
+import {
+  IACMessageDefinitionObject,
+  IAirGapTransaction,
+  UnsignedTransaction,
+  AirGapWallet,
+  IACMessageType,
+  ICoinProtocol
+} from '@airgap/coinlib-core'
+import BigNumber from 'bignumber.js'
 import * as bip39 from 'bip39'
-
-import { Secret } from '../../models/secret'
-import { handleErrorLocal, ErrorCategory } from '../../services/error-handler/error-handler.service'
-import { InteractionOperationType, InteractionService } from '../../services/interaction/interaction.service'
-import { NavigationService } from '../../services/navigation/navigation.service'
-import { SecretsService } from '../../services/secrets/secrets.service'
-import { SerializerService } from '@airgap/angular-core'
+import { ProtocolService, SerializerService } from '@airgap/angular-core'
+import { handleErrorLocal, ErrorCategory } from 'src/app/services/error-handler/error-handler.service'
+import { Secret } from 'src/app/models/secret'
+import { SecretsService } from 'src/app/services/secrets/secrets.service'
+import { InteractionOperationType, InteractionService } from 'src/app/services/interaction/interaction.service'
 import { AlertController } from '@ionic/angular'
+import { TokenService } from 'src/app/services/token/TokenService'
 import { SignTransactionInfo } from 'src/app/models/sign-transaction-info'
 
-// TODO: refactor multiple transactions
 @Component({
-  selector: 'airgap-transaction-detail',
-  templateUrl: './transaction-detail.page.html',
-  styleUrls: ['./transaction-detail.page.scss']
+  selector: 'airgap-unsigned-transaction',
+  templateUrl: './unsigned-transaction.component.html',
+  styleUrls: ['./unsigned-transaction.component.scss']
 })
-export class TransactionDetailPage {
-  public broadcastUrl?: string
+export class UnsignedTransactionComponent implements OnChanges {
+  @Input()
+  public unsignedTxs: IACMessageDefinitionObject[] | undefined // TODO: Type
 
+  @Input()
   public transactionInfos: SignTransactionInfo[]
+
+  @Input()
+  public syncProtocolString: string
+
   public airGapTxs: IAirGapTransaction[]
-  public signTransactionRequests: IACMessageDefinitionObject[]
+  public fallbackActivated: boolean = false
+  public broadcastUrl?: string
+  public transactionsWithWallets: [UnsignedTransaction, AirGapWallet][]
+
+  public aggregatedInfo:
+    | {
+      numberOfTxs: number
+      totalAmount: BigNumber
+      totalFees: BigNumber
+    }
+    | undefined
+
+  public rawTxData: string
 
   constructor(
     private readonly alertController: AlertController,
-    private readonly navigationService: NavigationService,
+    private readonly protocolService: ProtocolService,
+    private readonly serializerService: SerializerService,
     private readonly secretsService: SecretsService,
     private readonly interactionService: InteractionService,
-    private readonly serializerService: SerializerService
-  ) {}
-
+    private readonly tokenService: TokenService
+  ) { }
   public async ionViewWillEnter(): Promise<void> {
-    const state = this.navigationService.getState()
-    if (state.transactionInfos) {
-      this.transactionInfos = state.transactionInfos
-      this.signTransactionRequests = this.transactionInfos.map((info) => info.signTransactionRequest)
-      try {
-        this.airGapTxs = (
-          await Promise.all(
-            this.transactionInfos.map((info) =>
-              info.wallet.protocol.getTransactionDetails(info.signTransactionRequest.payload as UnsignedTransaction)
-            )
+    try {
+      this.airGapTxs = (
+        await Promise.all(
+          this.transactionInfos.map((info) =>
+            info.wallet.protocol.getTransactionDetails(info.signTransactionRequest.payload as UnsignedTransaction)
           )
+        )
+      ).reduce((flatten, toFlatten) => flatten.concat(toFlatten), [])
+    } catch (e) {
+      console.error('cannot read tx details', e)
+    }
+  }
+
+  public async ngOnChanges(): Promise<void> {
+    if (this.unsignedTxs && this.unsignedTxs.length > 0) {
+      const protocol: ICoinProtocol = await this.protocolService.getProtocol(this.unsignedTxs[0].protocol)
+      try {
+        // tslint:disable-next-line:no-unnecessary-type-assertion
+        const unsignedTransaction: UnsignedTransaction = this.unsignedTxs[0].payload as UnsignedTransaction
+        this.airGapTxs = (
+          await Promise.all(this.unsignedTxs.map((unsignedTx) => protocol.getTransactionDetails(unsignedTx.payload as UnsignedTransaction)))
         ).reduce((flatten, toFlatten) => flatten.concat(toFlatten), [])
+
+        if (
+          this.airGapTxs.length > 1 &&
+          this.airGapTxs.every((tx: IAirGapTransaction) => tx.protocolIdentifier === this.airGapTxs[0].protocolIdentifier)
+        ) {
+          this.aggregatedInfo = {
+            numberOfTxs: this.airGapTxs.length,
+            totalAmount: this.airGapTxs.reduce((pv: BigNumber, cv: IAirGapTransaction) => pv.plus(cv.amount), new BigNumber(0)),
+            totalFees: this.airGapTxs.reduce((pv: BigNumber, cv: IAirGapTransaction) => pv.plus(cv.fee), new BigNumber(0))
+          }
+        }
+
+        try {
+          if (this.airGapTxs.length !== 1) {
+            throw Error('TokenTransferDetails returned more than 1 transaction!')
+          }
+          this.airGapTxs = [await this.tokenService.getTokenTransferDetails(this.airGapTxs[0], unsignedTransaction)]
+        } catch (error) {
+          console.error('unable to parse token transaction, using ethereum transaction details instead')
+        }
+
+        this.fallbackActivated = false
       } catch (e) {
-        console.error('cannot read tx details', e)
+        this.fallbackActivated = true
+        // tslint:disable-next-line:no-unnecessary-type-assertion
+        this.rawTxData = JSON.stringify((this.unsignedTxs[0].payload as UnsignedTransaction).transaction)
       }
     }
   }
@@ -69,7 +127,6 @@ export class TransactionDetailPage {
         this.secretsService.getActiveSecret()
       )
     } catch (error) {
-      console.log('Caught error: ', error)
       if (error.message) {
         this.showAlert('Error', error.message)
       }
@@ -87,7 +144,6 @@ export class TransactionDetailPage {
           )
         )
       ).reduce((flatten, toFlatten) => flatten.concat(toFlatten), [])
-      console.log(transactions)
 
       txDetails = transactions
     } catch (e) {
@@ -110,6 +166,7 @@ export class TransactionDetailPage {
       }))
 
       const serializedTx: string[] = await this.serializerService.serialize(deserializedTxSigningRequests)
+
       const unsignedTransaction = transactionInfos[0].signTransactionRequest.payload as UnsignedTransaction
       return `${unsignedTransaction.callbackURL || 'airgap-wallet://?d='}${serializedTx.join(',')}`
     } else {

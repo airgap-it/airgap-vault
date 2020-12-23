@@ -83,6 +83,10 @@ export class TabSettingsPage {
     this.navigationService.route('/interaction-history').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
+  public goToQrSettings(): void {
+    this.navigationService.route('/qr-settings').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
   public pasteClipboard(): void {
     this.clipboardService.paste().then(
       (text: string) => {
@@ -92,18 +96,5 @@ export class TabSettingsPage {
         console.error('Error: ' + err)
       }
     )
-  }
-
-  public switchSerializerVersion(event: TouchEvent): void {
-    console.log((event.detail as any).checked)
-    this.serializerService.useV2 = (event.detail as any).checked
-  }
-  public qrMsChanged(event: TouchEvent): void {
-    console.log((event.detail as any).value)
-    this.serializerService.displayTimePerChunk = (event.detail as any).value
-  }
-  public qrBytesChanged(event: TouchEvent): void {
-    console.log((event.detail as any).value)
-    this.serializerService.chunkSize = (event.detail as any).value
   }
 }
