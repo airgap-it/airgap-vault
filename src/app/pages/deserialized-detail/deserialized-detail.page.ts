@@ -20,10 +20,7 @@ export class DeserializedDetailPage {
 
   public iacMessageType: IACMessageType
 
-  constructor(
-    private readonly navigationService: NavigationService,
-    private readonly translateService: TranslateService
-  ) { }
+  constructor(private readonly navigationService: NavigationService, private readonly translateService: TranslateService) {}
 
   public async ionViewWillEnter(): Promise<void> {
     const state = this.navigationService.getState()
@@ -31,7 +28,7 @@ export class DeserializedDetailPage {
       this.transactionInfos = state.transactionInfos
       this.type = state.type
       this.iacMessageType = this.transactionInfos[0].signTransactionRequest.type
-      this.signTransactionRequests = this.transactionInfos.map(info => info.signTransactionRequest)
+      this.signTransactionRequests = this.transactionInfos.map((info) => info.signTransactionRequest)
 
       const display = this.type === IACMessageType.TransactionSignRequest ? 'transaction' : 'message'
       this.title = this.translateService.instant(`deserialized-detail.${display}.title`)

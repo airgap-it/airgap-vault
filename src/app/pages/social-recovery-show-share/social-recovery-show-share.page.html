@@ -1,8 +1,6 @@
-<ion-header no-border>
+<ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-title>
-      {{ 'social-recovery-show-share.title' | translate }}
-    </ion-title>
+    <ion-title>{{ 'social-recovery-show-share.title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -14,7 +12,7 @@
   <h6 class="typography--mono" *ngIf="shares">{{ shares[currentShare] }}</h6>
 </ion-content>
 
-<ion-footer no-border color="primary">
+<ion-footer class="ion-no-border" color="primary">
   <airgap-progress-footer
     [progress]="currentShare * 2"
     [maxProgress]="shares.length * 2"

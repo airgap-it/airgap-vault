@@ -43,7 +43,6 @@ export class TransactionSignedPage {
 
     console.log('interactionUrl', this.interactionUrl)
     console.log('qrType', this.qrType)
-
   }
 
   public switchQR(): void {

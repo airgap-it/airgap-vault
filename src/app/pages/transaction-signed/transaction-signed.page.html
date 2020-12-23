@@ -1,11 +1,9 @@
-<ion-header no-border>
+<ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>
-      {{ pageTitle }}
-    </ion-title>
+    <ion-title>{{ pageTitle }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -13,10 +11,8 @@
   <h3 [innerHTML]="heading"></h3>
 
   <ion-row class="ion-justify-content-center ion-padding-top">
-    <airgap-qr *ngIf="interactionUrl && qrType === 0" [level]="'L'" [qrdata]="splits" [size]="300">
-    </airgap-qr>
-    <airgap-qr *ngIf="signedTxs && qrType === 1" [level]="'L'" [qrdata]="signedTxs" [size]="300">
-    </airgap-qr>
+    <airgap-qr *ngIf="interactionUrl && qrType === 0" [level]="'L'" [qrdata]="splits" [size]="300"></airgap-qr>
+    <airgap-qr *ngIf="signedTxs && qrType === 1" [level]="'L'" [qrdata]="signedTxs" [size]="300"></airgap-qr>
   </ion-row>
 
   <ng-container *ngIf="messageSignResponse">
@@ -28,11 +24,12 @@
       <ion-label class="ion-text-wrap">{{ 'transaction-signed.raw-tx_label' | translate }}</ion-label>
       <ion-toggle slot="end" (ionChange)="switchQR()"></ion-toggle>
     </ion-item>
-    <airgap-signed-transaction [syncProtocolString]="interactionUrl"></airgap-signed-transaction>
+    <ion-row class="ion-padding-vertical ion-margin-bottom">
+      <airgap-signed-transaction [syncProtocolString]="interactionUrl"></airgap-signed-transaction>
+    </ion-row>
   </ng-container>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-button color="primary" shape="round" (click)="done()">{{ 'transaction-signed.done_label' | translate }}
-    </ion-button>
+    <ion-button color="primary" shape="round" (click)="done()">{{ 'transaction-signed.done_label' | translate }}</ion-button>
   </ion-fab>
 </ion-content>

@@ -236,7 +236,7 @@
     "add-settings_label": "Add Secret",
     "paste-from-clipboard_label": "Paste code from clipboard",
     "qr-settings_label": "QR Settings",
-    "qr-page": "Go to QR page"
+    "qr-advanced-settings_label": "Advanced QR Settings"
   },
   "tab-wallets": {
     "title": "Accounts",

@@ -21,10 +21,10 @@ export class SignedTransactionComponent {
   public rawTxData: string
   public aggregatedInfo:
     | {
-      numberOfTxs: number
-      totalAmount: BigNumber
-      totalFees: BigNumber
-    }
+        numberOfTxs: number
+        totalAmount: BigNumber
+        totalFees: BigNumber
+      }
     | undefined
 
   constructor(

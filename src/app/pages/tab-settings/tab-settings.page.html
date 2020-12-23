@@ -1,4 +1,4 @@
-<ion-header no-border>
+<ion-header class="ion-no-border">
   <ion-toolbar color="secondary">
     <ion-title>{{ 'tab-settings.title' | translate }}</ion-title>
   </ion-toolbar>
@@ -11,7 +11,7 @@
     </ion-list-header>
 
     <ion-item lines="none" detail="true" (click)="goToAbout()">
-      <ion-icon slot="start" color="dark" src="assets/icons/md-info.svg"></ion-icon>
+      <ion-icon slot="start" name="information-circle-outline"></ion-icon>
       <ion-label>{{ 'tab-settings.about' | translate }}</ion-label>
     </ion-item>
     <!--
@@ -37,7 +37,7 @@
     </ion-row>
   </ion-list>
 
-  <ion-list no-border lines="none">
+  <ion-list class="ion-no-border" lines="none">
     <ion-list-header class="ion-no-margin" lines="none">
       <ion-label>{{ 'tab-settings.qr-settings_label' | translate }}</ion-label>
     </ion-list-header>
@@ -47,8 +47,8 @@
     </ion-item>
 
     <ion-item (click)="goToQrSettings()">
-      <ion-icon name="arrow-forward-outline" slot="start"></ion-icon>
-      {{ 'tab-settings.qr-page' | translate }}
+      <ion-icon name="qr-code-outline" slot="start"></ion-icon>
+      {{ 'tab-settings.qr-advanced-settings_label' | translate }}
     </ion-item>
   </ion-list>
 </ion-content>
