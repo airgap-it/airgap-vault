@@ -1,12 +1,12 @@
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
 import { async, ComponentFixture, TestBed } from '@angular/core/testing'
-import { IACMessageType, Serializer } from 'airgap-coin-lib'
+import { IACMessageType, Serializer } from '@airgap/coinlib-core'
 
 import { UnitHelper } from '../../../../test-config/unit-test-helper'
 
 import { UnsignedTransactionComponent } from './unsigned-transaction.component'
-import { MainProtocolSymbols } from 'airgap-coin-lib/dist/utils/ProtocolSymbols'
-import { Message } from 'airgap-coin-lib/dist/serializer/message'
+import { MainProtocolSymbols } from '@airgap/coinlib-core/utils/ProtocolSymbols'
+import { Message } from '@airgap/coinlib-core/serializer/message'
 import { SecureStorageService } from 'src/app/services/secure-storage/secure-storage.service'
 import { SecureStorageServiceMock } from 'src/app/services/secure-storage/secure-storage.mock'
 import { InteractionService } from 'src/app/services/interaction/interaction.service'

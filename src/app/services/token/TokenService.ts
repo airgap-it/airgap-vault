@@ -8,8 +8,8 @@ import {
   IAirGapTransaction,
   SignedTransaction,
   UnsignedTransaction
-} from 'airgap-coin-lib'
-import { SubProtocolSymbols } from 'airgap-coin-lib/dist/utils/ProtocolSymbols'
+} from '@airgap/coinlib-core'
+import { SubProtocolSymbols } from '@airgap/coinlib-core/utils/ProtocolSymbols'
 
 @Injectable({
   providedIn: 'root'
@@ -75,5 +75,4 @@ export class TokenService {
 
     return tx
   }
-
 }

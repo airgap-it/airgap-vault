@@ -1,9 +1,10 @@
-import { Message } from 'airgap-coin-lib/dist/serializer/message'
-import { async, ComponentFixture, TestBed } from '@angular/core/testing'
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
+
 import { UnitHelper } from '../../../../test-config/unit-test-helper'
 import { SignedTransactionComponent } from './signed-transaction.component'
-import { MainProtocolSymbols } from 'airgap-coin-lib/dist/utils/ProtocolSymbols'
-import { Serializer, IACMessageType } from 'airgap-coin-lib'
+import { MainProtocolSymbols } from '@airgap/coinlib-core/utils/ProtocolSymbols'
+import { IACMessageType, Serializer } from '@airgap/coinlib-core'
+import { Message } from '@airgap/coinlib-core/serializer/message'
 
 describe('SignedTransactionComponent', () => {
   let signedTransactionFixture: ComponentFixture<SignedTransactionComponent>
@@ -30,7 +31,7 @@ describe('SignedTransactionComponent', () => {
     expect(signedTransaction instanceof SignedTransactionComponent).toBe(true)
   })
 
-  it('should load the from-to component if a valid tx is given', async(async () => {
+  it('should load the from-to component if a valid tx is given', waitForAsync(async () => {
     const serializer: Serializer = new Serializer()
     const serializedTxs = await serializer.serialize([
       new Message(IACMessageType.TransactionSignResponse, MainProtocolSymbols.ETH, {
@@ -51,7 +52,7 @@ describe('SignedTransactionComponent', () => {
     expect(signedTransaction.fallbackActivated).toBe(false)
   }))
 
-  it('should load fallback if something about the TX is wrong', async(async () => {
+  it('should load fallback if something about the TX is wrong', waitForAsync(async () => {
     /*
     const syncProtocol = new SyncProtocolUtils()
     const serializedTx = await syncProtocol.serialize({

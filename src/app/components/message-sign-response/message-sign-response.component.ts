@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core'
-import { MessageSignResponse } from 'airgap-coin-lib'
+import { MessageSignResponse } from '@airgap/coinlib-core'
 
 @Component({
   selector: 'airgap-message-sign-response',

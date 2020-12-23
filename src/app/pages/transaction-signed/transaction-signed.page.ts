@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { AirGapWallet, MessageSignResponse } from 'airgap-coin-lib'
+import { AirGapWallet, MessageSignResponse } from '@airgap/coinlib-core'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
