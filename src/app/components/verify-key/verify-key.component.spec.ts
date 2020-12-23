@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing'
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
 
 import { UnitHelper } from './../../../../test-config/unit-test-helper'
 import { VerifyKeyComponent } from './verify-key.component'
@@ -26,7 +26,7 @@ describe('Component: VerifyKey', () => {
     fixture = TestBed.createComponent(VerifyKeyComponent)
     component = fixture.componentInstance
   })
-  it('should validate a regular mnemonic, and emit correct event', async(() => {
+  it('should validate a regular mnemonic, and emit correct event', waitForAsync(() => {
     component.secret = correctMnemonic
     fixture.detectChanges()
     const words = component.secret.split(' ')
@@ -45,7 +45,7 @@ describe('Component: VerifyKey', () => {
     expect(component.isCorrect()).toBeTruthy()
   }))
 
-  it('should detect a wrong word in a mnemonic', async(() => {
+  it('should detect a wrong word in a mnemonic', waitForAsync(() => {
     component.secret = correctMnemonic
     fixture.detectChanges()
     const words = component.secret.split(' ')
@@ -68,7 +68,7 @@ describe('Component: VerifyKey', () => {
     expect(component.isCorrect()).toBeFalsy()
   }))
 
-  it('should validate a mnemonic where the same word appears 2 times', async(() => {
+  it('should validate a mnemonic where the same word appears 2 times', waitForAsync(() => {
     component.secret = correctMnemonic
     fixture.detectChanges()
     component.ngOnInit()
@@ -81,7 +81,7 @@ describe('Component: VerifyKey', () => {
     expect(component.isCorrect()).toBeTruthy()
   }))
 
-  it('should not validate user input that is too short', async(() => {
+  it('should not validate user input that is too short', waitForAsync(() => {
     component.secret = correctMnemonic
     fixture.detectChanges()
     component.ngOnInit()
@@ -101,7 +101,7 @@ describe('Component: VerifyKey', () => {
     expect(component.isCorrect()).toBeTruthy()
   }))
 
-  it('should give the correct empty spots', async(() => {
+  it('should give the correct empty spots', waitForAsync(() => {
     component.secret = correctMnemonic
     fixture.detectChanges()
     component.ngOnInit()
@@ -116,7 +116,7 @@ describe('Component: VerifyKey', () => {
     expect(component.emptySpot(component.currentWords)).toEqual(1)
   }))
 
-  it('should let users select words to correct them', async(() => {
+  it('should let users select words to correct them', waitForAsync(() => {
     component.secret = correctMnemonic
     fixture.detectChanges()
     component.ngOnInit()
@@ -132,7 +132,7 @@ describe('Component: VerifyKey', () => {
     expect(component.currentWords[5]).toEqual(words[5])
   }))
 
-  it('should give users 3 words to choose from', async(() => {
+  it('should give users 3 words to choose from', waitForAsync(() => {
     component.secret = correctMnemonic
     component.ngOnInit()
     fixture.detectChanges()
@@ -153,7 +153,7 @@ describe('Component: VerifyKey', () => {
     expect(foundWord).toBeTruthy()
   }))
 
-  it('should give users 3 words to choose from if selecting a specific one', async(() => {
+  it('should give users 3 words to choose from if selecting a specific one', waitForAsync(() => {
     component.secret = correctMnemonic
     component.ngOnInit()
     fixture.detectChanges()
