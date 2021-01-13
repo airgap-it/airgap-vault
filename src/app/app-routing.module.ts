@@ -96,7 +96,7 @@ const routes: Routes = [
   },
   {
     path: 'qr-settings',
-    loadChildren: () => import('./lazy.module').then((m) => m.LazyModule)
+    loadChildren: () => import('./pages/qr-settings/qr-settings.module').then((m) => m.QrSettingsPageModule)
   }
 ]
 
