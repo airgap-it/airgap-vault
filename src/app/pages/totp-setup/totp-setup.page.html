@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>totp-setup</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ng-container *ngIf="data">
+    Scan the following QR code with a 2FA Authenticator app (eg. Google Authenticator, Authy, etc.)
+    <airgap-qr [qrdata]="data" [shouldPrefixSingleQrWithUrl]="false" [level]="'L'" [size]="300"></airgap-qr>
+
+    Enter the code that was generated in the Authenticator app here to verify everything is correct.ng-container
+    <br />
+    WARNING: If you lose access to your 2FA code, you will have to reset the Vault and re-import all your secrets!
+    <ion-input type="number" [(ngModel)]="code" (ionChange)="changed()"></ion-input>
+  </ng-container>
+</ion-content>

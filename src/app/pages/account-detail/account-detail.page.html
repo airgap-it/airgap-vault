@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>account-detail</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-segment (ionChange)="segmentChanged($event)">
+    <ion-segment-button value="external">
+      <ion-label>External</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="internal">
+      <ion-label>Internal</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+  {{fingerprint}} {{addresses | json}}
+  <ion-card *ngFor="let address of addresses">
+    {{address}}
+    <airgap-qr [qrdata]="address" [shouldPrefixSingleQrWithUrl]="false" [level]="'L'" [size]="300"></airgap-qr>
+  </ion-card>
+</ion-content>

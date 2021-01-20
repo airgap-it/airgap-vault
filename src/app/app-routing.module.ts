@@ -97,6 +97,42 @@ const routes: Routes = [
   {
     path: 'qr-settings',
     loadChildren: () => import('./lazy.module').then((m) => m.LazyModule)
+  },
+  {
+    path: 'secret-detail',
+    loadChildren: () => import('./pages/secret-detail/secret-detail.module').then((m) => m.SecretDetailPageModule)
+  },
+  {
+    path: 'account-detail',
+    loadChildren: () => import('./pages/account-detail/account-detail.module').then((m) => m.AccountDetailPageModule)
+  },
+  {
+    path: 'security-check',
+    loadChildren: () => import('./pages/security-check/security-check.module').then((m) => m.SecurityCheckPageModule)
+  },
+  {
+    path: 'wordlist',
+    loadChildren: () => import('./pages/wordlist/wordlist.module').then((m) => m.WordlistPageModule)
+  },
+  {
+    path: 'pin',
+    loadChildren: () => import('./pages/pin/pin.module').then((m) => m.PinPageModule)
+  },
+  {
+    path: 'totp-setup',
+    loadChildren: () => import('./pages/totp-setup/totp-setup.module').then((m) => m.TotpSetupPageModule)
+  },
+  {
+    path: 'advanced-settings',
+    loadChildren: () => import('./pages/advanced-settings/advanced-settings.module').then((m) => m.AdvancedSettingsPageModule)
+  },
+  {
+    path: 'audit-log',
+    loadChildren: () => import('./pages/audit-log/audit-log.module').then((m) => m.AuditLogPageModule)
+  },
+  {
+    path: 'audit-log-detail',
+    loadChildren: () => import('./pages/audit-log-detail/audit-log-detail.module').then((m) => m.AuditLogDetailPageModule)
   }
 ]
 

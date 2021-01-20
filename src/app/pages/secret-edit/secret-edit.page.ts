@@ -85,6 +85,12 @@ export class SecretEditPage {
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
+  public goToInfoPage(): void {
+    this.navigationService
+      .routeWithState('/secret-detail', { secret: this.secret, isEdit: true })
+      .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
   public async resetRecoveryPassword(): Promise<void> {
     try {
       const recoveryKey = await this.secretsService.resetRecoveryPassword(this.secret)

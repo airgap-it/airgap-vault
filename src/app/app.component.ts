@@ -19,6 +19,7 @@ import { Secret } from './models/secret'
 import { ErrorCategory, handleErrorLocal } from './services/error-handler/error-handler.service'
 import { IACService } from './services/iac/iac.service'
 import { NavigationService } from './services/navigation/navigation.service'
+import { NetworkService } from './services/network/network.service'
 import { SecretsService } from './services/secrets/secrets.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
 
@@ -42,6 +43,7 @@ export class AppComponent implements AfterViewInit {
     private readonly secretsService: SecretsService,
     private readonly ngZone: NgZone,
     private readonly navigationService: NavigationService,
+    private readonly networkService: NetworkService,
     @Inject(APP_PLUGIN) private readonly app: AppPlugin,
     @Inject(SECURITY_UTILS_PLUGIN) private readonly securityUtils: SecurityUtilsPlugin,
     @Inject(SPLASH_SCREEN_PLUGIN) private readonly splashScreen: SplashScreenPlugin,
@@ -53,6 +55,7 @@ export class AppComponent implements AfterViewInit {
   }
 
   public async initializeApp(): Promise<void> {
+    this.networkService.check()
     await Promise.all([this.platform.ready(), this.initializeTranslations()])
 
     this.initializeProtocols()

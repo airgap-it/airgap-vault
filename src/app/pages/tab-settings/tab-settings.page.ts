@@ -83,6 +83,10 @@ export class TabSettingsPage {
     this.navigationService.route('/interaction-history').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
+  public goToAdvancedSettings(): void {
+    this.navigationService.route('/advanced-settings').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
   public goToQrSettings(): void {
     this.navigationService.route('/qr-settings').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }

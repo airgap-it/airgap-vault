@@ -9,15 +9,27 @@ import { Identifiable } from './identifiable'
 
 const signer: BIP39Signer = new BIP39Signer()
 
+export enum SecretType {
+  MNEMONIC = 'mnemonic',
+  MNEMONIC_DURESS = 'mnemonic_duress',
+  TWOFACTOR = 'twofactor',
+  TEXT = 'text',
+  SSH = 'ssh',
+  PGP = 'pgp'
+}
+
 export class Secret implements Identifiable {
   public id: string = UUID.UUID()
   public label: string
+  public description: string
 
   public secretHex: string
   public isParanoia: boolean
   public hasSocialRecovery: boolean
   public interactionSetting: InteractionSetting
   public hasRecoveryKey: boolean
+
+  public secretType: SecretType
 
   public wallets: AirGapWallet[]
 

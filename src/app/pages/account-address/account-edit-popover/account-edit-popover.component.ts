@@ -7,6 +7,7 @@ import { first } from 'rxjs/operators'
 import { ClipboardService } from '@airgap/angular-core'
 import { ErrorCategory, handleErrorLocal } from '../../../services/error-handler/error-handler.service'
 import { SecretsService } from '../../../services/secrets/secrets.service'
+import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 @Component({
   selector: 'airgap-account-edit-popover',
@@ -23,7 +24,8 @@ export class AccountEditPopoverComponent {
     private readonly clipboardService: ClipboardService,
     private readonly secretsService: SecretsService,
     private readonly popoverController: PopoverController,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    private readonly navigationService: NavigationService
   ) {}
 
   public async copyAddressToClipboard(): Promise<void> {
@@ -40,6 +42,12 @@ export class AccountEditPopoverComponent {
       this.walletShareUrl,
       this.translateService.instant('wallet-edit-delete-popover.confirm_sync_code_copy')
     )
+
+    await this.popoverController.dismiss()
+  }
+
+  public async goToDetailPage(): Promise<void> {
+    this.navigationService.routeWithState('/account-detail', { wallet: this.wallet })
 
     await this.popoverController.dismiss()
   }

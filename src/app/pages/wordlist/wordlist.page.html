@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar color="secondary">
+    <ion-title>{{ 'wordlist.title' | translate }}</ion-title>
+  </ion-toolbar>
+  <ion-toolbar color="secondary">
+    <ion-searchbar placeholder="{{ 'wordlist.search_placeholder' | translate }}" (ionInput)="filterItems($event)"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="wordlist">
+  <ng-container *ngIf="unfilteredWordlist.length > 0">
+    <ion-list>
+      <ion-virtual-scroll [items]="unfilteredWordlist" approxItemHeight="320px">
+        <ion-item *virtualItem="let word">{{word}}</ion-item>
+      </ion-virtual-scroll>
+    </ion-list>
+  </ng-container>
+
+  <ng-container *ngIf="unfilteredWordlist.length === 0">
+    <ion-list-header>Starts with</ion-list-header>
+    <ion-list>
+      <ion-virtual-scroll [items]="startsWithWordlist" approxItemHeight="320px">
+        <ion-item *virtualItem="let word">{{word}}</ion-item>
+      </ion-virtual-scroll>
+    </ion-list>
+    <ion-list-header>Similar words</ion-list-header>
+    <ion-list>
+      <ion-virtual-scroll [items]="filteredWordlist" approxItemHeight="320px">
+        <ion-item *virtualItem="let word">{{word}}</ion-item>
+      </ion-virtual-scroll>
+    </ion-list>
+  </ng-container>
+</ion-content>

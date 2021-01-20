@@ -38,7 +38,9 @@
   },
   "angularCompilerOptions": {
     "enableIvy": true,
-    "strictInjectionParameters": true,
-    "fullTemplateTypeCheck": true
+    // "strictTemplates": true,
+    "strictInjectionParameters": true
+    // "strictInputAccessModifiers": true,
+    // "fullTemplateTypeCheck": true
   }
 }

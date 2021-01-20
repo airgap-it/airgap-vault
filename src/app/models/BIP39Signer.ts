@@ -80,6 +80,26 @@ export class BIP39Signer {
     ]
   }
 
+  public getUnknownWords(mnemonic: string): { word: string; position: number }[] {
+    const split = mnemonic
+      .toLowerCase()
+      .split(' ')
+      .filter((split) => split.length !== 0)
+    const words = split // .slice(0, split.length - 1)
+
+    const wordlist = bip39.wordlists.english
+
+    const unknownWords: { word: string; position: number }[] = []
+
+    words.forEach((word, index) => {
+      if (!wordlist.includes(word)) {
+        unknownWords.push({ word, position: index })
+      }
+    })
+
+    return unknownWords
+  }
+
   public generateSocialRecover(secret: string, numberOfShares: number, threshold: number): string[] {
     if (threshold > numberOfShares) {
       throw new Error('The threshold needs to be smaller or equal to the number or shares')

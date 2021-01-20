@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Security Check</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let item of items">
+      {{item.title}}
+      <ion-buttons slot="end">
+        <ion-button shape="round" size="small" color="secondary">
+          <ion-spinner name="lines-small" color="primary" *ngIf="item.status === 'pending'"></ion-spinner>
+          <span *ngIf="item.status === 'unknown'">{{item.status}}</span>
+          <span *ngIf="item.status === 'fail'"><ion-icon size="large" color="danger" name="close-circle"></ion-icon></span>
+          <span *ngIf="item.status === 'success'"><ion-icon size="large" color="success" name="checkmark-circle-outline"></ion-icon></span>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-list>
+  <ion-button (click)="runChecks()">Run all checks</ion-button>
+</ion-content>

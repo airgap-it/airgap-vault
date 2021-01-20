@@ -10,6 +10,10 @@
     <ion-icon name="clipboard-outline" color="dark" slot="end"></ion-icon>
     {{ 'wallet-edit-delete-popover.copy_sync_code' | translate }}
   </ion-item>
+  <ion-item button detail="false" (click)="goToDetailPage()">
+    <ion-icon name="clipboard-outline" color="dark" slot="end"></ion-icon>
+    {{ 'details' | translate }}
+  </ion-item>
   <ion-item button detail="false" (click)="delete()">
     <ion-icon name="trash" color="dark" slot="end"></ion-icon>
     {{ 'wallet-edit-delete-popover.account-removal_alert.delete_label' | translate }}
