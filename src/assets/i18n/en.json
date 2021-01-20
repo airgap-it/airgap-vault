@@ -377,6 +377,9 @@
   "message-signing-response": {
     "text": "Display signed message details"
   },
+  "qr-settings-page": {
+    "title": "QR Settings"
+  },
   "select-account": {
     "message-signing": {
       "title": "Select Account",
