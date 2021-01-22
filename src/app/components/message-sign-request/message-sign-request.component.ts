@@ -26,6 +26,8 @@ export class MessageSignRequestComponent {
   @Input()
   public messageDefinitionObject: IACMessageDefinitionObject
 
+  public message: string
+
   @Input()
   public syncProtocolString: string
 
@@ -46,7 +48,7 @@ export class MessageSignRequestComponent {
         this.navigationService.route('')
         return
       }
-      const message = (this.messageDefinitionObject.payload as MessageSignRequest).message
+      this.message = (this.messageDefinitionObject.payload as MessageSignRequest).message
       const secret: Secret = this.secretsService.getActiveSecret()
 
       // we should handle this case here as well
@@ -60,7 +62,7 @@ export class MessageSignRequestComponent {
       const mnemonic: string = bip39.entropyToMnemonic(entropy)
       const privateKey: Buffer = await protocol.getPrivateKeyFromMnemonic(mnemonic, protocol.standardDerivationPath) // TODO
 
-      const signature = await protocol.signMessage(message, { privateKey })
+      const signature = await protocol.signMessage(this.message, { privateKey })
       const messageSignRequest = this.messageDefinitionObject.payload as MessageSignRequest
       const messageSignResponse: MessageSignResponse = {
         message: messageSignRequest.message,

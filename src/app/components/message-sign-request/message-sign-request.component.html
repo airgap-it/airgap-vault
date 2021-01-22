@@ -1,6 +1,6 @@
-<ion-row class="rawdata--container">
+<ion-row class="rawdata--container" *ngIf="message">
   <ion-col class="ion-no-padding">
-    <pre class="ion-no-margin">{{ messageDefinitionObject | json }}</pre>
+    <pre class="ion-no-margin">{{ message | json }}</pre>
   </ion-col>
 </ion-row>
 <ion-fab vertical="bottom" horizontal="end" slot="fixed">
