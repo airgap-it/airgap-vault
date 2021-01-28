@@ -71,7 +71,7 @@ public class SecurityUtils: CAPPlugin {
             case .success(_):
                 call.resolve()
             case let .failure(error):
-                call.reject(error.localizedDescription)
+                call.reject(error.description, "\(error.code.rawValue)", error)
             }
         }
     }
@@ -155,7 +155,11 @@ public class SecurityUtils: CAPPlugin {
                 try secureStorage.delete(key: call.key)
                 call.resolve()
             } catch {
-                call.reject(error.localizedDescription)
+                if let error = error as? VaultError {
+                    call.reject(error.description, "\(error.code.rawValue)", error)
+                } else {
+                    call.reject(error.localizedDescription, "-1", error)
+                }
             }
         }
     }
@@ -167,7 +171,7 @@ public class SecurityUtils: CAPPlugin {
             let secureStorage = self.storage(forAlias: call.alias, isParanoia: call.isParanoia)
             secureStorage.store(key: call.key, value: call.value) { error in
                 if let error = error {
-                    call.reject(error.localizedDescription)
+                    call.reject(error.description, "\(error.code.rawValue)", error)
                 } else {
                     call.resolve()
                 }
@@ -185,7 +189,7 @@ public class SecurityUtils: CAPPlugin {
                 case let .success(value):
                     call.resolve([Key.VALUE: value])
                 case let .failure(error):
-                    call.reject(error.localizedDescription)
+                    call.reject(error.description, "\(error.code.rawValue)", error)
                 }
             }
         }

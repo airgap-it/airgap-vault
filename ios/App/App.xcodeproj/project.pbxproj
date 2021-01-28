@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2FAD9763203C412B000D30F8 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2FAD9762203C412B000D30F8 /* config.xml */; };
+		49690A7E25C2BF80004A3586 /* VaultError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49690A7D25C2BF80004A3586 /* VaultError.swift */; };
 		50379B232058CBB4000EE86E /* capacitor.config.json in Resources */ = {isa = PBXBuildFile; fileRef = 50379B222058CBB4000EE86E /* capacitor.config.json */; };
 		504EC3081FED79650016851F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504EC3071FED79650016851F /* AppDelegate.swift */; };
 		504EC30D1FED79650016851F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC30B1FED79650016851F /* Main.storyboard */; };
@@ -18,7 +19,7 @@
 		88AE2EED23D5CB3200428560 /* PluginCall+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AE2EEC23D5CB3200428560 /* PluginCall+Additions.swift */; };
 		88AE2EEF23D5D7B300428560 /* SecurityUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 88AE2EEE23D5D7B300428560 /* SecurityUtils.m */; };
 		88AE2EF123D5DC2400428560 /* DeviceIntegrity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AE2EF023D5DC2400428560 /* DeviceIntegrity.swift */; };
-		88AE2EF323D5DC3900428560 /* KeyChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AE2EF223D5DC3900428560 /* KeyChain.swift */; };
+		88AE2EF323D5DC3900428560 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AE2EF223D5DC3900428560 /* Keychain.swift */; };
 		88AE2EF523D5DC5100428560 /* LocalAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AE2EF423D5DC5100428560 /* LocalAuthentication.swift */; };
 		88AE2EF723D5DC7400428560 /* SecureScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AE2EF623D5DC7400428560 /* SecureScreen.swift */; };
 		88AE2EF923D5DC8300428560 /* SecureStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AE2EF823D5DC8300428560 /* SecureStorage.swift */; };
@@ -32,6 +33,7 @@
 
 /* Begin PBXFileReference section */
 		2FAD9762203C412B000D30F8 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = config.xml; sourceTree = "<group>"; };
+		49690A7D25C2BF80004A3586 /* VaultError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultError.swift; sourceTree = "<group>"; };
 		50379B222058CBB4000EE86E /* capacitor.config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = capacitor.config.json; sourceTree = "<group>"; };
 		504EC3041FED79650016851F /* App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = App.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		504EC3071FED79650016851F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -44,7 +46,7 @@
 		88AE2EEC23D5CB3200428560 /* PluginCall+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PluginCall+Additions.swift"; sourceTree = "<group>"; };
 		88AE2EEE23D5D7B300428560 /* SecurityUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecurityUtils.m; sourceTree = "<group>"; };
 		88AE2EF023D5DC2400428560 /* DeviceIntegrity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceIntegrity.swift; sourceTree = "<group>"; };
-		88AE2EF223D5DC3900428560 /* KeyChain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChain.swift; sourceTree = "<group>"; };
+		88AE2EF223D5DC3900428560 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		88AE2EF423D5DC5100428560 /* LocalAuthentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalAuthentication.swift; sourceTree = "<group>"; };
 		88AE2EF623D5DC7400428560 /* SecureScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureScreen.swift; sourceTree = "<group>"; };
 		88AE2EF823D5DC8300428560 /* SecureStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureStorage.swift; sourceTree = "<group>"; };
@@ -132,10 +134,11 @@
 				88AE2EE723D5C7A500428560 /* SecurityUtils.swift */,
 				88AE2EEE23D5D7B300428560 /* SecurityUtils.m */,
 				88AE2EF023D5DC2400428560 /* DeviceIntegrity.swift */,
-				88AE2EF223D5DC3900428560 /* KeyChain.swift */,
+				88AE2EF223D5DC3900428560 /* Keychain.swift */,
 				88AE2EF423D5DC5100428560 /* LocalAuthentication.swift */,
 				88AE2EF623D5DC7400428560 /* SecureScreen.swift */,
 				88AE2EF823D5DC8300428560 /* SecureStorage.swift */,
+				49690A7D25C2BF80004A3586 /* VaultError.swift */,
 			);
 			path = SecurityUtils;
 			sourceTree = "<group>";
@@ -288,8 +291,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				88AE2EF323D5DC3900428560 /* KeyChain.swift in Sources */,
+				88AE2EF323D5DC3900428560 /* Keychain.swift in Sources */,
 				88F9F14723D059AE008351D0 /* AppInfo.m in Sources */,
+				49690A7E25C2BF80004A3586 /* VaultError.swift in Sources */,
 				88AE2EF923D5DC8300428560 /* SecureStorage.swift in Sources */,
 				88F9F15623D06A76008351D0 /* CameraPreview.m in Sources */,
 				88AE2EF523D5DC5100428560 /* LocalAuthentication.swift in Sources */,
