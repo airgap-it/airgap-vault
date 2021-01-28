@@ -10,9 +10,23 @@ import Foundation
 import LocalAuthentication
 import UIKit
 
-public class LocalAuthentication {
+extension VaultError.Domain {
+    static let localAuthentication: Self = "LocalAuthentication"
+}
 
-    public static let shared = LocalAuthentication()
+extension VaultError.Code {
+    static let cancelled: Self = -300
+    static let passwordMismatch: Self = -301
+}
+
+extension VaultError {
+    static let cancelled = VaultError(domain: .localAuthentication, code: .cancelled, message: "Operation cancelled")
+    static let passwordMismatch = VaultError(domain: .localAuthentication, code: .passwordMismatch, message: "The password does not match")
+}
+
+class LocalAuthentication {
+
+    static let shared = LocalAuthentication()
 
     private static var automaticKey = "local_auth_automatic"
     private static var authenticationReasonKey = "local_auth_reason"
@@ -36,11 +50,11 @@ public class LocalAuthentication {
 
     private var lastAuthentication: Date = .distantFuture
     private var lastBackground: Date?
-    public var invalidateAfter: TimeInterval = 10
-    public fileprivate(set) var isAuthenticated = false
+    var invalidateAfter: TimeInterval = 10
+    fileprivate(set) var isAuthenticated = false
 
     private var defaults: UserDefaults { return UserDefaults.standard }
-    public var automatic: Bool {
+    var automatic: Bool {
         get {
             return defaults.bool(forKey: LocalAuthentication.automaticKey)
         }
@@ -67,7 +81,7 @@ public class LocalAuthentication {
         }
     }
 
-    public var localizedAuthenticationReason: String {
+    var localizedAuthenticationReason: String {
         get {
             return defaults.string(forKey: LocalAuthentication.authenticationReasonKey) ?? LocalAuthentication.defaultAuthenticationReason
         }
@@ -89,7 +103,7 @@ public class LocalAuthentication {
         return now > lastBackground.addingTimeInterval(invalidateAfter)
     }
 
-    public static func defaultAccessFlags() -> SecAccessControlCreateFlags {
+    static func defaultAccessFlags() -> SecAccessControlCreateFlags {
         return [.userPresence]
     }
 
@@ -102,25 +116,70 @@ public class LocalAuthentication {
         return canUseBiometrics
     }
 
-    public func fetchContextForAccessAuthentication(_ authenticationHandler: @escaping (LAContext) -> Bool) {
+    struct PasswordPrompt {
+        let title: String
+        let message: String
+    }
+
+    private func createPromptOperations(from prompts: [PasswordPrompt]) -> [PasswordPromptOperation] {
+        var passwordPromptOperations = [PasswordPromptOperation]()
+        passwordPromptOperations.reserveCapacity(prompts.count)
+        for prompt in prompts {
+            let previous = passwordPromptOperations.first
+            let current = PasswordPromptOperation(prompt: prompt, previousPromptOperation: previous)
+            passwordPromptOperations.insert(current, at: 0)
+        }
+        return passwordPromptOperations
+    }
+
+    private func extractPassword(from operations: [PasswordPromptOperation]) throws -> String? {
+        var password: String? = nil
+        for operation in operations {
+            if let error = operation.error {
+                throw error
+            }
+            if let currentPassword = operation.password, let prevPassword = password, currentPassword != prevPassword {
+                throw VaultError.passwordMismatch
+            }
+            password = operation.password
+        }
+        return password
+    }
+
+    func fetchContextForSecureItemAccess(using prompts: [PasswordPrompt], _ authenticationHandler: @escaping (Result<LAContext, VaultError>) -> Bool) {
+        let invalidateOperation = InvalidateOperation(localAuth: self, condition: self.needsAccessInvalidation)
+        let passwordPromptOperations = createPromptOperations(from: prompts)
+        passwordPromptOperations.last?.addDependency(invalidateOperation)
         let operation = BlockOperation {
-            if authenticationHandler(self.context) {
+            let context = self.context
+            if !passwordPromptOperations.isEmpty {
+                do {
+                    let password = try self.extractPassword(from: passwordPromptOperations)
+                    if let password = password {
+                        context.setCredential(password.data(using: .utf8), type: .applicationPassword)
+                    }
+                } catch {
+                    _ = authenticationHandler(.failure(VaultError(domain: .localAuthentication, other: error)))
+                    return
+                }
+            }
+            if authenticationHandler(.success(context)) {
                 self.lastAuthentication = Date()
                 self.isAuthenticated = true
             }
         }
-        operation.addDependency(InvalidateOperation(localAuth: self, condition: self.needsAccessInvalidation))
+        operation.addDependency(passwordPromptOperations.first ?? invalidateOperation)
         enqueue(operation)
     }
 
-    public func authenticate(localizedReason reason: String? = nil, completion: @escaping (Result<Bool, Error>) -> ()) {
+    func authenticate(localizedReason reason: String? = nil, completion: @escaping (Result<Bool, VaultError>) -> ()) {
         let operation = AuthenticationOperation(localAuth: self)
         operation.localizedReason = reason ?? context.localizedReason
         let invalidate = InvalidateOperation(localAuth: self, condition: self.needsAuthenticationInvalidation)
         operation.addDependency(invalidate)
         operation.completionBlock = { [unowned operation] in
             guard operation.error == nil else {
-                completion(.failure(Error(operation.error)))
+                completion(.failure(operation.error!))
                 return
             }
             completion(.success(operation.result))
@@ -128,19 +187,19 @@ public class LocalAuthentication {
         enqueue(operation)
     }
 
-    public func invalidate(completion: @escaping () -> ()) {
+    func invalidate(completion: @escaping () -> ()) {
         let operation = InvalidateOperation(localAuth: self, condition: true)
         operation.completionBlock = completion
         queue.addOperation(operation)
     }
 
-    public func setInvalidationTimeout(_ timeout: TimeInterval) {
+    func setInvalidationTimeout(_ timeout: TimeInterval) {
         queue.addOperation {
             self.invalidateAfter = timeout
         }
     }
 
-    public func updateAutomaticAuthenticationIfNeeded() {
+    func updateAutomaticAuthenticationIfNeeded() {
         if automatic && didBecomeActiveObserver == nil {
             didBecomeActiveObserver = Observer(name: UIApplication.didBecomeActiveNotification, object: UIApplication.shared) { [unowned self] _ in
                 self.authenticate() { result in
@@ -160,23 +219,9 @@ public class LocalAuthentication {
 
     private func enqueue(_ operation: Operation) {
         for dependent in operation.dependencies where !dependent.isFinished && !dependent.isExecuting {
-            queue.addOperation(dependent)
+            enqueue(dependent)
         }
         queue.addOperation(operation)
-    }
-
-    public enum Error: Swift.Error {
-        case unknown
-        case `internal`(Swift.Error)
-        case cancelled
-
-        init(_ error: Swift.Error?) {
-            if let error = error {
-                self = .internal(error)
-            } else {
-                self = .unknown
-            }
-        }
     }
 
     class AsyncOperation: Operation {
@@ -211,7 +256,7 @@ public class LocalAuthentication {
             }
         }
 
-        var error: Error?
+        var error: VaultError?
 
         override func start() {
             guard !isCancelled else {
@@ -237,7 +282,7 @@ public class LocalAuthentication {
             stop()
         }
 
-        func cancel(with error: Error) {
+        func cancel(with error: VaultError) {
             self.error = error
             self.cancel()
         }
@@ -277,7 +322,7 @@ public class LocalAuthentication {
                 self.localAuth.lastAuthentication = Date()
                 self.localAuth.isAuthenticated = true
             } catch {
-                self.error = Error(error)
+                self.error = VaultError(domain: .localAuthentication, other: error)
                 result = false
             }
             self.localAuth.lastBackground = nil
@@ -286,17 +331,14 @@ public class LocalAuthentication {
 
         private func authenticate(savePolicyState: Bool = false) throws {
             do {
-                let authentication = Keychain.Authentication(context: context, ui: .allow, promptMessage: localizedReason)
-                _ = try Keychain.Password.load(account: LocalAuthentication.localAuthenticationKey, includeData: false, authentication: authentication)
+                _ = try Keychain.Password.load(account: LocalAuthentication.localAuthenticationKey, includeData: false, using: context)
                 if savePolicyState {
                     localAuth.currentBiometrySate = context.evaluatedPolicyDomainState
                 }
             } catch {
                 guard
-                    let keychainError = error as? Keychain.Error,
-                    case let .osStatus(status) = keychainError,
-                    status == errSecItemNotFound else {
-
+                    let keychainError = error as? VaultError,
+                    keychainError.domain == .keychain && keychainError.code == .itemNotFound else {
                         throw error
                 }
                 let flags = LocalAuthentication.defaultAccessFlags()
@@ -334,6 +376,57 @@ public class LocalAuthentication {
             localAuth.context.invalidate()
             localAuth.context = context
             localAuth.isAuthenticated = false
+        }
+    }
+
+    class PasswordPromptOperation: AsyncOperation {
+
+        let prompt: PasswordPrompt
+        let previousPromptOperation: PasswordPromptOperation?
+        var password: String?
+
+        private var outterController: UIViewController? {
+            guard let root = UIApplication.shared.keyWindow?.rootViewController else {
+                return nil
+            }
+            var result = root
+            while let presented = result.presentedViewController, !presented.isBeingDismissed {
+                result = presented
+            }
+            return result
+        }
+
+        init(prompt: PasswordPrompt, previousPromptOperation: PasswordPromptOperation? = nil) {
+            self.prompt = prompt
+            self.previousPromptOperation = previousPromptOperation
+            super.init()
+            if let operation = previousPromptOperation {
+                addDependency(operation)
+            }
+        }
+
+        override func perform(completion: @escaping () -> ()) {
+            if let error = previousPromptOperation?.error {
+                self.error = error
+                completion()
+                return
+            }
+            DispatchQueue.main.async {
+                let alert = UIAlertController(title: self.prompt.title, message: self.prompt.message, preferredStyle: .alert)
+                alert.addTextField { (textField) in
+                    textField.isSecureTextEntry = true
+                }
+                alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { [weak alert, unowned self] _ in
+                    self.password = alert?.textFields?.first?.text
+                    completion()
+                }))
+                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { _ in
+                    self.error = .cancelled
+                    completion()
+                }))
+
+                self.outterController?.present(alert, animated: true)
+            }
         }
     }
 }

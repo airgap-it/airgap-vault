@@ -1,6 +1,6 @@
 //
 //  Keychain.swift
-//  AGUtilities
+//  Vault
 //
 //  Created by Mike Godenzi on 07.08.19.
 //  Copyright © 2019 Mike Godenzi. All rights reserved.
@@ -9,6 +9,38 @@
 import Foundation
 import Security
 import LocalAuthentication
+
+extension VaultError.Domain {
+    static let keychain: Self = "Keychain"
+}
+
+extension VaultError.Code {
+    static let keyGenerationFailure: Self = -100
+    static let accessFlagsFailure: Self = -101
+    static let osStatus: Self = -102
+    static let publicKeyCopyFailure: Self = -103
+    static let encryptionFailure: Self = -104
+    static let decryptionFailure: Self = -105
+    static let itemNotFound: Self = -106
+}
+
+extension VaultError {
+    static let keyGenerationFailure = VaultError(domain: .keychain, code: .keyGenerationFailure, message: "Failed to generate random key")
+    static let accessFlagsFailure = VaultError(domain: .keychain, code: .accessFlagsFailure, message: "Failed to create access flags")
+    static let publicKeyCopyFailure = VaultError(domain: .keychain, code: .publicKeyCopyFailure, message: "Failed to retrieve public key")
+    static let encryptionFailure = VaultError(domain: .keychain, code: .encryptionFailure, message: "Failed to encrypt data")
+    static let decryptionFailure = VaultError(domain: .keychain, code: .decryptionFailure, message: "Failed to decrypt data")
+    static let itemNotFound = VaultError(domain: .keychain, code: .itemNotFound, message: "Item not found")
+
+    static func osStatus(_ status: OSStatus) -> Self {
+        switch status {
+        case errSecItemNotFound:
+            return .itemNotFound
+        default:
+            return .init(domain: .keychain, code: .osStatus, message: "Keychain operation failed with status: \(status)")
+        }
+    }
+}
 
 public enum Keychain {
 
@@ -47,13 +79,13 @@ public enum Keychain {
 
         private let key: SecKey
 
-        public init(tag: Data, accessControl: SecAccessControlCreateFlags = [], protection: Keychain.Protection = .whenPasscodeSetThisDeviceOnly) throws {
+        public init(tag: Data, accessControl: SecAccessControlCreateFlags = [], protection: Keychain.Protection = .whenPasscodeSetThisDeviceOnly, using context: LAContext? = nil) throws {
             var error: Unmanaged<CFError>? = nil
             guard let access = SecAccessControlCreateWithFlags(kCFAllocatorDefault, protection.value, accessControl, &error) else {
-                throw Keychain.Error(error?.autorelease().takeUnretainedValue())
+                throw VaultError.accessFlagsFailure
             }
 
-            let attributes: [String: Any] = [
+            var attributes: [String: Any] = [
                 kSecAttrKeyType as String: kSecAttrKeyTypeECSECPrimeRandom,
                 kSecAttrKeySizeInBits as String: 256,
                 kSecAttrTokenID as String: kSecAttrTokenIDSecureEnclave,
@@ -64,8 +96,12 @@ public enum Keychain {
                 ]
             ]
 
+            if let context = context {
+                attributes[kSecUseAuthenticationContext as String] = context
+            }
+
             guard let key = SecKeyCreateRandomKey(attributes as CFDictionary, &error) else {
-                throw Keychain.Error(error?.autorelease().takeUnretainedValue())
+                throw VaultError.keyGenerationFailure
             }
 
             self.key = key
@@ -87,45 +123,6 @@ public enum Keychain {
 
         private init(value: CFString) {
             self.value = value
-        }
-    }
-    public struct Authentication {
-
-        let context: LAContext
-        let ui: UI
-        let promptMessage: String?
-
-        public init(context: LAContext, ui: UI, promptMessage: String? = nil) {
-            self.context = context
-            self.ui = ui
-            self.promptMessage = promptMessage
-        }
-
-        public struct UI {
-            public static let allow = UI(value: kSecUseAuthenticationUIAllow)
-            public static let fail = UI(value: kSecUseAuthenticationUIFail)
-            public static let skip = UI(value: kSecUseAuthenticationUISkip)
-
-            fileprivate let value: CFString
-
-            private init(value: CFString) {
-                self.value = value
-            }
-        }
-    }
-
-    public enum Error: Swift.Error {
-        case unknown
-        case osStatus(OSStatus)
-        case `internal`(Swift.Error)
-        case publicKeyCopyFailure
-
-        init(_ error: Swift.Error?) {
-            if let error = error {
-                self = .internal(error)
-            } else {
-                self = .unknown
-            }
         }
     }
 }
@@ -151,7 +148,7 @@ extension Keychain.Password {
             return
         }
         guard status == errSecDuplicateItem else {
-            throw Keychain.Error.osStatus(status)
+            throw VaultError.osStatus(status)
         }
         var query: [AnyHashable:Any] = [
             kSecClass as String: kSecClassGenericPassword,
@@ -169,7 +166,7 @@ extension Keychain.Password {
         }
         status = SecItemUpdate(query as CFDictionary, toUpdate as CFDictionary)
         if !status.isSuccess {
-            throw Keychain.Error.osStatus(status)
+            throw VaultError.osStatus(status)
         }
     }
 
@@ -177,8 +174,8 @@ extension Keychain.Password {
         try Keychain.Password.delete(account: account, service: service)
     }
 
-    public static func load(account: String, service: String? = nil, authentication: Keychain.Authentication? = nil) throws -> Keychain.Password {
-        let attributes = try load(account: account, service: service, includeData: true, authentication: authentication)
+    public static func load(account: String, service: String? = nil, using context: LAContext? = nil) throws -> Keychain.Password {
+        let attributes = try load(account: account, service: service, includeData: true, using: context)
         return Keychain.Password(
             data: attributes[kSecValueData as String] as! Data,
             account: attributes[kSecAttrAccount as String] as! String,
@@ -190,7 +187,7 @@ extension Keychain.Password {
         )
     }
 
-    public static func load(account: String, service: String? = nil, includeData returnData: Bool, authentication: Keychain.Authentication? = nil) throws -> [AnyHashable:Any] {
+    public static func load(account: String, service: String? = nil, includeData returnData: Bool, using context: LAContext? = nil) throws -> [AnyHashable:Any] {
         var query: [AnyHashable:Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: account,
@@ -201,17 +198,13 @@ extension Keychain.Password {
         if let service = service {
             query[kSecAttrService as String] = service
         }
-        if let authentication = authentication {
-            query[kSecUseAuthenticationContext as String] = authentication.context
-            query[kSecUseAuthenticationUI as String] = authentication.ui.value
-            if let message = authentication.promptMessage {
-                query[kSecUseOperationPrompt as String] = message
-            }
+        if let context = context {
+            query[kSecUseAuthenticationContext as String] = context
         }
         var result: CFTypeRef?
         let status = SecItemCopyMatching(query as CFDictionary, &result)
         guard status.isSuccess, let attributes = result as? [AnyHashable:Any] else {
-            throw Keychain.Error.osStatus(status)
+            throw VaultError.osStatus(status)
         }
 
         return attributes
@@ -227,34 +220,45 @@ extension Keychain.Password {
         }
         let status = SecItemDelete(query as CFDictionary)
         guard status.isSuccess else {
-            throw Keychain.Error.osStatus(status)
+            throw VaultError.osStatus(status)
         }
     }
 }
 
 extension Keychain.PrivateKey {
 
-    public static func load(tag: Data, authentication: Keychain.Authentication? = nil) throws -> Keychain.PrivateKey {
+    public static func load(tag: Data, using context: LAContext? = nil) throws -> Keychain.PrivateKey {
         var query: [AnyHashable:Any] = [
             kSecClass as String: kSecClassKey,
             kSecAttrApplicationTag as String: tag,
             kSecAttrKeyType as String: kSecAttrKeyTypeECSECPrimeRandom,
             kSecReturnRef as String: true
         ]
-        if let authentication = authentication {
-            query[kSecUseAuthenticationContext as String] = authentication.context
-            query[kSecUseAuthenticationUI as String] = authentication.ui.value
-            if let message = authentication.promptMessage {
-                query[kSecUseOperationPrompt as String] = message
-            }
+        if let context = context {
+            query[kSecUseAuthenticationContext as String] = context
         }
         var result: CFTypeRef?
         let status = SecItemCopyMatching(query as CFDictionary, &result)
         guard status.isSuccess, let key = result else {
-            throw Keychain.Error.osStatus(status)
+            throw VaultError.osStatus(status)
         }
 
         return Keychain.PrivateKey(key as! SecKey)
+    }
+
+    public static func contains(tag: Data) -> Bool {
+        let context = LAContext()
+        context.interactionNotAllowed = false
+        let query: [AnyHashable:Any] = [
+            kSecClass as String: kSecClassKey,
+            kSecAttrApplicationTag as String: tag,
+            kSecAttrKeyType as String: kSecAttrKeyTypeECSECPrimeRandom,
+            kSecReturnAttributes as String: true,
+            kSecUseAuthenticationContext as String: context
+        ]
+        var result: CFTypeRef?
+        let status = SecItemCopyMatching(query as CFDictionary, &result)
+        return status.isSuccess || status == errSecInteractionNotAllowed
     }
 
     public static func delete(tag: Data) -> Bool {
@@ -269,7 +273,7 @@ extension Keychain.PrivateKey {
 
     private func copyPublicKey() throws -> SecKey {
         guard let result = SecKeyCopyPublicKey(key) else {
-            throw Keychain.Error.publicKeyCopyFailure
+            throw VaultError.publicKeyCopyFailure
         }
         return result
     }
@@ -278,7 +282,7 @@ extension Keychain.PrivateKey {
         let publicKey = try copyPublicKey()
         var error: Unmanaged<CFError>? = nil
         guard let encryptedData = SecKeyCreateEncryptedData(publicKey, .eciesEncryptionStandardX963SHA256AESGCM, data as CFData, &error) else {
-            throw Keychain.Error(error?.autorelease().takeUnretainedValue())
+            throw VaultError.encryptionFailure
         }
         return encryptedData as Data
     }
@@ -286,7 +290,7 @@ extension Keychain.PrivateKey {
     public func decrypt(data: Data) throws -> Data {
         var error: Unmanaged<CFError>? = nil
         guard let decryptedData = SecKeyCreateDecryptedData(key, .eciesEncryptionStandardX963SHA256AESGCM, data as CFData, &error) else {
-            throw Keychain.Error(error?.autorelease().takeUnretainedValue())
+            throw VaultError.decryptionFailure
         }
         return decryptedData as Data
     }
