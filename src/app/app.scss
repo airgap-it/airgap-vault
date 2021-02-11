@@ -81,6 +81,15 @@ airgap-tab-accounts {
   }
 }
 
+pre {
+  background-color: var(--ion-color-light);
+  color: var(--ion-color-dark);
+  padding: 8px;
+  white-space: pre-wrap; /* css-3 */
+  white-space: -moz-pre-wrap;
+  word-wrap: break-word;
+}
+
 .transparent {
   --background: none transparent !important;
 }

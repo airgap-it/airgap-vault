@@ -6,7 +6,9 @@ import {
   MessageSignResponse,
   ICoinProtocol,
   IACMessageType,
-  ProtocolSymbols
+  ProtocolSymbols,
+  MainProtocolSymbols,
+  TezosCryptoClient
 } from '@airgap/coinlib-core'
 import { InteractionService, InteractionOperationType } from 'src/app/services/interaction/interaction.service'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
@@ -27,6 +29,7 @@ export class MessageSignRequestComponent {
   public messageDefinitionObject: IACMessageDefinitionObject
 
   public message: string
+  public blake2bHash: string | undefined
 
   @Input()
   public syncProtocolString: string
@@ -39,7 +42,15 @@ export class MessageSignRequestComponent {
     private readonly serializerService: SerializerService,
     private readonly alertCtrl: AlertController,
     private readonly modalController: ModalController
-  ) {}
+  ) { }
+
+  public async ngOnInit() {
+    this.message = (this.messageDefinitionObject.payload as MessageSignRequest).message
+    if (this.messageDefinitionObject.protocol === MainProtocolSymbols.XTZ) {
+      const cryptoClient = new TezosCryptoClient()
+      this.blake2bHash = await cryptoClient.blake2bLedgerHash(this.message)
+    }
+  }
 
   public async signAndGoToNextPage(): Promise<void> {
     try {
@@ -48,8 +59,13 @@ export class MessageSignRequestComponent {
         this.navigationService.route('')
         return
       }
-      this.message = (this.messageDefinitionObject.payload as MessageSignRequest).message
-      const secret: Secret = this.secretsService.getActiveSecret()
+      let secret: Secret
+      const pubKey = (this.messageDefinitionObject.payload as MessageSignRequest).publicKey
+      if (pubKey !== undefined && pubKey.length > 0) {
+        secret = this.secretsService.findByPublicKey(pubKey)
+      } else {
+        secret = this.secretsService.getActiveSecret()
+      }
 
       // we should handle this case here as well
       if (!secret) {
