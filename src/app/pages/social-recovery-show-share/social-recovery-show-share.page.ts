@@ -13,16 +13,16 @@ import { NavigationService } from '../../services/navigation/navigation.service'
 export class SocialRecoveryShowSharePage {
   public secret: Secret
   public shares: string[]
-  public currentShare: number
+  public currentShare: number = 0
 
   constructor(private readonly deviceService: DeviceService, private readonly navigationService: NavigationService) {
     this.shares = this.navigationService.getState().shares
     this.secret = this.navigationService.getState().secret
-    this.currentShare = this.navigationService.getState().currentShare
   }
 
   public ionViewDidEnter(): void {
     this.deviceService.enableScreenshotProtection({ routeBack: 'social-recovery-setup' })
+    this.currentShare = this.navigationService.getState().currentShare
   }
 
   public ionViewWillLeave(): void {

@@ -1,11 +1,9 @@
-<ion-header no-border>
+<ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>
-      {{ 'social-recovery-setup.title' | translate }}
-    </ion-title>
+    <ion-title>{{ 'social-recovery-setup.title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -40,8 +38,6 @@
   </ion-row>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-button color="primary" shape="round" (click)="next()">
-      {{ 'social-recovery-setup.start_label' | translate }}
-    </ion-button>
+    <ion-button color="primary" shape="round" (click)="next()">{{ 'social-recovery-setup.start_label' | translate }}</ion-button>
   </ion-fab>
 </ion-content>

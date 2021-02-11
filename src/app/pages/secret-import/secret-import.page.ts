@@ -29,10 +29,9 @@ export class SecretImportPage {
     }
 
     this.secretImportForm = this.formBuilder.group(formGroup)
-    this.secretImportForm.valueChanges.subscribe(formGroup => {
+    this.secretImportForm.valueChanges.subscribe((formGroup) => {
       this.mnemonic = formGroup.mnemonic
     })
-
   }
 
   public ionViewDidEnter(): void {

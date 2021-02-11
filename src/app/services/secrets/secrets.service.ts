@@ -1,9 +1,9 @@
 import { ProtocolService } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
 import { AlertController, LoadingController } from '@ionic/angular'
-import { AirGapWallet, ICoinProtocol } from 'airgap-coin-lib'
-import { ProtocolSymbols } from 'airgap-coin-lib/dist/utils/ProtocolSymbols'
-import { SerializedAirGapWallet } from 'airgap-coin-lib/dist/wallet/AirGapWallet'
+import { AirGapWallet, ICoinProtocol } from '@airgap/coinlib-core'
+import { ProtocolSymbols } from '@airgap/coinlib-core/utils/ProtocolSymbols'
+import { SerializedAirGapWallet } from '@airgap/coinlib-core/wallet/AirGapWallet'
 import * as bip39 from 'bip39'
 import { Observable, ReplaySubject } from 'rxjs'
 

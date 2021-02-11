@@ -1,11 +1,9 @@
-<ion-header no-border>
+<ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabs/tab-accounts"></ion-back-button>
     </ion-buttons>
-    <ion-title>
-      {{ 'wallet-select-coins.title' | translate }}
-    </ion-title>
+    <ion-title>{{ 'wallet-select-coins.title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -32,7 +30,7 @@
     </ion-radio-group>
   </ion-list>
 
-  <ion-list lines="none" class="ion-padding-top">
+  <ion-list lines="none" class="ion-padding-vertical ion-margin-bottom">
     <ion-item class="ion-no-padding">
       <ion-label class="font--weight__med">{{ 'wallet-select-coins.advanced_label' | translate }}</ion-label>
       <ion-toggle color="primary" slot="end" [(ngModel)]="isAdvancedMode"></ion-toggle>
@@ -56,7 +54,7 @@
             placeholder="BIP-39 Passphrase"
           ></ion-input>
         </ion-item>
-        <ion-item>
+        <ion-item class="ion-no-padding ion-margin-bottom">
           Reveal Passphrase
           <ion-checkbox [(ngModel)]="revealBip39Passphrase" slot="end"></ion-checkbox>
         </ion-item>

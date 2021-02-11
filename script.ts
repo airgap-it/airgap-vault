@@ -1,5 +1,5 @@
-import { TezosBTC } from 'airgap-coin-lib/dist/protocols/tezos/fa/TezosBTC'
-import { UnsignedTezosTransaction } from 'airgap-coin-lib/dist/serializer/v1/unsigned-transactions/tezos-transactions.serializer'
+import { TezosBTC } from '@airgap/coinlib-core'
+import { UnsignedTezosTransaction } from '@airgap/coinlib-core'
 const protocol = new TezosBTC()
 const unsignedTx: UnsignedTezosTransaction = {
   transaction: {
@@ -13,7 +13,7 @@ console.log('THIS IS THE PROTOCOL', protocol)
 
 protocol
   .getTransactionDetails(unsignedTx)
-  .then(airGapTxs => {
+  .then((airGapTxs) => {
     console.log('airGapTxs', airGapTxs)
   })
-  .catch(err => console.error(err))
+  .catch((err) => console.error(err))
