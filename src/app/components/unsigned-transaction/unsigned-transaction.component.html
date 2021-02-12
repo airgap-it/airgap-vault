@@ -2,14 +2,14 @@
   <ion-row class="ion-padding-bottom ion-text-center">
     <ion-col size="4" class="content--align__center-center">
       <h5>
-        {{ aggregatedInfo.totalAmount.toFixed() | amountConverter: { protocol: airGapTxs[0].protocolIdentifier, maxDigits: undefined } }}
+        {{ aggregatedInfo.totalAmount.toFixed() | amountConverter: { protocol: airGapTxs[0].protocolIdentifier, maxDigits: undefined } | async }}
       </h5>
     </ion-col>
     <ion-col size="4" class="content--align__center-center">
       <h5>{{ aggregatedInfo.numberOfTxs }}</h5>
     </ion-col>
     <ion-col size="4" class="content--align__center-center">
-      <h5>{{ aggregatedInfo.totalFees.toFixed() | feeConverter: { protocol: airGapTxs[0].protocolIdentifier } }}</h5>
+      <h5>{{ aggregatedInfo.totalFees.toFixed() | feeConverter: { protocol: airGapTxs[0].protocolIdentifier } | async }}</h5>
     </ion-col>
     <ion-col size="4">
       <small>Amount</small>
