@@ -45,6 +45,7 @@ export class MessageSignRequestComponent {
 
   public async ngOnInit() {
     this.message = (this.messageDefinitionObject.payload as MessageSignRequest).message
+
     if (this.messageDefinitionObject.protocol === MainProtocolSymbols.XTZ) {
       const cryptoClient = new TezosCryptoClient()
       this.blake2bHash = await cryptoClient.blake2bLedgerHash(this.message)
@@ -53,17 +54,11 @@ export class MessageSignRequestComponent {
 
   public async signAndGoToNextPage(): Promise<void> {
     try {
-      const account: AirGapWallet = await this.getSigningAccount()
+      const { account, secret } = await this.getSigningData()
 
       if (!account) {
         this.navigationService.route('')
         return
-      }
-      const secret: Secret = this.secretsService.findByPublicKey(account.publicKey)
-      // we should handle this case here as well
-      if (!secret) {
-        console.warn('no secret found for this public key')
-        throw new Error('no secret found for this public key')
       }
 
       const entropy = await this.secretsService.retrieveEntropyForSecret(secret)
@@ -104,10 +99,27 @@ export class MessageSignRequestComponent {
     }
   }
 
-  public async getSigningAccount(): Promise<AirGapWallet> {
-    const pubKey = (this.messageDefinitionObject.payload as MessageSignRequest).publicKey
+  public async getSigningData(): Promise<{ account: AirGapWallet; secret: Secret }> {
+    let pubKey = (this.messageDefinitionObject.payload as MessageSignRequest).publicKey
     let account: AirGapWallet
+    let secret: Secret
     if (!pubKey) {
+      account = await this.selectSigningAccount()
+      secret = this.secretsService.findByPublicKey(account.publicKey)
+    } else {
+      secret = this.secretsService.findByPublicKey(pubKey)
+      if (!secret) {
+        console.warn('no secret found for this public key')
+        throw new Error('no secret found for this public key')
+      }
+      account = secret.wallets.find((wallet) => wallet.publicKey === pubKey)
+    }
+
+    return { account: account, secret: secret }
+  }
+
+  public async selectSigningAccount(): Promise<AirGapWallet> {
+    return new Promise(async (resolve) => {
       const modal: HTMLIonModalElement = await this.modalController.create({
         component: SelectAccountPage,
         componentProps: { type: 'message-signing' }
@@ -116,19 +128,11 @@ export class MessageSignRequestComponent {
       await modal
         .onDidDismiss()
         .then((modalData) => {
-          if (!modalData.data) {
-            return
-          }
-          account = modalData.data
+          resolve(modalData.data as AirGapWallet)
         })
         .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
-    } else {
-      const secret = this.secretsService.findByPublicKey(pubKey)
-      account = secret.wallets.find((wallet) => wallet.publicKey === pubKey)
-    }
-    return account
+    })
   }
-
   public async showAlert(title: string, message: string): Promise<void> {
     const alert: HTMLIonAlertElement = await this.alertCtrl.create({
       header: title,
