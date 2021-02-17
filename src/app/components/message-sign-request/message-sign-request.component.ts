@@ -16,7 +16,7 @@ import { handleErrorLocal, ErrorCategory } from 'src/app/services/error-handler/
 import * as bip39 from 'bip39'
 import { Secret } from 'src/app/models/secret'
 import { AlertController, ModalController } from '@ionic/angular'
-import { ProtocolService, SerializerService } from '@airgap/angular-core'
+import { SerializerService } from '@airgap/angular-core'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 @Component({
