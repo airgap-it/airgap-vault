@@ -385,7 +385,7 @@
   "select-account": {
     "message-signing": {
       "title": "Select Account",
-      "heading": "Please select an account to scan this message with",
+      "heading": "Please select an account to sign this message with",
       "placeholder": "Search by identifier"
     }
   },
