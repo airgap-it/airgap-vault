@@ -4,6 +4,7 @@ import { Component } from '@angular/core'
 import { AirGapWallet } from '@airgap/coinlib-core'
 import { NavParams, ModalController } from '@ionic/angular'
 import { Secret } from 'src/app/models/secret'
+import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 
 @Component({
   selector: 'airgap-select-account',
@@ -32,15 +33,18 @@ export class SelectAccountPage {
     this.placeholder = this.translateService.instant(`select-account.${type}.placeholder`)
 
     this.secretsService.getSecretsObservable().subscribe((secrets: Secret[]) => {
-      this.wallets = [].concat.apply([], secrets.map((secret) => secret.wallets) as any)
+      this.wallets = ([] as AirGapWallet[]).concat.apply(
+        [],
+        secrets.map((secret) => secret.wallets as AirGapWallet[])
+      )
     })
   }
 
   public async setWallet(wallet: AirGapWallet) {
-    this.modalController.dismiss(wallet.protocol.identifier).catch((err) => console.error(err))
+    this.modalController.dismiss(wallet).catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 
   public async dismiss() {
-    this.modalController.dismiss().catch((err) => console.error(err))
+    this.modalController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 }

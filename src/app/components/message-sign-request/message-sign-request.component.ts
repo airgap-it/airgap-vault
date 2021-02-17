@@ -4,11 +4,11 @@ import {
   IACMessageDefinitionObject,
   MessageSignRequest,
   MessageSignResponse,
-  ICoinProtocol,
   IACMessageType,
   ProtocolSymbols,
   MainProtocolSymbols,
-  TezosCryptoClient
+  TezosCryptoClient,
+  AirGapWallet
 } from '@airgap/coinlib-core'
 import { InteractionService, InteractionOperationType } from 'src/app/services/interaction/interaction.service'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
@@ -37,12 +37,11 @@ export class MessageSignRequestComponent {
   constructor(
     private readonly interactionService: InteractionService,
     private readonly navigationService: NavigationService,
-    private readonly protocolService: ProtocolService,
     private readonly secretsService: SecretsService,
     private readonly serializerService: SerializerService,
     private readonly alertCtrl: AlertController,
     private readonly modalController: ModalController
-  ) { }
+  ) {}
 
   public async ngOnInit() {
     this.message = (this.messageDefinitionObject.payload as MessageSignRequest).message
@@ -54,19 +53,13 @@ export class MessageSignRequestComponent {
 
   public async signAndGoToNextPage(): Promise<void> {
     try {
-      const protocol = await this.getSigningProtocol()
-      if (!protocol) {
+      const account: AirGapWallet = await this.getSigningAccount()
+
+      if (!account) {
         this.navigationService.route('')
         return
       }
-      let secret: Secret
-      const pubKey = (this.messageDefinitionObject.payload as MessageSignRequest).publicKey
-      if (pubKey !== undefined && pubKey.length > 0) {
-        secret = this.secretsService.findByPublicKey(pubKey)
-      } else {
-        secret = this.secretsService.getActiveSecret()
-      }
-
+      const secret: Secret = this.secretsService.findByPublicKey(account.publicKey)
       // we should handle this case here as well
       if (!secret) {
         console.warn('no secret found for this public key')
@@ -76,9 +69,9 @@ export class MessageSignRequestComponent {
       const entropy = await this.secretsService.retrieveEntropyForSecret(secret)
 
       const mnemonic: string = bip39.entropyToMnemonic(entropy)
-      const privateKey: Buffer = await protocol.getPrivateKeyFromMnemonic(mnemonic, protocol.standardDerivationPath) // TODO
+      const privateKey: Buffer = await account.protocol.getPrivateKeyFromMnemonic(mnemonic, account.derivationPath) // TODO
 
-      const signature = await protocol.signMessage(this.message, { privateKey })
+      const signature = await account.protocol.signMessage(this.message, { privateKey })
       const messageSignRequest = this.messageDefinitionObject.payload as MessageSignRequest
       const messageSignResponse: MessageSignResponse = {
         message: messageSignRequest.message,
@@ -89,7 +82,7 @@ export class MessageSignRequestComponent {
       const messageDefinitionObject = {
         id: this.messageDefinitionObject.id,
         type: IACMessageType.MessageSignResponse,
-        protocol: (await this.getSigningProtocol()).identifier as ProtocolSymbols,
+        protocol: account.protocol.identifier as ProtocolSymbols,
         payload: messageSignResponse
       }
 
@@ -111,9 +104,10 @@ export class MessageSignRequestComponent {
     }
   }
 
-  public async getSigningProtocol(): Promise<ICoinProtocol> {
-    let protocol
-    if (!this.messageDefinitionObject.protocol || this.messageDefinitionObject.protocol.length === 0) {
+  public async getSigningAccount(): Promise<AirGapWallet> {
+    const pubKey = (this.messageDefinitionObject.payload as MessageSignRequest).publicKey
+    let account: AirGapWallet
+    if (!pubKey) {
       const modal: HTMLIonModalElement = await this.modalController.create({
         component: SelectAccountPage,
         componentProps: { type: 'message-signing' }
@@ -122,18 +116,17 @@ export class MessageSignRequestComponent {
       await modal
         .onDidDismiss()
         .then((modalData) => {
-          console.log()
           if (!modalData.data) {
             return
           }
-          const identifier = modalData.data
-          protocol = this.protocolService.getProtocol(identifier)
+          account = modalData.data
         })
         .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
     } else {
-      protocol = this.protocolService.getProtocol(this.messageDefinitionObject.protocol)
+      const secret = this.secretsService.findByPublicKey(pubKey)
+      account = secret.wallets.find((wallet) => wallet.publicKey === pubKey)
     }
-    return protocol
+    return account
   }
 
   public async showAlert(title: string, message: string): Promise<void> {
