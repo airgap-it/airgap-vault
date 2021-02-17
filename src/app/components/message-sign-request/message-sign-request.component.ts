@@ -101,13 +101,14 @@ export class MessageSignRequestComponent {
 
   public async getSigningData(): Promise<{ account: AirGapWallet; secret: Secret }> {
     let pubKey = (this.messageDefinitionObject.payload as MessageSignRequest).publicKey
+    let protocol = this.messageDefinitionObject.protocol
     let account: AirGapWallet
     let secret: Secret
-    if (!pubKey) {
+    if (!pubKey || !protocol) {
       account = await this.selectSigningAccount()
-      secret = this.secretsService.findByPublicKey(account.publicKey)
+      secret = this.secretsService.findByPublicKeyAndProtocolIdentifier(account.publicKey, account.protocol.identifier)
     } else {
-      secret = this.secretsService.findByPublicKey(pubKey)
+      secret = this.secretsService.findByPublicKeyAndProtocolIdentifier(pubKey, protocol)
       if (!secret) {
         console.warn('no secret found for this public key')
         throw new Error('no secret found for this public key')

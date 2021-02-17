@@ -40,10 +40,10 @@ export class UnsignedTransactionComponent implements OnChanges {
 
   public aggregatedInfo:
     | {
-      numberOfTxs: number
-      totalAmount: BigNumber
-      totalFees: BigNumber
-    }
+        numberOfTxs: number
+        totalAmount: BigNumber
+        totalFees: BigNumber
+      }
     | undefined
 
   public rawTxData: string
@@ -55,7 +55,7 @@ export class UnsignedTransactionComponent implements OnChanges {
     private readonly secretsService: SecretsService,
     private readonly interactionService: InteractionService,
     private readonly tokenService: TokenService
-  ) { }
+  ) {}
 
   public async ionViewWillEnter(): Promise<void> {
     try {
@@ -176,7 +176,10 @@ export class UnsignedTransactionComponent implements OnChanges {
   }
 
   public async signTransaction(transaction: UnsignedTransaction, wallet: AirGapWallet): Promise<string> {
-    const secret: Secret | undefined = this.secretsService.findByPublicKey(wallet.publicKey)
+    const secret: Secret | undefined = this.secretsService.findByPublicKeyAndProtocolIdentifier(
+      wallet.publicKey,
+      wallet.protocol.identifier
+    )
 
     // we should handle this case here as well
     if (!secret) {

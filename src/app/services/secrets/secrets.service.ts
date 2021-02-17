@@ -156,9 +156,11 @@ export class SecretsService {
       })
   }
 
-  public findByPublicKey(pubKey: string): Secret | undefined {
+  public findByPublicKeyAndProtocolIdentifier(pubKey: string, protocolIdentifier: ProtocolSymbols): Secret | undefined {
     for (const secret of this.secretsList) {
-      const foundWallet: AirGapWallet | undefined = secret.wallets.find((wallet: AirGapWallet) => wallet.publicKey === pubKey)
+      const foundWallet: AirGapWallet | undefined = secret.wallets.find(
+        (wallet: AirGapWallet) => wallet.publicKey === pubKey && wallet.protocol.identifier === protocolIdentifier
+      )
       if (foundWallet !== undefined) {
         return secret
       }
@@ -177,7 +179,7 @@ export class SecretsService {
   }
 
   public async removeWallet(wallet: AirGapWallet): Promise<void> {
-    const secret: Secret | undefined = this.findByPublicKey(wallet.publicKey)
+    const secret: Secret | undefined = this.findByPublicKeyAndProtocolIdentifier(wallet.publicKey, wallet.protocol.identifier)
     if (!secret) {
       return undefined
     }
@@ -194,7 +196,7 @@ export class SecretsService {
   }
 
   public findWalletByPublicKeyAndProtocolIdentifier(pubKey: string, protocolIdentifier: ProtocolSymbols): AirGapWallet | undefined {
-    const secret: Secret | undefined = this.findByPublicKey(pubKey)
+    const secret: Secret | undefined = this.findByPublicKeyAndProtocolIdentifier(pubKey, protocolIdentifier)
     if (!secret) {
       return undefined
     }
@@ -207,7 +209,7 @@ export class SecretsService {
   }
 
   public findBaseWalletByPublicKeyAndProtocolIdentifier(pubKey: string, protocolIdentifier: ProtocolSymbols): AirGapWallet | undefined {
-    const secret: Secret | undefined = this.findByPublicKey(pubKey)
+    const secret: Secret | undefined = this.findByPublicKeyAndProtocolIdentifier(pubKey, protocolIdentifier)
     if (!secret) {
       return undefined
     }
