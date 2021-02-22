@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { BIP85 } from 'bip85'
+import { BIP85 } from 'src/app/models/BIP85'
 import { Secret } from 'src/app/models/secret'
 import { DeviceService } from 'src/app/services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'

@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core'
-import { BIP85 } from 'bip85'
+import { BIP85 } from 'src/app/models/BIP85'
 import { VerifyKeyComponent } from 'src/app/components/verify-key/verify-key.component'
 import { Secret } from 'src/app/models/secret'
 import { DeviceService } from 'src/app/services/device/device.service'
@@ -62,8 +62,6 @@ export class Bip85ValidatePage {
 
     try {
       const secretHex = await secureStorage.getItem(secret.id).then((result) => result.value)
-
-      console.log('secretHex', secretHex, length, index)
 
       const masterSeed = BIP85.fromEntropy(secretHex, this.bip39Passphrase)
 
