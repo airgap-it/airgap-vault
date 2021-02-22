@@ -65,6 +65,14 @@
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #d7d7d7;
   --ion-color-light-tint: #f5f5f5;
+
+  /** gray light **/
+  --ion-color-grayLight: #f4f4f4;
+  --ion-color-grayLight-rgb: 244, 244, 244;
+  --ion-color-grayLight-contrast: #000000;
+  --ion-color-grayLight-contrast-rgb: 255, 255, 255;
+  --ion-color-grayLight-shade: #d7d7d7;
+  --ion-color-grayLight-tint: #f5f5f5;
 }
 /* secondary background color whith corresponding colors */
 airgap-account-add,
@@ -82,7 +90,7 @@ airgap-introduction,
 airgap-social-recovery-import,
 airgap-interaction-selection,
 airgap-interaction-selection-settings,
-airgap-transaction-detail,
+airgap-deserialized-detail,
 airgap-transaction-signed,
 airgap-secret-generate-onboarding,
 airgap-social-recovery-setup,
@@ -93,7 +101,8 @@ airgap-secret-show,
 airgap-social-recovery-show-share,
 airgap-social-recovery-validate-share,
 airgap-current-secret,
-airgap-local-authentication-onboarding {
+airgap-local-authentication-onboarding,
+airgap-deserialized-detail {
   --ion-background-color: var(--ion-color-secondary);
   ion-toolbar {
     --background: var(--ion-color-secondary);

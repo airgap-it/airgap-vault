@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { AirGapWallet } from 'airgap-coin-lib'
+import { AirGapWallet } from '@airgap/coinlib-core'
 import { BehaviorSubject, Observable } from 'rxjs'
 
 import { Secret } from '../../models/secret'
@@ -24,7 +24,11 @@ export class TabAccountsPage implements OnInit {
 
   public readonly isAndroid: boolean
 
-  constructor(private readonly platform: Platform, private readonly secretsService: SecretsService, private readonly navigationService: NavigationService) {
+  constructor(
+    private readonly platform: Platform,
+    private readonly secretsService: SecretsService,
+    private readonly navigationService: NavigationService
+  ) {
     this.secrets = this.secretsService.getSecretsObservable()
     this.isAndroid = this.platform.is('android')
   }
@@ -63,12 +67,11 @@ export class TabAccountsPage implements OnInit {
   }
 
   public navigateToRecoverySettings() {
-    this.navigationService.routeWithState(
-      '/secret-edit', 
-      { 
+    this.navigationService
+      .routeWithState('/secret-edit', {
         secret: this.activeSecret,
         action: SecretEditAction.SET_RECOVERY_KEY
-      }
-    ).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+      })
+      .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

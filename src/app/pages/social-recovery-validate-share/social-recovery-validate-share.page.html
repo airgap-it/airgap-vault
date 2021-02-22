@@ -1,8 +1,6 @@
-<ion-header no-border>
+<ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-title>
-      {{ 'social-recovery-validate-share.title' | translate }}
-    </ion-title>
+    <ion-title>{{ 'social-recovery-validate-share.title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -17,7 +15,7 @@
   ></airgap-verify-key>
 </ion-content>
 
-<ion-footer no-border color="primary">
+<ion-footer class="ion-no-border" color="primary">
   <airgap-progress-footer
     [rightEnabled]="validated"
     [progress]="currentShare * 2 + 1"

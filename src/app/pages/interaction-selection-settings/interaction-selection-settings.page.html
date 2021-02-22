@@ -1,19 +1,21 @@
-<ion-header no-border>
+<ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>
-      {{ 'interaction-selection-settings.title' | translate }}
-    </ion-title>
+    <ion-title>{{ 'interaction-selection-settings.title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <h3 *ngIf="selectedSetting === interactionSetting.SAME_DEVICE"
-    [innerHTML]="'interaction-selection-settings.same-device_heading' | translate"></h3>
-  <h3 *ngIf="selectedSetting === interactionSetting.OFFLINE_DEVICE"
-    [innerHTML]="'interaction-selection-settings.offline-device_heading' | translate"></h3>
+  <h3
+    *ngIf="selectedSetting === interactionSetting.SAME_DEVICE"
+    [innerHTML]="'interaction-selection-settings.same-device_heading' | translate"
+  ></h3>
+  <h3
+    *ngIf="selectedSetting === interactionSetting.OFFLINE_DEVICE"
+    [innerHTML]="'interaction-selection-settings.offline-device_heading' | translate"
+  ></h3>
 
   <p>{{ 'interaction-selection-settings.text' | translate }}</p>
 
