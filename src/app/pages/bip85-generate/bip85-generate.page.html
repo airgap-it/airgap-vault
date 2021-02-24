@@ -1,5 +1,5 @@
-<ion-header no-border>
-  <ion-toolbar>
+<ion-header class="ion-no-border">
+  <ion-toolbar color="secondary">
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
@@ -7,10 +7,10 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <p class="ion-padding-bottom">{{ 'bip85-generate.text' | translate }}</p>
+<ion-content>
+  <p class="ion-padding-bottom ion-padding-horizontal">{{ 'bip85-generate.text' | translate }}</p>
 
-  <ion-list>
+  <ion-list lines="none">
     <ion-item>
       <ion-label>{{ 'bip85-generate.mnemonic-length' | translate }}</ion-label>
       <ion-select [(ngModel)]="mnemonicLength">
@@ -20,7 +20,7 @@
       </ion-select>
     </ion-item>
 
-    <ion-item>
+    <ion-item lines="none">
       <ion-label>{{ 'bip85-generate.index' | translate }}</ion-label>
       <ion-select [(ngModel)]="index">
         <ion-select-option value="0">0</ion-select-option>
@@ -37,13 +37,13 @@
     </ion-item>
   </ion-list>
   <ion-list>
-    <ion-item>
+    <ion-item lines="none">
       <ion-label>{{ 'bip85-generate.advanced_label' | translate }}</ion-label>
       <ion-toggle color="primary" slot="end" [(ngModel)]="isAdvancedMode"></ion-toggle>
     </ion-item>
 
     <ng-container *ngIf="isAdvancedMode">
-      <ion-item lines="full">
+      <ion-item lines="none">
         <ion-label position="stacked" color="primary">{{ 'bip85-generate.bip39-passphrase' | translate }}</ion-label>
         <ion-input
           [type]="revealBip39Passphrase ? 'text' : 'password'"
@@ -51,7 +51,7 @@
           placeholder="{{'bip85-generate.bip39-passphrase' | translate}}"
         ></ion-input>
       </ion-item>
-      <ion-item>
+      <ion-item lines="none">
         {{ 'bip85-generate.bip39-passphrase-reveal' | translate }}
         <ion-checkbox [(ngModel)]="revealBip39Passphrase" slot="end"></ion-checkbox>
       </ion-item>

@@ -377,7 +377,7 @@
   },
   
   "bip85-generate": {
-    "title": "BIP85 Generate",
+    "title": "Generate BIP85",
     "text": "BIP85 allows you to securely derive a new mnemonic out of your main mnemonic. As long as you have access to your main mnemonic, you will always be able to re-generate your child mnemonics.",
     "mnemonic-length": "Mnemonic Length",
     "index": "Index",
@@ -388,7 +388,7 @@
   },
 
   "bip85-show": {
-    "title": "BIP85 Show",
+    "title": "Show BIP85 Details",
     "text": "Write down all the words on a piece of paper. You will have to verify the mnemonic on the next page.",
     "mnemonic-length": "Mnemonic Length",
     "index": "Index",
@@ -396,7 +396,7 @@
   },
 
   "bip85-validate": {
-    "title": "BIP85 Verify",
+    "title": "Verify BIP85",
     "text": "Match the order of your recovery phrase by selecting the correct words."
   },
 

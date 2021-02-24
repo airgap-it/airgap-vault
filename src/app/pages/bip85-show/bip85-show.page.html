@@ -1,4 +1,4 @@
-<ion-header no-border>
+<ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
@@ -9,10 +9,10 @@
 
 <ion-content class="ion-padding">
   <p class="ion-padding-bottom">{{ 'bip85-show.text' | translate }}</p>
-
-  {{ 'bip85-show.mnemonic-length' | translate }}: {{mnemonicLength}}
-  <br />
-  {{ 'bip85-show.index' | translate }}: {{index}}
+  <p _ngcontent-luc-c184="" class="font--weight__med">{{ 'bip85-show.mnemonic-length' | translate }}</p>
+  <h3>{{mnemonicLength}}</h3>
+  <p _ngcontent-luc-c184="" class="font--weight__med">{{ 'bip85-show.index' | translate }}</p>
+  <h3>{{index}}</h3>
   <h6 class="typography--mono">{{ childMnemonic }}</h6>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
