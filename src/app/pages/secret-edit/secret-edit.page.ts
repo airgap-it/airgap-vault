@@ -41,6 +41,7 @@ export class SecretEditPage {
     if (this.navigationService.getState()) {
       this.isGenerating = this.navigationService.getState().isGenerating
       this.secret = this.navigationService.getState().secret
+
       this.interactionSetting = this.secret.interactionSetting !== InteractionSetting.UNDETERMINED
 
       this.isAndroid = this.platform.is('android')
@@ -51,7 +52,7 @@ export class SecretEditPage {
 
   public async confirm(): Promise<void> {
     try {
-      await this.secretsService.addOrUpdateSecret(this.secret).catch()
+      await this.secretsService.addOrUpdateSecret(this.secret)
     } catch (error) {
       handleErrorLocal(ErrorCategory.SECURE_STORAGE)(error)
 
@@ -92,6 +93,40 @@ export class SecretEditPage {
     } catch (e) {
       this.showToast('secret-edit.secret-recovery-key.reset-error')
     }
+  }
+
+  public async showMnemonic() {
+    const alert = await this.alertCtrl.create({
+      header: this.translateService.instant('secret-edit.show-mnemonic.alert.title'),
+      message: this.translateService.instant('secret-edit.show-mnemonic.alert.message'),
+      backdropDismiss: false,
+      inputs: [
+        {
+          name: 'understood',
+          type: 'checkbox',
+          label: this.translateService.instant('secret-edit.show-mnemonic.alert.understood'),
+          value: 'understood',
+          checked: false
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Ok',
+          handler: async (result: string[]) => {
+            if (result.includes('understood')) {
+              const entropy = await this.secretsService.retrieveEntropyForSecret(this.secret)
+              const secret = new Secret(entropy)
+              this.navigationService.routeWithState('secret-show', { secret: secret }).catch((err) => console.error(err))
+            }
+          }
+        }
+      ]
+    })
+    alert.present()
   }
 
   public async presentEditPopover(event: Event): Promise<void> {
