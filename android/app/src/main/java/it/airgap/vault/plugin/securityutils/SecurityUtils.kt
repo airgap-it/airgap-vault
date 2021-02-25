@@ -14,9 +14,11 @@ import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
 import com.scottyab.rootbeer.RootBeer
 import it.airgap.vault.BuildConfig
+import it.airgap.vault.plugin.PluginError
 import it.airgap.vault.plugin.securityutils.SecurityUtils.Companion.REQUEST_CODE_CONFIRM_DEVICE_CREDENTIALS
 import it.airgap.vault.plugin.securityutils.storage.Storage
 import it.airgap.vault.util.assertReceived
+import it.airgap.vault.util.freeCallIfSaved
 import it.airgap.vault.util.logDebug
 import it.airgap.vault.util.resolveWithData
 import java.util.*
@@ -52,6 +54,10 @@ class SecurityUtils : Plugin() {
             return !isAuthenticated
         }
 
+    private var authTries: Int = 0
+        @Synchronized get
+        @Synchronized set
+
     private val integrityAssessment: Boolean
         get() {
             val isRooted = RootBeer(context).isRootedWithoutBusyBoxCheck
@@ -66,15 +72,18 @@ class SecurityUtils : Plugin() {
 
     @PluginMethod
     fun initStorage(call: PluginCall) {
+        saveCall(call)
         with (call) {
             try {
                 assertReceived(Param.ALIAS, Param.IS_PARANOIA)
                 if (isParanoia) {
                     setupParanoiaPassword(call)
                 } else {
+                    freeCallIfSaved()
                     resolve()
                 }
             } catch (e: Exception) {
+                freeCallIfSaved()
                 reject(e.toString())
             }
         }
@@ -96,6 +105,7 @@ class SecurityUtils : Plugin() {
 
     @PluginMethod
     fun getItem(call: PluginCall) {
+        saveCall(call)
         with (call) {
             try {
                 assessIntegrity()
@@ -103,12 +113,15 @@ class SecurityUtils : Plugin() {
 
                 Storage(context, alias, isParanoia).readString(key, {
                     logDebug("getItem: success")
+                    freeCallIfSaved()
                     resolveWithData(Key.VALUE to it)
                 }, {
                     logDebug("getItem: failure")
+                    freeCallIfSaved()
                     reject(it.toString())
-                }, { showAuthenticationScreen(call, it) })
+                }, createAuthenticationRequestedHandler(call))
             } catch (e: Exception) {
+                freeCallIfSaved()
                 reject(e.toString())
             }
         }
@@ -116,6 +129,7 @@ class SecurityUtils : Plugin() {
 
     @PluginMethod
     fun setItem(call: PluginCall) {
+        saveCall(call)
         with (call) {
             try {
                 assessIntegrity()
@@ -123,12 +137,15 @@ class SecurityUtils : Plugin() {
 
                 Storage(context, alias, isParanoia).writeString(key, value, {
                     logDebug("setItem: success")
+                    freeCallIfSaved()
                     resolve()
                 }, {
                     logDebug("setItem: failure")
+                    freeCallIfSaved()
                     reject(it.toString())
-                }, { showAuthenticationScreen(call, it) })
+                }, createAuthenticationRequestedHandler(call))
             } catch (e: Exception) {
+                freeCallIfSaved()
                 reject(e.toString())
             }
         }
@@ -136,17 +153,21 @@ class SecurityUtils : Plugin() {
 
     @PluginMethod
     fun removeAll(call: PluginCall) {
+        saveCall(call)
         with (call) {
             try {
                 assertReceived(Param.ALIAS)
 
                 val result = Storage.removeAll(activity, alias)
                 if (result) {
+                    freeCallIfSaved()
                     resolve()
                 } else {
+                    freeCallIfSaved()
                     reject("removeAll: failure")
                 }
             } catch (e: Exception) {
+                freeCallIfSaved()
                 reject(e.toString())
             }
         }
@@ -154,18 +175,22 @@ class SecurityUtils : Plugin() {
 
     @PluginMethod
     fun removeItem(call: PluginCall) {
+        saveCall(call)
         with (call) {
             try {
                 assertReceived(Param.ALIAS, Param.IS_PARANOIA, Param.FILE_KEY)
 
                 Storage(context, alias, isParanoia).removeString(key, {
                     logDebug("delete: success")
+                    freeCallIfSaved()
                     resolve()
                 }, {
                     logDebug("delete: failure")
+                    freeCallIfSaved()
                     reject(it.toString())
                 })
             } catch (e: Exception) {
+                freeCallIfSaved()
                 reject(e.toString())
             }
         }
@@ -173,15 +198,19 @@ class SecurityUtils : Plugin() {
 
     @PluginMethod
     fun destroy(call: PluginCall) {
+        saveCall(call)
         with (call) {
             try {
                 val result = Storage.destroy(activity)
                 if (result) {
+                    freeCallIfSaved()
                     resolve()
                 } else {
+                    freeCallIfSaved()
                     reject("destroy: failure")
                 }
             } catch (e: Exception) {
+                freeCallIfSaved()
                 reject(e.toString())
             }
         }
@@ -189,18 +218,22 @@ class SecurityUtils : Plugin() {
 
     @PluginMethod
     fun setupParanoiaPassword(call: PluginCall) {
+        saveCall(call)
         with (call) {
             try {
                 assertReceived(Param.ALIAS, Param.IS_PARANOIA)
 
                 Storage(context, alias, isParanoia).setupParanoiaPassword({
                     logDebug("paranoia setup: success")
+                    freeCallIfSaved()
                     resolve()
                 }, {
                     logDebug("paranoia setup: failure")
+                    freeCallIfSaved()
                     reject(it.toString())
                 })
             } catch (e: Exception) {
+                freeCallIfSaved()
                 reject(e.toString())
             }
         }
@@ -208,18 +241,22 @@ class SecurityUtils : Plugin() {
 
     @PluginMethod
     fun setupRecoveryPassword(call: PluginCall) {
+        saveCall(call)
         with (call) {
             try {
                 assertReceived(Param.ALIAS, Param.IS_PARANOIA, Param.FILE_KEY, Param.VALUE)
 
                 Storage(context, alias, isParanoia).writeRecoverableString(key, value, {
                     logDebug("written recoverable: success")
+                    freeCallIfSaved()
                     resolveWithData("recoveryKey" to it)
                 }, {
                     logDebug("written recoverable: failure")
+                    freeCallIfSaved()
                     reject(it.toString())
-                }, { showAuthenticationScreen(call, it) })
+                }, createAuthenticationRequestedHandler(call))
             } catch (e: Exception) {
+                freeCallIfSaved()
                 reject(e.toString())
             }
         }
@@ -231,13 +268,7 @@ class SecurityUtils : Plugin() {
 
     @PluginMethod
     fun authenticate(call: PluginCall) {
-        authenticate(call) {
-            if (it) {
-                call.resolve()
-            } else {
-                call.reject("Authentication failed")
-            }
-        }
+        authenticateOrContinue(AuthOrigin.VAULT, call, { call.resolve() }, { call.reject("Authentication failed") })
     }
 
     @PluginMethod
@@ -307,7 +338,7 @@ class SecurityUtils : Plugin() {
     override fun handleOnResume() {
         super.handleOnResume()
         if (automaticLocalAuthentication) {
-            authenticate()
+            authenticateOrContinue(AuthOrigin.VAULT, savedCall, { freeCallIfSaved() })
         }
     }
 
@@ -339,20 +370,53 @@ class SecurityUtils : Plugin() {
         }
     }
 
-    private fun authenticate(call: PluginCall? = null, onResult: ((Boolean) -> Unit)? = null) {
-        if (!needsAuthentication) {
-            onResult?.invoke(true)
-        } else {
-            showAuthenticationScreen(call, onAuthenticated = {
-                    isAuthenticated = true
-                    lastBackgroundDate = null
-                    onResult?.invoke(true)
-                }, onFailure = {
-                    isAuthenticated = false
-                    lastBackgroundDate = null
-                    onResult?.invoke(false)
-                })
+    private fun createAuthenticationRequestedHandler(call: PluginCall): (Int, () -> Unit) -> Unit =
+        { attemptNo, onAuthenticated ->
+            authenticate(AuthOrigin.SYSTEM, attemptNo, call, onAuthenticated)
         }
+
+    private fun authenticateOrContinue(origin: AuthOrigin, call: PluginCall? = null, onAuthenticated: (() -> Unit)? = null, onFailure: (() -> Unit)? = null) {
+        if (!needsAuthentication) {
+            onAuthenticated?.invoke()
+        } else {
+            authenticate(
+                    origin,
+                    ++authTries,
+                    call,
+                    {
+                        onAuthenticated?.invoke()
+                        authTries = 0
+                    },
+                    onFailure
+            )
+        }
+    }
+
+    private fun authenticate(
+            origin: AuthOrigin,
+            attemptNo: Int,
+            call: PluginCall? = null,
+            onAuthenticated: (() -> Unit)? = null,
+            onFailure: (() -> Unit)? = null
+    ) {
+        if (call != null && attemptNo > MAX_AUTH_TRIES) {
+            val error = when (origin) {
+                AuthOrigin.VAULT -> PluginError.maxAuthenticationRetriesVault
+                AuthOrigin.SYSTEM -> PluginError.maxAuthenticationRetriesSystem
+            }
+            call.reject(error.toString())
+            return
+        }
+
+        showAuthenticationScreen(call, onAuthenticated = {
+            isAuthenticated = true
+            lastBackgroundDate = null
+            onAuthenticated?.invoke()
+        }, onFailure = {
+            isAuthenticated = false
+            lastBackgroundDate = null
+            onFailure?.invoke()
+        })
     }
 
     private val PluginCall.alias: String
@@ -400,5 +464,6 @@ class SecurityUtils : Plugin() {
         const val REQUEST_CODE_CONFIRM_DEVICE_CREDENTIALS = 1
 
         private const val PREFERENCES_KEY_AUTOMATIC_AUTHENTICATION = "autoauth"
+        private const val MAX_AUTH_TRIES = 3
     }
 }
