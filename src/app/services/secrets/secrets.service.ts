@@ -145,7 +145,6 @@ export class SecretsService {
     return secureStorage
       .getItem(secret.id)
       .then((result) => {
-        console.log(result)
         return result.value
       })
       .catch((error) => {
