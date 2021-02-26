@@ -2,9 +2,13 @@ package it.airgap.vault.plugin.securityutils.storage
 
 import android.os.Build
 import android.security.keystore.UserNotAuthenticatedException
-import java.io.*
+import java.io.File
+import java.io.InputStream
 import java.nio.ByteBuffer
-import java.nio.charset.*
+import java.nio.charset.CharacterCodingException
+import java.nio.charset.Charset
+import java.nio.charset.CharsetDecoder
+import java.nio.charset.CodingErrorAction
 import java.security.Key
 import java.security.MessageDigest
 import javax.crypto.Cipher
@@ -18,8 +22,9 @@ import kotlin.concurrent.thread
  * Created by Dominik on 19.01.2018.
  */
 class SecureFileStorage(private val masterSecret: Key?, private val salt: ByteArray, private val baseDir: File) {
+    private var authAttemptNo: Int = 0
 
-    fun read(fileKey: String, secret: ByteArray = "".toByteArray(), success: (String) -> Unit, error: (Exception) -> Unit, requestAuthentication: (() -> Unit) -> Unit) {
+    fun read(fileKey: String, secret: ByteArray = "".toByteArray(), success: (String) -> Unit, error: (Exception) -> Unit, requestAuthentication: (Int, () -> Unit) -> Unit) {
         thread {
             try {
                 SecureFile(baseDir, hashForKey(fileKey)).input { fileInputStream ->
@@ -47,14 +52,15 @@ class SecureFileStorage(private val masterSecret: Key?, private val salt: ByteAr
                     specificSecretCipher.init(Cipher.DECRYPT_MODE, specificSecretKey, IvParameterSpec(ivForKey(fileKey)))
 
                     val secretCipherInputStream = CipherInputStream(fsCipherInputStream, specificSecretCipher)
-
                     val fileValue = secretCipherInputStream.readTextAndClose()
+
+                    authAttemptNo = 0
                     success(fileValue)
                 }
             } catch (e: Exception) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (e is UserNotAuthenticatedException) {
-                        requestAuthentication { read(fileKey, secret, success, error, requestAuthentication) }
+                        requestAuthentication(++authAttemptNo) { read(fileKey, secret, success, error, requestAuthentication) }
                     } else {
                         error(e)
                     }
@@ -65,7 +71,7 @@ class SecureFileStorage(private val masterSecret: Key?, private val salt: ByteAr
         }
     }
 
-    fun write(fileKey: String, fileData: String, secret: ByteArray = "".toByteArray(), success: () -> Unit, error: (Exception) -> Unit, requestAuthentication: (() -> Unit) -> Unit) {
+    fun write(fileKey: String, fileData: String, secret: ByteArray = "".toByteArray(), success: () -> Unit, error: (Exception) -> Unit, requestAuthentication: (Int, () -> Unit) -> Unit) {
         thread {
             try {
                 SecureFile(baseDir, hashForKey(fileKey)).output { fileOutputStream ->
@@ -93,12 +99,13 @@ class SecureFileStorage(private val masterSecret: Key?, private val salt: ByteAr
                         it.flush()
                     }
 
+                    authAttemptNo = 0
                     success()
                 }
             } catch (e: Exception) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (e is UserNotAuthenticatedException) {
-                        requestAuthentication { write(fileKey, fileData, secret, success, error, requestAuthentication) }
+                        requestAuthentication(++authAttemptNo) { write(fileKey, fileData, secret, success, error, requestAuthentication) }
                     } else {
                         error(e)
                     }

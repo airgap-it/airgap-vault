@@ -25,6 +25,12 @@ fun Plugin.logDebug(message: String) {
     Log.d(this::class.java.simpleName, message)
 }
 
+fun Plugin.freeCallIfSaved() {
+    if (savedCall != null) {
+        freeSavedCall()
+    }
+}
+
 /*
  * PluginCall Extensions
  */

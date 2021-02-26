@@ -125,7 +125,18 @@
       "generate": "Generate BIP85 Child Mnemonic",
       "text": "Securely generate a child mnemonic out of your master mnemonic."
     },
-    "confirm_label":"Confirm"
+    "show-mnemonic": {
+      "label": "Show Mnemonic",
+      "text": "Display the mnemonic associated with this secret.",
+      "alert": {
+        "title": "Show Mnemonic",
+        "message": "Please beware that the mnemonic should always be kept private as it grants full access to your funds. Under no circumstance take a screenshot or photo. Make sure you are in a safe location where no one else can see your screen.",
+        "understood": "I understand"
+      },
+      "copied": "Recovery key copied",
+      "reset-error": "Could not set the recovery key"
+    },
+    "confirm_label": "Confirm"
   },
 
   "secret-edit-delete-popover": {
