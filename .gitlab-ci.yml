@@ -49,12 +49,14 @@ build_android:
     - docker run --name $LOCAL_ANDROID $GOOGLE_TAG_ANDROID_CURRENT echo "container ran."
     - docker cp $LOCAL_ANDROID:/app/android-release-unsigned.apk airgap-vault-release-unsigned-$CI_PIPELINE_ID.apk
     - docker cp $LOCAL_ANDROID:/app/android-debug.apk airgap-vault-debug-$CI_PIPELINE_ID.apk
+    - docker cp $LOCAL_ANDROID:/app/android-appium.apk airgap-vault-appium-$CI_PIPELINE_ID.apk
   after_script:
     - docker rm -f $LOCAL_ANDROID || true
   artifacts:
     paths:
       - airgap-vault-release-unsigned-$CI_PIPELINE_ID.apk
       - airgap-vault-debug-$CI_PIPELINE_ID.apk
+      - airgap-vault-appium-$CI_PIPELINE_ID.apk
 
 qa:
   stage: qa

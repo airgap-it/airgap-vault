@@ -72,8 +72,17 @@ RUN /app/android/gradlew --project-dir /app/android build
 
 # copy release-apk
 RUN cp /app/android/app/build/outputs/apk/release/app-release-unsigned.apk android-release-unsigned.apk
+# this has nothing to do with debug!!!:
+RUN cp android-release-unsigned.apk android-debug.apk 
 
-RUN cp android-release-unsigned.apk android-debug.apk
+# copy release-apk
+RUN cp /app/android/app/build/outputs/apk/appium/app-appium-unsigned.apk android-appium-unsigned.apk
+
+RUN cp android-appium-unsigned.apk android-appium.apk
+
 
 # sign using debug key
 RUN jarsigner -verbose -keystore ./build/android/debug.keystore -storepass android -keypass android android-debug.apk androiddebugkey
+
+# sign using debug key
+RUN jarsigner -verbose -keystore ./build/android/debug.keystore -storepass android -keypass android android-appium.apk androiddebugkey

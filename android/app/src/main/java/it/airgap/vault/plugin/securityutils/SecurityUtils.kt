@@ -58,12 +58,14 @@ class SecurityUtils : Plugin() {
         @Synchronized get
         @Synchronized set
 
+    private val isDebuggable: Boolean
+        get() {
+            return BuildConfig.DEBUG || (context.applicationContext.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
+        }
+
     private val integrityAssessment: Boolean
         get() {
-            val isRooted = RootBeer(context).isRootedWithoutBusyBoxCheck
-            val nonDebuggable = BuildConfig.DEBUG || (context.applicationContext.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) == 0
-
-            return !isRooted && nonDebuggable
+            return !RootBeer(context).isRootedWithoutBusyBoxCheck || isDebuggable || BuildConfig.APPIUM
         }
 
     /*
@@ -321,16 +323,20 @@ class SecurityUtils : Plugin() {
 
     @PluginMethod
     fun setWindowSecureFlag(call: PluginCall) {
-        with (activity) {
-            runOnUiThread { window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE) }
+        if(!BuildConfig.APPIUM){
+            with (activity) {
+                runOnUiThread { window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE) }
+            }
         }
         call.resolve()
     }
 
     @PluginMethod
     fun clearWindowSecureFlag(call: PluginCall) {
-        with (activity) {
-            runOnUiThread { window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE) }
+        if(!BuildConfig.APPIUM){
+            with (activity) {
+                runOnUiThread { window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE) }
+            }
         }
         call.resolve()
     }
