@@ -18,7 +18,7 @@ import { SecretItemComponent } from './secret-item/secret-item.component'
 import { SignedTransactionComponent } from './signed-transaction/signed-transaction.component'
 import { TouchEntropyComponent } from './touch-entropy/touch-entropy.component'
 import { TraceInputDirective } from './trace-input/trace-input.directive'
-import { UnsignedTransactionComponent } from './unsigned-transaction/unsigned-transaction.component'
+import { TransactionComponent } from './transaction/transaction.component'
 import { VerifyKeyComponent } from './verify-key/verify-key.component'
 
 @NgModule({
@@ -28,7 +28,7 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     ProgressFooterComponent,
     SecretItemComponent,
     SignedTransactionComponent,
-    UnsignedTransactionComponent,
+    TransactionComponent,
     TouchEntropyComponent,
     TraceInputDirective,
     VerifyKeyComponent,
@@ -43,7 +43,7 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     ProgressFooterComponent,
     SecretItemComponent,
     SignedTransactionComponent,
-    UnsignedTransactionComponent,
+    TransactionComponent,
     TouchEntropyComponent,
     TraceInputDirective,
     VerifyKeyComponent,

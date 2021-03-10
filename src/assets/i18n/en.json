@@ -281,10 +281,36 @@
   "deserialized-detail": {
     "sign_text": "You're about to sign:",
     "transaction": {
-      "title": "Sign Transaction"
+      "title": "Sign Transaction",
+      "button_label": "Sign Transaction",
+      "unreadable_warning": "We were not able to extract information from this transaction. This does not mean that the transaction is invalid - Please make sure that you know what you are doing, and you can verify that you know that this transaction contains the correct data."
     },
     "message": {
-      "title": "Sign Message"
+      "title": "Sign Message",
+      "button_label": "Sign Message"
+    },
+    "alert": {
+      "bip39-passphrase": {
+        "header": "BIP-39 Passphrase",
+        "message": "If you have set a BIP-39 passphrase, please enter it here.",
+        "input-placeholder_label": "Passphrase",
+        "button_label": "Ok"
+      },
+      "bip39-passphrase-error": {
+        "header": "BIP-39 Passphrase",
+        "message": "Public keys do not match. Did you enter the correct BIP-39 Passphrase?",
+        "button_label": "Ok"
+      },
+      "secret-not-found-error": {
+        "header": "Secret not found",
+        "message": "No secret found for this public key",
+        "button_label": "Ok"
+      },
+      "unknown-error": {
+        "header": "Error",
+        "message": "Something went wrong!",
+        "button_label": "Ok"
+      }
     }
   },
   "transaction-signed": {

@@ -1,4 +1,4 @@
-import { ProtocolService, SerializerService } from '@airgap/angular-core'
+import { ProtocolService, SerializerService, sumAirGapTxValues } from '@airgap/angular-core'
 import { Component, Input } from '@angular/core'
 import { IACMessageDefinitionObject, IAirGapTransaction, ICoinProtocol, SignedTransaction } from '@airgap/coinlib-core'
 import BigNumber from 'bignumber.js'
@@ -61,8 +61,8 @@ export class SignedTransactionComponent {
         ) {
           this.aggregatedInfo = {
             numberOfTxs: this.airGapTxs.length,
-            totalAmount: this.airGapTxs.reduce((pv: BigNumber, cv: IAirGapTransaction) => pv.plus(cv.amount), new BigNumber(0)),
-            totalFees: this.airGapTxs.reduce((pv: BigNumber, cv: IAirGapTransaction) => pv.plus(cv.fee), new BigNumber(0))
+            totalAmount: new BigNumber(sumAirGapTxValues(this.airGapTxs, 'amount')),
+            totalFees: new BigNumber(sumAirGapTxValues(this.airGapTxs, 'fee'))
           }
         }
         try {

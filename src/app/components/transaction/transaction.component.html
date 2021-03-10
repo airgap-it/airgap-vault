@@ -1,0 +1,28 @@
+<ng-container *ngIf="(airGapTxs$ | async) as airGapTxs">
+  <ng-container *ngIf="(aggregatedDetails$ | async) as aggregatedDetails">
+    <ion-row class="ion-padding-bottom ion-text-center">
+      <ion-col size="4" class="content--align__center-center">
+        <h5>
+          {{ aggregatedDetails.totalAmount.toFixed() | amountConverter: { protocol: (protocolIdentifier$ | async), maxDigits: undefined } | async }}
+        </h5>
+      </ion-col>
+      <ion-col size="4" class="content--align__center-center">
+        <h5>{{ aggregatedDetails.numberOfTxs }}</h5>
+      </ion-col>
+      <ion-col size="4" class="content--align__center-center">
+        <h5>{{ aggregatedDetails.totalFees.toFixed() | feeConverter: { protocol: (protocolIdentifier$ | async) } | async }}</h5>
+      </ion-col>
+      <ion-col size="4">
+        <small>Amount</small>
+      </ion-col>
+      <ion-col size="4">
+        <small>Operations</small>
+      </ion-col>
+      <ion-col size="4">
+        <small>Fee</small>
+      </ion-col>
+    </ion-row>
+  </ng-container>
+
+  <airgap-from-to *ngFor="let airGapTx of airGapTxs" [transaction]="airGapTx"></airgap-from-to>
+</ng-container>
