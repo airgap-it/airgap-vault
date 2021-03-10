@@ -32,7 +32,8 @@
     "apply-diagnostic-modules": "node apply-diagnostic-modules.js"
   },
   "dependencies": {
-    "@airgap/angular-core": "0.0.8",
+    "@airgap/angular-core": "0.0.9-beta.2",
+    "@airgap/angular-ngrx": "0.0.9-beta.2",
     "@airgap/coinlib-core": "0.10.5",
     "@angular/common": "^11.0.4",
     "@angular/core": "^11.0.4",
@@ -48,7 +49,11 @@
     "@ionic-native/device-motion": "^5.19.1",
     "@ionic-native/diagnostic": "^5.7.0",
     "@ionic/angular": "5.5.2",
+    "@ionic/core": "^5.5.3",
     "@ionic/storage": "2.2.0",
+    "@ngrx/component-store": "^10.1.2",
+    "@ngrx/effects": "^10.1.2",
+    "@ngrx/store": "^10.1.2",
     "@ngx-translate/core": "^13.0.0",
     "@zxing/ngx-scanner": "3.0.0",
     "angular2-uuid": "^1.1.1",

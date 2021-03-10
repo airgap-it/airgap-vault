@@ -1,20 +1,21 @@
 import {
-  APP_CONFIG,
-  APP_PLUGIN,
-  APP_INFO_PLUGIN,
-  CLIPBOARD_PLUGIN,
-  SPLASH_SCREEN_PLUGIN,
-  STATUS_BAR_PLUGIN,
-  PERMISSIONS_PLUGIN,
   AirGapAngularCoreModule,
   AirGapTranslateLoader,
+  APP_CONFIG,
+  APP_INFO_PLUGIN,
+  APP_PLUGIN,
   ClipboardService,
+  CLIPBOARD_PLUGIN,
   DeeplinkService,
   PermissionsService,
-  SerializerService,
+  PERMISSIONS_PLUGIN,
   QrScannerService,
+  SerializerService,
+  SPLASH_SCREEN_PLUGIN,
+  STATUS_BAR_PLUGIN,
   UiEventService
 } from '@airgap/angular-core'
+import { AirGapAngularNgRxModule } from '@airgap/angular-ngrx'
 import { HttpClient, HttpClientModule } from '@angular/common/http'
 import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
@@ -24,11 +25,15 @@ import { DeviceMotion } from '@ionic-native/device-motion/ngx'
 import { Diagnostic } from '@ionic-native/diagnostic/ngx'
 import { IonicModule, IonicRouteStrategy, Platform } from '@ionic/angular'
 import { IonicStorageModule } from '@ionic/storage'
+import { EffectsModule } from '@ngrx/effects'
+import { StoreModule } from '@ngrx/store'
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
 
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
+import * as fromRoot from './app.reducers'
 import { CAMERA_PREVIEW_PLUGIN, SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
+import { appConfig } from './config/app-config'
 import { DistributionOnboardingPageModule } from './pages/distribution-onboarding/distribution-onboarding.module'
 import { IntroductionPageModule } from './pages/introduction/introduction.module'
 import { LocalAuthenticationOnboardingPageModule } from './pages/local-authentication-onboarding/local-authentication-onboarding.module'
@@ -50,7 +55,6 @@ import { SecureStorageService } from './services/secure-storage/secure-storage.s
 import { ShareUrlService } from './services/share-url/share-url.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
 import { VaultStorageService } from './services/storage/storage.service'
-import { appConfig } from './config/app-config'
 
 export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
   return new AirGapTranslateLoader(http, { prefix: './assets/i18n/', suffix: '.json' })
@@ -61,6 +65,15 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
   entryComponents: [],
   imports: [
     BrowserModule,
+    StoreModule.forRoot(fromRoot.reducers, {
+      metaReducers: fromRoot.metaReducers,
+      /* temporary fix for `ERROR TypeError: Cannot freeze array buffer views with elements` */
+      runtimeChecks: {
+        strictStateImmutability: false,
+        strictActionImmutability: false 
+      }
+    }),
+    EffectsModule.forRoot(),
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
@@ -79,7 +92,8 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
     IntroductionPageModule,
     DistributionOnboardingPageModule,
     LocalAuthenticationOnboardingPageModule,
-    AirGapAngularCoreModule
+    AirGapAngularCoreModule,
+    AirGapAngularNgRxModule
   ],
   providers: [
     { provide: APP_PLUGIN, useValue: Plugins.App },

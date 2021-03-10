@@ -166,12 +166,18 @@ export class IACService extends BaseIACService {
 
             return {
               wallet: correctWallet,
-              signTransactionRequest: messageDefinitionObject
+              signTransactionRequest: {
+                ...messageDefinitionObject,
+                payload: {
+                  ...messageSignRequest,
+                  publicKey: correctWallet?.publicKey ?? '' // ignore public key if no account has been found
+                }
+              }
             }
           }
         )
       )
-    ).filter((signTransactionDetails) => signTransactionDetails.wallet !== undefined)
+    )
 
     this.navigationService
       .routeWithState('deserialized-detail', {
