@@ -17,13 +17,20 @@
       </p>
     </ion-text>
 
-    <ion-progress-bar *ngIf="isMultiQr" style="height: 8px" color="secondary" [value]="percentageScanned"></ion-progress-bar>
+    <ion-progress-bar *ngIf="isMultiQr" style="height: 8px;" color="secondary" [value]="percentageScanned"></ion-progress-bar>
 
     <ion-row [hidden]="!hasCameraPermission" class="row--height__100 ion-justify-content-center ion-align-items-center">
       <ion-col class="guides--container content--align__center-center">
         <img class="guides--container__img" src="./assets/img/qr_code_guides.svg" />
       </ion-col>
-      <zxing-scanner *ngIf="isBrowser || isElectron" #scanner (scanSuccess)="checkScan($event)"></zxing-scanner>
+      <zxing-scanner
+        [formats]="['QR_CODE']"
+        [timeBetweenScans]="0"
+        [delayBetweenScanSuccess]="0"
+        *ngIf="isBrowser || isElectron"
+        #scanner
+        (scanSuccess)="checkScan($event)"
+      ></zxing-scanner>
     </ion-row>
 
     <ion-row

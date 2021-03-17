@@ -1,6 +1,7 @@
 import { IACHanderStatus, IACMessageTransport, PermissionsService, QrScannerService } from '@airgap/angular-core'
 import { Component, Inject, NgZone, ViewChild } from '@angular/core'
 import { Platform } from '@ionic/angular'
+import { URDecoder } from '@ngraveio/bc-ur'
 import { ZXingScannerComponent } from '@zxing/ngx-scanner'
 import { SecurityUtilsPlugin } from 'src/app/capacitor-plugins/definitions'
 import { SECURITY_UTILS_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
@@ -8,6 +9,31 @@ import { IACService } from 'src/app/services/iac/iac.service'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { ScanBasePage } from '../scan-base/scan-base'
+
+var downloadBlob, downloadURL
+
+downloadBlob = function (data: Uint8Array, fileName, mimeType) {
+  var blob, url
+  blob = new Blob([data], {
+    type: mimeType
+  })
+  url = window.URL.createObjectURL(blob)
+  downloadURL(url, fileName)
+  setTimeout(function () {
+    return window.URL.revokeObjectURL(url)
+  }, 1000)
+}
+
+downloadURL = function (data, fileName) {
+  var a
+  a = document.createElement('a')
+  a.href = data
+  a.download = fileName
+  document.body.appendChild(a)
+  a.style = 'display: none'
+  a.click()
+  a.remove()
+}
 
 @Component({
   selector: 'airgap-tab-scan',
@@ -25,6 +51,10 @@ export class TabScanPage extends ScanBasePage {
   private parts: Set<string> = new Set()
 
   public isMultiQr: boolean = false
+
+  public urDecoder = new URDecoder()
+
+  private isHandled: boolean = false
 
   constructor(
     platform: Platform,
@@ -48,7 +78,39 @@ export class TabScanPage extends ScanBasePage {
     this.isMultiQr = false
   }
 
+  public async handleUr(data: string) {
+    if (this.isHandled) {
+      return
+    }
+
+    const sizeBefore: number = this.parts.size
+    this.parts.add(data)
+
+    if (sizeBefore === this.parts.size) {
+      return
+    }
+
+    console.log(data)
+
+    this.urDecoder.receivePart(data)
+    this.percentageScanned = this.urDecoder.estimatedPercentComplete()
+    if (this.urDecoder.isComplete() && this.urDecoder.isSuccess()) {
+      this.isHandled = true
+      const res = this.urDecoder.resultUR().decodeCBOR()
+      console.log('success', res)
+      downloadBlob(new Uint8Array(Object.values(res)), 'air-gapped-file.jpg', 'application/octet-stream')
+    } else {
+      this.isMultiQr = true
+      this.numberOfQrsScanned = this.urDecoder.getProgress() * this.urDecoder.expectedPartCount()
+      this.numberOfQrsTotal = this.urDecoder.expectedPartCount()
+    }
+  }
+
   public async checkScan(data: string): Promise<boolean | void> {
+    if (data.startsWith('ur:')) {
+      return this.handleUr(data)
+    }
+
     const sizeBefore: number = this.parts.size
     this.parts.add(data)
 
