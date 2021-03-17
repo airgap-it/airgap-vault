@@ -1,9 +1,10 @@
 import { ProtocolService } from '@airgap/angular-core'
-import { Injectable } from '@angular/core'
-import { AlertController, LoadingController } from '@ionic/angular'
 import { AirGapWallet, ICoinProtocol } from '@airgap/coinlib-core'
 import { ProtocolSymbols } from '@airgap/coinlib-core/utils/ProtocolSymbols'
 import { SerializedAirGapWallet } from '@airgap/coinlib-core/wallet/AirGapWallet'
+import { Injectable } from '@angular/core'
+import { AlertController, LoadingController } from '@ionic/angular'
+import * as bip32 from 'bip32'
 import * as bip39 from 'bip39'
 import { Observable, ReplaySubject } from 'rxjs'
 
@@ -63,7 +64,13 @@ export class SecretsService {
         for (let i: number = 0; i < secret.wallets.length; i++) {
           const wallet: SerializedAirGapWallet = (secret.wallets[i] as any) as SerializedAirGapWallet
           const protocol: ICoinProtocol = await this.protocolService.getProtocol(wallet.protocolIdentifier)
-          const airGapWallet: AirGapWallet = new AirGapWallet(protocol, wallet.publicKey, wallet.isExtendedPublicKey, wallet.derivationPath)
+          const airGapWallet: AirGapWallet = new AirGapWallet(
+            protocol,
+            wallet.publicKey,
+            wallet.isExtendedPublicKey,
+            wallet.derivationPath,
+            wallet.masterFingerprint ?? ''
+          )
           airGapWallet.addresses = wallet.addresses
           secret.wallets[i] = airGapWallet
         }
@@ -75,7 +82,7 @@ export class SecretsService {
     return secrets
   }
 
-  public async addOrUpdateSecret(secret: Secret): Promise<void> {
+  public async addOrUpdateSecret(secret: Secret, options: { setActive: boolean } = { setActive: true }): Promise<void> {
     if (!secret.wallets) {
       secret.wallets = []
     }
@@ -83,7 +90,9 @@ export class SecretsService {
     if (!secret.secretHex) {
       this.secretsList[this.secretsList.findIndex((item: Secret) => item.id === secret.id)] = secret
 
-      this.setActiveSecret(secret)
+      if (options.setActive) {
+        this.setActiveSecret(secret)
+      }
 
       return this.persist()
     } else {
@@ -99,7 +108,9 @@ export class SecretsService {
         this.secrets$.next(this.secretsList)
       }
 
-      this.setActiveSecret(secret)
+      if (options.setActive) {
+        this.setActiveSecret(secret)
+      }
 
       return this.persist()
     }
@@ -260,12 +271,14 @@ export class SecretsService {
       const entropy: string = await this.retrieveEntropyForSecret(secret)
 
       const mnemonic: string = bip39.entropyToMnemonic(entropy)
-      const wallet: AirGapWallet = new AirGapWallet(
-        protocol,
-        await protocol.getPublicKeyFromMnemonic(mnemonic, customDerivationPath, bip39Passphrase),
-        isHDWallet,
-        customDerivationPath
-      )
+      const seed: Buffer = await bip39.mnemonicToSeed(mnemonic, bip39Passphrase)
+
+      const bip: bip32.BIP32Interface = bip32.fromSeed(seed)
+
+      const publicKey: string = await protocol.getPublicKeyFromMnemonic(mnemonic, customDerivationPath, bip39Passphrase)
+      const fingerprint: string = bip.fingerprint.toString('hex')
+
+      const wallet: AirGapWallet = new AirGapWallet(protocol, publicKey, isHDWallet, customDerivationPath, fingerprint)
 
       const addresses: string[] = await wallet.deriveAddresses(1)
       wallet.addresses = addresses

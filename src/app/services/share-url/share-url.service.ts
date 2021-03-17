@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core'
-import { AccountShareResponse, AirGapWallet, generateId, IACMessageDefinitionObject, IACMessageType } from '@airgap/coinlib-core'
-
 import { SerializerService } from '@airgap/angular-core'
+import { AccountShareResponse, AirGapWallet, generateId, IACMessageDefinitionObject, IACMessageType } from '@airgap/coinlib-core'
+import { Injectable } from '@angular/core'
+
 import { serializedDataToUrlString } from '../../utils/utils'
 
 @Injectable({
@@ -15,6 +15,7 @@ export class ShareUrlService {
   public async generateShareURL(wallet: AirGapWallet): Promise<string> {
     const accountShareResponse: AccountShareResponse = {
       publicKey: wallet.publicKey,
+      fingerprint: wallet.masterFingerprint,
       isExtendedPublicKey: wallet.isExtendedPublicKey,
       derivationPath: wallet.derivationPath
     }

@@ -1,11 +1,11 @@
 import { FormControl } from '@angular/forms'
 import * as bip39 from 'bip39'
 
-import { BIP39Signer } from '../models/BIP39Signer'
+import { BIPSigner } from '../models/BIPSigner'
 
 export class MnemonicValidator {
   public static checkMnemonic(mnemonic: string, wordlist: string): void {
-    const words: string[] = BIP39Signer.prepareMnemonic(mnemonic).split(' ')
+    const words: string[] = BIPSigner.prepareMnemonic(mnemonic).split(' ')
 
     if (words.length % 3 !== 0) {
       throw new Error('invalid mnemonic')
@@ -32,7 +32,7 @@ export class MnemonicValidator {
   }
 
   public static isValid(control: FormControl): { [key: string]: boolean } | null {
-    if (control.value && BIP39Signer.validateMnemonic(control.value)) {
+    if (control.value && BIPSigner.validateMnemonic(control.value)) {
       return null
     }
 

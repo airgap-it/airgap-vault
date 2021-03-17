@@ -1,9 +1,9 @@
-import { BIP39Signer } from './BIP39Signer'
+import { BIPSigner } from './BIPSigner'
 
 // tslint:disable:no-console
 
-describe('BIP39: Signer', () => {
-  const signer: BIP39Signer = new BIP39Signer()
+describe('BIP: Signer', () => {
+  const signer: BIPSigner = new BIPSigner()
 
   // Test with different secret lengths
   const secrets: string[] = [

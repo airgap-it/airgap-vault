@@ -330,6 +330,14 @@
     "done_label": "Done",
     "copy-address_modal": {
       "text": "Address was copied to your clipboard"
+    },
+    "alert": {
+      "bip39-passphrase": {
+        "header": "BIP-39 Passphrase",
+        "message": "If you have set a BIP-39 passphrase, please enter it here.",
+        "input-placeholder_label": "Passphrase",
+        "button_label": "Ok"
+      }
     }
   },
   "interaction-selection": {
