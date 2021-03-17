@@ -91,6 +91,18 @@ const routes: Routes = [
     loadChildren: () => import('./pages/transaction-signed/transaction-signed.module').then((m) => m.TransactionSignedPageModule)
   },
   {
+    path: 'bip85-generate',
+    loadChildren: () => import('./pages/bip85-generate/bip85-generate.module').then((m) => m.Bip85GeneratePageModule)
+  },
+  {
+    path: 'bip85-show',
+    loadChildren: () => import('./pages/bip85-show/bip85-show.module').then((m) => m.Bip85ShowPageModule)
+  },
+  {
+    path: 'bip85-validate',
+    loadChildren: () => import('./pages/bip85-validate/bip85-validate.module').then((m) => m.Bip85ValidatePageModule)
+  },
+  {
     path: 'select-account',
     loadChildren: () => import('./pages/select-account/select-account.module').then((m) => m.SelectAccountPageModule)
   },
@@ -104,4 +116,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules, relativeLinkResolution: 'corrected' })],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

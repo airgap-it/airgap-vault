@@ -87,6 +87,7 @@
     "title": " Your Secret",
     "text": "Give your secret a name and select the security level.",
     "secret_input_label": "Label of your secret",
+    "advanced": "Advanced Options",
     "security-level": {
       "heading": "Security Level",
       "text": "You can encrypt your secret additionally using a passcode."
@@ -120,6 +121,10 @@
       "copied": "Recovery key copied",
       "reset-error": "Could not set the recovery key"
     },
+    "bip85": {
+      "generate": "Generate BIP85 Child Mnemonic",
+      "text": "Securely generate a child mnemonic out of your master mnemonic."
+    },
     "show-mnemonic": {
       "label": "Show Mnemonic",
       "text": "Display the mnemonic associated with this secret.",
@@ -133,6 +138,7 @@
     },
     "confirm_label": "Confirm"
   },
+
   "secret-edit-delete-popover": {
     "title": "Confirm Secret Removal",
     "text": "Do you really want to remove this secret? You won't be able to restore it without a backup!",
@@ -406,6 +412,31 @@
       "understood_label": "I understand and accept"
     }
   },
+  
+  "bip85-generate": {
+    "title": "Generate BIP85",
+    "text": "BIP85 allows you to securely derive a new mnemonic out of your main mnemonic. As long as you have access to your main mnemonic, you will always be able to re-generate your child mnemonics.",
+    "mnemonic-length": "Mnemonic Length",
+    "index": "Index",
+    "generate": "Generate",
+    "advanced_label": "Advanced Mode",
+    "bip39-passphrase": "BIP-39 Passphrase",
+    "bip39-passphrase-reveal": "Reveal Passphrase"
+  },
+
+  "bip85-show": {
+    "title": "Show BIP85 Details",
+    "text": "Write down all the words on a piece of paper. You will have to verify the mnemonic on the next page.",
+    "mnemonic-length": "Mnemonic Length",
+    "index": "Index",
+    "validate": "Validate"
+  },
+
+  "bip85-validate": {
+    "title": "Verify BIP85",
+    "text": "Match the order of your recovery phrase by selecting the correct words."
+  },
+
   "message-signing-request": {
     "title": "Signed Message",
     "payload_label": "Message to sign. Make sure you know what you are signing.",
