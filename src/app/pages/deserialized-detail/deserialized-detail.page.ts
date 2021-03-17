@@ -1,10 +1,10 @@
 import { assertNever, UIAction, UIActionStatus, UiEventService, UIResource, UIResourceStatus } from '@airgap/angular-core'
 import { IAirGapTransaction, ProtocolSymbols } from '@airgap/coinlib-core'
-import { Component } from '@angular/core'
+import { Component, OnDestroy } from '@angular/core'
 import { ModalController } from '@ionic/angular'
 import { AlertOptions, ModalOptions, OverlayEventDetail } from '@ionic/core'
 import { Store } from '@ngrx/store'
-import { Observable } from 'rxjs'
+import { Observable, Subscription } from 'rxjs'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { SelectAccountPage } from '../select-account/select-account.page'
@@ -20,7 +20,7 @@ type ModalOnDismissAction = (modalData: OverlayEventDetail<unknown>) => Promise<
   templateUrl: './deserialized-detail.page.html',
   styleUrls: ['./deserialized-detail.page.scss']
 })
-export class DeserializedDetailPage {
+export class DeserializedDetailPage implements OnDestroy {
   public mode$: Observable<Mode | undefined>
   public title$: Observable<string>
   public button$: Observable<string | undefined>
@@ -38,6 +38,8 @@ export class DeserializedDetailPage {
   private alertElement: HTMLIonAlertElement
   private modalElement: HTMLIonModalElement
 
+  private subscriptions: Subscription[] = []
+
   constructor(
     private readonly store: Store<fromDeserializedDetail.State>,
     private readonly uiEventService: UiEventService,
@@ -54,10 +56,16 @@ export class DeserializedDetailPage {
 
     this.rawData$ = this.store.select(fromDeserializedDetail.selectRaw)
 
-    this.alert$.subscribe(this.dismissOrShowAlert.bind(this))
-    this.modal$.subscribe(this.dismissOrShowModal.bind(this))
+    this.subscriptions.push(this.alert$.subscribe(this.dismissOrShowAlert.bind(this)))
+    this.subscriptions.push(this.modal$.subscribe(this.dismissOrShowModal.bind(this)))
 
     this.store.dispatch(actions.viewInitialization())
+  }
+
+  public ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription: Subscription) => {
+      subscription.unsubscribe()
+    })
   }
 
   public continue(): void {

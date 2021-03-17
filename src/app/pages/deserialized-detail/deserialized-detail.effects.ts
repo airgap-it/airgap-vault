@@ -25,7 +25,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { Action, Store } from '@ngrx/store'
 import { TranslateService } from '@ngx-translate/core'
 import * as bip39 from 'bip39'
-import { from, Observable } from 'rxjs'
+import { concat, from, of } from 'rxjs'
 import { concatMap, first, switchMap, tap, withLatestFrom } from 'rxjs/operators'
 
 import { Secret } from '../../models/secret'
@@ -50,13 +50,7 @@ export class DeserializedDetailEffects {
   public navigationData$ = createEffect(() =>
     this.actions$.pipe(
       ofType(actions.viewInitialization),
-      switchMap(
-        () =>
-          new Observable<Action>((subscriber) => {
-            subscriber.next(actions.navigationDataLoading())
-            from(this.loadNavigationData()).pipe(first()).subscribe(subscriber)
-          })
-      )
+      switchMap(() => concat(of(actions.navigationDataLoading()), from(this.loadNavigationData()).pipe(first())))
     )
   )
 
@@ -70,10 +64,7 @@ export class DeserializedDetailEffects {
           protocol: 'protocol' in action ? action.protocol : undefined
         }
 
-        return new Observable<Action>((subscriber) => {
-          subscriber.next(actions.runningBlockingTask())
-          from(this.handlePayload(payload, userInput)).pipe(first()).subscribe(subscriber)
-        })
+        return concat(of(actions.runningBlockingTask()), from(this.handlePayload(payload, userInput)).pipe(first()))
       })
     )
   )
@@ -220,7 +211,7 @@ export class DeserializedDetailEffects {
               const cryptoClient = new TezosCryptoClient()
               blake2bHash = await cryptoClient.blake2bLedgerHash(data.message)
             }
-            
+
             return {
               type: 'unsigned',
               id: request.id,
