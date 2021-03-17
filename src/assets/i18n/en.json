@@ -89,11 +89,11 @@
     "secret_input_label": "Label of your secret",
     "security-level": {
       "heading": "Security Level",
-      "text": "You can encrypt your secret additionally using a passcode."
+      "text": "You can encrypt your secret additionally using a passphrase."
     },
     "passcode": {
-      "label": "Passcode",
-      "text": "Set a passcode for your secret. This is an optional setting."
+      "label": "Passphrase",
+      "text": "Set a passphrase for your secret. This is an optional setting."
     },
     "secret-recovery": {
       "heading": "Secret Recovery",
@@ -121,11 +121,11 @@
       "reset-error": "Could not set the recovery key"
     },
     "show-mnemonic": {
-      "label": "Show Mnemonic",
-      "text": "Display the mnemonic associated with this secret.",
+      "label": "Show Secret",
+      "text": "Display the secret associated with this secret.",
       "alert": {
-        "title": "Show Mnemonic",
-        "message": "Please beware that the mnemonic should always be kept private as it grants full access to your funds. Under no circumstance take a screenshot or photo. Make sure you are in a safe location where no one else can see your screen.",
+        "title": "Show Secret",
+        "message": "Please beware that the secret should always be kept private as it grants full access to your funds. Under no circumstance take a screenshot or photo. Make sure you are in a safe location where no one else can see your screen.",
         "understood": "I understand"
       },
       "copied": "Recovery key copied",
@@ -149,7 +149,7 @@
     "title": "Import secret",
     "text": "You can import an existing secret to AirGap. Fill in the words from your secret.",
     "placeholder": "wife pulp island ...",
-    "warning": "Please double-check the spelling of your mnemonic.",
+    "warning": "Please double-check the spelling of your secret.",
     "import_label": "Import"
   },
   "secret-rules": {

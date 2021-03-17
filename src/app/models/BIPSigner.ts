@@ -39,7 +39,7 @@ export class BIPSigner {
     const usedList: string[] | undefined = BIPSigner.determineWordList(mnemonic)
 
     if (!usedList) {
-      throw Error('non-compatible mnemonic')
+      throw Error('non-compatible secret')
     }
 
     return bip39.mnemonicToEntropy(mnemonic, usedList)

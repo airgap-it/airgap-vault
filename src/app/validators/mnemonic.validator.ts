@@ -8,13 +8,13 @@ export class MnemonicValidator {
     const words: string[] = BIPSigner.prepareMnemonic(mnemonic).split(' ')
 
     if (words.length % 3 !== 0) {
-      throw new Error('invalid mnemonic')
+      throw new Error('invalid secret')
     }
 
     words.forEach((word: string) => {
       const index: number = wordlist.indexOf(word)
       if (index === -1) {
-        throw new Error('invalid mnemonic')
+        throw new Error('invalid secret')
       }
     })
   }
