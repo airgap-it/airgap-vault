@@ -61,13 +61,17 @@ export class WarningModalPage implements AfterContentInit {
 
     if (this.errorType === Warning.SECURE_STORAGE) {
       this.translateService
-        .get(['warnings-modal.secure-storage.title', 'warnings-modal.secure-storage.description'])
+        .get([
+          'warnings-modal.secure-storage.title',
+          'warnings-modal.secure-storage.description',
+          'warnings-modal.secure-storage.button-text_label'
+        ])
         .subscribe((values) => {
           this.title = values['warnings-modal.secure-storage.title']
           this.description = values['warnings-modal.secure-storage.description']
+          this.buttonText = values['warnings-modal.secure-storage.button-text_label']
         })
       this.imageUrl = './assets/img/screenshot_detected.svg'
-      this.buttonText = 'warnings-modal.secure-storage.button-text_label'
       this.handler = (): void => {
         this.secureStorageService.secureDevice().catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
       }

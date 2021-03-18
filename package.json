@@ -76,6 +76,7 @@
     "secrets.js-grempe": "^1.1.0",
     "tslib": "^1.10.0",
     "tslint-config-valorsoft": "^2.2.1",
+    "wif": "^2.0.6",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
