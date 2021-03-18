@@ -1,7 +1,7 @@
 import { Component } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 
-import { BIPSigner } from '../../models/BIPSigner'
+import { BIPSigner } from '../../models/BIP39Signer'
 import { Secret } from '../../models/secret'
 import { DeviceService } from '../../services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'

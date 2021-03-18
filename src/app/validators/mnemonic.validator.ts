@@ -1,7 +1,7 @@
 import { FormControl } from '@angular/forms'
 import * as bip39 from 'bip39'
 
-import { BIPSigner } from '../models/BIPSigner'
+import { BIPSigner } from '../models/BIP39Signer'
 
 export class MnemonicValidator {
   public static checkMnemonic(mnemonic: string, wordlist: string): void {

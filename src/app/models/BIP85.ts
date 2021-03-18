@@ -1,5 +1,5 @@
 import { BIP32Interface, fromBase58, fromSeed } from 'bip32'
-import { validateMnemonic, entropyToMnemonic, mnemonicToSeed } from 'bip39'
+import { validateMnemonic, entropyToMnemonic, mnemonicToSeedSync } from 'bip39'
 import { BIP85Child } from './BIP85Child'
 
 import * as createHmac from 'create-hmac'
@@ -155,7 +155,7 @@ export class BIP85 {
       throw new Error('Invalid mnemonic')
     }
 
-    const seed = mnemonicToSeed(mnemonic, password)
+    const seed = mnemonicToSeedSync(mnemonic, password)
 
     return BIP85.fromSeed(seed)
   }

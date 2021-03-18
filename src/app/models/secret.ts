@@ -1,10 +1,11 @@
 import { AirGapWallet } from '@airgap/coinlib-core'
 import { UUID } from 'angular2-uuid'
+import { fromSeed } from 'bip32'
 
 import { toBoolean } from '../utils/utils'
 
 import { InteractionSetting } from './../services/interaction/interaction.service'
-import { BIPSigner } from './BIPSigner'
+import { BIPSigner } from './BIP39Signer'
 import { Identifiable } from './identifiable'
 
 const signer: BIPSigner = new BIPSigner()
@@ -81,8 +82,9 @@ export class Secret implements Identifiable {
 
   private getFingerprintFromMnemonic(entropy: string): string {
     const mnemonic: string = this.getMnemonicFromEntropy(entropy)
+    const seed: Buffer = signer.mnemonicToSeedSync(mnemonic)
 
-    return signer.fingerprintFromMnemonicSync(mnemonic).toString('hex')
+    return fromSeed(seed).fingerprint.toString('hex')
   }
 
   private isMnemonic(data: string): boolean {

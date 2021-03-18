@@ -1,4 +1,3 @@
-import * as bip32 from 'bip32'
 import * as bip39 from 'bip39'
 import { Hasher, sha3_256 } from 'js-sha3'
 import secretJS from 'secrets.js-grempe'
@@ -45,11 +44,8 @@ export class BIPSigner {
     return bip39.mnemonicToEntropy(mnemonic, usedList)
   }
 
-  public fingerprintFromMnemonicSync(mnemonic: string, bip39Passphrase?: string): Buffer {
-    const seed: Buffer = bip39.mnemonicToSeedSync(mnemonic, bip39Passphrase)
-    const bip: bip32.BIP32Interface = bip32.fromSeed(seed)
-
-    return bip.fingerprint
+  public mnemonicToSeedSync(mnemonic: string, passphrase?: string): Buffer {
+    return bip39.mnemonicToSeedSync(mnemonic, passphrase)
   }
 
   public static prepareMnemonic(mnemonic: string): string {
