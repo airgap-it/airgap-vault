@@ -22,8 +22,8 @@ export class ShareUrlService {
       isExtendedPublicKey: wallet.isExtendedPublicKey,
       derivationPath: wallet.derivationPath,
       masterFingerprint: wallet.masterFingerprint,
-      groupId: secret.fingerprint,
-      groupLabel: secret.label
+      groupId: secret.fingerprint ?? '',
+      groupLabel: secret.label ?? ''
     }
 
     const deserializedTxSigningRequest: IACMessageDefinitionObject = {
