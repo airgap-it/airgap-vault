@@ -41,8 +41,11 @@ export interface IInteractionOptions {
 export class InteractionService {
   constructor(private readonly navigationService: NavigationService, private readonly deepLinkService: DeeplinkService) {}
 
-  public startInteraction(interactionOptions: IInteractionOptions, secret: Secret): void {
-    const interactionSetting: InteractionSetting = secret.interactionSetting
+  public startInteraction(interactionOptions: IInteractionOptions, secret: Secret): void
+  public startInteraction(interactionOptions: IInteractionOptions, interactionSetting: InteractionSetting): void
+  public startInteraction(interactionOptions: IInteractionOptions, secretOrInteractionSetting: Secret | InteractionSetting): void {
+    const interactionSetting: InteractionSetting =
+      typeof secretOrInteractionSetting === 'string' ? secretOrInteractionSetting : secretOrInteractionSetting.interactionSetting
 
     if (interactionOptions.communicationType) {
       if (interactionSetting === InteractionSetting.UNDETERMINED) {

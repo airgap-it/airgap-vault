@@ -62,6 +62,10 @@ export class TabAccountsPage implements OnInit {
     this.symbolFilter = isValidSymbol(value) ? value.trim().toLowerCase() : undefined
   }
 
+  public syncWallets(): void {
+    this.navigationService.route('/account-share-select').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
   public addWallet(): void {
     this.navigationService.route('/account-add').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }

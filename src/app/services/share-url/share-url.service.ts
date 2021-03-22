@@ -1,4 +1,4 @@
-import { SerializerService } from '@airgap/angular-core'
+import { flattened, SerializerService } from '@airgap/angular-core'
 import { AccountShareResponse, AirGapWallet, generateId, IACMessageDefinitionObject, IACMessageType } from '@airgap/coinlib-core'
 import { Injectable } from '@angular/core'
 import { Secret } from 'src/app/models/secret'
@@ -14,7 +14,7 @@ export class ShareUrlService {
     //
   }
 
-  public async generateShareURL(wallet: AirGapWallet): Promise<string> {
+  public async generateShareWalletURL(wallet: AirGapWallet): Promise<string> {
     const secret: Secret | undefined = this.secretsService.findByPublicKey(wallet.publicKey)
 
     const accountShareResponse: AccountShareResponse = {
@@ -34,6 +34,34 @@ export class ShareUrlService {
     }
 
     const serializedTx: string[] = await this.serializerService.serialize([deserializedTxSigningRequest])
+
+    return serializedDataToUrlString(serializedTx, 'airgap-wallet://')
+  }
+
+  public async generateShareSecretsURL(secrets: Secret[]): Promise<string> {
+    const deserializedTxSigningRequests: IACMessageDefinitionObject[] = flattened(
+      secrets.map((secret: Secret) => {
+        return secret.wallets.map((wallet: AirGapWallet) => {
+          const accountShareResponse: AccountShareResponse = {
+            publicKey: wallet.publicKey,
+            isExtendedPublicKey: wallet.isExtendedPublicKey,
+            derivationPath: wallet.derivationPath,
+            masterFingerprint: wallet.masterFingerprint,
+            groupId: secret.fingerprint ?? '',
+            groupLabel: secret.label ?? ''
+          }
+
+          return {
+            id: generateId(10),
+            protocol: wallet.protocol.identifier,
+            type: IACMessageType.AccountShareResponse,
+            payload: accountShareResponse
+          }
+        })
+      })
+    )
+
+    const serializedTx: string[] = await this.serializerService.serialize(deserializedTxSigningRequests)
 
     return serializedDataToUrlString(serializedTx, 'airgap-wallet://')
   }

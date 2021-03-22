@@ -84,7 +84,7 @@ export class AccountAddressPage {
 
     if (this.walletShareUrlPromise === undefined) {
       this.walletShareUrlPromise = new Promise<string>(async (resolve) => {
-        const shareUrl: string = await this.shareUrlService.generateShareURL(this.wallet)
+        const shareUrl: string = await this.shareUrlService.generateShareWalletURL(this.wallet)
         resolve(shareUrl)
       }).then((shareUrl: string) => {
         this.walletShareUrl = shareUrl

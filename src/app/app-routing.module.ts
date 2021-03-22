@@ -24,6 +24,10 @@ const routes: Routes = [
   },
   { path: 'account-share', loadChildren: () => import('./pages/account-share/account-share.module').then((m) => m.AccountSharePageModule) },
   {
+    path: 'account-share-select',
+    loadChildren: () => import('./pages/account-share-select/account-share-select.module').then((m) => m.AccountShareSelectPageModule)
+  },
+  {
     path: 'account-address',
     loadChildren: () => import('./pages/account-address/account-address.module').then((m) => m.AccountAddressPageModule)
   },

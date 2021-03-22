@@ -389,6 +389,11 @@
     "same-device_label": "Same-Device-Sync",
     "done_label": "Done"
   },
+  "wallet-share-select": {
+    "title": "Sync Account",
+    "heading": "Select the accounts you'd like to sync with <span class=\"style__strong color__primary\">AirGap Wallet</span>.",
+    "sync_label": "Sync"
+  },
   "warnings-modal": {
     "root": {
       "title": "Your device is rooted",
