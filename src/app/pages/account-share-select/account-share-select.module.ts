@@ -9,7 +9,7 @@ import { TranslateModule } from '@ngx-translate/core'
 
 import { ComponentsModule } from '../../components/components.module'
 
-import { AccountShareSelectRoutingModule } from './account-share-select-routing.module'
+import { AccountShareSelectPageRoutingModule } from './account-share-select-routing.module'
 import { AccountShareSelectEffects } from './account-share-select.effects'
 import { AccountShareSelectPage } from './account-share-select.page'
 import * as fromAccountShareSelect from './account-share-select.reducers'
@@ -21,7 +21,7 @@ import * as fromAccountShareSelect from './account-share-select.reducers'
     FormsModule,
     IonicModule,
     TranslateModule,
-    AccountShareSelectRoutingModule,
+    AccountShareSelectPageRoutingModule,
     StoreModule.forFeature('accountShareSelect', fromAccountShareSelect.reducer),
     EffectsModule.forFeature([AccountShareSelectEffects]),
     AirGapAngularCoreModule
