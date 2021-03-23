@@ -22,7 +22,7 @@ export interface State extends fromRoot.State {
 
 /**************** Reducers ****************/
 
-const initialState: FeatureState = {
+export const initialState: FeatureState = {
   secrets: {
     status: UIResourceStatus.IDLE,
     value: []
