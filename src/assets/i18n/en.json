@@ -338,10 +338,9 @@
       "text": "Address was copied to your clipboard"
     },
     "alert": {
-      "bip39-passphrase": {
-        "header": "BIP-39 Passphrase",
-        "message": "If you have set a BIP-39 passphrase, please enter it here.",
-        "input-placeholder_label": "Passphrase",
+      "wallet-not-migrated": {
+        "header": "The account needs an update",
+        "message": "Can't proceed, please migrate or re-add the account first.",
         "button_label": "Ok"
       }
     }
@@ -392,7 +391,25 @@
   "wallet-share-select": {
     "title": "Sync Account",
     "heading": "Select the accounts you'd like to sync with <span class=\"style__strong color__primary\">AirGap Wallet</span>.",
-    "sync_label": "Sync"
+    "sync_label": "Sync",
+    "alert": {
+      "wallets-not-migrated": {
+        "header": "The accounts need an update",
+        "message": "Can't proceed, please migrate or re-add the accounts first.",
+        "button_label": "Ok"
+      },
+      "excluded-legacy-accounts": {
+        "header": "Some accounts need an update",
+        "message": "Some of the selected accounts can't be synced and must be migrated or re-added. You can still sync the rest of the accounts.",
+        "button-accept_label": "Sync",
+        "button-reject_label": "Cancel"
+      },
+      "unknown-error": {
+        "header": "Error",
+        "message": "Something went wrong!",
+        "button_label": "Ok"
+      }
+    }
   },
   "warnings-modal": {
     "root": {

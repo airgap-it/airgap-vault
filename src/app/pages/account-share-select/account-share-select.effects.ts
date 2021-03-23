@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { Action, Store } from '@ngrx/store'
-import { of } from 'rxjs'
-import { switchMap, tap, withLatestFrom } from 'rxjs/operators'
-import { Secret } from 'src/app/models/secret'
-import { InteractionOperationType, InteractionService, InteractionSetting } from 'src/app/services/interaction/interaction.service'
-import { SecretsService } from 'src/app/services/secrets/secrets.service'
-import { ShareUrlService } from 'src/app/services/share-url/share-url.service'
+import { from, of } from 'rxjs'
+import { first, switchMap, tap, withLatestFrom } from 'rxjs/operators'
+
+import { Secret } from '../../models/secret'
+import { InteractionOperationType, InteractionService, InteractionSetting } from '../../services/interaction/interaction.service'
+import { MigrationService } from '../../services/migration/migration.service'
+import { SecretsService } from '../../services/secrets/secrets.service'
+import { ShareUrlService } from '../../services/share-url/share-url.service'
 
 import * as actions from './account-share-select.actions'
 import * as fromAccountShareSelect from './account-share-select.reducers'
@@ -21,12 +23,21 @@ export class AccountShareSelectEffects {
     )
   )
 
+  public shareUrl$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(actions.syncButtonClicked),
+      withLatestFrom(this.store.select(fromAccountShareSelect.selectCheckedSecrets)),
+      switchMap(([_, checkedSecrets]) => from(this.generateAndShowQr(checkedSecrets)).pipe(first()))
+    )
+  )
+
   public sync$ = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(actions.syncButtonClicked),
-        withLatestFrom(this.store.select(fromAccountShareSelect.selectCheckedSecrets)),
-        tap(([_, checkedSecrets]) => this.generateAndShowQr(checkedSecrets))
+        ofType(actions.shareUrlGenerated, actions.migrationAlertAccepted),
+        tap((action) => {
+          this.syncAccounts(action.shareUrl, action.interactionSetting)
+        })
       ),
     { dispatch: false }
   )
@@ -36,12 +47,26 @@ export class AccountShareSelectEffects {
     private readonly store: Store<fromAccountShareSelect.State>,
     private readonly secretsService: SecretsService,
     private readonly shareUrlService: ShareUrlService,
-    private readonly interactionService: InteractionService
+    private readonly interactionService: InteractionService,
+    private readonly migrationService: MigrationService
   ) {}
 
-  private async generateAndShowQr(secrets: Secret[]): Promise<Action[]> {
-    const shareUrl: string = await this.shareUrlService.generateShareSecretsURL(secrets)
-    const interactionSetting: InteractionSetting = this.getCommonInteractionSetting(secrets)
+  private async generateAndShowQr(secrets: Secret[]): Promise<Action> {
+    await this.migrationService.runSecretsMigration(secrets)
+    const migratedSecrets: Secret[] = this.migrationService.getMigratedSecretsAndWallets(secrets)
+    if (migratedSecrets.length === 0) {
+      return actions.walletsNotMigrated()
+    }
+
+    const shareUrl: string = await this.shareUrlService.generateShareSecretsURL(migratedSecrets)
+    const interactionSetting: InteractionSetting = this.getCommonInteractionSetting(migratedSecrets)
+
+    return migratedSecrets.length === secrets.length
+      ? actions.shareUrlGenerated({ shareUrl, interactionSetting })
+      : actions.shareUrlGeneratedExcludedLegacy({ shareUrl, interactionSetting })
+  }
+
+  private syncAccounts(shareUrl: string, interactionSetting: InteractionSetting): void {
     this.interactionService.startInteraction(
       {
         operationType: InteractionOperationType.WALLET_SYNC,
@@ -49,8 +74,6 @@ export class AccountShareSelectEffects {
       },
       interactionSetting
     )
-
-    return []
   }
 
   private getCommonInteractionSetting(secrets: Secret[]): InteractionSetting {

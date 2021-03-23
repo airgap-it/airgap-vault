@@ -21,19 +21,19 @@ type ModalOnDismissAction = (modalData: OverlayEventDetail<unknown>) => Promise<
   styleUrls: ['./deserialized-detail.page.scss']
 })
 export class DeserializedDetailPage implements OnDestroy {
-  public mode$: Observable<Mode | undefined>
-  public title$: Observable<string>
-  public button$: Observable<string | undefined>
+  public readonly mode$: Observable<Mode | undefined>
+  public readonly title$: Observable<string>
+  public readonly button$: Observable<string | undefined>
 
-  public transactionsDetails$: Observable<UIResource<IAirGapTransaction[]>>
-  public messages$: Observable<UIResource<UnsignedMessage[]>>
-  public rawData$: Observable<UIResource<string>>
+  public readonly transactionsDetails$: Observable<UIResource<IAirGapTransaction[]>>
+  public readonly messages$: Observable<UIResource<UnsignedMessage[]>>
+  public readonly rawData$: Observable<UIResource<string>>
 
-  public alert$: Observable<UIAction<Alert> | undefined>
-  public modal$: Observable<UIAction<Modal> | undefined>
+  public readonly alert$: Observable<UIAction<Alert> | undefined>
+  public readonly modal$: Observable<UIAction<Modal> | undefined>
 
-  public Mode: typeof Mode = Mode
-  public UIResourceStatus: typeof UIResourceStatus = UIResourceStatus
+  public readonly Mode: typeof Mode = Mode
+  public readonly UIResourceStatus: typeof UIResourceStatus = UIResourceStatus
 
   private alertElement: HTMLIonAlertElement
   private modalElement: HTMLIonModalElement
@@ -66,6 +66,7 @@ export class DeserializedDetailPage implements OnDestroy {
     this.subscriptions.forEach((subscription: Subscription) => {
       subscription.unsubscribe()
     })
+    this.subscriptions = []
   }
 
   public continue(): void {

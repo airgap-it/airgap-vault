@@ -1,10 +1,11 @@
-import { UIAction, UIResource, UIResourceStatus } from '@airgap/angular-core'
+import { generateGUID, UIAction, UIActionStatus, UIResource, UIResourceStatus } from '@airgap/angular-core'
 import { createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store'
-import { Secret } from 'src/app/models/secret'
 
 import * as fromRoot from '../../app.reducers'
+import { Secret } from '../../models/secret'
+
 import * as actions from './account-share-select.actions'
-import { Alert } from './account-share.types'
+import { Alert, ExcludedLegacyAccountsAlert, WalletsNotMigratedAlert } from './account-share-select.types'
 
 /**************** STATE ****************/
 
@@ -52,7 +53,38 @@ export const reducer = createReducer(
           ? state.checkedIds.slice(0, foundIndex).concat(state.checkedIds.slice(foundIndex + 1))
           : [...state.checkedIds, secretId]
     }
-  })
+  }),
+  on(actions.walletsNotMigrated, (state) => ({
+    ...state,
+    alert: {
+      id: generateGUID(),
+      value: { type: 'walletsNotMigrated' as WalletsNotMigratedAlert['type'] },
+      status: UIActionStatus.PENDING
+    }
+  })),
+  on(actions.shareUrlGeneratedExcludedLegacy, (state, { shareUrl, interactionSetting }) => ({
+    ...state,
+    alert: {
+      id: generateGUID(),
+      value: {
+        type: 'excludedLegacyAccounts' as ExcludedLegacyAccountsAlert['type'],
+        shareUrl,
+        interactionSetting
+      },
+      status: UIActionStatus.PENDING
+    }
+  })),
+  on(actions.alertDismissed, (state, { id }) => ({
+    ...state,
+    alert:
+      state.alert !== undefined
+        ? {
+            id: state.alert.id,
+            value: state.alert.value,
+            status: id === state.alert.id ? UIActionStatus.HANDLED : state.alert.status
+          }
+        : undefined
+  }))
 )
 
 /**************** Selectors ****************/
@@ -67,6 +99,7 @@ export const selectSecrets = createSelector(
   })
 )
 export const selectCheckedIds = createSelector(selectFeatureState, (state: FeatureState): string[] => state.checkedIds)
+export const selectAlert = createSelector(selectFeatureState, (state: FeatureState): UIAction<Alert> | undefined => state.alert)
 
 export const selectCheckedSecrets = createSelector(
   selectSecrets,

@@ -1,28 +1,50 @@
-import { UIResource, UIResourceStatus } from '@airgap/angular-core'
-import { Component } from '@angular/core'
+import { UIAction, UIActionStatus, UiEventService, UIResource, UIResourceStatus } from '@airgap/angular-core'
+import { Component, OnDestroy } from '@angular/core'
+import { AlertOptions } from '@ionic/core'
 import { Store } from '@ngrx/store'
-import { Observable } from 'rxjs'
-import { Secret } from 'src/app/models/secret'
+import { Observable, Subscription } from 'rxjs'
+
+import { Secret } from '../../models/secret'
+import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
+import { InteractionSetting } from '../../services/interaction/interaction.service'
 
 import * as actions from './account-share-select.actions'
 import * as fromAccountShareSelect from './account-share-select.reducers'
+import { Alert } from './account-share-select.types'
 
 @Component({
   selector: 'airgap-account-share-select',
   templateUrl: './account-share-select.page.html',
   styleUrls: ['./account-share-select.page.scss']
 })
-export class AccountShareSelectPage {
-  public readonly UIResourceStatus: typeof UIResourceStatus = UIResourceStatus
-
+export class AccountShareSelectPage implements OnDestroy {
   public readonly secrets$: Observable<UIResource<Secret[]>>
   public readonly isChecked$: Observable<Record<string, boolean>>
 
-  constructor(private readonly store: Store<fromAccountShareSelect.State>) {
+  public readonly alert$: Observable<UIAction<Alert> | undefined>
+
+  public readonly UIResourceStatus: typeof UIResourceStatus = UIResourceStatus
+
+  private alertElement: HTMLIonAlertElement
+
+  private subscriptions: Subscription[] = []
+
+  constructor(private readonly store: Store<fromAccountShareSelect.State>, private readonly uiEventService: UiEventService) {
     this.secrets$ = this.store.select(fromAccountShareSelect.selectSecrets)
     this.isChecked$ = this.store.select(fromAccountShareSelect.selectIsSecretChecked)
 
+    this.alert$ = this.store.select(fromAccountShareSelect.selectAlert)
+
+    this.subscriptions.push(this.alert$.subscribe(this.dismissOrShowAlert.bind(this)))
+
     this.store.dispatch(actions.viewInitialization())
+  }
+
+  public ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription: Subscription) => {
+      subscription.unsubscribe()
+    })
+    this.subscriptions = []
   }
 
   public toggleSecret(secret: Secret): void {
@@ -31,5 +53,80 @@ export class AccountShareSelectPage {
 
   public sync(): void {
     this.store.dispatch(actions.syncButtonClicked())
+  }
+
+  private async dismissOrShowAlert(alert: UIAction<Alert> | undefined): Promise<void> {
+    this.alertElement?.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
+    if (alert?.status === UIActionStatus.PENDING) {
+      this.alertElement = await this.uiEventService.getTranslatedAlert(this.getAlertData(alert.value))
+      this.alertElement.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
+
+      return this.alertElement
+        .onWillDismiss()
+        .then(() => {
+          this.store.dispatch(actions.alertDismissed({ id: alert.id }))
+        })
+        .catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
+    } else {
+      this.alertElement = undefined
+    }
+  }
+
+  private getAlertData(alert: Alert): AlertOptions {
+    switch (alert.type) {
+      case 'walletsNotMigrated':
+        return this.walletsNotMigratedAlert()
+      case 'excludedLegacyAccounts':
+        return this.excludedLegacyAccountsAlert(alert.shareUrl, alert.interactionSetting)
+      case 'unknownError':
+        return this.unknownErrorAlert(alert.message)
+      default:
+        return {}
+    }
+  }
+
+  private walletsNotMigratedAlert(): AlertOptions {
+    return {
+      header: 'wallet-share-select.alert.wallets-not-migrated.header',
+      message: 'wallet-share-select.alert.wallets-not-migrated.message',
+      backdropDismiss: true,
+      buttons: [
+        {
+          text: 'wallet-share-select.alert.wallets-not-migrated.button_label'
+        }
+      ]
+    }
+  }
+
+  private excludedLegacyAccountsAlert(shareUrl: string, interactionSetting: InteractionSetting): AlertOptions {
+    return {
+      header: 'wallet-share-select.alert.excluded-legacy-accounts.header',
+      message: 'wallet-share-select.alert.excluded-legacy-accounts.message',
+      backdropDismiss: true,
+      buttons: [
+        {
+          text: 'wallet-share-select.alert.excluded-legacy-accounts.button-reject_label'
+        },
+        {
+          text: 'wallet-share-select.alert.excluded-legacy-accounts.button-accept_label',
+          handler: () => {
+            this.store.dispatch(actions.migrationAlertAccepted({ shareUrl, interactionSetting }))
+          }
+        }
+      ]
+    }
+  }
+
+  private unknownErrorAlert(message?: string): AlertOptions {
+    return {
+      header: 'wallet-share-select.alert.unknown-error.header',
+      message: message ?? 'wallet-share-select.alert.unknown-error.message',
+      backdropDismiss: true,
+      buttons: [
+        {
+          text: 'wallet-share-select.alert.unknown-error.button_label'
+        }
+      ]
+    }
   }
 }

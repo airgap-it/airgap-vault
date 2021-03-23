@@ -80,7 +80,12 @@ export class AccountAddressPage {
       return
     }
 
-    await this.assertWalletValid()
+    await this.migrationService.runWalletsMigration([this.wallet])
+    if (!this.migrationService.isWalletMigrated(this.wallet)) {
+      await this.showWalletNotMigratedAlert()
+
+      return Promise.reject('Cannot create share URL, wallet data is incomplete')
+    }
 
     if (this.walletShareUrlPromise === undefined) {
       this.walletShareUrlPromise = new Promise<string>(async (resolve) => {
@@ -95,50 +100,13 @@ export class AccountAddressPage {
     return this.walletShareUrlPromise
   }
 
-  private async assertWalletValid(): Promise<void> {
-    const migrateWallet = (bip39Passphrase: string = '', tries: number = 0): Promise<void> => {
-      return new Promise(async (resolve, reject) => {
-        try {
-          await this.migrationService.migrateWallet(this.wallet, bip39Passphrase)
-          resolve()
-        } catch (error) {
-          if (error.message?.toLowerCase().startsWith('invalid bip-39 passphrase') && tries < 1) {
-            await this.showBip39PassphraseAlert((passphrase: string) => {
-              migrateWallet(passphrase, tries + 1)
-                .then(resolve)
-                .catch(reject)
-            })
-          } else {
-            reject(error)
-          }
-        }
-      })
-    }
-
-    await Promise.all([migrateWallet()])
-  }
-
-  private async showBip39PassphraseAlert(onSuccess?: (passphrase: string) => void) {
-    await this.uiEventService.showTranslatedAlert({
-      header: 'wallet-address.alert.bip39-passphrase.header',
-      message: 'wallet-address.alert.bip39-passphrase.message',
-      backdropDismiss: false,
-      inputs: [
-        {
-          name: 'bip39Passphrase',
-          type: 'password',
-          placeholder: 'wallet-address.alert.bip39-passphrase.input-placeholder_label'
-        }
-      ],
+  private async showWalletNotMigratedAlert(): Promise<void> {
+    return this.uiEventService.showTranslatedAlert({
+      header: 'wallet-address.alert.wallet-not-migrated.header',
+      message: 'wallet-address.alert.wallet-not-migrated.message',
       buttons: [
         {
-          text: 'wallet-address.alert.bip39-passphrase.button_label',
-          handler: async (result: { bip39Passphrase: string }): Promise<void> => {
-            const passphrase: string = result.bip39Passphrase ?? ''
-            if (onSuccess !== undefined) {
-              onSuccess(passphrase)
-            }
-          }
+          text: 'wallet-address.alert.wallet-not-migrated.button_label'
         }
       ]
     })
