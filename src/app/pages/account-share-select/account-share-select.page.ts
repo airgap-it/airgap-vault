@@ -21,6 +21,8 @@ export class AccountShareSelectPage implements OnDestroy {
   public readonly secrets$: Observable<UIResource<Secret[]>>
   public readonly isChecked$: Observable<Record<string, boolean>>
 
+  public readonly syncEnabled$: Observable<boolean>
+
   public readonly alert$: Observable<UIAction<Alert> | undefined>
 
   public readonly UIResourceStatus: typeof UIResourceStatus = UIResourceStatus
@@ -33,9 +35,11 @@ export class AccountShareSelectPage implements OnDestroy {
     this.secrets$ = this.store.select(fromAccountShareSelect.selectSecrets)
     this.isChecked$ = this.store.select(fromAccountShareSelect.selectIsSecretChecked)
 
+    this.syncEnabled$ = this.store.select(fromAccountShareSelect.selectSyncEnabled)
+
     this.alert$ = this.store.select(fromAccountShareSelect.selectAlert)
 
-    this.subscriptions.push(this.alert$.subscribe(this.dismissOrShowAlert.bind(this)))
+    this.subscriptions.push(this.alert$.subscribe(this.showOrDismissAlert.bind(this)))
 
     this.store.dispatch(actions.viewInitialization())
   }
@@ -55,7 +59,7 @@ export class AccountShareSelectPage implements OnDestroy {
     this.store.dispatch(actions.syncButtonClicked())
   }
 
-  private async dismissOrShowAlert(alert: UIAction<Alert> | undefined): Promise<void> {
+  private async showOrDismissAlert(alert: UIAction<Alert> | undefined): Promise<void> {
     this.alertElement?.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
     if (alert?.status === UIActionStatus.PENDING) {
       this.alertElement = await this.uiEventService.getTranslatedAlert(this.getAlertData(alert.value))

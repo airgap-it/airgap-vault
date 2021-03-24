@@ -9,6 +9,7 @@ import { MigrationService } from '../../services/migration/migration.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
 import { ShareUrlService } from '../../services/share-url/share-url.service'
+import { isWalletMigrated } from '../../utils/migration'
 
 import { AccountEditPopoverComponent } from './account-edit-popover/account-edit-popover.component'
 
@@ -81,7 +82,7 @@ export class AccountAddressPage {
     }
 
     await this.migrationService.runWalletsMigration([this.wallet])
-    if (!this.migrationService.isWalletMigrated(this.wallet)) {
+    if (!isWalletMigrated(this.wallet)) {
       await this.showWalletNotMigratedAlert()
 
       return Promise.reject('Cannot create share URL, wallet data is incomplete')

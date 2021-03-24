@@ -113,6 +113,10 @@ const routes: Routes = [
   {
     path: 'qr-settings',
     loadChildren: () => import('./pages/qr-settings/qr-settings.module').then((m) => m.QrSettingsPageModule)
+  },
+  {
+    path: 'migration',
+    loadChildren: () => import('./pages/migration/migration.module').then((m) => m.MigrationPageModule)
   }
 ]
 

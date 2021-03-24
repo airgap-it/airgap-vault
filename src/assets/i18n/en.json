@@ -340,7 +340,7 @@
     "alert": {
       "wallet-not-migrated": {
         "header": "The account needs an update",
-        "message": "Can't proceed, please migrate or re-add the account first.",
+        "message": "Can't proceed, please update or re-add the account first.",
         "button_label": "Ok"
       }
     }
@@ -395,12 +395,12 @@
     "alert": {
       "wallets-not-migrated": {
         "header": "The accounts need an update",
-        "message": "Can't proceed, please migrate or re-add the accounts first.",
+        "message": "Can't proceed, please update or re-add the accounts first.",
         "button_label": "Ok"
       },
       "excluded-legacy-accounts": {
         "header": "Some accounts need an update",
-        "message": "Some of the selected accounts can't be synced and must be migrated or re-added. You can still sync the rest of the accounts.",
+        "message": "Some of the selected accounts can't be synced and must be updated or re-added. You can still sync the rest of the accounts.",
         "button-accept_label": "Sync",
         "button-reject_label": "Cancel"
       },
@@ -489,5 +489,34 @@
   },
   "unsigned-transaction": {
     "sign-tx_label": "Sign Transaction"
+  },
+  "migration": {
+    "title": "Accounts Update",
+    "heading": "TODO: explanation",
+    "list": {
+      "header": "The following secrets and accounts will be updated <br /> <br /> <strong>Note: you may be asked to authenticate and provide a passphrase, if it's been set for any of the displayed secrets or accounts.</strong>"
+    },
+    "button-run_label": "Update",
+    "button-done_label": "Done",
+    "alert": {
+      "paranoia-info": {
+        "header": "Passphrase",
+        "message": "It looks like you have set a passphrase to additionally secure <span class=\"style__strong color__primary\">{{label}}</span>. You may be be asked to provide it during the update. Skip if you don't want to update this secret now.",
+        "button-ok_label": "Ok",
+        "button-skip_label": "Skip"
+      },
+      "bip39-passphrase": {
+        "header": "BIP-39 Passphrase",
+        "message": "If you have set a BIP-39 passphrase for <span class=\"style__strong color__primary\">{{address}} ({{protocol}})</span>, please enter it here or skip the update of this account.",
+        "input-placeholder_label": "Passphrase",
+        "button-ok_label": "Ok",
+        "button-skip_label": "Skip"
+      },
+      "unknown-error": {
+        "header": "Error",
+        "message": "Something went wrong!",
+        "button_label": "Ok"
+      }
+    }
   }
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { Action, Store } from '@ngrx/store'
 import { from, of } from 'rxjs'
-import { first, switchMap, tap, withLatestFrom } from 'rxjs/operators'
+import { filter, first, switchMap, tap, withLatestFrom } from 'rxjs/operators'
 
 import { Secret } from '../../models/secret'
 import { InteractionOperationType, InteractionService, InteractionSetting } from '../../services/interaction/interaction.service'
@@ -27,6 +27,7 @@ export class AccountShareSelectEffects {
     this.actions$.pipe(
       ofType(actions.syncButtonClicked),
       withLatestFrom(this.store.select(fromAccountShareSelect.selectCheckedSecrets)),
+      filter(([_, checkedSecrets]) => checkedSecrets.length > 0),
       switchMap(([_, checkedSecrets]) => from(this.generateAndShowQr(checkedSecrets)).pipe(first()))
     )
   )
@@ -53,7 +54,7 @@ export class AccountShareSelectEffects {
 
   private async generateAndShowQr(secrets: Secret[]): Promise<Action> {
     await this.migrationService.runSecretsMigration(secrets)
-    const migratedSecrets: Secret[] = this.migrationService.getMigratedSecretsAndWallets(secrets)
+    const [migratedSecrets, allMigrated]: [Secret[], boolean] = this.migrationService.deepFilterMigratedSecretsAndWallets(secrets)
     if (migratedSecrets.length === 0) {
       return actions.walletsNotMigrated()
     }
@@ -61,7 +62,7 @@ export class AccountShareSelectEffects {
     const shareUrl: string = await this.shareUrlService.generateShareSecretsURL(migratedSecrets)
     const interactionSetting: InteractionSetting = this.getCommonInteractionSetting(migratedSecrets)
 
-    return migratedSecrets.length === secrets.length
+    return allMigrated
       ? actions.shareUrlGenerated({ shareUrl, interactionSetting })
       : actions.shareUrlGeneratedExcludedLegacy({ shareUrl, interactionSetting })
   }

@@ -130,3 +130,5 @@ export const selectIsSecretChecked = createSelector(
     )
   }
 )
+
+export const selectSyncEnabled = createSelector(selectCheckedIds, (checked: string[]): boolean => checked.length > 0)

@@ -13,13 +13,13 @@
   <ion-list lines="none" *ngIf="(secrets$ | async).status === UIResourceStatus.SUCCESS">
     <ng-container *ngFor="let secret of (secrets$ | async).value">
       <ion-item detail="false" class="ion-no-padding">
+        <ion-label class="white">{{ secret.label }}</ion-label>
         <ion-checkbox
-          slot="start"
+          slot="end"
           color="primary"
           [checked]="(isChecked$ | async)[secret.id]"
           (ionChange)="toggleSecret(secret)"
         ></ion-checkbox>
-        <ion-label class="white">{{ secret.label }}</ion-label>
       </ion-item>
       <ion-list lines="none" *ngIf="(isChecked$ | async)[secret.id]">
         <airgap-account-item *ngFor="let wallet of secret.wallets" [wallet]="wallet"></airgap-account-item>
@@ -28,7 +28,7 @@
   </ion-list>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-button [disabled]="(secrets$ | async).status !== UIResourceStatus.SUCCESS" color="primary" shape="round" (click)="sync()">
+    <ion-button [disabled]="!(syncEnabled$ | async)" color="primary" shape="round" (click)="sync()">
       {{ 'wallet-share-select.sync_label' | translate }}
     </ion-button>
   </ion-fab>

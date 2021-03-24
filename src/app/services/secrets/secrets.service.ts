@@ -276,6 +276,7 @@ export class SecretsService {
       const bip: bip32.BIP32Interface = bip32.fromSeed(seed)
 
       const publicKey: string = await protocol.getPublicKeyFromMnemonic(mnemonic, customDerivationPath, bip39Passphrase)
+      bip
       const fingerprint: string = bip.fingerprint.toString('hex')
 
       const wallet: AirGapWallet = new AirGapWallet(protocol, publicKey, isHDWallet, customDerivationPath, fingerprint)

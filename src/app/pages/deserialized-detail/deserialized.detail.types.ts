@@ -14,6 +14,7 @@ export enum Mode {
 }
 
 /**************** Alert ****************/
+
 export interface Bip39PassphraseAlert {
   type: 'bip39Passphrase'
 }
