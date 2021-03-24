@@ -3,15 +3,16 @@ import { AirGapWallet } from '@airgap/coinlib-core'
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { Action, Store } from '@ngrx/store'
-import { BIP32Interface, fromSeed } from 'bip32'
-import { entropyToMnemonic, mnemonicToSeed } from 'bip39'
+import { entropyToMnemonic } from 'bip39'
 import { concat, from, Observable, of, Subscriber } from 'rxjs'
 import { first, switchMap, tap, withLatestFrom } from 'rxjs/operators'
 
 import { Secret } from '../../models/secret'
+import { MigrationService } from '../../services/migration/migration.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
 import { isSecretMigrated, isWalletMigrated } from '../../utils/migration'
+import { retry } from '../../utils/retry'
 
 import * as actions from './migration.actions'
 import * as fromMigration from './migration.reducers'
@@ -120,7 +121,8 @@ export class MigrationEffects {
     private readonly actions$: Actions,
     private readonly store: Store<fromMigration.State>,
     private readonly navigationService: NavigationService,
-    private readonly secretsService: SecretsService
+    private readonly secretsService: SecretsService,
+    private readonly migrationService: MigrationService
   ) {}
 
   private async loadNavigationData(allSecrets: Secret[]): Promise<Action> {
@@ -191,12 +193,9 @@ export class MigrationEffects {
     subscriber.next(actions.nextSecret({ id: secret.id }))
 
     if (secret.isParanoia) {
-      subscriber.next(actions.paranoiaDetected({ secretId: secret.id }))
-      const paranoiaAccepted: boolean = await this.exposedPromises.yield(PromiseKey.PARANOIA_ACCEPTED)
+      const paranoiaAccepted: boolean = await this.waitForParanoiaAccepted(subscriber, secret)
       if (!paranoiaAccepted) {
-        // skip secret
         subscriber.next(actions.secretSkipped({ id: secret.id }))
-
         return
       }
     }
@@ -204,12 +203,7 @@ export class MigrationEffects {
     const entropy: string = await this.secretsService.retrieveEntropyForSecret(secret)
     const mnemonic: string = entropyToMnemonic(entropy)
 
-    if (!secret.fingerprint) {
-      const seed: Buffer = await mnemonicToSeed(mnemonic)
-      const bip32Node: BIP32Interface = fromSeed(seed)
-
-      secret.fingerprint = bip32Node.fingerprint.toString('hex')
-    }
+    await this.migrationService.migrateSecret(secret, { mnemonic, persist: false })
 
     for (const wallet of secret.wallets.filter((wallet: AirGapWallet) => targetWalletKeys.has(wallet.publicKey))) {
       await this.migrateWallet(subscriber, wallet, mnemonic)
@@ -219,32 +213,42 @@ export class MigrationEffects {
     await this.secretsService.addOrUpdateSecret(secret, { setActive: false })
   }
 
+  private async waitForParanoiaAccepted(subscriber: Subscriber<Action>, secret: Secret): Promise<boolean> {
+    subscriber.next(actions.paranoiaDetected({ secretId: secret.id }))
+
+    return this.exposedPromises.yield(PromiseKey.PARANOIA_ACCEPTED)
+  }
+
   private async migrateWallet(subscriber: Subscriber<Action>, wallet: AirGapWallet, mnemonic: string): Promise<void> {
     subscriber.next(actions.nextWallet({ publicKey: wallet.publicKey }))
 
-    if (!wallet.masterFingerprint) {
-      let bip39Passphrase: string | undefined = ''
-      let publicKey: string
-      do {
-        publicKey = await wallet.protocol.getPublicKeyFromMnemonic(mnemonic, wallet.derivationPath, bip39Passphrase)
-        if (publicKey !== wallet.publicKey) {
-          // a BIP-39 passphrase has been set during the account generation
-          subscriber.next(actions.invalidBip39Passphrase({ protocolIdentifier: wallet.protocol.identifier, publicKey: wallet.publicKey }))
-          bip39Passphrase = await this.exposedPromises.yield(PromiseKey.BIP39_PASSPHRASE)
+    await retry({
+      initArgs: '',
+      action: (bip39Passphrase: string) => this.migrationService.migrateWallet(wallet, { mnemonic, bip39Passphrase, persist: false }),
+      onFailure: async (error: any) => {
+        if (this.isInvalidBip39PassphraseError(error)) {
+          const bip39Passphrase: string | undefined = await this.askForBip39Passphrase(subscriber, wallet)
           if (bip39Passphrase === undefined) {
-            // skip wallet
             subscriber.next(actions.walletSkipped({ publicKey: wallet.publicKey }))
-
-            return
+            return { type: 'abort' }
           }
+
+          return {
+            type: 'retry',
+            nextArgs: bip39Passphrase
+          }
+        } else {
+          subscriber.next(actions.unknownError({ message: typeof error === 'string' ? error : error.message }))
+          return { type: 'abort' }
         }
-      } while (publicKey !== wallet.publicKey)
+      }
+    })
+  }
 
-      const seed: Buffer = await mnemonicToSeed(mnemonic, bip39Passphrase)
-      const bip32Node: BIP32Interface = fromSeed(seed)
+  private async askForBip39Passphrase(subscriber: Subscriber<Action>, wallet: AirGapWallet): Promise<string | undefined> {
+    subscriber.next(actions.invalidBip39Passphrase({ protocolIdentifier: wallet.protocol.identifier, publicKey: wallet.publicKey }))
 
-      wallet.masterFingerprint = bip32Node.fingerprint.toString('hex')
-    }
+    return this.exposedPromises.yield(PromiseKey.BIP39_PASSPHRASE)
   }
 
   private finish(): void {
@@ -255,5 +259,9 @@ export class MigrationEffects {
     if (this.onSuccess !== undefined) {
       this.onSuccess()
     }
+  }
+
+  private isInvalidBip39PassphraseError(error: any): boolean {
+    return error.message?.toLowerCase().startsWith('invalid bip-39 passphrase')
   }
 }
