@@ -54,13 +54,14 @@ export class AccountAddressPage {
   }
 
   public async presentEditPopover(event: Event): Promise<void> {
-    await this.waitWalletShareUrl()
-
     const popover: HTMLIonPopoverElement = await this.popoverCtrl.create({
       component: AccountEditPopoverComponent,
       componentProps: {
         wallet: this.wallet,
-        walletShareUrl: this.walletShareUrl,
+        getWalletShareUrl: async () => {
+          await this.waitWalletShareUrl()
+          return this.walletShareUrl
+        },
         onDelete: (): void => {
           this.navigationService.back()
         }
