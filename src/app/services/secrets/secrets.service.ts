@@ -1,4 +1,4 @@
-import { ProtocolService } from '@airgap/angular-core'
+import { Either, merged, ProtocolService } from '@airgap/angular-core'
 import { AirGapWallet, ICoinProtocol } from '@airgap/coinlib-core'
 import { ProtocolSymbols } from '@airgap/coinlib-core/utils/ProtocolSymbols'
 import { SerializedAirGapWallet } from '@airgap/coinlib-core/wallet/AirGapWallet'
@@ -14,6 +14,13 @@ import { NavigationService } from '../navigation/navigation.service'
 import { SecureStorage, SecureStorageService } from '../secure-storage/secure-storage.service'
 import { VaultStorageKey, VaultStorageService } from '../storage/storage.service'
 
+interface AddWalletConifg {
+  protocolIdentifier: ProtocolSymbols
+  isHDWallet: boolean
+  customDerivationPath: string
+  bip39Passphrase: string
+  isActive: boolean
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -69,7 +76,8 @@ export class SecretsService {
             wallet.publicKey,
             wallet.isExtendedPublicKey,
             wallet.derivationPath,
-            wallet.masterFingerprint ?? ''
+            wallet.masterFingerprint ?? '',
+            wallet.isActive ?? true
           )
           airGapWallet.addresses = wallet.addresses
           secret.wallets[i] = airGapWallet
@@ -252,65 +260,91 @@ export class SecretsService {
     return this.storageService.set(VaultStorageKey.AIRGAP_SECRET_LIST, this.secretsList)
   }
 
-  public async addWallet(
-    protocolIdentifier: ProtocolSymbols,
-    isHDWallet: boolean,
-    customDerivationPath: string,
-    bip39Passphrase: string
-  ): Promise<void> {
+  public async addWallets(configs: AddWalletConifg[]): Promise<void> {
     const loading: HTMLIonLoadingElement = await this.loadingCtrl.create({
       message: 'Deriving your wallet...'
     })
     loading.present().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
 
-    const protocol: ICoinProtocol = await this.protocolService.getProtocol(protocolIdentifier)
-
-    const secret: Secret = this.getActiveSecret()
-
     try {
+      const secret: Secret = this.getActiveSecret()
       const entropy: string = await this.retrieveEntropyForSecret(secret)
 
-      const mnemonic: string = bip39.entropyToMnemonic(entropy)
-      const seed: Buffer = await bip39.mnemonicToSeed(mnemonic, bip39Passphrase)
+      const createdOrUpdated: Either<AirGapWallet, AirGapWallet>[] = (
+        await Promise.all(configs.map((config: AddWalletConifg) => this.updateOrCreateWallet(entropy, config)))
+      ).filter((createdOrUpdated: Either<AirGapWallet, AirGapWallet> | undefined) => createdOrUpdated !== undefined)
 
-      const bip32Node: bip32.BIP32Interface = bip32.fromSeed(seed)
+      const [createdWallets, updatedWallets]: [AirGapWallet[], AirGapWallet[]] = merged(createdOrUpdated)
 
-      const publicKey: string = await protocol.getPublicKeyFromMnemonic(mnemonic, customDerivationPath, bip39Passphrase)
-      const fingerprint: string = bip32Node.fingerprint.toString('hex')
-
-      const wallet: AirGapWallet = new AirGapWallet(protocol, publicKey, isHDWallet, customDerivationPath, fingerprint)
-
-      const addresses: string[] = await wallet.deriveAddresses(1)
-      wallet.addresses = addresses
-
-      if (
-        secret.wallets.find(
-          (obj: AirGapWallet) => obj.publicKey === wallet.publicKey && obj.protocol.identifier === wallet.protocol.identifier
-        ) === undefined
-      ) {
-        secret.wallets.push(wallet)
-
-        loading.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
-        this.addOrUpdateSecret(secret)
-      } else {
-        loading.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
-        this.showAlert(
-          'Wallet already exists',
-          'You already have added this specific wallet. Please change its derivation path to add another address (advanced mode).'
-        )
-      }
-    } catch (error) {
-      // minimal solution without dependency
-      if (error.message.startsWith('Expected BIP32 derivation path')) {
-        error.message = 'Expected BIP32 derivation path, got invalid string'
+      if (createdWallets.length > 0 || updatedWallets.length > 0) {
+        secret.wallets.push(...createdWallets)
+        await this.addOrUpdateSecret(secret)
       }
 
       loading.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
-      if (error.message) {
-        this.showAlert('Error', error.message)
+    } catch (error) {
+      loading.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
+
+      let header: string | undefined
+      let message: string | undefined
+      // minimal solution without dependency
+      if (error.message?.toLowerCase().startsWith('Expected BIP32 derivation path')) {
+        message = 'Expected BIP32 derivation path, got invalid string'
+      } else if (error.message?.toLowerCase().startsWith('wallet already exists')) {
+        header = 'Wallet already exists'
+        message = 'You already have added this specific wallet. Please change its derivation path to add another address (advanced mode).'
+      }
+
+      if (message) {
+        this.showAlert(header ?? 'Error', message).catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
       }
       throw error
     }
+  }
+
+  private async updateOrCreateWallet(entropy: string, config: AddWalletConifg): Promise<Either<AirGapWallet, AirGapWallet> | undefined> {
+    const newWallet: AirGapWallet = await this.createNewWallet(entropy, config)
+    const existingWallet: AirGapWallet | undefined = this.findWalletByPublicKeyAndProtocolIdentifier(
+      newWallet.publicKey,
+      newWallet.protocol.identifier
+    )
+
+    if (existingWallet === undefined) {
+      return [newWallet, undefined]
+    } else if (newWallet.isActive && !existingWallet.isActive) {
+      existingWallet.isActive = true
+      return [undefined, existingWallet]
+    } else if (newWallet.isActive && existingWallet.isActive) {
+      throw new Error('Wallet already exists')
+    } else {
+      return undefined
+    }
+  }
+
+  private async createNewWallet(entropy: string, config: AddWalletConifg): Promise<AirGapWallet> {
+    const protocol: ICoinProtocol = await this.protocolService.getProtocol(config.protocolIdentifier)
+
+    const mnemonic: string = bip39.entropyToMnemonic(entropy)
+    const seed: Buffer = await bip39.mnemonicToSeed(mnemonic, config.bip39Passphrase)
+
+    const bip32Node: bip32.BIP32Interface = bip32.fromSeed(seed)
+
+    const publicKey: string = await protocol.getPublicKeyFromMnemonic(mnemonic, config.customDerivationPath, config.bip39Passphrase)
+    const fingerprint: string = bip32Node.fingerprint.toString('hex')
+
+    const wallet: AirGapWallet = new AirGapWallet(
+      protocol,
+      publicKey,
+      config.isHDWallet,
+      config.customDerivationPath,
+      fingerprint,
+      config.isActive
+    )
+
+    const addresses: string[] = await wallet.deriveAddresses(1)
+    wallet.addresses = addresses
+
+    return wallet
   }
 
   public async showAlert(title: string, message: string): Promise<void> {

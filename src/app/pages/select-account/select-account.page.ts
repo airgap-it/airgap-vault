@@ -32,7 +32,7 @@ export class SelectAccountPage {
     this.placeholder = this.translateService.instant(`select-account.${type}.placeholder`)
 
     this.secretsService.getSecretsObservable().subscribe((secrets: Secret[]) => {
-      this.wallets = [].concat.apply([], secrets.map((secret) => secret.wallets) as any)
+      this.wallets = [].concat.apply([], secrets.map((secret) => secret.wallets.filter((wallet: AirGapWallet) => wallet.isActive)) as any)
     })
   }
 

@@ -172,6 +172,7 @@ export class MigrationService {
     const fingerprint: string = bip32Node.fingerprint.toString('hex')
 
     wallet.masterFingerprint = fingerprint
+    wallet.isActive = true
 
     if (resolvedOptions.persist && secret !== undefined) {
       await this.migrateSecret(secret, { mnemonic: resolvedOptions.mnemonic, persist: resolvedOptions.persist })

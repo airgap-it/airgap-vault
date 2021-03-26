@@ -22,6 +22,7 @@ export class ShareUrlService {
       isExtendedPublicKey: wallet.isExtendedPublicKey,
       derivationPath: wallet.derivationPath,
       masterFingerprint: wallet.masterFingerprint,
+      isActive: wallet.isActive,
       groupId: secret.fingerprint ?? '',
       groupLabel: secret.label ?? ''
     }
@@ -47,6 +48,7 @@ export class ShareUrlService {
             isExtendedPublicKey: wallet.isExtendedPublicKey,
             derivationPath: wallet.derivationPath,
             masterFingerprint: wallet.masterFingerprint,
+            isActive: wallet.isActive,
             groupId: secret.fingerprint,
             groupLabel: secret.label
           }

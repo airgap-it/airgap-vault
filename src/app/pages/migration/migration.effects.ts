@@ -143,7 +143,9 @@ export class MigrationEffects {
       const secrets: Secret[] = state.secrets.filter((secret: Secret) => !isSecretMigrated(secret))
       const walletKeys: string[] = flattened(
         secrets.map((secret: Secret) =>
-          secret.wallets.filter((wallet: AirGapWallet) => !isWalletMigrated(wallet)).map((wallet: AirGapWallet) => wallet.publicKey)
+          secret.wallets
+            .filter((wallet: AirGapWallet) => wallet.isActive && !isWalletMigrated(wallet))
+            .map((wallet: AirGapWallet) => wallet.publicKey)
         )
       )
 

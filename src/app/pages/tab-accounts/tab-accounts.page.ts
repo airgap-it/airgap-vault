@@ -37,7 +37,7 @@ export class TabAccountsPage implements OnInit {
     this.secretsService.getActiveSecretObservable().subscribe((secret: Secret) => {
       if (secret && secret.wallets) {
         this.activeSecret = secret
-        this.wallets$.next(secret.wallets)
+        this.wallets$.next([...secret.wallets.filter((wallet: AirGapWallet) => wallet.isActive)])
       }
     })
 
