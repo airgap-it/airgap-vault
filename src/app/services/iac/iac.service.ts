@@ -71,7 +71,7 @@ export class IACService extends BaseIACService {
                     baseWallet.isExtendedPublicKey,
                     baseWallet.derivationPath,
                     baseWallet.masterFingerprint,
-                    baseWallet.isActive
+                    baseWallet.status
                   )
                   correctWallet.addresses = baseWallet.addresses
                 } catch (e) {
@@ -156,7 +156,7 @@ export class IACService extends BaseIACService {
                   baseWallet.isExtendedPublicKey,
                   baseWallet.derivationPath,
                   baseWallet.masterFingerprint,
-                  baseWallet.isActive
+                  baseWallet.status
                 )
                 correctWallet.addresses = baseWallet.addresses
               } catch (e) {

@@ -22,7 +22,10 @@
         ></ion-checkbox>
       </ion-item>
       <ion-list lines="none" *ngIf="(isChecked$ | async)[secret.id]">
-        <airgap-account-item *ngFor="let wallet of secret.wallets" *ngIf="wallet.isActive" [wallet]="wallet"></airgap-account-item>
+        <airgap-account-item
+          *ngFor="let wallet of (secret.wallets | walletFilter: { status: AirGapWalletStatus.ACTIVE })"
+          [wallet]="wallet"
+        ></airgap-account-item>
       </ion-list>
     </ng-container>
   </ion-list>

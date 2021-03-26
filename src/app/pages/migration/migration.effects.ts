@@ -1,5 +1,6 @@
 import { ExposedPromiseRegistry, flattened } from '@airgap/angular-core'
 import { AirGapWallet } from '@airgap/coinlib-core'
+import { AirGapWalletStatus } from '@airgap/coinlib-core/wallet/AirGapWallet'
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { Action, Store } from '@ngrx/store'
@@ -144,7 +145,7 @@ export class MigrationEffects {
       const walletKeys: string[] = flattened(
         secrets.map((secret: Secret) =>
           secret.wallets
-            .filter((wallet: AirGapWallet) => wallet.isActive && !isWalletMigrated(wallet))
+            .filter((wallet: AirGapWallet) => wallet.status === AirGapWalletStatus.ACTIVE && !isWalletMigrated(wallet))
             .map((wallet: AirGapWallet) => wallet.publicKey)
         )
       )

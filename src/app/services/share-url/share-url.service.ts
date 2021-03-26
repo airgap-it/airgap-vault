@@ -1,5 +1,6 @@
 import { flattened, SerializerService } from '@airgap/angular-core'
 import { AccountShareResponse, AirGapWallet, generateId, IACMessageDefinitionObject, IACMessageType } from '@airgap/coinlib-core'
+import { AirGapWalletStatus } from '@airgap/coinlib-core/wallet/AirGapWallet'
 import { Injectable } from '@angular/core'
 import { Secret } from 'src/app/models/secret'
 
@@ -22,7 +23,7 @@ export class ShareUrlService {
       isExtendedPublicKey: wallet.isExtendedPublicKey,
       derivationPath: wallet.derivationPath,
       masterFingerprint: wallet.masterFingerprint,
-      isActive: wallet.isActive,
+      isActive: wallet.status === AirGapWalletStatus.ACTIVE,
       groupId: secret.fingerprint ?? '',
       groupLabel: secret.label ?? ''
     }
@@ -42,24 +43,26 @@ export class ShareUrlService {
   public async generateShareSecretsURL(secrets: Secret[]): Promise<string> {
     const deserializedTxSigningRequests: IACMessageDefinitionObject[] = flattened(
       secrets.map((secret: Secret) => {
-        return secret.wallets.map((wallet: AirGapWallet) => {
-          const accountShareResponse: AccountShareResponse = {
-            publicKey: wallet.publicKey,
-            isExtendedPublicKey: wallet.isExtendedPublicKey,
-            derivationPath: wallet.derivationPath,
-            masterFingerprint: wallet.masterFingerprint,
-            isActive: wallet.isActive,
-            groupId: secret.fingerprint,
-            groupLabel: secret.label
-          }
+        return secret.wallets
+          .filter((wallet: AirGapWallet) => wallet.status !== AirGapWalletStatus.DELETED)
+          .map((wallet: AirGapWallet) => {
+            const accountShareResponse: AccountShareResponse = {
+              publicKey: wallet.publicKey,
+              isExtendedPublicKey: wallet.isExtendedPublicKey,
+              derivationPath: wallet.derivationPath,
+              masterFingerprint: wallet.masterFingerprint,
+              isActive: wallet.status === AirGapWalletStatus.ACTIVE,
+              groupId: secret.fingerprint,
+              groupLabel: secret.label
+            }
 
-          return {
-            id: generateId(10),
-            protocol: wallet.protocol.identifier,
-            type: IACMessageType.AccountShareResponse,
-            payload: accountShareResponse
-          }
-        })
+            return {
+              id: generateId(10),
+              protocol: wallet.protocol.identifier,
+              type: IACMessageType.AccountShareResponse,
+              payload: accountShareResponse
+            }
+          })
       })
     )
 

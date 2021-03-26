@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core'
 import { AirGapWallet } from '@airgap/coinlib-core'
+import { AirGapWalletStatus } from '@airgap/coinlib-core/wallet/AirGapWallet'
+import { Component, OnInit } from '@angular/core'
+import { Platform } from '@ionic/angular'
 import { BehaviorSubject, Observable } from 'rxjs'
 
 import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
-import { Platform } from '@ionic/angular'
 import { SecretEditAction } from '../secret-edit/secret-edit.page'
 
 @Component({
@@ -24,6 +25,8 @@ export class TabAccountsPage implements OnInit {
 
   public readonly isAndroid: boolean
 
+  public readonly AirGapWalletStatus: typeof AirGapWalletStatus = AirGapWalletStatus
+
   constructor(
     private readonly platform: Platform,
     private readonly secretsService: SecretsService,
@@ -37,7 +40,7 @@ export class TabAccountsPage implements OnInit {
     this.secretsService.getActiveSecretObservable().subscribe((secret: Secret) => {
       if (secret && secret.wallets) {
         this.activeSecret = secret
-        this.wallets$.next([...secret.wallets.filter((wallet: AirGapWallet) => wallet.isActive)])
+        this.wallets$.next([...secret.wallets])
       }
     })
 

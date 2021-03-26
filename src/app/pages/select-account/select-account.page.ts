@@ -4,6 +4,7 @@ import { Component } from '@angular/core'
 import { AirGapWallet } from '@airgap/coinlib-core'
 import { NavParams, ModalController } from '@ionic/angular'
 import { Secret } from 'src/app/models/secret'
+import { AirGapWalletStatus } from '@airgap/coinlib-core/wallet/AirGapWallet'
 
 @Component({
   selector: 'airgap-select-account',
@@ -32,7 +33,10 @@ export class SelectAccountPage {
     this.placeholder = this.translateService.instant(`select-account.${type}.placeholder`)
 
     this.secretsService.getSecretsObservable().subscribe((secrets: Secret[]) => {
-      this.wallets = [].concat.apply([], secrets.map((secret) => secret.wallets.filter((wallet: AirGapWallet) => wallet.isActive)) as any)
+      this.wallets = [].concat.apply(
+        [],
+        secrets.map((secret) => secret.wallets.filter((wallet: AirGapWallet) => wallet.status === AirGapWalletStatus.ACTIVE)) as any
+      )
     })
   }
 

@@ -1,4 +1,5 @@
 import { AirGapWallet } from '@airgap/coinlib-core'
+import { AirGapWalletStatus } from '@airgap/coinlib-core/wallet/AirGapWallet'
 import { Injectable } from '@angular/core'
 import { BIP32Interface, fromSeed } from 'bip32'
 import { entropyToMnemonic, mnemonicToSeed } from 'bip39'
@@ -172,7 +173,7 @@ export class MigrationService {
     const fingerprint: string = bip32Node.fingerprint.toString('hex')
 
     wallet.masterFingerprint = fingerprint
-    wallet.isActive = true
+    wallet.status = AirGapWalletStatus.ACTIVE
 
     if (resolvedOptions.persist && secret !== undefined) {
       await this.migrateSecret(secret, { mnemonic: resolvedOptions.mnemonic, persist: resolvedOptions.persist })

@@ -1,7 +1,7 @@
 import { Either, merged, ProtocolService } from '@airgap/angular-core'
 import { AirGapWallet, ICoinProtocol } from '@airgap/coinlib-core'
 import { ProtocolSymbols } from '@airgap/coinlib-core/utils/ProtocolSymbols'
-import { SerializedAirGapWallet } from '@airgap/coinlib-core/wallet/AirGapWallet'
+import { AirGapWalletStatus, SerializedAirGapWallet } from '@airgap/coinlib-core/wallet/AirGapWallet'
 import { Injectable } from '@angular/core'
 import { AlertController, LoadingController } from '@ionic/angular'
 import * as bip32 from 'bip32'
@@ -77,7 +77,7 @@ export class SecretsService {
             wallet.isExtendedPublicKey,
             wallet.derivationPath,
             wallet.masterFingerprint ?? '',
-            wallet.isActive ?? true
+            wallet.status ?? AirGapWalletStatus.ACTIVE
           )
           airGapWallet.addresses = wallet.addresses
           secret.wallets[i] = airGapWallet
@@ -200,13 +200,7 @@ export class SecretsService {
       return undefined
     }
 
-    secret.wallets.splice(
-      secret.wallets.findIndex(
-        (findWallet: AirGapWallet) =>
-          findWallet.publicKey === wallet.publicKey && findWallet.protocol.identifier === wallet.protocol.identifier
-      ),
-      1
-    )
+    wallet.status = AirGapWalletStatus.DELETED
 
     return this.addOrUpdateSecret(secret)
   }
@@ -271,7 +265,7 @@ export class SecretsService {
       const entropy: string = await this.retrieveEntropyForSecret(secret)
 
       const createdOrUpdated: Either<AirGapWallet, AirGapWallet>[] = (
-        await Promise.all(configs.map((config: AddWalletConifg) => this.updateOrCreateWallet(entropy, config)))
+        await Promise.all(configs.map((config: AddWalletConifg) => this.activateOrCreateWallet(entropy, config)))
       ).filter((createdOrUpdated: Either<AirGapWallet, AirGapWallet> | undefined) => createdOrUpdated !== undefined)
 
       const [createdWallets, updatedWallets]: [AirGapWallet[], AirGapWallet[]] = merged(createdOrUpdated)
@@ -302,7 +296,7 @@ export class SecretsService {
     }
   }
 
-  private async updateOrCreateWallet(entropy: string, config: AddWalletConifg): Promise<Either<AirGapWallet, AirGapWallet> | undefined> {
+  private async activateOrCreateWallet(entropy: string, config: AddWalletConifg): Promise<Either<AirGapWallet, AirGapWallet> | undefined> {
     const newWallet: AirGapWallet = await this.createNewWallet(entropy, config)
     const existingWallet: AirGapWallet | undefined = this.findWalletByPublicKeyAndProtocolIdentifier(
       newWallet.publicKey,
@@ -311,10 +305,10 @@ export class SecretsService {
 
     if (existingWallet === undefined) {
       return [newWallet, undefined]
-    } else if (newWallet.isActive && !existingWallet.isActive) {
-      existingWallet.isActive = true
+    } else if (newWallet.status === AirGapWalletStatus.ACTIVE && existingWallet.status !== AirGapWalletStatus.ACTIVE) {
+      existingWallet.status = AirGapWalletStatus.ACTIVE
       return [undefined, existingWallet]
-    } else if (newWallet.isActive && existingWallet.isActive) {
+    } else if (newWallet.status === AirGapWalletStatus.ACTIVE && existingWallet.status === AirGapWalletStatus.ACTIVE) {
       throw new Error('Wallet already exists')
     } else {
       return undefined
@@ -338,7 +332,7 @@ export class SecretsService {
       config.isHDWallet,
       config.customDerivationPath,
       fingerprint,
-      config.isActive
+      config.isActive ? AirGapWalletStatus.ACTIVE : AirGapWalletStatus.HIDDEN
     )
 
     const addresses: string[] = await wallet.deriveAddresses(1)
