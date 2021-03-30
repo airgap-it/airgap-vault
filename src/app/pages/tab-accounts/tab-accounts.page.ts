@@ -3,6 +3,8 @@ import { AirGapWalletStatus } from '@airgap/coinlib-core/wallet/AirGapWallet'
 import { Component, OnInit } from '@angular/core'
 import { Platform } from '@ionic/angular'
 import { BehaviorSubject, Observable } from 'rxjs'
+import { ModeService } from 'src/app/services/mode/mode.service'
+import { ModeStrategy } from 'src/app/services/mode/strategy/ModeStrategy'
 
 import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
@@ -30,7 +32,8 @@ export class TabAccountsPage implements OnInit {
   constructor(
     private readonly platform: Platform,
     private readonly secretsService: SecretsService,
-    private readonly navigationService: NavigationService
+    private readonly navigationService: NavigationService,
+    private readonly modeService: ModeService
   ) {
     this.secrets = this.secretsService.getSecretsObservable()
     this.isAndroid = this.platform.is('android')
@@ -65,8 +68,9 @@ export class TabAccountsPage implements OnInit {
     this.symbolFilter = isValidSymbol(value) ? value.trim().toLowerCase() : undefined
   }
 
-  public syncWallets(): void {
-    this.navigationService.route('/account-share-select').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  public async syncWallets(): Promise<void> {
+    const strategy: ModeStrategy = await this.modeService.strategy()
+    strategy.syncAll()
   }
 
   public addWallet(): void {

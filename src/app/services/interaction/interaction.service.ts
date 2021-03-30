@@ -75,6 +75,16 @@ export class InteractionService {
     }
   }
 
+  public getCommonInteractionSetting(secrets: Secret[]): InteractionSetting {
+    for (let i = 1; i < secrets.length; i++) {
+      if (secrets[i - 1]?.interactionSetting !== secrets[i]?.interactionSetting) {
+        return InteractionSetting.UNDETERMINED
+      }
+    }
+
+    return secrets[0]?.interactionSetting ?? InteractionSetting.UNDETERMINED
+  }
+
   private goToInteractionSelectionPage(interactionOptions: IInteractionOptions): void {
     this.navigationService
       .routeWithState('/interaction-selection', { interactionOptions })

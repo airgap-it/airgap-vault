@@ -28,7 +28,7 @@ export class AccountShareSelectEffects {
       ofType(actions.syncButtonClicked),
       withLatestFrom(this.store.select(fromAccountShareSelect.selectCheckedSecrets)),
       filter(([_, checkedSecrets]) => checkedSecrets.length > 0),
-      switchMap(([_, checkedSecrets]) => from(this.generateAndShowQr(checkedSecrets)).pipe(first()))
+      switchMap(([_, checkedSecrets]) => from(this.generateShareUrl(checkedSecrets)).pipe(first()))
     )
   )
 
@@ -52,7 +52,7 @@ export class AccountShareSelectEffects {
     private readonly migrationService: MigrationService
   ) {}
 
-  private async generateAndShowQr(secrets: Secret[]): Promise<Action> {
+  private async generateShareUrl(secrets: Secret[]): Promise<Action> {
     await this.migrationService.runSecretsMigration(secrets)
     const [migratedSecrets, allMigrated]: [Secret[], boolean] = this.migrationService.deepFilterMigratedSecretsAndWallets(secrets)
     if (migratedSecrets.length === 0) {
@@ -60,7 +60,7 @@ export class AccountShareSelectEffects {
     }
 
     const shareUrl: string = await this.shareUrlService.generateShareSecretsURL(migratedSecrets)
-    const interactionSetting: InteractionSetting = this.getCommonInteractionSetting(migratedSecrets)
+    const interactionSetting: InteractionSetting = this.interactionService.getCommonInteractionSetting(migratedSecrets)
 
     return allMigrated
       ? actions.shareUrlGenerated({ shareUrl, interactionSetting })
@@ -75,15 +75,5 @@ export class AccountShareSelectEffects {
       },
       interactionSetting
     )
-  }
-
-  private getCommonInteractionSetting(secrets: Secret[]): InteractionSetting {
-    for (let i = 1; i < secrets.length; i++) {
-      if (secrets[i - 1]?.interactionSetting !== secrets[i]?.interactionSetting) {
-        return InteractionSetting.UNDETERMINED
-      }
-    }
-
-    return secrets[0]?.interactionSetting ?? InteractionSetting.UNDETERMINED
   }
 }
