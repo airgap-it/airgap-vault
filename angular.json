@@ -70,8 +70,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "6mb"
+                  "maximumWarning": "55mb",
+                  "maximumError": "60mb"
                 },
                 {
                   "type": "anyComponentStyle",

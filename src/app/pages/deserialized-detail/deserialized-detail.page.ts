@@ -2,16 +2,17 @@ import { assertNever, UIAction, UIActionStatus, UiEventService, UIResource, UIRe
 import { IAirGapTransaction, ProtocolSymbols } from '@airgap/coinlib-core'
 import { Component } from '@angular/core'
 import { ModalController } from '@ionic/angular'
-import { AlertOptions, ModalOptions, OverlayEventDetail } from '@ionic/core'
+import { AlertOptions, LoadingOptions, ModalOptions, OverlayEventDetail } from '@ionic/core'
 import { Store } from '@ngrx/store'
 import { Observable } from 'rxjs'
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { SelectAccountPage } from '../select-account/select-account.page'
 
 import * as actions from './deserialized-detail.actions'
 import * as fromDeserializedDetail from './deserialized-detail.reducer'
-import { Alert, Modal, Mode, UnsignedMessage } from './deserialized.detail.types'
+import { Alert, Task, Modal, Mode, UnsignedMessage } from './deserialized.detail.types'
 
 type ModalOnDismissAction = (modalData: OverlayEventDetail<unknown>) => Promise<void>
 
@@ -29,14 +30,16 @@ export class DeserializedDetailPage {
   public messages$: Observable<UIResource<UnsignedMessage[]>>
   public rawData$: Observable<UIResource<string>>
 
+  public loader$: Observable<(UIAction<Task> & { userInput: actions.UserInput }) | undefined>
   public alert$: Observable<UIAction<Alert> | undefined>
   public modal$: Observable<UIAction<Modal> | undefined>
 
   public Mode: typeof Mode = Mode
   public UIResourceStatus: typeof UIResourceStatus = UIResourceStatus
 
-  private alertElement: HTMLIonAlertElement
-  private modalElement: HTMLIonModalElement
+  private loadingElement: HTMLIonLoadingElement | undefined
+  private alertElement: HTMLIonAlertElement | undefined
+  private modalElement: HTMLIonModalElement | undefined
 
   constructor(
     private readonly store: Store<fromDeserializedDetail.State>,
@@ -46,6 +49,8 @@ export class DeserializedDetailPage {
     this.mode$ = this.store.select(fromDeserializedDetail.selectMode)
     this.title$ = this.store.select(fromDeserializedDetail.selectTitle)
     this.button$ = this.store.select(fromDeserializedDetail.selectButton)
+
+    this.loader$ = this.store.select(fromDeserializedDetail.selectLoader)
     this.alert$ = this.store.select(fromDeserializedDetail.selectAlert)
     this.modal$ = this.store.select(fromDeserializedDetail.selectModal)
 
@@ -54,8 +59,10 @@ export class DeserializedDetailPage {
 
     this.rawData$ = this.store.select(fromDeserializedDetail.selectRaw)
 
-    this.alert$.subscribe(this.dismissOrShowAlert.bind(this))
-    this.modal$.subscribe(this.dismissOrShowModal.bind(this))
+    // FIXME [#210] set debounce time
+    this.loader$.pipe(debounceTime(0), distinctUntilChanged()).subscribe(this.showOrHideLoader.bind(this))
+    this.alert$.subscribe(this.showOrDismissAlert.bind(this))
+    this.modal$.subscribe(this.showOrDismissModal.bind(this))
 
     this.store.dispatch(actions.viewInitialization())
   }
@@ -64,7 +71,23 @@ export class DeserializedDetailPage {
     this.store.dispatch(actions.approved())
   }
 
-  private async dismissOrShowAlert(alert: UIAction<Alert> | undefined): Promise<void> {
+  private async showOrHideLoader(task: (UIAction<Task> & { userInput: actions.UserInput }) | undefined): Promise<void> {
+    this.loadingElement?.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
+    if (task?.status === UIActionStatus.PENDING) {
+      this.loadingElement = await this.uiEventService.getTranslatedLoader(this.getLoaderData(task.value))
+
+      // return this.loadingElement.present().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
+
+      // FIXME [#210]: replace with the above once the performance issue is resolved
+      await this.loadingElement.present().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
+      this.store.dispatch(actions.continueApproved({ userInput: task.userInput }))
+      // [#210]
+    } else {
+      this.loadingElement = undefined
+    }
+  }
+
+  private async showOrDismissAlert(alert: UIAction<Alert> | undefined): Promise<void> {
     this.alertElement?.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
     if (alert?.status === UIActionStatus.PENDING) {
       this.alertElement = await this.uiEventService.getTranslatedAlert(this.getAlertData(alert.value))
@@ -81,7 +104,7 @@ export class DeserializedDetailPage {
     }
   }
 
-  private async dismissOrShowModal(modal: UIAction<Modal> | undefined): Promise<void> {
+  private async showOrDismissModal(modal: UIAction<Modal> | undefined): Promise<void> {
     this.modalElement?.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
     if (modal?.status === UIActionStatus.PENDING) {
       const [modalOptions, onDismissAction]: [ModalOptions, ModalOnDismissAction] = this.getModalData(modal.value)
@@ -100,6 +123,35 @@ export class DeserializedDetailPage {
         .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
     } else {
       this.modalElement = undefined
+    }
+  }
+
+  private getLoaderData(task: Task): LoadingOptions {
+    switch (task) {
+      case 'signTransaction':
+        return this.signTransactionLoader()
+      case 'signMessage':
+        return this.signMessageLoader()
+      case 'generic':
+        return this.genericLoader()
+    }
+  }
+
+  private signTransactionLoader(): LoadingOptions {
+    return {
+      message: 'deserialized-detail.loader.sign-transaction.message'
+    }
+  }
+
+  private signMessageLoader(): LoadingOptions {
+    return {
+      message: 'deserialized-detail.loader.sign-message.message'
+    }
+  }
+
+  private genericLoader(): LoadingOptions {
+    return {
+      message: 'deserialized-detail.loader.generic.message'
     }
   }
 

@@ -295,6 +295,17 @@
       "title": "Sign Message",
       "button_label": "Sign Message"
     },
+    "loader": {
+      "sign-transaction": {
+        "message": "Signing transaction..."
+      },
+      "sign-message": {
+        "message": "Signing message..."
+      },
+      "generic": {
+        "message": "Loading..."
+      }
+    },
     "alert": {
       "bip39-passphrase": {
         "header": "BIP-39 Passphrase",
