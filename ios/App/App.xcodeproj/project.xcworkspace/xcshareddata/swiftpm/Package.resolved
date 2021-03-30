@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "AirGapSapling",
+        "repositoryURL": "https://github.com/airgap-it/airgap-sapling",
+        "state": {
+          "branch": null,
+          "revision": "aa23b91ba46c93723eca27fa1b41ea4064b9ef1c",
+          "version": "0.0.5-beta10"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

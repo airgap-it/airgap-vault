@@ -15,7 +15,8 @@
 
     <ion-grid
       *ngIf="(transactionsDetails$ | async).status === UIResourceStatus.ERROR 
-        && (rawData$ | async).status === UIResourceStatus.SUCCESS">
+        && (rawData$ | async).status === UIResourceStatus.SUCCESS"
+    >
       <ion-row>
         <ion-col size="2" class="ion-margin-top">
           <ion-icon color="white" src="assets/icons/md-warning.svg" class="warning-icon"></ion-icon>

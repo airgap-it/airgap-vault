@@ -7,8 +7,16 @@ import {
   DeserializedSignedMessage,
   DeserializedSignedTransaction,
   DeserializedTransaction,
+  Task,
   Mode
 } from './deserialized.detail.types'
+
+// FIXME [#210]: remove once the performance issue is resolved
+export interface UserInput {
+  bip39Passphrase?: string
+  protocol?: ProtocolSymbols
+}
+// [#210]
 
 const featureName = 'Deserialized Detail'
 
@@ -40,6 +48,10 @@ export const invalidData = createAction(`[${featureName}] Invalid Navigation Dat
 
 export const approved = createAction(`[${featureName}] Approved`)
 
+// FIXME [#210]: remove once the performance issue is resolved
+export const continueApproved = createAction(`[${featureName}] Continue Approved`, props<{ userInput: UserInput }>())
+// [#210]
+
 export const alertDismissed = createAction(`[${featureName}] Alert Dismissed`, props<{ id: string }>())
 export const modalDismissed = createAction(`[${featureName}] Modal Dismissed`, props<{ id: string }>())
 
@@ -48,13 +60,19 @@ export const signingProtocolProvided = createAction(`[${featureName}] Signing Pr
 
 /**************** Internal ****************/
 
-export const runningBlockingTask = createAction(`[${featureName}] Running Blocking Task`)
+// export const runningBlockingTask = createAction(`[${featureName}] Running Blocking Task`, props<{ task: Task }>())
+
+// FIXME [#210] replace with the above once the performance issue is resolved
+export const runningBlockingTask = createAction(`[${featureName}] Running Blocking Task`, props<{ task: Task; userInput: UserInput }>())
+// [#210]
 
 export const transactionsSigned = createAction(
   `[${featureName}] Transactions Signed`,
   props<{ transactions: DeserializedSignedTransaction[] }>()
 )
 export const messagesSigned = createAction(`[${featureName}] Messages Signed`, props<{ messages: DeserializedSignedMessage[] }>())
+
+export const loaderDismissed = createAction(`[${featureName}] Loader Dismissed`, props<{ id: string }>())
 
 export const secretNotFound = createAction(`[${featureName}] Secret Not Found`)
 export const protocolNotFound = createAction(`[${featureName}] Protocol Not Found`)

@@ -125,57 +125,50 @@ export class IACService extends BaseIACService {
     messageDefinitionObjects: IACMessageDefinitionObject[],
     _scanAgainCallback: Function
   ): Promise<boolean> {
-    const transactionInfos: SignTransactionInfo[] = (
-      await Promise.all(
-        messageDefinitionObjects.map(
-          async (messageDefinitionObject): Promise<SignTransactionInfo> => {
-            const messageSignRequest: MessageSignRequest = messageDefinitionObject.payload as MessageSignRequest
+    const transactionInfos: SignTransactionInfo[] = await Promise.all(
+      messageDefinitionObjects.map(
+        async (messageDefinitionObject): Promise<SignTransactionInfo> => {
+          const messageSignRequest: MessageSignRequest = messageDefinitionObject.payload as MessageSignRequest
 
-            let correctWallet = this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(
+          let correctWallet = this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(
+            messageSignRequest.publicKey,
+            messageDefinitionObject.protocol
+          )
+
+          // If we can't find a wallet for a protocol, we will try to find the "base" wallet and then create a new
+          // wallet with the right protocol. This way we can sign all ERC20 transactions, but show the right amount
+          // and fee for all tokens we support.
+          if (!correctWallet) {
+            const baseWallet: AirGapWallet | undefined = this.secretsService.findBaseWalletByPublicKeyAndProtocolIdentifier(
               messageSignRequest.publicKey,
               messageDefinitionObject.protocol
             )
 
-            // If we can't find a wallet for a protocol, we will try to find the "base" wallet and then create a new
-            // wallet with the right protocol. This way we can sign all ERC20 transactions, but show the right amount
-            // and fee for all tokens we support.
-            if (!correctWallet) {
-              const baseWallet: AirGapWallet | undefined = this.secretsService.findBaseWalletByPublicKeyAndProtocolIdentifier(
-                messageSignRequest.publicKey,
-                messageDefinitionObject.protocol
-              )
-
-              if (baseWallet) {
-                // If the protocol is not supported, use the base protocol for signing
-                const protocol = await this.protocolService.getProtocol(messageDefinitionObject.protocol)
-                try {
-                  correctWallet = new AirGapWallet(
-                    protocol,
-                    baseWallet.publicKey,
-                    baseWallet.isExtendedPublicKey,
-                    baseWallet.derivationPath
-                  )
-                  correctWallet.addresses = baseWallet.addresses
-                } catch (e) {
-                  if (e.message === 'PROTOCOL_NOT_SUPPORTED') {
-                    correctWallet = baseWallet
-                  }
-                }
-              }
-            }
-
-            return {
-              wallet: correctWallet,
-              signTransactionRequest: {
-                ...messageDefinitionObject,
-                payload: {
-                  ...messageSignRequest,
-                  publicKey: correctWallet?.publicKey ?? '' // ignore public key if no account has been found
+            if (baseWallet) {
+              // If the protocol is not supported, use the base protocol for signing
+              const protocol = await this.protocolService.getProtocol(messageDefinitionObject.protocol)
+              try {
+                correctWallet = new AirGapWallet(protocol, baseWallet.publicKey, baseWallet.isExtendedPublicKey, baseWallet.derivationPath)
+                correctWallet.addresses = baseWallet.addresses
+              } catch (e) {
+                if (e.message === 'PROTOCOL_NOT_SUPPORTED') {
+                  correctWallet = baseWallet
                 }
               }
             }
           }
-        )
+
+          return {
+            wallet: correctWallet,
+            signTransactionRequest: {
+              ...messageDefinitionObject,
+              payload: {
+                ...messageSignRequest,
+                publicKey: correctWallet?.publicKey ?? '' // ignore public key if no account has been found
+              }
+            }
+          }
+        }
       )
     )
 

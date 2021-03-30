@@ -32,7 +32,7 @@ export class TransactionStore extends ComponentStore<TransactionState> {
     return this.select((state: TransactionState) => state.protocolIdentifier)
   }
 
-  public selectAirGapTxs() { 
+  public selectAirGapTxs() {
     return this.select((state: TransactionState) => state.airGapTxs)
   }
 

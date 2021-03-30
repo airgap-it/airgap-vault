@@ -2,7 +2,7 @@ import { ProtocolService } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
 import { AlertController, LoadingController } from '@ionic/angular'
 import { AirGapWallet, ICoinProtocol } from '@airgap/coinlib-core'
-import { ProtocolSymbols } from '@airgap/coinlib-core/utils/ProtocolSymbols'
+import { MainProtocolSymbols, ProtocolSymbols } from '@airgap/coinlib-core/utils/ProtocolSymbols'
 import { SerializedAirGapWallet } from '@airgap/coinlib-core/wallet/AirGapWallet'
 import * as bip39 from 'bip39'
 import { Observable, ReplaySubject } from 'rxjs'
@@ -287,6 +287,7 @@ export class SecretsService {
         )
       }
     } catch (error) {
+      console.log(error)
       // minimal solution without dependency
       if (error.message.startsWith('Expected BIP32 derivation path')) {
         error.message = 'Expected BIP32 derivation path, got invalid string'
@@ -298,6 +299,12 @@ export class SecretsService {
       }
       throw error
     }
+  }
+
+  public getKnownViewingKeys(): string[] {
+    return this.getWallets()
+      .filter((wallet: AirGapWallet) => wallet.protocol.identifier === MainProtocolSymbols.XTZ_SHIELDED)
+      .map((wallet: AirGapWallet) => wallet.publicKey)
   }
 
   public async showAlert(title: string, message: string): Promise<void> {

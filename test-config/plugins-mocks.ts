@@ -2,7 +2,7 @@ import { AppInfoPlugin } from '@airgap/angular-core'
 import { AppPlugin, ClipboardPlugin, SplashScreenPlugin, StatusBarPlugin } from '@capacitor/core'
 
 import { newSpy } from './unit-test-helper'
-import { SecurityUtilsPlugin } from 'src/app/capacitor-plugins/definitions'
+import { SaplingPlugin, SecurityUtilsPlugin } from 'src/app/capacitor-plugins/definitions'
 
 export function createAppSpy(): AppPlugin {
   return jasmine.createSpyObj('AppPlugin', ['addListener', 'openUrl'])
@@ -39,6 +39,10 @@ export function createSecurityUtilsSpy(): SecurityUtilsPlugin {
   ])
 }
 
+export function createSaplingSpy(): SaplingPlugin {
+  return jasmine.createSpyObj('SaplingPlugin', ['isSupported'])
+}
+
 export function createSplashScreenSpy(): SplashScreenPlugin {
   return jasmine.createSpyObj('SplashScreenPlugin', ['hide'])
 }
@@ -57,6 +61,10 @@ export class AppInfoPluginMock {
       versionCode: 0
     })
   )
+}
+
+export class SaplingPluginMock {
+  public isSupported: jasmine.Spy = newSpy('isSupported', Promise.resolve(false))
 }
 
 export class StatusBarMock {
