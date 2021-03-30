@@ -254,6 +254,15 @@ export class SecretsService {
     return this.storageService.set(VaultStorageKey.AIRGAP_SECRET_LIST, this.secretsList)
   }
 
+  public async updateWallet(wallet: AirGapWallet): Promise<void> {
+    const secret: Secret | undefined = await this.findByPublicKey(wallet.publicKey)
+    if (secret === undefined) {
+      return
+    }
+
+    await this.addOrUpdateSecret(secret)
+  }
+
   public async addWallets(configs: AddWalletConifg[]): Promise<void> {
     const loading: HTMLIonLoadingElement = await this.loadingCtrl.create({
       message: 'Deriving your wallet...'
