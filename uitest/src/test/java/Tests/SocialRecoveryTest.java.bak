@@ -1,0 +1,59 @@
+package Tests;
+
+import Helpers.SleepExtension;
+import Pages.Settings.EditSecretPage;
+import Pages.MainPage;
+import Pages.Settings.SettingPage;
+import Pages.Settings.SocialRevoveryPage;
+import Pages.Welcome.GenerateSecretPage;
+import TestFixtures.BaseTestFixture;
+import org.junit.jupiter.api.Test;
+import Helpers.Log;
+
+public class SocialRecoveryTest extends BaseTestFixture {
+    @Test
+    public void SocialRecovery() {
+        String secretName = "test s1";
+        generateSecret(secretName, false);
+        new MainPage(driver)
+                .tapSettings();
+        new SettingPage(driver)
+                .tapSecret(secretName);
+        new EditSecretPage(driver)
+                .tapSocialRecovery();
+        new SocialRevoveryPage(driver)
+                .tapNumberOfShare("2")
+                .tapStart();
+        enterPIN();
+	Log.debug("going for first share");
+        String secretShare1 = new GenerateSecretPage(driver).getRecoveryPhrase();
+        new SocialRevoveryPage(driver)
+                .tapNext();
+        new GenerateSecretPage(driver)
+                .verifyRecoveryPhrase(secretShare1);
+        new SocialRevoveryPage(driver)
+                .tapNext();
+        
+	Log.debug("going for second share");
+        SleepExtension.sleep(10000);
+        Log.debug(driver.getPageSource());
+	String secretShare2 = new GenerateSecretPage(driver).getRecoveryPhrase();
+        Log.debug("secretShare2 "+secretShare2);
+	new SocialRevoveryPage(driver)
+                .tapNext();
+        new GenerateSecretPage(driver)
+                .verifyRecoveryPhrase(secretShare2);
+        new SocialRevoveryPage(driver)
+                .tapContinue();
+
+        SleepExtension.sleep(10000);
+        String secretShare3 = new GenerateSecretPage(driver).getRecoveryPhrase();
+        new SocialRevoveryPage(driver)
+                .tapNext();
+        new GenerateSecretPage(driver)
+                .verifyRecoveryPhrase(secretShare3);
+        new SocialRevoveryPage(driver)
+                .tapContinue();
+
+    }
+}
