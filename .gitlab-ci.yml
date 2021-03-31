@@ -1,6 +1,7 @@
 image: docker:latest
 
 variables:
+  SHARED_PATH: /builds/shared/$CI_PROJECT_PATH
   GOOGLE_TAG: eu.gcr.io/papers-kubernetes/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:$CI_COMMIT_SHA
   GOOGLE_TAG_ANDROID_CURRENT: eu.gcr.io/papers-kubernetes/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:android-$CI_COMMIT_SHA
   GOOGLE_TAG_ELECTRON_LINUX_CURRENT: eu.gcr.io/papers-kubernetes/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:electron-linux-$CI_COMMIT_SHA
@@ -11,13 +12,14 @@ stages:
   - test
   - qa
   - native_build
+  - native_test
 
 build_ionic:
   stage: build
   script:
     - docker build -t $GOOGLE_TAG .
   tags:
-    - docker
+    - android-ui
 
 unit:
   stage: test
@@ -30,7 +32,7 @@ unit:
     - docker rm unit-$CI_COMMIT_SHA
     - docker rm lint-$CI_COMMIT_SHA
   tags:
-    - docker
+    - android-ui
   artifacts:
     paths:
       - lcov.info
@@ -40,7 +42,7 @@ build_android:
   stage: native_build
   when: manual
   tags:
-    - docker
+    - android-ui
   variables:
     LOCAL_ANDROID: 'android-$CI_PIPELINE_ID'
   script:
@@ -57,6 +59,21 @@ build_android:
       - airgap-vault-release-unsigned-$CI_PIPELINE_ID.apk
       - airgap-vault-debug-$CI_PIPELINE_ID.apk
       - airgap-vault-appium-$CI_PIPELINE_ID.apk
+
+test_android:
+  stage: native_test
+  when: manual
+  tags:
+    - android-ui
+  before_script:
+    - echo "$APPIUM_CONFIG_JSON" > ./uitest/config.json
+  script:
+    - docker cp airgap-vault-appium-$CI_PIPELINE_ID.apk appium:/home/airgap-signed.apk
+    - docker create --network="host" -w /usr/src/uitest --name maven-runner-$CI_PIPELINE_ID maven:3.3-jdk-8 mvn test
+    - docker cp uitest maven-runner-$CI_PIPELINE_ID:/usr/src/
+    - docker start -a maven-runner-$CI_PIPELINE_ID
+  after_script:
+    - docker rm -f maven-runner-$CI_PIPELINE_ID || true
 
 qa:
   stage: qa
@@ -80,7 +97,7 @@ qa:
   after_script:
     - docker rm -f qa-$CI_PIPELINE_ID || true
   tags:
-    - docker
+    - android-ui
 
 build_ios:
   stage: native_build
@@ -107,3 +124,4 @@ build_ios:
       - ios/App.xcarchive
   tags:
     - ios
+
