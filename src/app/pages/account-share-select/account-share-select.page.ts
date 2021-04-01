@@ -1,5 +1,5 @@
 import { UIAction, UIActionStatus, UiEventService, UIResource, UIResourceStatus } from '@airgap/angular-core'
-import { AirGapWalletStatus } from '@airgap/coinlib-core/wallet/AirGapWallet'
+import { AirGapWalletStatus } from '@airgap/coinlib-core'
 import { Component, OnDestroy } from '@angular/core'
 import { AlertOptions } from '@ionic/core'
 import { Store } from '@ngrx/store'

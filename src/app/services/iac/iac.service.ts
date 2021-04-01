@@ -1,12 +1,19 @@
-import { BaseIACService, ProtocolService, SerializerService, UiEventService, UiEventElementsService } from '@airgap/angular-core'
+import { BaseIACService, ProtocolService, SerializerService, UiEventElementsService, UiEventService } from '@airgap/angular-core'
+import {
+  AirGapWallet,
+  AirGapWalletStatus,
+  IACMessageDefinitionObject,
+  IACMessageType,
+  MessageSignRequest,
+  UnsignedTransaction
+} from '@airgap/coinlib-core'
 import { Injectable } from '@angular/core'
-import { IACMessageDefinitionObject, UnsignedTransaction, AirGapWallet, IACMessageType, MessageSignRequest } from '@airgap/coinlib-core'
-import { SignTransactionInfo } from 'src/app/models/sign-transaction-info'
-import { handleErrorLocal, ErrorCategory } from '../error-handler/error-handler.service'
+
+import { SignTransactionInfo } from '../../models/sign-transaction-info'
+import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { InteractionOperationType, InteractionService } from '../interaction/interaction.service'
 import { NavigationService } from '../navigation/navigation.service'
 import { SecretsService } from '../secrets/secrets.service'
-import { AirGapWalletStatus } from '@airgap/coinlib-core/wallet/AirGapWallet'
 
 @Injectable({
   providedIn: 'root'

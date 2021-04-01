@@ -1,5 +1,4 @@
-import { AirGapWallet } from '@airgap/coinlib-core'
-import { AirGapWalletStatus } from '@airgap/coinlib-core/wallet/AirGapWallet'
+import { AirGapWallet, AirGapWalletStatus } from '@airgap/coinlib-core'
 import { Pipe, PipeTransform } from '@angular/core'
 
 @Pipe({

@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core'
+
 import { VaultStorageKey, VaultStorageService } from '../storage/storage.service'
+
 import { AdvancedModeSerivce } from './strategy/advanced-mode.service'
 import { BasicModeSerivce } from './strategy/basic-mode.service'
 import { ModeStrategy } from './strategy/ModeStrategy'

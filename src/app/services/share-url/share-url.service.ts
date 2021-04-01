@@ -1,9 +1,15 @@
 import { flattened, SerializerService } from '@airgap/angular-core'
-import { AccountShareResponse, AirGapWallet, generateId, IACMessageDefinitionObject, IACMessageType } from '@airgap/coinlib-core'
-import { AirGapWalletStatus } from '@airgap/coinlib-core/wallet/AirGapWallet'
+import {
+  AccountShareResponse,
+  AirGapWallet,
+  AirGapWalletStatus,
+  generateId,
+  IACMessageDefinitionObject,
+  IACMessageType
+} from '@airgap/coinlib-core'
 import { Injectable } from '@angular/core'
-import { Secret } from 'src/app/models/secret'
 
+import { Secret } from '../../models/secret'
 import { serializedDataToUrlString } from '../../utils/utils'
 import { SecretsService } from '../secrets/secrets.service'
 

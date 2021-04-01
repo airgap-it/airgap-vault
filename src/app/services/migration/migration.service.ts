@@ -1,5 +1,4 @@
-import { AirGapWallet } from '@airgap/coinlib-core'
-import { AirGapWalletStatus } from '@airgap/coinlib-core/wallet/AirGapWallet'
+import { AirGapWallet, AirGapWalletStatus } from '@airgap/coinlib-core'
 import { Injectable } from '@angular/core'
 import { BIP32Interface, fromSeed } from 'bip32'
 import { entropyToMnemonic, mnemonicToSeed } from 'bip39'

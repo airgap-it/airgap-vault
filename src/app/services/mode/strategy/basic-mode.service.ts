@@ -1,11 +1,13 @@
 import { UiEventService } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
 import { first } from 'rxjs/operators'
-import { Secret } from 'src/app/models/secret'
+
+import { Secret } from '../../../models/secret'
 import { InteractionOperationType, InteractionService, InteractionSetting } from '../../interaction/interaction.service'
 import { MigrationService } from '../../migration/migration.service'
 import { SecretsService } from '../../secrets/secrets.service'
 import { ShareUrlService } from '../../share-url/share-url.service'
+
 import { ModeStrategy } from './ModeStrategy'
 
 @Injectable({

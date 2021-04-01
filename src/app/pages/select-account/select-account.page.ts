@@ -1,10 +1,10 @@
-import { TranslateService } from '@ngx-translate/core'
-import { SecretsService } from 'src/app/services/secrets/secrets.service'
+import { AirGapWallet, AirGapWalletStatus } from '@airgap/coinlib-core'
 import { Component } from '@angular/core'
-import { AirGapWallet } from '@airgap/coinlib-core'
-import { NavParams, ModalController } from '@ionic/angular'
-import { Secret } from 'src/app/models/secret'
-import { AirGapWalletStatus } from '@airgap/coinlib-core/wallet/AirGapWallet'
+import { ModalController, NavParams } from '@ionic/angular'
+import { TranslateService } from '@ngx-translate/core'
+
+import { Secret } from '../../models/secret'
+import { SecretsService } from '../../services/secrets/secrets.service'
 
 @Component({
   selector: 'airgap-select-account',
