@@ -1,7 +1,12 @@
 import { Either, merged, ProtocolService } from '@airgap/angular-core'
-import { AirGapWallet, ICoinProtocol } from '@airgap/coinlib-core'
-import { ProtocolSymbols } from '@airgap/coinlib-core/utils/ProtocolSymbols'
-import { AirGapWalletStatus, SerializedAirGapWallet } from '@airgap/coinlib-core/wallet/AirGapWallet'
+import {
+  AirGapWallet,
+  AirGapWalletStatus,
+  ICoinProtocol,
+  MainProtocolSymbols,
+  ProtocolSymbols,
+  SerializedAirGapWallet
+} from '@airgap/coinlib-core'
 import { Injectable } from '@angular/core'
 import { AlertController, LoadingController } from '@ionic/angular'
 import * as bip32 from 'bip32'
@@ -348,6 +353,12 @@ export class SecretsService {
     wallet.addresses = addresses
 
     return wallet
+  }
+
+  public getKnownViewingKeys(): string[] {
+    return this.getWallets()
+      .filter((wallet: AirGapWallet) => wallet.protocol.identifier === MainProtocolSymbols.XTZ_SHIELDED)
+      .map((wallet: AirGapWallet) => wallet.publicKey)
   }
 
   public async showAlert(title: string, message: string): Promise<void> {

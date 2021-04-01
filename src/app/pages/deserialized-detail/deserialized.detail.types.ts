@@ -13,6 +13,10 @@ export enum Mode {
   SIGN_MESSAGE = 1
 }
 
+/**************** Task ****************/
+
+export type Task = 'signTransaction' | 'signMessage' | 'generic'
+
 /**************** Alert ****************/
 
 export interface Bip39PassphraseAlert {
