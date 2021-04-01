@@ -3,7 +3,8 @@ import { AirGapWalletStatus } from '@airgap/coinlib-core'
 import { Component, OnDestroy } from '@angular/core'
 import { AlertOptions } from '@ionic/core'
 import { Store } from '@ngrx/store'
-import { Observable, Subscription } from 'rxjs'
+import { Observable, Subject } from 'rxjs'
+import { takeUntil } from 'rxjs/operators'
 
 import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
@@ -31,7 +32,7 @@ export class AccountShareSelectPage implements OnDestroy {
 
   private alertElement: HTMLIonAlertElement
 
-  private subscriptions: Subscription[] = []
+  private readonly ngDestroyed$: Subject<void> = new Subject()
 
   constructor(private readonly store: Store<fromAccountShareSelect.State>, private readonly uiEventService: UiEventService) {
     this.secrets$ = this.store.select(fromAccountShareSelect.selectSecrets)
@@ -41,16 +42,14 @@ export class AccountShareSelectPage implements OnDestroy {
 
     this.alert$ = this.store.select(fromAccountShareSelect.selectAlert)
 
-    this.subscriptions.push(this.alert$.subscribe(this.showOrDismissAlert.bind(this)))
+    this.alert$.pipe(takeUntil(this.ngDestroyed$)).subscribe(this.showOrDismissAlert.bind(this))
 
     this.store.dispatch(actions.viewInitialization())
   }
 
   public ngOnDestroy(): void {
-    this.subscriptions.forEach((subscription: Subscription) => {
-      subscription.unsubscribe()
-    })
-    this.subscriptions = []
+    this.ngDestroyed$.next()
+    this.ngDestroyed$.complete()
   }
 
   public toggleSecret(secret: Secret): void {

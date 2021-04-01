@@ -4,15 +4,15 @@ import { Component, OnDestroy } from '@angular/core'
 import { ModalController } from '@ionic/angular'
 import { AlertOptions, LoadingOptions, ModalOptions, OverlayEventDetail } from '@ionic/core'
 import { Store } from '@ngrx/store'
-import { Observable, Subscription } from 'rxjs'
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
+import { Observable, Subject } from 'rxjs'
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { SelectAccountPage } from '../select-account/select-account.page'
 
 import * as actions from './deserialized-detail.actions'
 import * as fromDeserializedDetail from './deserialized-detail.reducer'
-import { Alert, Task, Modal, Mode, UnsignedMessage } from './deserialized.detail.types'
+import { Alert, Modal, Mode, Task, UnsignedMessage } from './deserialized.detail.types'
 
 type ModalOnDismissAction = (modalData: OverlayEventDetail<unknown>) => Promise<void>
 
@@ -41,7 +41,7 @@ export class DeserializedDetailPage implements OnDestroy {
   private alertElement: HTMLIonAlertElement | undefined
   private modalElement: HTMLIonModalElement | undefined
 
-  private subscriptions: Subscription[] = []
+  private readonly ngDestroyed$: Subject<void> = new Subject()
 
   constructor(
     private readonly store: Store<fromDeserializedDetail.State>,
@@ -61,18 +61,16 @@ export class DeserializedDetailPage implements OnDestroy {
 
     this.rawData$ = this.store.select(fromDeserializedDetail.selectRaw)
 
-    this.subscriptions.push(this.loader$.pipe(debounceTime(0), distinctUntilChanged()).subscribe(this.showOrHideLoader.bind(this)))
-    this.subscriptions.push(this.alert$.subscribe(this.showOrDismissAlert.bind(this)))
-    this.subscriptions.push(this.modal$.subscribe(this.showOrDismissModal.bind(this)))
+    this.loader$.pipe(debounceTime(0), distinctUntilChanged(), takeUntil(this.ngDestroyed$)).subscribe(this.showOrHideLoader.bind(this))
+    this.alert$.pipe(takeUntil(this.ngDestroyed$)).subscribe(this.showOrDismissAlert.bind(this))
+    this.modal$.pipe(takeUntil(this.ngDestroyed$)).subscribe(this.showOrDismissModal.bind(this))
 
     this.store.dispatch(actions.viewInitialization())
   }
 
   public ngOnDestroy(): void {
-    this.subscriptions.forEach((subscription: Subscription) => {
-      subscription.unsubscribe()
-    })
-    this.subscriptions = []
+    this.ngDestroyed$.next()
+    this.ngDestroyed$.complete()
   }
 
   public continue(): void {

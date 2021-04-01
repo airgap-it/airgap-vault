@@ -3,7 +3,8 @@ import { Component, OnDestroy } from '@angular/core'
 import { AlertOptions } from '@ionic/core'
 import { Store } from '@ngrx/store'
 import { TranslateService } from '@ngx-translate/core'
-import { Observable, Subscription } from 'rxjs'
+import { Observable, Subject } from 'rxjs'
+import { takeUntil } from 'rxjs/operators'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 
@@ -29,7 +30,7 @@ export class MigrationPage implements OnDestroy {
 
   private alertElement: HTMLIonAlertElement
 
-  private subscriptions: Subscription[] = []
+  private readonly ngDestroyed$: Subject<void> = new Subject()
 
   constructor(
     private readonly store: Store<fromMigration.State>,
@@ -43,7 +44,7 @@ export class MigrationPage implements OnDestroy {
 
     this.alert$ = this.store.select(fromMigration.selectAlert)
 
-    this.subscriptions.push(this.alert$.subscribe(this.showOrDismissAlert.bind(this)))
+    this.alert$.pipe(takeUntil(this.ngDestroyed$)).subscribe(this.showOrDismissAlert.bind(this))
   }
 
   public ionViewWillEnter(): void {
@@ -55,10 +56,8 @@ export class MigrationPage implements OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.subscriptions.forEach((subscription: Subscription) => {
-      subscription.unsubscribe()
-    })
-    this.subscriptions = []
+    this.ngDestroyed$.next()
+    this.ngDestroyed$.complete()
   }
 
   public run(): void {

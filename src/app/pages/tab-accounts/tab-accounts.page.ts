@@ -69,7 +69,7 @@ export class TabAccountsPage implements OnInit {
 
   public async syncWallets(): Promise<void> {
     const strategy: ModeStrategy = await this.modeService.strategy()
-    strategy.syncAll()
+    await strategy.syncAll()
   }
 
   public addWallet(): void {
