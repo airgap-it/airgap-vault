@@ -2,6 +2,7 @@ package it.airgap.vault;
 
 import android.os.Bundle;
 
+import com.dutchconcepts.capacitor.barcodescanner.BarcodeScanner;
 import com.getcapacitor.BridgeActivity;
 import com.getcapacitor.Plugin;
 
@@ -25,6 +26,7 @@ public class MainActivity extends BridgeActivity {
       add(AppInfo.class);
       add(SecurityUtils.class);
       add(SaplingNative.class);
+      add(BarcodeScanner.class);
     }});
   }
 }

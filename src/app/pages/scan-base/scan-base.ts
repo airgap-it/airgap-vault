@@ -84,15 +84,15 @@ export class ScanBasePage {
   }
 
   private async startScanMobile() {
-    this.scanner.scan(
-      (text) => {
+    this.scanner
+      .scan()
+      .then((text: string) => {
         this.checkScan(text)
-      },
-      (error) => {
+      })
+      .catch((error: any) => {
         console.warn(error)
         this.startScan()
-      }
-    )
+      })
   }
 
   private startScanBrowser() {
