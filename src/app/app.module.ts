@@ -4,6 +4,7 @@ import {
   APP_CONFIG,
   APP_INFO_PLUGIN,
   APP_PLUGIN,
+  BARCODE_SCANNER_PLUGIN,
   ClipboardService,
   CLIPBOARD_PLUGIN,
   DeeplinkService,
@@ -98,6 +99,7 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
   providers: [
     { provide: APP_PLUGIN, useValue: Plugins.App },
     { provide: APP_INFO_PLUGIN, useValue: Plugins.AppInfo },
+    { provide: BARCODE_SCANNER_PLUGIN, useValue: Plugins.BarcodeScanner },
     { provide: CAMERA_PREVIEW_PLUGIN, useValue: Plugins.CameraPreview },
     { provide: CLIPBOARD_PLUGIN, useValue: Plugins.Clipboard },
     { provide: PERMISSIONS_PLUGIN, useValue: Plugins.Permissions },
