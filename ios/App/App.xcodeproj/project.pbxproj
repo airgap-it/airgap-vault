@@ -296,10 +296,10 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
+			inputPaths = (
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -547,8 +547,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airgap-it/airgap-sapling";
 			requirement = {
-				kind = exactVersion;
-				version = "0.0.5-beta10";
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.6;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
