@@ -13,13 +13,14 @@ stages:
   - qa
   - native_build
   - native_test
+  - publish
 
 build_ionic:
   stage: build
   script:
     - docker build -t $GOOGLE_TAG .
   tags:
-    - android-ui
+    - docker
 
 unit:
   stage: test
@@ -32,7 +33,7 @@ unit:
     - docker rm unit-$CI_COMMIT_SHA
     - docker rm lint-$CI_COMMIT_SHA
   tags:
-    - android-ui
+    - docker
   artifacts:
     paths:
       - lcov.info
@@ -42,7 +43,7 @@ build_android:
   stage: native_build
   when: manual
   tags:
-    - android-ui
+    - docker
   variables:
     LOCAL_ANDROID: 'android-$CI_PIPELINE_ID'
   script:
@@ -97,14 +98,13 @@ qa:
   after_script:
     - docker rm -f qa-$CI_PIPELINE_ID || true
   tags:
-    - android-ui
+    - docker
 
 build_ios:
   stage: native_build
   when: manual
   before_script:
     - echo "$IOS_BUILD_JSON" > build.json
-    - echo "$IOS_EXPORT_OPTIONS" > exportOptions.plist
   script:
     - export DEVELOPER_DIR=$XCODE_PATH
     - nvm use 14
@@ -115,13 +115,21 @@ build_ios:
     - npx ionic info
     - npx ionic build --prod
     - npx cap sync ios
-    - xcodebuild -workspace ios/App/App.xcworkspace -scheme "App" -destination generic/platform=iOS -configuration Release archive -archivePath ios/App.xcarchive MARKETING_VERSION=$VERSION CURRENT_PROJECT_VERSION=$CI_PIPELINE_ID -allowProvisioningUpdates
-    - xcodebuild -exportArchive -archivePath ios/App.xcarchive -exportOptionsPlist exportOptions.plist -exportPath ios/ -allowProvisioningUpdates
-    - xcrun altool --upload-app -f ios/App.ipa -u $IOS_USERNAME -p $IOS_PASSWORD
+    - xcodebuild -workspace ios/App/App.xcworkspace -scheme "App" -destination generic/platform=iOS -configuration Release archive -archivePath ios/airgap-wallet-$VERSION-$CI_PIPELINE_ID.xcarchive MARKETING_VERSION=$VERSION CURRENT_PROJECT_VERSION=$CI_PIPELINE_ID -allowProvisioningUpdates
   artifacts:
     paths:
-      - ios/App.ipa
-      - ios/App.xcarchive
+      - ios/airgap-wallet-$VERSION-$CI_PIPELINE_ID.xcarchive
   tags:
     - ios
 
+publish_ios:
+  stage: publish
+  when: manual
+  before_script:
+    - echo "$IOS_EXPORT_OPTIONS" > exportOptions.plist
+  script:
+    - export DEVELOPER_DIR=$XCODE_PATH
+    - xcodebuild -exportArchive -archivePath ios/airgap-wallet-$VERSION-$CI_PIPELINE_ID.xcarchive -exportOptionsPlist exportOptions.plist -exportPath ios/ -allowProvisioningUpdates
+    - xcrun altool --upload-app -f ios/airgap-wallet-$VERSION-$CI_PIPELINE_ID.ipa -u $IOS_USERNAME -p $IOS_PASSWORD
+  tags:
+    - ios

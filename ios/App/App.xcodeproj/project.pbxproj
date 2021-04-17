@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		2FAD9763203C412B000D30F8 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2FAD9762203C412B000D30F8 /* config.xml */; };
 		49690A7E25C2BF80004A3586 /* VaultError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49690A7D25C2BF80004A3586 /* VaultError.swift */; };
+		49D642732629D22A0066C013 /* SaplingFFI in Frameworks */ = {isa = PBXBuildFile; productRef = 49D642722629D22A0066C013 /* SaplingFFI */; };
+		49D642752629D22A0066C013 /* Sapling in Frameworks */ = {isa = PBXBuildFile; productRef = 49D642742629D22A0066C013 /* Sapling */; };
 		50379B232058CBB4000EE86E /* capacitor.config.json in Resources */ = {isa = PBXBuildFile; fileRef = 50379B222058CBB4000EE86E /* capacitor.config.json */; };
 		504EC3081FED79650016851F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504EC3071FED79650016851F /* AppDelegate.swift */; };
 		504EC30D1FED79650016851F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC30B1FED79650016851F /* Main.storyboard */; };
@@ -17,7 +19,6 @@
 		50B271D11FEDC1A000F3C39B /* public in Resources */ = {isa = PBXBuildFile; fileRef = 50B271D01FEDC1A000F3C39B /* public */; };
 		885F55E825EE224200D85A88 /* SaplingNative.m in Sources */ = {isa = PBXBuildFile; fileRef = 885F55E725EE224200D85A88 /* SaplingNative.m */; };
 		885F55EB25EE226300D85A88 /* SaplingNative.swift in Sources */ = {isa = PBXBuildFile; fileRef = 885F55EA25EE226300D85A88 /* SaplingNative.swift */; };
-		888EC6D125EFE88400F0947F /* Sapling in Frameworks */ = {isa = PBXBuildFile; productRef = 888EC6D025EFE88400F0947F /* Sapling */; };
 		88AE2EE823D5C7A500428560 /* SecurityUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AE2EE723D5C7A500428560 /* SecurityUtils.swift */; };
 		88AE2EED23D5CB3200428560 /* PluginCall+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AE2EEC23D5CB3200428560 /* PluginCall+Additions.swift */; };
 		88AE2EEF23D5D7B300428560 /* SecurityUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 88AE2EEE23D5D7B300428560 /* SecurityUtils.m */; };
@@ -71,8 +72,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49D642752629D22A0066C013 /* Sapling in Frameworks */,
 				A084ECDBA7D38E1E42DFC39D /* Pods_App.framework in Frameworks */,
-				888EC6D125EFE88400F0947F /* Sapling in Frameworks */,
+				49D642732629D22A0066C013 /* SaplingFFI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -213,7 +215,8 @@
 			);
 			name = App;
 			packageProductDependencies = (
-				888EC6D025EFE88400F0947F /* Sapling */,
+				49D642722629D22A0066C013 /* SaplingFFI */,
+				49D642742629D22A0066C013 /* Sapling */,
 			);
 			productName = App;
 			productReference = 504EC3041FED79650016851F /* App.app */;
@@ -245,7 +248,7 @@
 			);
 			mainGroup = 504EC2FB1FED79650016851F;
 			packageReferences = (
-				888EC6CF25EFE88400F0947F /* XCRemoteSwiftPackageReference "airgap-sapling" */,
+				49D642712629D22A0066C013 /* XCRemoteSwiftPackageReference "airgap-sapling" */,
 			);
 			productRefGroup = 504EC3051FED79650016851F /* Products */;
 			projectDirPath = "";
@@ -543,7 +546,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		888EC6CF25EFE88400F0947F /* XCRemoteSwiftPackageReference "airgap-sapling" */ = {
+		49D642712629D22A0066C013 /* XCRemoteSwiftPackageReference "airgap-sapling" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airgap-it/airgap-sapling";
 			requirement = {
@@ -554,9 +557,14 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		888EC6D025EFE88400F0947F /* Sapling */ = {
+		49D642722629D22A0066C013 /* SaplingFFI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 888EC6CF25EFE88400F0947F /* XCRemoteSwiftPackageReference "airgap-sapling" */;
+			package = 49D642712629D22A0066C013 /* XCRemoteSwiftPackageReference "airgap-sapling" */;
+			productName = SaplingFFI;
+		};
+		49D642742629D22A0066C013 /* Sapling */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 49D642712629D22A0066C013 /* XCRemoteSwiftPackageReference "airgap-sapling" */;
 			productName = Sapling;
 		};
 /* End XCSwiftPackageProductDependency section */
