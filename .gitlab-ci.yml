@@ -115,10 +115,10 @@ build_ios:
     - npx ionic info
     - npx ionic build --prod
     - npx cap sync ios
-    - xcodebuild -workspace ios/App/App.xcworkspace -scheme "App" -destination generic/platform=iOS -configuration Release archive -archivePath ios/airgap-wallet-$VERSION-$CI_PIPELINE_ID.xcarchive MARKETING_VERSION=$VERSION CURRENT_PROJECT_VERSION=$CI_PIPELINE_ID -allowProvisioningUpdates
+    - xcodebuild -workspace ios/App/App.xcworkspace -scheme "App" -destination generic/platform=iOS -configuration Release archive -archivePath ios/airgap-vault-$VERSION-$CI_PIPELINE_ID.xcarchive MARKETING_VERSION=$VERSION CURRENT_PROJECT_VERSION=$CI_PIPELINE_ID -allowProvisioningUpdates
   artifacts:
     paths:
-      - ios/airgap-wallet-$VERSION-$CI_PIPELINE_ID.xcarchive
+      - ios/airgap-vault-$VERSION-$CI_PIPELINE_ID.xcarchive
   tags:
     - ios
 
@@ -129,7 +129,7 @@ publish_ios:
     - echo "$IOS_EXPORT_OPTIONS" > exportOptions.plist
   script:
     - export DEVELOPER_DIR=$XCODE_PATH
-    - xcodebuild -exportArchive -archivePath ios/airgap-wallet-$VERSION-$CI_PIPELINE_ID.xcarchive -exportOptionsPlist exportOptions.plist -exportPath ios/ -allowProvisioningUpdates
-    - xcrun altool --upload-app -f ios/airgap-wallet-$VERSION-$CI_PIPELINE_ID.ipa -u $IOS_USERNAME -p $IOS_PASSWORD
+    - xcodebuild -exportArchive -archivePath ios/airgap-vault-$VERSION-$CI_PIPELINE_ID.xcarchive -exportOptionsPlist exportOptions.plist -exportPath ios/airgap-vault-$VERSION-$CI_PIPELINE_ID.ipa -allowProvisioningUpdates
+    - xcrun altool --upload-app -f ios/airgap-vault-$VERSION-$CI_PIPELINE_ID.ipa -u $IOS_USERNAME -p $IOS_PASSWORD
   tags:
     - ios
