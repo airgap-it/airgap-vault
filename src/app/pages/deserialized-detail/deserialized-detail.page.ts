@@ -4,8 +4,8 @@ import { Component } from '@angular/core'
 import { ModalController } from '@ionic/angular'
 import { AlertOptions, LoadingOptions, ModalOptions, OverlayEventDetail } from '@ionic/core'
 import { Store } from '@ngrx/store'
-import { Observable } from 'rxjs'
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
+import { Observable, Subject, Subscription } from 'rxjs'
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { SelectAccountPage } from '../select-account/select-account.page'
@@ -40,6 +40,8 @@ export class DeserializedDetailPage {
   private loadingElement: HTMLIonLoadingElement | undefined
   private alertElement: HTMLIonAlertElement | undefined
   private modalElement: HTMLIonModalElement | undefined
+  private subscriptions: Subscription[] = []
+  private readonly ngDestroyed$: Subject<void> = new Subject()
 
   constructor(
     private readonly store: Store<fromDeserializedDetail.State>,
@@ -60,11 +62,20 @@ export class DeserializedDetailPage {
     this.rawData$ = this.store.select(fromDeserializedDetail.selectRaw)
 
     // FIXME [#210] set debounce time
-    this.loader$.pipe(debounceTime(0), distinctUntilChanged()).subscribe(this.showOrHideLoader.bind(this))
-    this.alert$.subscribe(this.showOrDismissAlert.bind(this))
-    this.modal$.subscribe(this.showOrDismissModal.bind(this))
+    this.subscriptions.push(this.loader$.pipe(debounceTime(0), distinctUntilChanged()).subscribe(this.showOrHideLoader.bind(this)))
+    this.subscriptions.push(this.alert$.subscribe(this.showOrDismissAlert.bind(this)))
+    this.subscriptions.push(this.modal$.subscribe(this.showOrDismissModal.bind(this)))
+
+    this.loader$.pipe(debounceTime(0), distinctUntilChanged(), takeUntil(this.ngDestroyed$)).subscribe(this.showOrHideLoader.bind(this))
+    this.alert$.pipe(takeUntil(this.ngDestroyed$)).subscribe(this.showOrDismissAlert.bind(this))
+    this.modal$.pipe(takeUntil(this.ngDestroyed$)).subscribe(this.showOrDismissModal.bind(this))
 
     this.store.dispatch(actions.viewInitialization())
+  }
+
+  public ngOnDestroy(): void {
+    this.ngDestroyed$.next()
+    this.ngDestroyed$.complete()
   }
 
   public continue(): void {
