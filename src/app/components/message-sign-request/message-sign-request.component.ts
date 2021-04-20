@@ -8,13 +8,13 @@ import {
   IACMessageType,
   ProtocolSymbols,
   MainProtocolSymbols,
-  TezosCryptoClient
+  TezosCryptoClient,
+  AirGapWallet
 } from '@airgap/coinlib-core'
 import { InteractionService, InteractionOperationType } from 'src/app/services/interaction/interaction.service'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
 import { handleErrorLocal, ErrorCategory } from 'src/app/services/error-handler/error-handler.service'
 import * as bip39 from 'bip39'
-import { Secret } from 'src/app/models/secret'
 import { AlertController, ModalController } from '@ionic/angular'
 import { ProtocolService, SerializerService } from '@airgap/angular-core'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
@@ -40,9 +40,9 @@ export class MessageSignRequestComponent {
     private readonly protocolService: ProtocolService,
     private readonly secretsService: SecretsService,
     private readonly serializerService: SerializerService,
-    private readonly alertCtrl: AlertController,
+    private readonly alertController: AlertController,
     private readonly modalController: ModalController
-  ) { }
+  ) {}
 
   public async ngOnInit() {
     this.message = (this.messageDefinitionObject.payload as MessageSignRequest).message
@@ -59,13 +59,20 @@ export class MessageSignRequestComponent {
         this.navigationService.route('')
         return
       }
-      let secret: Secret
+      let wallet: AirGapWallet
       const pubKey = (this.messageDefinitionObject.payload as MessageSignRequest).publicKey
+      const protocolIdentifier = this.messageDefinitionObject.protocol
       if (pubKey !== undefined && pubKey.length > 0) {
-        secret = this.secretsService.findByPublicKey(pubKey)
-      } else {
-        secret = this.secretsService.getActiveSecret()
+        wallet = this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(pubKey, protocolIdentifier)
       }
+
+      // we should handle this case here as well
+      if (!wallet) {
+        console.warn('no wallet found for this public key')
+        throw new Error('no wallet found for this public key')
+      }
+
+      const secret = this.secretsService.findByPublicKey(wallet.publicKey)
 
       // we should handle this case here as well
       if (!secret) {
@@ -76,7 +83,7 @@ export class MessageSignRequestComponent {
       const entropy = await this.secretsService.retrieveEntropyForSecret(secret)
 
       const mnemonic: string = bip39.entropyToMnemonic(entropy)
-      const privateKey: Buffer = await protocol.getPrivateKeyFromMnemonic(mnemonic, protocol.standardDerivationPath) // TODO
+      const privateKey: Buffer = await protocol.getPrivateKeyFromMnemonic(mnemonic, wallet.derivationPath)
 
       const signature = await protocol.signMessage(this.message, { privateKey })
       const messageSignRequest = this.messageDefinitionObject.payload as MessageSignRequest
@@ -137,7 +144,7 @@ export class MessageSignRequestComponent {
   }
 
   public async showAlert(title: string, message: string): Promise<void> {
-    const alert: HTMLIonAlertElement = await this.alertCtrl.create({
+    const alert: HTMLIonAlertElement = await this.alertController.create({
       header: title,
       message,
       backdropDismiss: false,
