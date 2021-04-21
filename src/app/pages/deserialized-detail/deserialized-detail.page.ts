@@ -80,6 +80,8 @@ export class DeserializedDetailPage {
 
   public continue(): void {
     this.store.dispatch(actions.approved())
+    this.ngDestroyed$.next()
+    this.ngDestroyed$.complete()
   }
 
   private async showOrHideLoader(task: (UIAction<Task> & { userInput: actions.UserInput }) | undefined): Promise<void> {
