@@ -74,5 +74,14 @@
    <ArchiveAction
       buildConfiguration = "Release"
       revealArchiveInOrganizer = "YES">
+      <PostActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Run Script"
+               scriptText = "for STATIC_LIB in &quot;${ARCHIVE_PATH}&quot;/Products/Applications/&quot;${PRODUCT_NAME}&quot;.app/frameworks/*.a&#10;do&#10;    echo &quot;Removing &apos;${STATIC_LIB}&apos;&quot;&#10;    rm -r &quot;${STATIC_LIB}&quot;&#10;done&#10;">
+            </ActionContent>
+         </ExecutionAction>
+      </PostActions>
    </ArchiveAction>
 </Scheme>
