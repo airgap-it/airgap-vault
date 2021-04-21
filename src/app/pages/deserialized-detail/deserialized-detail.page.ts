@@ -4,7 +4,7 @@ import { Component } from '@angular/core'
 import { ModalController } from '@ionic/angular'
 import { AlertOptions, LoadingOptions, ModalOptions, OverlayEventDetail } from '@ionic/core'
 import { Store } from '@ngrx/store'
-import { Observable, Subject, Subscription } from 'rxjs'
+import { Observable, Subject } from 'rxjs'
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
@@ -40,7 +40,6 @@ export class DeserializedDetailPage {
   private loadingElement: HTMLIonLoadingElement | undefined
   private alertElement: HTMLIonAlertElement | undefined
   private modalElement: HTMLIonModalElement | undefined
-  private subscriptions: Subscription[] = []
   private readonly ngDestroyed$: Subject<void> = new Subject()
 
   constructor(
@@ -62,10 +61,6 @@ export class DeserializedDetailPage {
     this.rawData$ = this.store.select(fromDeserializedDetail.selectRaw)
 
     // FIXME [#210] set debounce time
-    this.subscriptions.push(this.loader$.pipe(debounceTime(0), distinctUntilChanged()).subscribe(this.showOrHideLoader.bind(this)))
-    this.subscriptions.push(this.alert$.subscribe(this.showOrDismissAlert.bind(this)))
-    this.subscriptions.push(this.modal$.subscribe(this.showOrDismissModal.bind(this)))
-
     this.loader$.pipe(debounceTime(0), distinctUntilChanged(), takeUntil(this.ngDestroyed$)).subscribe(this.showOrHideLoader.bind(this))
     this.alert$.pipe(takeUntil(this.ngDestroyed$)).subscribe(this.showOrDismissAlert.bind(this))
     this.modal$.pipe(takeUntil(this.ngDestroyed$)).subscribe(this.showOrDismissModal.bind(this))
