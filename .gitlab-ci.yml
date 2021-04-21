@@ -129,7 +129,7 @@ publish_ios:
     - echo "$IOS_EXPORT_OPTIONS" > exportOptions.plist
   script:
     - export DEVELOPER_DIR=$XCODE_PATH
-    - xcodebuild -exportArchive -archivePath ios/airgap-vault-$VERSION-$CI_PIPELINE_ID.xcarchive -exportOptionsPlist exportOptions.plist -exportPath ios/airgap-vault-$VERSION-$CI_PIPELINE_ID.ipa -allowProvisioningUpdates
-    - xcrun altool --upload-app -f ios/airgap-vault-$VERSION-$CI_PIPELINE_ID.ipa -u $IOS_USERNAME -p $IOS_PASSWORD
+    - xcodebuild -exportArchive -archivePath ios/airgap-vault-$VERSION-$CI_PIPELINE_ID.xcarchive -exportOptionsPlist exportOptions.plist -exportPath ios/ -allowProvisioningUpdates
+    - xcrun altool --upload-app -f ios/App.ipa -u $IOS_USERNAME -p $IOS_PASSWORD
   tags:
     - ios
