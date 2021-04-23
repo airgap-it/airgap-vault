@@ -144,6 +144,11 @@ export class AppComponent implements AfterViewInit {
   }
 
   private async getSaplingParams(type: 'spend' | 'output'): Promise<Buffer> {
+    if (this.platform.is('hybrid')) {
+      // Sapling params are read and used in a native plugin, there's no need to read them in the Ionic part
+      return Buffer.alloc(0)
+    }
+
     const params: ArrayBuffer = await this.httpClient
       .get(`./assets/sapling/sapling-${type}.params`, { responseType: 'arraybuffer' })
       .toPromise()
