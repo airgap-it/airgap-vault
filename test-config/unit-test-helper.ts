@@ -19,7 +19,7 @@ import {
   PlatformMock,
   ToastControllerMock
 } from './ionic-mocks'
-import { AppInfoPluginMock, SplashScreenMock, StatusBarMock } from './plugins-mocks'
+import { AppInfoPluginMock, SaplingPluginMock, SplashScreenMock, StatusBarMock } from './plugins-mocks'
 import { StorageMock } from './storage-mock'
 import { APP_CONFIG } from '@airgap/angular-core'
 import { appConfig } from 'src/app/config/app-config'
@@ -28,6 +28,7 @@ export class UnitHelper {
   public readonly mockRefs = {
     appInfo: new AppInfoPluginMock(),
     platform: new PlatformMock(),
+    sapling: new SaplingPluginMock(),
     statusBar: new StatusBarMock(),
     splashScreen: new SplashScreenMock(),
     deeplink: new DeeplinkMock(),

@@ -12,13 +12,20 @@ import { SecureStorageServiceMock } from './services/secure-storage/secure-stora
 import { SecureStorageService } from './services/secure-storage/secure-storage.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
 import { StatusBarPlugin, SplashScreenPlugin, AppPlugin } from '@capacitor/core'
-import { SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
-import { SecurityUtilsPlugin } from './capacitor-plugins/definitions'
-import { createAppSpy, createSecurityUtilsSpy, createSplashScreenSpy, createStatusBarSpy } from 'test-config/plugins-mocks'
+import { SAPLING_PLUGIN, SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
+import { SaplingPlugin, SecurityUtilsPlugin } from './capacitor-plugins/definitions'
+import {
+  createAppSpy,
+  createSaplingSpy,
+  createSecurityUtilsSpy,
+  createSplashScreenSpy,
+  createStatusBarSpy
+} from 'test-config/plugins-mocks'
 import { IACService } from './services/iac/iac.service'
 
 describe('AppComponent', () => {
   let appSpy: AppPlugin
+  let saplingSpy: SaplingPlugin
   let securityUtilsSpy: SecurityUtilsPlugin
   let statusBarSpy: StatusBarPlugin
   let splashScreenSpy: SplashScreenPlugin
@@ -29,6 +36,7 @@ describe('AppComponent', () => {
   let unitHelper: UnitHelper
   beforeEach(() => {
     appSpy = createAppSpy()
+    saplingSpy = createSaplingSpy()
     securityUtilsSpy = createSecurityUtilsSpy()
     statusBarSpy = createStatusBarSpy()
     splashScreenSpy = createSplashScreenSpy()
@@ -43,6 +51,7 @@ describe('AppComponent', () => {
         providers: [
           { provide: SecureStorageService, useClass: SecureStorageServiceMock },
           { provide: APP_PLUGIN, useValue: appSpy },
+          { provide: SAPLING_PLUGIN, useValue: saplingSpy },
           { provide: SECURITY_UTILS_PLUGIN, useValue: securityUtilsSpy },
           { provide: STATUS_BAR_PLUGIN, useValue: statusBarSpy },
           { provide: SPLASH_SCREEN_PLUGIN, useValue: splashScreenSpy },

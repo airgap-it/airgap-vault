@@ -1,18 +1,12 @@
-<ion-row class="rawdata--container ion-padding-bottom" *ngIf="message">
+<ion-row class="rawdata--container ion-padding-bottom" *ngIf="messages[0]">
   <ion-col class="ion-no-padding">
     <p>{{ 'message-signing-request.payload_label' | translate }}</p>
-    <pre class="ion-no-margin">{{ message | json }}</pre>
+    <pre class="ion-no-margin">{{ messages[0].data | json }}</pre>
   </ion-col>
 </ion-row>
-<ion-row class="rawdata--container" *ngIf="blake2bHash">
+<ion-row class="rawdata--container" *ngIf="messages[0].blake2bHash">
   <ion-col class="ion-no-padding">
     <p>{{ 'message-signing-request.blake2b_hash' | translate }}</p>
-    <pre class="ion-no-margin">{{ blake2bHash }}</pre>
+    <pre class="ion-no-margin">{{ messages[0].blake2bHash }}</pre>
   </ion-col>
 </ion-row>
-<ion-fab vertical="bottom" horizontal="end" slot="fixed">
-  <ion-button color="primary" shape="round" (click)="signAndGoToNextPage()">
-    <ion-icon slot="start" src="assets/icons/md-check.svg"></ion-icon>
-    {{ 'message-signing-request.sign_button' | translate }}
-  </ion-button>
-</ion-fab>

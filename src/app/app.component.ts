@@ -6,6 +6,13 @@ import {
   SPLASH_SCREEN_PLUGIN,
   STATUS_BAR_PLUGIN
 } from '@airgap/angular-core'
+import { NetworkType, TezosProtocolNetwork, TezosSaplingExternalMethodProvider } from '@airgap/coinlib-core'
+import {
+  TezosSaplingProtocolOptions,
+  TezosShieldedTezProtocolConfig
+} from '@airgap/coinlib-core/protocols/tezos/sapling/TezosSaplingProtocolOptions'
+import { TezosShieldedTezProtocol } from '@airgap/coinlib-core/protocols/tezos/sapling/TezosShieldedTezProtocol'
+import { HttpClient } from '@angular/common/http'
 import { AfterViewInit, Component, Inject, NgZone } from '@angular/core'
 import { AppPlugin, AppUrlOpen, SplashScreenPlugin, StatusBarPlugin, StatusBarStyle } from '@capacitor/core'
 import { Platform } from '@ionic/angular'
@@ -19,6 +26,7 @@ import { Secret } from './models/secret'
 import { ErrorCategory, handleErrorLocal } from './services/error-handler/error-handler.service'
 import { IACService } from './services/iac/iac.service'
 import { NavigationService } from './services/navigation/navigation.service'
+import { SaplingNativeService } from './services/sapling-native/sapling-native.service'
 import { SecretsService } from './services/secrets/secrets.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
 
@@ -42,6 +50,8 @@ export class AppComponent implements AfterViewInit {
     private readonly secretsService: SecretsService,
     private readonly ngZone: NgZone,
     private readonly navigationService: NavigationService,
+    private readonly httpClient: HttpClient,
+    private readonly saplingNativeService: SaplingNativeService,
     @Inject(APP_PLUGIN) private readonly app: AppPlugin,
     @Inject(SECURITY_UTILS_PLUGIN) private readonly securityUtils: SecurityUtilsPlugin,
     @Inject(SPLASH_SCREEN_PLUGIN) private readonly splashScreen: SplashScreenPlugin,
@@ -53,9 +63,7 @@ export class AppComponent implements AfterViewInit {
   }
 
   public async initializeApp(): Promise<void> {
-    await Promise.all([this.platform.ready(), this.initializeTranslations()])
-
-    this.initializeProtocols()
+    await Promise.all([this.platform.ready(), this.initializeTranslations(), this.initializeProtocols()])
 
     if (this.platform.is('hybrid')) {
       this.statusBar.setStyle({ style: StatusBarStyle.Dark })
@@ -116,7 +124,35 @@ export class AppComponent implements AfterViewInit {
     })
   }
 
-  private initializeProtocols(): void {
-    this.protocolService.init()
+  private async initializeProtocols(): Promise<void> {
+    const externalMethodProvider:
+      | TezosSaplingExternalMethodProvider
+      | undefined = await this.saplingNativeService.createExternalMethodProvider()
+
+    const shieldedTezProtocol: TezosShieldedTezProtocol = new TezosShieldedTezProtocol(
+      new TezosSaplingProtocolOptions(
+        new TezosProtocolNetwork('Edonet', NetworkType.TESTNET, 'https://tezos-edonet-node.prod.gke.papers.tech'),
+        new TezosShieldedTezProtocolConfig(undefined, undefined, undefined, externalMethodProvider)
+      )
+    )
+
+    this.protocolService.init({
+      extraActiveProtocols: [shieldedTezProtocol]
+    })
+
+    await shieldedTezProtocol.initParameters(await this.getSaplingParams('spend'), await this.getSaplingParams('output'))
+  }
+
+  private async getSaplingParams(type: 'spend' | 'output'): Promise<Buffer> {
+    if (this.platform.is('hybrid')) {
+      // Sapling params are read and used in a native plugin, there's no need to read them in the Ionic part
+      return Buffer.alloc(0)
+    }
+
+    const params: ArrayBuffer = await this.httpClient
+      .get(`./assets/sapling/sapling-${type}.params`, { responseType: 'arraybuffer' })
+      .toPromise()
+
+    return Buffer.from(params)
   }
 }

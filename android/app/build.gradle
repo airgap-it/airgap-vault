@@ -15,10 +15,27 @@ android {
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     buildTypes {
+        debug {
+            buildConfigField "boolean", "APPIUM", "false"
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "boolean", "APPIUM", "false"
         }
+        appium {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "boolean", "APPIUM", "true"
+            matchingFallbacks = ['release']
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
     lintOptions {
         abortOnError false
@@ -48,6 +65,9 @@ dependencies {
 
     implementation 'com.google.android.material:material:1.2.0'
     implementation 'com.scottyab:rootbeer-lib:0.0.7'
+
+    def saplingVersion = "0.0.6"
+    implementation "com.github.airgap-it:airgap-sapling:$saplingVersion"
 }
 
 

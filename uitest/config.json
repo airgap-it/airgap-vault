@@ -1,0 +1,15 @@
+{
+  "platform": "android",
+  "noReset": "false",
+  "appiumServer": "http://ale.papers.tech:4724/wd/hub",
+
+  "androidVersion": "11.0",
+  "apkPath": "/home/airgap-signed.apk",
+
+  "iOSversion": "13.4",
+  "appPath": "/Users/aleksandr/Downloads/MOV-PA.app",
+  "deviceName": "iPhone 8 Plus",
+  "bundleId": "",
+  "xcodeOrgId": "",
+  "updatedWDABundleId": ""
+}

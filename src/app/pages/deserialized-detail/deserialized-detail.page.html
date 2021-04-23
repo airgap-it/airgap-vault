@@ -3,16 +3,46 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ title }}</ion-title>
+    <ion-title>{{ title$ | async }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <airgap-unsigned-transaction
-    [unsignedTxs]="signTransactionRequests"
-    [transactionInfos]="transactionInfos"
-    *ngIf="type !== 7"
-  ></airgap-unsigned-transaction>
+<ion-content class="deserialized-content ion-padding">
+  <ng-container *ngIf="(mode$ | async) === Mode.SIGN_TRANSACTION">
+    <ng-container *ngIf="(transactionsDetails$ | async).status === UIResourceStatus.SUCCESS">
+      <airgap-transaction [airGapTxs]="(transactionsDetails$ | async).value"></airgap-transaction>
+    </ng-container>
 
-  <airgap-message-sign-request [messageDefinitionObject]="signTransactionRequests[0]" *ngIf="type === 7"></airgap-message-sign-request>
+    <ion-grid
+      *ngIf="(transactionsDetails$ | async).status === UIResourceStatus.ERROR 
+        && (rawData$ | async).status === UIResourceStatus.SUCCESS"
+    >
+      <ion-row>
+        <ion-col size="2" class="ion-margin-top">
+          <ion-icon color="white" src="assets/icons/md-warning.svg" class="warning-icon"></ion-icon>
+        </ion-col>
+        <ion-col size="10">{{ 'deserialized-detail.transaction.unreadable_warning' | translate }}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <ion-text>
+            <p class="text--selectable typography--mono word-break__all">{{ (rawData$ | async).value }}</p>
+          </ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-container>
+
+  <ng-container *ngIf="(mode$ | async) === Mode.SIGN_MESSAGE">
+    <ng-container *ngIf="(messages$ | async).status === UIResourceStatus.SUCCESS">
+      <airgap-message-sign-request [messages]="(messages$ | async).value"></airgap-message-sign-request>
+    </ng-container>
+  </ng-container>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="(button$ | async) as button">
+    <ion-button color="primary" shape="round" (click)="continue()">
+      <ion-icon slot="start" src="assets/icons/md-check.svg"></ion-icon>
+      {{ button }}
+    </ion-button>
+  </ion-fab>
 </ion-content>
