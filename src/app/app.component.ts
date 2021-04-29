@@ -140,9 +140,12 @@ export class AppComponent implements AfterViewInit {
       extraActiveProtocols: [shieldedTezProtocol]
     })
 
+    // SAPLING-START
     await shieldedTezProtocol.initParameters(await this.getSaplingParams('spend'), await this.getSaplingParams('output'))
+    // SAPLING-END
   }
 
+  // SAPLING-START
   private async getSaplingParams(type: 'spend' | 'output'): Promise<Buffer> {
     if (this.platform.is('hybrid')) {
       // Sapling params are read and used in a native plugin, there's no need to read them in the Ionic part
@@ -155,4 +158,5 @@ export class AppComponent implements AfterViewInit {
 
     return Buffer.from(params)
   }
+  // SAPLING-END
 }

@@ -11,7 +11,7 @@
     "serve": "ionic serve --external",
     "start": "ng serve",
     "build": "ng build",
-    "build-no-sapling": "npm run remove-sapling && ng build",
+    "build-no-sapling": "npm run remove-sapling && npm run prepare-prod-build && ng build --prod",
     "build:stats": "ng build --stats-json",
     "build:analyze": "npm run build:stats && webpack-bundle-analyzer ./www/stats.json",
     "test": "ng test",
