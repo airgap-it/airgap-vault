@@ -1,6 +1,7 @@
 image: docker:latest
 
 variables:
+  SHARED_PATH: /builds/shared/$CI_PROJECT_PATH
   GOOGLE_TAG: eu.gcr.io/papers-kubernetes/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:$CI_COMMIT_SHA
   GOOGLE_TAG_ANDROID_CURRENT: eu.gcr.io/papers-kubernetes/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:android-$CI_COMMIT_SHA
   GOOGLE_TAG_ELECTRON_LINUX_CURRENT: eu.gcr.io/papers-kubernetes/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:electron-linux-$CI_COMMIT_SHA
@@ -11,6 +12,8 @@ stages:
   - test
   - qa
   - native_build
+  - native_test
+  - publish
 
 build_ionic:
   stage: build
@@ -58,6 +61,21 @@ build_android:
       - airgap-vault-debug-$CI_PIPELINE_ID.apk
       - airgap-vault-appium-$CI_PIPELINE_ID.apk
 
+test_android:
+  stage: native_test
+  when: manual
+  tags:
+    - android-ui
+  before_script:
+    - echo "$APPIUM_CONFIG_JSON" > ./uitest/config.json
+  script:
+    - docker cp airgap-vault-appium-$CI_PIPELINE_ID.apk appium:/home/airgap-signed.apk
+    - docker create --network="host" -w /usr/src/uitest --name maven-runner-$CI_PIPELINE_ID maven:3.3-jdk-8 mvn test
+    - docker cp uitest maven-runner-$CI_PIPELINE_ID:/usr/src/
+    - docker start -a maven-runner-$CI_PIPELINE_ID
+  after_script:
+    - docker rm -f maven-runner-$CI_PIPELINE_ID || true
+
 qa:
   stage: qa
   script:
@@ -87,7 +105,6 @@ build_ios:
   when: manual
   before_script:
     - echo "$IOS_BUILD_JSON" > build.json
-    - echo "$IOS_EXPORT_OPTIONS" > exportOptions.plist
   script:
     - export DEVELOPER_DIR=$XCODE_PATH
     - nvm use 14
@@ -98,12 +115,21 @@ build_ios:
     - npx ionic info
     - npx ionic build --prod
     - npx cap sync ios
-    - xcodebuild -workspace ios/App/App.xcworkspace -scheme "App" -destination generic/platform=iOS -configuration Release archive -archivePath ios/App.xcarchive MARKETING_VERSION=$VERSION CURRENT_PROJECT_VERSION=$CI_PIPELINE_ID -allowProvisioningUpdates
-    - xcodebuild -exportArchive -archivePath ios/App.xcarchive -exportOptionsPlist exportOptions.plist -exportPath ios/ -allowProvisioningUpdates
-    - xcrun altool --upload-app -f ios/App.ipa -u $IOS_USERNAME -p $IOS_PASSWORD
+    - xcodebuild -workspace ios/App/App.xcworkspace -scheme "App" -destination generic/platform=iOS -configuration Release archive -archivePath ios/airgap-vault-$VERSION-$CI_PIPELINE_ID.xcarchive MARKETING_VERSION=$VERSION CURRENT_PROJECT_VERSION=$CI_PIPELINE_ID -allowProvisioningUpdates
   artifacts:
     paths:
-      - ios/App.ipa
-      - ios/App.xcarchive
+      - ios/airgap-vault-$VERSION-$CI_PIPELINE_ID.xcarchive
+  tags:
+    - ios
+
+publish_ios:
+  stage: publish
+  when: manual
+  before_script:
+    - echo "$IOS_EXPORT_OPTIONS" > exportOptions.plist
+  script:
+    - export DEVELOPER_DIR=$XCODE_PATH
+    - xcodebuild -exportArchive -archivePath ios/airgap-vault-$VERSION-$CI_PIPELINE_ID.xcarchive -exportOptionsPlist exportOptions.plist -exportPath ios/ -allowProvisioningUpdates
+    - xcrun altool --upload-app -f ios/App.ipa -u $IOS_USERNAME -p $IOS_PASSWORD
   tags:
     - ios

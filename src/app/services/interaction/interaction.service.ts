@@ -41,8 +41,11 @@ export interface IInteractionOptions {
 export class InteractionService {
   constructor(private readonly navigationService: NavigationService, private readonly deepLinkService: DeeplinkService) {}
 
-  public startInteraction(interactionOptions: IInteractionOptions, secret: Secret): void {
-    const interactionSetting: InteractionSetting = secret.interactionSetting
+  public startInteraction(interactionOptions: IInteractionOptions, secret: Secret): void
+  public startInteraction(interactionOptions: IInteractionOptions, interactionSetting: InteractionSetting): void
+  public startInteraction(interactionOptions: IInteractionOptions, secretOrInteractionSetting: Secret | InteractionSetting): void {
+    const interactionSetting: InteractionSetting =
+      typeof secretOrInteractionSetting === 'string' ? secretOrInteractionSetting : secretOrInteractionSetting.interactionSetting
 
     if (interactionOptions.communicationType) {
       if (interactionSetting === InteractionSetting.UNDETERMINED) {
@@ -70,6 +73,16 @@ export class InteractionService {
         default:
       }
     }
+  }
+
+  public getCommonInteractionSetting(secrets: Secret[]): InteractionSetting {
+    for (let i = 1; i < secrets.length; i++) {
+      if (secrets[i - 1]?.interactionSetting !== secrets[i]?.interactionSetting) {
+        return InteractionSetting.UNDETERMINED
+      }
+    }
+
+    return secrets[0]?.interactionSetting ?? InteractionSetting.UNDETERMINED
   }
 
   private goToInteractionSelectionPage(interactionOptions: IInteractionOptions): void {

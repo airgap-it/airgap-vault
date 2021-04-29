@@ -18,6 +18,7 @@ import {
   ProtocolSymbols,
   SignedTransaction,
   TezosCryptoClient,
+  TezosSaplingProtocol,
   UnsignedTransaction
 } from '@airgap/coinlib-core'
 import { Injectable } from '@angular/core'
@@ -25,7 +26,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { Action, Store } from '@ngrx/store'
 import { TranslateService } from '@ngx-translate/core'
 import * as bip39 from 'bip39'
-import { from, Observable } from 'rxjs'
+import { concat, from, of } from 'rxjs'
 import { concatMap, first, switchMap, tap, withLatestFrom } from 'rxjs/operators'
 
 import { Secret } from '../../models/secret'
@@ -42,7 +43,8 @@ import {
   DeserializedUnsignedMessage,
   DeserializedUnsignedTransaction,
   Mode,
-  Payload
+  Payload,
+  Task
 } from './deserialized.detail.types'
 
 @Injectable()
@@ -50,16 +52,34 @@ export class DeserializedDetailEffects {
   public navigationData$ = createEffect(() =>
     this.actions$.pipe(
       ofType(actions.viewInitialization),
-      switchMap(
-        () =>
-          new Observable<Action>((subscriber) => {
-            subscriber.next(actions.navigationDataLoading())
-            from(this.loadNavigationData()).pipe(first()).subscribe(subscriber)
-          })
-      )
+      switchMap(() => concat(of(actions.navigationDataLoading()), from(this.loadNavigationData()).pipe(first())))
     )
   )
 
+  // FIXME [#210]:
+  // We can no longer execute the signing step as a single action due to Sapling heavy computational transaction signing
+  // https://gitlab.papers.tech/papers/airgap/airgap-vault/-/issues/210
+
+  // public approved$ = createEffect(() =>
+  //   this.actions$.pipe(
+  //     ofType(actions.approved, actions.bip39PassphraseProvided, actions.signingProtocolProvided),
+  //     concatMap((action) => from([action]).pipe(withLatestFrom(this.store.select(fromDeserializedDetail.selectFinalPayload)))),
+  //     switchMap(([action, payload]) => {
+  //       const userInput = {
+  //         bip39Passphrase: 'passphrase' in action ? action.passphrase : undefined,
+  //         protocol: 'protocol' in action ? action.protocol : undefined
+  //       }
+
+  //       return concat(
+  //         of(actions.runningBlockingTask({ task: this.identifyPayloadTask(payload) })),
+  //         from(this.handlePayload(payload, userInput)).pipe(first())
+  //       )
+  //     })
+  //   )
+  // )
+  // [#210]
+
+  // FIXME [#210]: replace with the above once the performance issue is resolved
   public approved$ = createEffect(() =>
     this.actions$.pipe(
       ofType(actions.approved, actions.bip39PassphraseProvided, actions.signingProtocolProvided),
@@ -70,13 +90,21 @@ export class DeserializedDetailEffects {
           protocol: 'protocol' in action ? action.protocol : undefined
         }
 
-        return new Observable<Action>((subscriber) => {
-          subscriber.next(actions.runningBlockingTask())
-          from(this.handlePayload(payload, userInput)).pipe(first()).subscribe(subscriber)
-        })
+        return concat(of(actions.runningBlockingTask({ task: this.identifyPayloadTask(payload), userInput })))
       })
     )
   )
+  // [#210]
+
+  // FIXME [#210]: remove once the performance issue is resolved
+  public continueApproved$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(actions.continueApproved),
+      concatMap((action) => from([action]).pipe(withLatestFrom(this.store.select(fromDeserializedDetail.selectFinalPayload)))),
+      switchMap(([action, payload]) => from(this.handlePayload(payload, action.userInput)).pipe(first()))
+    )
+  )
+  // [#210]
 
   public navigateWithSignedTransactions$ = createEffect(
     () =>
@@ -192,7 +220,17 @@ export class DeserializedDetailEffects {
         )
         .map(
           async ([wallet, request]: [AirGapWallet, IACMessageDefinitionObject]): Promise<DeserializedUnsignedTransaction> => {
-            const details: IAirGapTransaction[] = await this.transactionService.getDetailsFromIACMessages([request])
+            let details: IAirGapTransaction[]
+            if (await this.checkIfSaplingTransaction(request.payload as UnsignedTransaction, request.protocol)) {
+              details = await this.transactionService.getDetailsFromIACMessages([request], {
+                overrideProtocol: await this.getSaplingProtocol(),
+                data: {
+                  knownViewingKeys: this.secretsService.getKnownViewingKeys()
+                }
+              })
+            } else {
+              details = await this.transactionService.getDetailsFromIACMessages([request])
+            }
 
             return {
               type: 'unsigned',
@@ -220,7 +258,7 @@ export class DeserializedDetailEffects {
               const cryptoClient = new TezosCryptoClient()
               blake2bHash = await cryptoClient.blake2bLedgerHash(data.message)
             }
-            
+
             return {
               type: 'unsigned',
               id: request.id,
@@ -232,6 +270,17 @@ export class DeserializedDetailEffects {
           }
         )
     )
+  }
+
+  private identifyPayloadTask(payload: Payload): Task {
+    switch (payload.mode) {
+      case Mode.SIGN_TRANSACTION:
+        return 'signTransaction'
+      case Mode.SIGN_MESSAGE:
+        return 'signMessage'
+      default:
+        return 'generic'
+    }
   }
 
   private async handlePayload(payload: Payload, userInput: { bip39Passphrase?: string; protocol?: ProtocolSymbols }): Promise<Action> {
@@ -450,5 +499,25 @@ export class DeserializedDetailEffects {
     const serialized: string[] = await this.serializerService.serialize(messages)
 
     return `${callbackUrl || 'airgap-wallet://?d='}${serialized.join(',')}`
+  }
+
+  private async checkIfSaplingTransaction(transaction: UnsignedTransaction, protocolIdentifier: ProtocolSymbols): Promise<boolean> {
+    if (protocolIdentifier === MainProtocolSymbols.XTZ) {
+      const tezosProtocol: ICoinProtocol = await this.protocolService.getProtocol(protocolIdentifier)
+      const saplingProtocol: TezosSaplingProtocol = await this.getSaplingProtocol()
+
+      const txDetails: IAirGapTransaction[] = await tezosProtocol.getTransactionDetails(transaction)
+      const recipients: string[] = txDetails
+        .map((details) => details.to)
+        .reduce((flatten: string[], next: string[]) => flatten.concat(next), [])
+
+      return recipients.includes(saplingProtocol.options.config.contractAddress)
+    }
+
+    return protocolIdentifier === MainProtocolSymbols.XTZ_SHIELDED
+  }
+
+  private async getSaplingProtocol(): Promise<TezosSaplingProtocol> {
+    return (await this.protocolService.getProtocol(MainProtocolSymbols.XTZ_SHIELDED)) as TezosSaplingProtocol
   }
 }

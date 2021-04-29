@@ -32,7 +32,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
 import * as fromRoot from './app.reducers'
-import { CAMERA_PREVIEW_PLUGIN, SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
+import { CAMERA_PREVIEW_PLUGIN, SAPLING_PLUGIN, SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
 import { appConfig } from './config/app-config'
 import { DistributionOnboardingPageModule } from './pages/distribution-onboarding/distribution-onboarding.module'
 import { IntroductionPageModule } from './pages/introduction/introduction.module'
@@ -70,7 +70,7 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
       /* temporary fix for `ERROR TypeError: Cannot freeze array buffer views with elements` */
       runtimeChecks: {
         strictStateImmutability: false,
-        strictActionImmutability: false 
+        strictActionImmutability: false
       }
     }),
     EffectsModule.forRoot(),
@@ -101,6 +101,7 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
     { provide: CAMERA_PREVIEW_PLUGIN, useValue: Plugins.CameraPreview },
     { provide: CLIPBOARD_PLUGIN, useValue: Plugins.Clipboard },
     { provide: PERMISSIONS_PLUGIN, useValue: Plugins.Permissions },
+    { provide: SAPLING_PLUGIN, useValue: Plugins.SaplingNative },
     { provide: SECURITY_UTILS_PLUGIN, useValue: Plugins.SecurityUtils },
     { provide: SPLASH_SCREEN_PLUGIN, useValue: Plugins.SplashScreen },
     { provide: STATUS_BAR_PLUGIN, useValue: Plugins.StatusBar },

@@ -5,6 +5,9 @@ import { SignedTransactionComponent } from './signed-transaction.component'
 import { MainProtocolSymbols } from '@airgap/coinlib-core/utils/ProtocolSymbols'
 import { IACMessageType, Serializer } from '@airgap/coinlib-core'
 import { Message } from '@airgap/coinlib-core/serializer/message'
+import { SecretsService } from 'src/app/services/secrets/secrets.service'
+import { SecureStorageService } from 'src/app/services/secure-storage/secure-storage.service'
+import { SecureStorageServiceMock } from 'src/app/services/secure-storage/secure-storage.mock'
 
 describe('SignedTransactionComponent', () => {
   let signedTransactionFixture: ComponentFixture<SignedTransactionComponent>
@@ -15,7 +18,8 @@ describe('SignedTransactionComponent', () => {
     unitHelper = new UnitHelper()
     TestBed.configureTestingModule(
       unitHelper.testBed({
-        declarations: []
+        declarations: [],
+        providers: [{ provide: SecureStorageService, useClass: SecureStorageServiceMock }, SecretsService]
       })
     )
       .compileComponents()

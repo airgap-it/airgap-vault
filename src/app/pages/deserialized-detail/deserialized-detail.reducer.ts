@@ -21,7 +21,8 @@ import {
   Payload,
   SecretNotFoundErrorAlert,
   UnknownErrorAlert,
-  UnsignedMessage
+  UnsignedMessage,
+  Task
 } from './deserialized.detail.types'
 
 /**************** STATE ****************/
@@ -31,9 +32,12 @@ export interface FeatureState {
   mode: Mode | undefined
   title: string
   button: string | undefined
+  // loader: UIAction<Task> | undefined
+  // FIXME [#210] replace with the above once the performance issue is resolved
+  loader: (UIAction<Task> & { userInput: actions.UserInput }) | undefined
+  // [#210]
   alert: UIAction<Alert> | undefined
   modal: UIAction<Modal> | undefined
-  isBusy: boolean
   transactions: UIResource<DeserializedTransaction[]>
   messages: UIResource<DeserializedMessage[]>
   raw: UIResource<string>
@@ -50,9 +54,9 @@ const initialState: FeatureState = {
   mode: undefined,
   title: '',
   button: undefined,
+  loader: undefined,
   alert: undefined,
   modal: undefined,
-  isBusy: false,
   transactions: {
     value: undefined,
     status: UIResourceStatus.IDLE
@@ -72,9 +76,9 @@ export const reducer = createReducer(
   initialState,
   on(actions.navigationDataLoading, (state) => ({
     ...state,
+    loader: undefined,
     alert: undefined,
     modal: undefined,
-    isBusy: false,
     transactions: {
       value: state.transactions.value,
       status: UIResourceStatus.LOADING
@@ -93,9 +97,9 @@ export const reducer = createReducer(
     mode,
     title,
     button,
+    loader: undefined,
     alert: undefined,
     modal: undefined,
-    isBusy: false,
     transactions: {
       value: transactions,
       status: UIResourceStatus.SUCCESS
@@ -114,9 +118,9 @@ export const reducer = createReducer(
     mode,
     title,
     button,
+    loader: undefined,
     alert: undefined,
     modal: undefined,
-    isBusy: false,
     transactions: {
       value: undefined,
       status: UIResourceStatus.ERROR
@@ -132,8 +136,8 @@ export const reducer = createReducer(
   })),
   on(actions.transactionsSigned, (state, { transactions }) => ({
     ...state,
+    loader: undefined,
     alert: undefined,
-    isBusy: false,
     transactions: {
       value: (state.transactions.value ?? []).concat(transactions),
       status: state.transactions.status
@@ -141,13 +145,25 @@ export const reducer = createReducer(
   })),
   on(actions.messagesSigned, (state, { messages }) => ({
     ...state,
+    loader: undefined,
     alert: undefined,
     modal: undefined,
-    isBusy: false,
     messages: {
       value: (state.messages.value ?? []).concat(messages),
       status: state.transactions.status
     }
+  })),
+  on(actions.loaderDismissed, (state, { id }) => ({
+    ...state,
+    loader:
+      state.loader !== undefined
+        ? {
+            id: state.loader.id,
+            value: state.loader.value,
+            status: id === state.loader.id ? UIActionStatus.HANDLED : state.loader.status,
+            userInput: id === state.loader.id ? {} : state.loader.userInput
+          }
+        : undefined
   })),
   on(actions.alertDismissed, (state, { id }) => ({
     ...state,
@@ -177,24 +193,24 @@ export const reducer = createReducer(
     return state.bip39PassphraseTries < MAX_BIP39_PASSPHRASE_TRIES
       ? {
           ...state,
+          loader: undefined,
           alert: {
             id: generateGUID(),
             value: { type: 'bip39Passphrase' as Bip39PassphraseAlert['type'] },
             status: UIActionStatus.PENDING
           },
           modal: undefined,
-          isBusy: false,
           bip39PassphraseTries: state.bip39PassphraseTries + 1
         }
       : {
           ...state,
+          loader: undefined,
           alert: {
             id: generateGUID(),
             value: { type: 'bip39PassphraseError' as Bip39PassphraseErrorAlert['type'] },
             status: UIActionStatus.PENDING
           },
           modal: undefined,
-          isBusy: false,
           bip39PassphraseTries: 0
         }
   }),
@@ -209,20 +225,26 @@ export const reducer = createReducer(
   })),
   on(actions.protocolNotFound, (state) => ({
     ...state,
+    loader: undefined,
     alert: undefined,
     modal: {
       id: generateGUID(),
       value: 'selectSigningAccount' as Modal,
       status: UIActionStatus.PENDING
-    },
-    isBusy: false
+    }
   })),
-  on(actions.runningBlockingTask, (state) => ({
+  on(actions.runningBlockingTask, (state, { task, userInput }) => ({
     ...state,
-    isBusy: true
+    loader: {
+      id: generateGUID(),
+      value: task,
+      status: UIActionStatus.PENDING,
+      userInput
+    }
   })),
   on(actions.unknownError, (state, { message }) => ({
     ...state,
+    loader: undefined,
     alert: {
       id: generateGUID(),
       value: {
@@ -231,8 +253,7 @@ export const reducer = createReducer(
       },
       status: UIActionStatus.PENDING
     },
-    modal: undefined,
-    isBusy: false
+    modal: undefined
   }))
 )
 
@@ -240,12 +261,12 @@ export const reducer = createReducer(
 
 export const selectFeatureState = createFeatureSelector<State, FeatureState>('deserializedDetail')
 
-export const selectMode = createSelector(selectFeatureState, (state: FeatureState): Mode | undefined => state.mode)
-export const selectTitle = createSelector(selectFeatureState, (state: FeatureState): string => state.title)
-export const selectButton = createSelector(selectFeatureState, (state: FeatureState): string | undefined => state.button)
-export const selectAlert = createSelector(selectFeatureState, (state: FeatureState): UIAction<Alert> | undefined => state.alert)
-export const selectModal = createSelector(selectFeatureState, (state: FeatureState): UIAction<Modal> | undefined => state.modal)
-export const selectIsBusy = createSelector(selectFeatureState, (state: FeatureState): boolean => state.isBusy)
+export const selectMode = createSelector(selectFeatureState, (state: FeatureState): FeatureState['mode'] => state.mode)
+export const selectTitle = createSelector(selectFeatureState, (state: FeatureState): FeatureState['title'] => state.title)
+export const selectButton = createSelector(selectFeatureState, (state: FeatureState): FeatureState['button'] => state.button)
+export const selectLoader = createSelector(selectFeatureState, (state: FeatureState): FeatureState['loader'] => state.loader)
+export const selectAlert = createSelector(selectFeatureState, (state: FeatureState): FeatureState['alert'] => state.alert)
+export const selectModal = createSelector(selectFeatureState, (state: FeatureState): FeatureState['modal'] => state.modal)
 
 export const selectTransactions = createSelector(
   selectFeatureState,
@@ -318,10 +339,8 @@ const getMessagesData = (
   const details: UnsignedMessage[] | undefined = messages.value
     ?.filter((message: DeserializedMessage) => (type !== undefined ? message.type === type : true))
     .map((message: DeserializedMessage) => {
-      const blake2bHash: string | undefined = message.type === 'unsigned'
-        ? message.blake2bHash
-        : undefined
-      
+      const blake2bHash: string | undefined = message.type === 'unsigned' ? message.blake2bHash : undefined
+
       return { data: message.data.message, blake2bHash }
     })
 

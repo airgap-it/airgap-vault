@@ -90,11 +90,11 @@
     "advanced": "Advanced Options",
     "security-level": {
       "heading": "Security Level",
-      "text": "You can encrypt your secret additionally using a passcode."
+      "text": "You can encrypt your secret additionally using a passphrase."
     },
     "passcode": {
-      "label": "Passcode",
-      "text": "Set a passcode for your secret. This is an optional setting."
+      "label": "Passphrase",
+      "text": "Set a passphrase for your secret. This is an optional setting."
     },
     "secret-recovery": {
       "heading": "Secret Recovery",
@@ -126,11 +126,11 @@
       "text": "Securely generate a child mnemonic out of your master mnemonic."
     },
     "show-mnemonic": {
-      "label": "Show Mnemonic",
-      "text": "Display the mnemonic associated with this secret.",
+      "label": "Show Secret",
+      "text": "Display the secret associated with this secret.",
       "alert": {
-        "title": "Show Mnemonic",
-        "message": "Please beware that the mnemonic should always be kept private as it grants full access to your funds. Under no circumstance take a screenshot or photo. Make sure you are in a safe location where no one else can see your screen.",
+        "title": "Show Secret",
+        "message": "Please beware that the secret should always be kept private as it grants full access to your funds. Under no circumstance take a screenshot or photo. Make sure you are in a safe location where no one else can see your screen.",
         "understood": "I understand"
       },
       "copied": "Recovery key copied",
@@ -155,7 +155,7 @@
     "title": "Import secret",
     "text": "You can import an existing secret to AirGap. Fill in the words from your secret.",
     "placeholder": "wife pulp island ...",
-    "warning": "Please double-check the spelling of your mnemonic.",
+    "warning": "Please double-check the spelling of your secret.",
     "import_label": "Import"
   },
   "secret-rules": {
@@ -295,6 +295,17 @@
       "title": "Sign Message",
       "button_label": "Sign Message"
     },
+    "loader": {
+      "sign-transaction": {
+        "message": "Signing transaction..."
+      },
+      "sign-message": {
+        "message": "Signing message..."
+      },
+      "generic": {
+        "message": "Loading..."
+      }
+    },
     "alert": {
       "bip39-passphrase": {
         "header": "BIP-39 Passphrase",
@@ -336,6 +347,13 @@
     "done_label": "Done",
     "copy-address_modal": {
       "text": "Address was copied to your clipboard"
+    },
+    "alert": {
+      "wallet-not-migrated": {
+        "header": "The account needs an update",
+        "message": "Can't proceed, please update or re-add the account first.",
+        "button_label": "Ok"
+      }
     }
   },
   "interaction-selection": {
@@ -381,6 +399,29 @@
     "same-device_label": "Same-Device-Sync",
     "done_label": "Done"
   },
+  "wallet-share-select": {
+    "title": "Sync Account",
+    "heading": "Select the accounts you'd like to sync with <span class=\"style__strong color__primary\">AirGap Wallet</span>.",
+    "sync_label": "Sync",
+    "alert": {
+      "wallets-not-migrated": {
+        "header": "The accounts need an update",
+        "message": "Can't proceed, please update or re-add the accounts first.",
+        "button_label": "Ok"
+      },
+      "excluded-legacy-accounts": {
+        "header": "Some accounts need an update",
+        "message": "Some of the selected accounts can't be synced and must be updated or re-added. You can still sync the rest of the accounts.",
+        "button-accept_label": "Sync",
+        "button-reject_label": "Cancel"
+      },
+      "unknown-error": {
+        "header": "Error",
+        "message": "Something went wrong!",
+        "button_label": "Ok"
+      }
+    }
+  },
   "warnings-modal": {
     "root": {
       "title": "Your device is rooted",
@@ -421,7 +462,12 @@
     "generate": "Generate",
     "advanced_label": "Advanced Mode",
     "bip39-passphrase": "BIP-39 Passphrase",
-    "bip39-passphrase-reveal": "Reveal Passphrase"
+    "bip39-passphrase-reveal": "Reveal Passphrase",
+    "alert": {
+      "header": "BIP-39 Passphrase",
+      "message": "You set a BIP39 Passphrase. You will need to enter this passphrase again when you try to derive the same child key!",
+      "understand": "I understand" 
+    }
   },
 
   "bip85-show": {
@@ -459,5 +505,34 @@
   },
   "unsigned-transaction": {
     "sign-tx_label": "Sign Transaction"
+  },
+  "migration": {
+    "title": "Accounts Update",
+    "heading": "TODO: explanation",
+    "list": {
+      "header": "The following secrets and accounts will be updated <br /> <br /> <strong>Note: you may be asked to authenticate and provide a passphrase, if it's been set for any of the displayed secrets or accounts.</strong>"
+    },
+    "button-run_label": "Update",
+    "button-done_label": "Done",
+    "alert": {
+      "paranoia-info": {
+        "header": "Passphrase",
+        "message": "It looks like you have set a passphrase to additionally secure <span class=\"style__strong color__primary\">{{label}}</span>. You may be be asked to provide it during the update. Skip if you don't want to update this secret now.",
+        "button-ok_label": "Ok",
+        "button-skip_label": "Skip"
+      },
+      "bip39-passphrase": {
+        "header": "BIP-39 Passphrase",
+        "message": "If you have set a BIP-39 passphrase for <span class=\"style__strong color__primary\">{{address}} ({{protocol}})</span>, please enter it here or skip the update of this account.",
+        "input-placeholder_label": "Passphrase",
+        "button-ok_label": "Ok",
+        "button-skip_label": "Skip"
+      },
+      "unknown-error": {
+        "header": "Error",
+        "message": "Something went wrong!",
+        "button_label": "Ok"
+      }
+    }
   }
 }

@@ -21,6 +21,9 @@ inline fun Plugin.requiresPermissions(code: Int, vararg permissions: String, blo
     }
 }
 
+fun Plugin.readFromAssets(path: String): ByteArray =
+        bridge.activity.assets.open(path).use { it.readBytes() }
+
 fun Plugin.logDebug(message: String) {
     Log.d(this::class.java.simpleName, message)
 }
@@ -36,10 +39,31 @@ fun Plugin.freeCallIfSaved() {
  */
 
 fun PluginCall.resolveWithData(vararg keyValuePairs: Pair<String, Any>) {
-    val data = JSObject().apply {
-        keyValuePairs.forEach { put(it.first, it.second) }
+    if (keyValuePairs.isEmpty()) {
+        resolve()
+    } else {
+        val data = JSObject().apply {
+            keyValuePairs.forEach { put(it.first, it.second) }
+        }
+        resolve(data)
     }
-    resolve(data)
+}
+
+fun PluginCall.tryResolveCatchReject(block: () -> Unit) {
+    try {
+        block()
+        resolve()
+    } catch (e: Throwable) {
+        reject(e.message)
+    }
+}
+
+fun PluginCall.tryResolveWithDataCatchReject(block: () -> List<Pair<String, Any>>) {
+    try {
+        resolveWithData(*block().toTypedArray())
+    } catch (e: Throwable) {
+        reject(e.message)
+    }
 }
 
 fun PluginCall.assertReceived(vararg params: String, acceptEmpty: Boolean = false) {
