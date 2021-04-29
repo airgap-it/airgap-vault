@@ -1,5 +1,6 @@
 import { Component } from '@angular/core'
 import { AlertController } from '@ionic/angular'
+import { TranslateService } from '@ngx-translate/core'
 import { Secret } from 'src/app/models/secret'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
@@ -20,7 +21,11 @@ export class Bip85GeneratePage {
   public revealBip39Passphrase: boolean = false
   public bip39Passphrase: string = ''
 
-  constructor(private readonly navigationService: NavigationService, private readonly alertController: AlertController) {
+  constructor(
+    private readonly navigationService: NavigationService,
+    private readonly alertController: AlertController,
+    private readonly translateService: TranslateService
+  ) {
     if (this.navigationService.getState()) {
       this.secret = this.navigationService.getState().secret
       console.log(this.secret)
@@ -28,16 +33,16 @@ export class Bip85GeneratePage {
   }
 
   public async generateChildSeed() {
-    if (this.bip39Passphrase.length > 0) {
+    if (this.bip39Passphrase.length > 0 && this.isAdvancedMode) {
       const alert = await this.alertController.create({
-        header: 'BIP39 Passphrase',
-        message: 'You set a BIP39 Passphrase. You will need to enter this passphrase again when you try to derive the same child key!',
+        header: this.translateService.instant('bip85-generate.alert.header'),
+        message: this.translateService.instant('bip85-generate.alert.message'),
         backdropDismiss: false,
         inputs: [
           {
             name: 'understood',
             type: 'checkbox',
-            label: 'I understand',
+            label: this.translateService.instant('bip85-generate.alert.understand'),
             value: 'understood',
             checked: false
           }

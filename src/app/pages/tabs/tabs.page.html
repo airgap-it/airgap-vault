@@ -1,4 +1,4 @@
-<ion-tabs>
+<ion-tabs #tabs (ionTabsDidChange)="tabChange(tabs)">
   <ion-tab-bar slot="bottom">
     <ion-tab-button tab="tab-accounts">
       <ion-icon name="list-outline"></ion-icon>

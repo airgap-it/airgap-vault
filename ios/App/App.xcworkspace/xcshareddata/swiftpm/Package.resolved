@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/airgap-it/airgap-sapling",
         "state": {
           "branch": null,
-          "revision": "aa23b91ba46c93723eca27fa1b41ea4064b9ef1c",
-          "version": "0.0.5-beta10"
+          "revision": "c6606fce5d84cea678414681b13ef5efb3629a7e",
+          "version": "0.0.6"
         }
       }
     ]

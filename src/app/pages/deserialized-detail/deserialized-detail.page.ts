@@ -40,6 +40,7 @@ export class DeserializedDetailPage implements OnDestroy {
   private loadingElement: HTMLIonLoadingElement | undefined
   private alertElement: HTMLIonAlertElement | undefined
   private modalElement: HTMLIonModalElement | undefined
+  private readonly ngDestroyed$: Subject<void> = new Subject()
 
   private readonly ngDestroyed$: Subject<void> = new Subject()
 
@@ -61,6 +62,7 @@ export class DeserializedDetailPage implements OnDestroy {
 
     this.rawData$ = this.store.select(fromDeserializedDetail.selectRaw)
 
+    // FIXME [#210] set debounce time
     this.loader$.pipe(debounceTime(0), distinctUntilChanged(), takeUntil(this.ngDestroyed$)).subscribe(this.showOrHideLoader.bind(this))
     this.alert$.pipe(takeUntil(this.ngDestroyed$)).subscribe(this.showOrDismissAlert.bind(this))
     this.modal$.pipe(takeUntil(this.ngDestroyed$)).subscribe(this.showOrDismissModal.bind(this))
