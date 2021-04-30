@@ -1,26 +1,26 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
-import { IonicModule } from '@ionic/angular'
+// import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
+// import { IonicModule } from '@ionic/angular'
 
-import { SeedXorGeneratePage } from './seed-xor-generate.page'
+// import { SeedXorGeneratePage } from './seed-xor-generate.page'
 
-describe('SeedXorGeneratePage', () => {
-  let component: SeedXorGeneratePage
-  let fixture: ComponentFixture<SeedXorGeneratePage>
+// describe('SeedXorGeneratePage', () => {
+//   let component: SeedXorGeneratePage
+//   let fixture: ComponentFixture<SeedXorGeneratePage>
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [SeedXorGeneratePage],
-        imports: [IonicModule.forRoot()]
-      }).compileComponents()
+//   beforeEach(
+//     waitForAsync(() => {
+//       TestBed.configureTestingModule({
+//         declarations: [SeedXorGeneratePage],
+//         imports: [IonicModule.forRoot()]
+//       }).compileComponents()
 
-      fixture = TestBed.createComponent(SeedXorGeneratePage)
-      component = fixture.componentInstance
-      fixture.detectChanges()
-    })
-  )
+//       fixture = TestBed.createComponent(SeedXorGeneratePage)
+//       component = fixture.componentInstance
+//       fixture.detectChanges()
+//     })
+//   )
 
-  it('should create', () => {
-    expect(component).toBeTruthy()
-  })
-})
+//   it('should create', () => {
+//     expect(component).toBeTruthy()
+//   })
+// })
