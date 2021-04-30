@@ -118,6 +118,14 @@ const routes: Routes = [
     path: 'secret-generate-coin-flip',
     loadChildren: () =>
       import('./pages/secret-generate-coin-flip/secret-generate-coin-flip.module').then((m) => m.SecretGenerateCoinFlipPageModule)
+  },
+  {
+    path: 'seed-xor-generate',
+    loadChildren: () => import('./pages/seed-xor-generate/seed-xor-generate.module').then((m) => m.SeedXorGeneratePageModule)
+  },
+  {
+    path: 'seed-xor-import',
+    loadChildren: () => import('./pages/seed-xor-import/seed-xor-import.module').then((m) => m.SeedXorImportPageModule)
   }
 ]
 
@@ -125,4 +133,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules, relativeLinkResolution: 'corrected' })],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

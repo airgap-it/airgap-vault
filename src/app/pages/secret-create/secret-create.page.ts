@@ -66,4 +66,8 @@ export class SecretCreatePage implements OnInit {
   public goToCoinFlipPage(): void {
     this.navigationService.route('/secret-generate-coin-flip').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
+
+  public goToSeedXOR(): void {
+    this.navigationService.route('/seed-xor-import').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
 }

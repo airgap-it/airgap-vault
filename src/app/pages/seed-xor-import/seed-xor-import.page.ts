@@ -1,30 +1,31 @@
 import { Component } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-
-import { Secret } from '../../models/secret'
-import { DeviceService } from '../../services/device/device.service'
-import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
-import { NavigationService } from '../../services/navigation/navigation.service'
-import { MnemonicValidator } from '../../validators/mnemonic.validator'
+import { Secret } from 'src/app/models/secret'
+import { DeviceService } from 'src/app/services/device/device.service'
+import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
+import { NavigationService } from 'src/app/services/navigation/navigation.service'
+import { SeedXorService } from 'src/app/services/seed-xor/seed-xor.service'
+import { MnemonicValidator } from 'src/app/validators/mnemonic.validator'
 
 @Component({
-  selector: 'airgap-social-recovery-import',
-  templateUrl: './social-recovery-import.page.html',
-  styleUrls: ['./social-recovery-import.page.scss']
+  selector: 'airgap-seed-xor-import',
+  templateUrl: './seed-xor-import.page.html',
+  styleUrls: ['./seed-xor-import.page.scss']
 })
-export class SocialRecoveryImportPage {
-  public numberOfShares: number
-  public shares: string[]
-
-  public socialRecoveryForm: FormGroup
-
+export class SeedXorImportPage {
   constructor(
+    private readonly seedXOR: SeedXorService,
     private readonly deviceService: DeviceService,
     private readonly navigationService: NavigationService,
     public formBuilder: FormBuilder
   ) {
-    this.setNumberOfShares(2)
+    this.setNumberOfShares(3)
   }
+
+  public numberOfShares: number
+  public shares: string[]
+
+  public socialRecoveryForm: FormGroup
 
   public ionViewDidEnter(): void {
     this.deviceService.enableScreenshotProtection({ routeBack: 'secret-create' })
@@ -50,11 +51,12 @@ export class SocialRecoveryImportPage {
     this.socialRecoveryForm = this.formBuilder.group(formGroup)
   }
 
-  public recover(): void {
+  public async recover(): Promise<void> {
     try {
-      const secretString: string = Secret.recoverSecretFromShares(this.shares)
+      const secretString = await this.seedXOR.combine(this.shares)
+
       this.navigationService
-        .routeWithState('secret-edit', { secret: new Secret(secretString, 'Recovery by Social Recovery') })
+        .routeWithState('secret-edit', { secret: new Secret(secretString, 'Recovery by SeedXOR') })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } catch (error) {
       console.log('oops', error)
