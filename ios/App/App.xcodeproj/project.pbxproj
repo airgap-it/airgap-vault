@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		2FAD9763203C412B000D30F8 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2FAD9762203C412B000D30F8 /* config.xml */; };
 		49690A7E25C2BF80004A3586 /* VaultError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49690A7D25C2BF80004A3586 /* VaultError.swift */; };
-		49D642732629D22A0066C013 /* SaplingFFI in Frameworks */ = {isa = PBXBuildFile; productRef = 49D642722629D22A0066C013 /* SaplingFFI */; };
-		49D642752629D22A0066C013 /* Sapling in Frameworks */ = {isa = PBXBuildFile; productRef = 49D642742629D22A0066C013 /* Sapling */; };
+		49D642732629D22A0066C013 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = 49D642722629D22A0066C013 /* SwiftPackageProductDependency */; };
+		49D642752629D22A0066C013 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = 49D642742629D22A0066C013 /* SwiftPackageProductDependency */; };
 		50379B232058CBB4000EE86E /* capacitor.config.json in Resources */ = {isa = PBXBuildFile; fileRef = 50379B222058CBB4000EE86E /* capacitor.config.json */; };
 		504EC3081FED79650016851F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504EC3071FED79650016851F /* AppDelegate.swift */; };
 		504EC30D1FED79650016851F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC30B1FED79650016851F /* Main.storyboard */; };
@@ -72,9 +72,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49D642752629D22A0066C013 /* Sapling in Frameworks */,
+				49D642752629D22A0066C013 /* BuildFile in Frameworks */,
 				A084ECDBA7D38E1E42DFC39D /* Pods_App.framework in Frameworks */,
-				49D642732629D22A0066C013 /* SaplingFFI in Frameworks */,
+				49D642732629D22A0066C013 /* BuildFile in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -215,8 +215,8 @@
 			);
 			name = App;
 			packageProductDependencies = (
-				49D642722629D22A0066C013 /* SaplingFFI */,
-				49D642742629D22A0066C013 /* Sapling */,
+				49D642722629D22A0066C013 /* SwiftPackageProductDependency */,
+				49D642742629D22A0066C013 /* SwiftPackageProductDependency */,
 			);
 			productName = App;
 			productReference = 504EC3041FED79650016851F /* App.app */;
@@ -248,7 +248,7 @@
 			);
 			mainGroup = 504EC2FB1FED79650016851F;
 			packageReferences = (
-				49D642712629D22A0066C013 /* XCRemoteSwiftPackageReference "airgap-sapling" */,
+				49D642712629D22A0066C013 /* RemoteSwiftPackageReference */,
 			);
 			productRefGroup = 504EC3051FED79650016851F /* Products */;
 			projectDirPath = "";
@@ -299,10 +299,10 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
+			inputFileListPaths = (
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
+			outputFileListPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -546,7 +546,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		49D642712629D22A0066C013 /* XCRemoteSwiftPackageReference "airgap-sapling" */ = {
+		49D642712629D22A0066C013 /* RemoteSwiftPackageReference */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airgap-it/airgap-sapling";
 			requirement = {
@@ -557,14 +557,14 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		49D642722629D22A0066C013 /* SaplingFFI */ = {
+		49D642722629D22A0066C013 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 49D642712629D22A0066C013 /* XCRemoteSwiftPackageReference "airgap-sapling" */;
+			package = 49D642712629D22A0066C013 /* RemoteSwiftPackageReference */;
 			productName = SaplingFFI;
 		};
-		49D642742629D22A0066C013 /* Sapling */ = {
+		49D642742629D22A0066C013 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 49D642712629D22A0066C013 /* XCRemoteSwiftPackageReference "airgap-sapling" */;
+			package = 49D642712629D22A0066C013 /* RemoteSwiftPackageReference */;
 			productName = Sapling;
 		};
 /* End XCSwiftPackageProductDependency section */

@@ -496,9 +496,9 @@ export class DeserializedDetailEffects {
   }
 
   private async generateBroadcastUrl(messages: IACMessageDefinitionObject[], callbackUrl?: string): Promise<string> {
-    const serialized: string[] = await this.serializerService.serialize(messages)
+    const serialized: string | string[] = await this.serializerService.serialize(messages)
 
-    return `${callbackUrl || 'airgap-wallet://?d='}${serialized.join(',')}`
+    return `${callbackUrl || 'airgap-wallet://?d='}${(serialized as string[]).join(',')}`
   }
 
   private async checkIfSaplingTransaction(transaction: UnsignedTransaction, protocolIdentifier: ProtocolSymbols): Promise<boolean> {

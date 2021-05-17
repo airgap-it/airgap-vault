@@ -41,7 +41,7 @@ export class ShareUrlService {
       payload: accountShareResponse
     }
 
-    const serializedTx: string[] = await this.serializerService.serialize([deserializedTxSigningRequest])
+    const serializedTx: string | string[] = await this.serializerService.serialize([deserializedTxSigningRequest])
 
     return serializedDataToUrlString(serializedTx, 'airgap-wallet://')
   }
@@ -72,7 +72,7 @@ export class ShareUrlService {
       })
     )
 
-    const serializedTx: string[] = await this.serializerService.serialize(deserializedTxSigningRequests)
+    const serializedTx: string | string[] = await this.serializerService.serialize(deserializedTxSigningRequests)
 
     return serializedDataToUrlString(serializedTx, 'airgap-wallet://')
   }

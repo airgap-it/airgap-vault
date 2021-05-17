@@ -34,7 +34,7 @@
   "dependencies": {
     "@airgap/angular-core": "0.0.9",
     "@airgap/angular-ngrx": "0.0.9",
-    "@airgap/coinlib-core": "0.11.0",
+    "@airgap/coinlib-core": "0.11.1-beta.1",
     "@airgap/sapling-wasm": "0.0.6",
     "@angular/common": "^11.0.4",
     "@angular/core": "^11.0.4",
