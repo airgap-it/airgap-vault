@@ -1,6 +1,6 @@
 import { DeeplinkService } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
-import { AirGapWallet, UnsignedTransaction, MessageSignResponse } from '@airgap/coinlib-core'
+import { AirGapWallet, UnsignedTransaction, MessageSignResponse, IACMessageDefinitionObject } from '@airgap/coinlib-core'
 
 import { Secret } from '../../models/secret'
 import { assertNever } from '../../utils/utils'
@@ -27,7 +27,7 @@ export enum InteractionOperationType {
 
 export interface IInteractionOptions {
   operationType: InteractionOperationType
-  url: string
+  url: string | IACMessageDefinitionObject
   communicationType?: InteractionCommunicationType
   signedTxs?: string[]
   wallets?: AirGapWallet[]
@@ -52,7 +52,7 @@ export class InteractionService {
         this.goToInteractionSelectionSettingsPage(interactionOptions)
       }
       if (interactionOptions.communicationType === InteractionCommunicationType.DEEPLINK) {
-        this.startDeeplink(interactionOptions.url)
+        this.startDeeplink(interactionOptions.url as string)
       } else if (interactionOptions.communicationType === InteractionCommunicationType.QR) {
         this.navigateToPageByOperationType(interactionOptions)
       }
@@ -65,7 +65,7 @@ export class InteractionService {
           this.goToInteractionSelectionPage(interactionOptions)
           break
         case InteractionSetting.SAME_DEVICE:
-          this.startDeeplink(interactionOptions.url)
+          this.startDeeplink(interactionOptions.url as string)
           break
         case InteractionSetting.OFFLINE_DEVICE:
           this.navigateToPageByOperationType(interactionOptions)

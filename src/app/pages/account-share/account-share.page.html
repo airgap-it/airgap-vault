@@ -11,7 +11,13 @@
   <h3 class="ion-padding-bottom" [innerHTML]="'wallet-share.heading' | translate"></h3>
 
   <ion-row class="ion-justify-content-center ion-padding-bottom">
-    <airgap-qr *ngIf="splits" [qrdata]="splits" [level]="'L'" [size]="300"></airgap-qr>
+    <airgap-iac-qr
+      *ngIf="splits"
+      [messageDefinitionObjects]="[interactionUrl]"
+      [qrType]="qrType"
+      [level]="'L'"
+      [size]="300"
+    ></airgap-iac-qr>
   </ion-row>
 
   <ion-row><p [innerHTML]="'wallet-share.text' | translate"></p></ion-row>

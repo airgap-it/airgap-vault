@@ -21,7 +21,7 @@ export class ShareUrlService {
     //
   }
 
-  public async generateShareWalletURL(wallet: AirGapWallet): Promise<string> {
+  public async generateShareWalletURL(wallet: AirGapWallet): Promise<IACMessageDefinitionObject> {
     const secret: Secret | undefined = this.secretsService.findByPublicKey(wallet.publicKey)
 
     const accountShareResponse: AccountShareResponse = {
@@ -41,9 +41,9 @@ export class ShareUrlService {
       payload: accountShareResponse
     }
 
-    const serializedTx: string[] = await this.serializerService.serialize([deserializedTxSigningRequest])
+    // const serializedTx: string | string[] = await this.serializerService.serialize([deserializedTxSigningRequest])
 
-    return serializedDataToUrlString(serializedTx, 'airgap-wallet://')
+    return deserializedTxSigningRequest // serializedDataToUrlString(serializedTx, 'airgap-wallet://')
   }
 
   public async generateShareSecretsURL(secrets: Secret[]): Promise<string> {
@@ -72,7 +72,7 @@ export class ShareUrlService {
       })
     )
 
-    const serializedTx: string[] = await this.serializerService.serialize(deserializedTxSigningRequests)
+    const serializedTx: string | string[] = await this.serializerService.serialize(deserializedTxSigningRequests)
 
     return serializedDataToUrlString(serializedTx, 'airgap-wallet://')
   }

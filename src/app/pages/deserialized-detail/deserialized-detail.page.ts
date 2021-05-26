@@ -42,8 +42,6 @@ export class DeserializedDetailPage implements OnDestroy {
   private modalElement: HTMLIonModalElement | undefined
   private readonly ngDestroyed$: Subject<void> = new Subject()
 
-  private readonly ngDestroyed$: Subject<void> = new Subject()
-
   constructor(
     private readonly store: Store<fromDeserializedDetail.State>,
     private readonly uiEventService: UiEventService,

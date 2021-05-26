@@ -1,4 +1,4 @@
-import { BaseIACService, ProtocolService, SerializerService, UiEventElementsService, UiEventService } from '@airgap/angular-core'
+import { BaseIACService, ClipboardService, ProtocolService, UiEventElementsService, UiEventService } from '@airgap/angular-core'
 import {
   AirGapWallet,
   AirGapWalletStatus,
@@ -21,14 +21,14 @@ import { SecretsService } from '../secrets/secrets.service'
 export class IACService extends BaseIACService {
   constructor(
     public readonly uiEventService: UiEventService,
-    uiEventElementsService: UiEventElementsService,
-    serializerService: SerializerService,
+    public readonly uiEventElementsService: UiEventElementsService,
     private readonly protocolService: ProtocolService,
+    protected readonly clipboard: ClipboardService,
     private readonly navigationService: NavigationService,
     private readonly secretsService: SecretsService,
     private readonly interactionService: InteractionService
   ) {
-    super(uiEventElementsService, serializerService, secretsService.isReady(), [])
+    super(uiEventElementsService, clipboard, secretsService.isReady(), [])
 
     this.serializerMessageHandlers[IACMessageType.TransactionSignRequest] = this.handleUnsignedTransactions.bind(this)
     this.serializerMessageHandlers[IACMessageType.MessageSignRequest] = this.handleMessageSignRequest.bind(this)
@@ -45,7 +45,6 @@ export class IACService extends BaseIACService {
   }
 
   private async handleUnsignedTransactions(
-    _data: string | string[],
     signTransactionRequests: IACMessageDefinitionObject[],
     scanAgainCallback: Function
   ): Promise<boolean> {
@@ -136,7 +135,6 @@ export class IACService extends BaseIACService {
     }
   }
   private async handleMessageSignRequest(
-    _data: string | string[],
     messageDefinitionObjects: IACMessageDefinitionObject[],
     _scanAgainCallback: Function
   ): Promise<boolean> {

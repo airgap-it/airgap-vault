@@ -1,4 +1,4 @@
-import { IACHanderStatus, IACMessageTransport, PermissionsService, QrScannerService } from '@airgap/angular-core'
+import { IACHandlerStatus, IACMessageTransport, PermissionsService, QrScannerService } from '@airgap/angular-core'
 import { Component, Inject, NgZone, ViewChild } from '@angular/core'
 import { Platform } from '@ionic/angular'
 import { URDecoder } from '@ngraveio/bc-ur'
@@ -127,23 +127,16 @@ export class TabScanPage extends ScanBasePage {
     this.ngZone.run(() => {
       this.iacService
         .handleRequest(
-          Array.from(this.parts),
+          Array.from(this.parts)[0],
           IACMessageTransport.QR_SCANNER,
-          (scanResult?: Error | { currentPage: number; totalPageNumber: number }) => {
-            console.log('scan result', scanResult)
+          (progress: number | { currentPage: number; totalPageNumber: number }) => {
+            console.log('scan result', progress)
 
-            const typedScanResult = (scanResult as any) as { availablePages: number[]; totalPages: number }
-            if (scanResult && typedScanResult.availablePages) {
-              this.isMultiQr = true
-              this.numberOfQrsScanned = typedScanResult.availablePages.length
-              this.numberOfQrsTotal = typedScanResult.totalPages
-              this.percentageScanned = Math.max(0, Math.min(1, typedScanResult.availablePages.length / typedScanResult.totalPages))
-            }
             this.startScan()
           }
         )
-        .then((result: IACHanderStatus) => {
-          if (result === IACHanderStatus.SUCCESS) {
+        .then((result: IACHandlerStatus) => {
+          if (result === IACHandlerStatus.SUCCESS) {
             this.resetScannerPage()
           }
         })

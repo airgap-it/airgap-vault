@@ -32,9 +32,9 @@
     "apply-diagnostic-modules": "node apply-diagnostic-modules.js"
   },
   "dependencies": {
-    "@airgap/angular-core": "0.0.9",
+    "@airgap/angular-core": "0.0.9-beta.26",
     "@airgap/angular-ngrx": "0.0.9",
-    "@airgap/coinlib-core": "0.11.0",
+    "@airgap/coinlib-core": "0.11.1-beta.9",
     "@airgap/sapling-wasm": "0.0.6",
     "@angular/common": "^11.0.4",
     "@angular/core": "^11.0.4",

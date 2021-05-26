@@ -1,5 +1,5 @@
 import { ClipboardService, UiEventService } from '@airgap/angular-core'
-import { AirGapWallet } from '@airgap/coinlib-core'
+import { AirGapWallet, IACMessageDefinitionObject } from '@airgap/coinlib-core'
 import { Component } from '@angular/core'
 import { PopoverController } from '@ionic/angular'
 
@@ -21,7 +21,7 @@ import { AccountEditPopoverComponent } from './account-edit-popover/account-edit
 export class AccountAddressPage {
   public wallet: AirGapWallet
 
-  private walletShareUrl?: string
+  private walletShareUrl?: IACMessageDefinitionObject
   private walletShareUrlPromise?: Promise<void>
 
   constructor(
@@ -90,10 +90,10 @@ export class AccountAddressPage {
     }
 
     if (this.walletShareUrlPromise === undefined) {
-      this.walletShareUrlPromise = new Promise<string>(async (resolve) => {
-        const shareUrl: string = await this.shareUrlService.generateShareWalletURL(this.wallet)
+      this.walletShareUrlPromise = new Promise<IACMessageDefinitionObject>(async (resolve) => {
+        const shareUrl: IACMessageDefinitionObject = await this.shareUrlService.generateShareWalletURL(this.wallet)
         resolve(shareUrl)
-      }).then((shareUrl: string) => {
+      }).then((shareUrl: IACMessageDefinitionObject) => {
         this.walletShareUrl = shareUrl
         this.walletShareUrlPromise = undefined
       })
