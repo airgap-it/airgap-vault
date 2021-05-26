@@ -90,6 +90,7 @@ export class TabSettingsPage {
   public pasteClipboard(): void {
     this.clipboardService.paste().then(
       (text: string) => {
+        console.log('pasteClipboard', text)
         this.iacService.handleRequest(text, IACMessageTransport.PASTE).catch((err) => console.error(err))
       },
       (err: string) => {
