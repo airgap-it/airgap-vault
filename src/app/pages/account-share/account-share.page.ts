@@ -15,7 +15,7 @@ export class AccountSharePage {
 
   constructor(private readonly navigationService: NavigationService) {
     this.interactionUrl = this.navigationService.getState().interactionUrl
-    this.splits = this.interactionUrl.substr('airgap-wallet://?d='.length).split(',')
+    this.splits = this.interactionUrl.replace(/^airgap-wallet:\/\/\?d=/, '').split(',')
   }
 
   public done(): void {
