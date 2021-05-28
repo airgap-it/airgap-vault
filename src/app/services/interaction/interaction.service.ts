@@ -1,6 +1,6 @@
 import { DeeplinkService } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
-import { AirGapWallet, UnsignedTransaction, MessageSignResponse, IACMessageDefinitionObject } from '@airgap/coinlib-core'
+import { AirGapWallet, UnsignedTransaction, MessageSignResponse, IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
 
 import { Secret } from '../../models/secret'
 import { assertNever } from '../../utils/utils'
@@ -27,7 +27,7 @@ export enum InteractionOperationType {
 
 export interface IInteractionOptions {
   operationType: InteractionOperationType
-  url: string | IACMessageDefinitionObject
+  url: string | IACMessageDefinitionObjectV3
   communicationType?: InteractionCommunicationType
   signedTxs?: string[]
   wallets?: AirGapWallet[]

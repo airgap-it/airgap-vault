@@ -4,7 +4,9 @@ import { TestModuleMetadata } from '@angular/core/testing'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterTestingModule } from '@angular/router/testing'
 import { AlertController, IonicModule, NavController, Platform, ToastController } from '@ionic/angular'
-import { IonicStorageModule, Storage } from '@ionic/storage'
+import { Storage } from '@ionic/storage'
+import { IonicStorageModule } from '@ionic/storage-angular'
+
 import { TranslateFakeLoader, TranslateLoader, TranslateModule } from '@ngx-translate/core'
 
 import { ComponentsModule } from '../src/app/components/components.module'

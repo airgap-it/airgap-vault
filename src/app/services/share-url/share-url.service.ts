@@ -1,12 +1,7 @@
 import { flattened, SerializerService } from '@airgap/angular-core'
-import {
-  AccountShareResponse,
-  AirGapWallet,
-  AirGapWalletStatus,
-  generateId,
-  IACMessageDefinitionObject,
-  IACMessageType
-} from '@airgap/coinlib-core'
+import { AccountShareResponse, AirGapWallet, AirGapWalletStatus, IACMessageDefinitionObjectV3, IACMessageType } from '@airgap/coinlib-core'
+import { generateId } from '@airgap/coinlib-core/serializer-v3/utils/generateId'
+
 import { Injectable } from '@angular/core'
 
 import { Secret } from '../../models/secret'
@@ -21,7 +16,7 @@ export class ShareUrlService {
     //
   }
 
-  public async generateShareWalletURL(wallet: AirGapWallet): Promise<IACMessageDefinitionObject> {
+  public async generateShareWalletURL(wallet: AirGapWallet): Promise<IACMessageDefinitionObjectV3> {
     const secret: Secret | undefined = this.secretsService.findByPublicKey(wallet.publicKey)
 
     const accountShareResponse: AccountShareResponse = {
@@ -34,20 +29,23 @@ export class ShareUrlService {
       groupLabel: secret.label ?? ''
     }
 
-    const deserializedTxSigningRequest: IACMessageDefinitionObject = {
-      id: generateId(10),
+    const deserializedTxSigningRequest: IACMessageDefinitionObjectV3 = {
+      id: generateId(8),
       protocol: wallet.protocol.identifier,
       type: IACMessageType.AccountShareResponse,
       payload: accountShareResponse
     }
 
+    if (deserializedTxSigningRequest.type === IACMessageType.AccountShareResponse) {
+      deserializedTxSigningRequest.payload
+    }
     // const serializedTx: string | string[] = await this.serializerService.serialize([deserializedTxSigningRequest])
 
     return deserializedTxSigningRequest // serializedDataToUrlString(serializedTx, 'airgap-wallet://')
   }
 
   public async generateShareSecretsURL(secrets: Secret[]): Promise<string> {
-    const deserializedTxSigningRequests: IACMessageDefinitionObject[] = flattened(
+    const deserializedTxSigningRequests: IACMessageDefinitionObjectV3[] = flattened(
       secrets.map((secret: Secret) => {
         return secret.wallets
           .filter((wallet: AirGapWallet) => wallet.status !== AirGapWalletStatus.DELETED)
@@ -63,7 +61,7 @@ export class ShareUrlService {
             }
 
             return {
-              id: generateId(10),
+              id: generateId(8),
               protocol: wallet.protocol.identifier,
               type: IACMessageType.AccountShareResponse,
               payload: accountShareResponse
@@ -72,7 +70,7 @@ export class ShareUrlService {
       })
     )
 
-    const serializedTx: string | string[] = await this.serializerService.serialize(deserializedTxSigningRequests)
+    const serializedTx: string | string[] = await this.serializerService.serialize(deserializedTxSigningRequests as any)
 
     return serializedDataToUrlString(serializedTx, 'airgap-wallet://')
   }
