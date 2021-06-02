@@ -1,3 +1,4 @@
+import { IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { Action, Store } from '@ngrx/store'
@@ -37,7 +38,7 @@ export class AccountShareSelectEffects {
       this.actions$.pipe(
         ofType(actions.shareUrlGenerated, actions.migrationAlertAccepted),
         tap((action) => {
-          this.syncAccounts(action.shareUrl, action.interactionSetting)
+          this.syncAccounts(action.shareUrl as IACMessageDefinitionObjectV3[], action.interactionSetting) // JGD remove typecast
         })
       ),
     { dispatch: false }
@@ -59,7 +60,7 @@ export class AccountShareSelectEffects {
       return actions.walletsNotMigrated()
     }
 
-    const shareUrl: string = await this.shareUrlService.generateShareSecretsURL(migratedSecrets)
+    const shareUrl: IACMessageDefinitionObjectV3[] = await this.shareUrlService.generateShareSecretsURL(migratedSecrets)
     const interactionSetting: InteractionSetting = this.interactionService.getCommonInteractionSetting(migratedSecrets)
 
     return allMigrated
@@ -67,11 +68,11 @@ export class AccountShareSelectEffects {
       : actions.shareUrlGeneratedExcludedLegacy({ shareUrl, interactionSetting })
   }
 
-  private syncAccounts(shareUrl: string, interactionSetting: InteractionSetting): void {
+  private syncAccounts(shareUrl: IACMessageDefinitionObjectV3[], interactionSetting: InteractionSetting): void {
     this.interactionService.startInteraction(
       {
         operationType: InteractionOperationType.WALLET_SYNC,
-        url: shareUrl
+        iacMessage: shareUrl
       },
       interactionSetting
     )

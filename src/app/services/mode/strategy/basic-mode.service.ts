@@ -1,4 +1,5 @@
 import { UiEventService } from '@airgap/angular-core'
+import { IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
 import { Injectable } from '@angular/core'
 import { first } from 'rxjs/operators'
 
@@ -31,7 +32,7 @@ export class BasicModeSerivce implements ModeStrategy {
       return
     }
 
-    const shareUrl: string = await this.shareUrlService.generateShareSecretsURL(migratedSecrets)
+    const shareUrl: IACMessageDefinitionObjectV3[] = await this.shareUrlService.generateShareSecretsURL(migratedSecrets)
     const interactionSetting: InteractionSetting = this.interactionService.getCommonInteractionSetting(migratedSecrets)
 
     if (allMigrated) {
@@ -41,11 +42,11 @@ export class BasicModeSerivce implements ModeStrategy {
     }
   }
 
-  private syncAccounts(shareUrl: string, interactionSetting: InteractionSetting): void {
+  private syncAccounts(shareUrl: IACMessageDefinitionObjectV3[], interactionSetting: InteractionSetting): void {
     this.interactionService.startInteraction(
       {
         operationType: InteractionOperationType.WALLET_SYNC,
-        url: shareUrl
+        iacMessage: shareUrl // JGD rename shareUrl
       },
       interactionSetting
     )
@@ -64,7 +65,10 @@ export class BasicModeSerivce implements ModeStrategy {
     })
   }
 
-  private async showExcludedLegacyAccountsAlert(shareUrl: string, interactionSetting: InteractionSetting): Promise<void> {
+  private async showExcludedLegacyAccountsAlert(
+    shareUrl: IACMessageDefinitionObjectV3[],
+    interactionSetting: InteractionSetting
+  ): Promise<void> {
     await this.uiEventService.showTranslatedAlert({
       header: 'wallet-share-select.alert.excluded-legacy-accounts.header',
       message: 'wallet-share-select.alert.excluded-legacy-accounts.message',

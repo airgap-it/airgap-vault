@@ -3,13 +3,13 @@ import {
   flattenAirGapTxAddresses,
   KeyPairService,
   ProtocolService,
-  SerializerService,
   sumAirGapTxValues,
   TransactionService
 } from '@airgap/angular-core'
 import {
   AirGapWallet,
   IACMessageDefinitionObject,
+  IACMessageDefinitionObjectV3,
   IACMessageType,
   IAirGapTransaction,
   ICoinProtocol,
@@ -133,7 +133,6 @@ export class DeserializedDetailEffects {
     private readonly secretsService: SecretsService,
     private readonly keyPairService: KeyPairService,
     private readonly transactionService: TransactionService,
-    private readonly serializerService: SerializerService,
     private readonly interactionService: InteractionService
   ) {}
 
@@ -427,11 +426,11 @@ export class DeserializedDetailEffects {
   }
 
   private async navigateWithSignedTransactions(transactions: DeserializedSignedTransaction[]): Promise<void> {
-    const broadcastUrl: string = await this.generateTransactionBroadcastUrl(transactions)
+    const broadcastUrl: IACMessageDefinitionObjectV3[] = await this.generateTransactionBroadcastUrl(transactions)
     this.interactionService.startInteraction(
       {
         operationType: InteractionOperationType.TRANSACTION_BROADCAST,
-        url: broadcastUrl,
+        iacMessage: broadcastUrl,
         wallets: transactions.map((transaction: DeserializedSignedTransaction): AirGapWallet => transaction.wallet),
         signedTxs: transactions.map((transaction: DeserializedSignedTransaction): string => transaction.data.transaction)
       },
@@ -439,10 +438,10 @@ export class DeserializedDetailEffects {
     )
   }
 
-  private async generateTransactionBroadcastUrl(transactions: DeserializedSignedTransaction[]): Promise<string> {
-    const signResponses: IACMessageDefinitionObject[] = transactions.map(
-      (transaction: DeserializedSignedTransaction): IACMessageDefinitionObject => ({
-        id: transaction.id,
+  private async generateTransactionBroadcastUrl(transactions: DeserializedSignedTransaction[]): Promise<IACMessageDefinitionObjectV3[]> {
+    const signResponses: IACMessageDefinitionObjectV3[] = transactions.map(
+      (transaction: DeserializedSignedTransaction): IACMessageDefinitionObjectV3 => ({
+        id: 12345678, // JGD
         protocol: transaction.wallet.protocol.identifier,
         type: IACMessageType.TransactionSignResponse,
         payload: {
@@ -460,11 +459,11 @@ export class DeserializedDetailEffects {
   }
 
   private async navigateWithSignedMessages(messages: DeserializedSignedMessage[]): Promise<void> {
-    const broadcastUrl: string = await this.generateMessageBroadcastUrl(messages)
+    const broadcastUrl: IACMessageDefinitionObjectV3[] = await this.generateMessageBroadcastUrl(messages)
     this.interactionService.startInteraction(
       {
         operationType: InteractionOperationType.MESSAGE_SIGN_REQUEST,
-        url: broadcastUrl,
+        iacMessage: broadcastUrl,
         messageSignResponse:
           messages[0] !== undefined
             ? {
@@ -478,10 +477,10 @@ export class DeserializedDetailEffects {
     )
   }
 
-  private async generateMessageBroadcastUrl(messages: DeserializedSignedMessage[]): Promise<string> {
-    const signResponses: IACMessageDefinitionObject[] = messages.map(
-      (message: DeserializedSignedMessage): IACMessageDefinitionObject => ({
-        id: message.id,
+  private async generateMessageBroadcastUrl(messages: DeserializedSignedMessage[]): Promise<IACMessageDefinitionObjectV3[]> {
+    const signResponses: IACMessageDefinitionObjectV3[] = messages.map(
+      (message: DeserializedSignedMessage): IACMessageDefinitionObjectV3 => ({
+        id: 12345678, // JGD
         protocol: message.protocol,
         type: IACMessageType.MessageSignResponse,
         payload: {
@@ -495,10 +494,13 @@ export class DeserializedDetailEffects {
     return this.generateBroadcastUrl(signResponses, messages[0]?.data.callbackURL)
   }
 
-  private async generateBroadcastUrl(messages: IACMessageDefinitionObject[], callbackUrl?: string): Promise<string> {
-    const serialized: string | string[] = await this.serializerService.serialize(messages)
+  private async generateBroadcastUrl(
+    messages: IACMessageDefinitionObjectV3[],
+    _callbackUrl?: string
+  ): Promise<IACMessageDefinitionObjectV3[]> {
+    // const serialized: string | string[] = await this.serializerService.serialize(messages)
 
-    return `${callbackUrl || 'airgap-wallet://?d='}${typeof serialized === 'string' ? serialized : serialized.join(',')}`
+    return messages // `${callbackUrl || 'airgap-wallet://?d='}${typeof serialized === 'string' ? serialized : serialized.join(',')}`
   }
 
   private async checkIfSaplingTransaction(transaction: UnsignedTransaction, protocolIdentifier: ProtocolSymbols): Promise<boolean> {

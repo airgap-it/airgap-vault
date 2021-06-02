@@ -1,4 +1,4 @@
-import { DeeplinkService } from '@airgap/angular-core'
+import { DeeplinkService, SerializerService, serializedDataToUrlString } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
 import { AirGapWallet, UnsignedTransaction, MessageSignResponse, IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
 
@@ -27,7 +27,7 @@ export enum InteractionOperationType {
 
 export interface IInteractionOptions {
   operationType: InteractionOperationType
-  url: string | IACMessageDefinitionObjectV3
+  iacMessage: string | IACMessageDefinitionObjectV3[] // JGD remove string
   communicationType?: InteractionCommunicationType
   signedTxs?: string[]
   wallets?: AirGapWallet[]
@@ -39,7 +39,11 @@ export interface IInteractionOptions {
   providedIn: 'root'
 })
 export class InteractionService {
-  constructor(private readonly navigationService: NavigationService, private readonly deepLinkService: DeeplinkService) {}
+  constructor(
+    private readonly navigationService: NavigationService,
+    private readonly deepLinkService: DeeplinkService,
+    private readonly serializerService: SerializerService
+  ) {}
 
   public startInteraction(interactionOptions: IInteractionOptions, secret: Secret): void
   public startInteraction(interactionOptions: IInteractionOptions, interactionSetting: InteractionSetting): void
@@ -52,7 +56,7 @@ export class InteractionService {
         this.goToInteractionSelectionSettingsPage(interactionOptions)
       }
       if (interactionOptions.communicationType === InteractionCommunicationType.DEEPLINK) {
-        this.startDeeplink(interactionOptions.url as string)
+        this.startDeeplink(interactionOptions.iacMessage as IACMessageDefinitionObjectV3[]) // JGD remove typecast
       } else if (interactionOptions.communicationType === InteractionCommunicationType.QR) {
         this.navigateToPageByOperationType(interactionOptions)
       }
@@ -65,7 +69,7 @@ export class InteractionService {
           this.goToInteractionSelectionPage(interactionOptions)
           break
         case InteractionSetting.SAME_DEVICE:
-          this.startDeeplink(interactionOptions.url as string)
+          this.startDeeplink(interactionOptions.iacMessage as IACMessageDefinitionObjectV3[]) // JGD remove typecast
           break
         case InteractionSetting.OFFLINE_DEVICE:
           this.navigateToPageByOperationType(interactionOptions)
@@ -100,12 +104,12 @@ export class InteractionService {
   private navigateToPageByOperationType(interactionOptions: IInteractionOptions): void {
     if (interactionOptions.operationType === InteractionOperationType.WALLET_SYNC) {
       this.navigationService
-        .routeWithState('/account-share', { interactionUrl: interactionOptions.url })
+        .routeWithState('/account-share', { interactionUrl: interactionOptions.iacMessage })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } else if (interactionOptions.operationType === InteractionOperationType.TRANSACTION_BROADCAST) {
       this.navigationService
         .routeWithState('/transaction-signed', {
-          interactionUrl: interactionOptions.url,
+          interactionUrl: interactionOptions.iacMessage,
           wallets: interactionOptions.wallets,
           signedTxs: interactionOptions.signedTxs,
           transactions: interactionOptions.transactions,
@@ -116,7 +120,7 @@ export class InteractionService {
       console.log('messageSignResponse', interactionOptions.messageSignResponse)
       this.navigationService
         .routeWithState('/transaction-signed', {
-          interactionUrl: interactionOptions.url,
+          interactionUrl: interactionOptions.iacMessage,
           translationKey: 'message-signing-request',
           messageSignResponse: interactionOptions.messageSignResponse
         })
@@ -126,7 +130,14 @@ export class InteractionService {
     }
   }
 
-  private startDeeplink(url: string): void {
+  private async startDeeplink(iacMessage: IACMessageDefinitionObjectV3[]): Promise<void> {
+    console.log('startDeeplink', iacMessage)
+    const serializedTx: string | string[] = await this.serializerService.serialize(iacMessage as any)
+    console.log('serializedTx', serializedTx)
+
+    const url = serializedDataToUrlString(serializedTx, 'airgap-wallet://')
+    console.log('url', url)
+
     this.deepLinkService
       .sameDeviceDeeplink(url)
       .then(() => {

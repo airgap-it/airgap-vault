@@ -1,5 +1,5 @@
 import { UIAction, UIActionStatus, UiEventService, UIResource, UIResourceStatus } from '@airgap/angular-core'
-import { AirGapWalletStatus } from '@airgap/coinlib-core'
+import { AirGapWalletStatus, IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
 import { Component, OnDestroy } from '@angular/core'
 import { AlertOptions } from '@ionic/core'
 import { Store } from '@ngrx/store'
@@ -103,7 +103,7 @@ export class AccountShareSelectPage implements OnDestroy {
     }
   }
 
-  private excludedLegacyAccountsAlert(shareUrl: string, interactionSetting: InteractionSetting): AlertOptions {
+  private excludedLegacyAccountsAlert(shareUrl: IACMessageDefinitionObjectV3[], interactionSetting: InteractionSetting): AlertOptions {
     return {
       header: 'wallet-share-select.alert.excluded-legacy-accounts.header',
       message: 'wallet-share-select.alert.excluded-legacy-accounts.message',

@@ -33,7 +33,6 @@ export class TransactionSignedPage {
 
   constructor(public navigationService: NavigationService, private readonly translateService: TranslateService) {
     this.interactionUrl = this.navigationService.getState().interactionUrl
-    this.splits = this.interactionUrl.substr('airgap-wallet://?d='.length).split(',')
     this.wallets = this.navigationService.getState().wallets
     this.signedTxs = this.navigationService.getState().signedTxs
     this.translationKey = this.navigationService.getState().translationKey

@@ -1,22 +1,21 @@
-import { flattened, SerializerService } from '@airgap/angular-core'
+import { flattened } from '@airgap/angular-core'
 import { AccountShareResponse, AirGapWallet, AirGapWalletStatus, IACMessageDefinitionObjectV3, IACMessageType } from '@airgap/coinlib-core'
 import { generateId } from '@airgap/coinlib-core/serializer-v3/utils/generateId'
 
 import { Injectable } from '@angular/core'
 
 import { Secret } from '../../models/secret'
-import { serializedDataToUrlString } from '../../utils/utils'
 import { SecretsService } from '../secrets/secrets.service'
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShareUrlService {
-  constructor(private readonly serializerService: SerializerService, private readonly secretsService: SecretsService) {
+  constructor(private readonly secretsService: SecretsService) {
     //
   }
 
-  public async generateShareWalletURL(wallet: AirGapWallet): Promise<IACMessageDefinitionObjectV3> {
+  public async generateShareWalletURL(wallet: AirGapWallet): Promise<IACMessageDefinitionObjectV3[]> {
     const secret: Secret | undefined = this.secretsService.findByPublicKey(wallet.publicKey)
 
     const accountShareResponse: AccountShareResponse = {
@@ -39,12 +38,11 @@ export class ShareUrlService {
     if (deserializedTxSigningRequest.type === IACMessageType.AccountShareResponse) {
       deserializedTxSigningRequest.payload
     }
-    // const serializedTx: string | string[] = await this.serializerService.serialize([deserializedTxSigningRequest])
 
-    return deserializedTxSigningRequest // serializedDataToUrlString(serializedTx, 'airgap-wallet://')
+    return [deserializedTxSigningRequest]
   }
 
-  public async generateShareSecretsURL(secrets: Secret[]): Promise<string> {
+  public async generateShareSecretsURL(secrets: Secret[]): Promise<IACMessageDefinitionObjectV3[]> {
     const deserializedTxSigningRequests: IACMessageDefinitionObjectV3[] = flattened(
       secrets.map((secret: Secret) => {
         return secret.wallets
@@ -70,8 +68,6 @@ export class ShareUrlService {
       })
     )
 
-    const serializedTx: string | string[] = await this.serializerService.serialize(deserializedTxSigningRequests as any)
-
-    return serializedDataToUrlString(serializedTx, 'airgap-wallet://')
+    return deserializedTxSigningRequests
   }
 }

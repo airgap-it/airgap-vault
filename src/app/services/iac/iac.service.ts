@@ -38,7 +38,7 @@ export class IACService extends BaseIACService {
     this.interactionService.startInteraction(
       {
         operationType: InteractionOperationType.WALLET_SYNC,
-        url: Array.isArray(data) ? data.join(',') : data
+        iacMessage: Array.isArray(data) ? data.join(',') : data
       },
       this.secretsService.getActiveSecret()
     )

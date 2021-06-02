@@ -1,3 +1,4 @@
+import { IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
 import { InteractionSetting } from '../../services/interaction/interaction.service'
 
 /**************** Alert ****************/
@@ -7,7 +8,7 @@ export interface WalletsNotMigratedAlert {
 
 export interface ExcludedLegacyAccountsAlert {
   type: 'excludedLegacyAccounts'
-  shareUrl: string
+  shareUrl: IACMessageDefinitionObjectV3[]
   interactionSetting: InteractionSetting
 }
 

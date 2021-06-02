@@ -21,7 +21,7 @@ import { AccountEditPopoverComponent } from './account-edit-popover/account-edit
 export class AccountAddressPage {
   public wallet: AirGapWallet
 
-  private walletShareUrl?: IACMessageDefinitionObjectV3
+  private walletShareUrl?: IACMessageDefinitionObjectV3[]
   private walletShareUrlPromise?: Promise<void>
 
   constructor(
@@ -47,7 +47,7 @@ export class AccountAddressPage {
     this.interactionService.startInteraction(
       {
         operationType: InteractionOperationType.WALLET_SYNC,
-        url: this.walletShareUrl
+        iacMessage: this.walletShareUrl
       },
       this.secretsService.getActiveSecret()
     )
@@ -90,10 +90,10 @@ export class AccountAddressPage {
     }
 
     if (this.walletShareUrlPromise === undefined) {
-      this.walletShareUrlPromise = new Promise<IACMessageDefinitionObjectV3>(async (resolve) => {
-        const shareUrl: IACMessageDefinitionObjectV3 = await this.shareUrlService.generateShareWalletURL(this.wallet)
+      this.walletShareUrlPromise = new Promise<IACMessageDefinitionObjectV3[]>(async (resolve) => {
+        const shareUrl: IACMessageDefinitionObjectV3[] = await this.shareUrlService.generateShareWalletURL(this.wallet)
         resolve(shareUrl)
-      }).then((shareUrl: IACMessageDefinitionObjectV3) => {
+      }).then((shareUrl: IACMessageDefinitionObjectV3[]) => {
         this.walletShareUrl = shareUrl
         this.walletShareUrlPromise = undefined
       })
