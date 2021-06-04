@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterTestingModule } from '@angular/router/testing'
 import { AlertController, IonicModule, NavController, Platform, ToastController } from '@ionic/angular'
 import { Storage } from '@ionic/storage'
-import { IonicStorageModule } from '@ionic/storage-angular'
+import { IonicStorageModule } from '@ionic/storage'
 
 import { TranslateFakeLoader, TranslateLoader, TranslateModule } from '@ngx-translate/core'
 
