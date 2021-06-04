@@ -11,7 +11,7 @@ import { ErrorCategory, handleErrorLocal } from './../../services/error-handler/
   styleUrls: ['./account-share.page.scss']
 })
 export class AccountSharePage {
-  public interactionUrl: IACMessageDefinitionObjectV3[]
+  public interactionUrl: IACMessageDefinitionObjectV3[] = []
   public splits: string[] = []
 
   constructor(private readonly navigationService: NavigationService) {

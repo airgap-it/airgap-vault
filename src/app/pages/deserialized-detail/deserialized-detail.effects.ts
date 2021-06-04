@@ -8,7 +8,6 @@ import {
 } from '@airgap/angular-core'
 import {
   AirGapWallet,
-  IACMessageDefinitionObject,
   IACMessageDefinitionObjectV3,
   IACMessageType,
   IAirGapTransaction,
@@ -213,12 +212,12 @@ export class DeserializedDetailEffects {
   ): Promise<DeserializedUnsignedTransaction[]> {
     return Promise.all(
       transactionInfo
-        .map((info: SignTransactionInfo): [AirGapWallet, IACMessageDefinitionObject] => [info.wallet, info.signTransactionRequest])
+        .map((info: SignTransactionInfo): [AirGapWallet, IACMessageDefinitionObjectV3] => [info.wallet, info.signTransactionRequest])
         .filter(
-          ([_, request]: [AirGapWallet, IACMessageDefinitionObject]): boolean => request.type === IACMessageType.TransactionSignRequest
+          ([_, request]: [AirGapWallet, IACMessageDefinitionObjectV3]): boolean => request.type === IACMessageType.TransactionSignRequest
         )
         .map(
-          async ([wallet, request]: [AirGapWallet, IACMessageDefinitionObject]): Promise<DeserializedUnsignedTransaction> => {
+          async ([wallet, request]: [AirGapWallet, IACMessageDefinitionObjectV3]): Promise<DeserializedUnsignedTransaction> => {
             let details: IAirGapTransaction[]
             if (await this.checkIfSaplingTransaction(request.payload as UnsignedTransaction, request.protocol)) {
               details = await this.transactionService.getDetailsFromIACMessages([request], {
@@ -246,10 +245,10 @@ export class DeserializedDetailEffects {
   private async signTransactionInfoToUnsignedMessages(transactionInfo: SignTransactionInfo[]): Promise<DeserializedUnsignedMessage[]> {
     return Promise.all(
       transactionInfo
-        .map((info: SignTransactionInfo): [AirGapWallet, IACMessageDefinitionObject] => [info.wallet, info.signTransactionRequest])
-        .filter(([_, request]: [AirGapWallet, IACMessageDefinitionObject]): boolean => request.type === IACMessageType.MessageSignRequest)
+        .map((info: SignTransactionInfo): [AirGapWallet, IACMessageDefinitionObjectV3] => [info.wallet, info.signTransactionRequest])
+        .filter(([_, request]: [AirGapWallet, IACMessageDefinitionObjectV3]): boolean => request.type === IACMessageType.MessageSignRequest)
         .map(
-          async ([wallet, request]: [AirGapWallet, IACMessageDefinitionObject]): Promise<DeserializedUnsignedMessage> => {
+          async ([wallet, request]: [AirGapWallet, IACMessageDefinitionObjectV3]): Promise<DeserializedUnsignedMessage> => {
             const data: MessageSignRequest = request.payload as MessageSignRequest
 
             let blake2bHash: string | undefined
@@ -441,7 +440,7 @@ export class DeserializedDetailEffects {
   private async generateTransactionBroadcastUrl(transactions: DeserializedSignedTransaction[]): Promise<IACMessageDefinitionObjectV3[]> {
     const signResponses: IACMessageDefinitionObjectV3[] = transactions.map(
       (transaction: DeserializedSignedTransaction): IACMessageDefinitionObjectV3 => ({
-        id: 12345678, // JGD
+        id: transaction.id,
         protocol: transaction.wallet.protocol.identifier,
         type: IACMessageType.TransactionSignResponse,
         payload: {
@@ -480,7 +479,7 @@ export class DeserializedDetailEffects {
   private async generateMessageBroadcastUrl(messages: DeserializedSignedMessage[]): Promise<IACMessageDefinitionObjectV3[]> {
     const signResponses: IACMessageDefinitionObjectV3[] = messages.map(
       (message: DeserializedSignedMessage): IACMessageDefinitionObjectV3 => ({
-        id: 12345678, // JGD
+        id: message.id,
         protocol: message.protocol,
         type: IACMessageType.MessageSignResponse,
         payload: {

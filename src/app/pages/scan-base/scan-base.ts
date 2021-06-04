@@ -84,7 +84,7 @@ export class ScanBasePage {
   }
 
   private async startScanMobile() {
-    this.scanner.scan()
+    this.scanner.scan(() => {})
   }
 
   private startScanBrowser() {

@@ -46,7 +46,7 @@ export type Modal = 'selectSigningAccount'
 
 export interface DeserializedUnsignedTransaction {
   type: 'unsigned'
-  id: string
+  id: number
   details: IAirGapTransaction[]
   data: UnsignedTransaction
   wallet: AirGapWallet
@@ -54,7 +54,7 @@ export interface DeserializedUnsignedTransaction {
 
 export interface DeserializedSignedTransaction {
   type: 'signed'
-  id: string
+  id: number
   details: IAirGapTransaction[]
   data: SignedTransaction & Pick<UnsignedTransaction, 'callbackURL'>
   wallet: AirGapWallet
@@ -70,7 +70,7 @@ export function isDeserializedTransaction(data: unknown): data is DeserializedTr
 
 export interface DeserializedUnsignedMessage {
   type: 'unsigned'
-  id: string
+  id: number
   protocol: ProtocolSymbols | undefined
   data: MessageSignRequest
   blake2bHash: string | undefined
@@ -79,7 +79,7 @@ export interface DeserializedUnsignedMessage {
 
 export interface DeserializedSignedMessage {
   type: 'signed'
-  id: string
+  id: number
   protocol: ProtocolSymbols | undefined
   data: MessageSignResponse & Pick<MessageSignRequest, 'callbackURL'>
   wallet: AirGapWallet | undefined

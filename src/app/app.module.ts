@@ -4,7 +4,6 @@ import {
   APP_CONFIG,
   APP_INFO_PLUGIN,
   APP_PLUGIN,
-  BARCODE_SCANNER_PLUGIN,
   ClipboardService,
   CLIPBOARD_PLUGIN,
   DeeplinkService,
@@ -25,12 +24,10 @@ import { Plugins } from '@capacitor/core'
 import { DeviceMotion } from '@ionic-native/device-motion/ngx'
 import { Diagnostic } from '@ionic-native/diagnostic/ngx'
 import { IonicModule, IonicRouteStrategy, Platform } from '@ionic/angular'
-import { IonicStorageModule } from '@ionic/storage-angular'
+import { IonicStorageModule } from '@ionic/storage'
 import { EffectsModule } from '@ngrx/effects'
 import { StoreModule } from '@ngrx/store'
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
-import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver'
-import { Drivers } from '@ionic/storage'
 
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
@@ -89,7 +86,7 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
     }),
     IonicStorageModule.forRoot({
       name: '__airgap_storage',
-      driverOrder: [CordovaSQLiteDriver._driver, Drivers.LocalStorage]
+      driverOrder: ['sqlite', 'localstorage']
     }),
     WarningModalPageModule,
     IntroductionPageModule,
@@ -102,8 +99,6 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
     { provide: APP_PLUGIN, useValue: Plugins.App },
     { provide: APP_INFO_PLUGIN, useValue: Plugins.AppInfo },
     { provide: CAMERA_PREVIEW_PLUGIN, useValue: Plugins.CameraPreview },
-    { provide: BARCODE_SCANNER_PLUGIN, useValue: Plugins.BarcodeScanner },
-
     { provide: CLIPBOARD_PLUGIN, useValue: Plugins.Clipboard },
     { provide: PERMISSIONS_PLUGIN, useValue: Plugins.Permissions },
     { provide: SAPLING_PLUGIN, useValue: Plugins.SaplingNative },

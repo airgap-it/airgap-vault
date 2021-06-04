@@ -1,4 +1,4 @@
-import { DeeplinkService, SerializerService, serializedDataToUrlString } from '@airgap/angular-core'
+import { DeeplinkService } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
 import { AirGapWallet, UnsignedTransaction, MessageSignResponse, IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
 
@@ -39,11 +39,7 @@ export interface IInteractionOptions {
   providedIn: 'root'
 })
 export class InteractionService {
-  constructor(
-    private readonly navigationService: NavigationService,
-    private readonly deepLinkService: DeeplinkService,
-    private readonly serializerService: SerializerService
-  ) {}
+  constructor(private readonly navigationService: NavigationService, private readonly deepLinkService: DeeplinkService) {}
 
   public startInteraction(interactionOptions: IInteractionOptions, secret: Secret): void
   public startInteraction(interactionOptions: IInteractionOptions, interactionSetting: InteractionSetting): void
@@ -117,7 +113,6 @@ export class InteractionService {
         })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } else if (interactionOptions.operationType === InteractionOperationType.MESSAGE_SIGN_REQUEST) {
-      console.log('messageSignResponse', interactionOptions.messageSignResponse)
       this.navigationService
         .routeWithState('/transaction-signed', {
           interactionUrl: interactionOptions.iacMessage,
@@ -131,15 +126,8 @@ export class InteractionService {
   }
 
   private async startDeeplink(iacMessage: IACMessageDefinitionObjectV3[]): Promise<void> {
-    console.log('startDeeplink', iacMessage)
-    const serializedTx: string | string[] = await this.serializerService.serialize(iacMessage as any)
-    console.log('serializedTx', serializedTx)
-
-    const url = serializedDataToUrlString(serializedTx, 'airgap-wallet://')
-    console.log('url', url)
-
     this.deepLinkService
-      .sameDeviceDeeplink(url)
+      .sameDeviceDeeplink(iacMessage)
       .then(() => {
         this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       })

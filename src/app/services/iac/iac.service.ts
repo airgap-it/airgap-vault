@@ -1,8 +1,15 @@
-import { BaseIACService, ClipboardService, ProtocolService, UiEventElementsService, UiEventService } from '@airgap/angular-core'
+import {
+  BaseIACService,
+  ClipboardService,
+  DeeplinkService,
+  ProtocolService,
+  UiEventElementsService,
+  UiEventService
+} from '@airgap/angular-core'
 import {
   AirGapWallet,
   AirGapWalletStatus,
-  IACMessageDefinitionObject,
+  IACMessageDefinitionObjectV3,
   IACMessageType,
   MessageSignRequest,
   UnsignedTransaction
@@ -22,13 +29,14 @@ export class IACService extends BaseIACService {
   constructor(
     public readonly uiEventService: UiEventService,
     public readonly uiEventElementsService: UiEventElementsService,
+    public readonly deeplinkService: DeeplinkService,
     private readonly protocolService: ProtocolService,
     protected readonly clipboard: ClipboardService,
     private readonly navigationService: NavigationService,
     private readonly secretsService: SecretsService,
     private readonly interactionService: InteractionService
   ) {
-    super(uiEventElementsService, clipboard, secretsService.isReady(), [])
+    super(uiEventElementsService, clipboard, secretsService.isReady(), [], deeplinkService)
 
     this.serializerMessageHandlers[IACMessageType.TransactionSignRequest] = this.handleUnsignedTransactions.bind(this)
     this.serializerMessageHandlers[IACMessageType.MessageSignRequest] = this.handleMessageSignRequest.bind(this)
@@ -45,7 +53,7 @@ export class IACService extends BaseIACService {
   }
 
   private async handleUnsignedTransactions(
-    signTransactionRequests: IACMessageDefinitionObject[],
+    signTransactionRequests: IACMessageDefinitionObjectV3[],
     scanAgainCallback: Function
   ): Promise<boolean> {
     const transactionInfos: SignTransactionInfo[] = (
@@ -135,7 +143,7 @@ export class IACService extends BaseIACService {
     }
   }
   private async handleMessageSignRequest(
-    messageDefinitionObjects: IACMessageDefinitionObject[],
+    messageDefinitionObjects: IACMessageDefinitionObjectV3[],
     _scanAgainCallback: Function
   ): Promise<boolean> {
     const transactionInfos: SignTransactionInfo[] = await Promise.all(
