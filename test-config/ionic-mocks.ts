@@ -9,6 +9,11 @@ export class RouterMock {
   public navigate: jasmine.Spy = jasmine.createSpy('navigate').and.returnValue(Promise.resolve())
 }
 
+export class ClipboardMock {
+  public read: jasmine.Spy = newSpy('read', Promise.resolve())
+  public write: jasmine.Spy = newSpy('write', Promise.resolve())
+}
+
 export class ModalControllerMock {
   public create: jasmine.Spy = jasmine.createSpy('create').and.returnValue(
     Promise.resolve({

@@ -19,7 +19,8 @@ import {
   ModalControllerMock,
   NavControllerMock,
   PlatformMock,
-  ToastControllerMock
+  ToastControllerMock,
+  ClipboardMock
 } from './ionic-mocks'
 import { AppInfoPluginMock, SaplingPluginMock, SplashScreenMock, StatusBarMock } from './plugins-mocks'
 import { StorageMock } from './storage-mock'
@@ -37,7 +38,8 @@ export class UnitHelper {
     toastController: new ToastControllerMock(),
     alertController: new AlertControllerMock(),
     loadingController: new LoadingControllerMock(),
-    modalController: new ModalControllerMock()
+    modalController: new ModalControllerMock(),
+    clipboard: new ClipboardMock()
   }
 
   public testBed(testBed: TestModuleMetadata, useIonicOnlyTestBed: boolean = false): TestModuleMetadata {
