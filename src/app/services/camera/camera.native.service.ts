@@ -1,5 +1,5 @@
 import { PermissionsService, PermissionStatus } from '@airgap/angular-core'
-import { ElementRef, Injectable, Renderer2, RendererFactory2, ViewChild, Inject, Directive } from '@angular/core'
+import { ElementRef, Injectable, Renderer2, RendererFactory2, ViewChild, Inject } from '@angular/core'
 import { Platform } from '@ionic/angular'
 import { Observable } from 'rxjs'
 
@@ -12,7 +12,6 @@ import { CAMERA_PREVIEW_PLUGIN } from 'src/app/capacitor-plugins/injection-token
 const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
 const entropyCalculatorWorker = new Worker(blobURL)
 
-@Directive()
 @Injectable({ providedIn: 'root' })
 export class CameraNativeService implements IEntropyGenerator {
   private disabled = false

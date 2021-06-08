@@ -1,4 +1,4 @@
-import { ElementRef, Injectable, ViewChild, Directive } from '@angular/core'
+import { ElementRef, Injectable, ViewChild } from '@angular/core'
 import { Observable } from 'rxjs'
 
 import workerJS from '../../../assets/workers/entropyCalculatorWorker'
@@ -6,7 +6,6 @@ import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
 const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
 const entropyCalculatorWorker = new Worker(blobURL)
 
-@Directive()
 @Injectable({ providedIn: 'root' })
 export class CameraBrowserService implements IEntropyGenerator {
   private readonly VIDEO_FREQUENCY = 2000
