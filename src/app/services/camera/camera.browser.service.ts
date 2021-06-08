@@ -8,10 +8,10 @@ const entropyCalculatorWorker = new Worker(blobURL)
 
 @Injectable({ providedIn: 'root' })
 export class CameraBrowserService implements IEntropyGenerator {
-  private readonly VIDEO_FREQUENCY = 2000
-
   @ViewChild('cameraCanvas') public cameraCanvas: ElementRef
   public canvasElement: HTMLCanvasElement
+
+  private readonly VIDEO_FREQUENCY = 2000
 
   private collectedEntropyPercentage: number = 0
 
@@ -120,6 +120,10 @@ export class CameraBrowserService implements IEntropyGenerator {
     return this.collectedEntropyPercentage
   }
 
+  public setVideoElement(element) {
+    this.videoElement = element
+  }
+
   private arrayBufferFromUint8Array(uintArray: Uint8ClampedArray) {
     const buffer = new ArrayBuffer(uintArray.length)
     const bufView = new Uint8Array(buffer)
@@ -129,9 +133,5 @@ export class CameraBrowserService implements IEntropyGenerator {
     }
 
     return buffer
-  }
-
-  public setVideoElement(element) {
-    this.videoElement = element
   }
 }
