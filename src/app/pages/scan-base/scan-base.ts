@@ -67,7 +67,6 @@ export class ScanBasePage {
       this.scanner.destroy()
     } else if (this.zxingScanner) {
       this.zxingScanner.enable = false
-      this.zxingScanner.codeReader.getScannerControls().stop()
     }
   }
 
@@ -88,7 +87,7 @@ export class ScanBasePage {
   }
 
   private startScanBrowser() {
-    if (this.zxingScanner) {
+    if (this.zxingScanner && !this.zxingScanner.enabled) {
       this.zxingScanner.enable = true
       this.zxingScanner.camerasNotFound.subscribe((_devices: MediaDeviceInfo[]) => {
         console.error('An error has occurred when trying to enumerate your video-stream-enabled devices.')

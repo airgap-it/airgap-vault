@@ -1,39 +1,14 @@
 import { IACHandlerStatus, IACMessageTransport, PermissionsService, QrScannerService } from '@airgap/angular-core'
 import { Component, Inject, NgZone, ViewChild } from '@angular/core'
 import { Platform } from '@ionic/angular'
-import { URDecoder } from '@ngraveio/bc-ur'
 import { ZXingScannerComponent } from '@zxing/ngx-scanner'
 import { SecurityUtilsPlugin } from 'src/app/capacitor-plugins/definitions'
 import { SECURITY_UTILS_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
 import { IACService } from 'src/app/services/iac/iac.service'
+import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { ScanBasePage } from '../scan-base/scan-base'
-
-var downloadBlob, downloadURL
-
-downloadBlob = function (data: Uint8Array, fileName, mimeType) {
-  var blob, url
-  blob = new Blob([data], {
-    type: mimeType
-  })
-  url = window.URL.createObjectURL(blob)
-  downloadURL(url, fileName)
-  setTimeout(function () {
-    return window.URL.revokeObjectURL(url)
-  }, 1000)
-}
-
-downloadURL = function (data, fileName) {
-  var a
-  a = document.createElement('a')
-  a.href = data
-  a.download = fileName
-  document.body.appendChild(a)
-  a.style = 'display: none'
-  a.click()
-  a.remove()
-}
 
 @Component({
   selector: 'airgap-tab-scan',
@@ -45,16 +20,10 @@ export class TabScanPage extends ScanBasePage {
   public zxingScanner?: ZXingScannerComponent
 
   public percentageScanned: number = 0
-  public numberOfQrsScanned: number = 0
-  public numberOfQrsTotal: number = 0
 
   private parts: Set<string> = new Set()
 
   public isMultiQr: boolean = false
-
-  public urDecoder = new URDecoder()
-
-  private isHandled: boolean = false
 
   constructor(
     platform: Platform,
@@ -62,7 +31,8 @@ export class TabScanPage extends ScanBasePage {
     permissionsProvider: PermissionsService,
     @Inject(SECURITY_UTILS_PLUGIN) securityUtils: SecurityUtilsPlugin,
     private readonly iacService: IACService,
-    private readonly ngZone: NgZone
+    private readonly ngZone: NgZone,
+    private readonly navigationService: NavigationService
   ) {
     super(platform, scanner, permissionsProvider, securityUtils)
   }
@@ -70,6 +40,7 @@ export class TabScanPage extends ScanBasePage {
   public async ionViewWillEnter(): Promise<void> {
     await super.ionViewWillEnter()
     this.resetScannerPage()
+    this.iacService.resetHandlers()
   }
 
   private resetScannerPage(): void {
@@ -78,39 +49,7 @@ export class TabScanPage extends ScanBasePage {
     this.isMultiQr = false
   }
 
-  public async handleUr(data: string) {
-    if (this.isHandled) {
-      return
-    }
-
-    const sizeBefore: number = this.parts.size
-    this.parts.add(data)
-
-    if (sizeBefore === this.parts.size) {
-      return
-    }
-
-    console.log(data)
-
-    this.urDecoder.receivePart(data)
-    this.percentageScanned = this.urDecoder.estimatedPercentComplete()
-    if (this.urDecoder.isComplete() && this.urDecoder.isSuccess()) {
-      this.isHandled = true
-      const res = this.urDecoder.resultUR().decodeCBOR()
-      console.log('success', res)
-      downloadBlob(new Uint8Array(Object.values(res)), 'air-gapped-file.jpg', 'application/octet-stream')
-    } else {
-      this.isMultiQr = true
-      this.numberOfQrsScanned = this.urDecoder.getProgress() * this.urDecoder.expectedPartCount()
-      this.numberOfQrsTotal = this.urDecoder.expectedPartCount()
-    }
-  }
-
   public async checkScan(data: string): Promise<boolean | void> {
-    if (data.startsWith('ur:')) {
-      return this.handleUr(data)
-    }
-
     const sizeBefore: number = this.parts.size
     this.parts.add(data)
 
@@ -126,18 +65,20 @@ export class TabScanPage extends ScanBasePage {
 
     this.ngZone.run(() => {
       this.iacService
-        .handleRequest(
-          Array.from(this.parts)[0],
-          IACMessageTransport.QR_SCANNER,
-          (progress: number | { currentPage: number; totalPageNumber: number }) => {
-            console.log('scan result', progress)
-
-            this.startScan()
-          }
-        )
+        .handleRequest(data, IACMessageTransport.QR_SCANNER, (progress: number) => {
+          console.log('scan result', progress)
+          this.isMultiQr = true
+          this.percentageScanned = progress ?? 0
+          this.startScan()
+        })
         .then((result: IACHandlerStatus) => {
           if (result === IACHandlerStatus.SUCCESS) {
-            this.resetScannerPage()
+            this.navigationService
+              .route('/')
+              .then(() => {
+                this.resetScannerPage()
+              })
+              .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
           }
         })
         .catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))

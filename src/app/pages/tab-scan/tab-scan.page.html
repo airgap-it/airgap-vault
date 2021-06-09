@@ -4,7 +4,7 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title>{{ 'tab-scan.title' | translate }}</ion-title>
-    <ion-title slot="end" *ngIf="isMultiQr">{{ numberOfQrsScanned }}/{{ numberOfQrsTotal }}</ion-title>
+    <ion-title slot="end" *ngIf="isMultiQr">{{ percentageScanned * 100 }}%</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -24,11 +24,11 @@
         <img class="guides--container__img" src="./assets/img/qr_code_guides.svg" />
       </ion-col>
       <zxing-scanner
+        #scanner
         [formats]="['QR_CODE']"
         [timeBetweenScans]="0"
         [delayBetweenScanSuccess]="0"
         *ngIf="isBrowser || isElectron"
-        #scanner
         (scanSuccess)="checkScan($event)"
       ></zxing-scanner>
     </ion-row>
