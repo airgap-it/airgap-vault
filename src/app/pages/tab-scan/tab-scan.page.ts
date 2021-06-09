@@ -5,7 +5,7 @@ import { ZXingScannerComponent } from '@zxing/ngx-scanner'
 import { SecurityUtilsPlugin } from 'src/app/capacitor-plugins/definitions'
 import { SECURITY_UTILS_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
 import { IACService } from 'src/app/services/iac/iac.service'
-import { NavigationService } from 'src/app/services/navigation/navigation.service'
+// import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { ScanBasePage } from '../scan-base/scan-base'
@@ -31,8 +31,7 @@ export class TabScanPage extends ScanBasePage {
     permissionsProvider: PermissionsService,
     @Inject(SECURITY_UTILS_PLUGIN) securityUtils: SecurityUtilsPlugin,
     private readonly iacService: IACService,
-    private readonly ngZone: NgZone,
-    private readonly navigationService: NavigationService
+    private readonly ngZone: NgZone // private readonly navigationService: NavigationService
   ) {
     super(platform, scanner, permissionsProvider, securityUtils)
   }
@@ -47,6 +46,7 @@ export class TabScanPage extends ScanBasePage {
     this.parts = new Set()
     this.percentageScanned = 0
     this.isMultiQr = false
+    this.iacService.resetHandlers()
   }
 
   public async checkScan(data: string): Promise<boolean | void> {
@@ -73,12 +73,12 @@ export class TabScanPage extends ScanBasePage {
         })
         .then((result: IACHandlerStatus) => {
           if (result === IACHandlerStatus.SUCCESS) {
-            this.navigationService
-              .route('/')
-              .then(() => {
-                this.resetScannerPage()
-              })
-              .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+            // this.navigationService
+            //   .route('/')
+            //   .then(() => {
+            this.resetScannerPage()
+            // })
+            // .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
           }
         })
         .catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
