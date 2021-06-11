@@ -82,8 +82,16 @@ export class ScanBasePage {
     console.error(`The checkScan method needs to be overwritten. Ignoring text ${resultString}`)
   }
 
-  private async startScanMobile() {
-    this.scanner.scan(() => {})
+  private startScanMobile() {
+    this.scanner.scan(
+      (text) => {
+        this.checkScan(text)
+      },
+      (error) => {
+        console.warn(error)
+        this.startScan()
+      }
+    )
   }
 
   private startScanBrowser() {
