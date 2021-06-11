@@ -1,8 +1,11 @@
 import {
+  AppConfig,
+  APP_CONFIG,
   BaseIACService,
   ClipboardService,
   DeeplinkService,
   ProtocolService,
+  RelayMessage,
   UiEventElementsService,
   UiEventService
 } from '@airgap/angular-core'
@@ -14,7 +17,7 @@ import {
   MessageSignRequest,
   UnsignedTransaction
 } from '@airgap/coinlib-core'
-import { Injectable } from '@angular/core'
+import { Inject, Injectable } from '@angular/core'
 
 import { SignTransactionInfo } from '../../models/sign-transaction-info'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
@@ -34,19 +37,20 @@ export class IACService extends BaseIACService {
     protected readonly clipboard: ClipboardService,
     private readonly navigationService: NavigationService,
     private readonly secretsService: SecretsService,
-    private readonly interactionService: InteractionService
+    private readonly interactionService: InteractionService,
+    @Inject(APP_CONFIG) appConfig: AppConfig
   ) {
-    super(uiEventElementsService, clipboard, secretsService.isReady(), [], deeplinkService)
+    super(uiEventElementsService, clipboard, secretsService.isReady(), [], deeplinkService, appConfig)
 
     this.serializerMessageHandlers[IACMessageType.TransactionSignRequest] = this.handleUnsignedTransactions.bind(this)
     this.serializerMessageHandlers[IACMessageType.MessageSignRequest] = this.handleMessageSignRequest.bind(this)
   }
 
-  public async relay(data: string | string[]): Promise<void> {
+  public async relay(data: RelayMessage): Promise<void> {
     this.interactionService.startInteraction(
       {
         operationType: InteractionOperationType.WALLET_SYNC,
-        iacMessage: Array.isArray(data) ? data.join(',') : data
+        iacMessage: (data as any).messages ?? (data as any).rawString // TODO: Fix types
       },
       this.secretsService.getActiveSecret()
     )
