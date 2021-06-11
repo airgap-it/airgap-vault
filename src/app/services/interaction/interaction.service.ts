@@ -27,7 +27,7 @@ export enum InteractionOperationType {
 
 export interface IInteractionOptions {
   operationType: InteractionOperationType
-  iacMessage: string | IACMessageDefinitionObjectV3[] // JGD remove string
+  iacMessage: IACMessageDefinitionObjectV3[] // remove string
   communicationType?: InteractionCommunicationType
   signedTxs?: string[]
   wallets?: AirGapWallet[]
@@ -52,7 +52,7 @@ export class InteractionService {
         this.goToInteractionSelectionSettingsPage(interactionOptions)
       }
       if (interactionOptions.communicationType === InteractionCommunicationType.DEEPLINK) {
-        this.startDeeplink(interactionOptions.iacMessage as IACMessageDefinitionObjectV3[]) // JGD remove typecast
+        this.startDeeplink(interactionOptions.iacMessage)
       } else if (interactionOptions.communicationType === InteractionCommunicationType.QR) {
         this.navigateToPageByOperationType(interactionOptions)
       }
@@ -65,7 +65,7 @@ export class InteractionService {
           this.goToInteractionSelectionPage(interactionOptions)
           break
         case InteractionSetting.SAME_DEVICE:
-          this.startDeeplink(interactionOptions.iacMessage as IACMessageDefinitionObjectV3[]) // JGD remove typecast
+          this.startDeeplink(interactionOptions.iacMessage)
           break
         case InteractionSetting.OFFLINE_DEVICE:
           this.navigateToPageByOperationType(interactionOptions)
