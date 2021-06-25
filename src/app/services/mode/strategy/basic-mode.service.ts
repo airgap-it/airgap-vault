@@ -14,7 +14,7 @@ import { ModeStrategy } from './ModeStrategy'
 @Injectable({
   providedIn: 'root'
 })
-export class BasicModeSerivce implements ModeStrategy {
+export class BasicModeService implements ModeStrategy {
   constructor(
     private readonly secretsService: SecretsService,
     private readonly shareUrlService: ShareUrlService,
