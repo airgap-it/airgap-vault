@@ -5,6 +5,10 @@ import {
   EthereumERC20ProtocolOptions,
   EthereumProtocolNetwork,
   GenericERC20,
+  GenericRskERC20,
+  RskProtocolNetwork,
+  RskERC20ProtocolConfig,
+  RskERC20ProtocolOptions,
   IAirGapTransaction,
   SignedTransaction,
   UnsignedTransaction
@@ -35,7 +39,23 @@ export class TokenService {
         )
       )
 
-      const transactions: IAirGapTransaction[] = await genericErc20.getTransactionDetailsFromSigned(signedTransaction)
+      const genericRskERC20: GenericRskERC20 = new GenericRskERC20(
+        new RskERC20ProtocolOptions(
+          new RskProtocolNetwork(),
+          new RskERC20ProtocolConfig(
+            token.symbol,
+            token.name,
+            token.marketSymbol,
+            token.identifier as SubProtocolSymbols,
+            token.contractAddress,
+            token.decimals
+          )
+        )
+      )
+
+      const ethTransactions: IAirGapTransaction[] = await genericErc20.getTransactionDetailsFromSigned(signedTransaction)
+      const rskTransactions: IAirGapTransaction[] = await genericRskERC20.getTransactionDetailsFromSigned(signedTransaction)
+      const transactions: IAirGapTransaction[] = ethTransactions.concat(rskTransactions)
 
       if (transactions.length !== 1) {
         throw Error('TokenTransferDetails returned more than 1 transaction!')
@@ -64,7 +84,23 @@ export class TokenService {
         )
       )
 
-      const transactions: IAirGapTransaction[] = await genericErc20.getTransactionDetails(unsignedTransaction)
+      const genericRskERC20: GenericRskERC20 = new GenericRskERC20(
+        new RskERC20ProtocolOptions(
+          new RskProtocolNetwork(),
+          new RskERC20ProtocolConfig(
+            token.symbol,
+            token.name,
+            token.marketSymbol,
+            token.identifier as SubProtocolSymbols,
+            token.contractAddress,
+            token.decimals
+          )
+        )
+      )
+
+      const ethTransactions: IAirGapTransaction[] = await genericErc20.getTransactionDetails(unsignedTransaction)
+      const rskTransactions: IAirGapTransaction[] = await genericRskERC20.getTransactionDetails(unsignedTransaction)
+      const transactions: IAirGapTransaction[] = ethTransactions.concat(rskTransactions)
 
       if (transactions.length !== 1) {
         throw Error('TokenTransferDetails returned more than 1 transaction!')
