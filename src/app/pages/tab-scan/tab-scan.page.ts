@@ -1,4 +1,5 @@
 import { IACHandlerStatus, IACMessageTransport, PermissionsService, QrScannerService } from '@airgap/angular-core'
+import { PercentPipe } from '@angular/common'
 import { Component, Inject, NgZone, ViewChild } from '@angular/core'
 import { Platform } from '@ionic/angular'
 import { ZXingScannerComponent } from '@zxing/ngx-scanner'
@@ -13,7 +14,8 @@ import { ScanBasePage } from '../scan-base/scan-base'
 @Component({
   selector: 'airgap-tab-scan',
   templateUrl: './tab-scan.page.html',
-  styleUrls: ['./tab-scan.page.scss']
+  styleUrls: ['./tab-scan.page.scss'],
+  providers: [PercentPipe]
 })
 export class TabScanPage extends ScanBasePage {
   @ViewChild('scanner')
