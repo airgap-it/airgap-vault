@@ -12,11 +12,11 @@
 
   <ion-list lines="none" *ngIf="(walletGroups$ | async).status === UIResourceStatus.SUCCESS">
     <ion-list-header class="ion-no-padding">
-      <ion-label class="white" [innerHtml]="'migration.list.header' | translate"></ion-label>
+      <ion-label color="light" [innerHtml]="'migration.list.header' | translate"></ion-label>
     </ion-list-header>
     <ng-container *ngFor="let group of (walletGroups$ | async).value">
       <ion-item detail="false" class="ion-no-padding">
-        <ion-label class="white">{{ group.label }}</ion-label>
+        <ion-label color="light">{{ group.label }}</ion-label>
         <ng-container *ngIf="(isRunning$ | async) || (isDone$ | async)">
           <ion-spinner *ngIf="group.status === 'migrating'" name="lines" slot="end"></ion-spinner>
           <ion-icon name="checkmark-done-outline" *ngIf="group.status === 'migrated'" slot="end"></ion-icon>

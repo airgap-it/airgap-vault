@@ -508,9 +508,9 @@
   },
   "migration": {
     "title": "Accounts Update",
-    "heading": "TODO: explanation",
+    "heading": "Accounts Migration",
     "list": {
-      "header": "The following secrets and accounts will be updated <br /> <br /> <strong>Note: you may be asked to authenticate and provide a passphrase, if it's been set for any of the displayed secrets or accounts.</strong>"
+      "header": "The following secrets and accounts will be updated for the sake of simplified onboarding <br /> <br /> <strong>Note: you may be asked to authenticate and provide a passphrase, if it's been set for any of the displayed secrets or accounts.</strong>"
     },
     "button-run_label": "Update",
     "button-done_label": "Done",
