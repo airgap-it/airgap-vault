@@ -16,6 +16,7 @@ import {
   UiEventService
 } from '@airgap/angular-core'
 import { AirGapAngularNgRxModule } from '@airgap/angular-ngrx'
+import { PercentPipe } from '@angular/common'
 import { HttpClient, HttpClientModule } from '@angular/common/http'
 import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
@@ -128,6 +129,7 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
     SerializerService,
     VaultStorageService,
     UiEventService,
+    PercentPipe,
     SecureStorageFactoryDepHolder,
     CameraFactoryDepHolder,
     {
