@@ -14,6 +14,8 @@ export class AccountSharePage {
   public interactionUrl: IACMessageDefinitionObjectV3[] = []
   public splits: string[] = []
 
+  displayRawData: boolean = false
+
   constructor(private readonly navigationService: NavigationService) {
     this.interactionUrl = this.navigationService.getState().interactionUrl
   }
