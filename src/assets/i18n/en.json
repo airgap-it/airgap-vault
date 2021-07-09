@@ -333,7 +333,6 @@
   "transaction-signed": {
     "title": "Signed Transaction",
     "heading": "This is your signed transaction, scan it with <span class=\"style__strong color__primary\">AirGap Wallet</span>.",
-    "raw-tx_label": "Display Raw Transaction",
     "done_label": "Done"
   },
   "touch-entropy": {
