@@ -44,10 +44,6 @@ export class TransactionSignedPage {
     console.log('qrType', this.qrType)
   }
 
-  public switchQR(): void {
-    this.qrType = this.qrType === TransactionQRType.SignedAirGap ? TransactionQRType.SignedRaw : TransactionQRType.SignedAirGap
-  }
-
   public done(): void {
     this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }

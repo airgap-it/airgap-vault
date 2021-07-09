@@ -25,11 +25,6 @@
   </ng-container>
 
   <ng-container *ngIf="signedTxs">
-    <ion-item lines="none">
-      <ion-label class="ion-text-wrap">{{ 'transaction-signed.raw-tx_label' | translate }}</ion-label>
-      <ion-toggle slot="end" (ionChange)="switchQR()"></ion-toggle>
-    </ion-item>
-
     <ion-row class="ion-padding-vertical ion-margin-bottom">
       <airgap-signed-transaction [signedTxs]="interactionUrl"></airgap-signed-transaction>
     </ion-row>
