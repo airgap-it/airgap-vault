@@ -39,13 +39,6 @@ export class TransactionSignedPage {
     this.pageTitle = this.translateService.instant(`${this.translationKey}.title`)
     this.heading = this.translateService.instant(`${this.translationKey}.heading`)
     this.messageSignResponse = this.navigationService.getState().messageSignResponse
-
-    console.log('interactionUrl', this.interactionUrl)
-    console.log('qrType', this.qrType)
-  }
-
-  public switchQR(): void {
-    this.qrType = this.qrType === TransactionQRType.SignedAirGap ? TransactionQRType.SignedRaw : TransactionQRType.SignedAirGap
   }
 
   public done(): void {
