@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core'
 
-import { WalletFilterPipe } from './wallet-filter/wallet-filter.pipe'
+import { WalletStatusPipe } from './wallet-status/wallet-status.pipe'
 
 @NgModule({
-  declarations: [WalletFilterPipe],
+  declarations: [WalletStatusPipe],
   imports: [],
-  exports: [WalletFilterPipe]
+  exports: [WalletStatusPipe]
 })
 export class PipesModule {}

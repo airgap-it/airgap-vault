@@ -69,7 +69,19 @@ export class AccountAddPage {
   private async addWalletAndReturnToAddressPage(): Promise<void> {
     const addAccount = () => {
       this.secretsService
-        .addWallet(this.selectedProtocol.identifier, this.isHDWallet, this.customDerivationPath, this.bip39Passphrase)
+        .addWallets(
+          this.protocols.map((protocol: ICoinProtocol) => {
+            const isSelected: boolean = this.selectedProtocol.identifier === protocol.identifier
+
+            return {
+              protocolIdentifier: protocol.identifier,
+              isHDWallet: protocol.supportsHD,
+              customDerivationPath: isSelected ? this.customDerivationPath : protocol.standardDerivationPath,
+              bip39Passphrase: isSelected ? this.bip39Passphrase : '',
+              isActive: isSelected
+            }
+          })
+        )
         .then(() => {
           this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
         })

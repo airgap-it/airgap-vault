@@ -1,13 +1,15 @@
-import { Component, OnInit } from '@angular/core'
+import { ClipboardService, UiEventService } from '@airgap/angular-core'
+import { AirGapWallet, IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
+import { Component } from '@angular/core'
 import { PopoverController } from '@ionic/angular'
-import { AirGapWallet } from '@airgap/coinlib-core'
 
-import { ClipboardService } from '@airgap/angular-core'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { InteractionOperationType, InteractionService } from '../../services/interaction/interaction.service'
+import { MigrationService } from '../../services/migration/migration.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
 import { ShareUrlService } from '../../services/share-url/share-url.service'
+import { isWalletMigrated } from '../../utils/migration'
 
 import { AccountEditPopoverComponent } from './account-edit-popover/account-edit-popover.component'
 
@@ -16,9 +18,11 @@ import { AccountEditPopoverComponent } from './account-edit-popover/account-edit
   templateUrl: './account-address.page.html',
   styleUrls: ['./account-address.page.scss']
 })
-export class AccountAddressPage implements OnInit {
+export class AccountAddressPage {
   public wallet: AirGapWallet
-  private walletShareUrl: string
+
+  private walletShareUrl?: IACMessageDefinitionObjectV3[]
+  private walletShareUrlPromise?: Promise<void>
 
   constructor(
     private readonly popoverCtrl: PopoverController,
@@ -26,13 +30,11 @@ export class AccountAddressPage implements OnInit {
     private readonly secretsService: SecretsService,
     private readonly shareUrlService: ShareUrlService,
     private readonly interactionService: InteractionService,
-    private readonly navigationService: NavigationService
+    private readonly navigationService: NavigationService,
+    private readonly uiEventService: UiEventService,
+    private readonly migrationService: MigrationService
   ) {
     this.wallet = this.navigationService.getState().wallet
-  }
-
-  public async ngOnInit(): Promise<void> {
-    this.walletShareUrl = await this.shareUrlService.generateShareURL(this.wallet)
   }
 
   public done(): void {
@@ -40,10 +42,12 @@ export class AccountAddressPage implements OnInit {
   }
 
   public async share(): Promise<void> {
+    await this.waitWalletShareUrl()
+
     this.interactionService.startInteraction(
       {
         operationType: InteractionOperationType.WALLET_SYNC,
-        url: this.walletShareUrl
+        iacMessage: this.walletShareUrl
       },
       this.secretsService.getActiveSecret()
     )
@@ -54,7 +58,10 @@ export class AccountAddressPage implements OnInit {
       component: AccountEditPopoverComponent,
       componentProps: {
         wallet: this.wallet,
-        walletShareUrl: this.walletShareUrl,
+        getWalletShareUrl: async () => {
+          await this.waitWalletShareUrl()
+          return this.walletShareUrl
+        },
         onDelete: (): void => {
           this.navigationService.back()
         }
@@ -68,5 +75,42 @@ export class AccountAddressPage implements OnInit {
 
   public async copyAddressToClipboard(): Promise<void> {
     await this.clipboardService.copyAndShowToast(this.wallet.receivingPublicAddress)
+  }
+
+  private async waitWalletShareUrl(): Promise<void> {
+    if (this.walletShareUrl !== undefined) {
+      return
+    }
+
+    await this.migrationService.runWalletsMigration([this.wallet])
+    if (!isWalletMigrated(this.wallet)) {
+      await this.showWalletNotMigratedAlert()
+
+      return Promise.reject('Cannot create share URL, wallet data is incomplete')
+    }
+
+    if (this.walletShareUrlPromise === undefined) {
+      this.walletShareUrlPromise = new Promise<IACMessageDefinitionObjectV3[]>(async (resolve) => {
+        const shareUrl: IACMessageDefinitionObjectV3[] = await this.shareUrlService.generateShareWalletURL(this.wallet)
+        resolve(shareUrl)
+      }).then((shareUrl: IACMessageDefinitionObjectV3[]) => {
+        this.walletShareUrl = shareUrl
+        this.walletShareUrlPromise = undefined
+      })
+    }
+
+    return this.walletShareUrlPromise
+  }
+
+  private async showWalletNotMigratedAlert(): Promise<void> {
+    return this.uiEventService.showTranslatedAlert({
+      header: 'wallet-address.alert.wallet-not-migrated.header',
+      message: 'wallet-address.alert.wallet-not-migrated.message',
+      buttons: [
+        {
+          text: 'wallet-address.alert.wallet-not-migrated.button_label'
+        }
+      ]
+    })
   }
 }

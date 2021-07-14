@@ -1,8 +1,26 @@
-import { BaseIACService, ProtocolService, SerializerService, UiEventService, UiEventElementsService } from '@airgap/angular-core'
-import { Injectable } from '@angular/core'
-import { IACMessageDefinitionObject, UnsignedTransaction, AirGapWallet, IACMessageType, MessageSignRequest } from '@airgap/coinlib-core'
-import { SignTransactionInfo } from 'src/app/models/sign-transaction-info'
-import { handleErrorLocal, ErrorCategory } from '../error-handler/error-handler.service'
+import {
+  AppConfig,
+  APP_CONFIG,
+  BaseIACService,
+  ClipboardService,
+  DeeplinkService,
+  ProtocolService,
+  RelayMessage,
+  UiEventElementsService,
+  UiEventService
+} from '@airgap/angular-core'
+import {
+  AirGapWallet,
+  AirGapWalletStatus,
+  IACMessageDefinitionObjectV3,
+  IACMessageType,
+  MessageSignRequest,
+  UnsignedTransaction
+} from '@airgap/coinlib-core'
+import { Inject, Injectable } from '@angular/core'
+
+import { SignTransactionInfo } from '../../models/sign-transaction-info'
+import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { InteractionOperationType, InteractionService } from '../interaction/interaction.service'
 import { NavigationService } from '../navigation/navigation.service'
 import { SecretsService } from '../secrets/secrets.service'
@@ -13,32 +31,33 @@ import { SecretsService } from '../secrets/secrets.service'
 export class IACService extends BaseIACService {
   constructor(
     public readonly uiEventService: UiEventService,
-    uiEventElementsService: UiEventElementsService,
-    serializerService: SerializerService,
+    public readonly uiEventElementsService: UiEventElementsService,
+    public readonly deeplinkService: DeeplinkService,
     private readonly protocolService: ProtocolService,
+    protected readonly clipboard: ClipboardService,
     private readonly navigationService: NavigationService,
     private readonly secretsService: SecretsService,
-    private readonly interactionService: InteractionService
+    private readonly interactionService: InteractionService,
+    @Inject(APP_CONFIG) appConfig: AppConfig
   ) {
-    super(uiEventElementsService, serializerService, secretsService.isReady(), [])
+    super(uiEventElementsService, clipboard, secretsService.isReady(), [], deeplinkService, appConfig)
 
     this.serializerMessageHandlers[IACMessageType.TransactionSignRequest] = this.handleUnsignedTransactions.bind(this)
     this.serializerMessageHandlers[IACMessageType.MessageSignRequest] = this.handleMessageSignRequest.bind(this)
   }
 
-  public async relay(data: string | string[]): Promise<void> {
+  public async relay(data: RelayMessage): Promise<void> {
     this.interactionService.startInteraction(
       {
         operationType: InteractionOperationType.WALLET_SYNC,
-        url: Array.isArray(data) ? data.join(',') : data
+        iacMessage: (data as any).messages ?? (data as any).rawString // TODO: Fix types
       },
       this.secretsService.getActiveSecret()
     )
   }
 
   private async handleUnsignedTransactions(
-    _data: string | string[],
-    signTransactionRequests: IACMessageDefinitionObject[],
+    signTransactionRequests: IACMessageDefinitionObjectV3[],
     scanAgainCallback: Function
   ): Promise<boolean> {
     const transactionInfos: SignTransactionInfo[] = (
@@ -52,6 +71,10 @@ export class IACService extends BaseIACService {
               signTransactionRequest.protocol
             )
 
+            if (correctWallet) {
+              await this.activateWallet(correctWallet)
+            }
+
             // If we can't find a wallet for a protocol, we will try to find the "base" wallet and then create a new
             // wallet with the right protocol. This way we can sign all ERC20 transactions, but show the right amount
             // and fee for all tokens we support.
@@ -62,6 +85,7 @@ export class IACService extends BaseIACService {
               )
 
               if (baseWallet) {
+                await this.activateWallet(baseWallet)
                 // If the protocol is not supported, use the base protocol for signing
                 const protocol = await this.protocolService.getProtocol(signTransactionRequest.protocol)
                 try {
@@ -69,7 +93,9 @@ export class IACService extends BaseIACService {
                     protocol,
                     baseWallet.publicKey,
                     baseWallet.isExtendedPublicKey,
-                    baseWallet.derivationPath
+                    baseWallet.derivationPath,
+                    baseWallet.masterFingerprint,
+                    baseWallet.status
                   )
                   correctWallet.addresses = baseWallet.addresses
                 } catch (e) {
@@ -121,8 +147,7 @@ export class IACService extends BaseIACService {
     }
   }
   private async handleMessageSignRequest(
-    _data: string | string[],
-    messageDefinitionObjects: IACMessageDefinitionObject[],
+    messageDefinitionObjects: IACMessageDefinitionObjectV3[],
     _scanAgainCallback: Function
   ): Promise<boolean> {
     const transactionInfos: SignTransactionInfo[] = await Promise.all(
@@ -135,6 +160,10 @@ export class IACService extends BaseIACService {
             messageDefinitionObject.protocol
           )
 
+          if (correctWallet) {
+            await this.activateWallet(correctWallet)
+          }
+
           // If we can't find a wallet for a protocol, we will try to find the "base" wallet and then create a new
           // wallet with the right protocol. This way we can sign all ERC20 transactions, but show the right amount
           // and fee for all tokens we support.
@@ -145,10 +174,18 @@ export class IACService extends BaseIACService {
             )
 
             if (baseWallet) {
+              await this.activateWallet(baseWallet)
               // If the protocol is not supported, use the base protocol for signing
               const protocol = await this.protocolService.getProtocol(messageDefinitionObject.protocol)
               try {
-                correctWallet = new AirGapWallet(protocol, baseWallet.publicKey, baseWallet.isExtendedPublicKey, baseWallet.derivationPath)
+                correctWallet = new AirGapWallet(
+                  protocol,
+                  baseWallet.publicKey,
+                  baseWallet.isExtendedPublicKey,
+                  baseWallet.derivationPath,
+                  baseWallet.masterFingerprint,
+                  baseWallet.status
+                )
                 correctWallet.addresses = baseWallet.addresses
               } catch (e) {
                 if (e.message === 'PROTOCOL_NOT_SUPPORTED') {
@@ -180,5 +217,14 @@ export class IACService extends BaseIACService {
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
 
     return true
+  }
+
+  private async activateWallet(wallet: AirGapWallet): Promise<void> {
+    if (wallet.status === AirGapWalletStatus.ACTIVE) {
+      return
+    }
+
+    wallet.status = AirGapWalletStatus.ACTIVE
+    await this.secretsService.updateWallet(wallet)
   }
 }

@@ -50,11 +50,7 @@ airgap-identicon {
   min-width: 48px;
   min-height: 48px;
 }
-/* clipboard compomnent styling */
-airgap-qr {
-  padding: 24px;
-  background-color: var(--ion-color-secondary-contrast);
-}
+
 /* removes padding and adds it only if used in the tabs-accounts toolbar */
 airgap-current-secret {
   ion-item {
@@ -77,6 +73,16 @@ airgap-tab-accounts {
   airgap-tab-accounts {
     ion-list {
       padding-top: 8px;
+    }
+  }
+}
+
+.airgap-account-item-migration {
+  airgap-account-item {
+    ion-label {
+      .typography--mono {
+        color: var(--ion-color-light);
+      }
     }
   }
 }

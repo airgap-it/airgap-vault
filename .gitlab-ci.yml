@@ -27,7 +27,7 @@ unit:
   script:
     - docker run --name unit-$CI_COMMIT_SHA $GOOGLE_TAG npm run test-ci
     - docker run --name lint-$CI_COMMIT_SHA $GOOGLE_TAG npm run lint-ci
-    - docker cp unit-$CI_COMMIT_SHA:/app/coverage/lcov.info lcov.info
+    - docker cp unit-$CI_COMMIT_SHA:/app/src/coverage/report-lcov/lcov.info lcov.info
     - docker cp lint-$CI_COMMIT_SHA:/app/lintReport.json lintReport.json
   after_script:
     - docker rm unit-$CI_COMMIT_SHA

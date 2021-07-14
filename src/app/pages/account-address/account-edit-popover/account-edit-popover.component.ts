@@ -16,7 +16,7 @@ import { SecretsService } from '../../../services/secrets/secrets.service'
 export class AccountEditPopoverComponent {
   private readonly wallet: AirGapWallet
   private readonly onDelete: Function
-  private readonly walletShareUrl: string
+  private readonly getWalletShareUrl: () => Promise<string>
 
   constructor(
     private readonly alertCtrl: AlertController,
@@ -37,7 +37,7 @@ export class AccountEditPopoverComponent {
 
   public async copyShareUrlToClipboard(): Promise<void> {
     await this.clipboardService.copyAndShowToast(
-      this.walletShareUrl,
+      await this.getWalletShareUrl(),
       this.translateService.instant('wallet-edit-delete-popover.confirm_sync_code_copy')
     )
 
