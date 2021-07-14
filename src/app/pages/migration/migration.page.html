@@ -27,7 +27,9 @@
       </ion-item>
       <ion-list lines="none">
         <ion-item *ngFor="let wallet of group.wallets">
-          <airgap-account-item [wallet]="wallet.data"></airgap-account-item>
+          <span class="airgap-account-item-migration">
+            <airgap-account-item [wallet]="wallet.data"></airgap-account-item>
+          </span>
           <ng-container *ngIf="(isRunning$ | async) || (isDone$ | async)">
             <ion-spinner *ngIf="wallet.status === 'migrating'" name="lines-small" slot="end"></ion-spinner>
             <ion-icon name="checkmark-outline" size="small" *ngIf="wallet.status === 'migrated'" slot="end"></ion-icon>

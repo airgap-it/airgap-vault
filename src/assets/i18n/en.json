@@ -509,7 +509,7 @@
     "title": "Accounts Update",
     "heading": "Accounts Migration",
     "list": {
-      "header": "The following secrets and accounts will be updated for the sake of simplified onboarding <br /> <br /> <strong>Note: you may be asked to authenticate and provide a passphrase, if it's been set for any of the displayed secrets or accounts.</strong>"
+      "header": "The following secrets and accounts will be updated to support the new simplified onboarding. <br /> <br /> <strong>Note: You may be asked to authenticate and provide a passphrase, if it has been set for any of the displayed secrets or accounts.</strong>"
     },
     "button-run_label": "Update",
     "button-done_label": "Done",
@@ -529,7 +529,7 @@
       },
       "unknown-error": {
         "header": "Error",
-        "message": "Something went wrong!",
+        "message": "Something went wrong! Please try again.",
         "button_label": "Ok"
       }
     }
