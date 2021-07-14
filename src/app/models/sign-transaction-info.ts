@@ -1,6 +1,6 @@
-import { AirGapWallet, IACMessageDefinitionObject } from '@airgap/coinlib-core'
+import { AirGapWallet, IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
 
 export interface SignTransactionInfo {
   wallet: AirGapWallet
-  signTransactionRequest: IACMessageDefinitionObject
+  signTransactionRequest: IACMessageDefinitionObjectV3
 }

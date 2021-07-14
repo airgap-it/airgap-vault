@@ -1,13 +1,14 @@
 import { AirGapWallet } from '@airgap/coinlib-core'
 import { UUID } from 'angular2-uuid'
+import { fromSeed } from 'bip32'
 
 import { toBoolean } from '../utils/utils'
 
 import { InteractionSetting } from './../services/interaction/interaction.service'
-import { BIP39Signer } from './BIP39Signer'
+import { BIPSigner } from './BIP39Signer'
 import { Identifiable } from './identifiable'
 
-const signer: BIP39Signer = new BIP39Signer()
+const signer: BIPSigner = new BIPSigner()
 
 export class Secret implements Identifiable {
   public id: string = UUID.UUID()
@@ -18,6 +19,8 @@ export class Secret implements Identifiable {
   public hasSocialRecovery: boolean
   public interactionSetting: InteractionSetting
   public hasRecoveryKey: boolean
+
+  public fingerprint?: string
 
   public wallets: AirGapWallet[]
 
@@ -37,12 +40,8 @@ export class Secret implements Identifiable {
 
     if (seed !== null) {
       this.secretHex = this.getEntropyFromMnemonic(seed)
+      this.fingerprint = this.getFingerprintFromMnemonic(seed)
     }
-  }
-
-  public getEntropyFromMnemonic(mnemonic: string): string {
-    // TODO: better check whether this is a mnemonic (validate)
-    return mnemonic && mnemonic.indexOf(' ') > -1 ? signer.mnemonicToEntropy(mnemonic) : mnemonic
   }
 
   public getIdentifier(): string {
@@ -71,5 +70,25 @@ export class Secret implements Identifiable {
 
   public static init(obj: Secret): Secret {
     return Object.assign(new Secret(null, obj.label), obj)
+  }
+
+  private getEntropyFromMnemonic(mnemonic: string): string {
+    return this.isMnemonic(mnemonic) ? signer.mnemonicToEntropy(mnemonic) : mnemonic
+  }
+
+  private getMnemonicFromEntropy(entropy: string): string {
+    return this.isMnemonic(entropy) ? entropy : signer.entropyToMnemonic(entropy)
+  }
+
+  private getFingerprintFromMnemonic(entropy: string): string {
+    const mnemonic: string = this.getMnemonicFromEntropy(entropy)
+    const seed: Buffer = signer.mnemonicToSeedSync(mnemonic)
+
+    return fromSeed(seed).fingerprint.toString('hex')
+  }
+
+  private isMnemonic(data: string): boolean {
+    // TODO: better check whether this is a mnemonic (validate)
+    return data && data.indexOf(' ') > -1
   }
 }

@@ -81,7 +81,7 @@ export class SecureStorageService {
             }
 
             if (errorMessage && errorMessage.toLowerCase().includes('wrong paranoia password')) {
-              throw new Error('Wrong passcode.')
+              throw new Error('Wrong passphrase.')
             }
 
             throw error
