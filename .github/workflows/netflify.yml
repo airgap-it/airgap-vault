@@ -1,0 +1,64 @@
+name: Deploy to Netlify on pull requests
+
+on: [push, workflow_dispatch]
+
+env:
+  node_version: 14.x
+
+jobs:
+  environment:
+    name: 🌱 Load Environment
+    runs-on: macos-latest
+
+    steps:
+      - name: ⚙️ Node.js version used - ${{ env.node_version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.node_version }}
+
+  test:
+    name: 🧪 Test
+    runs-on: ubuntu-latest
+    needs: environment
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: 🔧 Installation of dependencies
+        run: npm run install-test-dependencies && npm ci
+
+      - name: 🧪 Test CI
+        run: npm run test-ci
+
+      - name: 🧪 Lint CI
+        run: npm run lint-ci
+
+      - name: 📦 Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: '${{ runner.os }} - Lint Report'
+          path: ./lintReport.json
+
+  build:
+    runs-on: ubuntu-latest
+    needs: environment
+
+    steps:
+      # Checkout repo
+      - uses: actions/checkout@v2
+
+      - name: Prepare
+        run: npm ci
+
+      - name: Install Netlify
+        run: npm install netlify-cli
+
+      - name: Build site
+        run: npm run build:prod
+
+      # Deploy the site with netlify-cli
+      - name: Deploy Site
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        run: netlify deploy --dir=www --alias=$GITHUB_SHA --message=$GITHUB_SHA

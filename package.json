@@ -11,6 +11,7 @@
     "serve": "ionic serve --external",
     "start": "ng serve",
     "build": "ng build",
+    "build:prod": "ng build --prod",
     "build:stats": "ng build --stats-json",
     "build:analyze": "npm run build:stats && webpack-bundle-analyzer ./www/stats.json",
     "build:electron": "ng build --base-href=./",

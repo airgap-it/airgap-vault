@@ -36,6 +36,33 @@ jobs:
         name: 🌱 Set app name in environment
         run: echo "::set-output name=app_name::$(node -p -e "require('./capacitor.config.json').appName")"
 
+  test:
+    name: 🧪 Test
+    runs-on: ${{ matrix.os }}
+    needs: environment
+
+    strategy:
+      matrix:
+        os: ['windows-latest', 'macos-latest']
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: 🔧 Installation of dependencies
+        run: npm run install-test-dependencies && npm ci
+
+      - name: 🧪 Test CI
+        run: npm run test-ci
+
+      - name: 🧪 Lint CI
+        run: npm run lint-ci
+
+      - name: 📦 Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: '${{ runner.os }} - Lint Report'
+          path: ./lintReport.json
+
   prebuild:
     name: 🔧 Pre Build
     runs-on: ${{ matrix.os }}
@@ -49,7 +76,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: 🔧 Installation of dependencies
-        run: npm ci
+        run: npm run install-build-dependencies && npm ci
 
       - name: 🔧 Installation of electron dependencies
         working-directory: ${{ env.electron_folder }}
