@@ -1,0 +1,314 @@
+name: Build
+
+on: [push, workflow_dispatch]
+
+env:
+  node_version: 14.x
+  electron_folder: ./electron
+
+jobs:
+  environment:
+    name: 🌱 Load Environment
+    runs-on: macos-latest
+
+    outputs:
+      package_version: ${{ steps.load_package_version.outputs.package_version }}
+      package_name: ${{ steps.load_package_name.outputs.package_name }}
+      app_name: ${{ steps.load_app_name.outputs.app_name }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ⚙️ Node.js version used - ${{ env.node_version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.node_version }}
+
+      - id: load_package_version
+        name: 🌱 Set package version in environment
+        run: echo "::set-output name=package_version::$(node -p -e "require('./package.json').version")"
+
+      - id: load_package_name
+        name: 🌱 Set package name in environment
+        run: echo "::set-output name=package_name::$(node -p -e "require('./package.json').name")"
+
+      - id: load_app_name
+        name: 🌱 Set app name in environment
+        run: echo "::set-output name=app_name::$(node -p -e "require('./capacitor.config.json').appName")"
+
+  test:
+    name: 🧪 Test
+    runs-on: ${{ matrix.os }}
+    needs: environment
+
+    strategy:
+      matrix:
+        os: ['ubuntu-latest', 'macos-latest']
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: 🔧 Installation of dependencies
+        run: npm run install-test-dependencies && npm ci
+
+      - name: 🧪 Test CI
+        run: npm run test-ci
+
+      - name: 🧪 Lint CI
+        run: npm run lint-ci
+
+      - name: 📦 Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: '${{ runner.os }} - Lint Report'
+          path: ./lintReport.json
+
+  prebuild:
+    name: 🔧 Pre Build
+    runs-on: ${{ matrix.os }}
+    needs: environment
+
+    strategy:
+      matrix:
+        os: ['ubuntu-latest', 'macos-latest']
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: 🔧 Installation of dependencies
+        run: npm run install-build-dependencies && npm ci
+
+      - name: 🔧 Installation of electron dependencies
+        working-directory: ${{ env.electron_folder }}
+        run: npm ci
+
+      - name: 🌀 Updating android version
+        run: sed -i -e 's/versionName "0.0.0"/versionName "${{ needs.environment.outputs.package_version }}"/g' android/app/build.gradle
+
+      - name: 🌀 Updating electron version
+        working-directory: ${{ env.electron_folder }}
+        run: npm version ${{ needs.environment.outputs.package_version }}
+
+      - name: 🧠 Caching prebuild
+        uses: actions/cache@v2
+        id: prebuild-cache
+        with:
+          path: ./*
+          key: prebuild-${{ runner.os }}-${{ github.sha }}
+
+  build_electron:
+    name: 🏗️ Build to Electron And Sync
+    runs-on: ${{ matrix.os }}
+    needs: [environment, prebuild]
+
+    strategy:
+      matrix:
+        os: ['ubuntu-latest', 'macos-latest']
+
+    steps:
+      - name: 🧠 Using prebuild cache
+        uses: actions/cache@v2
+        id: prebuild-cache
+        with:
+          path: ./*
+          key: prebuild-${{ runner.os }}-${{ github.sha }}
+
+      - name: 🏗️ Build
+        run: npm run build:electron:prod
+
+      - name: 🔄 Copy to Electron
+        run: npx cap sync electron
+
+      - name: 🧠 Caching build
+        uses: actions/cache@v2
+        id: build-electron-cache
+        with:
+          path: ./*
+          key: electron-${{ runner.os }}-${{ github.sha }}
+
+  build_ionic:
+    name: 🏗️ Build Ionic
+    runs-on: ubuntu-latest
+    needs: [environment, prebuild]
+
+    steps:
+      - name: 🧠 Using prebuild cache
+        uses: actions/cache@v2
+        id: prebuild-cache
+        with:
+          path: ./*
+          key: prebuild-${{ runner.os }}-${{ github.sha }}
+
+      - name: 🔧 Disable pure getters
+        run: npm run disable-pure-getters
+
+      - name: 🔧 Configure mangle
+        run: npm run configure-mangle
+
+      - name: 🔧 Apply diagnostic modules
+        run: npm run apply-diagnostic-modules
+
+      - name: 🏗️ Build
+        run: npx ionic build --prod
+
+      - name: 🔄 Copy to iOS
+        run: npx cap sync ios
+
+      - name: 🔄 Copy to Android
+        run: npx cap sync android
+
+      - name: 🧠 Caching build
+        uses: actions/cache@v2
+        id: build-ionic-cache
+        with:
+          path: ./*
+          key: ionic-${{ runner.os }}-${{ github.sha }}
+
+  # Desktop
+
+  build_windows:
+    name: 🏗️ Build to Windows
+    runs-on: ubuntu-latest
+    needs: [environment, build_electron]
+
+    steps:
+      - name: 🧠 Using build cache
+        uses: actions/cache@v2
+        id: build-electron-cache
+        with:
+          path: ./*
+          key: electron-${{ runner.os }}-${{ github.sha }}
+
+      - name: 🍷 Setup Wine
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt update
+          wget -qO- https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
+          sudo apt install software-properties-common
+          sudo apt-add-repository 'deb http://dl.winehq.org/wine-builds/ubuntu/ bionic main'
+          wget -qO- https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/xUbuntu_18.04/Release.key | sudo apt-key add -
+          sudo sh -c 'echo "deb https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/xUbuntu_18.04/ ./" > /etc/apt/sources.list.d/obs.list'
+          sudo apt update
+          sudo apt-get install --install-recommends winehq-stable
+
+      - name: 🏗️ Build Windows
+        working-directory: ${{ env.electron_folder }}
+        run: npm run build:windows
+
+      - name: 📦 Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: '${{ needs.environment.outputs.app_name }} Windows ${{ needs.environment.outputs.package_version }}'
+          path: |
+            ${{ env.electron_folder }}/build/${{ needs.environment.outputs.package_name }}-${{ needs.environment.outputs.package_version }}.exe
+            ${{ env.electron_folder }}/build/${{ needs.environment.outputs.package_name }}-${{ needs.environment.outputs.package_version }}.exe.blockmap
+  build_mac:
+    name: 🏗️ Build to MacOS
+    runs-on: macos-latest
+    needs: [environment, build_electron]
+
+    steps:
+      - name: 🧠 Using build cache
+        uses: actions/cache@v2
+        id: build-electron-cache
+        with:
+          path: ./*
+          key: electron-${{ runner.os }}-${{ github.sha }}
+
+      - name: 🏗️ Build Mac
+        working-directory: ${{ env.electron_folder }}
+        run: npm run build:mac
+
+      - name: 📦 Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: '${{ needs.environment.outputs.app_name }} MacOS ${{ needs.environment.outputs.package_version }}'
+          path: |
+            ${{ env.electron_folder }}/build/${{ needs.environment.outputs.package_name }}-${{ needs.environment.outputs.package_version }}.dmg
+            ${{ env.electron_folder }}/build/${{ needs.environment.outputs.package_name }}-${{ needs.environment.outputs.package_version }}.dmg.blockmap
+            ${{ env.electron_folder }}/build/${{ needs.environment.outputs.package_name }}-${{ needs.environment.outputs.package_version }}.zip
+  build_linux:
+    name: 🏗️ Build to Linux
+    runs-on: ubuntu-latest
+    needs: [environment, build_electron]
+
+    steps:
+      - name: 🧠 Using build cache
+        uses: actions/cache@v2
+        id: build-electron-cache
+        with:
+          path: ./*
+          key: electron-${{ runner.os }}-${{ github.sha }}
+
+      - name: 🏗️ Build Linux
+        working-directory: ${{ env.electron_folder }}
+        run: npm run build:linux
+
+      - name: 📦 Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: '${{ needs.environment.outputs.app_name }} Linux ${{ needs.environment.outputs.package_version }}'
+          path: ${{ env.electron_folder }}/build/${{ needs.environment.outputs.package_name }}-${{ needs.environment.outputs.package_version }}.AppImage
+
+  # Mobile
+
+  build_android:
+    name: 🏗️ Build to Android
+    runs-on: ubuntu-latest
+    needs: [environment, build_ionic]
+
+    steps:
+      - name: 🧠 Using build cache
+        uses: actions/cache@v2
+        id: build-angular-cache
+        with:
+          path: ./*
+          key: ionic-${{ runner.os }}-${{ github.sha }}
+
+      - name: ⚙️ Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: 🔨 Clean Project
+        run: android/gradlew --project-dir android clean build
+
+      - name: 🗂️ Move APK
+        run: mv android/app/build/outputs/apk/release/app-release-unsigned.apk ${{ needs.environment.outputs.package_name }}-release-unsigned-${{ needs.environment.outputs.package_version }}.apk
+
+      - name: 🗂️ Copy APK
+        run: cp ${{ needs.environment.outputs.package_name }}-release-unsigned-${{ needs.environment.outputs.package_version }}.apk ${{ needs.environment.outputs.package_name }}-debug-${{ needs.environment.outputs.package_version }}.apk
+
+      - name: 🔐 Sign
+        run: jarsigner -verbose -keystore ./build/android/debug.keystore -storepass android -keypass android ${{ needs.environment.outputs.package_name }}-debug-${{ needs.environment.outputs.package_version }}.apk androiddebugkey
+
+      - name: 📦 Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: '${{ needs.environment.outputs.app_name }} Android ${{ needs.environment.outputs.package_version }}'
+          path: |
+            ${{ needs.environment.outputs.package_name }}-release-unsigned-${{ needs.environment.outputs.package_version }}.apk
+            ${{ needs.environment.outputs.package_name }}-debug-${{ needs.environment.outputs.package_version }}.apk
+  build_ios:
+    name: 🏗️ Build to iOS
+    runs-on: macos-latest
+    needs: [environment, build_ionic]
+
+    steps:
+      - name: 🧠 Using build cache
+        uses: actions/cache@v2
+        id: build-angular-cache
+        with:
+          path: ./*
+          key: ionic-${{ runner.os }}-${{ github.sha }}
+      # - name: 🔨 Xcode Task
+      #   run: xcodebuild -workspace ios/App/App.xcworkspace -scheme "App" -destination generic/platform=iOS -configuration Release archive -archivePath ios/App.xcarchive MARKETING_VERSION=${{ needs.environment.outputs.package_version }} CURRENT_PROJECT_VERSION=${{ needs.environment.outputs.package_version }} -allowProvisioningUpdates
+      # - name: 🔨 Xcode Task
+      #   run: xcodebuild -exportArchive -archivePath ios/App.xcarchive -exportOptionsPlist exportOptions.plist -exportPath ios/ -allowProvisioningUpdates
+      # - name: 📦 Upload Artifact
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: '${{ needs.environment.outputs.app_name }} iOS ${{ needs.environment.outputs.package_version }}'
+      #     path: |
+      #       ios/App.ipa
+      #       ios/App.xcarchive
