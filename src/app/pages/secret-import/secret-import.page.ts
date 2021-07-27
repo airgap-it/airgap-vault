@@ -1,7 +1,7 @@
 import { Component } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 
-import { BIP39Signer } from '../../models/BIP39Signer'
+import { BIPSigner } from '../../models/BIP39Signer'
 import { Secret } from '../../models/secret'
 import { DeviceService } from '../../services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
@@ -143,13 +143,13 @@ export class SecretImportPage {
   }
 
   public isValid(): boolean {
-    return BIP39Signer.validateMnemonic(this.secretWords.join(' '))
+    return BIPSigner.validateMnemonic(this.secretWords.join(' '))
   }
 
   public goToSecretCreatePage(): void {
-    const signer: BIP39Signer = new BIP39Signer()
+    const signer: BIPSigner = new BIPSigner()
 
-    const secret: Secret = new Secret(signer.mnemonicToEntropy(BIP39Signer.prepareMnemonic(this.secretWords.join(' '))))
+    const secret: Secret = new Secret(signer.mnemonicToEntropy(BIPSigner.prepareMnemonic(this.secretWords.join(' '))))
 
     this.navigationService
       .routeWithState('secret-edit', { secret, isGenerating: true })

@@ -1,4 +1,4 @@
-import { MainProtocolSymbols } from '@airgap/coinlib-core/utils/ProtocolSymbols'
+import { MainProtocolSymbols } from '@airgap/coinlib-core'
 
 export class StorageMock {
   private readonly data: any = {
@@ -15,6 +15,14 @@ export class StorageMock {
         hourlyMarketSample: []
       }
     ]
+  }
+
+  public create(): Promise<void> {
+    return Promise.resolve()
+  }
+
+  public defineDriver(): Promise<void> {
+    return Promise.resolve()
   }
 
   public get(key: string): Promise<any> {
@@ -35,5 +43,9 @@ export class StorageMock {
       delete this.data[key]
       resolve()
     })
+  }
+
+  public ready(): Promise<void> {
+    return Promise.resolve()
   }
 }

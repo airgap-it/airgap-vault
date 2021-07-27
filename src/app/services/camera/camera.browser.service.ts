@@ -1,4 +1,4 @@
-import { ElementRef, Injectable, ViewChild, Directive } from '@angular/core'
+import { ElementRef, Injectable, ViewChild } from '@angular/core'
 import { Observable } from 'rxjs'
 
 import workerJS from '../../../assets/workers/entropyCalculatorWorker'
@@ -6,13 +6,12 @@ import { Entropy, IEntropyGenerator } from '../entropy/IEntropyGenerator'
 const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
 const entropyCalculatorWorker = new Worker(blobURL)
 
-@Directive()
 @Injectable({ providedIn: 'root' })
 export class CameraBrowserService implements IEntropyGenerator {
-  private readonly VIDEO_FREQUENCY = 2000
-
   @ViewChild('cameraCanvas') public cameraCanvas: ElementRef
   public canvasElement: HTMLCanvasElement
+
+  private readonly VIDEO_FREQUENCY = 2000
 
   private collectedEntropyPercentage: number = 0
 
@@ -121,6 +120,10 @@ export class CameraBrowserService implements IEntropyGenerator {
     return this.collectedEntropyPercentage
   }
 
+  public setVideoElement(element) {
+    this.videoElement = element
+  }
+
   private arrayBufferFromUint8Array(uintArray: Uint8ClampedArray) {
     const buffer = new ArrayBuffer(uintArray.length)
     const bufView = new Uint8Array(buffer)
@@ -130,9 +133,5 @@ export class CameraBrowserService implements IEntropyGenerator {
     }
 
     return buffer
-  }
-
-  public setVideoElement(element) {
-    this.videoElement = element
   }
 }

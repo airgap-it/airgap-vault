@@ -3,9 +3,16 @@ import { TestBed } from '@angular/core/testing'
 import { IACService } from './iac.service'
 
 import { UnitHelper } from '../../../../test-config/unit-test-helper'
-import { STATUS_BAR_PLUGIN, SPLASH_SCREEN_PLUGIN, APP_PLUGIN } from '@airgap/angular-core'
+import { STATUS_BAR_PLUGIN, SPLASH_SCREEN_PLUGIN, APP_PLUGIN, CLIPBOARD_PLUGIN } from '@airgap/angular-core'
 import { ModalController, NavController, NavParams, Platform } from '@ionic/angular'
-import { DeviceProviderMock, ModalControllerMock, NavControllerMock, NavParamsMock, PlatformMock } from 'test-config/ionic-mocks'
+import {
+  ClipboardMock,
+  DeviceProviderMock,
+  ModalControllerMock,
+  NavControllerMock,
+  NavParamsMock,
+  PlatformMock
+} from 'test-config/ionic-mocks'
 import { StatusBarMock, SplashScreenMock, createAppSpy } from 'test-config/plugins-mocks'
 import { StorageMock } from 'test-config/storage-mock'
 import { DeviceService } from '../device/device.service'
@@ -35,6 +42,7 @@ describe('IACService', () => {
           { provide: APP_PLUGIN, useValue: createAppSpy() },
           { provide: STATUS_BAR_PLUGIN, useClass: StatusBarMock },
           { provide: SPLASH_SCREEN_PLUGIN, useClass: SplashScreenMock },
+          { provide: CLIPBOARD_PLUGIN, useClass: ClipboardMock },
           { provide: Platform, useClass: PlatformMock }
         ]
       })
