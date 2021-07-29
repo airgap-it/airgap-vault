@@ -18,13 +18,18 @@ export class MessageSignRequestComponent {
     })
   }
 
-  private hexToReadable(hex: string): string {
-    var str = ''
-    const idx = hex.startsWith('0x') ? 2 : 0
-    for (var i = idx; i < hex.length; i += 2) {
-      str += String.fromCharCode(parseInt(hex.substr(i, 2), 16))
+  private hexToReadable(str: string): string {
+    var result = ''
+    const idx = str.startsWith('0x') ? 2 : 0
+    for (var i = idx; i < str.length; i += 2) {
+      result += String.fromCharCode(parseInt(str.substr(i, 2), 16))
     }
-    return str
+
+    const regex = /[^ A-Za-z0-9_@.,!?/#&+-\d\s:]/g
+    const containsGibberish: boolean = result.match(regex)?.length > 0
+    // if true then the message was most likely not a human readable message encoded in hex
+
+    return containsGibberish ? str : result
   }
 
   constructor() {}
