@@ -51,7 +51,7 @@ describe('SignedTransactionComponent', () => {
       expect(signedTransaction.fallbackActivated).toBe(false)
 
       const signedTxs = await serializer.deserialize(serializedTxs)
-      signedTransaction.signedTxs = signedTxs
+      signedTransaction.signedTxs = signedTxs as any
       await signedTransaction.ngOnChanges()
 
       expect(signedTransaction.airGapTxs).toBeDefined()

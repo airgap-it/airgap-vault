@@ -33,20 +33,12 @@ export class TransactionSignedPage {
 
   constructor(public navigationService: NavigationService, private readonly translateService: TranslateService) {
     this.interactionUrl = this.navigationService.getState().interactionUrl
-    this.splits = this.interactionUrl.substr('airgap-wallet://?d='.length).split(',')
     this.wallets = this.navigationService.getState().wallets
     this.signedTxs = this.navigationService.getState().signedTxs
     this.translationKey = this.navigationService.getState().translationKey
     this.pageTitle = this.translateService.instant(`${this.translationKey}.title`)
     this.heading = this.translateService.instant(`${this.translationKey}.heading`)
     this.messageSignResponse = this.navigationService.getState().messageSignResponse
-
-    console.log('interactionUrl', this.interactionUrl)
-    console.log('qrType', this.qrType)
-  }
-
-  public switchQR(): void {
-    this.qrType = this.qrType === TransactionQRType.SignedAirGap ? TransactionQRType.SignedRaw : TransactionQRType.SignedAirGap
   }
 
   public done(): void {

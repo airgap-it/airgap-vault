@@ -3,13 +3,12 @@ import {
   flattenAirGapTxAddresses,
   KeyPairService,
   ProtocolService,
-  SerializerService,
   sumAirGapTxValues,
   TransactionService
 } from '@airgap/angular-core'
 import {
   AirGapWallet,
-  IACMessageDefinitionObject,
+  IACMessageDefinitionObjectV3,
   IACMessageType,
   IAirGapTransaction,
   ICoinProtocol,
@@ -26,7 +25,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { Action, Store } from '@ngrx/store'
 import { TranslateService } from '@ngx-translate/core'
 import * as bip39 from 'bip39'
-import { from, Observable } from 'rxjs'
+import { concat, from, of } from 'rxjs'
 import { concatMap, first, switchMap, tap, withLatestFrom } from 'rxjs/operators'
 
 import { Secret } from '../../models/secret'
@@ -52,13 +51,7 @@ export class DeserializedDetailEffects {
   public navigationData$ = createEffect(() =>
     this.actions$.pipe(
       ofType(actions.viewInitialization),
-      switchMap(
-        () =>
-          new Observable<Action>((subscriber) => {
-            subscriber.next(actions.navigationDataLoading())
-            from(this.loadNavigationData()).pipe(first()).subscribe(subscriber)
-          })
-      )
+      switchMap(() => concat(of(actions.navigationDataLoading()), from(this.loadNavigationData()).pipe(first())))
     )
   )
 
@@ -76,10 +69,10 @@ export class DeserializedDetailEffects {
   //         protocol: 'protocol' in action ? action.protocol : undefined
   //       }
 
-  //       return new Observable<Action>((subscriber) => {
-  //         subscriber.next(actions.runningBlockingTask({ task: this.identifyPayloadTask(payload) }))
-  //         from(this.handlePayload(payload, userInput)).pipe(first()).subscribe(subscriber)
-  //       })
+  //       return concat(
+  //         of(actions.runningBlockingTask({ task: this.identifyPayloadTask(payload) })),
+  //         from(this.handlePayload(payload, userInput)).pipe(first())
+  //       )
   //     })
   //   )
   // )
@@ -96,9 +89,7 @@ export class DeserializedDetailEffects {
           protocol: 'protocol' in action ? action.protocol : undefined
         }
 
-        return new Observable<Action>((subscriber) => {
-          subscriber.next(actions.runningBlockingTask({ task: this.identifyPayloadTask(payload), userInput }))
-        })
+        return concat(of(actions.runningBlockingTask({ task: this.identifyPayloadTask(payload), userInput })))
       })
     )
   )
@@ -109,11 +100,7 @@ export class DeserializedDetailEffects {
     this.actions$.pipe(
       ofType(actions.continueApproved),
       concatMap((action) => from([action]).pipe(withLatestFrom(this.store.select(fromDeserializedDetail.selectFinalPayload)))),
-      switchMap(([action, payload]) => {
-        return new Observable<Action>((subscriber) => {
-          from(this.handlePayload(payload, action.userInput)).pipe(first()).subscribe(subscriber)
-        })
-      })
+      switchMap(([action, payload]) => from(this.handlePayload(payload, action.userInput)).pipe(first()))
     )
   )
   // [#210]
@@ -145,7 +132,6 @@ export class DeserializedDetailEffects {
     private readonly secretsService: SecretsService,
     private readonly keyPairService: KeyPairService,
     private readonly transactionService: TransactionService,
-    private readonly serializerService: SerializerService,
     private readonly interactionService: InteractionService
   ) {}
 
@@ -226,12 +212,12 @@ export class DeserializedDetailEffects {
   ): Promise<DeserializedUnsignedTransaction[]> {
     return Promise.all(
       transactionInfo
-        .map((info: SignTransactionInfo): [AirGapWallet, IACMessageDefinitionObject] => [info.wallet, info.signTransactionRequest])
+        .map((info: SignTransactionInfo): [AirGapWallet, IACMessageDefinitionObjectV3] => [info.wallet, info.signTransactionRequest])
         .filter(
-          ([_, request]: [AirGapWallet, IACMessageDefinitionObject]): boolean => request.type === IACMessageType.TransactionSignRequest
+          ([_, request]: [AirGapWallet, IACMessageDefinitionObjectV3]): boolean => request.type === IACMessageType.TransactionSignRequest
         )
         .map(
-          async ([wallet, request]: [AirGapWallet, IACMessageDefinitionObject]): Promise<DeserializedUnsignedTransaction> => {
+          async ([wallet, request]: [AirGapWallet, IACMessageDefinitionObjectV3]): Promise<DeserializedUnsignedTransaction> => {
             let details: IAirGapTransaction[]
             if (await this.checkIfSaplingTransaction(request.payload as UnsignedTransaction, request.protocol)) {
               details = await this.transactionService.getDetailsFromIACMessages([request], {
@@ -259,10 +245,10 @@ export class DeserializedDetailEffects {
   private async signTransactionInfoToUnsignedMessages(transactionInfo: SignTransactionInfo[]): Promise<DeserializedUnsignedMessage[]> {
     return Promise.all(
       transactionInfo
-        .map((info: SignTransactionInfo): [AirGapWallet, IACMessageDefinitionObject] => [info.wallet, info.signTransactionRequest])
-        .filter(([_, request]: [AirGapWallet, IACMessageDefinitionObject]): boolean => request.type === IACMessageType.MessageSignRequest)
+        .map((info: SignTransactionInfo): [AirGapWallet, IACMessageDefinitionObjectV3] => [info.wallet, info.signTransactionRequest])
+        .filter(([_, request]: [AirGapWallet, IACMessageDefinitionObjectV3]): boolean => request.type === IACMessageType.MessageSignRequest)
         .map(
-          async ([wallet, request]: [AirGapWallet, IACMessageDefinitionObject]): Promise<DeserializedUnsignedMessage> => {
+          async ([wallet, request]: [AirGapWallet, IACMessageDefinitionObjectV3]): Promise<DeserializedUnsignedMessage> => {
             const data: MessageSignRequest = request.payload as MessageSignRequest
 
             let blake2bHash: string | undefined
@@ -439,11 +425,11 @@ export class DeserializedDetailEffects {
   }
 
   private async navigateWithSignedTransactions(transactions: DeserializedSignedTransaction[]): Promise<void> {
-    const broadcastUrl: string = await this.generateTransactionBroadcastUrl(transactions)
+    const broadcastUrl: IACMessageDefinitionObjectV3[] = await this.generateTransactionBroadcastUrl(transactions)
     this.interactionService.startInteraction(
       {
         operationType: InteractionOperationType.TRANSACTION_BROADCAST,
-        url: broadcastUrl,
+        iacMessage: broadcastUrl,
         wallets: transactions.map((transaction: DeserializedSignedTransaction): AirGapWallet => transaction.wallet),
         signedTxs: transactions.map((transaction: DeserializedSignedTransaction): string => transaction.data.transaction)
       },
@@ -451,9 +437,9 @@ export class DeserializedDetailEffects {
     )
   }
 
-  private async generateTransactionBroadcastUrl(transactions: DeserializedSignedTransaction[]): Promise<string> {
-    const signResponses: IACMessageDefinitionObject[] = transactions.map(
-      (transaction: DeserializedSignedTransaction): IACMessageDefinitionObject => ({
+  private async generateTransactionBroadcastUrl(transactions: DeserializedSignedTransaction[]): Promise<IACMessageDefinitionObjectV3[]> {
+    const signResponses: IACMessageDefinitionObjectV3[] = transactions.map(
+      (transaction: DeserializedSignedTransaction): IACMessageDefinitionObjectV3 => ({
         id: transaction.id,
         protocol: transaction.wallet.protocol.identifier,
         type: IACMessageType.TransactionSignResponse,
@@ -472,11 +458,11 @@ export class DeserializedDetailEffects {
   }
 
   private async navigateWithSignedMessages(messages: DeserializedSignedMessage[]): Promise<void> {
-    const broadcastUrl: string = await this.generateMessageBroadcastUrl(messages)
+    const broadcastUrl: IACMessageDefinitionObjectV3[] = await this.generateMessageBroadcastUrl(messages)
     this.interactionService.startInteraction(
       {
         operationType: InteractionOperationType.MESSAGE_SIGN_REQUEST,
-        url: broadcastUrl,
+        iacMessage: broadcastUrl,
         messageSignResponse:
           messages[0] !== undefined
             ? {
@@ -490,9 +476,9 @@ export class DeserializedDetailEffects {
     )
   }
 
-  private async generateMessageBroadcastUrl(messages: DeserializedSignedMessage[]): Promise<string> {
-    const signResponses: IACMessageDefinitionObject[] = messages.map(
-      (message: DeserializedSignedMessage): IACMessageDefinitionObject => ({
+  private async generateMessageBroadcastUrl(messages: DeserializedSignedMessage[]): Promise<IACMessageDefinitionObjectV3[]> {
+    const signResponses: IACMessageDefinitionObjectV3[] = messages.map(
+      (message: DeserializedSignedMessage): IACMessageDefinitionObjectV3 => ({
         id: message.id,
         protocol: message.protocol,
         type: IACMessageType.MessageSignResponse,
@@ -507,10 +493,13 @@ export class DeserializedDetailEffects {
     return this.generateBroadcastUrl(signResponses, messages[0]?.data.callbackURL)
   }
 
-  private async generateBroadcastUrl(messages: IACMessageDefinitionObject[], callbackUrl?: string): Promise<string> {
-    const serialized: string[] = await this.serializerService.serialize(messages)
+  private async generateBroadcastUrl(
+    messages: IACMessageDefinitionObjectV3[],
+    _callbackUrl?: string
+  ): Promise<IACMessageDefinitionObjectV3[]> {
+    // const serialized: string | string[] = await this.serializerService.serialize(messages)
 
-    return `${callbackUrl || 'airgap-wallet://?d='}${serialized.join(',')}`
+    return messages // `${callbackUrl || 'airgap-wallet://?d='}${typeof serialized === 'string' ? serialized : serialized.join(',')}`
   }
 
   private async checkIfSaplingTransaction(transaction: UnsignedTransaction, protocolIdentifier: ProtocolSymbols): Promise<boolean> {

@@ -1,10 +1,12 @@
-import { IACHanderStatus, IACMessageTransport, PermissionsService, QrScannerService } from '@airgap/angular-core'
+import { IACHandlerStatus, IACMessageTransport, PermissionsService, QrScannerService } from '@airgap/angular-core'
+import { PercentPipe } from '@angular/common'
 import { Component, Inject, NgZone, ViewChild } from '@angular/core'
 import { Platform } from '@ionic/angular'
 import { ZXingScannerComponent } from '@zxing/ngx-scanner'
 import { SecurityUtilsPlugin } from 'src/app/capacitor-plugins/definitions'
 import { SECURITY_UTILS_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
 import { IACService } from 'src/app/services/iac/iac.service'
+// import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { ScanBasePage } from '../scan-base/scan-base'
@@ -12,15 +14,14 @@ import { ScanBasePage } from '../scan-base/scan-base'
 @Component({
   selector: 'airgap-tab-scan',
   templateUrl: './tab-scan.page.html',
-  styleUrls: ['./tab-scan.page.scss']
+  styleUrls: ['./tab-scan.page.scss'],
+  providers: [PercentPipe]
 })
 export class TabScanPage extends ScanBasePage {
   @ViewChild('scanner')
   public zxingScanner?: ZXingScannerComponent
 
   public percentageScanned: number = 0
-  public numberOfQrsScanned: number = 0
-  public numberOfQrsTotal: number = 0
 
   private parts: Set<string> = new Set()
 
@@ -32,7 +33,7 @@ export class TabScanPage extends ScanBasePage {
     permissionsProvider: PermissionsService,
     @Inject(SECURITY_UTILS_PLUGIN) securityUtils: SecurityUtilsPlugin,
     private readonly iacService: IACService,
-    private readonly ngZone: NgZone
+    private readonly ngZone: NgZone // private readonly navigationService: NavigationService
   ) {
     super(platform, scanner, permissionsProvider, securityUtils)
   }
@@ -40,12 +41,14 @@ export class TabScanPage extends ScanBasePage {
   public async ionViewWillEnter(): Promise<void> {
     await super.ionViewWillEnter()
     this.resetScannerPage()
+    this.iacService.resetHandlers()
   }
 
   private resetScannerPage(): void {
     this.parts = new Set()
     this.percentageScanned = 0
     this.isMultiQr = false
+    this.iacService.resetHandlers()
   }
 
   public async checkScan(data: string): Promise<boolean | void> {
@@ -64,25 +67,20 @@ export class TabScanPage extends ScanBasePage {
 
     this.ngZone.run(() => {
       this.iacService
-        .handleRequest(
-          Array.from(this.parts),
-          IACMessageTransport.QR_SCANNER,
-          (scanResult?: Error | { currentPage: number; totalPageNumber: number }) => {
-            console.log('scan result', scanResult)
-
-            const typedScanResult = (scanResult as any) as { availablePages: number[]; totalPages: number }
-            if (scanResult && typedScanResult.availablePages) {
-              this.isMultiQr = true
-              this.numberOfQrsScanned = typedScanResult.availablePages.length
-              this.numberOfQrsTotal = typedScanResult.totalPages
-              this.percentageScanned = Math.max(0, Math.min(1, typedScanResult.availablePages.length / typedScanResult.totalPages))
-            }
-            this.startScan()
-          }
-        )
-        .then((result: IACHanderStatus) => {
-          if (result === IACHanderStatus.SUCCESS) {
+        .handleRequest(data, IACMessageTransport.QR_SCANNER, (progress: number) => {
+          console.log('scan result', progress)
+          this.isMultiQr = true
+          this.percentageScanned = progress ?? 0
+          this.startScan()
+        })
+        .then((result: IACHandlerStatus) => {
+          if (result === IACHandlerStatus.SUCCESS) {
+            // this.navigationService
+            //   .route('/')
+            //   .then(() => {
             this.resetScannerPage()
+            // })
+            // .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
           }
         })
         .catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))

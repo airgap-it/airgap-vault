@@ -1,6 +1,6 @@
 import { assertNever, UIAction, UIActionStatus, UiEventService, UIResource, UIResourceStatus } from '@airgap/angular-core'
 import { IAirGapTransaction, ProtocolSymbols } from '@airgap/coinlib-core'
-import { Component } from '@angular/core'
+import { Component, OnDestroy } from '@angular/core'
 import { ModalController } from '@ionic/angular'
 import { AlertOptions, LoadingOptions, ModalOptions, OverlayEventDetail } from '@ionic/core'
 import { Store } from '@ngrx/store'
@@ -12,7 +12,7 @@ import { SelectAccountPage } from '../select-account/select-account.page'
 
 import * as actions from './deserialized-detail.actions'
 import * as fromDeserializedDetail from './deserialized-detail.reducer'
-import { Alert, Task, Modal, Mode, UnsignedMessage } from './deserialized.detail.types'
+import { Alert, Modal, Mode, Task, UnsignedMessage } from './deserialized.detail.types'
 
 type ModalOnDismissAction = (modalData: OverlayEventDetail<unknown>) => Promise<void>
 
@@ -21,21 +21,21 @@ type ModalOnDismissAction = (modalData: OverlayEventDetail<unknown>) => Promise<
   templateUrl: './deserialized-detail.page.html',
   styleUrls: ['./deserialized-detail.page.scss']
 })
-export class DeserializedDetailPage {
-  public mode$: Observable<Mode | undefined>
-  public title$: Observable<string>
-  public button$: Observable<string | undefined>
+export class DeserializedDetailPage implements OnDestroy {
+  public readonly mode$: Observable<Mode | undefined>
+  public readonly title$: Observable<string>
+  public readonly button$: Observable<string | undefined>
 
-  public transactionsDetails$: Observable<UIResource<IAirGapTransaction[]>>
-  public messages$: Observable<UIResource<UnsignedMessage[]>>
-  public rawData$: Observable<UIResource<string>>
+  public readonly transactionsDetails$: Observable<UIResource<IAirGapTransaction[]>>
+  public readonly messages$: Observable<UIResource<UnsignedMessage[]>>
+  public readonly rawData$: Observable<UIResource<string>>
 
-  public loader$: Observable<(UIAction<Task> & { userInput: actions.UserInput }) | undefined>
-  public alert$: Observable<UIAction<Alert> | undefined>
-  public modal$: Observable<UIAction<Modal> | undefined>
+  public readonly loader$: Observable<(UIAction<Task> & { userInput: actions.UserInput }) | undefined>
+  public readonly alert$: Observable<UIAction<Alert> | undefined>
+  public readonly modal$: Observable<UIAction<Modal> | undefined>
 
-  public Mode: typeof Mode = Mode
-  public UIResourceStatus: typeof UIResourceStatus = UIResourceStatus
+  public readonly Mode: typeof Mode = Mode
+  public readonly UIResourceStatus: typeof UIResourceStatus = UIResourceStatus
 
   private loadingElement: HTMLIonLoadingElement | undefined
   private alertElement: HTMLIonAlertElement | undefined
@@ -140,6 +140,8 @@ export class DeserializedDetailPage {
         return this.signMessageLoader()
       case 'generic':
         return this.genericLoader()
+      default:
+        assertNever('getLoaderData', task)
     }
   }
 
@@ -172,7 +174,7 @@ export class DeserializedDetailPage {
       case 'unknownError':
         return this.unknownErrorAlert(alert.message)
       default:
-        return {}
+        assertNever('getAlertData', alert)
     }
   }
 
@@ -244,7 +246,7 @@ export class DeserializedDetailPage {
       case 'selectSigningAccount':
         return this.selectSigningAccountModal()
       default:
-        assertNever('getModalForType', modal)
+        assertNever('getModalData', modal)
     }
   }
 

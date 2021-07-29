@@ -1,7 +1,7 @@
 import { ProtocolService, SerializerService, sumAirGapTxValues } from '@airgap/angular-core'
 import { Component, Input } from '@angular/core'
 import {
-  IACMessageDefinitionObject,
+  IACMessageDefinitionObjectV3,
   IAirGapTransaction,
   ICoinProtocol,
   MainProtocolSymbols,
@@ -20,7 +20,7 @@ import { SecretsService } from 'src/app/services/secrets/secrets.service'
 })
 export class SignedTransactionComponent {
   @Input()
-  public signedTxs: IACMessageDefinitionObject[] | undefined // TODO: Type
+  public signedTxs: IACMessageDefinitionObjectV3[] | undefined // TODO: Type
 
   @Input()
   public syncProtocolString: string

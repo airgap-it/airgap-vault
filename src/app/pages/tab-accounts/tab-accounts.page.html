@@ -29,12 +29,15 @@
   </ion-item>
 
   <ion-list>
-    <ng-container *ngFor="let wallet of wallets$ | async | walletFilter: { symbol: symbolFilter }">
+    <ng-container *ngFor="let wallet of wallets$ | async | walletFilter: { status: AirGapWalletStatus.ACTIVE, symbol: symbolFilter }">
       <airgap-account-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></airgap-account-item>
     </ng-container>
   </ion-list>
   <ion-row>
-    <div class="empty-list" *ngIf="wallets$ && (wallets$ | async | walletFilter: { symbol: symbolFilter }).length === 0">
+    <div
+      class="empty-list"
+      *ngIf="wallets$ && (wallets$ | async | walletFilter: { status: AirGapWalletStatus.ACTIVE, symbol: symbolFilter }).length === 0"
+    >
       <img src="./assets/img/no-wallet-added-onboarding.svg" />
       <p>
         <strong>{{ 'tab-wallets.empty-state_text' | translate }}</strong>
@@ -43,9 +46,21 @@
   </ion-row>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-button color="secondary" shape="round" (click)="addWallet()">
+    <!-- <ion-button color="secondary" shape="round" (click)="addWallet()">
       <ion-icon slot="start" name="add"></ion-icon>
       {{ 'tab-wallets.add-wallet_label' | translate }}
-    </ion-button>
+    </ion-button> -->
+
+    <ion-fab-button color="secondary">
+      <ion-icon name="chevron-up-outline"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button color="secondary" (click)="syncWallets()">
+        <ion-icon name="sync-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button color="secondary" (click)="addWallet()">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
   </ion-fab>
 </ion-content>
