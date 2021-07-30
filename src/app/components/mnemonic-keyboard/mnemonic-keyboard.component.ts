@@ -54,11 +54,13 @@ export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.subscriptions.add(
-      this.setWord.subscribe((word) => {
-        this.setText(word)
-      })
-    )
+    if (this.setWord) {
+      this.subscriptions.add(
+        this.setWord.subscribe((word) => {
+          this.setText(word)
+        })
+      )
+    }
   }
 
   ngOnDestroy() {
