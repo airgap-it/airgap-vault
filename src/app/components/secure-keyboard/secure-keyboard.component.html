@@ -1,0 +1,31 @@
+<ng-container>
+  <span>
+    <span *ngFor="let letter of text.split(''); let i = index" (click)="setCaret(i + 1)">
+      {{ letter === ' ' ? '_' : letter }}{{ i === caretPosition - 1 ? '|' : '' }}
+    </span>
+  </span>
+  <br />
+  Caret: {{ caretPosition }} Length: {{ text.length }}
+</ng-container>
+
+<div *ngFor="let row of rows">
+  <ion-button
+    *ngFor="let letter of row"
+    [id]="'key-' + letter.letter"
+    style="height: 2em;"
+    shape="round"
+    size="small"
+    [color]="letter.active ? 'primary' : 'tertiary'"
+    [class.lowercase]="!shift"
+    class="typography--mono"
+    [disabled]="!letter.enabled"
+    (click)="selectLetter(letter.letter)"
+  >
+    {{ letter.letter }}
+  </ion-button>
+</div>
+
+<ion-button (click)="toggleScrambled()">RANDOM</ion-button>
+<ion-button (click)="paste()">Paste</ion-button>
+<ion-button (click)="copy()">Copy</ion-button>
+<ion-button (click)="reset()">Reset</ion-button>

@@ -117,6 +117,10 @@ const routes: Routes = [
   {
     path: 'migration',
     loadChildren: () => import('./pages/migration/migration.module').then((m) => m.MigrationPageModule)
+  },
+  {
+    path: 'secure-text-input',
+    loadChildren: () => import('./pages/secure-text-input/secure-text-input.module').then((m) => m.SecureTextInputPageModule)
   }
 ]
 
