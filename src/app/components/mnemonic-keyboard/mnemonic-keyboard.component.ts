@@ -1,0 +1,138 @@
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
+
+import * as bip39 from 'bip39'
+import { Observable, Subscription } from 'rxjs'
+
+function shuffle(arr: string): string {
+  const array = arr.split('')
+  let currentIndex = array.length
+  let randomIndex
+
+  while (0 !== currentIndex) {
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex)
+    currentIndex--
+
+    // And swap it with the current element.
+    ;[array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]]
+  }
+
+  return array.join('')
+}
+
+const ALPHABET = 'qwertyuiopasdfghjklzxcvbnm'
+
+@Component({
+  selector: 'airgap-mnemonic-keyboard',
+  templateUrl: './mnemonic-keyboard.component.html',
+  styleUrls: ['./mnemonic-keyboard.component.scss']
+})
+export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
+  public text: string = ''
+
+  @Input()
+  public setWord: Observable<string>
+
+  @Input()
+  public wordlist: string[] = bip39.wordlists.EN
+
+  @Output()
+  public wordSelected: EventEmitter<string | undefined> = new EventEmitter()
+
+  public suggestions: string[] = []
+
+  public rows: { letter: string; enabled: boolean; active: boolean }[][]
+
+  public validLetters: string = ALPHABET
+
+  public shuffled: boolean = false
+
+  private subscriptions: Subscription = new Subscription()
+
+  constructor() {
+    this.paintKeyboard()
+  }
+
+  ngOnInit() {
+    this.subscriptions.add(
+      this.setWord.subscribe((word) => {
+        this.setText(word)
+      })
+    )
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe()
+  }
+
+  public async paintKeyboard() {
+    if (this.wordlist) {
+      const filtered = this.wordlist.filter((word) => word.startsWith(this.text))
+
+      if (this.text.length > 0) {
+        this.suggestions = filtered.slice(0, 3)
+      }
+
+      const set = new Set<string>()
+      filtered.forEach((word) => {
+        set.add(word[this.text.length])
+      })
+      this.validLetters = [...set.values()].join('')
+    } else {
+      this.validLetters = ALPHABET
+    }
+
+    let alphabet = ALPHABET
+
+    const letters = (this.shuffled ? shuffle(alphabet) : alphabet).split('').map((letter) => {
+      return { letter, enabled: this.validLetters.includes(letter), active: false }
+    })
+    console.log('LETTERS', letters.map((l) => l.letter).join(''))
+    const firstRow = 10
+    const secondRow = 9
+    const thirdRow = 7
+    this.rows = []
+    this.rows.push(letters.splice(0, firstRow))
+    this.rows.push(letters.splice(0, secondRow))
+    this.rows.push([...letters.splice(0, thirdRow), { letter: '{backspace}', enabled: this.text.length > 0, active: false }])
+  }
+
+  public selectLetter(letter: string) {
+    if (letter === '{backspace}') {
+      this.remove()
+    } else {
+      this.add(letter)
+    }
+
+    this.paintKeyboard()
+  }
+
+  public selectWord(word: string) {
+    this.wordSelected.next(word)
+  }
+
+  private add(char: string) {
+    this.text += char
+  }
+
+  async remove(): Promise<void> {
+    const len = this.text.length
+    this.text = this.text.substring(0, len - 1)
+  }
+
+  async toggleShuffled() {
+    this.shuffled = !this.shuffled
+    this.paintKeyboard()
+  }
+
+  async delete() {
+    this.wordSelected.next(undefined)
+  }
+
+  async setText(text: string) {
+    console.log('SETTING TEXT', text)
+    this.text = text
+    this.suggestions = []
+    this.paintKeyboard()
+  }
+}

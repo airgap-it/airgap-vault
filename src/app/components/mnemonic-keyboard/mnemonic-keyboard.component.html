@@ -1,0 +1,32 @@
+<br />
+<ion-button
+  *ngFor="let suggestion of suggestions"
+  style="height: 2em;"
+  shape="round"
+  [color]="'primary'"
+  class="typography--mono lowercase"
+  (click)="selectWord(suggestion)"
+>
+  {{ suggestion }}
+</ion-button>
+<br />
+Current text: {{ text }}
+
+<div *ngFor="let row of rows">
+  <ion-button
+    *ngFor="let letter of row"
+    [id]="'key-' + letter.letter"
+    style="height: 2em;"
+    shape="round"
+    size="small"
+    [color]="letter.active ? 'primary' : 'tertiary'"
+    class="typography--mono lowercase"
+    [disabled]="!letter.enabled"
+    (click)="selectLetter(letter.letter)"
+  >
+    {{ letter.letter }}
+  </ion-button>
+</div>
+
+<ion-button (click)="delete()">Delete Word</ion-button>
+<ion-button (click)="toggleShuffled()">Shuffle Letters</ion-button>
