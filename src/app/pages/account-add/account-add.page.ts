@@ -1,6 +1,6 @@
 import { Component } from '@angular/core'
 import { ModalController, AlertController } from '@ionic/angular'
-import { ICoinProtocol } from '@airgap/coinlib-core'
+import { ICoinProtocol, MainProtocolSymbols } from '@airgap/coinlib-core'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
@@ -16,14 +16,13 @@ import { ProtocolService } from '@airgap/angular-core'
   styleUrls: ['./account-add.page.scss']
 })
 export class AccountAddPage {
-  public selectedProtocol: ICoinProtocol
-  public protocols: ICoinProtocol[]
-  public isHDWallet: boolean = false
+  public formValid: boolean = false
+  public protocolList: { protocol: ICoinProtocol; isChecked: boolean }[]
 
   public isAdvancedMode: boolean = false
+  public customDerivationPath: string | undefined
   public isBip39PassphraseEnabled: boolean = BIP39_PASSPHRASE_ENABLED
   public revealBip39Passphrase: boolean = false
-  public customDerivationPath: string
   public bip39Passphrase: string = ''
 
   constructor(
@@ -35,15 +34,31 @@ export class AccountAddPage {
     private readonly alertController: AlertController
   ) {
     this.protocolService.getActiveProtocols().then((protocols: ICoinProtocol[]) => {
-      this.protocols = protocols
-      this.onSelectedProtocolChange(this.navigationService.getState().protocol || this.protocols[0])
+      this.protocolList = protocols.map((protocol) => {
+        const isChecked =
+          protocol.identifier === MainProtocolSymbols.BTC_SEGWIT ||
+          protocol.identifier === MainProtocolSymbols.ETH ||
+          this.navigationService.getState().protocol?.identifier === protocol.identifier
+        return { protocol, isChecked: isChecked }
+      })
+      this.onProtocolSelected()
     })
   }
 
-  public onSelectedProtocolChange(selectedProtocol: ICoinProtocol): void {
-    this.selectedProtocol = selectedProtocol
-    this.isHDWallet = this.selectedProtocol.supportsHD
-    this.customDerivationPath = this.selectedProtocol.standardDerivationPath
+  public onProtocolSelected(): void {
+    // Wait 1 tick so "isChecked" is updated
+    setTimeout(() => {
+      const selectedProtocols = this.protocolList.filter((protocol) => protocol.isChecked)
+      if (selectedProtocols.length === 0) {
+        this.formValid = false
+      } else if (selectedProtocols.length === 1) {
+        this.customDerivationPath = selectedProtocols[0].protocol.standardDerivationPath
+        this.formValid = true
+      } else {
+        this.customDerivationPath = undefined
+        this.formValid = true
+      }
+    }, 0)
   }
 
   public async addWallet(): Promise<void> {
@@ -70,15 +85,16 @@ export class AccountAddPage {
     const addAccount = () => {
       this.secretsService
         .addWallets(
-          this.protocols.map((protocol: ICoinProtocol) => {
-            const isSelected: boolean = this.selectedProtocol.identifier === protocol.identifier
-
+          this.protocolList.map((protocol: { protocol: ICoinProtocol; isChecked: boolean }) => {
+            // TODO: BIP39 passphrase: Should we also add all "default" wallets?
+            // TODO: BIP39 passphrase: Should we "mark" the wallets (eg. masterFingerprint or hash of PW?)
+            // TODO: CUSTOM DERIVATION PATH IS CURRENTLY IGNORED
             return {
-              protocolIdentifier: protocol.identifier,
-              isHDWallet: protocol.supportsHD,
-              customDerivationPath: isSelected ? this.customDerivationPath : protocol.standardDerivationPath,
-              bip39Passphrase: isSelected ? this.bip39Passphrase : '',
-              isActive: isSelected
+              protocolIdentifier: protocol.protocol.identifier,
+              isHDWallet: protocol.protocol.supportsHD,
+              customDerivationPath: protocol.protocol.standardDerivationPath, // TODO: If custom derivation path is set, should we add others with default derivation?
+              bip39Passphrase: this.bip39Passphrase, // TODO: Was this what we wanted? I think if a BIP39 passphrase is set, it should be applied to all?
+              isActive: protocol.isChecked
             }
           })
         )
