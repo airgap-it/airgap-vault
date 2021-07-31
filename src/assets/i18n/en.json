@@ -253,7 +253,8 @@
     "add-settings_label": "Add Secret",
     "paste-from-clipboard_label": "Paste code from clipboard",
     "qr-settings_label": "QR Settings",
-    "qr-advanced-settings_label": "Advanced QR Settings"
+    "qr-advanced-settings_label": "Advanced QR Settings",
+    "danger-zone_label": "Danger Zone"
   },
   "tab-wallets": {
     "title": "Accounts",
@@ -531,6 +532,19 @@
         "header": "Error",
         "message": "Something went wrong! Please try again.",
         "button_label": "Ok"
+      }
+    }
+  },
+  "danger-zone": {
+    "label": "Danger Zone",
+    "description": "The actions on this page are only intended for advanced users. Please be aware of the consequences if you use one of the following features.",
+    "wipe_label": "Reset AirGap Vault",
+    "wipe": {
+      "alert": {
+        "title": "Wipe Vault",
+        "message": "This action will delete all your secrets and reset AirGap Vault to the factory settings.<br /><br /><b>Make sure you have a backup of all your recovery phrases.</b>",
+        "cancel": "Cancel",
+        "ok": "Ok"
       }
     }
   }

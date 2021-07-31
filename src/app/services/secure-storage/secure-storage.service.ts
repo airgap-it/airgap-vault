@@ -96,4 +96,8 @@ export class SecureStorageService {
       }
     }
   }
+
+  public wipe() {
+    return this.securityUtils.removeAll({})
+  }
 }

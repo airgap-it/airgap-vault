@@ -117,6 +117,10 @@ const routes: Routes = [
   {
     path: 'migration',
     loadChildren: () => import('./pages/migration/migration.module').then((m) => m.MigrationPageModule)
+  },
+  {
+    path: 'danger-zone',
+    loadChildren: () => import('./pages/danger-zone/danger-zone.module').then((m) => m.DangerZonePageModule)
   }
 ]
 

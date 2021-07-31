@@ -81,4 +81,8 @@ export class SecureStorageServiceMock {
         .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
     })
   }
+
+  public wipe() {
+    localStorage.clear()
+  }
 }

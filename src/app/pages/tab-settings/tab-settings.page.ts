@@ -87,6 +87,10 @@ export class TabSettingsPage {
     this.navigationService.route('/qr-settings').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
+  public goToDangerZone(): void {
+    this.navigationService.route('/danger-zone').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
   public pasteClipboard(): void {
     this.clipboardService.paste().then(
       (text: string) => {

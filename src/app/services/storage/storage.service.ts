@@ -41,4 +41,8 @@ export class VaultStorageService extends BaseStorage<VaultStorageKey, VaultStora
   constructor(storage: Storage) {
     super(storage, defaultValues)
   }
+
+  wipe() {
+    return this.storage.clear()
+  }
 }
