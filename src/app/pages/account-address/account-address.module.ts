@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms'
 import { RouterModule, Routes } from '@angular/router'
 import { IonicModule } from '@ionic/angular'
 import { TranslateModule } from '@ngx-translate/core'
+import { AddressAliasComponent } from 'src/app/components/address-alias/address-alias.component'
 
 import { ComponentsModule } from '../../components/components.module'
 
@@ -29,6 +30,6 @@ const routes: Routes = [
     TranslateModule,
     AirGapAngularCoreModule
   ],
-  declarations: [AccountAddressPage, AccountEditPopoverComponent]
+  declarations: [AccountAddressPage, AccountEditPopoverComponent, AddressAliasComponent]
 })
 export class AccountAddressPageModule {}

@@ -117,6 +117,10 @@ const routes: Routes = [
   {
     path: 'migration',
     loadChildren: () => import('./pages/migration/migration.module').then((m) => m.MigrationPageModule)
+  },
+  {
+    path: 'contacts',
+    loadChildren: () => import('./pages/contacts/contacts.module').then((m) => m.ContactsPageModule)
   }
 ]
 

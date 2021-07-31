@@ -26,7 +26,9 @@
       <p>
         {{ 'wallet-address.address_label' | translate }}
         <br />
-        <span class="selectable typography--mono" (click)="copyAddressToClipboard()">{{ wallet.receivingPublicAddress }}</span>
+        <span class="selectable typography--mono" (click)="copyAddressToClipboard()">
+          <airgap-address-alias [address]="wallet.receivingPublicAddress"></airgap-address-alias>
+        </span>
       </p>
       <p>
         {{ 'wallet-address.path_label' | translate }}

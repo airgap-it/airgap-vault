@@ -1,4 +1,5 @@
 import {
+  AddressService,
   APP_PLUGIN,
   IACMessageTransport,
   LanguageService,
@@ -6,7 +7,7 @@ import {
   SPLASH_SCREEN_PLUGIN,
   STATUS_BAR_PLUGIN
 } from '@airgap/angular-core'
-import { NetworkType, TezosProtocolNetwork, TezosSaplingExternalMethodProvider } from '@airgap/coinlib-core'
+import { BitcoinProtocol, NetworkType, TezosProtocolNetwork, TezosSaplingExternalMethodProvider } from '@airgap/coinlib-core'
 import {
   TezosSaplingProtocolOptions,
   TezosShieldedTezProtocolConfig
@@ -23,6 +24,7 @@ import { SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
 import { DEEPLINK_VAULT_ADD_ACCOUNT, DEEPLINK_VAULT_PREFIX } from './constants/constants'
 import { ExposedPromise, exposedPromise } from './functions/exposed-promise'
 import { Secret } from './models/secret'
+import { ContactResolver } from './services/contact/contact.service'
 import { ErrorCategory, handleErrorLocal } from './services/error-handler/error-handler.service'
 import { IACService } from './services/iac/iac.service'
 import { NavigationService } from './services/navigation/navigation.service'
@@ -52,6 +54,7 @@ export class AppComponent implements AfterViewInit {
     private readonly navigationService: NavigationService,
     private readonly httpClient: HttpClient,
     private readonly saplingNativeService: SaplingNativeService,
+    private readonly addressService: AddressService,
     @Inject(APP_PLUGIN) private readonly app: AppPlugin,
     @Inject(SECURITY_UTILS_PLUGIN) private readonly securityUtils: SecurityUtilsPlugin,
     @Inject(SPLASH_SCREEN_PLUGIN) private readonly splashScreen: SplashScreenPlugin,
@@ -140,6 +143,7 @@ export class AppComponent implements AfterViewInit {
       extraActiveProtocols: [shieldedTezProtocol]
     })
 
+    await this.initializeContacts()
     await shieldedTezProtocol.initParameters(await this.getSaplingParams('spend'), await this.getSaplingParams('output'))
   }
 
@@ -154,5 +158,16 @@ export class AppComponent implements AfterViewInit {
       .toPromise()
 
     return Buffer.from(params)
+  }
+
+  private async initializeContacts(): Promise<void> {
+    const resolver = new ContactResolver([])
+    const protocols = await this.protocolService.getActiveProtocols()
+
+    for (const protocol of protocols) {
+      this.addressService.registerExternalAliasResolver(resolver, protocol)
+    }
+
+    console.log('ADDR', await this.addressService.getAlias('test', new BitcoinProtocol()))
   }
 }
