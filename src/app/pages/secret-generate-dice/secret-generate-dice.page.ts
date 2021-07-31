@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { IonContent } from '@ionic/angular'
 import { Secret } from 'src/app/models/secret'
-import { DiceRollService } from 'src/app/services/dice-roll/dice-roll.service'
+import { DiceRollService, DiceRollType } from 'src/app/services/dice-roll/dice-roll.service'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
@@ -21,6 +21,8 @@ export class SecretGenerateDicePage implements OnInit {
 
   public entropyBits: number = 0
 
+  public inputType: DiceRollType = DiceRollType.DEFAULT
+
   private entropy: string = ''
 
   constructor(private readonly navigationService: NavigationService, private readonly diceRollService: DiceRollService) {}
@@ -28,7 +30,7 @@ export class SecretGenerateDicePage implements OnInit {
   ngOnInit() {}
 
   async next() {
-    const entropy = await this.diceRollService.getEntropyFromInput(this.entropy)
+    const entropy = await this.diceRollService.getEntropyFromInput(this.entropy, this.inputType)
 
     const secret: Secret = new Secret(entropy)
 
@@ -53,6 +55,14 @@ export class SecretGenerateDicePage implements OnInit {
     } catch (e) {
       this.isValid = false
       this.error = e
+    }
+  }
+
+  async switchInputType() {
+    if (this.inputType === DiceRollType.DEFAULT) {
+      this.inputType = DiceRollType.COLDCARD
+    } else {
+      this.inputType = DiceRollType.DEFAULT
     }
   }
 
