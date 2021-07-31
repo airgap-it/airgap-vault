@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core'
+import { toHexString } from 'src/app/utils/utils'
 
 function binaryToByte(bin: string): number {
   return parseInt(bin, 2)
@@ -30,8 +31,6 @@ export class CoinFlipService {
     }
 
     const entropyBytes = binaryEntropy.match(/(.{1,8})/g).map(binaryToByte)
-
-    const toHexString = (bytes: Uint8Array) => bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '')
 
     const entropy = toHexString(new Uint8Array(entropyBytes))
 

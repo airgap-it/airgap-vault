@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core'
 import * as createHash from 'create-hash'
+import { toHexString } from 'src/app/utils/utils'
 
 export enum DiceRollType {
   DEFAULT = 0, // Iancoleman, Cobo Vault
@@ -43,8 +44,6 @@ export class DiceRollService {
     const transformedEntropy = await this.transformEntropy(diceEntropy, type)
 
     const hash: Uint8Array = createHash('sha256').update(transformedEntropy).digest()
-
-    const toHexString = (bytes: Uint8Array) => bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '')
 
     const entropy = toHexString(hash)
 
