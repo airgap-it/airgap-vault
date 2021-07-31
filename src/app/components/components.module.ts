@@ -8,7 +8,6 @@ import { QRCodeModule } from 'angularx-qrcode'
 
 import { PipesModule } from '../pipes/pipes.module'
 
-import { AccountItemComponent } from './account-item/account-item.component'
 import { CurrentSecretComponent } from './current-secret/current-secret.component'
 import { EntropyProgressComponent } from './entropy-progress/entropy-progress.component'
 import { GridInputComponent } from './grid-input/grid-input.component'
@@ -33,7 +32,6 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     TouchEntropyComponent,
     TraceInputDirective,
     VerifyKeyComponent,
-    AccountItemComponent,
     MessageSignRequestComponent,
     MessageSignResponseComponent,
     GridInputComponent
@@ -49,7 +47,6 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     TouchEntropyComponent,
     TraceInputDirective,
     VerifyKeyComponent,
-    AccountItemComponent,
     MessageSignRequestComponent,
     MessageSignResponseComponent,
     GridInputComponent

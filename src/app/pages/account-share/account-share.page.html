@@ -10,11 +10,21 @@
 <ion-content class="ion-padding">
   <h3 class="ion-padding-bottom" [innerHTML]="'wallet-share.heading' | translate"></h3>
 
-  <ion-row class="ion-justify-content-center ion-padding-bottom">
-    <airgap-qr *ngIf="splits" [qrdata]="splits" [level]="'L'" [size]="300"></airgap-qr>
+  <ion-row class="ion-justify-content-center ion-padding-bottom" *ngIf="interactionUrl">
+    <airgap-iac-qr [messageDefinitionObjects]="interactionUrl" [level]="'L'" [size]="300"></airgap-iac-qr>
   </ion-row>
 
   <ion-row><p [innerHTML]="'wallet-share.text' | translate"></p></ion-row>
+
+  <ion-row class="rawdata--container" *ngIf="interactionUrl">
+    <ion-col class="ion-no-padding">
+      <ion-item class="ion-no-padding" lines="none">
+        <ion-label>QR Details</ion-label>
+        <ion-toggle [checked]="displayRawData" (ionChange)="displayRawData = !displayRawData" slot="end"></ion-toggle>
+      </ion-item>
+      <pre *ngIf="displayRawData" class="ion-no-margin">{{ interactionUrl | json }}</pre>
+    </ion-col>
+  </ion-row>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-button color="primary" shape="round" (click)="done()">{{ 'wallet-share.done_label' | translate }}</ion-button>

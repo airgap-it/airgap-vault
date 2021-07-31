@@ -131,7 +131,7 @@ export class AppComponent implements AfterViewInit {
 
     const shieldedTezProtocol: TezosShieldedTezProtocol = new TezosShieldedTezProtocol(
       new TezosSaplingProtocolOptions(
-        new TezosProtocolNetwork('Edonet', NetworkType.TESTNET, 'https://tezos-edonet-node.prod.gke.papers.tech'),
+        new TezosProtocolNetwork('Florencenet', NetworkType.TESTNET, 'https://tezos-florencenet-node.prod.gke.papers.tech'),
         new TezosShieldedTezProtocolConfig(undefined, undefined, undefined, externalMethodProvider)
       )
     )

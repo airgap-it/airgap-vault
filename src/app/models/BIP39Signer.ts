@@ -2,7 +2,7 @@ import * as bip39 from 'bip39'
 import { Hasher, sha3_256 } from 'js-sha3'
 import secretJS from 'secrets.js-grempe'
 
-export class BIP39Signer {
+export class BIPSigner {
   public readonly checkSumLength: number = 10
 
   private getOffsetMapping(share: string): { offset: number; seedOffset: number } {
@@ -35,13 +35,17 @@ export class BIP39Signer {
   }
 
   public mnemonicToEntropy(mnemonic: string): string {
-    const usedList: string[] | undefined = BIP39Signer.determineWordList(mnemonic)
+    const usedList: string[] | undefined = BIPSigner.determineWordList(mnemonic)
 
     if (!usedList) {
-      throw Error('non-compatible mnemonic')
+      throw Error('non-compatible secret')
     }
 
     return bip39.mnemonicToEntropy(mnemonic, usedList)
+  }
+
+  public mnemonicToSeedSync(mnemonic: string, passphrase?: string): Buffer {
+    return bip39.mnemonicToSeedSync(mnemonic, passphrase)
   }
 
   public static prepareMnemonic(mnemonic: string): string {
@@ -49,15 +53,15 @@ export class BIP39Signer {
   }
 
   public static validateMnemonic(mnemonic: string): boolean {
-    const preparedMnemonic: string = BIP39Signer.prepareMnemonic(mnemonic)
-    const wordList: string[] | undefined = BIP39Signer.determineWordList(preparedMnemonic)
+    const preparedMnemonic: string = BIPSigner.prepareMnemonic(mnemonic)
+    const wordList: string[] | undefined = BIPSigner.determineWordList(preparedMnemonic)
 
     return bip39.validateMnemonic(preparedMnemonic, wordList)
   }
 
   public static determineWordList(mnemonic: string): string[] | undefined {
-    for (const list of BIP39Signer.wordLists()) {
-      if (bip39.validateMnemonic(BIP39Signer.prepareMnemonic(mnemonic), list)) {
+    for (const list of BIPSigner.wordLists()) {
+      if (bip39.validateMnemonic(BIPSigner.prepareMnemonic(mnemonic), list)) {
         return list
       }
     }

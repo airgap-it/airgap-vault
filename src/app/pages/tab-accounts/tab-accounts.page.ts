@@ -1,12 +1,14 @@
+import { AirGapWallet, AirGapWalletStatus } from '@airgap/coinlib-core'
 import { Component, OnInit } from '@angular/core'
-import { AirGapWallet } from '@airgap/coinlib-core'
+import { Platform } from '@ionic/angular'
 import { BehaviorSubject, Observable } from 'rxjs'
 
 import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
+import { ModeService } from '../../services/mode/mode.service'
+import { ModeStrategy } from '../../services/mode/strategy/ModeStrategy'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
-import { Platform } from '@ionic/angular'
 import { SecretEditAction } from '../secret-edit/secret-edit.page'
 
 @Component({
@@ -24,10 +26,13 @@ export class TabAccountsPage implements OnInit {
 
   public readonly isAndroid: boolean
 
+  public readonly AirGapWalletStatus: typeof AirGapWalletStatus = AirGapWalletStatus
+
   constructor(
     private readonly platform: Platform,
     private readonly secretsService: SecretsService,
-    private readonly navigationService: NavigationService
+    private readonly navigationService: NavigationService,
+    private readonly modeService: ModeService
   ) {
     this.secrets = this.secretsService.getSecretsObservable()
     this.isAndroid = this.platform.is('android')
@@ -37,7 +42,7 @@ export class TabAccountsPage implements OnInit {
     this.secretsService.getActiveSecretObservable().subscribe((secret: Secret) => {
       if (secret && secret.wallets) {
         this.activeSecret = secret
-        this.wallets$.next(secret.wallets)
+        this.wallets$.next([...secret.wallets])
       }
     })
 
@@ -60,6 +65,11 @@ export class TabAccountsPage implements OnInit {
     const value: unknown = event.target.value
 
     this.symbolFilter = isValidSymbol(value) ? value.trim().toLowerCase() : undefined
+  }
+
+  public async syncWallets(): Promise<void> {
+    const strategy: ModeStrategy = await this.modeService.strategy()
+    await strategy.syncAll()
   }
 
   public addWallet(): void {

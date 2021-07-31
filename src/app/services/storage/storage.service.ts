@@ -8,6 +8,7 @@ export enum VaultStorageKey {
   DISCLAIMER_HIDE_LOCAL_AUTH_ONBOARDING = 'DISCLAIMER_HIDE_LOCAL_AUTH_ONBOARDING',
   DISCLAIMER_ELECTRON = 'DISCLAIMER_ELECTRON',
   INTRODUCTION_INITIAL = 'INTRODUCTION_INITIAL',
+  ADVANCED_MODE = 'ADVANCED_MODE',
   AIRGAP_SECRET_LIST = 'airgap-secret-list'
 }
 
@@ -17,6 +18,7 @@ interface VaultStorageKeyReturnType {
   [VaultStorageKey.DISCLAIMER_HIDE_LOCAL_AUTH_ONBOARDING]: boolean
   [VaultStorageKey.DISCLAIMER_ELECTRON]: boolean
   [VaultStorageKey.INTRODUCTION_INITIAL]: boolean
+  [VaultStorageKey.ADVANCED_MODE]: boolean
   [VaultStorageKey.AIRGAP_SECRET_LIST]: unknown
 }
 
@@ -28,6 +30,7 @@ const defaultValues: VaultStorageKeyReturnDefaults = {
   [VaultStorageKey.DISCLAIMER_HIDE_LOCAL_AUTH_ONBOARDING]: false,
   [VaultStorageKey.DISCLAIMER_ELECTRON]: false,
   [VaultStorageKey.INTRODUCTION_INITIAL]: false,
+  [VaultStorageKey.ADVANCED_MODE]: false,
   [VaultStorageKey.AIRGAP_SECRET_LIST]: []
 }
 

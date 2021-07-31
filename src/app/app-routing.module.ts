@@ -24,6 +24,10 @@ const routes: Routes = [
   },
   { path: 'account-share', loadChildren: () => import('./pages/account-share/account-share.module').then((m) => m.AccountSharePageModule) },
   {
+    path: 'account-share-select',
+    loadChildren: () => import('./pages/account-share-select/account-share-select.module').then((m) => m.AccountShareSelectPageModule)
+  },
+  {
     path: 'account-address',
     loadChildren: () => import('./pages/account-address/account-address.module').then((m) => m.AccountAddressPageModule)
   },
@@ -111,6 +115,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/qr-settings/qr-settings.module').then((m) => m.QrSettingsPageModule)
   },
   {
+    path: 'migration',
+    loadChildren: () => import('./pages/migration/migration.module').then((m) => m.MigrationPageModule)
+  },
+  {
     path: 'secret-generate-dice',
     loadChildren: () => import('./pages/secret-generate-dice/secret-generate-dice.module').then((m) => m.SecretGenerateDicePageModule)
   },
@@ -125,4 +133,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules, relativeLinkResolution: 'corrected' })],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

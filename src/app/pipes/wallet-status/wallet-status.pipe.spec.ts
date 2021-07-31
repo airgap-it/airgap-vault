@@ -1,8 +1,8 @@
-import { WalletFilterPipe } from './wallet-filter.pipe'
+import { WalletStatusPipe } from './wallet-status.pipe'
 
 describe('WalletFilterPipe', () => {
   it('create an instance', () => {
-    const pipe = new WalletFilterPipe()
+    const pipe = new WalletStatusPipe()
     expect(pipe).toBeTruthy()
   })
 })

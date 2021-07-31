@@ -1,6 +1,6 @@
 import { Location } from '@angular/common'
 import { Injectable } from '@angular/core'
-import { Router } from '@angular/router'
+import { NavigationBehaviorOptions, Router } from '@angular/router'
 import { NavController } from '@ionic/angular'
 
 import { Identifiable } from '../../models/identifiable'
@@ -26,10 +26,10 @@ export class NavigationService {
     return this.router.navigateByUrl(route)
   }
 
-  public async routeWithState(route: string, object: State): Promise<boolean> {
+  public async routeWithState(route: string, object: State, options?: NavigationBehaviorOptions): Promise<boolean> {
     this.state = object
 
-    return this.router.navigateByUrl(route)
+    return this.router.navigateByUrl(route, options)
   }
 
   public back(): void {
