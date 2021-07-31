@@ -81,6 +81,14 @@
     "social-recovery": {
       "label": "Social Recovery",
       "text": "Recover a lost private key from your social contacts' secret shares."
+    },
+    "dice-roll": {
+      "label": "Generate Secret with Dice Rolls",
+      "text": "Use die to generate a secure and verifiable recovery phrase."
+    },
+    "coin-flip": {
+      "label": "Generate Secret with Coin Flips",
+      "text": "Use a coin to generate a secure and verifiable recovery phrase."
     }
   },
   "secret-edit": {
@@ -533,5 +541,21 @@
         "button_label": "Ok"
       }
     }
+  },
+  "secret-generate-dice-roll": {
+    "label": "Generate Secret with Dice Rolls",
+    "description": "Generating entropy with dice rolls is an advanced feature. It allows you to provide your own entropy and generate a verifiable recovery phrase. Only use this feature if you know how to use it!",
+    "status": "{{ inputLength }} of at least 99 rolls ({{ entropyBits }} bits of entropy)",
+    "remove_label": "Remove",
+    "next_label": "Next"
+  },
+  "secret-generate-coin-flip": {
+    "label": "Generate Secret with Coin Flips",
+    "description": "Generating entropy with coin flips is an advanced feature. It allows you to provide your own entropy and generate a verifiable recovery phrase. Only use this feature if you know how to use it!",
+    "status": "{{ inputLength }} of 256 coin flips ({{ inputLength }} bits of entropy)",
+    "head": "HEAD",
+    "tail": "TAIL",
+    "remove_label": "Remove",
+    "next_label": "Next"
   }
 }
