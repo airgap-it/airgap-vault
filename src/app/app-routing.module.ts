@@ -117,6 +117,14 @@ const routes: Routes = [
   {
     path: 'migration',
     loadChildren: () => import('./pages/migration/migration.module').then((m) => m.MigrationPageModule)
+  },
+  {
+    path: 'link-page',
+    loadChildren: () => import('./pages/link-page/link-page.module').then((m) => m.LinkPagePageModule)
+  },
+  {
+    path: 'guides',
+    loadChildren: () => import('./pages/guides/guides.module').then((m) => m.GuidesPageModule)
   }
 ]
 

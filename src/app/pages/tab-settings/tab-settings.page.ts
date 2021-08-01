@@ -87,6 +87,48 @@ export class TabSettingsPage {
     this.navigationService.route('/qr-settings').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
+  public goToGuides(): void {
+    this.navigationService.route('/guides').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
+  public github(): void {
+    this.openLinkPage(
+      'GitHub',
+      'https://github.com/airgap-it/airgap-vault',
+      `AirGap Vault is fully open source. Visit the GitHub repository to view the source code.`
+    )
+  }
+
+  public faq(): void {
+    this.openLinkPage('FAQ', 'https://support.airgap.it', `Our support page contains a lot of explanations and security best practices.`)
+  }
+
+  public feedback(): void {
+    this.openLinkPage(
+      'Feedback',
+      'hi@airgap.it',
+      `We're always happy to get feedback if you have suggestions or are experiencing bugs. Please write an email to the address below.`
+    )
+  }
+
+  public discord(): void {
+    this.openLinkPage(
+      'Discord',
+      'https://discord.gg/gnWqCQsteh',
+      `Join our discord server to ask questions and hear about the latest developments.`
+    )
+  }
+
+  private openLinkPage(title: string, link: string, description?: string) {
+    this.navigationService
+      .routeWithState('/link-page', {
+        title,
+        link,
+        description
+      })
+      .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
   public pasteClipboard(): void {
     this.clipboardService.paste().then(
       (text: string) => {

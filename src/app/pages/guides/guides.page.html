@@ -1,0 +1,34 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab-settings"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Guides</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <!-- <ion-list-header>
+      <ion-label>{{ 'guides.title' | translate }}</ion-label>
+    </ion-list-header> -->
+
+    <ion-item lines="none" (click)="bip85()" detail="true">
+      <ion-label>BIP85</ion-label>
+    </ion-item>
+    <ion-item lines="none" (click)="socialRecovery()" detail="true">
+      <ion-label>Social Recovery</ion-label>
+    </ion-item>
+    <ion-item lines="none" (click)="updateAirGap()" detail="true">
+      <ion-label>How to update AirGap Vault on an offline device</ion-label>
+    </ion-item>
+
+    <!-- <ion-list-header>
+      <ion-label>{{ 'guides.blogs_label' | translate }}</ion-label>
+    </ion-list-header>
+
+    <ion-item lines="none" (click)="bip85()" detail="true">
+      <ion-label>{{ 'tab-settings.about' | translate }}</ion-label>
+    </ion-item> -->
+  </ion-list>
+</ion-content>
