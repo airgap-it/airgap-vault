@@ -8,7 +8,7 @@ env:
 jobs:
   environment:
     name: 🌱 Load Environment
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: ⚙️ Node.js version used - ${{ env.node_version }}
@@ -53,8 +53,9 @@ jobs:
       - name: Install Netlify
         run: npm install netlify-cli
 
+      # We use the "no-sapling" build so the 50 MB parameters file isn't downloaded
       - name: Build site
-        run: npm run build:prod
+        run: npm run build:no-sapling
 
       # Deploy the site with netlify-cli
       - name: Deploy Site
