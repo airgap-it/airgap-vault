@@ -249,11 +249,13 @@
     "about": "About",
     "title": "Settings",
     "information_label": "Information",
-    "secrets_label": "Secrets",
-    "add-settings_label": "Add Secret",
     "paste-from-clipboard_label": "Paste code from clipboard",
     "qr-settings_label": "QR Settings",
     "qr-advanced-settings_label": "Advanced QR Settings"
+  },
+  "tab-secrets": {
+    "title": "Secrets",
+    "add-secret_label": "Add Secret"
   },
   "tab-wallets": {
     "title": "Accounts",
@@ -282,6 +284,7 @@
   "tabs": {
     "wallets": "Accounts",
     "scanner": "Scanner",
+    "secrets": "Secrets",
     "settings": "Settings"
   },
   "deserialized-detail": {

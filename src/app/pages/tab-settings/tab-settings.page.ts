@@ -1,5 +1,4 @@
 import { Component } from '@angular/core'
-import { AlertController, ToastController } from '@ionic/angular'
 import { Observable } from 'rxjs'
 
 import { Secret } from '../../models/secret'
@@ -20,59 +19,11 @@ export class TabSettingsPage {
   constructor(
     public readonly serializerService: SerializerService,
     private readonly secretsService: SecretsService,
-    private readonly alertController: AlertController,
-    private readonly toastController: ToastController,
     private readonly iacService: IACService,
     private readonly clipboardService: ClipboardService,
     private readonly navigationService: NavigationService
   ) {
     this.secrets = this.secretsService.getSecretsObservable()
-  }
-
-  public goToNewSecret(): void {
-    this.navigationService.route('/secret-create').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-  }
-
-  public goToEditSecret(secret: Secret): void {
-    this.navigationService.routeWithState('/secret-edit', { secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-  }
-
-  public async deleteSecret(secret: Secret): Promise<void> {
-    const alert: HTMLIonAlertElement = await this.alertController.create({
-      header: 'Delete ' + secret.label,
-      subHeader: 'Are you sure you want to delete ' + secret.label + '?',
-      buttons: [
-        {
-          text: 'Delete',
-          handler: async () => {
-            this.secretsService.remove(secret).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
-
-            const toast: HTMLIonToastElement = await this.toastController.create({
-              message: 'Secret deleted',
-              duration: 5000,
-              buttons: [
-                {
-                  text: 'Undo',
-                  role: 'cancel'
-                }
-              ]
-            })
-
-            toast.onDidDismiss().then((role) => {
-              if (role === 'close') {
-                this.secretsService.addOrUpdateSecret(secret).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
-              }
-            })
-
-            toast.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
-          }
-        },
-        {
-          text: 'Cancel'
-        }
-      ]
-    })
-    alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
   }
 
   public goToAbout(): void {

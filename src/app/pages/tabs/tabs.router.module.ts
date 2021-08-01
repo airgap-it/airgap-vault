@@ -27,6 +27,15 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'tab-secrets',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../tab-secrets/tab-secrets.module').then((m) => m.TabSecretsPageModule)
+          }
+        ]
+      },
+      {
         path: 'tab-settings',
         children: [
           {

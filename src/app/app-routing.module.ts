@@ -5,6 +5,10 @@ const routes: Routes = [
   { path: '', loadChildren: () => import('./pages/tabs/tabs.module').then((m) => m.TabsPageModule) },
   { path: 'tab-accounts', loadChildren: () => import('./pages/tab-accounts/tab-accounts.module').then((m) => m.TabAccountsPageModule) },
   { path: 'tab-scan', loadChildren: () => import('./pages/tab-scan/tab-scan.module').then((m) => m.TabScanPageModule) },
+  {
+    path: 'tab-secrets',
+    loadChildren: () => import('./pages/tab-secrets/tab-secrets.module').then((m) => m.TabSecretsPageModule)
+  },
   { path: 'tab-settings', loadChildren: () => import('./pages/tab-settings/tab-settings.module').then((m) => m.TabSettingsPageModule) },
   { path: 'account-add', loadChildren: () => import('./pages/account-add/account-add.module').then((m) => m.AccountAddPageModule) },
   { path: 'secret-create', loadChildren: () => import('./pages/secret-create/secret-create.module').then((m) => m.SecretCreatePageModule) },
