@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Security Check</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let item of items" detail="true">
+      {{item.title}}
+      <ion-buttons slot="end">
+        <ion-button shape="round" size="small" color="secondary">
+          <ion-spinner name="lines-small" color="primary" *ngIf="item.status === 'pending'"></ion-spinner>
+          <span *ngIf="item.status === 'unknown'"><ion-icon size="large" color="light" name="help-circle"></ion-icon></span>
+          <span *ngIf="item.status === 'fail'"><ion-icon size="large" color="danger" name="close-circle"></ion-icon></span>
+          <span *ngIf="item.status === 'success'"><ion-icon size="large" color="success" name="checkmark-circle-outline"></ion-icon></span>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-list>
+  <ion-button (click)="runChecks()">Run all checks</ion-button>
+
+  <p>
+    The checks on this page test several mechanisms that are used throughout our apps and report any issues. This can help catch issues with
+    your device or with the software. However, if someone has complete access to your device or can alter the contents of AirGap Vault,
+    these security checks can be manipulated, so a pass is not a definitive indicator that there is absolutely no security issue.
+  </p>
+</ion-content>
