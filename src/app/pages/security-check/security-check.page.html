@@ -1,22 +1,47 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Security Check</ion-title>
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab-settings"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>{{ 'security-check.title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-list>
-    <ion-item *ngFor="let item of items" detail="true">
-      {{item.title}}
-      <ion-buttons slot="end">
-        <ion-button shape="round" size="small" color="secondary">
-          <ion-spinner name="lines-small" color="primary" *ngIf="item.status === 'pending'"></ion-spinner>
-          <span *ngIf="item.status === 'unknown'"><ion-icon size="large" color="light" name="help-circle"></ion-icon></span>
-          <span *ngIf="item.status === 'fail'"><ion-icon size="large" color="danger" name="close-circle"></ion-icon></span>
-          <span *ngIf="item.status === 'success'"><ion-icon size="large" color="success" name="checkmark-circle-outline"></ion-icon></span>
-        </ion-button>
-      </ion-buttons>
-    </ion-item>
+    <ng-container *ngFor="let group of groups">
+      <ion-item (click)="toggleShow(group)" detail="true">
+        {{group.name}} ({{group.checks.length}})
+        <ion-buttons slot="end">
+          <ion-button shape="round" size="small" color="secondary">
+            <ion-spinner name="lines-small" color="primary" *ngIf="group.status === 'pending'"></ion-spinner>
+            <span *ngIf="group.status === 'unknown'"><ion-icon size="large" color="medium" name="help-circle-outline"></ion-icon></span>
+            <span *ngIf="group.status === 'fail'"><ion-icon size="large" color="danger" name="close-circle"></ion-icon></span>
+            <span *ngIf="group.status === 'warning'"><ion-icon size="large" color="warning" name="alert-circle-outline"></ion-icon></span>
+            <span *ngIf="group.status === 'success'">
+              <ion-icon size="large" color="success" name="checkmark-circle-outline"></ion-icon>
+            </span>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+      <ng-container *ngIf="group.showChecks">
+        <ion-item *ngFor="let item of group.checks" (click)="showDescription(item)" detail="true">
+          > {{item.title}}
+          <ion-buttons slot="end">
+            <ion-button shape="round" size="small" color="secondary">
+              <ion-spinner name="lines-small" color="primary" *ngIf="item.status === 'pending'"></ion-spinner>
+              <span *ngIf="item.status === 'unknown'"><ion-icon size="large" color="medium" name="help-circle-outline"></ion-icon></span>
+              <span *ngIf="item.status === 'fail'"><ion-icon size="large" color="danger" name="close-circle"></ion-icon></span>
+              <span *ngIf="item.status === 'warning'"><ion-icon size="large" color="warning" name="alert-circle-outline"></ion-icon></span>
+              <span *ngIf="item.status === 'success'">
+                <ion-icon size="large" color="success" name="checkmark-circle-outline"></ion-icon>
+              </span>
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+      </ng-container>
+    </ng-container>
   </ion-list>
   <ion-button (click)="runChecks()">Run all checks</ion-button>
 

@@ -21,6 +21,9 @@ export class NetworkService {
     this.appCanAccessInternet()
   }
 
+  /**
+   * This checks if the device has internet access
+   */
   public async capacitorCanAccessInternet() {
     // TODO: Implement native check
     const isOnline = false
@@ -31,6 +34,9 @@ export class NetworkService {
     return isOnline
   }
 
+  /**
+   * This checks if the webview has internet access
+   */
   public async webviewCanAccessInternet() {
     const isOnline = navigator.onLine
     if (isOnline) {
@@ -40,6 +46,9 @@ export class NetworkService {
     return isOnline
   }
 
+  /**
+   * This checks if the app can connect to the internet (regarding CSP rules)
+   */
   public async appCanAccessInternet() {
     const isOnline = await (async () => {
       try {

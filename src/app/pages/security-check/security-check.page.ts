@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core'
+import { AlertController } from '@ionic/angular'
 import { first } from 'rxjs/operators'
 import { DeviceService } from 'src/app/services/device/device.service'
 import { NetworkService } from 'src/app/services/network/network.service'
@@ -54,11 +55,20 @@ enum CheckStatus {
 
 */
 
+interface CheckGroup {
+  name: string
+  showChecks: boolean
+  status: CheckStatus
+  checks: CheckItem[]
+}
+
 interface CheckItem {
   title: string
   description: string
   status: CheckStatus
   delay: number
+  successStatus(): Promise<CheckStatus>
+  failureStatus(): Promise<CheckStatus>
   check: () => Promise<boolean>
 }
 
@@ -68,7 +78,7 @@ interface CheckItem {
   styleUrls: ['./security-check.page.scss']
 })
 export class SecurityCheckPage implements OnInit {
-  items: CheckItem[]
+  groups: CheckGroup[]
 
   checksRunning: boolean = false
 
@@ -76,91 +86,141 @@ export class SecurityCheckPage implements OnInit {
     private readonly networkSerice: NetworkService,
     private readonly secureStorageService: SecureStorageService,
     private readonly deviceService: DeviceService,
-    private readonly secretsService: SecretsService
+    private readonly secretsService: SecretsService,
+    private readonly alertCtrl: AlertController
   ) {
-    this.items = [
+    this.groups = [
       {
-        title: 'Device Internet',
-        description: 'Description',
+        name: `Connectivity`,
         status: CheckStatus.UNKNOWN,
-        delay: 200,
-        check: async () => {
-          return !(await this.networkSerice.capacitorCanAccessInternet())
-        }
-      },
-      {
-        title: 'Webview Internet',
-        description: 'Description',
-        status: CheckStatus.UNKNOWN,
-        delay: 100,
-        check: async () => {
-          return !(await this.networkSerice.webviewCanAccessInternet())
-        }
-      },
-      {
-        title: 'App Internet',
-        description: 'Description',
-        status: CheckStatus.UNKNOWN,
-        delay: 500,
-        check: async () => {
-          return !(await this.networkSerice.appCanAccessInternet())
-        }
-      },
-      {
-        title: 'Device is unrooted',
-        description: 'Description',
-        status: CheckStatus.UNKNOWN,
-        delay: 100,
-        check: async () => {
-          return !(await this.deviceService.checkForRoot())
-        }
-      },
-      {
-        title: 'Secure storage available',
-        description: 'Description',
-        status: CheckStatus.UNKNOWN,
-        delay: 100,
-        check: async () => {
-          return !(await this.secureStorageService.isDeviceSecure())
-        }
-      },
-      {
-        title: 'Checking randomness',
-        description: 'Description',
-        status: CheckStatus.UNKNOWN,
-        delay: 100,
-        check: async () => {
-          const results = new Set()
-          for (let i = 0; i < 10000; i++) {
-            const random = Math.random()
-            if (results.has(random)) {
-              return false
-            } else {
-              results.add(random)
+        showChecks: false,
+        checks: [
+          {
+            title: 'Device Internet',
+            description: 'Description',
+            status: CheckStatus.UNKNOWN,
+            delay: 200,
+            successStatus: async () => CheckStatus.SUCCESS,
+            failureStatus: async () => CheckStatus.FAIL,
+            check: async () => {
+              return !(await this.networkSerice.capacitorCanAccessInternet())
+            }
+          },
+          {
+            title: 'Webview Internet',
+            description: 'Description',
+            status: CheckStatus.UNKNOWN,
+            delay: 100,
+            successStatus: async () => CheckStatus.SUCCESS,
+            failureStatus: async () => CheckStatus.FAIL,
+            check: async () => {
+              return !(await this.networkSerice.webviewCanAccessInternet())
+            }
+          },
+          {
+            title: 'App Internet',
+            description: 'Description',
+            status: CheckStatus.UNKNOWN,
+            delay: 500,
+            successStatus: async () => CheckStatus.SUCCESS,
+            failureStatus: async () => CheckStatus.FAIL,
+            check: async () => {
+              return !(await this.networkSerice.appCanAccessInternet())
             }
           }
-          for (let i = 0; i < 10; i++) {
-            const secureRandomArray = new Uint8Array(32)
-            window.crypto.getRandomValues(secureRandomArray)
-            if (results.has(secureRandomArray.toString())) {
-              return false
-            } else {
-              results.add(secureRandomArray.toString())
-              console.log('has', secureRandomArray.toString())
-            }
-          }
-          return true
-        }
+        ]
       },
       {
-        title: 'Checking address generation',
-        description: 'Description',
+        name: `Device`,
         status: CheckStatus.UNKNOWN,
-        delay: 100,
-        check: async () => {
-          // Generate address for all protocols from a known seed
-          return this.generateAddresses()
-        }
+        showChecks: false,
+        checks: [
+          {
+            title: 'Device is unrooted',
+            description: 'Description',
+            status: CheckStatus.UNKNOWN,
+            delay: 100,
+            successStatus: async () => CheckStatus.SUCCESS,
+            failureStatus: async () => CheckStatus.FAIL,
+            check: async () => {
+              return !(await this.deviceService.checkForRoot())
+            }
+          },
+          {
+            title: 'Device OS up to date',
+            description: 'Description',
+            status: CheckStatus.UNKNOWN,
+            delay: 100,
+            successStatus: async () => CheckStatus.SUCCESS,
+            failureStatus: async () => CheckStatus.WARNING,
+            check: async () => {
+              return false
+            }
+          },
+          {
+            title: 'Software updated recently',
+            description: 'Description',
+            status: CheckStatus.UNKNOWN,
+            delay: 100,
+            successStatus: async () => CheckStatus.SUCCESS,
+            failureStatus: async () => CheckStatus.WARNING,
+            check: async () => {
+              return false
+            }
+          },
+          {
+            title: 'Secure storage available',
+            description: 'Description',
+            status: CheckStatus.UNKNOWN,
+            delay: 100,
+            successStatus: async () => CheckStatus.SUCCESS,
+            failureStatus: async () => CheckStatus.FAIL,
+            check: async () => {
+              return !(await this.secureStorageService.isDeviceSecure())
+            }
+          },
+          {
+            title: 'Checking randomness',
+            description: 'Description',
+            status: CheckStatus.UNKNOWN,
+            delay: 100,
+            successStatus: async () => CheckStatus.SUCCESS,
+            failureStatus: async () => CheckStatus.FAIL,
+            check: async () => {
+              const results = new Set()
+              for (let i = 0; i < 10000; i++) {
+                const random = Math.random()
+                if (results.has(random)) {
+                  return false
+                } else {
+                  results.add(random)
+                }
+              }
+              for (let i = 0; i < 10000; i++) {
+                const secureRandomArray = new Uint8Array(32)
+                window.crypto.getRandomValues(secureRandomArray)
+                if (results.has(secureRandomArray.toString())) {
+                  return false
+                } else {
+                  results.add(secureRandomArray.toString())
+                }
+              }
+              return true
+            }
+          },
+          {
+            title: 'Checking address generation',
+            description: 'Description',
+            status: CheckStatus.UNKNOWN,
+            delay: 100,
+            successStatus: async () => CheckStatus.SUCCESS,
+            failureStatus: async () => CheckStatus.FAIL,
+            check: async () => {
+              // Generate address for all protocols from a known seed
+              return this.generateAddresses()
+            }
+          }
+        ]
       }
     ]
   }
@@ -171,51 +231,63 @@ export class SecurityCheckPage implements OnInit {
       .pipe(first())
       .subscribe((secrets) => {
         secrets.forEach((secret) => {
-          this.items.push({
-            title: `Checking Secret "${secret.label}" (Should not be in memory)`,
-            description: 'Description',
+          this.groups.push({
+            name: `Secret "${secret.label}"`,
             status: CheckStatus.UNKNOWN,
-            delay: 100,
-            check: async () => {
-              return !secret.secretHex
-            }
-          })
-
-          this.items.push({
-            title: `Checking Secret "${secret.label}" (is Paranoia)`,
-            description: 'Description',
-            status: CheckStatus.UNKNOWN,
-            delay: 100,
-            check: async () => {
-              return secret.isParanoia
-            }
-          })
-
-          this.items.push({
-            title: `Checking Secret "${secret.label}" (has social recovery)`,
-            description: 'Description',
-            status: CheckStatus.UNKNOWN,
-            delay: 100,
-            check: async () => {
-              return secret.hasSocialRecovery
-            }
-          })
-
-          this.items.push({
-            title: `Checking Secret "${secret.label}" (can read secret)`,
-            description: 'Description',
-            status: CheckStatus.UNKNOWN,
-            delay: 100,
-            check: async () => {
-              // TODO: Can we add a method to "check" the storage without actually reading it?
-              const secureStorage = await this.secureStorageService.get(secret.id, secret.isParanoia)
-              try {
-                await secureStorage.getItem(secret.id).then(() => undefined)
-                return true
-              } catch (e) {
-                return false
+            showChecks: false,
+            checks: [
+              {
+                title: `Not in memory`,
+                description: 'Description',
+                status: CheckStatus.UNKNOWN,
+                delay: 100,
+                successStatus: async () => CheckStatus.SUCCESS,
+                failureStatus: async () => CheckStatus.FAIL,
+                check: async () => {
+                  return !secret.secretHex
+                }
+              },
+              {
+                title: `Password enabled`,
+                description: 'Description',
+                status: CheckStatus.UNKNOWN,
+                delay: 100,
+                successStatus: async () => CheckStatus.SUCCESS,
+                failureStatus: async () => CheckStatus.WARNING,
+                check: async () => {
+                  return secret.isParanoia
+                }
+              },
+              {
+                title: `Has Social Recovery`,
+                description: 'Description',
+                status: CheckStatus.UNKNOWN,
+                delay: 100,
+                successStatus: async () => CheckStatus.SUCCESS,
+                failureStatus: async () => CheckStatus.WARNING,
+                check: async () => {
+                  return secret.hasSocialRecovery
+                }
+              },
+              {
+                title: `Can access secure storage`,
+                description: 'Description',
+                status: CheckStatus.UNKNOWN,
+                delay: 100,
+                successStatus: async () => CheckStatus.SUCCESS,
+                failureStatus: async () => CheckStatus.FAIL,
+                check: async () => {
+                  // TODO: Can we add a method to "check" the storage without actually reading it?
+                  const secureStorage = await this.secureStorageService.get(secret.id, secret.isParanoia)
+                  try {
+                    await secureStorage.getItem(secret.id).then(() => undefined)
+                    return true
+                  } catch (e) {
+                    return false
+                  }
+                }
               }
-            }
+            ]
           })
         })
       })
@@ -227,16 +299,50 @@ export class SecurityCheckPage implements OnInit {
     }
     this.checksRunning = true
 
-    this.items.forEach((item) => (item.status = CheckStatus.UNKNOWN))
-    for (let i = 0; i < this.items.length; i++) {
-      const element = this.items[i]
-      element.status = CheckStatus.PENDING
-      await new Promise((resolve) => setTimeout(resolve, element.delay))
-      element.status = (await element.check()) ? CheckStatus.SUCCESS : CheckStatus.FAIL
-      await new Promise((resolve) => setTimeout(resolve, 100))
+    this.groups.forEach((group) => {
+      group.status = CheckStatus.UNKNOWN
+      group.checks.forEach((check) => (check.status = CheckStatus.UNKNOWN))
+    })
+
+    for (const group of this.groups) {
+      group.status = CheckStatus.PENDING
+
+      let status = CheckStatus.SUCCESS
+
+      for (const item of group.checks) {
+        item.status = CheckStatus.PENDING
+        await new Promise((resolve) => setTimeout(resolve, item.delay))
+        item.status = (await item.check()) ? await item.successStatus() : await item.failureStatus()
+        await new Promise((resolve) => setTimeout(resolve, 100))
+
+        if (item.status === CheckStatus.FAIL) {
+          status = CheckStatus.FAIL
+        } else if (status !== CheckStatus.FAIL && item.status === CheckStatus.WARNING) {
+          status = CheckStatus.WARNING
+        }
+      }
+
+      group.status = status
     }
 
     this.checksRunning = false
+  }
+
+  public toggleShow(group: CheckGroup) {
+    group.showChecks = !group.showChecks
+  }
+
+  async showDescription(item: CheckItem) {
+    const alert = await this.alertCtrl.create({
+      header: item.title,
+      message: item.description,
+      buttons: [
+        {
+          text: 'Ok'
+        }
+      ]
+    })
+    alert.present()
   }
 
   private generateAddresses() {
