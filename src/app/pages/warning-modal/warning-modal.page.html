@@ -9,7 +9,7 @@
 
   <ion-row class="ion-justify-content-center" *ngIf="imageUrl"><img class="warning-img" [src]="imageUrl" /></ion-row>
 
-  <ion-fab *ngIf="buttonText" vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab id="accept" *ngIf="buttonText" vertical="bottom" horizontal="end" slot="fixed">
     <ion-button default (click)="handler()" color="primary" shape="round" item-right>{{ buttonText }}</ion-button>
   </ion-fab>
 </ion-content>

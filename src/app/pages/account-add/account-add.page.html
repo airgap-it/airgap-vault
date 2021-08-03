@@ -15,7 +15,7 @@
       <ion-list-header class="ion-no-padding">
         <ion-label class="font--weight__med white">{{ 'wallet-select-coins.text' | translate }}</ion-label>
       </ion-list-header>
-      <ion-item detail="false" class="ion-no-padding" *ngFor="let protocol of protocols">
+      <ion-item id="protocol-{{protocol.identifier}}" detail="false" class="ion-no-padding" *ngFor="let protocol of protocols">
         <ion-avatar slot="start" class="ion-align-items-center">
           <airgap-currency-symbol [symbol]="protocol.symbol"></airgap-currency-symbol>
         </ion-avatar>
@@ -63,7 +63,7 @@
   </ion-list>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-button [disabled]="!selectedProtocol" color="primary" shape="round" (click)="addWallet()">
+    <ion-button id="add" [disabled]="!selectedProtocol" color="primary" shape="round" (click)="addWallet()">
       {{ 'wallet-select-coins.create_label' | translate }}
     </ion-button>
   </ion-fab>
