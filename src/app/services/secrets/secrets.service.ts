@@ -268,14 +268,13 @@ export class SecretsService {
     await this.addOrUpdateSecret(secret)
   }
 
-  public async addWallets(configs: AddWalletConifg[]): Promise<void> {
+  public async addWallets(secret: Secret, configs: AddWalletConifg[]): Promise<void> {
     const loading: HTMLIonLoadingElement = await this.loadingCtrl.create({
       message: 'Deriving your wallet...'
     })
     loading.present().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
 
     try {
-      const secret: Secret = this.getActiveSecret()
       const entropy: string = await this.retrieveEntropyForSecret(secret)
 
       const createdOrUpdated: Either<AirGapWallet, AirGapWallet>[] = (
@@ -381,6 +380,6 @@ export class SecretsService {
     error.ignore = true
 
     await this.showAlert('Error', error.message)
-    await this.navigationService.routeToAccountsTab(true)
+    await this.navigationService.routeToSecretsTab(true)
   }
 }

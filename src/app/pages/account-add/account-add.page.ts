@@ -9,6 +9,7 @@ import { VaultStorageKey, VaultStorageService } from '../../services/storage/sto
 import { LocalAuthenticationOnboardingPage } from '../local-authentication-onboarding/local-authentication-onboarding.page'
 import { BIP39_PASSPHRASE_ENABLED } from 'src/app/constants/constants'
 import { ProtocolService } from '@airgap/angular-core'
+import { Secret } from 'src/app/models/secret'
 
 @Component({
   selector: 'airgap-account-add',
@@ -16,6 +17,7 @@ import { ProtocolService } from '@airgap/angular-core'
   styleUrls: ['./account-add.page.scss']
 })
 export class AccountAddPage {
+  public secret: Secret
   public selectedProtocol: ICoinProtocol
   public protocols: ICoinProtocol[]
   public isHDWallet: boolean = false
@@ -34,9 +36,11 @@ export class AccountAddPage {
     private readonly navigationService: NavigationService,
     private readonly alertController: AlertController
   ) {
+    const state = this.navigationService.getState()
+    this.secret = state.secret
     this.protocolService.getActiveProtocols().then((protocols: ICoinProtocol[]) => {
       this.protocols = protocols
-      this.onSelectedProtocolChange(this.navigationService.getState().protocol || this.protocols[0])
+      this.onSelectedProtocolChange(state.protocol || this.protocols[0])
     })
   }
 
@@ -70,6 +74,7 @@ export class AccountAddPage {
     const addAccount = () => {
       this.secretsService
         .addWallets(
+          this.secret,
           this.protocols.map((protocol: ICoinProtocol) => {
             const isSelected: boolean = this.selectedProtocol.identifier === protocol.identifier
 
@@ -83,7 +88,7 @@ export class AccountAddPage {
           })
         )
         .then(() => {
-          this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+          this.navigationService.routeToSecretsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
         })
         .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
     }

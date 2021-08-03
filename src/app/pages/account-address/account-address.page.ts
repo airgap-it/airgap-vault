@@ -38,7 +38,7 @@ export class AccountAddressPage {
   }
 
   public done(): void {
-    this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.navigationService.routeToSecretsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public async share(): Promise<void> {

@@ -3,7 +3,6 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router'
 
 const routes: Routes = [
   { path: '', loadChildren: () => import('./pages/tabs/tabs.module').then((m) => m.TabsPageModule) },
-  { path: 'tab-accounts', loadChildren: () => import('./pages/tab-accounts/tab-accounts.module').then((m) => m.TabAccountsPageModule) },
   { path: 'tab-scan', loadChildren: () => import('./pages/tab-scan/tab-scan.module').then((m) => m.TabScanPageModule) },
   {
     path: 'tab-secrets',
@@ -121,6 +120,10 @@ const routes: Routes = [
   {
     path: 'migration',
     loadChildren: () => import('./pages/migration/migration.module').then((m) => m.MigrationPageModule)
+  },
+  {
+    path: 'accounts-list',
+    loadChildren: () => import('./pages/accounts-list/accounts-list.module').then((m) => m.AccountsListPageModule)
   }
 ]
 

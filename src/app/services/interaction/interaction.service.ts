@@ -129,7 +129,7 @@ export class InteractionService {
     this.deepLinkService
       .sameDeviceDeeplink(iacMessage)
       .then(() => {
-        this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+        this.navigationService.routeToSecretsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       })
       .catch(handleErrorLocal(ErrorCategory.DEEPLINK_SERVICE))
   }

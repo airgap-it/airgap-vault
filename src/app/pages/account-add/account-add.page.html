@@ -1,15 +1,13 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/tab-accounts"></ion-back-button>
+      <ion-back-button defaultHref="/accounts-list"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ 'wallet-select-coins.title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <airgap-current-secret></airgap-current-secret>
-
   <ion-list lines="none">
     <ion-radio-group [ngModel]="selectedProtocol" (ngModelChange)="onSelectedProtocolChange($event)">
       <ion-list-header class="ion-no-padding">

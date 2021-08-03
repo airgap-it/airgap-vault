@@ -39,6 +39,10 @@ export class TabSecretsPage {
     this.navigationService.route('/secret-create').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
+  public goToAccountsList(secret: Secret): void {
+    this.navigationService.routeWithState('/accounts-list', { secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
   public goToEditSecret(secret: Secret): void {
     this.navigationService.routeWithState('/secret-edit', { secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }

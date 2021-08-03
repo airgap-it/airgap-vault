@@ -57,7 +57,7 @@ airgap-current-secret {
     --padding-start: 0;
   }
 }
-airgap-tab-accounts {
+airgap-accounts-list {
   airgap-current-secret ion-item {
     --padding-start: 16px;
   }
@@ -70,7 +70,7 @@ airgap-tab-accounts {
       --padding-top: 4px;
     }
   }
-  airgap-tab-accounts {
+  airgap-accounts-list {
     ion-list {
       padding-top: 8px;
     }
@@ -83,6 +83,15 @@ airgap-tab-accounts {
       .typography--mono {
         color: var(--ion-color-light);
       }
+    }
+  }
+}
+
+.airgap-currency-symbol-secret {
+  airgap-currency-symbol {
+    img {
+      width: 32px;
+      height: 32px;
     }
   }
 }

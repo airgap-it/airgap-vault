@@ -1,10 +1,9 @@
 <ion-header class="ion-no-border">
   <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
     <ion-title>{{ 'tab-wallets.title' | translate }}</ion-title>
-  </ion-toolbar>
-
-  <ion-toolbar color="secondary">
-    <airgap-current-secret></airgap-current-secret>
   </ion-toolbar>
 
   <ion-toolbar color="secondary">
@@ -14,7 +13,7 @@
 
 <ion-content *ngIf="wallets$" class="ion-padding-horizontal">
   <ion-item
-    *ngIf="isAndroid && activeSecret && !activeSecret.hasRecoveryKey"
+    *ngIf="isAndroid && secret && !secret.hasRecoveryKey"
     lines="none"
     detail="true"
     class="ion-margin-vertical"

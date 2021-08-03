@@ -1,24 +1,21 @@
 import { AirGapWallet, AirGapWalletStatus } from '@airgap/coinlib-core'
 import { Component, OnInit } from '@angular/core'
 import { Platform } from '@ionic/angular'
-import { BehaviorSubject, Observable } from 'rxjs'
-
-import { Secret } from '../../models/secret'
-import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
-import { ModeService } from '../../services/mode/mode.service'
-import { ModeStrategy } from '../../services/mode/strategy/ModeStrategy'
-import { NavigationService } from '../../services/navigation/navigation.service'
-import { SecretsService } from '../../services/secrets/secrets.service'
+import { BehaviorSubject } from 'rxjs'
+import { Secret } from 'src/app/models/secret'
+import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
+import { ModeService } from 'src/app/services/mode/mode.service'
+import { ModeStrategy } from 'src/app/services/mode/strategy/ModeStrategy'
+import { NavigationService } from 'src/app/services/navigation/navigation.service'
 import { SecretEditAction } from '../secret-edit/secret-edit.page'
 
 @Component({
-  selector: 'airgap-tab-accounts',
-  templateUrl: './tab-accounts.page.html',
-  styleUrls: ['./tab-accounts.page.scss']
+  selector: 'airgap-accounts-list',
+  templateUrl: './accounts-list.page.html',
+  styleUrls: ['./accounts-list.page.scss']
 })
-export class TabAccountsPage implements OnInit {
-  public readonly secrets: Observable<Secret[]>
-  public activeSecret: Secret
+export class AccountsListPage implements OnInit {
+  public secret: Secret
 
   public symbolFilter: string | undefined
 
@@ -30,27 +27,21 @@ export class TabAccountsPage implements OnInit {
 
   constructor(
     private readonly platform: Platform,
-    private readonly secretsService: SecretsService,
     private readonly navigationService: NavigationService,
     private readonly modeService: ModeService
   ) {
-    this.secrets = this.secretsService.getSecretsObservable()
+    this.secret = this.navigationService.getState().secret
+    this.wallets$.next([...this.secret.wallets].sort((a, b) => a.protocol.name.localeCompare(b.protocol.name)))
     this.isAndroid = this.platform.is('android')
   }
 
   public async ngOnInit(): Promise<void> {
-    this.secretsService.getActiveSecretObservable().subscribe((secret: Secret) => {
-      if (secret && secret.wallets) {
-        this.activeSecret = secret
-        this.wallets$.next([...secret.wallets])
-      }
-    })
-
-    this.secrets.subscribe(async (secrets: Secret[]) => {
-      if (secrets.length === 0) {
-        this.navigationService.route('/secret-create/initial').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-      }
-    }) // We should never unsubscribe, because we need to watch this in case a user deletes all his secrets
+    // TODO: MOVE THIS TO SECRETS TAB
+    // this.secrets.subscribe(async (secrets: Secret[]) => {
+    //   if (secrets.length === 0) {
+    //     this.navigationService.route('/secret-create/initial').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    //   }
+    // }) // We should never unsubscribe, because we need to watch this in case a user deletes all his secrets
   }
 
   public goToReceiveAddress(wallet: AirGapWallet): void {
@@ -73,13 +64,17 @@ export class TabAccountsPage implements OnInit {
   }
 
   public addWallet(): void {
-    this.navigationService.route('/account-add').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.navigationService.routeWithState('/account-add', { secret: this.secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
+  public goToEditSecret(secret: Secret): void {
+    this.navigationService.routeWithState('/secret-edit', { secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public navigateToRecoverySettings() {
     this.navigationService
       .routeWithState('/secret-edit', {
-        secret: this.activeSecret,
+        secret: this.secret,
         action: SecretEditAction.SET_RECOVERY_KEY
       })
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))

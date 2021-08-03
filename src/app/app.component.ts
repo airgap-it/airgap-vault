@@ -95,7 +95,7 @@ export class AppComponent implements AfterViewInit {
             if (secrets.length > 0) {
               this.ngZone
                 .run(async () => {
-                  this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+                  this.navigationService.routeToSecretsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
 
                   const protocol: string = data.url.substr(DEEPLINK_VAULT_ADD_ACCOUNT.length)
                   if (protocol.length > 0) {
