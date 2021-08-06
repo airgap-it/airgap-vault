@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core'
+import { Secret } from 'src/app/models/secret'
 
 import { ErrorCategory, handleErrorLocal } from './../error-handler/error-handler.service'
 import { SecureStorage } from './secure-storage.service'
@@ -82,7 +83,8 @@ export class SecureStorageServiceMock {
     })
   }
 
-  public wipe() {
+  public wipe(secrets: Secret[]) {
+    console.log(`Deleting ${secrets.length} secrets.`)
     localStorage.clear()
   }
 }

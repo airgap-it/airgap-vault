@@ -1,6 +1,7 @@
 import { Injectable, Inject } from '@angular/core'
 import { SecurityUtilsPlugin } from 'src/app/capacitor-plugins/definitions'
 import { SECURITY_UTILS_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
+import { Secret } from 'src/app/models/secret'
 
 export interface SecureStorage {
   init(): Promise<void>
@@ -97,7 +98,16 @@ export class SecureStorageService {
     }
   }
 
-  public wipe() {
-    return this.securityUtils.removeAll({})
+  public async wipe(secrets: Secret[]) {
+    // Delete each secret individually
+    for (const secret of secrets) {
+      await this.securityUtils.removeAll({
+        alias: secret.id,
+        isParanoia: secret.isParanoia
+      })
+    }
+
+    // Then wipe the whole storage
+    await this.securityUtils.destroy()
   }
 }

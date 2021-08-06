@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core'
 import { AlertController } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
+import { first } from 'rxjs/operators'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
+import { SecretsService } from 'src/app/services/secrets/secrets.service'
 import { SecureStorageService } from 'src/app/services/secure-storage/secure-storage.service'
 import { VaultStorageService } from 'src/app/services/storage/storage.service'
 
@@ -16,7 +18,8 @@ export class DangerZonePage implements OnInit {
     private readonly translateService: TranslateService,
     private readonly storageService: VaultStorageService,
     private readonly secureStorage: SecureStorageService,
-    private readonly navigationService: NavigationService
+    private readonly navigationService: NavigationService,
+    private readonly secretsService: SecretsService
   ) {}
 
   ngOnInit() {}
@@ -33,7 +36,8 @@ export class DangerZonePage implements OnInit {
         {
           text: this.translateService.instant('danger-zone.wipe.alert.ok'),
           handler: async () => {
-            await Promise.all([this.storageService.wipe(), this.secureStorage.wipe()])
+            const secrets = await this.secretsService.getSecretsObservable().pipe(first()).toPromise()
+            await Promise.all([this.storageService.wipe(), this.secureStorage.wipe(secrets)])
             this.navigationService.route('/').then(() => {
               location.reload()
             })
