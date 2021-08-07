@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>pin</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <p>{{pinService.pin}}</p>
+  <ion-row class="row1" *ngFor="let group of numberGroups; index as i">
+    <ion-col col-md-4 *ngIf="i === 3"></ion-col>
+    <ion-col col-md-4 *ngFor="let number of group">
+      <ion-button class="round-button" (click)="pinService.add(number)">{{ number }}</ion-button>
+    </ion-col>
+    <ion-col col-md-4 *ngIf="i === 3">
+      <ion-button class="round-button" (click)="pinService.removeLast()"><</ion-button>
+    </ion-col>
+  </ion-row>
+  <p (click)="scramble()">Scramble Keyboard</p>
+</ion-content>
