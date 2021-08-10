@@ -1,32 +1,38 @@
-<br />
-<ion-button
-  *ngFor="let suggestion of suggestions"
-  style="height: 2em;"
-  shape="round"
-  [color]="'primary'"
-  class="typography--mono lowercase"
-  (click)="selectWord(suggestion)"
->
-  {{ suggestion }}
-</ion-button>
-<br />
-Current text: {{ text }}
+<div class="input--container">
+  <span class="typography--mono">{{ text }}</span>
+</div>
 
-<div *ngFor="let row of rows">
+<ion-row class="suggestion--container">
+  <ion-button
+    *ngFor="let suggestion of suggestions"
+    shape="round"
+    size="small"
+    [color]="'primary'"
+    class="typography--mono lowercase"
+    (click)="selectWord(suggestion)"
+  >
+    {{ suggestion }}
+  </ion-button>
+</ion-row>
+
+<div class="content--align__center-center" *ngFor="let row of rows">
   <ion-button
     *ngFor="let letter of row"
     [id]="'key-' + letter.letter"
-    style="height: 2em;"
-    shape="round"
     size="small"
     [color]="letter.active ? 'primary' : 'tertiary'"
     class="typography--mono lowercase"
     [disabled]="!letter.enabled"
     (click)="selectLetter(letter.letter)"
   >
-    {{ letter.letter }}
+    <span [innerHTML]="letter.letter"></span>
   </ion-button>
 </div>
 
-<ion-button (click)="delete()">Delete Word</ion-button>
-<ion-button (click)="toggleShuffled()">Shuffle Letters</ion-button>
+<div class="content--align__center-center actions--container">
+  <ion-button (click)="delete()"><ion-icon name="trash-outline"></ion-icon></ion-button>
+  <ion-button (click)="toggleShuffled()"><ion-icon name="shuffle-outline"></ion-icon></ion-button>
+  <!-- TODO: add paste/shuffle action -->
+  <ion-button><ion-icon name="clipboard-outline"></ion-icon></ion-button>
+  <ion-button><ion-icon name="eye-off-outline"></ion-icon></ion-button>
+</div>

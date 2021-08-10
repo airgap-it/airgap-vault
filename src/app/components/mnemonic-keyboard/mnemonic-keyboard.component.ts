@@ -96,11 +96,15 @@ export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
     this.rows = []
     this.rows.push(letters.splice(0, firstRow))
     this.rows.push(letters.splice(0, secondRow))
-    this.rows.push([...letters.splice(0, thirdRow), { letter: '{backspace}', enabled: this.text.length > 0, active: false }])
+    this.rows.push([
+      ...letters.splice(0, thirdRow),
+      /* TODO: use for backspace <ion-icon name="backspace-outline"></ion-icon> */
+      { letter: '<ion-icon name="backspace-outline"></ion-icon>', enabled: this.text.length > 0, active: false }
+    ])
   }
 
   public selectLetter(letter: string) {
-    if (letter === '{backspace}') {
+    if (letter === '<ion-icon name="backspace-outline"></ion-icon>') {
       this.remove()
     } else {
       this.add(letter)
