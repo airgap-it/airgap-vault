@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { AlertController } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 import { first } from 'rxjs/operators'
+import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
 import { SecureStorageService } from 'src/app/services/secure-storage/secure-storage.service'
@@ -46,5 +47,9 @@ export class DangerZonePage implements OnInit {
       ]
     })
     alert.present()
+  }
+
+  public goToExportBackup(): void {
+    this.navigationService.route('/export-backup').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }
