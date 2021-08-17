@@ -3,6 +3,7 @@
 </div>
 
 <ion-row class="suggestion--container">
+  <!-- TODO: How many suggestions should be shown? If it's only 3, it sometimes looks like those are the only remaining options. It should either have an indication that there are more, or we show all of them in a "slider". -->
   <ion-button
     *ngFor="let suggestion of suggestions"
     shape="round"
@@ -12,6 +13,10 @@
     (click)="selectWord(suggestion)"
   >
     {{ suggestion }}
+  </ion-button>
+  <!-- TODO: If we don't have a "placeholder" here, the keyboard goes up and down while typing, which is bad -->
+  <ion-button *ngIf="suggestions.length === 0" shape="round" size="small" [color]="'secondary'" class="typography--mono lowercase">
+    no suggestions
   </ion-button>
 </ion-row>
 
@@ -25,14 +30,18 @@
     [disabled]="!letter.enabled"
     (click)="selectLetter(letter.letter)"
   >
-    <span [innerHTML]="letter.letter"></span>
+    <ng-container *ngIf="letter.letter === '{backspace}'">
+      <ion-icon name="backspace-outline"></ion-icon>
+    </ng-container>
+    <ng-container *ngIf="letter.letter !== '{backspace}'">
+      <span [innerHTML]="letter.letter"></span>
+    </ng-container>
   </ion-button>
 </div>
 
 <div class="content--align__center-center actions--container">
   <ion-button (click)="delete()"><ion-icon name="trash-outline"></ion-icon></ion-button>
   <ion-button (click)="toggleShuffled()"><ion-icon name="shuffle-outline"></ion-icon></ion-button>
-  <!-- TODO: add paste/shuffle action -->
-  <ion-button><ion-icon name="clipboard-outline"></ion-icon></ion-button>
-  <ion-button><ion-icon name="eye-off-outline"></ion-icon></ion-button>
+  <ion-button (click)="paste()"><ion-icon name="clipboard-outline"></ion-icon></ion-button>
+  <ion-button (click)="scramble()"><ion-icon [name]="_maskInput ? 'eye-outline' : 'eye-off-outline'"></ion-icon></ion-button>
 </div>

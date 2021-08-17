@@ -9,7 +9,6 @@ import { NavigationService } from '../../services/navigation/navigation.service'
 
 import * as bip39 from 'bip39'
 import { Observable, Subject } from 'rxjs'
-import { ClipboardService } from '@airgap/angular-core'
 import { map } from 'rxjs/operators'
 
 type SingleWord = string
@@ -22,19 +21,20 @@ type SingleWord = string
 export class SecretImportPage {
   public secretWords: string[] = []
   public secretWordsValid: Observable<boolean>
-  public selectedWordIndex: number = -1
+  public selectedWordIndex: number = 0
   public selectedWord: string = ''
 
   public maskWords: boolean = false
 
   public wordList: SingleWord[] = bip39.wordlists.EN as any
 
+  public lastWordOptions: string[] = []
+
   public setWordEmitter: Subject<string> = new Subject()
 
   constructor(
     private readonly deviceService: DeviceService,
     private readonly navigationService: NavigationService,
-    private readonly clipboardService: ClipboardService,
     private readonly alertController: AlertController
   ) {
     this.secretWordsValid = this.setWordEmitter.pipe(
@@ -49,6 +49,10 @@ export class SecretImportPage {
     this.selectedWordIndex = index
     this.selectedWord = this.secretWords[this.selectedWordIndex]
 
+    if (this.selectedWordIndex === 0 && !this.selectedWord) {
+      this.selectedWordIndex = -1
+    }
+
     this.setWordEmitter.next(this.selectedWord ?? '')
   }
 
@@ -57,6 +61,8 @@ export class SecretImportPage {
       if (this.selectedWordIndex >= 0) {
         this.secretWords.splice(this.selectedWordIndex, 1)
         this.selectWord(Math.max(this.selectedWordIndex - 1, 0))
+      } else if (this.selectedWordIndex === -1) {
+        this.selectWord(this.secretWords.length - 1)
       }
       return
     }
@@ -69,6 +75,8 @@ export class SecretImportPage {
 
     this.selectedWordIndex = -1
     this.selectedWord = ''
+
+    this.getLastWord()
 
     this.setWordEmitter.next(this.selectedWord ?? '')
   }
@@ -95,8 +103,7 @@ export class SecretImportPage {
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  public async paste() {
-    const text = await this.clipboardService.paste()
+  public async paste(text: string | undefined) {
     if (BIPSigner.validateMnemonic(text)) {
       this.secretWords = text.split(' ')
       this.selectedWordIndex = -1
@@ -115,5 +122,23 @@ export class SecretImportPage {
       })
       alert.present()
     }
+  }
+
+  public async mask(enabled: boolean) {
+    this.maskWords = enabled
+  }
+
+  public getLastWord() {
+    const options = []
+    if (this.secretWords.length === 23) {
+      // The last word is 3 bits entropy and 8 bits checksum of the entropy. But because there are only 2048 words, it's fast to just try all combinations and the code is a lot easier, so we do that.
+      for (const word of bip39.wordlists.EN) {
+        if (bip39.validateMnemonic([...this.secretWords, word].join(' '))) {
+          options.push(word)
+          console.log('LAST WORD', word)
+        }
+      }
+    }
+    this.lastWordOptions = options
   }
 }

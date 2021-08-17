@@ -1,3 +1,4 @@
+import { ClipboardService } from '@airgap/angular-core'
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
 
 import * as bip39 from 'bip39'
@@ -39,6 +40,14 @@ export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
   @Output()
   public wordSelected: EventEmitter<string | undefined> = new EventEmitter()
 
+  @Output()
+  public pasted: EventEmitter<string | undefined> = new EventEmitter()
+
+  _maskInput: boolean = false
+
+  @Output()
+  public maskInput: EventEmitter<boolean> = new EventEmitter()
+
   public suggestions: string[] = []
 
   public rows: { letter: string; enabled: boolean; active: boolean }[][]
@@ -49,7 +58,7 @@ export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription = new Subscription()
 
-  constructor() {
+  constructor(private readonly clipboardService: ClipboardService) {
     this.paintKeyboard()
   }
 
@@ -71,9 +80,8 @@ export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
     if (this.wordlist) {
       const filtered = this.wordlist.filter((word) => word.startsWith(this.text))
 
-      if (this.text.length > 0) {
-        this.suggestions = filtered.slice(0, 3)
-      }
+      const numberOfItems = 3
+      this.suggestions = filtered.slice(0, numberOfItems)
 
       const set = new Set<string>()
       filtered.forEach((word) => {
@@ -89,25 +97,20 @@ export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
     const letters = (this.shuffled ? shuffle(alphabet) : alphabet).split('').map((letter) => {
       return { letter, enabled: this.validLetters.includes(letter), active: false }
     })
-    console.log('LETTERS', letters.map((l) => l.letter).join(''))
     const firstRow = 10
     const secondRow = 9
     const thirdRow = 7
     this.rows = []
     this.rows.push(letters.splice(0, firstRow))
     this.rows.push(letters.splice(0, secondRow))
-    this.rows.push([
-      ...letters.splice(0, thirdRow),
-      /* TODO: use for backspace <ion-icon name="backspace-outline"></ion-icon> */
-      { letter: '<ion-icon name="backspace-outline"></ion-icon>', enabled: this.text.length > 0, active: false }
-    ])
+    this.rows.push([...letters.splice(0, thirdRow), { letter: '{backspace}', enabled: this.text.length > 0, active: false }])
   }
 
   public selectLetter(letter: string) {
-    if (letter === '<ion-icon name="backspace-outline"></ion-icon>') {
-      this.remove()
+    if (letter === '{backspace}') {
+      this.removeLetter()
     } else {
-      this.add(letter)
+      this.addLetter(letter)
     }
 
     this.paintKeyboard()
@@ -117,11 +120,16 @@ export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
     this.wordSelected.next(word)
   }
 
-  private add(char: string) {
+  private addLetter(char: string) {
     this.text += char
+    const hasExactMatch = this.wordlist.filter((word) => word === this.text).length > 0
+
+    if (hasExactMatch) {
+      this.selectWord(this.text)
+    }
   }
 
-  async remove(): Promise<void> {
+  async removeLetter(): Promise<void> {
     const len = this.text.length
     this.text = this.text.substring(0, len - 1)
   }
@@ -136,9 +144,19 @@ export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
   }
 
   async setText(text: string) {
-    console.log('SETTING TEXT', text)
     this.text = text
     this.suggestions = []
     this.paintKeyboard()
+  }
+
+  async paste() {
+    const text = await this.clipboardService.paste()
+
+    this.pasted.emit(text)
+  }
+
+  async scramble() {
+    this._maskInput = !this._maskInput
+    this.maskInput.emit(this._maskInput)
   }
 }
