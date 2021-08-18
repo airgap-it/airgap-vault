@@ -4,7 +4,6 @@ import { fromSeed } from 'bip32'
 
 import { toBoolean } from '../utils/utils'
 
-import { InteractionSetting } from './../services/interaction/interaction.service'
 import { BIPSigner } from './BIP39Signer'
 import { Identifiable } from './identifiable'
 
@@ -17,7 +16,6 @@ export class Secret implements Identifiable {
   public secretHex: string
   public isParanoia: boolean
   public hasSocialRecovery: boolean
-  public interactionSetting: InteractionSetting
   public hasRecoveryKey: boolean
 
   public fingerprint?: string
@@ -26,16 +24,9 @@ export class Secret implements Identifiable {
 
   private readonly twofactor: string
 
-  constructor(
-    seed: string | null,
-    label: string = '',
-    isParanoia: boolean = false,
-    interactionSetting: InteractionSetting = InteractionSetting.UNDETERMINED,
-    hasRecoveryKey: boolean = false
-  ) {
+  constructor(seed: string | null, label: string = '', isParanoia: boolean = false, hasRecoveryKey: boolean = false) {
     this.label = label
     this.isParanoia = isParanoia
-    this.interactionSetting = interactionSetting
     this.hasRecoveryKey = hasRecoveryKey
 
     if (seed !== null) {

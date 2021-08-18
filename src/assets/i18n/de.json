@@ -216,6 +216,8 @@
   "tab-settings.secrets_label": "Geheimschlüssel",
   "tab-settings.add-settings_label": "Geheimschlüssel hinzufügen",
   "tab-settings.paste-from-clipboard_label": "Code aus der Zwischenablage einfügen",
+  "tab-settings.interaction-options_label": "Interaktion Optionen",
+  "tab-settings.interaction-settings_label": "Interaktion Einstellungen",
   "tab-settings.qr.settings_label": "QR Einstellungen",
   "tab-settings.qr.enable-new-serializer_label": "Neuen Serializer aktivieren",
   "tab-settings.qr.page-time_label": "QR Anzeigezeit",

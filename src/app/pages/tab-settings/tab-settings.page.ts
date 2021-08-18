@@ -37,6 +37,10 @@ export class TabSettingsPage {
     this.navigationService.routeWithState('/secret-edit', { secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
+  public goToInteractionSettings(): void {
+    this.navigationService.route('/interaction-selection-settings').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
   public async deleteSecret(secret: Secret): Promise<void> {
     const alert: HTMLIonAlertElement = await this.alertController.create({
       header: 'Delete ' + secret.label,
