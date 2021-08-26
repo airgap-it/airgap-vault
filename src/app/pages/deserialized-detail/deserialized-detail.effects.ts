@@ -426,15 +426,12 @@ export class DeserializedDetailEffects {
 
   private async navigateWithSignedTransactions(transactions: DeserializedSignedTransaction[]): Promise<void> {
     const broadcastUrl: IACMessageDefinitionObjectV3[] = await this.generateTransactionBroadcastUrl(transactions)
-    this.interactionService.startInteraction(
-      {
-        operationType: InteractionOperationType.TRANSACTION_BROADCAST,
-        iacMessage: broadcastUrl,
-        wallets: transactions.map((transaction: DeserializedSignedTransaction): AirGapWallet => transaction.wallet),
-        signedTxs: transactions.map((transaction: DeserializedSignedTransaction): string => transaction.data.transaction)
-      },
-      this.secretsService.getActiveSecret()
-    )
+    this.interactionService.startInteraction({
+      operationType: InteractionOperationType.TRANSACTION_BROADCAST,
+      iacMessage: broadcastUrl,
+      wallets: transactions.map((transaction: DeserializedSignedTransaction): AirGapWallet => transaction.wallet),
+      signedTxs: transactions.map((transaction: DeserializedSignedTransaction): string => transaction.data.transaction)
+    })
   }
 
   private async generateTransactionBroadcastUrl(transactions: DeserializedSignedTransaction[]): Promise<IACMessageDefinitionObjectV3[]> {
@@ -459,21 +456,18 @@ export class DeserializedDetailEffects {
 
   private async navigateWithSignedMessages(messages: DeserializedSignedMessage[]): Promise<void> {
     const broadcastUrl: IACMessageDefinitionObjectV3[] = await this.generateMessageBroadcastUrl(messages)
-    this.interactionService.startInteraction(
-      {
-        operationType: InteractionOperationType.MESSAGE_SIGN_REQUEST,
-        iacMessage: broadcastUrl,
-        messageSignResponse:
-          messages[0] !== undefined
-            ? {
-                message: messages[0].data.message,
-                publicKey: messages[0].data.publicKey,
-                signature: messages[0].data.signature
-              }
-            : undefined
-      },
-      this.secretsService.getActiveSecret()
-    )
+    this.interactionService.startInteraction({
+      operationType: InteractionOperationType.MESSAGE_SIGN_REQUEST,
+      iacMessage: broadcastUrl,
+      messageSignResponse:
+        messages[0] !== undefined
+          ? {
+              message: messages[0].data.message,
+              publicKey: messages[0].data.publicKey,
+              signature: messages[0].data.signature
+            }
+          : undefined
+    })
   }
 
   private async generateMessageBroadcastUrl(messages: DeserializedSignedMessage[]): Promise<IACMessageDefinitionObjectV3[]> {

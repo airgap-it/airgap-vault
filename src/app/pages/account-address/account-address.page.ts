@@ -7,7 +7,6 @@ import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/er
 import { InteractionOperationType, InteractionService } from '../../services/interaction/interaction.service'
 import { MigrationService } from '../../services/migration/migration.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
-import { SecretsService } from '../../services/secrets/secrets.service'
 import { ShareUrlService } from '../../services/share-url/share-url.service'
 import { isWalletMigrated } from '../../utils/migration'
 
@@ -27,7 +26,6 @@ export class AccountAddressPage {
   constructor(
     private readonly popoverCtrl: PopoverController,
     private readonly clipboardService: ClipboardService,
-    private readonly secretsService: SecretsService,
     private readonly shareUrlService: ShareUrlService,
     private readonly interactionService: InteractionService,
     private readonly navigationService: NavigationService,
@@ -44,13 +42,10 @@ export class AccountAddressPage {
   public async share(): Promise<void> {
     await this.waitWalletShareUrl()
 
-    this.interactionService.startInteraction(
-      {
-        operationType: InteractionOperationType.WALLET_SYNC,
-        iacMessage: this.walletShareUrl
-      },
-      this.secretsService.getActiveSecret()
-    )
+    this.interactionService.startInteraction({
+      operationType: InteractionOperationType.WALLET_SYNC,
+      iacMessage: this.walletShareUrl
+    })
   }
 
   public async presentEditPopover(event: Event): Promise<void> {

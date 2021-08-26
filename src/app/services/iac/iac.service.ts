@@ -47,13 +47,10 @@ export class IACService extends BaseIACService {
   }
 
   public async relay(data: RelayMessage): Promise<void> {
-    this.interactionService.startInteraction(
-      {
-        operationType: InteractionOperationType.WALLET_SYNC,
-        iacMessage: (data as any).messages ?? (data as any).rawString // TODO: Fix types
-      },
-      this.secretsService.getActiveSecret()
-    )
+    this.interactionService.startInteraction({
+      operationType: InteractionOperationType.WALLET_SYNC,
+      iacMessage: (data as any).messages ?? (data as any).rawString // TODO: Fix types
+    })
   }
 
   private async handleUnsignedTransactions(

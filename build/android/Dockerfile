@@ -62,7 +62,7 @@ RUN ionic build --prod
 RUN cap sync android
 
 # accept licenses
-RUN echo y | $ANDROID_HOME/tools/bin/sdkmanager --update
+RUN yes | $ANDROID_HOME/tools/bin/sdkmanager --update
 
 # clean project
 RUN /app/android/gradlew --project-dir /app/android clean

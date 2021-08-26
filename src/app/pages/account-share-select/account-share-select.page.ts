@@ -8,7 +8,6 @@ import { takeUntil } from 'rxjs/operators'
 
 import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
-import { InteractionSetting } from '../../services/interaction/interaction.service'
 
 import * as actions from './account-share-select.actions'
 import * as fromAccountShareSelect from './account-share-select.reducers'
@@ -82,7 +81,7 @@ export class AccountShareSelectPage implements OnDestroy {
       case 'walletsNotMigrated':
         return this.walletsNotMigratedAlert()
       case 'excludedLegacyAccounts':
-        return this.excludedLegacyAccountsAlert(alert.shareUrl, alert.interactionSetting)
+        return this.excludedLegacyAccountsAlert(alert.shareUrl)
       case 'unknownError':
         return this.unknownErrorAlert(alert.message)
       default:
@@ -103,7 +102,7 @@ export class AccountShareSelectPage implements OnDestroy {
     }
   }
 
-  private excludedLegacyAccountsAlert(shareUrl: IACMessageDefinitionObjectV3[], interactionSetting: InteractionSetting): AlertOptions {
+  private excludedLegacyAccountsAlert(shareUrl: IACMessageDefinitionObjectV3[]): AlertOptions {
     return {
       header: 'wallet-share-select.alert.excluded-legacy-accounts.header',
       message: 'wallet-share-select.alert.excluded-legacy-accounts.message',
@@ -115,7 +114,7 @@ export class AccountShareSelectPage implements OnDestroy {
         {
           text: 'wallet-share-select.alert.excluded-legacy-accounts.button-accept_label',
           handler: () => {
-            this.store.dispatch(actions.migrationAlertAccepted({ shareUrl, interactionSetting }))
+            this.store.dispatch(actions.migrationAlertAccepted({ shareUrl }))
           }
         }
       ]

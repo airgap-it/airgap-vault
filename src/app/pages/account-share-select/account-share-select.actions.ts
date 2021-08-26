@@ -2,7 +2,6 @@ import { IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
 import { createAction, props } from '@ngrx/store'
 
 import { Secret } from '../../models/secret'
-import { InteractionSetting } from '../../services/interaction/interaction.service'
 
 const featureName = 'Account Share Select'
 
@@ -20,18 +19,15 @@ export const alertDismissed = createAction(`[${featureName}] Alert Dismissed`, p
 
 export const migrationAlertAccepted = createAction(
   `[${featureName}] Migration Alert Accepted`,
-  props<{ shareUrl: IACMessageDefinitionObjectV3[]; interactionSetting: InteractionSetting }>()
+  props<{ shareUrl: IACMessageDefinitionObjectV3[] }>()
 )
 
 /**************** Internal ****************/
 
 export const walletsNotMigrated = createAction(`[${featureName}] Wallets Not Migrated`)
 
-export const shareUrlGenerated = createAction(
-  `[${featureName}] Share URL Generated`,
-  props<{ shareUrl: IACMessageDefinitionObjectV3[]; interactionSetting: InteractionSetting }>()
-)
+export const shareUrlGenerated = createAction(`[${featureName}] Share URL Generated`, props<{ shareUrl: IACMessageDefinitionObjectV3[] }>())
 export const shareUrlGeneratedExcludedLegacy = createAction(
   `[${featureName}] Share URL Generated (Legacy Accounts Excluded)`,
-  props<{ shareUrl: IACMessageDefinitionObjectV3[]; interactionSetting: InteractionSetting }>()
+  props<{ shareUrl: IACMessageDefinitionObjectV3[] }>()
 )
