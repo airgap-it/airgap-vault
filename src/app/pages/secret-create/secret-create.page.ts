@@ -16,6 +16,8 @@ import { VaultStorageKey, VaultStorageService } from '../../services/storage/sto
 export class SecretCreatePage implements OnInit {
   public canGoBack: boolean = false
 
+  public isAdvancedMode: boolean = false
+
   constructor(
     private readonly navigationService: NavigationService,
     private readonly secretsService: SecretsService,

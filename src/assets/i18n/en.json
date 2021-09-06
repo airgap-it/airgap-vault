@@ -84,7 +84,7 @@
     },
     "dice-roll": {
       "label": "Generate with Dice Rolls",
-      "text": "Use die to generate a secure and verifiable recovery phrase."
+      "text": "Use dice to generate a secure and verifiable recovery phrase."
     },
     "coin-flip": {
       "label": "Generate with Coin Flips",
