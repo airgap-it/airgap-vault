@@ -1,14 +1,9 @@
 import { Component } from '@angular/core'
+import { InteractionType, VaultStorageKey, VaultStorageService } from 'src/app/services/storage/storage.service'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
-import {
-  IInteractionOptions,
-  InteractionCommunicationType,
-  InteractionService,
-  InteractionSetting
-} from '../../services/interaction/interaction.service'
+import { IInteractionOptions, InteractionCommunicationType, InteractionService } from '../../services/interaction/interaction.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
-import { SecretsService } from '../../services/secrets/secrets.service'
 
 @Component({
   selector: 'airgap-interaction-selection',
@@ -20,7 +15,7 @@ export class InteractionSelectionPage {
 
   constructor(
     private readonly navigationService: NavigationService,
-    private readonly secretsService: SecretsService,
+    private readonly storageService: VaultStorageService,
     private readonly interactionService: InteractionService
   ) {}
 
@@ -38,12 +33,12 @@ export class InteractionSelectionPage {
     this.goToNextPage()
   }
 
-  private goToNextPage(): void {
-    const secret = this.secretsService.getActiveSecret()
-    if (secret.interactionSetting === InteractionSetting.UNDETERMINED) {
+  private async goToNextPage(): Promise<void> {
+    const interactionType = await this.storageService.get(VaultStorageKey.INTERACTION_TYPE)
+    if (interactionType === InteractionType.UNDETERMINED) {
       this.goToInteractionSelectionSettingsPage(this.interactionOptions)
     } else {
-      this.interactionService.startInteraction(this.interactionOptions, secret)
+      this.interactionService.startInteraction(this.interactionOptions)
     }
   }
 
