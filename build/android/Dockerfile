@@ -1,4 +1,4 @@
-FROM beevelop/ionic:v5.2.3
+FROM beevelop/ionic:v2021.06.1
 
 RUN apt-get update -y && apt-get install -y \
     bzip2 \
@@ -11,11 +11,8 @@ RUN apt-get update -y && apt-get install -y \
 RUN mkdir /app
 WORKDIR /app
 
-# using npm 6.5.0 to fix installing certain cordova/ionic plugins
-RUN npm install -g npm@6.5.0 ionic@5.4.0 @capacitor/core@2.4.0 @capacitor/cli@2.4.0
-RUN npm cache clean -f
-RUN npm install -g n
-RUN n 10.14.1
+# using npm 7
+RUN npm install -g npm@7 @capacitor/cli
 
 # Install app dependencies, using wildcard if package-lock exists
 COPY package.json /app/package.json

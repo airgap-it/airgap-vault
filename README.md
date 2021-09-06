@@ -91,7 +91,7 @@ First follow the steps below to install the dependencies:
 
 ```bash
 $ npm install -g @capacitor/cli
-$ npm install
+$ npm ci
 ```
 
 Run locally in browser:
