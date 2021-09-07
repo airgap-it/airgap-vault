@@ -11,7 +11,7 @@ RUN apt-get update -y && apt-get install -y \
 RUN mkdir /app
 WORKDIR /app
 
-# using npm 7
+# using npm 7 for lockfile 2 support
 RUN npm install -g npm@7 @capacitor/cli
 
 # Install app dependencies, using wildcard if package-lock exists
