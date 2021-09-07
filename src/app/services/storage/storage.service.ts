@@ -2,6 +2,19 @@ import { BaseStorage } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
 import { Storage } from '@ionic/storage'
 
+export enum InteractionType {
+  UNDETERMINED = 'UNDETERMINED',
+  ALWAYS_ASK = 'ALWAYS_ASK',
+  DEEPLINK = 'DEEPLINK',
+  QR_CODE = 'QR_CODE'
+}
+
+export enum InstallationType {
+  UNDETERMINED = 'UNDETERMINED',
+  ONLINE = 'ONLINE',
+  OFFLINE = 'OFFLINE'
+}
+
 export enum VaultStorageKey {
   DISCLAIMER_GENERATE_INITIAL = 'DISCLAIMER_GENERATE_INITIAL',
   DISCLAIMER_INITIAL = 'DISCLAIMER_INITIAL',
@@ -9,6 +22,8 @@ export enum VaultStorageKey {
   DISCLAIMER_ELECTRON = 'DISCLAIMER_ELECTRON',
   INTRODUCTION_INITIAL = 'INTRODUCTION_INITIAL',
   ADVANCED_MODE = 'ADVANCED_MODE',
+  INTERACTION_TYPE = 'INTERACTION_TYPE',
+  INSTALLATION_TYPE = 'INSTALLATION_TYPE',
   AIRGAP_SECRET_LIST = 'airgap-secret-list'
 }
 
@@ -19,6 +34,8 @@ interface VaultStorageKeyReturnType {
   [VaultStorageKey.DISCLAIMER_ELECTRON]: boolean
   [VaultStorageKey.INTRODUCTION_INITIAL]: boolean
   [VaultStorageKey.ADVANCED_MODE]: boolean
+  [VaultStorageKey.INTERACTION_TYPE]: InteractionType
+  [VaultStorageKey.INSTALLATION_TYPE]: InstallationType
   [VaultStorageKey.AIRGAP_SECRET_LIST]: unknown
 }
 
@@ -31,6 +48,8 @@ const defaultValues: VaultStorageKeyReturnDefaults = {
   [VaultStorageKey.DISCLAIMER_ELECTRON]: false,
   [VaultStorageKey.INTRODUCTION_INITIAL]: false,
   [VaultStorageKey.ADVANCED_MODE]: false,
+  [VaultStorageKey.INTERACTION_TYPE]: InteractionType.UNDETERMINED,
+  [VaultStorageKey.INSTALLATION_TYPE]: InstallationType.UNDETERMINED,
   [VaultStorageKey.AIRGAP_SECRET_LIST]: []
 }
 
