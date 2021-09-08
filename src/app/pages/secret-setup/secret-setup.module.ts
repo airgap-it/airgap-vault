@@ -5,17 +5,17 @@ import { RouterModule, Routes } from '@angular/router'
 import { IonicModule } from '@ionic/angular'
 import { TranslateModule } from '@ngx-translate/core'
 
-import { SecretCreatePage } from './secret-create.page'
+import { SecretSetupPage } from './secret-setup.page'
 
 const routes: Routes = [
   {
     path: '',
-    component: SecretCreatePage
+    component: SecretSetupPage
   }
 ]
 
 @NgModule({
   imports: [CommonModule, FormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule],
-  declarations: [SecretCreatePage]
+  declarations: [SecretSetupPage]
 })
-export class SecretCreatePageModule {}
+export class SecretSetupPageModule {}

@@ -4,7 +4,7 @@ import { generateId } from '@airgap/coinlib-core/serializer-v3/utils/generateId'
 
 import { Injectable } from '@angular/core'
 
-import { Secret } from '../../models/secret'
+import { MnemonicSecret } from '../../models/secret'
 import { SecretsService } from '../secrets/secrets.service'
 
 @Injectable({
@@ -16,7 +16,7 @@ export class ShareUrlService {
   }
 
   public async generateShareWalletURL(wallet: AirGapWallet): Promise<IACMessageDefinitionObjectV3[]> {
-    const secret: Secret | undefined = this.secretsService.findByPublicKey(wallet.publicKey)
+    const secret: MnemonicSecret | undefined = this.secretsService.findByPublicKey(wallet.publicKey)
 
     const accountShareResponse: AccountShareResponse = {
       publicKey: wallet.publicKey,
@@ -42,9 +42,9 @@ export class ShareUrlService {
     return [deserializedTxSigningRequest]
   }
 
-  public async generateShareSecretsURL(secrets: Secret[]): Promise<IACMessageDefinitionObjectV3[]> {
+  public async generateShareSecretsURL(secrets: MnemonicSecret[]): Promise<IACMessageDefinitionObjectV3[]> {
     const deserializedTxSigningRequests: IACMessageDefinitionObjectV3[] = flattened(
-      secrets.map((secret: Secret) => {
+      secrets.map((secret: MnemonicSecret) => {
         return secret.wallets
           .filter((wallet: AirGapWallet) => wallet.status !== AirGapWalletStatus.DELETED)
           .map((wallet: AirGapWallet) => {

@@ -67,7 +67,7 @@
     "wallet_install_label": "Install AirGap Wallet",
     "continue_label": "Let's Go"
   },
-  "secret-create": {
+  "secret-setup": {
     "heading": "Let's setup AirGap!",
     "text": "Do you want to create a new secret or import an existing one?",
     "generate": {
@@ -475,12 +475,7 @@
     "text": "Write down all the words on a piece of paper. You will have to verify the mnemonic on the next page.",
     "mnemonic-length": "Mnemonic Length",
     "index": "Index",
-    "validate": "Validate"
-  },
-
-  "bip85-validate": {
-    "title": "Verify BIP85",
-    "text": "Match the order of your recovery phrase by selecting the correct words."
+    "add": "Add Secret"
   },
 
   "message-signing-request": {
