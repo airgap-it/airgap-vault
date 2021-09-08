@@ -5,7 +5,7 @@ import { AirGapWallet } from '@airgap/coinlib-core'
 import { createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store'
 
 import * as fromRoot from '../../app.reducers'
-import { Secret } from '../../models/secret'
+import { MnemonicSecret } from '../../models/secret'
 
 import * as actions from './migration.actions'
 import { Alert, Bip39PassphraseAlert, MigrationWallet, MigrationWalletGroup, ParanoiaInfoAlert, UnknownErrorAlert } from './migration.types'
@@ -13,7 +13,7 @@ import { getWalletGroupMigrationStatus, getWalletMigrationStatus } from './migra
 
 export interface FeatureState {
   // TODO: move secrets to a global state
-  targetSecrets: UIResource<Secret[]>
+  targetSecrets: UIResource<MnemonicSecret[]>
   targetWalletKeys: string[]
 
   handledSecretIds: string[]
@@ -86,7 +86,7 @@ export const reducer = createReducer(
     currentlyHandledSecretId: id
   })),
   on(actions.secretSkipped, (state, { id }) => {
-    const secret: Secret | undefined = state.targetSecrets.value?.find((secret: Secret) => secret.id === id)
+    const secret: MnemonicSecret | undefined = state.targetSecrets.value?.find((secret: MnemonicSecret) => secret.id === id)
 
     return {
       ...state,
@@ -116,7 +116,7 @@ export const reducer = createReducer(
     currentlyHandledWalletKey: undefined
   })),
   on(actions.paranoiaDetected, (state, { secretId }) => {
-    const secret: Secret | undefined = state.targetSecrets.value?.find((secret: Secret) => secret.id === secretId)
+    const secret: MnemonicSecret | undefined = state.targetSecrets.value?.find((secret: MnemonicSecret) => secret.id === secretId)
 
     return {
       ...state,
@@ -188,7 +188,10 @@ export const reducer = createReducer(
 
 export const selectFeatureState = createFeatureSelector<State, FeatureState>('migration')
 
-export const selectTargetSecrets = createSelector(selectFeatureState, (state: FeatureState): UIResource<Secret[]> => state.targetSecrets)
+export const selectTargetSecrets = createSelector(
+  selectFeatureState,
+  (state: FeatureState): UIResource<MnemonicSecret[]> => state.targetSecrets
+)
 export const selectTargetWalletKeys = createSelector(selectFeatureState, (state: FeatureState): string[] => state.targetWalletKeys)
 export const selectHandledSecretIds = createSelector(selectFeatureState, (state: FeatureState): string[] => state.handledSecretIds)
 export const selectHandledWalletKeys = createSelector(selectFeatureState, (state: FeatureState): string[] => state.handledWalletKeys)
@@ -209,7 +212,7 @@ export const selectMigrationWalletGroups = createSelector(
   selectCurrentlyHandledSecretId,
   selectCurrentlyHandledWalletKey,
   (
-    targetSecrets: UIResource<Secret[]>,
+    targetSecrets: UIResource<MnemonicSecret[]>,
     targetWalletKeys: string[],
     handledWalletKeys: string[],
     currentlyHandledSecretId: string | undefined,
@@ -260,7 +263,7 @@ export const selectIsDone = createSelector(
   selectCurrentlyHandledSecretId,
   selectCurrentlyHandledWalletKey,
   (
-    targetSecrets: UIResource<Secret[]>,
+    targetSecrets: UIResource<MnemonicSecret[]>,
     targetWalletKeys: string[],
     handledSecretIds: string[],
     handledWalletKeys: string[],

@@ -5,7 +5,7 @@ import { Action, Store } from '@ngrx/store'
 import { from, of } from 'rxjs'
 import { filter, first, switchMap, tap, withLatestFrom } from 'rxjs/operators'
 
-import { Secret } from '../../models/secret'
+import { MnemonicSecret } from '../../models/secret'
 import { InteractionOperationType, InteractionService } from '../../services/interaction/interaction.service'
 import { MigrationService } from '../../services/migration/migration.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
@@ -53,9 +53,9 @@ export class AccountShareSelectEffects {
     private readonly migrationService: MigrationService
   ) {}
 
-  private async generateShareUrl(secrets: Secret[]): Promise<Action> {
+  private async generateShareUrl(secrets: MnemonicSecret[]): Promise<Action> {
     await this.migrationService.runSecretsMigration(secrets)
-    const [migratedSecrets, allMigrated]: [Secret[], boolean] = this.migrationService.deepFilterMigratedSecretsAndWallets(secrets)
+    const [migratedSecrets, allMigrated]: [MnemonicSecret[], boolean] = this.migrationService.deepFilterMigratedSecretsAndWallets(secrets)
     if (migratedSecrets.length === 0) {
       return actions.walletsNotMigrated()
     }

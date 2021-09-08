@@ -2,7 +2,7 @@ import { Component } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 
 import { BIPSigner } from '../../models/BIP39Signer'
-import { Secret } from '../../models/secret'
+import { MnemonicSecret } from '../../models/secret'
 import { DeviceService } from '../../services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
@@ -35,20 +35,18 @@ export class SecretImportPage {
   }
 
   public ionViewDidEnter(): void {
-    this.deviceService.enableScreenshotProtection({ routeBack: 'secret-create' })
+    this.deviceService.enableScreenshotProtection({ routeBack: 'secret-setup' })
   }
 
   public ionViewWillLeave(): void {
     this.deviceService.disableScreenshotProtection()
   }
 
-  public goToSecretCreatePage(): void {
+  public goToSecretSetupPage(): void {
     const signer: BIPSigner = new BIPSigner()
 
-    const secret: Secret = new Secret(signer.mnemonicToEntropy(BIPSigner.prepareMnemonic(this.mnemonic)))
+    const secret: MnemonicSecret = new MnemonicSecret(signer.mnemonicToEntropy(BIPSigner.prepareMnemonic(this.mnemonic)))
 
-    this.navigationService
-      .routeWithState('secret-edit', { secret, isGenerating: true })
-      .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.navigationService.routeWithState('secret-add', { secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

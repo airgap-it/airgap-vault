@@ -2,7 +2,7 @@ import { Component } from '@angular/core'
 import { AlertController, ToastController } from '@ionic/angular'
 import { Observable } from 'rxjs'
 
-import { Secret } from '../../models/secret'
+import { MnemonicSecret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
@@ -15,7 +15,7 @@ import { IACService } from 'src/app/services/iac/iac.service'
   styleUrls: ['./tab-settings.page.scss']
 })
 export class TabSettingsPage {
-  public readonly secrets: Observable<Secret[]>
+  public readonly secrets: Observable<MnemonicSecret[]>
 
   constructor(
     public readonly serializerService: SerializerService,
@@ -30,10 +30,10 @@ export class TabSettingsPage {
   }
 
   public goToNewSecret(): void {
-    this.navigationService.route('/secret-create').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.navigationService.route('/secret-setup').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  public goToEditSecret(secret: Secret): void {
+  public goToEditSecret(secret: MnemonicSecret): void {
     this.navigationService.routeWithState('/secret-edit', { secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
@@ -41,7 +41,7 @@ export class TabSettingsPage {
     this.navigationService.route('/interaction-selection-settings').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  public async deleteSecret(secret: Secret): Promise<void> {
+  public async deleteSecret(secret: MnemonicSecret): Promise<void> {
     const alert: HTMLIonAlertElement = await this.alertController.create({
       header: 'Delete ' + secret.label,
       subHeader: 'Are you sure you want to delete ' + secret.label + '?',

@@ -7,7 +7,7 @@ import { entropyToMnemonic } from 'bip39'
 import { concat, from, Observable, of, Subscriber } from 'rxjs'
 import { first, switchMap, tap, withLatestFrom } from 'rxjs/operators'
 
-import { Secret } from '../../models/secret'
+import { MnemonicSecret } from '../../models/secret'
 import { MigrationService } from '../../services/migration/migration.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
@@ -125,24 +125,27 @@ export class MigrationEffects {
     private readonly migrationService: MigrationService
   ) {}
 
-  private async loadNavigationData(allSecrets: Secret[]): Promise<Action> {
+  private async loadNavigationData(allSecrets: MnemonicSecret[]): Promise<Action> {
     const state = this.navigationService.getState()
 
     this.onSuccess = state.onSuccess
     this.onError = state.onError
 
-    const [secrets, targetWalletKeys]: [Secret[] | undefined, string[] | undefined] = this.getSecretsAndTargetWalletKeys(state, allSecrets)
+    const [secrets, targetWalletKeys]: [MnemonicSecret[] | undefined, string[] | undefined] = this.getSecretsAndTargetWalletKeys(
+      state,
+      allSecrets
+    )
 
     return secrets !== undefined && targetWalletKeys !== undefined
       ? actions.navigationDataLoaded({ secrets, targetWalletKeys })
       : actions.invalidData()
   }
 
-  private getSecretsAndTargetWalletKeys(state: any, allSecrets: Secret[]): [Secret[] | undefined, string[] | undefined] {
+  private getSecretsAndTargetWalletKeys(state: any, allSecrets: MnemonicSecret[]): [MnemonicSecret[] | undefined, string[] | undefined] {
     if (state.secrets !== undefined) {
-      const secrets: Secret[] = state.secrets.filter((secret: Secret) => !isSecretMigrated(secret))
+      const secrets: MnemonicSecret[] = state.secrets.filter((secret: MnemonicSecret) => !isSecretMigrated(secret))
       const walletKeys: string[] = flattened(
-        secrets.map((secret: Secret) =>
+        secrets.map((secret: MnemonicSecret) =>
           secret.wallets
             .filter((wallet: AirGapWallet) => wallet.status === AirGapWalletStatus.ACTIVE && !isWalletMigrated(wallet))
             .map((wallet: AirGapWallet) => wallet.publicKey)
@@ -161,7 +164,7 @@ export class MigrationEffects {
 
       const walletKeysSet: Set<string> = new Set(walletKeys)
 
-      const secrets: Secret[] = allSecrets.filter((secret: Secret) =>
+      const secrets: MnemonicSecret[] = allSecrets.filter((secret: MnemonicSecret) =>
         secret.wallets.some((wallet: AirGapWallet) => walletKeysSet.has(wallet.publicKey))
       )
 
@@ -171,7 +174,7 @@ export class MigrationEffects {
     return [undefined, undefined]
   }
 
-  private migrate(secrets: Secret[], targetWalletKeys: string[]): Observable<Action> {
+  private migrate(secrets: MnemonicSecret[], targetWalletKeys: string[]): Observable<Action> {
     return new Observable((subscriber: Subscriber<Action>) => {
       // tslint:disable-next-line: no-floating-promises
       new Promise<void>(async (resolve) => {
@@ -191,7 +194,7 @@ export class MigrationEffects {
     })
   }
 
-  private async migrateSecret(subscriber: Subscriber<Action>, secret: Secret, targetWalletKeys: Set<string>): Promise<void> {
+  private async migrateSecret(subscriber: Subscriber<Action>, secret: MnemonicSecret, targetWalletKeys: Set<string>): Promise<void> {
     subscriber.next(actions.nextSecret({ id: secret.id }))
 
     if (secret.isParanoia) {
@@ -215,7 +218,7 @@ export class MigrationEffects {
     await this.secretsService.addOrUpdateSecret(secret, { setActive: false })
   }
 
-  private async waitForParanoiaAccepted(subscriber: Subscriber<Action>, secret: Secret): Promise<boolean> {
+  private async waitForParanoiaAccepted(subscriber: Subscriber<Action>, secret: MnemonicSecret): Promise<boolean> {
     subscriber.next(actions.paranoiaDetected({ secretId: secret.id }))
 
     return this.exposedPromises.yield(PromiseKey.PARANOIA_ACCEPTED)

@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core'
 
 import { VerifyKeyComponent } from '../../components/verify-key/verify-key.component'
-import { Secret } from '../../models/secret'
+import { MnemonicSecret } from '../../models/secret'
 import { DeviceService } from '../../services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
@@ -15,14 +15,14 @@ export class SecretValidatePage {
   @ViewChild('verify', { static: true })
   public verify: VerifyKeyComponent
 
-  public readonly secret: Secret
+  public readonly secret: MnemonicSecret
 
   constructor(private readonly deviceService: DeviceService, private readonly navigationService: NavigationService) {
     this.secret = this.navigationService.getState().secret
   }
 
   public ionViewDidEnter(): void {
-    this.deviceService.enableScreenshotProtection({ routeBack: 'secret-create' })
+    this.deviceService.enableScreenshotProtection({ routeBack: 'secret-setup' })
   }
 
   public ionViewWillLeave(): void {
@@ -30,12 +30,10 @@ export class SecretValidatePage {
   }
 
   public onContinue(): void {
-    this.goToSecretEditPage()
+    this.goToSecretAddPage()
   }
 
-  public goToSecretEditPage(): void {
-    this.navigationService
-      .routeWithState('secret-edit', { secret: this.secret, isGenerating: true })
-      .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  public goToSecretAddPage(): void {
+    this.navigationService.routeWithState('secret-add', { secret: this.secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

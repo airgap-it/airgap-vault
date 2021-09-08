@@ -3,7 +3,7 @@ import { IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
 import { Injectable } from '@angular/core'
 import { first } from 'rxjs/operators'
 
-import { Secret } from '../../../models/secret'
+import { MnemonicSecret } from '../../../models/secret'
 import { InteractionOperationType, InteractionService } from '../../interaction/interaction.service'
 import { MigrationService } from '../../migration/migration.service'
 import { SecretsService } from '../../secrets/secrets.service'
@@ -24,9 +24,9 @@ export class BasicModeService implements ModeStrategy {
   ) {}
 
   public async syncAll(): Promise<void> {
-    const secrets: Secret[] = await this.secretsService.getSecretsObservable().pipe(first()).toPromise()
+    const secrets: MnemonicSecret[] = await this.secretsService.getSecretsObservable().pipe(first()).toPromise()
     await this.migrationService.runSecretsMigration(secrets)
-    const [migratedSecrets, allMigrated]: [Secret[], boolean] = this.migrationService.deepFilterMigratedSecretsAndWallets(secrets)
+    const [migratedSecrets, allMigrated]: [MnemonicSecret[], boolean] = this.migrationService.deepFilterMigratedSecretsAndWallets(secrets)
     if (migratedSecrets.length === 0) {
       await this.showNoMigratedWalletsAlert()
       return
