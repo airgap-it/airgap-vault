@@ -2,22 +2,21 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { async, ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { SecretCreatePage } from './secret-create.page'
+import { SecretEditPage } from './secret-edit.page'
 
-describe('SecretCreatePage', () => {
-  let component: SecretCreatePage
-  let fixture: ComponentFixture<SecretCreatePage>
+describe('SecretEditPage', () => {
+  let component: SecretEditPage
+  let fixture: ComponentFixture<SecretEditPage>
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SecretCreatePage ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    })
-    .compileComponents()
+      declarations: [SecretEditPage],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    }).compileComponents()
   }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SecretCreatePage)
+    fixture = TestBed.createComponent(SecretEditPage)
     component = fixture.componentInstance
     fixture.detectChanges()
   })

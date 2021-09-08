@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store'
 import { Observable, Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 
-import { Secret } from '../../models/secret'
+import { MnemonicSecret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 
 import * as actions from './account-share-select.actions'
@@ -19,7 +19,7 @@ import { Alert } from './account-share-select.types'
   styleUrls: ['./account-share-select.page.scss']
 })
 export class AccountShareSelectPage implements OnDestroy {
-  public readonly secrets$: Observable<UIResource<Secret[]>>
+  public readonly secrets$: Observable<UIResource<MnemonicSecret[]>>
   public readonly isChecked$: Observable<Record<string, boolean>>
 
   public readonly syncEnabled$: Observable<boolean>
@@ -51,7 +51,7 @@ export class AccountShareSelectPage implements OnDestroy {
     this.ngDestroyed$.complete()
   }
 
-  public toggleSecret(secret: Secret): void {
+  public toggleSecret(secret: MnemonicSecret): void {
     this.store.dispatch(actions.secretToggled({ secretId: secret.id }))
   }
 

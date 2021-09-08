@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core'
 
-import { Secret } from '../../models/secret'
+import { MnemonicSecret } from '../../models/secret'
 
 @Component({
   selector: 'airgap-secret-item',
@@ -9,5 +9,5 @@ import { Secret } from '../../models/secret'
 })
 export class SecretItemComponent {
   @Input()
-  public secret: Secret
+  public secret: MnemonicSecret
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { first } from 'rxjs/operators'
 
-import { Secret } from '../../models/secret'
+import { MnemonicSecret } from '../../models/secret'
 import { DeviceService } from '../../services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
@@ -9,11 +9,11 @@ import { SecretsService } from '../../services/secrets/secrets.service'
 import { VaultStorageKey, VaultStorageService } from '../../services/storage/storage.service'
 
 @Component({
-  selector: 'airgap-secret-create',
-  templateUrl: './secret-create.page.html',
-  styleUrls: ['./secret-create.page.scss']
+  selector: 'airgap-secret-setup',
+  templateUrl: './secret-setup.page.html',
+  styleUrls: ['./secret-setup.page.scss']
 })
-export class SecretCreatePage implements OnInit {
+export class SecretSetupPage implements OnInit {
   public canGoBack: boolean = false
 
   constructor(
@@ -27,7 +27,7 @@ export class SecretCreatePage implements OnInit {
     this.secretsService
       .getSecretsObservable()
       .pipe(first())
-      .subscribe((secrets: Secret[]) => {
+      .subscribe((secrets: MnemonicSecret[]) => {
         if (secrets.length > 0) {
           this.canGoBack = true
         }
