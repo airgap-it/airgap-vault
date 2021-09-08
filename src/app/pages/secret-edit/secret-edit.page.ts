@@ -3,7 +3,6 @@ import { PopoverController, Platform, ToastController, AlertController } from '@
 
 import { Secret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
-import { InteractionSetting } from '../../services/interaction/interaction.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
 
@@ -22,7 +21,6 @@ export enum SecretEditAction {
 })
 export class SecretEditPage {
   public isGenerating: boolean = false
-  public interactionSetting: boolean = false
 
   public isAndroid: boolean = false
 
@@ -41,8 +39,6 @@ export class SecretEditPage {
     if (this.navigationService.getState()) {
       this.isGenerating = this.navigationService.getState().isGenerating
       this.secret = this.navigationService.getState().secret
-
-      this.interactionSetting = this.secret.interactionSetting !== InteractionSetting.UNDETERMINED
 
       this.isAndroid = this.platform.is('android')
 
