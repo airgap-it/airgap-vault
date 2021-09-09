@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { IonContent } from '@ionic/angular'
-import { Secret } from 'src/app/models/secret'
+import { MnemonicSecret } from 'src/app/models/secret'
 import { CoinFlipService } from 'src/app/services/coin-flip/coin-flip.service'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
@@ -29,7 +29,7 @@ export class SecretGenerateCoinFlipPage implements OnInit {
   async next() {
     const entropy = await this.coinFlipService.getEntropyFromInput(this.entropy)
 
-    const secret: Secret = new Secret(entropy)
+    const secret: MnemonicSecret = new MnemonicSecret(entropy)
 
     this.navigationService.routeWithState('secret-rules', { secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }

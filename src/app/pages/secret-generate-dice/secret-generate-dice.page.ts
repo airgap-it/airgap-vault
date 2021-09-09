@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { AlertController, IonContent } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
-import { Secret } from 'src/app/models/secret'
+import { MnemonicSecret } from 'src/app/models/secret'
 import { DiceRollService, DiceRollType } from 'src/app/services/dice-roll/dice-roll.service'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
@@ -38,7 +38,7 @@ export class SecretGenerateDicePage implements OnInit {
   async next() {
     const entropy = await this.diceRollService.getEntropyFromInput(this.entropy, this.diceRollType)
 
-    const secret: Secret = new Secret(entropy)
+    const secret: MnemonicSecret = new MnemonicSecret(entropy)
 
     this.navigationService.routeWithState('secret-rules', { secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
