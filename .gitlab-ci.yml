@@ -107,7 +107,7 @@ build_ios:
     - echo "$IOS_BUILD_JSON" > build.json
   script:
     - export DEVELOPER_DIR=$XCODE_PATH
-    - nvm use 15
+    - nvm use 14
     - npm install
     - npm run disable-pure-getters
     - npm run configure-mangle
