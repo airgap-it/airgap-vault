@@ -114,6 +114,15 @@ const routes: Routes = [
   {
     path: 'migration',
     loadChildren: () => import('./pages/migration/migration.module').then((m) => m.MigrationPageModule)
+  },
+  {
+    path: 'secret-generate-dice',
+    loadChildren: () => import('./pages/secret-generate-dice/secret-generate-dice.module').then((m) => m.SecretGenerateDicePageModule)
+  },
+  {
+    path: 'secret-generate-coin-flip',
+    loadChildren: () =>
+      import('./pages/secret-generate-coin-flip/secret-generate-coin-flip.module').then((m) => m.SecretGenerateCoinFlipPageModule)
   }
 ]
 

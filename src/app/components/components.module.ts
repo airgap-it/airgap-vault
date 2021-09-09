@@ -10,6 +10,7 @@ import { PipesModule } from '../pipes/pipes.module'
 
 import { CurrentSecretComponent } from './current-secret/current-secret.component'
 import { EntropyProgressComponent } from './entropy-progress/entropy-progress.component'
+import { GridInputComponent } from './grid-input/grid-input.component'
 import { MessageSignRequestComponent } from './message-sign-request/message-sign-request.component'
 import { MessageSignResponseComponent } from './message-sign-response/message-sign-response.component'
 import { ProgressFooterComponent } from './progress-footer/progress-footer.component'
@@ -34,6 +35,7 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     VerifyKeyComponent,
     MessageSignRequestComponent,
     MessageSignResponseComponent,
+    GridInputComponent,
     SecretOptionItemComponent
   ],
   imports: [IonicModule, PipesModule, CommonModule, FormsModule, TranslateModule, QRCodeModule, AirGapAngularCoreModule],
@@ -49,6 +51,7 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     VerifyKeyComponent,
     MessageSignRequestComponent,
     MessageSignResponseComponent,
+    GridInputComponent,
     SecretOptionItemComponent
   ],
   entryComponents: []

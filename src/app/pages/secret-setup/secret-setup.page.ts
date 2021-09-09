@@ -16,6 +16,8 @@ import { VaultStorageKey, VaultStorageService } from '../../services/storage/sto
 export class SecretSetupPage implements OnInit {
   public canGoBack: boolean = false
 
+  public isAdvancedMode: boolean = false
+
   constructor(
     private readonly navigationService: NavigationService,
     private readonly secretsService: SecretsService,
@@ -57,5 +59,13 @@ export class SecretSetupPage implements OnInit {
 
   public goToSocialRecoveryImport(): void {
     this.navigationService.route('/social-recovery-import').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
+  public goToDiceRollPage(): void {
+    this.navigationService.route('/secret-generate-dice').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
+  public goToCoinFlipPage(): void {
+    this.navigationService.route('/secret-generate-coin-flip').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }
