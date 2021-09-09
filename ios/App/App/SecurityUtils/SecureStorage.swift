@@ -158,4 +158,9 @@ class SecureStorage {
     func delete(key: String) throws {
         try Keychain.Password.delete(account: key)
     }
+    
+    static func delete() throws {
+        try Keychain.Password.delete()
+        _ = Keychain.PrivateKey.delete()
+    }
 }

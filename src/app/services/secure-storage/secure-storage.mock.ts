@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core'
+import { MnemonicSecret } from 'src/app/models/secret'
 
 import { ErrorCategory, handleErrorLocal } from './../error-handler/error-handler.service'
 import { SecureStorage } from './secure-storage.service'
@@ -67,7 +68,7 @@ export class SecureStorageServiceMock {
         localStorage.removeItem(alias + '-' + key)
 
         return new Promise<any>((resolve) => {
-          resolve()
+          resolve({})
         })
       }
     }
@@ -80,5 +81,10 @@ export class SecureStorageServiceMock {
         })
         .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
     })
+  }
+
+  public wipe(secrets: MnemonicSecret[]) {
+    console.log(`Deleting ${secrets.length} secrets.`)
+    localStorage.clear()
   }
 }

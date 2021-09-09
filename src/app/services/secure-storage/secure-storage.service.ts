@@ -96,4 +96,9 @@ export class SecureStorageService {
       }
     }
   }
+
+  public async wipe() {
+    // Wipe the whole secure storage
+    await this.securityUtils.destroy()
+  }
 }
