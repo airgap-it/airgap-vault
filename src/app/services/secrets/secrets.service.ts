@@ -13,7 +13,7 @@ import * as bip32 from 'bip32'
 import * as bip39 from 'bip39'
 import { Observable, ReplaySubject } from 'rxjs'
 
-import { Secret } from '../../models/secret'
+import { MnemonicSecret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { NavigationService } from '../navigation/navigation.service'
 import { SecureStorage, SecureStorageService } from '../secure-storage/secure-storage.service'
@@ -31,11 +31,11 @@ interface AddWalletConifg {
 })
 export class SecretsService {
   private readonly ready: Promise<void>
-  private readonly secretsList: Secret[] = []
-  private activeSecret: Secret
+  private readonly secretsList: MnemonicSecret[] = []
+  private activeSecret: MnemonicSecret
 
-  private readonly activeSecret$: ReplaySubject<Secret> = new ReplaySubject(1)
-  private readonly secrets$: ReplaySubject<Secret[]> = new ReplaySubject(1)
+  private readonly activeSecret$: ReplaySubject<MnemonicSecret> = new ReplaySubject(1)
+  private readonly secrets$: ReplaySubject<MnemonicSecret[]> = new ReplaySubject(1)
 
   constructor(
     private readonly secureStorageService: SecureStorageService,
@@ -49,8 +49,8 @@ export class SecretsService {
   }
 
   private async init(): Promise<void> {
-    const secrets: Secret[] = await this.read()
-    this.secretsList.push(...secrets.map((obj: Secret) => Secret.init(obj)))
+    const secrets: MnemonicSecret[] = await this.read()
+    this.secretsList.push(...secrets.map((obj: MnemonicSecret) => MnemonicSecret.init(obj)))
     this.secrets$.next(this.secretsList)
     this.activeSecret = this.secretsList[0]
     this.activeSecret$.next(this.activeSecret)
@@ -60,18 +60,18 @@ export class SecretsService {
     return this.ready
   }
 
-  private async read(): Promise<Secret[]> {
+  private async read(): Promise<MnemonicSecret[]> {
     const rawSecretsPayload: unknown = await this.storageService.get(VaultStorageKey.AIRGAP_SECRET_LIST)
 
     // necessary due to double serialization bug we had
-    let secrets: Secret[] = typeof rawSecretsPayload === 'string' ? JSON.parse(rawSecretsPayload) : rawSecretsPayload
+    let secrets: MnemonicSecret[] = typeof rawSecretsPayload === 'string' ? JSON.parse(rawSecretsPayload) : rawSecretsPayload
 
     if (!secrets) {
       secrets = []
     }
 
     for (let k: number = 0; k < secrets.length; k++) {
-      const secret: Secret = secrets[k]
+      const secret: MnemonicSecret = secrets[k]
       if (secret.wallets) {
         for (let i: number = 0; i < secret.wallets.length; i++) {
           const wallet: SerializedAirGapWallet = (secret.wallets[i] as any) as SerializedAirGapWallet
@@ -95,13 +95,13 @@ export class SecretsService {
     return secrets
   }
 
-  public async addOrUpdateSecret(secret: Secret, options: { setActive: boolean } = { setActive: true }): Promise<void> {
+  public async addOrUpdateSecret(secret: MnemonicSecret, options: { setActive: boolean } = { setActive: true }): Promise<void> {
     if (!secret.wallets) {
       secret.wallets = []
     }
 
     if (!secret.secretHex) {
-      this.secretsList[this.secretsList.findIndex((item: Secret) => item.id === secret.id)] = secret
+      this.secretsList[this.secretsList.findIndex((item: MnemonicSecret) => item.id === secret.id)] = secret
 
       if (options.setActive) {
         this.setActiveSecret(secret)
@@ -116,7 +116,7 @@ export class SecretsService {
       secret.flushSecret()
 
       // It's a new secret, push to array
-      if (this.secretsList.findIndex((item: Secret) => item.id === secret.id) === -1) {
+      if (this.secretsList.findIndex((item: MnemonicSecret) => item.id === secret.id) === -1) {
         this.secretsList.push(secret)
         this.secrets$.next(this.secretsList)
       }
@@ -129,7 +129,7 @@ export class SecretsService {
     }
   }
 
-  public async remove(secret: Secret): Promise<void> {
+  public async remove(secret: MnemonicSecret): Promise<void> {
     const secureStorage: SecureStorage = await this.secureStorageService.get(secret.id, secret.isParanoia)
 
     await secureStorage.removeItem(secret.id)
@@ -144,7 +144,7 @@ export class SecretsService {
     await this.persist()
   }
 
-  public async resetRecoveryPassword(secret: Secret): Promise<string> {
+  public async resetRecoveryPassword(secret: MnemonicSecret): Promise<string> {
     const secureStorage: SecureStorage = await this.secureStorageService.get(secret.id, secret.isParanoia)
     try {
       const secretHex = await secureStorage.getItem(secret.id).then((result) => result.value)
@@ -163,7 +163,7 @@ export class SecretsService {
     }
   }
 
-  public async retrieveEntropyForSecret(secret: Secret): Promise<string> {
+  public async retrieveEntropyForSecret(secret: MnemonicSecret): Promise<string> {
     const secureStorage: SecureStorage = await this.secureStorageService.get(secret.id, secret.isParanoia)
 
     return secureStorage
@@ -179,7 +179,7 @@ export class SecretsService {
       })
   }
 
-  public findByPublicKey(pubKey: string): Secret | undefined {
+  public findByPublicKey(pubKey: string): MnemonicSecret | undefined {
     for (const secret of this.secretsList) {
       const foundWallet: AirGapWallet | undefined = secret.wallets.find((wallet: AirGapWallet) => wallet.publicKey === pubKey)
       if (foundWallet !== undefined) {
@@ -200,7 +200,7 @@ export class SecretsService {
   }
 
   public async removeWallet(wallet: AirGapWallet): Promise<void> {
-    const secret: Secret | undefined = this.findByPublicKey(wallet.publicKey)
+    const secret: MnemonicSecret | undefined = this.findByPublicKey(wallet.publicKey)
     if (!secret) {
       return undefined
     }
@@ -211,7 +211,7 @@ export class SecretsService {
   }
 
   public findWalletByPublicKeyAndProtocolIdentifier(pubKey: string, protocolIdentifier: ProtocolSymbols): AirGapWallet | undefined {
-    const secret: Secret | undefined = this.findByPublicKey(pubKey)
+    const secret: MnemonicSecret | undefined = this.findByPublicKey(pubKey)
     if (!secret) {
       return undefined
     }
@@ -224,7 +224,7 @@ export class SecretsService {
   }
 
   public findBaseWalletByPublicKeyAndProtocolIdentifier(pubKey: string, protocolIdentifier: ProtocolSymbols): AirGapWallet | undefined {
-    const secret: Secret | undefined = this.findByPublicKey(pubKey)
+    const secret: MnemonicSecret | undefined = this.findByPublicKey(pubKey)
     if (!secret) {
       return undefined
     }
@@ -234,25 +234,25 @@ export class SecretsService {
     )
   }
 
-  public getActiveSecret(): Secret {
+  public getActiveSecret(): MnemonicSecret {
     return this.activeSecret || this.secretsList[0]
   }
 
-  public setActiveSecret(secret: Secret): void {
+  public setActiveSecret(secret: MnemonicSecret): void {
     this.activeSecret = secret
     this.activeSecret$.next(secret)
   }
 
-  public getActiveSecretObservable(): Observable<Secret> {
+  public getActiveSecretObservable(): Observable<MnemonicSecret> {
     return this.activeSecret$.asObservable()
   }
 
-  public getSecretsObservable(): Observable<Secret[]> {
+  public getSecretsObservable(): Observable<MnemonicSecret[]> {
     return this.secrets$.asObservable()
   }
 
   public persist(): Promise<void> {
-    this.secretsList.forEach((secret: Secret) => {
+    this.secretsList.forEach((secret: MnemonicSecret) => {
       secret.flushSecret()
     })
 
@@ -260,7 +260,7 @@ export class SecretsService {
   }
 
   public async updateWallet(wallet: AirGapWallet): Promise<void> {
-    const secret: Secret | undefined = await this.findByPublicKey(wallet.publicKey)
+    const secret: MnemonicSecret | undefined = await this.findByPublicKey(wallet.publicKey)
     if (secret === undefined) {
       return
     }
@@ -275,7 +275,7 @@ export class SecretsService {
     loading.present().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
 
     try {
-      const secret: Secret = this.getActiveSecret()
+      const secret: MnemonicSecret = this.getActiveSecret()
       const entropy: string = await this.retrieveEntropyForSecret(secret)
 
       const createdOrUpdated: Either<AirGapWallet, AirGapWallet>[] = (

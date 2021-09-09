@@ -28,7 +28,7 @@ import * as bip39 from 'bip39'
 import { concat, from, of } from 'rxjs'
 import { concatMap, first, switchMap, tap, withLatestFrom } from 'rxjs/operators'
 
-import { Secret } from '../../models/secret'
+import { MnemonicSecret } from '../../models/secret'
 import { SignTransactionInfo } from '../../models/sign-transaction-info'
 import { InteractionOperationType, InteractionService } from '../../services/interaction/interaction.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
@@ -330,7 +330,7 @@ export class DeserializedDetailEffects {
   }
 
   private async signTransaction(wallet: AirGapWallet, transaction: UnsignedTransaction, bip39Passphrase: string): Promise<string> {
-    const secret: Secret | undefined = this.secretsService.findByPublicKey(wallet.publicKey)
+    const secret: MnemonicSecret | undefined = this.secretsService.findByPublicKey(wallet.publicKey)
     if (secret === undefined) {
       throw new Error('Secret not found')
     }
@@ -391,7 +391,7 @@ export class DeserializedDetailEffects {
     wallet?: AirGapWallet,
     protocolIdentifier?: ProtocolSymbols
   ): Promise<string> {
-    const secret: Secret | undefined =
+    const secret: MnemonicSecret | undefined =
       wallet !== undefined
         ? this.secretsService.findByPublicKey(wallet.publicKey) ?? this.secretsService.getActiveSecret()
         : this.secretsService.getActiveSecret()

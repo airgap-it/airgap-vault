@@ -1,7 +1,7 @@
 import { Component } from '@angular/core'
 import * as bip39 from 'bip39'
 
-import { Secret } from '../../models/secret'
+import { MnemonicSecret } from '../../models/secret'
 import { DeviceService } from '../../services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
@@ -15,7 +15,7 @@ import { SecretsService } from '../../services/secrets/secrets.service'
 export class SocialRecoverySetupPage {
   public numberOfShares: number = 3
   public numberOfRequiredShares: number = 2
-  private readonly secret: Secret
+  private readonly secret: MnemonicSecret
 
   constructor(
     private readonly secretService: SecretsService,
@@ -52,7 +52,7 @@ export class SocialRecoverySetupPage {
     this.secretService
       .retrieveEntropyForSecret(this.secret)
       .then((entropy) => {
-        const shares: string[] = Secret.generateSocialRecover(
+        const shares: string[] = MnemonicSecret.generateSocialRecover(
           bip39.entropyToMnemonic(entropy),
           this.numberOfShares,
           this.numberOfRequiredShares

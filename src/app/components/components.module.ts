@@ -15,6 +15,7 @@ import { MessageSignRequestComponent } from './message-sign-request/message-sign
 import { MessageSignResponseComponent } from './message-sign-response/message-sign-response.component'
 import { ProgressFooterComponent } from './progress-footer/progress-footer.component'
 import { SecretItemComponent } from './secret-item/secret-item.component'
+import { SecretOptionItemComponent } from './secret-option-item/secret-option-item.component'
 import { SignedTransactionComponent } from './signed-transaction/signed-transaction.component'
 import { TouchEntropyComponent } from './touch-entropy/touch-entropy.component'
 import { TraceInputDirective } from './trace-input/trace-input.directive'
@@ -34,7 +35,8 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     VerifyKeyComponent,
     MessageSignRequestComponent,
     MessageSignResponseComponent,
-    GridInputComponent
+    GridInputComponent,
+    SecretOptionItemComponent
   ],
   imports: [IonicModule, PipesModule, CommonModule, FormsModule, TranslateModule, QRCodeModule, AirGapAngularCoreModule],
   exports: [
@@ -49,7 +51,8 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     VerifyKeyComponent,
     MessageSignRequestComponent,
     MessageSignResponseComponent,
-    GridInputComponent
+    GridInputComponent,
+    SecretOptionItemComponent
   ],
   entryComponents: []
 })

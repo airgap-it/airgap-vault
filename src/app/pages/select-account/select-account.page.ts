@@ -3,7 +3,7 @@ import { Component } from '@angular/core'
 import { ModalController, NavParams } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 
-import { Secret } from '../../models/secret'
+import { MnemonicSecret } from '../../models/secret'
 import { SecretsService } from '../../services/secrets/secrets.service'
 
 @Component({
@@ -32,7 +32,7 @@ export class SelectAccountPage {
     this.heading = this.translateService.instant(`select-account.${type}.heading`)
     this.placeholder = this.translateService.instant(`select-account.${type}.placeholder`)
 
-    this.secretsService.getSecretsObservable().subscribe((secrets: Secret[]) => {
+    this.secretsService.getSecretsObservable().subscribe((secrets: MnemonicSecret[]) => {
       this.wallets = [].concat.apply(
         [],
         secrets.map((secret) => secret.wallets.filter((wallet: AirGapWallet) => wallet.status === AirGapWalletStatus.ACTIVE)) as any

@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core'
 
 import { VerifyKeyComponent } from '../../components/verify-key/verify-key.component'
-import { Secret } from '../../models/secret'
+import { MnemonicSecret } from '../../models/secret'
 import { DeviceService } from '../../services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
@@ -19,7 +19,7 @@ export class SocialRecoveryValidateSharePage {
   public validated: boolean = false
   public shares: string[]
   public currentShare: number
-  public secret: Secret
+  public secret: MnemonicSecret
 
   constructor(
     private readonly deviceService: DeviceService,
