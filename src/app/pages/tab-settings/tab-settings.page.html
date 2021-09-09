@@ -55,5 +55,10 @@
       <ion-icon src="assets/icons/md-swap_horiz.svg" slot="start"></ion-icon>
       {{ 'tab-settings.interaction-settings_label' | translate }}
     </ion-item>
+
+    <ion-item (click)="goToDangerZone()">
+      <ion-icon name="warning" slot="start"></ion-icon>
+      {{ 'tab-settings.danger-zone_label' | translate }}
+    </ion-item>
   </ion-list>
 </ion-content>

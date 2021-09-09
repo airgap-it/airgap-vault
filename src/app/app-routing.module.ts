@@ -116,6 +116,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/migration/migration.module').then((m) => m.MigrationPageModule)
   },
   {
+    path: 'danger-zone',
+    loadChildren: () => import('./pages/danger-zone/danger-zone.module').then((m) => m.DangerZonePageModule)
+  },
+  {
     path: 'secret-generate-dice',
     loadChildren: () => import('./pages/secret-generate-dice/secret-generate-dice.module').then((m) => m.SecretGenerateDicePageModule)
   },
