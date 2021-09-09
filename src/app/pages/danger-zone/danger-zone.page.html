@@ -11,9 +11,11 @@
 <ion-content class="ion-padding">
   <p>{{ 'danger-zone.description' | translate }}</p>
   <ion-list class="ion-no-border no-padding" lines="none">
-    <!-- <ion-list-header class="ion-no-margin" lines="none">
-      <ion-label>{{ 'danger-zone.wipe_label' | translate }}</ion-label>
-    </ion-list-header> -->
+    <ion-item (click)="copyErrorHistory()">
+      <ion-icon name="bug-outline" slot="start"></ion-icon>
+      Copy Error History
+    </ion-item>
+
     <ion-item (click)="resetVault()">
       <ion-icon name="warning" slot="start"></ion-icon>
       {{ 'danger-zone.wipe_label' | translate }}
