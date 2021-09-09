@@ -95,3 +95,5 @@ export function toBoolean(value: unknown): boolean {
 export function assertNever(name: string, arg: never): never {
   throw new Error(`${name} ${arg}`)
 }
+
+export const toHexString = (bytes: Uint8Array) => bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '')

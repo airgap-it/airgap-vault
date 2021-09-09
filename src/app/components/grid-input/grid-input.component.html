@@ -1,0 +1,16 @@
+<table width="100%">
+  <tr *ngFor="let row of grid">
+    <td
+      (click)="setCaret(col.position)"
+      *ngFor="let col of row"
+      [ngClass]="{ active: col.position === this.caretPosition }"
+      [ngStyle]="{ width: calculatedWidth }"
+    >
+      <small>
+        <small>{{ col.position + 1 }}</small>
+      </small>
+      <br />
+      {{ col.value }}
+    </td>
+  </tr>
+</table>

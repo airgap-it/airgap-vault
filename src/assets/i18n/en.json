@@ -81,6 +81,14 @@
     "social-recovery": {
       "label": "Social Recovery",
       "text": "Recover a lost private key from your social contacts' secret shares."
+    },
+    "dice-roll": {
+      "label": "Generate with Dice Rolls",
+      "text": "Use dice to generate a secure and verifiable recovery phrase."
+    },
+    "coin-flip": {
+      "label": "Generate with Coin Flips",
+      "text": "Use a coin to generate a secure and verifiable recovery phrase."
     }
   },
   "secret-edit": {
@@ -529,5 +537,26 @@
         "button_label": "Ok"
       }
     }
+  },
+  "secret-generate-dice-roll": {
+    "title": "Dice Rolls",
+    "label": "Generate Secret with Dice Rolls",
+    "description": "Generating entropy with dice rolls is an advanced feature. It allows you to provide your own entropy and generate a verifiable recovery phrase. Only use this feature if you know how to use it!",
+    "status": "{{ inputLength }} of at least 99 rolls ({{ entropyBits }} bits of entropy)",
+    "type-alert" : {
+      "header": "Select Dice Roll Type",
+      "message": "There are multiple standards of how dice roll inputs can be interpreted. Select one of the types below if you want to verify your mnemonic with another tool.",
+      "default": "Default",
+      "coldcard": "ColdCard"
+    }
+  },
+  "secret-generate-coin-flip": {
+    "title": "Coin Flips",
+    "label": "Generate Secret with Coin Flips",
+    "description": "Generating entropy with coin flips is an advanced feature. It allows you to provide your own entropy and generate a verifiable recovery phrase. Only use this feature if you know how to use it!",
+    "status": "{{ inputLength }} of 256 coin flips ({{ inputLength }} bits of entropy)",
+    "head": "Head",
+    "tail": "Tail"
+
   }
 }
