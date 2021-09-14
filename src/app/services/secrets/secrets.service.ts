@@ -73,20 +73,33 @@ export class SecretsService {
     for (let k: number = 0; k < secrets.length; k++) {
       const secret: MnemonicSecret = secrets[k]
       if (secret.wallets) {
-        for (let i: number = 0; i < secret.wallets.length; i++) {
-          const wallet: SerializedAirGapWallet = (secret.wallets[i] as any) as SerializedAirGapWallet
-          const protocol: ICoinProtocol = await this.protocolService.getProtocol(wallet.protocolIdentifier)
-          const airGapWallet: AirGapWallet = new AirGapWallet(
-            protocol,
-            wallet.publicKey,
-            wallet.isExtendedPublicKey,
-            wallet.derivationPath,
-            wallet.masterFingerprint ?? '',
-            wallet.status ?? AirGapWalletStatus.ACTIVE
+        const serializedWallets: SerializedAirGapWallet[] = (secret.wallets as unknown) as SerializedAirGapWallet[]
+        const wallets = (
+          await Promise.all(
+            serializedWallets.map(async (serializedWallet) => {
+              const protocol: ICoinProtocol | undefined = await this.protocolService
+                .getProtocol(serializedWallet.protocolIdentifier)
+                .catch((error) => {
+                  console.error(error)
+                  return undefined
+                })
+              if (protocol === undefined) {
+                return undefined
+              }
+              const airGapWallet: AirGapWallet = new AirGapWallet(
+                protocol,
+                serializedWallet.publicKey,
+                serializedWallet.isExtendedPublicKey,
+                serializedWallet.derivationPath,
+                serializedWallet.masterFingerprint ?? '',
+                serializedWallet.status ?? AirGapWalletStatus.ACTIVE
+              )
+              airGapWallet.addresses = serializedWallet.addresses
+              return airGapWallet
+            })
           )
-          airGapWallet.addresses = wallet.addresses
-          secret.wallets[i] = airGapWallet
-        }
+        ).filter((wallet) => wallet !== undefined)
+        secrets[k].wallets = wallets
       } else {
         secrets[k].wallets = []
       }
@@ -251,16 +264,43 @@ export class SecretsService {
     return this.secrets$.asObservable()
   }
 
-  public persist(): Promise<void> {
+  private async persist(): Promise<void> {
     this.secretsList.forEach((secret: MnemonicSecret) => {
       secret.flushSecret()
     })
 
-    return this.storageService.set(VaultStorageKey.AIRGAP_SECRET_LIST, this.secretsList)
+    const rawSecretsPayload: unknown = await this.storageService.get(VaultStorageKey.AIRGAP_SECRET_LIST)
+
+    // necessary due to double serialization bug we had
+    const storedSecrets: MnemonicSecret[] = typeof rawSecretsPayload === 'string' ? JSON.parse(rawSecretsPayload) : rawSecretsPayload
+    const secrets = this.secretsList.map((secret) => {
+      const storedSecret = storedSecrets.find((storedSecret) => storedSecret.id === secret.getIdentifier())
+      if (storedSecret === undefined) {
+        return secret
+      }
+      const wallets: (AirGapWallet | SerializedAirGapWallet)[] = secret.wallets.slice(0)
+      for (let i = 0; i < storedSecret.wallets.length; ++i) {
+        const serializedWallet = (storedSecret.wallets[i] as unknown) as SerializedAirGapWallet
+        const found = wallets.find(
+          (wallet) =>
+            isAirGapWallet(wallet) &&
+            wallet.protocol.identifier === serializedWallet.protocolIdentifier &&
+            wallet.publicKey === serializedWallet.publicKey
+        )
+        if (found === undefined) {
+          wallets.push(serializedWallet)
+        }
+      }
+      const result = MnemonicSecret.init(secret)
+      result.wallets = (wallets as unknown) as AirGapWallet[]
+      return result
+    })
+
+    return this.storageService.set(VaultStorageKey.AIRGAP_SECRET_LIST, secrets)
   }
 
   public async updateWallet(wallet: AirGapWallet): Promise<void> {
-    const secret: MnemonicSecret | undefined = await this.findByPublicKey(wallet.publicKey)
+    const secret: MnemonicSecret | undefined = this.findByPublicKey(wallet.publicKey)
     if (secret === undefined) {
       return
     }
@@ -383,4 +423,8 @@ export class SecretsService {
     await this.showAlert('Error', error.message)
     await this.navigationService.routeToAccountsTab(true)
   }
+}
+
+function isAirGapWallet(value: AirGapWallet | SerializedAirGapWallet): value is AirGapWallet {
+  return (value as any).protocol !== undefined
 }

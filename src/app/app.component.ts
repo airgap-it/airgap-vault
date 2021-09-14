@@ -6,7 +6,7 @@ import {
   SPLASH_SCREEN_PLUGIN,
   STATUS_BAR_PLUGIN
 } from '@airgap/angular-core'
-import { NetworkType, TezosProtocolNetwork, TezosSaplingExternalMethodProvider } from '@airgap/coinlib-core'
+import { TezosSaplingExternalMethodProvider } from '@airgap/coinlib-core'
 import {
   TezosSaplingProtocolOptions,
   TezosShieldedTezProtocolConfig
@@ -131,7 +131,7 @@ export class AppComponent implements AfterViewInit {
 
     const shieldedTezProtocol: TezosShieldedTezProtocol = new TezosShieldedTezProtocol(
       new TezosSaplingProtocolOptions(
-        new TezosProtocolNetwork('Florencenet', NetworkType.TESTNET, 'https://tezos-florencenet-node.prod.gke.papers.tech'),
+        undefined,
         new TezosShieldedTezProtocolConfig(undefined, undefined, undefined, externalMethodProvider)
       )
     )
