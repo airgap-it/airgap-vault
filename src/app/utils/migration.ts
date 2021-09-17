@@ -1,8 +1,8 @@
 import { AirGapWallet } from '@airgap/coinlib-core'
 
-import { Secret } from '../models/secret'
+import { MnemonicSecret } from '../models/secret'
 
-export function isSecretMigrated(secret: Secret): boolean {
+export function isSecretMigrated(secret: MnemonicSecret): boolean {
   return secret.fingerprint && secret.wallets.every(isWalletMigrated)
 }
 

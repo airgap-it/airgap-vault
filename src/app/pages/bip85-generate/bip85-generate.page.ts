@@ -1,7 +1,7 @@
 import { Component } from '@angular/core'
 import { AlertController } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
-import { Secret } from 'src/app/models/secret'
+import { MnemonicSecret } from 'src/app/models/secret'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
@@ -11,7 +11,7 @@ import { NavigationService } from 'src/app/services/navigation/navigation.servic
   styleUrls: ['./bip85-generate.page.scss']
 })
 export class Bip85GeneratePage {
-  public secret: Secret
+  public secret: MnemonicSecret
 
   public mnemonicLength: '12' | '18' | '24' = '24'
 

@@ -22,6 +22,7 @@ CAP_PLUGIN(SecurityUtils, "SecurityUtils",
            CAP_PLUGIN_METHOD(isDeviceSecure, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(secureDevice, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(removeAll, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(destroy, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(removeItem, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(setItem, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(getItem, CAPPluginReturnPromise);

@@ -3,7 +3,7 @@ import { AlertController, PopoverController } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 import { first } from 'rxjs/operators'
 
-import { Secret } from '../../../models/secret'
+import { MnemonicSecret } from '../../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../../services/error-handler/error-handler.service'
 import { SecretsService } from '../../../services/secrets/secrets.service'
 
@@ -13,7 +13,7 @@ import { SecretsService } from '../../../services/secrets/secrets.service'
   styleUrls: ['./secret-edit-popover.component.scss']
 })
 export class SecretEditPopoverComponent {
-  private readonly secret: Secret
+  private readonly secret: MnemonicSecret
   private readonly onDelete: Function
 
   constructor(

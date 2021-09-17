@@ -6,7 +6,7 @@ import {
   SPLASH_SCREEN_PLUGIN,
   STATUS_BAR_PLUGIN
 } from '@airgap/angular-core'
-import { NetworkType, TezosProtocolNetwork, TezosSaplingExternalMethodProvider } from '@airgap/coinlib-core'
+import { TezosSaplingExternalMethodProvider } from '@airgap/coinlib-core'
 import {
   TezosSaplingProtocolOptions,
   TezosShieldedTezProtocolConfig
@@ -22,7 +22,7 @@ import { SecurityUtilsPlugin } from './capacitor-plugins/definitions'
 import { SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
 import { DEEPLINK_VAULT_ADD_ACCOUNT, DEEPLINK_VAULT_PREFIX } from './constants/constants'
 import { ExposedPromise, exposedPromise } from './functions/exposed-promise'
-import { Secret } from './models/secret'
+import { MnemonicSecret } from './models/secret'
 import { ErrorCategory, handleErrorLocal } from './services/error-handler/error-handler.service'
 import { IACService } from './services/iac/iac.service'
 import { NavigationService } from './services/navigation/navigation.service'
@@ -91,7 +91,7 @@ export class AppComponent implements AfterViewInit {
         this.secretsService
           .getSecretsObservable()
           .pipe(first())
-          .subscribe((secrets: Secret[]) => {
+          .subscribe((secrets: MnemonicSecret[]) => {
             if (secrets.length > 0) {
               this.ngZone
                 .run(async () => {
@@ -131,7 +131,7 @@ export class AppComponent implements AfterViewInit {
 
     const shieldedTezProtocol: TezosShieldedTezProtocol = new TezosShieldedTezProtocol(
       new TezosSaplingProtocolOptions(
-        new TezosProtocolNetwork('Florencenet', NetworkType.TESTNET, 'https://tezos-florencenet-node.prod.gke.papers.tech'),
+        undefined,
         new TezosShieldedTezProtocolConfig(undefined, undefined, undefined, externalMethodProvider)
       )
     )

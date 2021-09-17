@@ -1,6 +1,6 @@
 import { Component } from '@angular/core'
 
-import { Secret } from '../../models/secret'
+import { MnemonicSecret } from '../../models/secret'
 import { DeviceService } from '../../services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
@@ -11,7 +11,7 @@ import { NavigationService } from '../../services/navigation/navigation.service'
   styleUrls: ['./social-recovery-show-share.page.scss']
 })
 export class SocialRecoveryShowSharePage {
-  public secret: Secret
+  public secret: MnemonicSecret
   public shares: string[]
   public currentShare: number = 0
 

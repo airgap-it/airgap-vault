@@ -67,7 +67,7 @@ export class SecureStorageServiceMock {
         localStorage.removeItem(alias + '-' + key)
 
         return new Promise<any>((resolve) => {
-          resolve()
+          resolve({})
         })
       }
     }
@@ -80,5 +80,10 @@ export class SecureStorageServiceMock {
         })
         .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
     })
+  }
+
+  public wipe() {
+    console.log(`Deleting "secure storage" (browser).`)
+    localStorage.clear()
   }
 }

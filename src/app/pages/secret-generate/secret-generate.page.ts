@@ -4,7 +4,7 @@ import { Platform } from '@ionic/angular'
 import { auditTime } from 'rxjs/operators'
 
 import { TouchEntropyComponent } from '../../components/touch-entropy/touch-entropy.component'
-import { Secret } from '../../models/secret'
+import { MnemonicSecret } from '../../models/secret'
 import { AudioNativeService } from '../../services/audio/audio.native.servive'
 import { CameraNativeService } from '../../services/camera/camera.native.service'
 import { EntropyService } from '../../services/entropy/entropy.service'
@@ -128,7 +128,7 @@ export class SecretGeneratePage implements OnInit {
     this.entropyService
       .getEntropyAsHex()
       .then((hashHex: string) => {
-        const secret: Secret = new Secret(hashHex)
+        const secret: MnemonicSecret = new MnemonicSecret(hashHex)
 
         this.navigationService.routeWithState('secret-rules', { secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       })

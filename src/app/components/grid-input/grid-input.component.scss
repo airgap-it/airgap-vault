@@ -1,0 +1,18 @@
+.active {
+  background-color: var(--ion-color-primary);
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+td {
+  height: 6vh;
+  display: inline-block;
+
+  vertical-align: middle;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  align-items: center;
+}

@@ -25,9 +25,7 @@
   </ng-container>
 
   <ng-container *ngIf="signedTxs">
-    <ion-row class="ion-padding-vertical ion-margin-bottom">
-      <airgap-signed-transaction [signedTxs]="interactionUrl"></airgap-signed-transaction>
-    </ion-row>
+    <airgap-signed-transaction [signedTxs]="interactionUrl"></airgap-signed-transaction>
   </ng-container>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
