@@ -25,18 +25,17 @@ WORKDIR /app
 COPY install-build-deps.js /app
 COPY install-test-deps.js /app
 COPY package.json /app
-COPY package-lock.json /app
+COPY yarn.lock /app
+COPY config /app/config
+COPY apply-diagnostic-modules.js /app
 
-RUN npm run install-test-dependencies
+RUN yarn install-test-dependencies
 
 # install dependencies
-RUN npm install
+RUN yarn install
 
 # install static webserver
-RUN npm install node-static -g
-
-# browserify coin-lib
-# RUN npm run browserify-coinlib
+RUN yarn global add node-static
 
 # Bundle app source
 COPY . /app
@@ -48,6 +47,6 @@ RUN export NODE_ENV=production
 RUN node config/patch_crypto.js
 
 # build
-RUN npx ionic build --prod
+RUN yarn build:prod
 
 CMD ["static", "-p", "8100", "-a", "0.0.0.0", "www"]
