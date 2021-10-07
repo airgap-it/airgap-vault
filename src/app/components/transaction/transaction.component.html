@@ -28,5 +28,8 @@
     </ion-row>
   </ng-container>
 
-  <airgap-from-to *ngFor="let airGapTx of airGapTxs" [transaction]="airGapTx"></airgap-from-to>
+  <ng-container *ngFor="let airGapTx of airGapTxs">
+    <airgap-transaction-warning [transaction]="airGapTx"></airgap-transaction-warning>
+    <airgap-from-to class="ion-padding-horizontal" [transaction]="airGapTx"></airgap-from-to>
+  </ng-container>
 </ng-container>

@@ -18,6 +18,33 @@ import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.
 import { NavigationService } from '../navigation/navigation.service'
 import { SecureStorage, SecureStorageService } from '../secure-storage/secure-storage.service'
 import { VaultStorageKey, VaultStorageService } from '../storage/storage.service'
+import * as bitcoinJS from 'bitcoinjs-lib'
+
+import * as bs58check from 'bs58check'
+
+class ExtendedPublicKey {
+  private readonly rawKey: Buffer
+  constructor(extendedPublicKey: string) {
+    this.rawKey = bs58check.decode(extendedPublicKey).slice(4)
+  }
+
+  toXpub() {
+    return this.addPrefix('0488b21e')
+  }
+
+  toYPub() {
+    return this.addPrefix('049d7cb2')
+  }
+
+  toZPub() {
+    return this.addPrefix('04b24746')
+  }
+
+  private addPrefix(prefix: string) {
+    const data = Buffer.concat([Buffer.from(prefix, 'hex'), this.rawKey])
+    return bs58check.encode(data)
+  }
+}
 
 interface AddWalletConifg {
   protocolIdentifier: ProtocolSymbols
@@ -192,6 +219,17 @@ export class SecretsService {
       })
   }
 
+  public findByFingerprint(fingerprint: string): MnemonicSecret | undefined {
+    for (const secret of this.secretsList) {
+      const foundWallet: AirGapWallet | undefined = secret.wallets.find((wallet: AirGapWallet) => wallet.masterFingerprint === fingerprint)
+      if (foundWallet !== undefined) {
+        return secret
+      }
+    }
+
+    return undefined
+  }
+
   public findByPublicKey(pubKey: string): MnemonicSecret | undefined {
     for (const secret of this.secretsList) {
       const foundWallet: AirGapWallet | undefined = secret.wallets.find((wallet: AirGapWallet) => wallet.publicKey === pubKey)
@@ -232,6 +270,38 @@ export class SecretsService {
     const foundWallet: AirGapWallet | undefined = secret.wallets.find(
       (wallet: AirGapWallet) => wallet.publicKey === pubKey && wallet.protocol.identifier === protocolIdentifier
     )
+
+    return foundWallet
+  }
+
+  public findWalletByFingerprintDerivationPathAndProtocolIdentifier(
+    fingerprint: string,
+    protocolIdentifier: ProtocolSymbols,
+    derivationPath: string,
+    publicKey: Buffer
+  ): AirGapWallet | undefined {
+    const secret: MnemonicSecret | undefined = this.findByFingerprint(fingerprint)
+    if (!secret) {
+      return undefined
+    }
+
+    const foundWallet: AirGapWallet | undefined = secret.wallets.find((wallet: AirGapWallet) => {
+      const match = wallet.masterFingerprint === fingerprint && wallet.protocol.identifier === protocolIdentifier
+      if (match) {
+        if (!derivationPath.startsWith(wallet.derivationPath)) {
+          return false
+        }
+
+        // This uses the same logic to find child key as "sign" method in the BitcoinSegwitProtocol
+        const bip32PK = bitcoinJS.bip32.fromBase58(new ExtendedPublicKey(wallet.publicKey).toXpub())
+        const cutoffFrom = derivationPath.lastIndexOf("'") || derivationPath.lastIndexOf('h')
+        const childPath = derivationPath.substr(cutoffFrom + 2)
+        const walletPublicKey = bip32PK.derivePath(childPath).publicKey
+
+        return publicKey.equals(walletPublicKey)
+      }
+      return false
+    })
 
     return foundWallet
   }
