@@ -19,6 +19,7 @@ import { SecretOptionItemComponent } from './secret-option-item/secret-option-it
 import { SignedTransactionComponent } from './signed-transaction/signed-transaction.component'
 import { TouchEntropyComponent } from './touch-entropy/touch-entropy.component'
 import { TraceInputDirective } from './trace-input/trace-input.directive'
+import { TransactionWarningComponent } from './transaction-warning/transaction-warning.component'
 import { TransactionComponent } from './transaction/transaction.component'
 import { VerifyKeyComponent } from './verify-key/verify-key.component'
 
@@ -30,6 +31,7 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     SecretItemComponent,
     SignedTransactionComponent,
     TransactionComponent,
+    TransactionWarningComponent,
     TouchEntropyComponent,
     TraceInputDirective,
     VerifyKeyComponent,
@@ -46,6 +48,7 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     SecretItemComponent,
     SignedTransactionComponent,
     TransactionComponent,
+    TransactionWarningComponent,
     TouchEntropyComponent,
     TraceInputDirective,
     VerifyKeyComponent,
