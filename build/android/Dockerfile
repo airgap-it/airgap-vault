@@ -1,28 +1,29 @@
-FROM beevelop/ionic:v5.2.3
+FROM beevelop/ionic:v2021.06.1
 
 RUN apt-get update -y && apt-get install -y \
     bzip2 \
     build-essential  \
     pkg-config  \
     libjpeg-dev \
-    libcairo2-dev 
+    libcairo2-dev
 
 # create app directory
 RUN mkdir /app
 WORKDIR /app
 
-# using npm 6.5.0 to fix installing certain cordova/ionic plugins
-RUN npm install -g npm@7.7.6 ionic@5.4.0 @capacitor/core@2.4.0 @capacitor/cli@2.4.0
-RUN npm cache clean -f
-RUN npm install -g n
+RUN yarn global add ionic@5.4.0 @capacitor/core@2.4.0 @capacitor/cli@2.4.0
+RUN yarn cache clean --force
+RUN yarn global add n
 RUN n 15.14.0
 
 # Install app dependencies, using wildcard if package-lock exists
 COPY package.json /app/package.json
-COPY package-lock.json /app/package-lock.json
+COPY yarn.lock /app/yarn.lock
+COPY config /app/config
+COPY apply-diagnostic-modules.js /app
 
 # install dependencies
-RUN npm ci
+RUN yarn install --frozen-lockfile
 
 # copy capacitor configs and ionic configs
 COPY capacitor.config.json /app/capacitor.config.json
@@ -44,16 +45,16 @@ ARG BUILD_NR
 RUN sed -i -e "s/versionCode 1/versionCode $BUILD_NR/g" /app/android/app/build.gradle
 
 # disable pure getters due to https://github.com/angular/angular-cli/issues/11439 
-RUN npm run disable-pure-getters
+RUN yarn disable-pure-getters
 
 # configure mangle (keep_fnames) for bitcoinjs https://github.com/bitcoinjs/bitcoinjs-lib/issues/959
-RUN npm run configure-mangle
+RUN yarn configure-mangle
 
 # remove unused cordova-diagnostic-plugin features
-RUN npm run apply-diagnostic-modules
+RUN yarn apply-diagnostic-modules
 
 # jetify dependencies
-RUN npx jetifier
+RUN yarn jetifier
 
 # build ionic
 RUN ionic build --prod
@@ -62,7 +63,7 @@ RUN ionic build --prod
 RUN cap sync android
 
 # accept licenses
-RUN yes | $ANDROID_HOME/tools/bin/sdkmanager --update
+RUN yes | /opt/android/tools/bin/sdkmanager --update
 
 # clean project
 RUN /app/android/gradlew --project-dir /app/android clean
