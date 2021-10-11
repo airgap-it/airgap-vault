@@ -18,7 +18,7 @@ import {
 import { AirGapAngularNgRxModule } from '@airgap/angular-ngrx'
 import { PercentPipe } from '@angular/common'
 import { HttpClient, HttpClientModule } from '@angular/common/http'
-import { NgModule } from '@angular/core'
+import { ErrorHandler, NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { RouteReuseStrategy } from '@angular/router'
 import { Plugins } from '@capacitor/core'
@@ -107,6 +107,7 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
     { provide: SPLASH_SCREEN_PLUGIN, useValue: Plugins.SplashScreen },
     { provide: STATUS_BAR_PLUGIN, useValue: Plugins.StatusBar },
     { provide: APP_CONFIG, useValue: appConfig },
+    { provide: ErrorHandler, useClass: ErrorHandlerService },
     Diagnostic,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     DeviceMotion,

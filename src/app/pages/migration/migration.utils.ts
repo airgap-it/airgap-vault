@@ -1,6 +1,6 @@
 import { AirGapWallet } from '@airgap/coinlib-core'
 
-import { Secret } from '../../models/secret'
+import { MnemonicSecret } from '../../models/secret'
 import { isWalletMigrated } from '../../utils/migration'
 
 import { GroupMigrationStatus, MigrationStatus, MigrationWallet } from './migration.types'
@@ -21,7 +21,7 @@ export function getWalletMigrationStatus(
 }
 
 export function getWalletGroupMigrationStatus(
-  secret: Secret,
+  secret: MnemonicSecret,
   wallets: MigrationWallet[],
   options: { currentlyHandled: string | undefined }
 ): GroupMigrationStatus {

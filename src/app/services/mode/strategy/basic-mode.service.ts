@@ -3,8 +3,8 @@ import { IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
 import { Injectable } from '@angular/core'
 import { first } from 'rxjs/operators'
 
-import { Secret } from '../../../models/secret'
-import { InteractionOperationType, InteractionService, InteractionSetting } from '../../interaction/interaction.service'
+import { MnemonicSecret } from '../../../models/secret'
+import { InteractionOperationType, InteractionService } from '../../interaction/interaction.service'
 import { MigrationService } from '../../migration/migration.service'
 import { SecretsService } from '../../secrets/secrets.service'
 import { ShareUrlService } from '../../share-url/share-url.service'
@@ -24,32 +24,28 @@ export class BasicModeService implements ModeStrategy {
   ) {}
 
   public async syncAll(): Promise<void> {
-    const secrets: Secret[] = await this.secretsService.getSecretsObservable().pipe(first()).toPromise()
+    const secrets: MnemonicSecret[] = await this.secretsService.getSecretsObservable().pipe(first()).toPromise()
     await this.migrationService.runSecretsMigration(secrets)
-    const [migratedSecrets, allMigrated]: [Secret[], boolean] = this.migrationService.deepFilterMigratedSecretsAndWallets(secrets)
+    const [migratedSecrets, allMigrated]: [MnemonicSecret[], boolean] = this.migrationService.deepFilterMigratedSecretsAndWallets(secrets)
     if (migratedSecrets.length === 0) {
       await this.showNoMigratedWalletsAlert()
       return
     }
 
     const shareUrl: IACMessageDefinitionObjectV3[] = await this.shareUrlService.generateShareSecretsURL(migratedSecrets)
-    const interactionSetting: InteractionSetting = this.interactionService.getCommonInteractionSetting(migratedSecrets)
 
     if (allMigrated) {
-      this.syncAccounts(shareUrl, interactionSetting)
+      this.syncAccounts(shareUrl)
     } else {
-      await this.showExcludedLegacyAccountsAlert(shareUrl, interactionSetting)
+      await this.showExcludedLegacyAccountsAlert(shareUrl)
     }
   }
 
-  private syncAccounts(shareUrl: IACMessageDefinitionObjectV3[], interactionSetting: InteractionSetting): void {
-    this.interactionService.startInteraction(
-      {
-        operationType: InteractionOperationType.WALLET_SYNC,
-        iacMessage: shareUrl // JGD rename shareUrl
-      },
-      interactionSetting
-    )
+  private syncAccounts(shareUrl: IACMessageDefinitionObjectV3[]): void {
+    this.interactionService.startInteraction({
+      operationType: InteractionOperationType.WALLET_SYNC,
+      iacMessage: shareUrl // JGD rename shareUrl
+    })
   }
 
   private async showNoMigratedWalletsAlert(): Promise<void> {
@@ -65,10 +61,7 @@ export class BasicModeService implements ModeStrategy {
     })
   }
 
-  private async showExcludedLegacyAccountsAlert(
-    shareUrl: IACMessageDefinitionObjectV3[],
-    interactionSetting: InteractionSetting
-  ): Promise<void> {
+  private async showExcludedLegacyAccountsAlert(shareUrl: IACMessageDefinitionObjectV3[]): Promise<void> {
     await this.uiEventService.showTranslatedAlert({
       header: 'wallet-share-select.alert.excluded-legacy-accounts.header',
       message: 'wallet-share-select.alert.excluded-legacy-accounts.message',
@@ -80,7 +73,7 @@ export class BasicModeService implements ModeStrategy {
         {
           text: 'wallet-share-select.alert.excluded-legacy-accounts.button-accept_label',
           handler: () => {
-            this.syncAccounts(shareUrl, interactionSetting)
+            this.syncAccounts(shareUrl)
           }
         }
       ]

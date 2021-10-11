@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core'
 
-import { Secret } from '../../models/secret'
-import { InteractionSetting } from '../../services/interaction/interaction.service'
+import { MnemonicSecret } from '../../models/secret'
 
 @Component({
   selector: 'airgap-secret-item',
@@ -10,7 +9,5 @@ import { InteractionSetting } from '../../services/interaction/interaction.servi
 })
 export class SecretItemComponent {
   @Input()
-  public secret: Secret
-
-  public interactionSetting: typeof InteractionSetting = InteractionSetting
+  public secret: MnemonicSecret
 }

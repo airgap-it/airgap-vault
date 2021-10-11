@@ -14,6 +14,7 @@ import {
   AirGapWalletStatus,
   IACMessageDefinitionObjectV3,
   IACMessageType,
+  MainProtocolSymbols,
   MessageSignRequest,
   UnsignedTransaction
 } from '@airgap/coinlib-core'
@@ -24,6 +25,7 @@ import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.
 import { InteractionOperationType, InteractionService } from '../interaction/interaction.service'
 import { NavigationService } from '../navigation/navigation.service'
 import { SecretsService } from '../secrets/secrets.service'
+import * as bitcoinJS from 'bitcoinjs-lib'
 
 @Injectable({
   providedIn: 'root'
@@ -47,13 +49,10 @@ export class IACService extends BaseIACService {
   }
 
   public async relay(data: RelayMessage): Promise<void> {
-    this.interactionService.startInteraction(
-      {
-        operationType: InteractionOperationType.WALLET_SYNC,
-        iacMessage: (data as any).messages ?? (data as any).rawString // TODO: Fix types
-      },
-      this.secretsService.getActiveSecret()
-    )
+    this.interactionService.startInteraction({
+      operationType: InteractionOperationType.WALLET_SYNC,
+      iacMessage: (data as any).messages ?? (data as any).rawString // TODO: Fix types
+    })
   }
 
   private async handleUnsignedTransactions(
@@ -70,6 +69,32 @@ export class IACService extends BaseIACService {
               unsignedTransaction.publicKey,
               signTransactionRequest.protocol
             )
+
+            if (!correctWallet && signTransactionRequest.protocol === MainProtocolSymbols.BTC_SEGWIT) {
+              const decodedPSBT = bitcoinJS.Psbt.fromHex(unsignedTransaction.transaction)
+              for (const input of decodedPSBT.data.inputs) {
+                for (const derivation of input.bip32Derivation) {
+                  const masterFingerprint = derivation.masterFingerprint.toString('hex')
+
+                  correctWallet = this.secretsService.findWalletByFingerprintDerivationPathAndProtocolIdentifier(
+                    masterFingerprint,
+                    signTransactionRequest.protocol,
+                    derivation.path,
+                    derivation.pubkey
+                  )
+                  if (correctWallet) {
+                    break
+                  }
+                }
+                if (correctWallet) {
+                  break
+                }
+              }
+
+              if (correctWallet && !unsignedTransaction.publicKey) {
+                unsignedTransaction.publicKey = correctWallet.publicKey // PSBT txs don't include a public key, so we need to set it
+              }
+            }
 
             if (correctWallet) {
               await this.activateWallet(correctWallet)

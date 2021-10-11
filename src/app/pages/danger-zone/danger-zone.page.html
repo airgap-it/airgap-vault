@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab-settings"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>{{ 'danger-zone.label' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <p>{{ 'danger-zone.description' | translate }}</p>
+  <ion-list class="ion-no-border no-padding" lines="none">
+    <ion-item (click)="copyErrorHistory()">
+      <ion-icon name="bug-outline" slot="start"></ion-icon>
+      Copy Error History
+    </ion-item>
+
+    <ion-item (click)="resetVault()">
+      <ion-icon name="warning" slot="start"></ion-icon>
+      {{ 'danger-zone.wipe_label' | translate }}
+    </ion-item>
+  </ion-list>
+</ion-content>

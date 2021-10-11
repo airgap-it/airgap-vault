@@ -12,7 +12,7 @@ export class TabsPage {
   constructor() {}
 
   tabChange(tabsRef: IonTabs) {
-    this.activeTab = tabsRef.outlet.activatedView.element
+    this.activeTab = tabsRef?.outlet?.activatedView?.element
   }
 
   ionViewWillEnter() {
