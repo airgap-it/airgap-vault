@@ -1,4 +1,4 @@
-import { PluginListenerHandle } from '@capacitor/core'
+import { PluginListenerHandle, registerPlugin } from '@capacitor/core'
 
 export interface CameraPreviewPlugin {
   start({}): Promise<void>
@@ -6,7 +6,9 @@ export interface CameraPreviewPlugin {
   capture({}): Promise<{ value: string }>
 }
 
-export interface SaplingPlugin {
+export const CameraPreview: CameraPreviewPlugin = registerPlugin('CameraPreview')
+
+export interface SaplingNativePlugin {
   isSupported(): Promise<{ isSupported: boolean }>
   initParameters(): Promise<void>
   initProvingContext(): Promise<{ context: string }>
@@ -31,6 +33,8 @@ export interface SaplingPlugin {
   createBindingSignature(params: { context: string; balance: string; sighash: string }): Promise<{ bindingSignature: string }>
 }
 
+export const SaplingNative: SaplingNativePlugin = registerPlugin('SaplingNative')
+
 export interface SecurityUtilsPlugin {
   waitForOverlayDismiss(): Promise<void>
   assessDeviceIntegrity(): Promise<{ value: boolean }>
@@ -52,3 +56,5 @@ export interface SecurityUtilsPlugin {
   clearWindowSecureFlag(): Promise<void>
   addListener(event: string, callback: Function): PluginListenerHandle
 }
+
+export const SecurityUtils: SecurityUtilsPlugin = registerPlugin('SecurityUtils')

@@ -3,6 +3,7 @@ package it.airgap.vault.util
 import android.content.Context
 import android.util.Log
 import com.getcapacitor.JSObject
+import com.getcapacitor.PermissionState
 import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
 
@@ -13,14 +14,6 @@ import com.getcapacitor.PluginCall
 val Plugin.applicationContext: Context
     get() = activity.applicationContext
 
-inline fun Plugin.requiresPermissions(code: Int, vararg permissions: String, block: () -> Unit) {
-    if (hasRequiredPermissions()) {
-        block()
-    } else {
-        pluginRequestPermissions(permissions, code)
-    }
-}
-
 fun Plugin.readFromAssets(path: String): ByteArray =
         bridge.activity.assets.open(path).use { it.readBytes() }
 
@@ -28,10 +21,8 @@ fun Plugin.logDebug(message: String) {
     Log.d(this::class.java.simpleName, message)
 }
 
-fun Plugin.freeCallIfSaved() {
-    if (savedCall != null) {
-        freeSavedCall()
-    }
+fun Plugin.releaseCallIfKept(callbackId: String) {
+    bridge.getSavedCall(callbackId)?.release(bridge)
 }
 
 /*

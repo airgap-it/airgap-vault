@@ -11,7 +11,7 @@ RUN apt-get update -y && apt-get install -y \
 RUN mkdir /app
 WORKDIR /app
 
-RUN yarn global add ionic@5.4.0 @capacitor/core@2.4.0 @capacitor/cli@2.4.0
+RUN yarn global add ionic@5.4.0 @capacitor/core@3.2.5 @capacitor/cli@3.2.5
 RUN yarn cache clean --force
 RUN yarn global add n
 RUN n 15.14.0
