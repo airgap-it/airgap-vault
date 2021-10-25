@@ -5,7 +5,10 @@ RUN apt-get update -y && apt-get install -y \
     build-essential  \
     pkg-config  \
     libjpeg-dev \
-    libcairo2-dev
+    libcairo2-dev \
+    openjdk-11-jdk-headless
+
+ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
 # create app directory
 RUN mkdir /app
@@ -26,7 +29,7 @@ COPY apply-diagnostic-modules.js /app
 RUN yarn install --frozen-lockfile
 
 # copy capacitor configs and ionic configs
-COPY capacitor.config.json /app/capacitor.config.json
+COPY capacitor.config.ts /app/capacitor.config.ts
 COPY ionic.config.json /app/ionic.config.json
 
 RUN mkdir www
@@ -63,7 +66,7 @@ RUN ionic build --prod
 RUN cap sync android
 
 # accept licenses
-RUN yes | /opt/android/tools/bin/sdkmanager --update
+RUN echo y | sdkmanager --sdk_root=${ANDROID_SDK_ROOT} --update
 
 # clean project
 RUN /app/android/gradlew --project-dir /app/android clean
