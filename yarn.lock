@@ -2,24 +2,24 @@
 # yarn lockfile v1
 
 
-"@airgap/angular-core@0.0.20-beta.0":
-  version "0.0.20-beta.0"
-  resolved "https://registry.yarnpkg.com/@airgap/angular-core/-/angular-core-0.0.20-beta.0.tgz#dc373f270ca164101636bd99568b29dc2d4ded12"
-  integrity sha512-ujIhmJ+oZVwJTG5FEDj7hxmkSHOQIVQL0iRrs1MUyq6/cJh4EMJaHn9M0KRWpPLFOVAaAcf6XYZyxaBsB63X+w==
+"@airgap/angular-core@0.0.20":
+  version "0.0.20"
+  resolved "https://registry.yarnpkg.com/@airgap/angular-core/-/angular-core-0.0.20.tgz#af6be8723f89cf1026a31b532ba8b3987dca67b4"
+  integrity sha512-CnI7IDOjxddjzxJSkz3OuDTz78O/SZTTRDyDiRNxnfNlV7MDgcUhAVuIlSPSa+ThKmfVYIyHr0T66gxPCb2M+g==
   dependencies:
     tslib "^2.2.0"
 
-"@airgap/angular-ngrx@0.0.20-beta.0":
-  version "0.0.20-beta.0"
-  resolved "https://registry.yarnpkg.com/@airgap/angular-ngrx/-/angular-ngrx-0.0.20-beta.0.tgz#c58b7600f8584f862e85dfa29503c6e38f1d4186"
-  integrity sha512-S3bNfz1cDJ3t7MvMhtn13AOKsxizJv9gtLMSThE0237EzDLVV7S6LoGft7VOYBqgjgRcHAMEmgDAcTXgBJTqrQ==
+"@airgap/angular-ngrx@0.0.20":
+  version "0.0.20"
+  resolved "https://registry.yarnpkg.com/@airgap/angular-ngrx/-/angular-ngrx-0.0.20.tgz#7cdcb78e51b4b45336996953bd3da248dff694f4"
+  integrity sha512-fESWKi27UINRlRhzoFgw92kfGRc/5PfIjAd9lQQzym73K7KZwcolduAQYboS48d2VK5vv4aIXfaqEn8FDS23eQ==
   dependencies:
     tslib "^2.2.0"
 
-"@airgap/coinlib-core@0.12.0":
-  version "0.12.0"
-  resolved "https://registry.yarnpkg.com/@airgap/coinlib-core/-/coinlib-core-0.12.0.tgz#9ff7ad041c261bb70add42336c7ca02b4b3ee5d2"
-  integrity sha512-roeYVGtDza/4QQ+6osNRMbh3Ra8znQKzafodE9jlwFOmyOOH2QknBFGfFleEO3fkVDdMUCcOpa7DdoX3TJrx+w==
+"@airgap/coinlib-core@0.12.2":
+  version "0.12.2"
+  resolved "https://registry.yarnpkg.com/@airgap/coinlib-core/-/coinlib-core-0.12.2.tgz#0461656f55f805729dbeda571100739754a2e6d5"
+  integrity sha512-Aap0WQWXY4MERwh6SijhC47jG0+wXZRtem4Iim55lm3og46LQ8PGae5Opu+DKM0B9ipK3AC6qpzN8GvUVbE2xw==
   dependencies:
     "@airgap/sapling-wasm" "0.0.5"
     "@polkadot/util" "2.0.1"

@@ -4,6 +4,7 @@ import {
   BaseIACService,
   ClipboardService,
   DeeplinkService,
+  IACMessageTransport,
   ProtocolService,
   RelayMessage,
   UiEventElementsService,
@@ -57,6 +58,7 @@ export class IACService extends BaseIACService {
 
   private async handleUnsignedTransactions(
     signTransactionRequests: IACMessageDefinitionObjectV3[],
+    _transport: IACMessageTransport,
     scanAgainCallback: Function
   ): Promise<boolean> {
     const transactionInfos: SignTransactionInfo[] = (
@@ -173,6 +175,7 @@ export class IACService extends BaseIACService {
   }
   private async handleMessageSignRequest(
     messageDefinitionObjects: IACMessageDefinitionObjectV3[],
+    _transport: IACMessageTransport,
     _scanAgainCallback: Function
   ): Promise<boolean> {
     const transactionInfos: SignTransactionInfo[] = await Promise.all(
