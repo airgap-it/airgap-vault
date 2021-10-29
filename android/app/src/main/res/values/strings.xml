@@ -19,4 +19,8 @@
     <string name="recovery_input_alert_recover_message">Your secret is missing. Recover it using Recovery Password or re-import.</string>
     <string name="recovery_input_alert_reimport_button">Import</string>
     <string name="recovery_input_alert_recover_button">Recover</string>
+
+    <string name="biometric_prompt_title">Verify Your Identity</string>
+    <string name="biometric_prompt_subtitle">Accessing Your Secret</string>
+    <string name="biometric_prompt_description">The Secret in the secure storage is used to create accounts and sign transactions.</string>
 </resources>
