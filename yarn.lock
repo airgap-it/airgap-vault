@@ -3334,17 +3334,17 @@ cordova-plugin-qrscanner@3.0.1:
     qrcode-reader "^1.0.4"
     webrtc-adapter "^3.1.4"
 
-cordova-sqlite-storage-dependencies@2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/cordova-sqlite-storage-dependencies/-/cordova-sqlite-storage-dependencies-2.1.1.tgz#3706fd035289bdaca5770599986d5b9829b4bab0"
-  integrity sha512-1lV5Pg1FttjBmGO8z4gxtuA4BbPKtgTfUEh1Vx4boa41inizyxaowRyTeaaqEhi5gmYAaX8sRTABm9U/XckRFg==
-
-cordova-sqlite-storage@^4.0.0:
+cordova-sqlite-storage-dependencies@4.0.0:
   version "4.0.0"
-  resolved "https://registry.yarnpkg.com/cordova-sqlite-storage/-/cordova-sqlite-storage-4.0.0.tgz#50a4ac0f4d198fa9837079805572457bc839d9c8"
-  integrity sha512-/n5KT3TyRAC7QRe9A4Sn7bMpdsBJ6aMmHat2PsMxFZBot45SOxbAEgfGmXtq0e7OEdVzk573sIn42bLS6lNLjQ==
+  resolved "https://registry.yarnpkg.com/cordova-sqlite-storage-dependencies/-/cordova-sqlite-storage-dependencies-4.0.0.tgz#2ffa2d1f2fb3bae868f489b6e174fb58d2926b8f"
+  integrity sha512-dTBxYaX/RGzH6+pp49o4sb3FuHCvhrssaKn1XMJ4LL3f9dnvz3rhFK2LdcWrdFkhOLOndnW/azUkbzZd+WWhRA==
+
+cordova-sqlite-storage@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/cordova-sqlite-storage/-/cordova-sqlite-storage-6.0.0.tgz#25eba8eb4657d2b526c4b753747e6d1533fcb73b"
+  integrity sha512-njRloA3AICaUFztKHXoFfVcwlL7zbvyFxtdZIkK7P+MA3umILXtSKhYAQkSe2GtHr0LBNzJI5xUUqAlZl/Js0A==
   dependencies:
-    cordova-sqlite-storage-dependencies "2.1.1"
+    cordova-sqlite-storage-dependencies "4.0.0"
 
 cordova.plugins.diagnostic@4.0.10:
   version "4.0.10"
