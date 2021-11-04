@@ -12,30 +12,30 @@ export class TransactionWarningComponent {
   public set transaction(value: IAirGapTransaction | undefined) {
     this._transaction = value
     if (value) {
-      this.warnings = value.warnings.map((warning) => {
+      this.warnings = value.warnings?.map((warning) => {
         return {
           ...warning,
           color:
             warning.type === AirGapTransactionWarningType.SUCCESS
               ? 'success'
               : warning.type === AirGapTransactionWarningType.NOTE
-              ? 'light'
-              : warning.type === AirGapTransactionWarningType.WARNING
-              ? 'warning'
-              : warning.type === AirGapTransactionWarningType.ERROR
-              ? 'danger'
-              : 'primary',
+                ? 'light'
+                : warning.type === AirGapTransactionWarningType.WARNING
+                  ? 'warning'
+                  : warning.type === AirGapTransactionWarningType.ERROR
+                    ? 'danger'
+                    : 'primary',
           icon: warning.icon
             ? warning.icon
             : warning.type === AirGapTransactionWarningType.SUCCESS
-            ? 'checkmark-circle-outline'
-            : warning.type === AirGapTransactionWarningType.NOTE
-            ? 'information-circle-outline'
-            : warning.type === AirGapTransactionWarningType.WARNING
-            ? 'warning'
-            : warning.type === AirGapTransactionWarningType.ERROR
-            ? 'warning'
-            : 'warning'
+              ? 'checkmark-circle-outline'
+              : warning.type === AirGapTransactionWarningType.NOTE
+                ? 'information-circle-outline'
+                : warning.type === AirGapTransactionWarningType.WARNING
+                  ? 'warning'
+                  : warning.type === AirGapTransactionWarningType.ERROR
+                    ? 'warning'
+                    : 'warning'
         }
       })
     }
@@ -49,7 +49,7 @@ export class TransactionWarningComponent {
 
   public warnings: (AirGapTransactionWarning & { color: string })[] | undefined
 
-  constructor() {}
+  constructor() { }
 
   // doAction(warning: AirGapTransactionWarning) {
   //   // TODO: Use link page
