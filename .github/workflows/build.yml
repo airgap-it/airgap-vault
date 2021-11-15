@@ -43,13 +43,13 @@ jobs:
 
     strategy:
       matrix:
-        os: ['ubuntu-latest', 'macos-latest']
+        os: ['ubuntu-latest']
 
     steps:
       - uses: actions/checkout@v2
 
       - name: 🔧 Installation of dependencies
-        run: yarn run install-test-dependencies && yarn install --frozen-lockfile
+        run: yarn run install-test-dependencies && yarn install # This is only for tests, so no frozen lockfile needed
 
       - name: 🧪 Test CI
         run: yarn run test-ci
@@ -70,7 +70,7 @@ jobs:
 
     strategy:
       matrix:
-        os: ['ubuntu-latest', 'macos-latest']
+        os: ['ubuntu-latest']
 
     steps:
       - uses: actions/checkout@v2
@@ -103,7 +103,7 @@ jobs:
 
     strategy:
       matrix:
-        os: ['ubuntu-latest', 'macos-latest']
+        os: ['ubuntu-latest']
 
     steps:
       - name: 🧠 Using prebuild cache
@@ -213,7 +213,7 @@ jobs:
         id: build-electron-cache
         with:
           path: ./*
-          key: electron-${{ runner.os }}-${{ github.sha }}
+          key: electron-ubuntu-latest-${{ github.sha }}
 
       - name: 🏗️ Build Mac
         working-directory: ${{ env.electron_folder }}
@@ -300,7 +300,7 @@ jobs:
         id: build-angular-cache
         with:
           path: ./*
-          key: ionic-${{ runner.os }}-${{ github.sha }}
+          key: ionic-ubuntu-latest-${{ github.sha }}
       # - name: 🔨 Xcode Task
       #   run: xcodebuild -workspace ios/App/App.xcworkspace -scheme "App" -destination generic/platform=iOS -configuration Release archive -archivePath ios/App.xcarchive MARKETING_VERSION=${{ needs.environment.outputs.package_version }} CURRENT_PROJECT_VERSION=${{ needs.environment.outputs.package_version }} -allowProvisioningUpdates
       # - name: 🔨 Xcode Task
