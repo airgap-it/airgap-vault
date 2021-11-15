@@ -25,13 +25,13 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: 🔧 Installation of dependencies
-        run: npm run install-test-dependencies && npm ci
+        run: yarn run install-test-dependencies && yarn install --frozen-lockfile
 
       - name: 🧪 Test CI
-        run: npm run test-ci
+        run: yarn run test-ci
 
       - name: 🧪 Lint CI
-        run: npm run lint-ci
+        run: yarn run lint-ci
 
       - name: 📦 Upload Artifact
         uses: actions/upload-artifact@v2
@@ -48,14 +48,14 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Prepare
-        run: npm ci
+        run: yarn install --frozen-lockfile
 
       - name: Install Netlify
-        run: npm install netlify-cli
+        run: yarn add netlify-cli
 
       # We use the "no-sapling" build so the 50 MB parameters file isn't downloaded
       - name: Build site
-        run: npm run build:no-sapling
+        run: yarn run build:no-sapling
 
       # Deploy the site with netlify-cli
       - name: Deploy Site
