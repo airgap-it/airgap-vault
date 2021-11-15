@@ -16,29 +16,6 @@ jobs:
         with:
           node-version: ${{ env.node_version }}
 
-  test:
-    name: 🧪 Test
-    runs-on: ubuntu-latest
-    needs: environment
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: 🔧 Installation of dependencies
-        run: yarn run install-test-dependencies && yarn install --frozen-lockfile
-
-      - name: 🧪 Test CI
-        run: yarn run test-ci
-
-      - name: 🧪 Lint CI
-        run: yarn run lint-ci
-
-      - name: 📦 Upload Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: '${{ runner.os }} - Lint Report'
-          path: ./lintReport.json
-
   build:
     runs-on: ubuntu-latest
     needs: [environment, test]
