@@ -200,8 +200,8 @@ jobs:
         with:
           name: '${{ needs.environment.outputs.app_name }} Windows ${{ needs.environment.outputs.package_version }}'
           path: |
-            ${{ env.electron_folder }}/build/${{ needs.environment.outputs.package_name }}-${{ needs.environment.outputs.package_version }}.exe
-            ${{ env.electron_folder }}/build/${{ needs.environment.outputs.package_name }}-${{ needs.environment.outputs.package_version }}.exe.blockmap
+            ${{ needs.environment.outputs.package_name }}-${{ needs.environment.outputs.package_version }}.exe
+            ${{ needs.environment.outputs.package_name }}-${{ needs.environment.outputs.package_version }}.exe.blockmap
   build_mac:
     name: 🏗️ Build to MacOS
     runs-on: macos-latest
@@ -224,9 +224,9 @@ jobs:
         with:
           name: '${{ needs.environment.outputs.app_name }} MacOS ${{ needs.environment.outputs.package_version }}'
           path: |
-            ${{ env.electron_folder }}/build/${{ needs.environment.outputs.package_name }}-${{ needs.environment.outputs.package_version }}.dmg
-            ${{ env.electron_folder }}/build/${{ needs.environment.outputs.package_name }}-${{ needs.environment.outputs.package_version }}.dmg.blockmap
-            ${{ env.electron_folder }}/build/${{ needs.environment.outputs.package_name }}-${{ needs.environment.outputs.package_version }}.zip
+            ${{ needs.environment.outputs.package_name }}-${{ needs.environment.outputs.package_version }}.dmg
+            ${{ needs.environment.outputs.package_name }}-${{ needs.environment.outputs.package_version }}.dmg.blockmap
+            ${{ needs.environment.outputs.package_name }}-${{ needs.environment.outputs.package_version }}.zip
   build_linux:
     name: 🏗️ Build to Linux
     runs-on: ubuntu-latest
@@ -248,7 +248,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: '${{ needs.environment.outputs.app_name }} Linux ${{ needs.environment.outputs.package_version }}'
-          path: ${{ env.electron_folder }}/build/${{ needs.environment.outputs.package_name }}-${{ needs.environment.outputs.package_version }}.AppImage
+          path: ${{ needs.environment.outputs.package_name }}-${{ needs.environment.outputs.package_version }}.AppImage
 
   # Mobile
 
