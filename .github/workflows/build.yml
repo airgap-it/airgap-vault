@@ -268,7 +268,7 @@ jobs:
       - name: ⚙️ Setup Java
         uses: actions/setup-java@v1
         with:
-          java-version: 1.8
+          java-version: '11'
 
       - name: 🔨 Clean Project
         run: android/gradlew --project-dir android clean build
