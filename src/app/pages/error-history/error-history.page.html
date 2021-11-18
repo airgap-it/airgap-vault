@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab-settings"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Error History</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="copyErrorHistory()">
+        <ion-icon slot="icon-only" name="download"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let error of errorHistory" (click)="expand(error)">
+      <ng-container *ngIf="!error.expanded">
+        {{error.date | date: 'yyyy-MM-dd HH:mm'}} - {{error.title}}
+      </ng-container>
+      <ng-container *ngIf="error.expanded"><pre>{{error.detail}}</pre></ng-container>
+    </ion-item>
+  </ion-list>
+</ion-content>
