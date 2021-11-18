@@ -1,14 +1,15 @@
 import {
   AirGapAngularCoreModule,
   AirGapTranslateLoader,
+  AppInfo,
   APP_CONFIG,
   APP_INFO_PLUGIN,
+  APP_LAUNCHER_PLUGIN,
   APP_PLUGIN,
   ClipboardService,
   CLIPBOARD_PLUGIN,
   DeeplinkService,
   PermissionsService,
-  PERMISSIONS_PLUGIN,
   QrScannerService,
   SerializerService,
   SPLASH_SCREEN_PLUGIN,
@@ -18,10 +19,14 @@ import {
 import { AirGapAngularNgRxModule } from '@airgap/angular-ngrx'
 import { PercentPipe } from '@angular/common'
 import { HttpClient, HttpClientModule } from '@angular/common/http'
-import { NgModule } from '@angular/core'
+import { ErrorHandler, NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { RouteReuseStrategy } from '@angular/router'
-import { Plugins } from '@capacitor/core'
+import { App } from '@capacitor/app'
+import { AppLauncher } from '@capacitor/app-launcher'
+import { Clipboard } from '@capacitor/clipboard'
+import { SplashScreen } from '@capacitor/splash-screen'
+import { StatusBar } from '@capacitor/status-bar'
 import { DeviceMotion } from '@ionic-native/device-motion/ngx'
 import { Diagnostic } from '@ionic-native/diagnostic/ngx'
 import { IonicModule, IonicRouteStrategy, Platform } from '@ionic/angular'
@@ -33,6 +38,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
 import * as fromRoot from './app.reducers'
+import { CameraPreview, SaplingNative, SecurityUtils } from './capacitor-plugins/definitions'
 import { CAMERA_PREVIEW_PLUGIN, SAPLING_PLUGIN, SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
 import { appConfig } from './config/app-config'
 import { DistributionOnboardingPageModule } from './pages/distribution-onboarding/distribution-onboarding.module'
@@ -97,16 +103,17 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
     AirGapAngularNgRxModule
   ],
   providers: [
-    { provide: APP_PLUGIN, useValue: Plugins.App },
-    { provide: APP_INFO_PLUGIN, useValue: Plugins.AppInfo },
-    { provide: CAMERA_PREVIEW_PLUGIN, useValue: Plugins.CameraPreview },
-    { provide: CLIPBOARD_PLUGIN, useValue: Plugins.Clipboard },
-    { provide: PERMISSIONS_PLUGIN, useValue: Plugins.Permissions },
-    { provide: SAPLING_PLUGIN, useValue: Plugins.SaplingNative },
-    { provide: SECURITY_UTILS_PLUGIN, useValue: Plugins.SecurityUtils },
-    { provide: SPLASH_SCREEN_PLUGIN, useValue: Plugins.SplashScreen },
-    { provide: STATUS_BAR_PLUGIN, useValue: Plugins.StatusBar },
+    { provide: APP_PLUGIN, useValue: App },
+    { provide: APP_INFO_PLUGIN, useValue: AppInfo },
+    { provide: APP_LAUNCHER_PLUGIN, useValue: AppLauncher },
+    { provide: CAMERA_PREVIEW_PLUGIN, useValue: CameraPreview },
+    { provide: CLIPBOARD_PLUGIN, useValue: Clipboard },
+    { provide: SAPLING_PLUGIN, useValue: SaplingNative },
+    { provide: SECURITY_UTILS_PLUGIN, useValue: SecurityUtils },
+    { provide: SPLASH_SCREEN_PLUGIN, useValue: SplashScreen },
+    { provide: STATUS_BAR_PLUGIN, useValue: StatusBar },
     { provide: APP_CONFIG, useValue: appConfig },
+    { provide: ErrorHandler, useClass: ErrorHandlerService },
     Diagnostic,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     DeviceMotion,

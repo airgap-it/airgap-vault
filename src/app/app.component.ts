@@ -6,7 +6,7 @@ import {
   SPLASH_SCREEN_PLUGIN,
   STATUS_BAR_PLUGIN
 } from '@airgap/angular-core'
-import { NetworkType, TezosProtocolNetwork, TezosSaplingExternalMethodProvider } from '@airgap/coinlib-core'
+import { TezosSaplingExternalMethodProvider } from '@airgap/coinlib-core'
 import {
   TezosSaplingProtocolOptions,
   TezosShieldedTezProtocolConfig
@@ -14,7 +14,9 @@ import {
 import { TezosShieldedTezProtocol } from '@airgap/coinlib-core/protocols/tezos/sapling/TezosShieldedTezProtocol'
 import { HttpClient } from '@angular/common/http'
 import { AfterViewInit, Component, Inject, NgZone } from '@angular/core'
-import { AppPlugin, AppUrlOpen, SplashScreenPlugin, StatusBarPlugin, StatusBarStyle } from '@capacitor/core'
+import { AppPlugin, URLOpenListenerEvent } from '@capacitor/app'
+import { SplashScreenPlugin } from '@capacitor/splash-screen'
+import { StatusBarPlugin, Style } from '@capacitor/status-bar'
 import { Platform } from '@ionic/angular'
 import { first } from 'rxjs/operators'
 
@@ -22,7 +24,7 @@ import { SecurityUtilsPlugin } from './capacitor-plugins/definitions'
 import { SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
 import { DEEPLINK_VAULT_ADD_ACCOUNT, DEEPLINK_VAULT_PREFIX } from './constants/constants'
 import { ExposedPromise, exposedPromise } from './functions/exposed-promise'
-import { Secret } from './models/secret'
+import { MnemonicSecret } from './models/secret'
 import { ErrorCategory, handleErrorLocal } from './services/error-handler/error-handler.service'
 import { IACService } from './services/iac/iac.service'
 import { NavigationService } from './services/navigation/navigation.service'
@@ -66,7 +68,7 @@ export class AppComponent implements AfterViewInit {
     await Promise.all([this.platform.ready(), this.initializeTranslations(), this.initializeProtocols()])
 
     if (this.platform.is('hybrid')) {
-      this.statusBar.setStyle({ style: StatusBarStyle.Dark })
+      this.statusBar.setStyle({ style: Style.Dark })
       this.statusBar.setBackgroundColor({ color: '#311B58' })
       this.splashScreen.hide()
 
@@ -84,14 +86,14 @@ export class AppComponent implements AfterViewInit {
 
   public async ngAfterViewInit(): Promise<void> {
     await this.platform.ready()
-    this.app.addListener('appUrlOpen', async (data: AppUrlOpen) => {
+    this.app.addListener('appUrlOpen', async (data: URLOpenListenerEvent) => {
       await this.isInitialized.promise
       if (data.url === DEEPLINK_VAULT_PREFIX || data.url.startsWith(DEEPLINK_VAULT_ADD_ACCOUNT)) {
         console.log('Successfully matched route', data.url)
         this.secretsService
           .getSecretsObservable()
           .pipe(first())
-          .subscribe((secrets: Secret[]) => {
+          .subscribe((secrets: MnemonicSecret[]) => {
             if (secrets.length > 0) {
               this.ngZone
                 .run(async () => {
@@ -131,7 +133,7 @@ export class AppComponent implements AfterViewInit {
 
     const shieldedTezProtocol: TezosShieldedTezProtocol = new TezosShieldedTezProtocol(
       new TezosSaplingProtocolOptions(
-        new TezosProtocolNetwork('Florencenet', NetworkType.TESTNET, 'https://tezos-florencenet-node.prod.gke.papers.tech'),
+        undefined,
         new TezosShieldedTezProtocolConfig(undefined, undefined, undefined, externalMethodProvider)
       )
     )

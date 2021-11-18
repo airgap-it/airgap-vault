@@ -1,14 +1,14 @@
 package it.airgap.vault.plugin.saplingnative
 
-import com.getcapacitor.NativePlugin
 import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
+import com.getcapacitor.annotation.CapacitorPlugin
 import it.airgap.sapling.Sapling
 import it.airgap.vault.util.*
 import kotlin.concurrent.thread
 
-@NativePlugin
+@CapacitorPlugin
 class SaplingNative : Plugin() {
     private val sapling: Sapling by lazy { Sapling() }
 
@@ -115,37 +115,37 @@ class SaplingNative : Plugin() {
     }
 
     private val PluginCall.context: Long
-        get() = getString(Param.CONTEXT).toLong()
+        get() = getString(Param.CONTEXT)!!.toLong()
 
     private val PluginCall.spendingKey: ByteArray
-        get() = getString(Param.SPENDING_KEY).asByteArray()
+        get() = getString(Param.SPENDING_KEY)!!.asByteArray()
 
     private val PluginCall.address: ByteArray
-        get() = getString(Param.ADDRESS).asByteArray()
+        get() = getString(Param.ADDRESS)!!.asByteArray()
 
     private val PluginCall.rcm: ByteArray
-        get() = getString(Param.RCM).asByteArray()
+        get() = getString(Param.RCM)!!.asByteArray()
 
     private val PluginCall.ar: ByteArray
-        get() = getString(Param.AR).asByteArray()
+        get() = getString(Param.AR)!!.asByteArray()
 
     private val PluginCall.esk: ByteArray
-        get() = getString(Param.ESK).asByteArray()
+        get() = getString(Param.ESK)!!.asByteArray()
 
     private val PluginCall.value: Long
-        get() = getString(Param.VALUE).toLong()
+        get() = getString(Param.VALUE)!!.toLong()
 
     private val PluginCall.root: ByteArray
-        get() = getString(Param.ROOT).asByteArray()
+        get() = getString(Param.ROOT)!!.asByteArray()
 
     private val PluginCall.merklePath: ByteArray
-        get() = getString(Param.MERKLE_PATH).asByteArray()
+        get() = getString(Param.MERKLE_PATH)!!.asByteArray()
 
     private val PluginCall.balance: Long
-        get() = getString(Param.BALANCE).toLong()
+        get() = getString(Param.BALANCE)!!.toLong()
 
     private val PluginCall.sighash: ByteArray
-        get() = getString(Param.SIGHASH).asByteArray()
+        get() = getString(Param.SIGHASH)!!.asByteArray()
 
     private object Param {
         const val CONTEXT = "context"

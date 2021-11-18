@@ -28,7 +28,7 @@ import * as bip39 from 'bip39'
 import { concat, from, of } from 'rxjs'
 import { concatMap, first, switchMap, tap, withLatestFrom } from 'rxjs/operators'
 
-import { Secret } from '../../models/secret'
+import { MnemonicSecret } from '../../models/secret'
 import { SignTransactionInfo } from '../../models/sign-transaction-info'
 import { InteractionOperationType, InteractionService } from '../../services/interaction/interaction.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
@@ -330,7 +330,7 @@ export class DeserializedDetailEffects {
   }
 
   private async signTransaction(wallet: AirGapWallet, transaction: UnsignedTransaction, bip39Passphrase: string): Promise<string> {
-    const secret: Secret | undefined = this.secretsService.findByPublicKey(wallet.publicKey)
+    const secret: MnemonicSecret | undefined = this.secretsService.findByPublicKey(wallet.publicKey)
     if (secret === undefined) {
       throw new Error('Secret not found')
     }
@@ -391,7 +391,7 @@ export class DeserializedDetailEffects {
     wallet?: AirGapWallet,
     protocolIdentifier?: ProtocolSymbols
   ): Promise<string> {
-    const secret: Secret | undefined =
+    const secret: MnemonicSecret | undefined =
       wallet !== undefined
         ? this.secretsService.findByPublicKey(wallet.publicKey) ?? this.secretsService.getActiveSecret()
         : this.secretsService.getActiveSecret()
@@ -426,15 +426,12 @@ export class DeserializedDetailEffects {
 
   private async navigateWithSignedTransactions(transactions: DeserializedSignedTransaction[]): Promise<void> {
     const broadcastUrl: IACMessageDefinitionObjectV3[] = await this.generateTransactionBroadcastUrl(transactions)
-    this.interactionService.startInteraction(
-      {
-        operationType: InteractionOperationType.TRANSACTION_BROADCAST,
-        iacMessage: broadcastUrl,
-        wallets: transactions.map((transaction: DeserializedSignedTransaction): AirGapWallet => transaction.wallet),
-        signedTxs: transactions.map((transaction: DeserializedSignedTransaction): string => transaction.data.transaction)
-      },
-      this.secretsService.getActiveSecret()
-    )
+    this.interactionService.startInteraction({
+      operationType: InteractionOperationType.TRANSACTION_BROADCAST,
+      iacMessage: broadcastUrl,
+      wallets: transactions.map((transaction: DeserializedSignedTransaction): AirGapWallet => transaction.wallet),
+      signedTxs: transactions.map((transaction: DeserializedSignedTransaction): string => transaction.data.transaction)
+    })
   }
 
   private async generateTransactionBroadcastUrl(transactions: DeserializedSignedTransaction[]): Promise<IACMessageDefinitionObjectV3[]> {
@@ -459,21 +456,18 @@ export class DeserializedDetailEffects {
 
   private async navigateWithSignedMessages(messages: DeserializedSignedMessage[]): Promise<void> {
     const broadcastUrl: IACMessageDefinitionObjectV3[] = await this.generateMessageBroadcastUrl(messages)
-    this.interactionService.startInteraction(
-      {
-        operationType: InteractionOperationType.MESSAGE_SIGN_REQUEST,
-        iacMessage: broadcastUrl,
-        messageSignResponse:
-          messages[0] !== undefined
-            ? {
-                message: messages[0].data.message,
-                publicKey: messages[0].data.publicKey,
-                signature: messages[0].data.signature
-              }
-            : undefined
-      },
-      this.secretsService.getActiveSecret()
-    )
+    this.interactionService.startInteraction({
+      operationType: InteractionOperationType.MESSAGE_SIGN_REQUEST,
+      iacMessage: broadcastUrl,
+      messageSignResponse:
+        messages[0] !== undefined
+          ? {
+              message: messages[0].data.message,
+              publicKey: messages[0].data.publicKey,
+              signature: messages[0].data.signature
+            }
+          : undefined
+    })
   }
 
   private async generateMessageBroadcastUrl(messages: DeserializedSignedMessage[]): Promise<IACMessageDefinitionObjectV3[]> {

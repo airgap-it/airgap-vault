@@ -23,6 +23,7 @@
         <ion-toggle [checked]="displayRawData" (ionChange)="displayRawData = !displayRawData" slot="end"></ion-toggle>
       </ion-item>
       <pre *ngIf="displayRawData" class="ion-no-margin">{{ interactionUrl | json }}</pre>
+      <ion-button *ngIf="displayRawData" (click)="copyToClipboard()">Copy data to clipboard</ion-button>
     </ion-col>
   </ion-row>
 

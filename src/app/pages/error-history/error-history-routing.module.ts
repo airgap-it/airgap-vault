@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core'
 import { Routes, RouterModule } from '@angular/router'
 
-import { Bip85ValidatePage } from './bip85-validate.page'
+import { ErrorHistoryPage } from './error-history.page'
 
 const routes: Routes = [
   {
     path: '',
-    component: Bip85ValidatePage
+    component: ErrorHistoryPage
   }
 ]
 
@@ -14,4 +14,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class Bip85ValidatePageRoutingModule {}
+export class ErrorHistoryPageRoutingModule {}

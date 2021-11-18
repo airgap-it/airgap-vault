@@ -1,29 +1,46 @@
 package it.airgap.vault.plugin.camerapreview
 
 import android.Manifest
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Point
+import android.os.Build
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewParent
+import android.view.WindowInsets
 import android.widget.FrameLayout
-import com.getcapacitor.NativePlugin
+import com.getcapacitor.PermissionState
 import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
+import com.getcapacitor.annotation.CapacitorPlugin
+import com.getcapacitor.annotation.Permission
+import com.getcapacitor.annotation.PermissionCallback
 import it.airgap.vault.plugin.camerapreview.CameraFragment.CameraPreviewListener
-import it.airgap.vault.util.requiresPermissions
+import it.airgap.vault.util.releaseCallIfKept
 import it.airgap.vault.util.resolveWithData
 
 /**
  * Forked from: https://github.com/arielhernandezmusa/capacitor-camera-preview
  */
 
-@NativePlugin(permissions = [Manifest.permission.CAMERA])
+@CapacitorPlugin(
+    permissions = [
+        Permission(strings = [Manifest.permission.CAMERA], alias = CameraPreview.PERMISSION_ALIAS_CAMERA)
+    ]
+)
 class CameraPreview : Plugin(), CameraPreviewListener {
+    private var lastCallbackId: String? = null
+    private var lastCall: PluginCall?
+        get() = lastCallbackId?.let { bridge.getSavedCall(it) }
+        set(value) {
+            value?.let {
+                bridge.saveCall(it)
+                lastCallbackId = it.callbackId
+            }
+        }
 
     private var fragment: CameraFragment? = null
     private val containerViewId = 20
@@ -33,9 +50,11 @@ class CameraPreview : Plugin(), CameraPreviewListener {
 
     @PluginMethod
     fun start(call: PluginCall) {
-        saveCall(call)
-        requiresPermissions(REQUEST_CODE_CAMERA_PERMISSION, Manifest.permission.CAMERA) {
+        lastCall = call
+        if (getPermissionState(PERMISSION_ALIAS_CAMERA) == PermissionState.GRANTED) {
             startCamera(call)
+        } else {
+            requestPermissionForAlias(PERMISSION_ALIAS_CAMERA, call, "cameraPermissionCallback")
         }
     }
 
@@ -46,10 +65,10 @@ class CameraPreview : Plugin(), CameraPreviewListener {
 
     @PluginMethod
     fun capture(call: PluginCall) {
-        saveCall(call)
-        val width = call.getInt(Param.WIDTH, 0)
-        val height = call.getInt(Param.HEIGHT, 0)
-        val quality = call.getInt(Param.QUALITY, 85)
+        lastCall = call
+        val width = call.getInt(Param.WIDTH) ?: 0
+        val height = call.getInt(Param.HEIGHT) ?: 0
+        val quality = call.getInt(Param.QUALITY) ?: 85
 
         fragment?.takePicture(width, height, quality) ?: call.reject("camera has not started")
     }
@@ -60,34 +79,25 @@ class CameraPreview : Plugin(), CameraPreviewListener {
             if (previewContainerView != null) {
                 hideCameraPreview()
                 fragment = null
-                call.success()
+                call.resolve()
             } else {
                 call.reject("camera already stopped")
             }
         }
     }
 
-    override fun handleRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.handleRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        when (requestCode) {
-            REQUEST_CODE_CAMERA_PERMISSION -> {
-                val permissionsGranted = grantResults
-                        .map { it == PackageManager.PERMISSION_GRANTED }
-                        .reduce(Boolean::and)
-
-                if (permissionsGranted) {
-                    startCamera(savedCall)
-                } else {
-                    savedCall.reject("permissions not granted")
-                }
-            }
+    @PermissionCallback
+    fun cameraPermissionCallback(call: PluginCall) {
+        if (getPermissionState(PERMISSION_ALIAS_CAMERA) == PermissionState.GRANTED) {
+            startCamera(bridge.getSavedCall(null))
+        } else {
+            call.reject("permissions not granted")
         }
     }
 
     private fun startCamera(call: PluginCall) {
         val defaultCamera = call.getString(Param.CAMERA, Param.CAMERA_DEFAULT_VALUE)
-        val disableExifHeaderStripping = call.getBoolean(Param.DISABLE_EXIF_HEADER_STRIPPING, Param.DISABLE_EXIF_HEADER_STRIPPING_DEFAULT_VALUE)
+        val disableExifHeaderStripping = call.getBoolean(Param.DISABLE_EXIF_HEADER_STRIPPING) ?: Param.DISABLE_EXIF_HEADER_STRIPPING_DEFAULT_VALUE
 
         fragment = CameraFragment().apply {
             setEventListener(this@CameraPreview)
@@ -95,19 +105,32 @@ class CameraPreview : Plugin(), CameraPreviewListener {
         }
 
         activity.runOnUiThread {
-            val size = Point().also { activity.windowManager.defaultDisplay.getSize(it) }
+            val size = Point().also {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    val metrics = activity.windowManager.currentWindowMetrics
+                    val windowInsets = metrics.windowInsets
+                    val insets = windowInsets.getInsetsIgnoringVisibility(WindowInsets.Type.navigationBars() or WindowInsets.Type.displayCutout())
+                    val insetsWidth = insets.right + insets.left
+                    val insetsHeight = insets.top + insets.bottom
 
-            val x = call.getInt(Param.X, Param.X_DEFAULT_VALUE)
-            val y = call.getInt(Param.Y, Param.Y_DEFAULT_VALUE)
+                    it.x = metrics.bounds.width() - insetsWidth
+                    it.y = metrics.bounds.height() - insetsHeight
+                } else {
+                    activity.windowManager.defaultDisplay.getSize(it)
+                }
+            }
 
-            val width = call.getInt(Param.WIDTH, size.x)
-            val height = call.getInt(Param.HEIGHT, size.y)
+            val x = call.getInt(Param.X) ?: Param.X_DEFAULT_VALUE
+            val y = call.getInt(Param.Y) ?: Param.Y_DEFAULT_VALUE
+
+            val width = call.getInt(Param.WIDTH) ?: size.x
+            val height = call.getInt(Param.HEIGHT) ?: size.y
 
             setPreviewRect(x, y, width, height, activity.resources.displayMetrics)
 
             if (previewContainerView == null) {
                 showCameraPreview()
-                call.success()
+                call.resolve()
             } else {
                 call.reject("camera already started")
             }
@@ -115,19 +138,31 @@ class CameraPreview : Plugin(), CameraPreviewListener {
     }
 
     override fun onPictureTaken(originalPicture: String) {
-        savedCall.resolveWithData(Key.VALUE to originalPicture)
+        lastCall?.run {
+            resolveWithData(Key.VALUE to originalPicture)
+            releaseCallIfKept(callbackId)
+        }
     }
 
     override fun onPictureTakenError(message: String) {
-        savedCall.reject(message)
+        lastCall?.run {
+            reject(message)
+            releaseCallIfKept(callbackId)
+        }
     }
 
     override fun onSnapshotTaken(originalPicture: String) {
-        savedCall.resolveWithData(Key.VALUE to originalPicture)
+        lastCall?.run {
+            resolveWithData(Key.VALUE to originalPicture)
+            releaseCallIfKept(callbackId)
+        }
     }
 
     override fun onSnapshotTakenError(message: String) {
-        savedCall.reject(message)
+        lastCall?.run {
+            reject(message)
+            releaseCallIfKept(callbackId)
+        }
     }
 
     override fun onFocusSet(pointX: Int, pointY: Int) = Unit
@@ -136,7 +171,10 @@ class CameraPreview : Plugin(), CameraPreviewListener {
 
     override fun onCameraStarted() {
         println("camera started")
-        savedCall.resolve()
+        lastCall?.run {
+            resolve()
+            releaseCallIfKept(callbackId)
+        }
     }
 
     private fun setPreviewRect(x: Int, y: Int, width: Int, height: Int, metrics: DisplayMetrics) { // offset
@@ -220,6 +258,6 @@ class CameraPreview : Plugin(), CameraPreviewListener {
     }
 
     companion object {
-        private const val REQUEST_CODE_CAMERA_PERMISSION = 101
+        const val PERMISSION_ALIAS_CAMERA = "camera"
     }
 }

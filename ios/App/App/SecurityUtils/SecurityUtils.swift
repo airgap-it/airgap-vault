@@ -146,6 +146,21 @@ public class SecurityUtils: CAPPlugin {
         }
     }
     
+    @objc func destroy(_ call: CAPPluginCall) {
+        queue.addOperation {
+            do {
+                try SecureStorage.delete()
+                call.resolve()
+            } catch {
+                if let error = error as? VaultError {
+                    call.reject(error.description, "\(error.code.rawValue)", error)
+                } else {
+                    call.reject(error.localizedDescription, "-1", error)
+                }
+            }
+        }
+    }
+    
     @objc func removeItem(_ call: CAPPluginCall) {
         queue.addOperation {
             call.assertReceived(forMethod: "SecureStorage_removeItem", requiredParams: Param.ALIAS, Param.IS_PARANOIA, Param.KEY)
