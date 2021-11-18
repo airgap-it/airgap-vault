@@ -53,6 +53,10 @@ export class LocalErrorLogger {
       })
       .join('\n\n')
   }
+
+  public async clearAll() {
+    localStorage.setItem(this.errorHistoryKey, JSON.stringify([]))
+  }
 }
 
 const errorLogger = new LocalErrorLogger()
