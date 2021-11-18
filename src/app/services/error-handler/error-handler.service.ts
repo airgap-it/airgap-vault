@@ -16,9 +16,15 @@ export enum ErrorCategory {
   OTHER = 'other'
 }
 
-const NUMBER_OF_ERRORS_CACHED = 10
+const NUMBER_OF_ERRORS_CACHED = 100
 
-type ErrorHistoryObject = [ErrorCategory, string, string, string, number]
+export type ErrorHistoryObject = [
+  ErrorCategory, // category
+  string, // name
+  string, // message
+  string, // stack
+  number // date
+]
 
 export class LocalErrorLogger {
   private readonly errorHistoryKey: string = 'airgap-vault:ERROR_HISTORY'
