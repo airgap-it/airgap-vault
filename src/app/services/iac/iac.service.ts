@@ -17,6 +17,7 @@ import {
   IACMessageType,
   MainProtocolSymbols,
   MessageSignRequest,
+  RawBitcoinSegwitTransaction,
   UnsignedTransaction
 } from '@airgap/coinlib-core'
 import { Inject, Injectable } from '@angular/core'
@@ -73,8 +74,9 @@ export class IACService extends BaseIACService {
             )
 
             if (!correctWallet && signTransactionRequest.protocol === MainProtocolSymbols.BTC_SEGWIT) {
-              const decodedPSBT = bitcoinJS.Psbt.fromHex(unsignedTransaction.transaction)
-              for (const input of decodedPSBT.data.inputs) {
+              const transaction: RawBitcoinSegwitTransaction = unsignedTransaction.transaction
+              const decodedPSBT = bitcoinJS.Psbt.fromHex(transaction.psbt)
+                for (const input of decodedPSBT.data.inputs) {
                 for (const derivation of input.bip32Derivation) {
                   const masterFingerprint = derivation.masterFingerprint.toString('hex')
 
