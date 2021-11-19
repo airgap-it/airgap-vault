@@ -37,9 +37,9 @@
     "apply-diagnostic-modules": "node apply-diagnostic-modules.js"
   },
   "dependencies": {
-    "@airgap/angular-core": "0.0.20",
-    "@airgap/angular-ngrx": "0.0.20",
-    "@airgap/coinlib-core": "0.12.2",
+    "@airgap/angular-core": "0.0.21",
+    "@airgap/angular-ngrx": "0.0.21",
+    "@airgap/coinlib-core": "0.12.3",
     "@airgap/sapling-wasm": "0.0.6",
     "@angular/common": "^11.2.9",
     "@angular/core": "^11.2.9",
@@ -52,6 +52,7 @@
     "@capacitor/app-launcher": "^1.0.6",
     "@capacitor/clipboard": "^1.0.5",
     "@capacitor/core": "^3.2.5",
+    "@capacitor/filesystem": "1.0.6",
     "@capacitor/ios": "^3.2.5",
     "@capacitor/splash-screen": "^1.1.5",
     "@capacitor/status-bar": "^1.0.5",
