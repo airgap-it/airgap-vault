@@ -133,7 +133,7 @@ export class DeserializedDetailEffects {
     private readonly keyPairService: KeyPairService,
     private readonly transactionService: TransactionService,
     private readonly interactionService: InteractionService
-  ) {}
+  ) { }
 
   private async loadNavigationData(): Promise<Action> {
     const state = this.navigationService.getState()
@@ -235,7 +235,8 @@ export class DeserializedDetailEffects {
               id: request.id,
               details,
               data: request.payload as UnsignedTransaction,
-              wallet
+              wallet,
+              originalProtocolIdentifier: request.protocol !== wallet.protocol.symbol ? request.protocol : undefined
             }
           }
         )
@@ -263,7 +264,8 @@ export class DeserializedDetailEffects {
               protocol: request.protocol,
               data,
               blake2bHash,
-              wallet
+              wallet,
+              originalProtocolIdentifier: request.protocol !== wallet.protocol.symbol ? request.protocol : undefined
             }
           }
         )
@@ -308,7 +310,8 @@ export class DeserializedDetailEffects {
                 transaction: signed,
                 callbackURL: transaction.data.callbackURL
               },
-              wallet: transaction.wallet
+              wallet: transaction.wallet,
+              originalProtocolIdentifier: transaction.originalProtocolIdentifier
             }
           }
         )
@@ -362,7 +365,8 @@ export class DeserializedDetailEffects {
                 signature,
                 callbackURL: message.data.callbackURL
               },
-              wallet: message.wallet
+              wallet: message.wallet,
+              originalProtocolIdentifier: message.originalProtocolIdentifier
             }
           }
         )
@@ -425,20 +429,20 @@ export class DeserializedDetailEffects {
   }
 
   private async navigateWithSignedTransactions(transactions: DeserializedSignedTransaction[]): Promise<void> {
-    const broadcastUrl: IACMessageDefinitionObjectV3[] = await this.generateTransactionBroadcastUrl(transactions)
+    const messages: IACMessageDefinitionObjectV3[] = await this.generateTransactionIACMessages(transactions)
     this.interactionService.startInteraction({
       operationType: InteractionOperationType.TRANSACTION_BROADCAST,
-      iacMessage: broadcastUrl,
+      iacMessage: messages,
       wallets: transactions.map((transaction: DeserializedSignedTransaction): AirGapWallet => transaction.wallet),
       signedTxs: transactions.map((transaction: DeserializedSignedTransaction): string => transaction.data.transaction)
     })
   }
 
-  private async generateTransactionBroadcastUrl(transactions: DeserializedSignedTransaction[]): Promise<IACMessageDefinitionObjectV3[]> {
+  private async generateTransactionIACMessages(transactions: DeserializedSignedTransaction[]): Promise<IACMessageDefinitionObjectV3[]> {
     const signResponses: IACMessageDefinitionObjectV3[] = transactions.map(
       (transaction: DeserializedSignedTransaction): IACMessageDefinitionObjectV3 => ({
         id: transaction.id,
-        protocol: transaction.wallet.protocol.identifier,
+        protocol: transaction.originalProtocolIdentifier ?? transaction.wallet.protocol.identifier,
         type: IACMessageType.TransactionSignResponse,
         payload: {
           accountIdentifier: transaction.data.accountIdentifier,
@@ -450,31 +454,30 @@ export class DeserializedDetailEffects {
         }
       })
     )
-
-    return this.generateBroadcastUrl(signResponses, transactions[0]?.data.callbackURL)
+    return signResponses
   }
 
   private async navigateWithSignedMessages(messages: DeserializedSignedMessage[]): Promise<void> {
-    const broadcastUrl: IACMessageDefinitionObjectV3[] = await this.generateMessageBroadcastUrl(messages)
+    const iacMessages: IACMessageDefinitionObjectV3[] = await this.generateIACMessages(messages)
     this.interactionService.startInteraction({
       operationType: InteractionOperationType.MESSAGE_SIGN_REQUEST,
-      iacMessage: broadcastUrl,
+      iacMessage: iacMessages,
       messageSignResponse:
         messages[0] !== undefined
           ? {
-              message: messages[0].data.message,
-              publicKey: messages[0].data.publicKey,
-              signature: messages[0].data.signature
-            }
+            message: messages[0].data.message,
+            publicKey: messages[0].data.publicKey,
+            signature: messages[0].data.signature
+          }
           : undefined
     })
   }
 
-  private async generateMessageBroadcastUrl(messages: DeserializedSignedMessage[]): Promise<IACMessageDefinitionObjectV3[]> {
+  private async generateIACMessages(messages: DeserializedSignedMessage[]): Promise<IACMessageDefinitionObjectV3[]> {
     const signResponses: IACMessageDefinitionObjectV3[] = messages.map(
       (message: DeserializedSignedMessage): IACMessageDefinitionObjectV3 => ({
         id: message.id,
-        protocol: message.protocol,
+        protocol: message.originalProtocolIdentifier ?? message.protocol,
         type: IACMessageType.MessageSignResponse,
         payload: {
           message: message.data.message,
@@ -483,17 +486,7 @@ export class DeserializedDetailEffects {
         }
       })
     )
-
-    return this.generateBroadcastUrl(signResponses, messages[0]?.data.callbackURL)
-  }
-
-  private async generateBroadcastUrl(
-    messages: IACMessageDefinitionObjectV3[],
-    _callbackUrl?: string
-  ): Promise<IACMessageDefinitionObjectV3[]> {
-    // const serialized: string | string[] = await this.serializerService.serialize(messages)
-
-    return messages // `${callbackUrl || 'airgap-wallet://?d='}${typeof serialized === 'string' ? serialized : serialized.join(',')}`
+    return signResponses
   }
 
   private async checkIfSaplingTransaction(transaction: UnsignedTransaction, protocolIdentifier: ProtocolSymbols): Promise<boolean> {

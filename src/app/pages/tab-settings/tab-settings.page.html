@@ -56,6 +56,11 @@
       {{ 'tab-settings.interaction-settings_label' | translate }}
     </ion-item>
 
+    <ion-item (click)="goToErrorHistory()">
+      <ion-icon name="bug-outline" slot="start"></ion-icon>
+      Local Error History
+    </ion-item>
+
     <ion-item (click)="goToDangerZone()">
       <ion-icon name="warning" slot="start"></ion-icon>
       {{ 'tab-settings.danger-zone_label' | translate }}

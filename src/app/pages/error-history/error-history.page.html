@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab-settings"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Error History</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="copyErrorHistory()">
+        <ion-icon slot="icon-only" name="download"></ion-icon>
+      </ion-button>
+      <ion-button (click)="clearErrors()">
+        <ion-icon slot="icon-only" name="trash"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-card *ngIf=" errorHistory.length === 0">
+      <ion-card-content>Error list is empty! 🎉</ion-card-content>
+    </ion-card>
+    <ion-card *ngFor="let error of errorHistory" (click)="error.expanded = !error.expanded">
+      <ion-item>
+        <ion-label>{{error.date | date: 'yyyy-MM-dd HH:mm'}}</ion-label>
+        <ion-button fill="outline" slot="end">Details</ion-button>
+      </ion-item>
+
+      <ion-card-content>
+        <ng-container *ngIf="!error.expanded">{{error.title}}</ng-container>
+        <pre *ngIf="error.expanded">{{error.detail}}</pre>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+</ion-content>
