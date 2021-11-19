@@ -50,6 +50,7 @@ export interface DeserializedUnsignedTransaction {
   details: IAirGapTransaction[]
   data: UnsignedTransaction
   wallet: AirGapWallet
+  originalProtocolIdentifier?: ProtocolSymbols
 }
 
 export interface DeserializedSignedTransaction {
@@ -57,7 +58,8 @@ export interface DeserializedSignedTransaction {
   id: number
   details: IAirGapTransaction[]
   data: SignedTransaction & Pick<UnsignedTransaction, 'callbackURL'>
-  wallet: AirGapWallet
+  wallet: AirGapWallet,
+  originalProtocolIdentifier?: ProtocolSymbols
 }
 
 export type DeserializedTransaction = DeserializedUnsignedTransaction | DeserializedSignedTransaction
@@ -75,6 +77,7 @@ export interface DeserializedUnsignedMessage {
   data: MessageSignRequest
   blake2bHash: string | undefined
   wallet: AirGapWallet | undefined
+  originalProtocolIdentifier?: ProtocolSymbols
 }
 
 export interface DeserializedSignedMessage {
@@ -83,6 +86,7 @@ export interface DeserializedSignedMessage {
   protocol: ProtocolSymbols | undefined
   data: MessageSignResponse & Pick<MessageSignRequest, 'callbackURL'>
   wallet: AirGapWallet | undefined
+  originalProtocolIdentifier?: ProtocolSymbols
 }
 
 export type DeserializedMessage = DeserializedUnsignedMessage | DeserializedSignedMessage

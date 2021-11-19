@@ -2,24 +2,24 @@
 # yarn lockfile v1
 
 
-"@airgap/angular-core@0.0.20":
-  version "0.0.20"
-  resolved "https://registry.yarnpkg.com/@airgap/angular-core/-/angular-core-0.0.20.tgz#af6be8723f89cf1026a31b532ba8b3987dca67b4"
-  integrity sha512-CnI7IDOjxddjzxJSkz3OuDTz78O/SZTTRDyDiRNxnfNlV7MDgcUhAVuIlSPSa+ThKmfVYIyHr0T66gxPCb2M+g==
+"@airgap/angular-core@0.0.21":
+  version "0.0.21"
+  resolved "https://registry.yarnpkg.com/@airgap/angular-core/-/angular-core-0.0.21.tgz#10e7d4dbef9d6573a4e40c78d8ab8090f5390d18"
+  integrity sha512-9zh0/hs0ble8Ms3xfNBRb37HSCJTUcv3Jq23s4nW7U/88j2ZkTsgnbAr2bx+r16oanrdlkw9+/552TwkFVKMSw==
   dependencies:
     tslib "^2.2.0"
 
-"@airgap/angular-ngrx@0.0.20":
-  version "0.0.20"
-  resolved "https://registry.yarnpkg.com/@airgap/angular-ngrx/-/angular-ngrx-0.0.20.tgz#7cdcb78e51b4b45336996953bd3da248dff694f4"
-  integrity sha512-fESWKi27UINRlRhzoFgw92kfGRc/5PfIjAd9lQQzym73K7KZwcolduAQYboS48d2VK5vv4aIXfaqEn8FDS23eQ==
+"@airgap/angular-ngrx@0.0.21":
+  version "0.0.21"
+  resolved "https://registry.yarnpkg.com/@airgap/angular-ngrx/-/angular-ngrx-0.0.21.tgz#fa84be8baa11fe648a41062e1b42abd2aea884e4"
+  integrity sha512-UeQ9Vp5YsJjT+lgq+bNWqXZF8vTutNarXnOpiqvsQXh34XWPA1aGr5I+ajk9N2E4F4K7DRvRu7Az3SQtBIZWQw==
   dependencies:
     tslib "^2.2.0"
 
-"@airgap/coinlib-core@0.12.2":
-  version "0.12.2"
-  resolved "https://registry.yarnpkg.com/@airgap/coinlib-core/-/coinlib-core-0.12.2.tgz#0461656f55f805729dbeda571100739754a2e6d5"
-  integrity sha512-Aap0WQWXY4MERwh6SijhC47jG0+wXZRtem4Iim55lm3og46LQ8PGae5Opu+DKM0B9ipK3AC6qpzN8GvUVbE2xw==
+"@airgap/coinlib-core@0.12.3":
+  version "0.12.3"
+  resolved "https://registry.yarnpkg.com/@airgap/coinlib-core/-/coinlib-core-0.12.3.tgz#18759298509b02f0922373218cd4a8001825ce69"
+  integrity sha512-jgZdrTtu+WdMT0ZJkodc6N6E6CyV2okAl/4tYf9zzG9atVo//kAXePXth6UwkSQ/laM8i/dibEgkx+YlUjfTgg==
   dependencies:
     "@airgap/sapling-wasm" "0.0.5"
     "@polkadot/util" "2.0.1"
@@ -1187,6 +1187,11 @@
   integrity sha512-sr5ZhbdCUL6FAiyNEDpSKDEzjHCOsCA5R32inRergcPFRpOArsQi/NfhoMLHaZwZ78HAn9bfFV7JkoSr46NDDw==
   dependencies:
     tslib "^2.1.0"
+
+"@capacitor/filesystem@1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@capacitor/filesystem/-/filesystem-1.0.6.tgz#b837585e6b5d48dc705ee89e49cc7c6aeb8874ec"
+  integrity sha512-8xqUbDZFGBMhgqoBSn9wEd9OBPdHIRegQ9zCCZcpHNf3FFAIby1ck+aDFnoq+Da49xhD6ks1SKCBSxz/26qWTw==
 
 "@capacitor/ios@^3.2.5":
   version "3.2.5"
