@@ -1,4 +1,4 @@
-FROM node:15.14.0
+FROM node:16.13.0
 
 # See https://crbug.com/795759
 RUN apt-get update && apt-get install -yq libgconf-2-4 bzip2 build-essential libxtst6
@@ -42,9 +42,6 @@ COPY . /app
 
 # set to production
 RUN export NODE_ENV=production
-
-# post-install hook, to be safe if it got cached
-RUN node config/patch_crypto.js
 
 # build
 RUN yarn build:prod
