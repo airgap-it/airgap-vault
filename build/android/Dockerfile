@@ -14,7 +14,7 @@ ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 RUN mkdir /app
 WORKDIR /app
 
-RUN yarn cache clean --force
+RUN yarn cache clean --force && yarn global add n && n 16.13.0
 
 # Install app dependencies, using wildcard if package-lock exists and copy capacitor configs and ionic configs
 COPY package.json yarn.lock apply-diagnostic-modules.js capacitor.config.ts ionic.config.json /app/
