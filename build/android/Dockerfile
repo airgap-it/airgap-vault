@@ -14,10 +14,10 @@ ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 RUN mkdir /app
 WORKDIR /app
 
-RUN yarn global add ionic@5.4.0 @capacitor/core@3.2.5 @capacitor/cli@3.2.5 && yarn cache clean --force && yarn global add n && n 15.14.0
+RUN yarn cache clean --force
 
 # Install app dependencies, using wildcard if package-lock exists and copy capacitor configs and ionic configs
-COPY package.json yarn.lock apply-diagnostic-modules.js capacitor.config.ts ionic.config.json /app
+COPY package.json yarn.lock apply-diagnostic-modules.js capacitor.config.ts ionic.config.json /app/
 COPY config /app/config
 
 # install dependencies
@@ -26,9 +26,6 @@ RUN yarn install --frozen-lockfile && mkdir www && ionic info
 
 # Bundle app source
 COPY . /app
-
-# post-install hook, to be safe if it got cached
-RUN node config/patch_crypto.js
 
 # set version code
 ARG BUILD_NR
