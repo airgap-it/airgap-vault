@@ -4,6 +4,8 @@ FROM node:16.13.0
 RUN apt-get update && apt-get install -yq libgconf-2-4 bzip2 build-essential libxtst6
 RUN apt-get install -yq git
 
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 40976EAF437D05B5
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32
 RUN echo "deb http://us-west-2.ec2.archive.ubuntu.com/ubuntu/ trusty multiverse \
 deb http://us-west-2.ec2.archive.ubuntu.com/ubuntu/ trusty-updates multiverse \
 deb http://us-west-2.ec2.archive.ubuntu.com/ubuntu/ trusty-backports main restricted universe multiverse" | tee /etc/apt/sources.list.d/multiverse.list  
