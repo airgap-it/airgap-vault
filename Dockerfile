@@ -30,7 +30,6 @@ COPY install-build-deps.js /app
 COPY install-test-deps.js /app
 COPY package.json /app
 COPY yarn.lock /app
-COPY config /app/config
 COPY apply-diagnostic-modules.js /app
 
 RUN yarn install-test-dependencies
