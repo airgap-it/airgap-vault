@@ -35,6 +35,9 @@ export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
   public setWord: Observable<string>
 
   @Input()
+  public enabled: boolean = true
+
+  @Input()
   public wordlist: string[] = bip39.wordlists.EN
 
   @Output()

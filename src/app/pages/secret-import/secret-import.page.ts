@@ -32,6 +32,10 @@ export class SecretImportPage {
 
   public setWordEmitter: Subject<string> = new Subject()
 
+  public keyboardEnabled: boolean = true
+
+  private maxWords: number = 24
+
   constructor(
     private readonly deviceService: DeviceService,
     private readonly navigationService: NavigationService,
@@ -39,6 +43,9 @@ export class SecretImportPage {
   ) {
     this.secretWordsValid = this.setWordEmitter.pipe(
       map(() => {
+        const isShorterThanMaxLength = this.selectedWordIndex === -1 && this.secretWords.length < this.maxWords
+        const isEditingWord = this.selectedWordIndex !== -1
+        this.keyboardEnabled = isShorterThanMaxLength || isEditingWord
         return this.isValid()
       })
     )
