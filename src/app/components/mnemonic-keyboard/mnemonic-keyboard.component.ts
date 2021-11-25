@@ -122,7 +122,16 @@ export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
 
   private addLetter(char: string) {
     this.text += char
-    const hasExactMatch = this.wordlist.filter((word) => word === this.text).length > 0
+
+    const startsWith = this.wordlist.filter((word) => word.startsWith(this.text))
+
+    // If there are multiple matches, we don't autocomplete.
+    if (startsWith.length > 1) {
+      return
+    }
+
+    // If there is only one word that matches, we will autocomplete.
+    const hasExactMatch = startsWith.filter((word) => word === this.text).length > 0
 
     if (hasExactMatch) {
       this.selectWord(this.text)
