@@ -1,4 +1,4 @@
-import { ProtocolSymbols } from '@airgap/coinlib-core'
+import { AirGapWallet, ProtocolSymbols } from '@airgap/coinlib-core'
 import { createAction, props } from '@ngrx/store'
 
 // tslint:disable: typedef
@@ -56,7 +56,7 @@ export const alertDismissed = createAction(`[${featureName}] Alert Dismissed`, p
 export const modalDismissed = createAction(`[${featureName}] Modal Dismissed`, props<{ id: string }>())
 
 export const bip39PassphraseProvided = createAction(`[${featureName}] BIP-39 Passphrase Provided`, props<{ passphrase: string }>())
-export const signingProtocolProvided = createAction(`[${featureName}] Signing Protocol Provided`, props<{ protocol: ProtocolSymbols }>())
+export const signingWalletProvided = createAction(`[${featureName}] Signing Wallet Provided`, props<{ wallet: AirGapWallet }>())
 
 /**************** Internal ****************/
 

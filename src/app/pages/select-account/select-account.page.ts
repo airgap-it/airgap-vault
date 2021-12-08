@@ -2,6 +2,7 @@ import { AirGapWallet, AirGapWalletStatus } from '@airgap/coinlib-core'
 import { Component } from '@angular/core'
 import { ModalController, NavParams } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
+import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 
 import { MnemonicSecret } from '../../models/secret'
 import { SecretsService } from '../../services/secrets/secrets.service'
@@ -41,10 +42,10 @@ export class SelectAccountPage {
   }
 
   public async setWallet(wallet: AirGapWallet) {
-    this.modalController.dismiss(wallet.protocol.identifier).catch((err) => console.error(err))
+    this.modalController.dismiss(wallet).catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 
   public async dismiss() {
-    this.modalController.dismiss().catch((err) => console.error(err))
+    this.modalController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 }

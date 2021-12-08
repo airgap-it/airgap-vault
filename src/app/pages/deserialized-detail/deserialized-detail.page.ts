@@ -1,5 +1,5 @@
 import { assertNever, UIAction, UIActionStatus, UiEventService, UIResource, UIResourceStatus } from '@airgap/angular-core'
-import { IAirGapTransaction, ProtocolSymbols } from '@airgap/coinlib-core'
+import { AirGapWallet, IAirGapTransaction } from '@airgap/coinlib-core'
 import { Component, OnDestroy } from '@angular/core'
 import { ModalController } from '@ionic/angular'
 import { AlertOptions, LoadingOptions, ModalOptions, OverlayEventDetail } from '@ionic/core'
@@ -119,13 +119,11 @@ export class DeserializedDetailPage implements OnDestroy {
 
       return this.modalElement
         .onWillDismiss()
-        .then(
-          (data: OverlayEventDetail<unknown>): Promise<void> => {
-            this.store.dispatch(actions.modalDismissed({ id: modal.id }))
+        .then((data: OverlayEventDetail<unknown>): Promise<void> => {
+          this.store.dispatch(actions.modalDismissed({ id: modal.id }))
 
-            return onDismissAction(data)
-          }
-        )
+          return onDismissAction(data)
+        })
         .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
     } else {
       this.modalElement = undefined
@@ -257,11 +255,11 @@ export class DeserializedDetailPage implements OnDestroy {
     }
 
     const action: ModalOnDismissAction = async (modalData: OverlayEventDetail<unknown>): Promise<void> => {
-      if (modalData.data === undefined || typeof modalData.data !== 'string') {
+      if (modalData.data === undefined) {
         return
       }
 
-      this.store.dispatch(actions.signingProtocolProvided({ protocol: modalData.data as ProtocolSymbols }))
+      this.store.dispatch(actions.signingWalletProvided({ wallet: modalData.data as AirGapWallet }))
     }
 
     return [options, action]
