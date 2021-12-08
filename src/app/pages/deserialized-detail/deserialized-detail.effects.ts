@@ -387,7 +387,6 @@ export class DeserializedDetailEffects {
     wallet?: AirGapWallet,
     protocolIdentifier?: ProtocolSymbols
   ): Promise<string> {
-    console.log('signMessage WALLET', wallet)
     const secret: MnemonicSecret | undefined =
       wallet !== undefined
         ? this.secretsService.findByPublicKey(wallet.publicKey) ?? this.secretsService.getActiveSecret()
@@ -401,7 +400,6 @@ export class DeserializedDetailEffects {
     const mnemonic: string = bip39.entropyToMnemonic(entropy)
 
     if (wallet !== undefined) {
-      console.log('SIGNING WITH', wallet)
       return this.keyPairService.signWithWallet(wallet, message, mnemonic, bip39Passphrase)
     } else {
       let protocol: ICoinProtocol | undefined
