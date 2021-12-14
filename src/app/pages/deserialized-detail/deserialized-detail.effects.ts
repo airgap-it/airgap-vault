@@ -221,7 +221,7 @@ export class DeserializedDetailEffects {
             let details: IAirGapTransaction[]
             if (await this.checkIfSaplingTransaction(request.payload as UnsignedTransaction, request.protocol)) {
               details = await this.transactionService.getDetailsFromIACMessages([request], {
-                overrideProtocol: await this.getSaplingProtocol(),
+                overrideProtocol: await this.getSaplingProtocol(request.protocol),
                 data: {
                   knownViewingKeys: this.secretsService.getKnownViewingKeys()
                 }
@@ -492,7 +492,7 @@ export class DeserializedDetailEffects {
   private async checkIfSaplingTransaction(transaction: UnsignedTransaction, protocolIdentifier: ProtocolSymbols): Promise<boolean> {
     if (protocolIdentifier === MainProtocolSymbols.XTZ) {
       const tezosProtocol: ICoinProtocol = await this.protocolService.getProtocol(protocolIdentifier)
-      const saplingProtocol: TezosSaplingProtocol = await this.getSaplingProtocol()
+      const saplingProtocol: TezosSaplingProtocol = await this.getSaplingProtocol(protocolIdentifier)
 
       const txDetails: IAirGapTransaction[] = await tezosProtocol.getTransactionDetails(transaction)
       const recipients: string[] = txDetails
@@ -502,10 +502,15 @@ export class DeserializedDetailEffects {
       return recipients.includes(saplingProtocol.options.config.contractAddress)
     }
 
-    return protocolIdentifier === MainProtocolSymbols.XTZ_SHIELDED
+    return this.isSaplingProtocol(protocolIdentifier)
   }
 
-  private async getSaplingProtocol(): Promise<TezosSaplingProtocol> {
-    return (await this.protocolService.getProtocol(MainProtocolSymbols.XTZ_SHIELDED)) as TezosSaplingProtocol
+  private async getSaplingProtocol(protocolIdentifier: ProtocolSymbols): Promise<TezosSaplingProtocol> {
+    const saplingProtocolIdentifier = this.isSaplingProtocol(protocolIdentifier) ? protocolIdentifier : MainProtocolSymbols.XTZ_SHIELDED
+    return (await this.protocolService.getProtocol(saplingProtocolIdentifier)) as TezosSaplingProtocol
+  }
+
+  private isSaplingProtocol(protocolIdentifier: ProtocolSymbols): boolean {
+    return protocolIdentifier === MainProtocolSymbols.XTZ_SHIELDED || protocolIdentifier === MainProtocolSymbols.XTZ_ST
   }
 }

@@ -3,9 +3,9 @@ import {
   AirGapWallet,
   AirGapWalletStatus,
   ICoinProtocol,
-  MainProtocolSymbols,
   ProtocolSymbols,
-  SerializedAirGapWallet
+  SerializedAirGapWallet,
+  TezosSaplingProtocol
 } from '@airgap/coinlib-core'
 import { Injectable } from '@angular/core'
 import { AlertController, LoadingController } from '@ionic/angular'
@@ -467,7 +467,7 @@ export class SecretsService {
 
   public getKnownViewingKeys(): string[] {
     return this.getWallets()
-      .filter((wallet: AirGapWallet) => wallet.protocol.identifier === MainProtocolSymbols.XTZ_SHIELDED)
+      .filter((wallet: AirGapWallet) => wallet.protocol instanceof TezosSaplingProtocol)
       .map((wallet: AirGapWallet) => wallet.publicKey)
   }
 

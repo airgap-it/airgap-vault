@@ -9,8 +9,11 @@ import {
 import { TezosSaplingExternalMethodProvider } from '@airgap/coinlib-core'
 import {
   TezosSaplingProtocolOptions,
+  TezosSaplingTokenProtocolConfig,
+  TezosSaplingTokenProtocolOptions,
   TezosShieldedTezProtocolConfig
 } from '@airgap/coinlib-core/protocols/tezos/sapling/TezosSaplingProtocolOptions'
+import { TezosSaplingTokenProtocol } from '@airgap/coinlib-core/protocols/tezos/sapling/TezosSaplingTokenProtocol'
 import { TezosShieldedTezProtocol } from '@airgap/coinlib-core/protocols/tezos/sapling/TezosShieldedTezProtocol'
 import { HttpClient } from '@angular/common/http'
 import { AfterViewInit, Component, Inject, NgZone } from '@angular/core'
@@ -138,11 +141,33 @@ export class AppComponent implements AfterViewInit {
       )
     )
 
+    const saplingTokenProtocol = new TezosSaplingTokenProtocol(
+      new TezosSaplingTokenProtocolOptions(
+        undefined,
+        new TezosSaplingTokenProtocolConfig(
+          undefined, 
+          undefined, 
+          undefined, 
+          undefined, 
+          undefined, 
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          externalMethodProvider
+        )
+      )
+    )
+
     this.protocolService.init({
-      extraActiveProtocols: [shieldedTezProtocol]
+      extraActiveProtocols: [shieldedTezProtocol, saplingTokenProtocol]
     })
 
-    await shieldedTezProtocol.initParameters(await this.getSaplingParams('spend'), await this.getSaplingParams('output'))
+    await Promise.all([
+      shieldedTezProtocol.initParameters(await this.getSaplingParams('spend'), await this.getSaplingParams('output')),
+      saplingTokenProtocol.initParameters(await this.getSaplingParams('spend'), await this.getSaplingParams('output'))
+    ])
   }
 
   private async getSaplingParams(type: 'spend' | 'output'): Promise<Buffer> {

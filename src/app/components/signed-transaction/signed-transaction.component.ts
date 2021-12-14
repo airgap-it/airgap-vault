@@ -65,7 +65,7 @@ export class SignedTransactionComponent {
             this.signedTxs.map(async (signedTx) => {
               const payload: SignedTransaction = signedTx.payload as SignedTransaction
               if (await this.checkIfSaplingTransaction(payload, signedTx.protocol)) {
-                const saplingProtocol = await this.getSaplingProtocol()
+                const saplingProtocol = await this.getSaplingProtocol(signedTx.protocol)
                 return saplingProtocol.getTransactionDetailsFromSigned(payload, {
                   knownViewingKeys: this.secretsService.getKnownViewingKeys()
                 })
@@ -108,7 +108,7 @@ export class SignedTransactionComponent {
   private async checkIfSaplingTransaction(transaction: SignedTransaction, protocolIdentifier: ProtocolSymbols): Promise<boolean> {
     if (protocolIdentifier === MainProtocolSymbols.XTZ) {
       const tezosProtocol: ICoinProtocol = await this.protocolService.getProtocol(protocolIdentifier)
-      const saplingProtocol: TezosSaplingProtocol = await this.getSaplingProtocol()
+      const saplingProtocol: TezosSaplingProtocol = await this.getSaplingProtocol(protocolIdentifier)
 
       const txDetails: IAirGapTransaction[] = await tezosProtocol.getTransactionDetailsFromSigned(transaction)
       const recipients: string[] = txDetails
@@ -119,10 +119,16 @@ export class SignedTransactionComponent {
       return recipients.includes(saplingProtocol.options.config.contractAddress)
     }
 
-    return protocolIdentifier === MainProtocolSymbols.XTZ_SHIELDED
+    return this.isSaplingProtocol(protocolIdentifier)
   }
 
-  private async getSaplingProtocol(): Promise<TezosSaplingProtocol> {
-    return (await this.protocolService.getProtocol(MainProtocolSymbols.XTZ_SHIELDED)) as TezosSaplingProtocol
+  private async getSaplingProtocol(protocolIdentifier: ProtocolSymbols): Promise<TezosSaplingProtocol> {
+    const saplingProtocolIdentifier = this.isSaplingProtocol(protocolIdentifier) ? protocolIdentifier : MainProtocolSymbols.XTZ_SHIELDED
+    return (await this.protocolService.getProtocol(saplingProtocolIdentifier)) as TezosSaplingProtocol
+  }
+
+
+  private isSaplingProtocol(protocolIdentifier: ProtocolSymbols): boolean {
+    return protocolIdentifier === MainProtocolSymbols.XTZ_SHIELDED || protocolIdentifier === MainProtocolSymbols.XTZ_ST
   }
 }
