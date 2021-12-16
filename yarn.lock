@@ -16,10 +16,10 @@
   dependencies:
     tslib "^2.2.0"
 
-"@airgap/coinlib-core@0.12.5-beta.1":
-  version "0.12.5-beta.1"
-  resolved "https://registry.npmjs.org/@airgap/coinlib-core/-/coinlib-core-0.12.5-beta.1.tgz"
-  integrity sha512-S+KDzJ0M3AvjvLX0GFQ8ME3oEcc6nTCXUv2BNsbm1zG5OPw9jxWC4VvDmwNOUdF0Og9DI0nao3UVxCONCor3tQ==
+"@airgap/coinlib-core@0.12.5-beta.4":
+  version "0.12.5-beta.4"
+  resolved "https://registry.yarnpkg.com/@airgap/coinlib-core/-/coinlib-core-0.12.5-beta.4.tgz#5b6f2625117b863dee9da44cb4a579629396c43c"
+  integrity sha512-n/1FEz1f+C8x6VT4ywepIhLyKfrWFO+BrNBZOc3ZZE0ZD1T2aTuNyqWY62xQnIsc3ybVB7CDNLNrZrD2BsPE+A==
   dependencies:
     "@airgap/sapling-wasm" "0.0.5"
     "@polkadot/util" "2.0.1"
