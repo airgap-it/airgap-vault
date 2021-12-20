@@ -138,3 +138,12 @@ airgap-tab-accounts {
     --background-activated: transparent;
   }
 }
+
+airgap-mnemonic-keyboard {
+  @media only screen and (max-width: 360px) {
+    ion-button {
+      --padding-start: 10px;
+      --padding-end: 10px;
+    }
+  }
+}
