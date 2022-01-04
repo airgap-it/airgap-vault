@@ -56,7 +56,7 @@ export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
 
   public suggestions: string[] = []
 
-  public hiddenSiggestions: number = 0
+  public hiddenSuggestions: number = 0
 
   public rows: { letter: string; enabled: boolean; active: boolean }[][]
 
@@ -90,7 +90,7 @@ export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
 
       const numberOfSuggestions = 20
       this.suggestions = filtered.slice(0, numberOfSuggestions)
-      this.hiddenSiggestions = Math.max(0, filtered.length - numberOfSuggestions)
+      this.hiddenSuggestions = Math.max(0, filtered.length - numberOfSuggestions)
 
       const set = new Set<string>()
       filtered.forEach((word) => {
