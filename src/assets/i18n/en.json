@@ -262,6 +262,8 @@
     "paste-from-clipboard_label": "Paste code from clipboard",
     "qr-advanced-settings_label": "Advanced QR Settings",
     "interaction-settings_label": "Interaction Settings",
+    "advanced-settings_label": "Advanced Settings",
+    "error-history_label": "Local Error History",
     "danger-zone_label": "Danger Zone"
   },
   "tab-wallets": {
@@ -574,5 +576,10 @@
     "status": "{{ inputLength }} of 256 coin flips ({{ inputLength }} bits of entropy)",
     "head": "Head",
     "tail": "Tail"
+  },
+  "error-history": {
+    "title": "Error History",
+    "empty_label": "Error list is empty! 🎉",
+    "details_label": "Details"
   }
 }
