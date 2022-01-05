@@ -1,8 +1,11 @@
 import { ClipboardService } from '@airgap/angular-core'
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
+import { ModalController } from '@ionic/angular'
 
 import * as bip39 from 'bip39'
 import { Observable, Subscription } from 'rxjs'
+import { WordlistPage } from 'src/app/pages/wordlist/wordlist.page'
+import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 
 function shuffle(arr: string): string {
   const array = arr.split('')
@@ -66,7 +69,7 @@ export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription = new Subscription()
 
-  constructor(private readonly clipboardService: ClipboardService) {
+  constructor(private readonly clipboardService: ClipboardService, private readonly modalController: ModalController) {
     this.paintKeyboard()
   }
 
@@ -180,5 +183,13 @@ export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
   async scramble() {
     this._maskInput = !this._maskInput
     this.maskInput.emit(this._maskInput)
+  }
+
+  async showWordlist() {
+    const modal: HTMLIonModalElement = await this.modalController.create({
+      component: WordlistPage
+    })
+
+    modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 }
