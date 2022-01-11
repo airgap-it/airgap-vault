@@ -17,7 +17,7 @@ import {
   FILESYSTEM_PLUGIN,
   UiEventService
 } from '@airgap/angular-core'
-import { AirGapAngularNgRxModule } from '@airgap/angular-ngrx'
+import { AirGapAngularNgRxModule, currencySymbolNgRxFacade } from '@airgap/angular-ngrx'
 import { PercentPipe } from '@angular/common'
 import { HttpClient, HttpClientModule } from '@angular/common/http'
 import { ErrorHandler, NgModule } from '@angular/core'
@@ -101,7 +101,11 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
     IntroductionPageModule,
     DistributionOnboardingPageModule,
     LocalAuthenticationOnboardingPageModule,
-    AirGapAngularCoreModule,
+    AirGapAngularCoreModule.forRoot({
+      factories: {
+        currencySymbolFacade: currencySymbolNgRxFacade
+      }
+    }),
     AirGapAngularNgRxModule
   ],
   providers: [
@@ -165,4 +169,4 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

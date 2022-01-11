@@ -1,4 +1,4 @@
-import { AirGapMarketWallet } from '@airgap/coinlib-core'
+import { AirGapMarketWallet, MainProtocolSymbols } from '@airgap/coinlib-core'
 import { Component, OnInit } from '@angular/core'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 import * as bip32 from 'bip32'
@@ -47,8 +47,13 @@ export class AddressExplorerPage implements OnInit {
   public xpub: string = ''
   public addresses: AddressInfo[] = []
 
+  public showChange: boolean = true
+
   constructor(private readonly navigationService: NavigationService) {
     this.wallet = this.navigationService.getState().wallet
+    if (this.wallet.protocol.identifier === MainProtocolSymbols.ETH) {
+      this.showChange = false
+    }
   }
 
   ngOnInit() {
