@@ -141,7 +141,7 @@ export class DeserializedDetailEffects {
     const [, messageType]: [string | undefined, string | undefined] = this.getPageTypes(state.type)
     const mode: Mode | undefined = this.getMode(state.type)
 
-    if (messageType !== undefined && mode !== undefined && state.transactionInfos !== undefined && state.iacContext !== undefined) {
+    if (messageType !== undefined && mode !== undefined && state.transactionInfos !== undefined) {
       const title: string = this.translateService.instant(`deserialized-detail.${messageType}.title`)
       const button: string = this.translateService.instant(`deserialized-detail.${messageType}.button_label`)
       const raw: string = this.signTransactionInfoToRaw(state.transactionInfos)
@@ -210,7 +210,7 @@ export class DeserializedDetailEffects {
 
   private async signTransactionInfoToUnsignedTransactions(
     transactionInfo: SignTransactionInfo[],
-    iacContext: IACContext
+    iacContext?: IACContext
   ): Promise<DeserializedUnsignedTransaction[]> {
     return Promise.all(
       transactionInfo
@@ -246,7 +246,7 @@ export class DeserializedDetailEffects {
 
   private async signTransactionInfoToUnsignedMessages(
     transactionInfo: SignTransactionInfo[],
-    iacContext: IACContext
+    iacContext?: IACContext
   ): Promise<DeserializedUnsignedMessage[]> {
     return Promise.all(
       transactionInfo
@@ -337,7 +337,7 @@ export class DeserializedDetailEffects {
   private async signTransaction(
     wallet: AirGapWallet,
     transaction: UnsignedTransaction,
-    iacContext: IACContext,
+    iacContext: IACContext | undefined,
     bip39Passphrase: string
   ): Promise<string> {
     const secret: MnemonicSecret | undefined = this.secretsService.findByPublicKey(wallet.publicKey)
@@ -355,7 +355,7 @@ export class DeserializedDetailEffects {
       bip39Passphrase,
       wallet.isExtendedPublicKey,
       wallet.derivationPath,
-      await this.getChildDerivationPath(wallet.derivationPath, iacContext.derivationPath)
+      await this.getChildDerivationPath(wallet.derivationPath, iacContext?.derivationPath)
     )
   }
 
@@ -411,7 +411,7 @@ export class DeserializedDetailEffects {
 
   private async signMessage(
     message: MessageSignRequest,
-    iacContext: IACContext,
+    iacContext: IACContext | undefined,
     bip39Passphrase: string,
     wallet?: AirGapWallet,
     protocolIdentifier?: ProtocolSymbols
@@ -436,7 +436,7 @@ export class DeserializedDetailEffects {
         bip39Passphrase,
         wallet.isExtendedPublicKey,
         wallet.derivationPath,
-        await this.getChildDerivationPath(wallet.derivationPath, iacContext.derivationPath)
+        await this.getChildDerivationPath(wallet.derivationPath, iacContext?.derivationPath)
       )
     } else {
       let protocol: ICoinProtocol | undefined
@@ -460,7 +460,7 @@ export class DeserializedDetailEffects {
         bip39Passphrase,
         false,
         protocol.standardDerivationPath,
-        await this.getChildDerivationPath(protocol.standardDerivationPath, iacContext.derivationPath)
+        await this.getChildDerivationPath(protocol.standardDerivationPath, iacContext?.derivationPath)
       )
     }
   }
