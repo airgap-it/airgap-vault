@@ -33,12 +33,12 @@
     </ion-col>
   </ion-row>
 
-  <ion-card *ngFor="let address of addresses">
+  <ion-card *ngFor="let address of addresses" color="light">
     <ion-card-header (click)="toggle(address)">
       <ion-card-subtitle>{{address.derivationPath}}</ion-card-subtitle>
-      <ion-card-title>
+      <h6>
         <span class="address">{{address.address}}</span>
-      </ion-card-title>
+      </h6>
     </ion-card-header>
 
     <ion-card-content *ngIf="address.isExpanded">
