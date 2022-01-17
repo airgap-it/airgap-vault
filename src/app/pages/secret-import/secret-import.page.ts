@@ -32,6 +32,10 @@ export class SecretImportPage {
 
   public setWordEmitter: Subject<string> = new Subject()
 
+  public keyboardEnabled: boolean = true
+
+  private maxWords: number = 24
+
   constructor(
     private readonly deviceService: DeviceService,
     private readonly navigationService: NavigationService,
@@ -39,6 +43,9 @@ export class SecretImportPage {
   ) {
     this.secretWordsValid = this.setWordEmitter.pipe(
       map(() => {
+        const isShorterThanMaxLength = this.selectedWordIndex === -1 && this.secretWords.length < this.maxWords
+        const isEditingWord = this.selectedWordIndex !== -1
+        this.keyboardEnabled = isShorterThanMaxLength || isEditingWord
         return this.isValid()
       })
     )
@@ -56,6 +63,14 @@ export class SecretImportPage {
     this.setWordEmitter.next(this.selectedWord ?? '')
   }
 
+  wordLastSelected(word: string | undefined) {
+    if (this.secretWords.length !== 23) {
+      return console.error('(wordLastSelected): secret word list is not 23 words long')
+    }
+    this.selectedWordIndex = 23
+    this.wordSelected(word)
+  }
+
   wordSelected(word: string | undefined) {
     if (typeof word === 'undefined') {
       if (this.selectedWordIndex >= 0) {
@@ -64,6 +79,7 @@ export class SecretImportPage {
       } else if (this.selectedWordIndex === -1) {
         this.selectWord(this.secretWords.length - 1)
       }
+      this.getLastWord()
       return
     }
 
@@ -118,6 +134,22 @@ export class SecretImportPage {
       })
       alert.present()
     }
+  }
+
+  public async addNewWord() {
+    if (this.secretWords.length >= 24) {
+      return console.error('(addNewWord): secret word list too long')
+    }
+
+    const word = this.secretWords[this.selectedWordIndex]
+
+    if (!word) {
+      return console.log('(addNewWord): no word at current position')
+    }
+
+    this.secretWords.splice(this.selectedWordIndex + 1, 0, '')
+    this.selectedWordIndex++
+    this.setWordEmitter.next('')
   }
 
   public async mask(enabled: boolean) {
