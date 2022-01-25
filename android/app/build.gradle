@@ -65,7 +65,16 @@ dependencies {
 
     implementation "com.google.android.material:material:$androidxMaterialVersion"
     implementation 'com.scottyab:rootbeer-lib:0.0.7'
-    implementation("androidx.biometric:biometric:1.1.0")
+
+    def fragmentVersion = "1.4.0"
+    implementation("androidx.fragment:fragment-ktx:$fragmentVersion")
+
+    def biometricVersion = "1.2.0-alpha04"
+    implementation("androidx.biometric:biometric:$biometricVersion")
+
+    def coroutinesVersion = "1.6.0"
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
 
     def saplingVersion = "0.0.6"
     implementation "com.github.airgap-it:airgap-sapling:$saplingVersion"
