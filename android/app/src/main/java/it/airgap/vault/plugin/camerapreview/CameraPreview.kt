@@ -19,7 +19,9 @@ import com.getcapacitor.annotation.CapacitorPlugin
 import com.getcapacitor.annotation.Permission
 import com.getcapacitor.annotation.PermissionCallback
 import it.airgap.vault.plugin.camerapreview.CameraFragment.CameraPreviewListener
+import it.airgap.vault.util.addView
 import it.airgap.vault.util.releaseCallIfKept
+import it.airgap.vault.util.removeView
 import it.airgap.vault.util.resolveWithData
 
 /**
@@ -220,18 +222,6 @@ class CameraPreview : Plugin(), CameraPreviewListener {
                     .beginTransaction()
                     .remove(fragment!!)
                     .commit()
-        }
-    }
-
-    private fun ViewParent.addView(child: View?, params: ViewGroup.LayoutParams) {
-        if (child != null) {
-            (this as? ViewGroup)?.addView(child, params)
-        }
-    }
-
-    private fun ViewParent.removeView(view: View?) {
-        if (view != null) {
-            (this as? ViewGroup)?.removeView(view)
         }
     }
 
