@@ -55,7 +55,7 @@ export class SecretAddPage {
 
   public async dismiss(): Promise<boolean> {
     try {
-      return this.navigationService.routeToAccountsTab()
+      return this.navigationService.routeToSecretsTab()
     } catch (error) {
       return false
     }
