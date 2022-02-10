@@ -14,9 +14,10 @@ import {
   SerializerService,
   SPLASH_SCREEN_PLUGIN,
   STATUS_BAR_PLUGIN,
+  FILESYSTEM_PLUGIN,
   UiEventService
 } from '@airgap/angular-core'
-import { AirGapAngularNgRxModule } from '@airgap/angular-ngrx'
+import { AirGapAngularNgRxModule, currencySymbolNgRxFacade } from '@airgap/angular-ngrx'
 import { PercentPipe } from '@angular/common'
 import { HttpClient, HttpClientModule } from '@angular/common/http'
 import { ErrorHandler, NgModule } from '@angular/core'
@@ -62,6 +63,7 @@ import { SecureStorageService } from './services/secure-storage/secure-storage.s
 import { ShareUrlService } from './services/share-url/share-url.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
 import { VaultStorageService } from './services/storage/storage.service'
+import { Filesystem } from '@capacitor/filesystem'
 
 export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
   return new AirGapTranslateLoader(http, { prefix: './assets/i18n/', suffix: '.json' })
@@ -99,7 +101,11 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
     IntroductionPageModule,
     DistributionOnboardingPageModule,
     LocalAuthenticationOnboardingPageModule,
-    AirGapAngularCoreModule,
+    AirGapAngularCoreModule.forRoot({
+      factories: {
+        currencySymbolFacade: currencySymbolNgRxFacade
+      }
+    }),
     AirGapAngularNgRxModule
   ],
   providers: [
@@ -108,6 +114,7 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
     { provide: APP_LAUNCHER_PLUGIN, useValue: AppLauncher },
     { provide: CAMERA_PREVIEW_PLUGIN, useValue: CameraPreview },
     { provide: CLIPBOARD_PLUGIN, useValue: Clipboard },
+    { provide: FILESYSTEM_PLUGIN, useValue: Filesystem },
     { provide: SAPLING_PLUGIN, useValue: SaplingNative },
     { provide: SECURITY_UTILS_PLUGIN, useValue: SecurityUtils },
     { provide: SPLASH_SCREEN_PLUGIN, useValue: SplashScreen },

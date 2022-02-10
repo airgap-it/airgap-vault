@@ -53,6 +53,10 @@ export class LocalErrorLogger {
       })
       .join('\n\n')
   }
+
+  public async clearAll() {
+    localStorage.setItem(this.errorHistoryKey, JSON.stringify([]))
+  }
 }
 
 const errorLogger = new LocalErrorLogger()
@@ -61,7 +65,7 @@ type ErrorCallback = (error: Error & { originalError?: Error }) => void
 
 const handleErrorLocal: (category: ErrorCategory) => ErrorCallback = (category?: ErrorCategory): ErrorCallback => {
   return (error: Error & { originalError?: Error }): void => {
-    console.log('saving error locally, category', category)
+    console.log('saving error locally, category', category, error)
     errorLogger.addLog(category, error)
   }
 }

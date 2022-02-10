@@ -12,6 +12,7 @@ dependencies {
     implementation project(':capacitor-app')
     implementation project(':capacitor-app-launcher')
     implementation project(':capacitor-clipboard')
+    implementation project(':capacitor-filesystem')
     implementation project(':capacitor-splash-screen')
     implementation project(':capacitor-status-bar')
     implementation "com.android.support:support-v4:26.+"

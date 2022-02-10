@@ -11,3 +11,18 @@
 .actions--container {
   padding-top: 0.5rem;
 }
+
+.horizontal--scroll {
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+  overflow-y: hidden;
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.horizontal--scroll::-webkit-scrollbar {
+  display: none;
+}

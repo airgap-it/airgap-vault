@@ -76,9 +76,18 @@
       {{ 'tab-settings.interaction-settings_label' | translate }}
     </ion-item>
 
+    <ion-list-header class="ion-no-margin" lines="none">
+      <ion-label>{{ 'tab-settings.advanced-settings_label' | translate }}</ion-label>
+    </ion-list-header>
+
+    <ion-item (click)="goToBip39Wordlist()">
+      <ion-icon name="list" slot="start"></ion-icon>
+      {{ 'tab-settings.bip39_wordlist_label' | translate }}
+    </ion-item>
+
     <ion-item (click)="goToErrorHistory()">
       <ion-icon name="bug-outline" slot="start"></ion-icon>
-      Local Error History
+      {{ 'tab-settings.error-history_label' | translate }}
     </ion-item>
 
     <ion-item (click)="goToDangerZone()">

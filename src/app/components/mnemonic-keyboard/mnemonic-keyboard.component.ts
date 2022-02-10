@@ -1,8 +1,11 @@
 import { ClipboardService } from '@airgap/angular-core'
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
+import { ModalController } from '@ionic/angular'
 
 import * as bip39 from 'bip39'
 import { Observable, Subscription } from 'rxjs'
+import { WordlistPage } from 'src/app/pages/wordlist/wordlist.page'
+import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 
 function shuffle(arr: string): string {
   const array = arr.split('')
@@ -35,6 +38,9 @@ export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
   public setWord: Observable<string>
 
   @Input()
+  public enabled: boolean = true
+
+  @Input()
   public wordlist: string[] = bip39.wordlists.EN
 
   @Output()
@@ -43,12 +49,17 @@ export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
   @Output()
   public pasted: EventEmitter<string | undefined> = new EventEmitter()
 
+  @Output()
+  public addNewWord: EventEmitter<void> = new EventEmitter()
+
   _maskInput: boolean = false
 
   @Output()
   public maskInput: EventEmitter<boolean> = new EventEmitter()
 
   public suggestions: string[] = []
+
+  public hiddenSuggestions: number = 0
 
   public rows: { letter: string; enabled: boolean; active: boolean }[][]
 
@@ -58,7 +69,7 @@ export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription = new Subscription()
 
-  constructor(private readonly clipboardService: ClipboardService) {
+  constructor(private readonly clipboardService: ClipboardService, private readonly modalController: ModalController) {
     this.paintKeyboard()
   }
 
@@ -80,8 +91,9 @@ export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
     if (this.wordlist) {
       const filtered = this.wordlist.filter((word) => word.startsWith(this.text))
 
-      const numberOfItems = 3
-      this.suggestions = filtered.slice(0, numberOfItems)
+      const numberOfSuggestions = 20
+      this.suggestions = filtered.slice(0, numberOfSuggestions)
+      this.hiddenSuggestions = Math.max(0, filtered.length - numberOfSuggestions)
 
       const set = new Set<string>()
       filtered.forEach((word) => {
@@ -122,7 +134,16 @@ export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
 
   private addLetter(char: string) {
     this.text += char
-    const hasExactMatch = this.wordlist.filter((word) => word === this.text).length > 0
+
+    const startsWith = this.wordlist.filter((word) => word.startsWith(this.text))
+
+    // If there are multiple matches, we don't autocomplete.
+    if (startsWith.length > 1) {
+      return
+    }
+
+    // If there is only one word that matches, we will autocomplete.
+    const hasExactMatch = startsWith.filter((word) => word === this.text).length > 0
 
     if (hasExactMatch) {
       this.selectWord(this.text)
@@ -137,6 +158,10 @@ export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
   async toggleShuffled() {
     this.shuffled = !this.shuffled
     this.paintKeyboard()
+  }
+
+  async add() {
+    this.addNewWord.next()
   }
 
   async delete() {
@@ -158,5 +183,13 @@ export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
   async scramble() {
     this._maskInput = !this._maskInput
     this.maskInput.emit(this._maskInput)
+  }
+
+  async showWordlist() {
+    const modal: HTMLIonModalElement = await this.modalController.create({
+      component: WordlistPage
+    })
+
+    modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 }
