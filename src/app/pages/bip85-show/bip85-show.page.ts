@@ -1,6 +1,7 @@
 import { Component } from '@angular/core'
+import { BIPSigner } from 'src/app/models/BIP39Signer'
 import { BIP85 } from 'src/app/models/BIP85'
-import { Secret } from 'src/app/models/secret'
+import { MnemonicSecret } from 'src/app/models/secret'
 import { DeviceService } from 'src/app/services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
@@ -12,7 +13,7 @@ import { SecureStorage, SecureStorageService } from 'src/app/services/secure-sto
   styleUrls: ['./bip85-show.page.scss']
 })
 export class Bip85ShowPage {
-  private secret: Secret
+  private secret: MnemonicSecret
   public mnemonicLength: 12 | 18 | 24
   public index: number
 
@@ -43,18 +44,17 @@ export class Bip85ShowPage {
     this.deviceService.disableScreenshotProtection()
   }
 
-  public goToValidateSecret(): void {
+  public goToSecretSetupPage(): void {
+    const signer: BIPSigner = new BIPSigner()
+
+    const secret: MnemonicSecret = new MnemonicSecret(signer.mnemonicToEntropy(BIPSigner.prepareMnemonic(this.childMnemonic)))
+
     this.navigationService
-      .routeWithState('bip85-validate', {
-        secret: this.secret,
-        bip39Passphrase: this.bip39Passphrase,
-        mnemonicLength: this.mnemonicLength,
-        index: this.index
-      })
+      .routeWithState('secret-add', { secret: new MnemonicSecret(secret.secretHex, `BIP85 child of "${this.secret.label}"`) })
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  private async generateChildMnemonic(secret: Secret, length: 12 | 18 | 24, index: number) {
+  private async generateChildMnemonic(secret: MnemonicSecret, length: 12 | 18 | 24, index: number) {
     const secureStorage: SecureStorage = await this.secureStorageService.get(secret.id, secret.isParanoia)
 
     try {

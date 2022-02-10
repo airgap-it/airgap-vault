@@ -4,13 +4,13 @@ import { Inject, Injectable } from '@angular/core'
 import { Platform } from '@ionic/angular'
 
 import { SAPLING_PLUGIN } from '../..//capacitor-plugins/injection-tokens'
-import { SaplingPlugin } from '../../capacitor-plugins/definitions'
+import { SaplingNativePlugin } from '../../capacitor-plugins/definitions'
 
 @Injectable({
   providedIn: 'root'
 })
 export class SaplingNativeService {
-  constructor(@Inject(SAPLING_PLUGIN) private readonly sapling: SaplingPlugin, private readonly platform: Platform) {}
+  constructor(@Inject(SAPLING_PLUGIN) private readonly sapling: SaplingNativePlugin, private readonly platform: Platform) {}
 
   public async createExternalMethodProvider(): Promise<TezosSaplingExternalMethodProvider | undefined> {
     const isSupported = this.platform.is('capacitor') && !this.platform.is('electron') && (await this.sapling.isSupported()).isSupported
@@ -26,13 +26,13 @@ export class SaplingNativeService {
       : undefined
   }
 
-  private initParameters(saplingPlugin: SaplingPlugin): TezosSaplingExternalMethodProvider['initParameters'] {
+  private initParameters(saplingPlugin: SaplingNativePlugin): TezosSaplingExternalMethodProvider['initParameters'] {
     return async (_spendParams: Buffer, _outputParams: Buffer): Promise<void> => {
       return saplingPlugin.initParameters()
     }
   }
 
-  private withProvingContext(saplingPlugin: SaplingPlugin): TezosSaplingExternalMethodProvider['withProvingContext'] {
+  private withProvingContext(saplingPlugin: SaplingNativePlugin): TezosSaplingExternalMethodProvider['withProvingContext'] {
     return async (action: (context: number) => Promise<TezosSaplingTransaction>): Promise<TezosSaplingTransaction> => {
       const { context } = await saplingPlugin.initProvingContext()
       const transaction = await action(parseInt(context))
@@ -42,7 +42,7 @@ export class SaplingNativeService {
     }
   }
 
-  private prepareSpendDescription(saplingPlugin: SaplingPlugin): TezosSaplingExternalMethodProvider['prepareSpendDescription'] {
+  private prepareSpendDescription(saplingPlugin: SaplingNativePlugin): TezosSaplingExternalMethodProvider['prepareSpendDescription'] {
     return async (
       context: number,
       spendingKey: Buffer,
@@ -77,7 +77,7 @@ export class SaplingNativeService {
   }
 
   private preparePartialOutputDescription(
-    saplingPlugin: SaplingPlugin
+    saplingPlugin: SaplingNativePlugin
   ): TezosSaplingExternalMethodProvider['preparePartialOutputDescription'] {
     return async (context: number, address: Buffer, rcm: Buffer, esk: Buffer, value: string): Promise<SaplingPartialOutputDescription> => {
       const { outputDescription: outputDescriptionHex } = await saplingPlugin.preparePartialOutputDescription({
@@ -98,7 +98,7 @@ export class SaplingNativeService {
     }
   }
 
-  private createBindingSignature(saplingPlugin: SaplingPlugin): TezosSaplingExternalMethodProvider['createBindingSignature'] {
+  private createBindingSignature(saplingPlugin: SaplingNativePlugin): TezosSaplingExternalMethodProvider['createBindingSignature'] {
     return async (context: number, balance: string, sighash: Buffer): Promise<Buffer> => {
       const { bindingSignature } = await saplingPlugin.createBindingSignature({
         context: context.toString(),

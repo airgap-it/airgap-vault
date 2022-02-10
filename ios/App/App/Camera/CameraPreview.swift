@@ -38,11 +38,13 @@ public class CameraPreview: CAPPlugin {
 
                     self.previewView = UIView(frame: CGRect(x: x, y: y, width: width, height: height))
 
-                    self.webView.isOpaque = false
-                    self.webView.backgroundColor = UIColor.clear
+                    if let webView = self.webView {
+                        webView.isOpaque = false
+                        webView.backgroundColor = UIColor.clear
 
-                    self.webView.superview?.addSubview(self.previewView)
-                    self.webView.superview?.bringSubviewToFront(self.webView)
+                        webView.superview?.addSubview(self.previewView)
+                        webView.superview?.bringSubviewToFront(webView)
+                    }
 
                     try? self.cameraController.displayPreview(on: self.previewView)
                     call.resolve()
@@ -62,7 +64,9 @@ public class CameraPreview: CAPPlugin {
         DispatchQueue.main.async {
             self.cameraController.captureSession?.stopRunning()
             self.previewView.removeFromSuperview()
-            self.webView.isOpaque = true
+            if let webView = self.webView {
+                webView.isOpaque = true
+            }
             call.resolve()
         }
     }

@@ -9,6 +9,8 @@
 </ion-header>
 
 <ion-content>
+  <ion-button (click)="runChecks()">Run all checks</ion-button>
+
   <ion-list>
     <ng-container *ngFor="let group of groups">
       <ion-item (click)="toggleShow(group)" detail="true">
@@ -43,7 +45,6 @@
       </ng-container>
     </ng-container>
   </ion-list>
-  <ion-button (click)="runChecks()">Run all checks</ion-button>
 
   <p>
     The checks on this page test several mechanisms that are used throughout our apps and report any issues. This can help catch issues with

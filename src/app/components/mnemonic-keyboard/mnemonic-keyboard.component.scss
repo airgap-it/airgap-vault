@@ -1,0 +1,28 @@
+.lowercase {
+  text-transform: lowercase;
+}
+.suggestion--container {
+  padding: 0.5rem 0;
+  min-height: 2.5rem;
+}
+.input--container {
+  min-height: 1.5rem;
+}
+.actions--container {
+  padding-top: 0.5rem;
+}
+
+.horizontal--scroll {
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+  overflow-y: hidden;
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.horizontal--scroll::-webkit-scrollbar {
+  display: none;
+}

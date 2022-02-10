@@ -43,19 +43,19 @@ jobs:
 
     strategy:
       matrix:
-        os: ['ubuntu-latest', 'macos-latest']
+        os: ['ubuntu-latest']
 
     steps:
       - uses: actions/checkout@v2
 
       - name: 🔧 Installation of dependencies
-        run: npm run install-test-dependencies && npm ci
+        run: yarn run install-test-dependencies && yarn install # This is only for tests, so no frozen lockfile needed
 
       - name: 🧪 Test CI
-        run: npm run test-ci
+        run: yarn run test-ci
 
       - name: 🧪 Lint CI
-        run: npm run lint-ci
+        run: yarn run lint-ci
 
       - name: 📦 Upload Artifact
         uses: actions/upload-artifact@v2
@@ -70,17 +70,17 @@ jobs:
 
     strategy:
       matrix:
-        os: ['ubuntu-latest', 'macos-latest']
+        os: ['ubuntu-latest']
 
     steps:
       - uses: actions/checkout@v2
 
       - name: 🔧 Installation of dependencies
-        run: npm run install-build-dependencies && npm ci
+        run: yarn run install-build-dependencies && yarn install --frozen-lockfile
 
       - name: 🔧 Installation of electron dependencies
         working-directory: ${{ env.electron_folder }}
-        run: npm ci
+        run: yarn install --frozen-lockfile
 
       - name: 🌀 Updating android version
         run: sed -i -e 's/versionName "0.0.0"/versionName "${{ needs.environment.outputs.package_version }}"/g' android/app/build.gradle
@@ -103,7 +103,7 @@ jobs:
 
     strategy:
       matrix:
-        os: ['ubuntu-latest', 'macos-latest']
+        os: ['ubuntu-latest']
 
     steps:
       - name: 🧠 Using prebuild cache
@@ -114,7 +114,7 @@ jobs:
           key: prebuild-${{ runner.os }}-${{ github.sha }}
 
       - name: 🏗️ Build
-        run: npm run build:electron:prod
+        run: yarn run build:electron:prod
 
       - name: 🔄 Copy to Electron
         run: npx cap sync electron
@@ -140,13 +140,13 @@ jobs:
           key: prebuild-${{ runner.os }}-${{ github.sha }}
 
       - name: 🔧 Disable pure getters
-        run: npm run disable-pure-getters
+        run: yarn run disable-pure-getters
 
       - name: 🔧 Configure mangle
-        run: npm run configure-mangle
+        run: yarn run configure-mangle
 
       - name: 🔧 Apply diagnostic modules
-        run: npm run apply-diagnostic-modules
+        run: yarn run apply-diagnostic-modules
 
       - name: 🏗️ Build
         run: npx ionic build --prod
@@ -193,7 +193,7 @@ jobs:
 
       - name: 🏗️ Build Windows
         working-directory: ${{ env.electron_folder }}
-        run: npm run build:windows
+        run: yarn run build:windows
 
       - name: 📦 Upload Artifact
         uses: actions/upload-artifact@v2
@@ -213,11 +213,11 @@ jobs:
         id: build-electron-cache
         with:
           path: ./*
-          key: electron-${{ runner.os }}-${{ github.sha }}
+          key: electron-Linux-${{ github.sha }}
 
       - name: 🏗️ Build Mac
         working-directory: ${{ env.electron_folder }}
-        run: npm run build:mac
+        run: yarn run build:mac
 
       - name: 📦 Upload Artifact
         uses: actions/upload-artifact@v2
@@ -242,7 +242,7 @@ jobs:
 
       - name: 🏗️ Build Linux
         working-directory: ${{ env.electron_folder }}
-        run: npm run build:linux
+        run: yarn run build:linux
 
       - name: 📦 Upload Artifact
         uses: actions/upload-artifact@v2
@@ -268,7 +268,7 @@ jobs:
       - name: ⚙️ Setup Java
         uses: actions/setup-java@v1
         with:
-          java-version: 1.8
+          java-version: '11'
 
       - name: 🔨 Clean Project
         run: android/gradlew --project-dir android clean build
@@ -300,7 +300,7 @@ jobs:
         id: build-angular-cache
         with:
           path: ./*
-          key: ionic-${{ runner.os }}-${{ github.sha }}
+          key: ionic-Linux-${{ github.sha }}
       # - name: 🔨 Xcode Task
       #   run: xcodebuild -workspace ios/App/App.xcworkspace -scheme "App" -destination generic/platform=iOS -configuration Release archive -archivePath ios/App.xcarchive MARKETING_VERSION=${{ needs.environment.outputs.package_version }} CURRENT_PROJECT_VERSION=${{ needs.environment.outputs.package_version }} -allowProvisioningUpdates
       # - name: 🔨 Xcode Task

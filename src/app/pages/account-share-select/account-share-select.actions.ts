@@ -1,14 +1,14 @@
 import { IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
 import { createAction, props } from '@ngrx/store'
 
-import { Secret } from '../../models/secret'
+import { MnemonicSecret } from '../../models/secret'
 
 const featureName = 'Account Share Select'
 
 /**************** View Lifecycle ****************/
 
 export const viewInitialization = createAction(`[${featureName}] View Initialization`)
-export const initialDataLoaded = createAction(`[${featureName}] Initial Data Loaded`, props<{ secrets: Secret[] }>())
+export const initialDataLoaded = createAction(`[${featureName}] Initial Data Loaded`, props<{ secrets: MnemonicSecret[] }>())
 
 /**************** User Interaction ****************/
 
