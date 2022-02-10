@@ -1,7 +1,7 @@
 import { Component } from '@angular/core'
 import { Observable } from 'rxjs'
 
-import { Secret } from '../../models/secret'
+import { MnemonicSecret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
@@ -14,7 +14,7 @@ import { IACService } from 'src/app/services/iac/iac.service'
   styleUrls: ['./tab-settings.page.scss']
 })
 export class TabSettingsPage {
-  public readonly secrets: Observable<Secret[]>
+  public readonly secrets: Observable<MnemonicSecret[]>
 
   constructor(
     public readonly serializerService: SerializerService,
@@ -36,6 +36,14 @@ export class TabSettingsPage {
 
   public goToQrSettings(): void {
     this.navigationService.route('/qr-settings').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
+  public goToBip39Wordlist(): void {
+    this.navigationService.route('/wordlist').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
+  public goToDangerZone(): void {
+    this.navigationService.route('/danger-zone').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public pasteClipboard(): void {

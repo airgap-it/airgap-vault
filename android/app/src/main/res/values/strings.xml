@@ -5,13 +5,13 @@
     <string name="package_name">it.airgap.vault</string>
     <string name="custom_url_scheme">airgap-vault</string>
 
-    <string name="paranoia_input_alert_title">Enter your Password</string>
-    <string name="paranoia_input_alert_setup_message">Choose a password with at least 4 characters.</string>
-    <string name="paranoia_input_alert_positive_button">Set Password</string>
+    <string name="paranoia_input_alert_title">Enter your encryption password</string>
+    <string name="paranoia_input_alert_setup_message">Choose an encryption password with at least 4 characters.</string>
+    <string name="paranoia_input_alert_positive_button">Set Encryption Password</string>
     <string name="paranoia_input_alert_unlock_button">Unlock</string>
 
-    <string name="password_input_alert_hint">Your Password</string>
-    <string name="password_input_alert_confirmation_hint">Confirm Your Password</string>
+    <string name="password_input_alert_hint">Your encryption password</string>
+    <string name="password_input_alert_confirmation_hint">Confirm your encryption password</string>
 
     <string name="recovery_input_alert_title">Enter your Recovery Password</string>
     <string name="recovery_input_alert_setup_message">Choose a password with at least 4 characters.</string>
@@ -19,4 +19,8 @@
     <string name="recovery_input_alert_recover_message">Your secret is missing. Recover it using Recovery Password or re-import.</string>
     <string name="recovery_input_alert_reimport_button">Import</string>
     <string name="recovery_input_alert_recover_button">Recover</string>
+
+    <string name="biometric_prompt_title">Verify Your Identity</string>
+    <string name="biometric_prompt_subtitle">Accessing Your Secret</string>
+    <string name="biometric_prompt_description">The Secret in the secure storage is used to create accounts and sign transactions.</string>
 </resources>

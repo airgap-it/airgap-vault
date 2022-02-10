@@ -15,7 +15,7 @@
       </ion-list-header>
       <ion-item detail="false" class="ion-no-padding" *ngFor="let protocol of protocols">
         <ion-avatar slot="start" class="ion-align-items-center">
-          <airgap-currency-symbol [symbol]="protocol.symbol"></airgap-currency-symbol>
+          <airgap-currency-symbol [symbol]="protocol.symbol" [protocolIdentifier]="protocol.identifier"></airgap-currency-symbol>
         </ion-avatar>
         <ion-label class="ion-text-wrap">
           <h2>
@@ -41,6 +41,11 @@
           [(ngModel)]="customDerivationPath"
           placeholder="{{ 'wallet-select-coins.custom-path.placeholder' | translate }}"
         ></ion-input>
+      </ion-item>
+
+      <ion-item *ngIf="selectedProtocol.identifier === 'eth' && selectedProtocol.supportsHD" class="ion-no-padding">
+        {{ 'wallet-select-coins.select-type.hd-wallet_label' | translate }}
+        <ion-checkbox [(ngModel)]="isHDWallet" (ionChange)="setDerivationPath()" slot="end"></ion-checkbox>
       </ion-item>
 
       <ng-container *ngIf="isBip39PassphraseEnabled">

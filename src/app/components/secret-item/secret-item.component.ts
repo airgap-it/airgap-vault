@@ -2,8 +2,7 @@ import { AirGapWalletStatus } from '@airgap/coinlib-core'
 import { Component, Input, OnInit } from '@angular/core'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
 
-import { Secret } from '../../models/secret'
-import { InteractionSetting } from '../../services/interaction/interaction.service'
+import { MnemonicSecret } from '../../models/secret'
 
 @Component({
   selector: 'airgap-secret-item',
@@ -12,17 +11,15 @@ import { InteractionSetting } from '../../services/interaction/interaction.servi
 })
 export class SecretItemComponent implements OnInit {
   @Input()
-  public secret: Secret
+  public secret: MnemonicSecret
 
   public activeWallets: string[]
   public hasMoreWallets: number = 0
 
-  public interactionSetting: typeof InteractionSetting = InteractionSetting
-
   constructor(private readonly secretsService: SecretsService) {}
 
   public ngOnInit() {
-    this.secretsService.getActiveSecretObservable().subscribe((secret: Secret) => {
+    this.secretsService.getActiveSecretObservable().subscribe((secret: MnemonicSecret) => {
       if (secret && secret.wallets) {
         this.getWalletsFromSecret()
       }

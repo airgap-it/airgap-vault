@@ -1,7 +1,7 @@
 import { Component } from '@angular/core'
 
 import { AlertController, ModalController, ToastController } from '@ionic/angular'
-import { Secret } from '../../models/secret'
+import { MnemonicSecret } from '../../models/secret'
 import { Observable } from 'rxjs'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
@@ -13,7 +13,7 @@ import { NavigationService } from 'src/app/services/navigation/navigation.servic
   styleUrls: ['./tab-secrets.page.scss']
 })
 export class TabSecretsPage {
-  public secrets: Observable<Secret[]>
+  public secrets: Observable<MnemonicSecret[]>
 
   constructor(
     public modalController: ModalController,
@@ -39,15 +39,15 @@ export class TabSecretsPage {
     this.navigationService.route('/secret-create').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  public goToAccountsList(secret: Secret): void {
+  public goToAccountsList(secret: MnemonicSecret): void {
     this.navigationService.routeWithState('/accounts-list', { secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  public goToEditSecret(secret: Secret): void {
+  public goToEditSecret(secret: MnemonicSecret): void {
     this.navigationService.routeWithState('/secret-edit', { secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  public async deleteSecret(secret: Secret): Promise<void> {
+  public async deleteSecret(secret: MnemonicSecret): Promise<void> {
     const alert: HTMLIonAlertElement = await this.alertController.create({
       header: 'Delete ' + secret.label,
       subHeader: 'Are you sure you want to delete ' + secret.label + '?',

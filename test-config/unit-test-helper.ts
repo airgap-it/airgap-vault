@@ -1,35 +1,34 @@
+import { APP_CONFIG, APP_LAUNCHER_PLUGIN } from '@airgap/angular-core'
 import { CommonModule } from '@angular/common'
 import { HttpClientModule } from '@angular/common/http'
 import { TestModuleMetadata } from '@angular/core/testing'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterTestingModule } from '@angular/router/testing'
 import { AlertController, IonicModule, NavController, Platform, ToastController } from '@ionic/angular'
-import { Storage } from '@ionic/storage'
-import { IonicStorageModule } from '@ionic/storage'
-
+import { IonicStorageModule, Storage } from '@ionic/storage'
 import { TranslateFakeLoader, TranslateLoader, TranslateModule } from '@ngx-translate/core'
 
 import { ComponentsModule } from '../src/app/components/components.module'
+import { appConfig } from '../src/app/config/app-config'
 import { PipesModule } from '../src/app/pipes/pipes.module'
 
 import {
   AlertControllerMock,
+  ClipboardMock,
   DeeplinkMock,
   LoadingControllerMock,
   ModalControllerMock,
   NavControllerMock,
   PlatformMock,
-  ToastControllerMock,
-  ClipboardMock
+  ToastControllerMock
 } from './ionic-mocks'
-import { AppInfoPluginMock, SaplingPluginMock, SplashScreenMock, StatusBarMock } from './plugins-mocks'
+import { AppInfoPluginMock, AppLauncherMock, SaplingPluginMock, SplashScreenMock, StatusBarMock } from './plugins-mocks'
 import { StorageMock } from './storage-mock'
-import { APP_CONFIG } from '@airgap/angular-core'
-import { appConfig } from 'src/app/config/app-config'
 
 export class UnitHelper {
   public readonly mockRefs = {
     appInfo: new AppInfoPluginMock(),
+    appLauncher: new AppLauncherMock(),
     platform: new PlatformMock(),
     sapling: new SaplingPluginMock(),
     statusBar: new StatusBarMock(),
@@ -65,6 +64,7 @@ export class UnitHelper {
       { provide: Platform, useValue: this.mockRefs.platform },
       { provide: ToastController, useValue: this.mockRefs.toastController },
       { provide: AlertController, useValue: this.mockRefs.alertController },
+      { provide: APP_LAUNCHER_PLUGIN, useValue: this.mockRefs.appLauncher },
       { provide: APP_CONFIG, useValue: appConfig }
     ]
 

@@ -2,7 +2,7 @@ import { AirGapWallet, AirGapWalletStatus } from '@airgap/coinlib-core'
 import { Component, OnInit } from '@angular/core'
 import { Platform } from '@ionic/angular'
 import { BehaviorSubject } from 'rxjs'
-import { Secret } from 'src/app/models/secret'
+import { MnemonicSecret } from 'src/app/models/secret'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 import { ModeService } from 'src/app/services/mode/mode.service'
 import { ModeStrategy } from 'src/app/services/mode/strategy/ModeStrategy'
@@ -15,7 +15,7 @@ import { SecretEditAction } from '../secret-edit/secret-edit.page'
   styleUrls: ['./accounts-list.page.scss']
 })
 export class AccountsListPage implements OnInit {
-  public secret: Secret
+  public secret: MnemonicSecret
 
   public symbolFilter: string | undefined
 
@@ -40,6 +40,18 @@ export class AccountsListPage implements OnInit {
     // this.secrets.subscribe(async (secrets: Secret[]) => {
     //   if (secrets.length === 0) {
     //     this.navigationService.route('/secret-create/initial').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    //   }
+    // }) // We should never unsubscribe, because we need to watch this in case a user deletes all his secrets
+    // TODO: The following is potentially old code
+    // this.secretsService.getActiveSecretObservable().subscribe((secret: MnemonicSecret) => {
+    //   if (secret && secret.wallets) {
+    //     this.activeSecret = secret
+    //     this.wallets$.next([...secret.wallets])
+    //   }
+    // })
+    // this.secrets.subscribe(async (secrets: MnemonicSecret[]) => {
+    //   if (secrets.length === 0) {
+    //     this.navigationService.route('/secret-setup/initial').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     //   }
     // }) // We should never unsubscribe, because we need to watch this in case a user deletes all his secrets
   }
@@ -67,7 +79,7 @@ export class AccountsListPage implements OnInit {
     this.navigationService.routeWithState('/account-add', { secret: this.secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  public goToEditSecret(secret: Secret): void {
+  public goToEditSecret(secret: MnemonicSecret): void {
     this.navigationService.routeWithState('/secret-edit', { secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 

@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core'
 import { first } from 'rxjs/operators'
 
 import { SHOW_SECRET_MIN_TIME_IN_SECONDS } from '../../constants/constants'
-import { Secret } from '../../models/secret'
+import { MnemonicSecret } from '../../models/secret'
 import { DeviceService } from '../../services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
@@ -15,7 +15,7 @@ import { NavigationService } from '../../services/navigation/navigation.service'
   styleUrls: ['./secret-show.page.scss']
 })
 export class SecretShowPage {
-  public readonly secret: Secret
+  public readonly secret: MnemonicSecret
   public readonly startTime: Date = new Date()
 
   constructor(
@@ -28,7 +28,7 @@ export class SecretShowPage {
   }
 
   public ionViewDidEnter(): void {
-    this.deviceService.enableScreenshotProtection({ routeBack: 'secret-create' })
+    this.deviceService.enableScreenshotProtection({ routeBack: 'secret-setup' })
   }
 
   public ionViewWillLeave(): void {

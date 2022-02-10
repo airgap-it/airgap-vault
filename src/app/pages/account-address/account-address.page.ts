@@ -1,4 +1,4 @@
-import { ClipboardService, UiEventService } from '@airgap/angular-core'
+import { ClipboardService, DeeplinkService, UiEventService } from '@airgap/angular-core'
 import { AirGapWallet, IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
 import { Component } from '@angular/core'
 import { PopoverController } from '@ionic/angular'
@@ -7,7 +7,6 @@ import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/er
 import { InteractionOperationType, InteractionService } from '../../services/interaction/interaction.service'
 import { MigrationService } from '../../services/migration/migration.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
-import { SecretsService } from '../../services/secrets/secrets.service'
 import { ShareUrlService } from '../../services/share-url/share-url.service'
 import { isWalletMigrated } from '../../utils/migration'
 
@@ -21,18 +20,19 @@ import { AccountEditPopoverComponent } from './account-edit-popover/account-edit
 export class AccountAddressPage {
   public wallet: AirGapWallet
 
-  private walletShareUrl?: IACMessageDefinitionObjectV3[]
-  private walletShareUrlPromise?: Promise<void>
+  private shareObject?: IACMessageDefinitionObjectV3[]
+  private shareObjectPromise?: Promise<void>
+  private walletShareUrl?: string
 
   constructor(
     private readonly popoverCtrl: PopoverController,
     private readonly clipboardService: ClipboardService,
-    private readonly secretsService: SecretsService,
     private readonly shareUrlService: ShareUrlService,
     private readonly interactionService: InteractionService,
     private readonly navigationService: NavigationService,
     private readonly uiEventService: UiEventService,
-    private readonly migrationService: MigrationService
+    private readonly migrationService: MigrationService,
+    private readonly deepLinkService: DeeplinkService
   ) {
     this.wallet = this.navigationService.getState().wallet
   }
@@ -44,13 +44,10 @@ export class AccountAddressPage {
   public async share(): Promise<void> {
     await this.waitWalletShareUrl()
 
-    this.interactionService.startInteraction(
-      {
-        operationType: InteractionOperationType.WALLET_SYNC,
-        iacMessage: this.walletShareUrl
-      },
-      this.secretsService.getActiveSecret()
-    )
+    this.interactionService.startInteraction({
+      operationType: InteractionOperationType.WALLET_SYNC,
+      iacMessage: this.shareObject
+    })
   }
 
   public async presentEditPopover(event: Event): Promise<void> {
@@ -77,8 +74,13 @@ export class AccountAddressPage {
     await this.clipboardService.copyAndShowToast(this.wallet.receivingPublicAddress)
   }
 
-  private async waitWalletShareUrl(): Promise<void> {
-    if (this.walletShareUrl !== undefined) {
+  private async waitWalletShareUrl() {
+    await this.prepareSyncObject()
+    this.walletShareUrl = await this.deepLinkService.generateDeepLinkUrl(this.shareObject)
+  }
+
+  private async prepareSyncObject(): Promise<void> {
+    if (this.shareObject !== undefined) {
       return
     }
 
@@ -89,17 +91,17 @@ export class AccountAddressPage {
       return Promise.reject('Cannot create share URL, wallet data is incomplete')
     }
 
-    if (this.walletShareUrlPromise === undefined) {
-      this.walletShareUrlPromise = new Promise<IACMessageDefinitionObjectV3[]>(async (resolve) => {
-        const shareUrl: IACMessageDefinitionObjectV3[] = await this.shareUrlService.generateShareWalletURL(this.wallet)
-        resolve(shareUrl)
-      }).then((shareUrl: IACMessageDefinitionObjectV3[]) => {
-        this.walletShareUrl = shareUrl
-        this.walletShareUrlPromise = undefined
+    if (this.shareObjectPromise === undefined) {
+      this.shareObjectPromise = new Promise<IACMessageDefinitionObjectV3[]>(async (resolve) => {
+        const shareObject: IACMessageDefinitionObjectV3[] = await this.shareUrlService.generateShareWalletURL(this.wallet)
+        resolve(shareObject)
+      }).then((shareObject: IACMessageDefinitionObjectV3[]) => {
+        this.shareObject = shareObject
+        this.shareObjectPromise = undefined
       })
     }
 
-    return this.walletShareUrlPromise
+    return this.shareObjectPromise
   }
 
   private async showWalletNotMigratedAlert(): Promise<void> {

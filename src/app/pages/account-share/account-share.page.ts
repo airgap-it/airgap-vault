@@ -1,3 +1,4 @@
+import { ClipboardService } from '@airgap/angular-core'
 import { IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
 import { Component } from '@angular/core'
 
@@ -16,11 +17,15 @@ export class AccountSharePage {
 
   displayRawData: boolean = false
 
-  constructor(private readonly navigationService: NavigationService) {
+  constructor(private readonly navigationService: NavigationService, private readonly clipboardService: ClipboardService) {
     this.interactionUrl = this.navigationService.getState().interactionUrl
   }
 
   public done(): void {
     this.navigationService.routeToSecretsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
+  public copyToClipboard(): void {
+    this.clipboardService.copyAndShowToast(JSON.stringify(this.interactionUrl))
   }
 }

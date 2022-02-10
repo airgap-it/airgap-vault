@@ -9,7 +9,7 @@ import { VaultStorageKey, VaultStorageService } from '../../services/storage/sto
 import { LocalAuthenticationOnboardingPage } from '../local-authentication-onboarding/local-authentication-onboarding.page'
 import { BIP39_PASSPHRASE_ENABLED } from 'src/app/constants/constants'
 import { ProtocolService } from '@airgap/angular-core'
-import { Secret } from 'src/app/models/secret'
+import { MnemonicSecret } from 'src/app/models/secret'
 
 @Component({
   selector: 'airgap-account-add',
@@ -17,7 +17,7 @@ import { Secret } from 'src/app/models/secret'
   styleUrls: ['./account-add.page.scss']
 })
 export class AccountAddPage {
-  public secret: Secret
+  public secret: MnemonicSecret
   public selectedProtocol: ICoinProtocol
   public protocols: ICoinProtocol[]
   public isHDWallet: boolean = false
@@ -42,6 +42,14 @@ export class AccountAddPage {
       this.protocols = protocols
       this.onSelectedProtocolChange(state.protocol || this.protocols[0])
     })
+  }
+
+  public setDerivationPath() {
+    if (this.selectedProtocol.supportsHD && this.isHDWallet) {
+      this.customDerivationPath = this.selectedProtocol.standardDerivationPath
+    } else {
+      this.customDerivationPath = `${this.selectedProtocol.standardDerivationPath}/0/0`
+    }
   }
 
   public onSelectedProtocolChange(selectedProtocol: ICoinProtocol): void {
@@ -80,7 +88,7 @@ export class AccountAddPage {
 
             return {
               protocolIdentifier: protocol.identifier,
-              isHDWallet: protocol.supportsHD,
+              isHDWallet: isSelected ? this.isHDWallet : protocol.supportsHD,
               customDerivationPath: isSelected ? this.customDerivationPath : protocol.standardDerivationPath,
               bip39Passphrase: isSelected ? this.bip39Passphrase : '',
               isActive: isSelected
