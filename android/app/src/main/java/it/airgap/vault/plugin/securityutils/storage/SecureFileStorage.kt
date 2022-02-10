@@ -24,7 +24,7 @@ import kotlin.concurrent.thread
 class SecureFileStorage(private val masterSecret: Key?, private val salt: ByteArray, private val baseDir: File) {
     private var authAttemptNo: Int = 0
 
-    fun read(fileKey: String, secret: ByteArray = "".toByteArray(), success: (String) -> Unit, error: (Exception) -> Unit, requestAuthentication: (Int, () -> Unit) -> Unit) {
+    fun read(fileKey: String, secret: ByteArray = "".toByteArray(), success: (String) -> Unit, error: (Exception) -> Unit, requestAuthentication: (Int, () -> Unit, () -> Unit) -> Unit) {
         thread {
             try {
                 SecureFile(baseDir, hashForKey(fileKey)).input { fileInputStream ->
@@ -60,7 +60,7 @@ class SecureFileStorage(private val masterSecret: Key?, private val salt: ByteAr
             } catch (e: Exception) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (e is UserNotAuthenticatedException) {
-                        requestAuthentication(++authAttemptNo) { read(fileKey, secret, success, error, requestAuthentication) }
+                        requestAuthentication(++authAttemptNo, { read(fileKey, secret, success, error, requestAuthentication) }, { error(e) })
                     } else {
                         error(e)
                     }
@@ -71,7 +71,7 @@ class SecureFileStorage(private val masterSecret: Key?, private val salt: ByteAr
         }
     }
 
-    fun write(fileKey: String, fileData: String, secret: ByteArray = "".toByteArray(), success: () -> Unit, error: (Exception) -> Unit, requestAuthentication: (Int, () -> Unit) -> Unit) {
+    fun write(fileKey: String, fileData: String, secret: ByteArray = "".toByteArray(), success: () -> Unit, error: (Exception) -> Unit, requestAuthentication: (Int, () -> Unit, () -> Unit) -> Unit) {
         thread {
             try {
                 SecureFile(baseDir, hashForKey(fileKey)).output { fileOutputStream ->
@@ -105,7 +105,7 @@ class SecureFileStorage(private val masterSecret: Key?, private val salt: ByteAr
             } catch (e: Exception) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (e is UserNotAuthenticatedException) {
-                        requestAuthentication(++authAttemptNo) { write(fileKey, fileData, secret, success, error, requestAuthentication) }
+                        requestAuthentication(++authAttemptNo, { write(fileKey, fileData, secret, success, error, requestAuthentication) }, { error(e) })
                     } else {
                         error(e)
                     }
