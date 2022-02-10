@@ -1,4 +1,4 @@
-import { AirGapWallet, AirGapWalletStatus } from '@airgap/coinlib-core'
+import { AirGapWallet, AirGapWalletStatus, MainProtocolSymbols } from '@airgap/coinlib-core'
 import { Component } from '@angular/core'
 import { ModalController, NavParams } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
@@ -18,7 +18,7 @@ export class SelectAccountPage {
   public placeholder: string
 
   public wallets: AirGapWallet[]
-  public symbolFilter: string | undefined
+  public symbolFilter: MainProtocolSymbols | undefined
 
   constructor(
     private readonly secretsService: SecretsService,
@@ -36,13 +36,20 @@ export class SelectAccountPage {
     this.secretsService.getSecretsObservable().subscribe((secrets: MnemonicSecret[]) => {
       this.wallets = [].concat.apply(
         [],
-        secrets.map((secret) => secret.wallets.filter((wallet: AirGapWallet) => wallet.status === AirGapWalletStatus.ACTIVE)) as any
+        secrets.map((secret) =>
+          secret.wallets.filter(
+            (wallet: AirGapWallet) =>
+              wallet.status === AirGapWalletStatus.ACTIVE && (!this.symbolFilter || wallet.protocol.identifier === this.symbolFilter)
+          )
+        ) as any
       )
     })
   }
 
   public async setWallet(wallet: AirGapWallet) {
-    this.modalController.dismiss(wallet).catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+    this.modalController
+      .dismiss(this.navParams.get('type') === 'message-signing' ? wallet.protocol.identifier : wallet) // TODO: change to always return wallet, but it will require a change wherever the "message-signing" is used
+      .catch((err) => console.error(err))
   }
 
   public async dismiss() {

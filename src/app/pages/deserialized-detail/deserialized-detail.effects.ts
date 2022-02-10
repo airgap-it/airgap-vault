@@ -1,6 +1,7 @@
 import {
   assertNever,
   flattenAirGapTxAddresses,
+  IACContext,
   KeyPairService,
   ProtocolService,
   sumAirGapTxValues,
@@ -146,8 +147,8 @@ export class DeserializedDetailEffects {
       const raw: string = this.signTransactionInfoToRaw(state.transactionInfos)
       try {
         const [transactions, messages]: [DeserializedUnsignedTransaction[], DeserializedUnsignedMessage[]] = await Promise.all([
-          this.signTransactionInfoToUnsignedTransactions(state.transactionInfos),
-          this.signTransactionInfoToUnsignedMessages(state.transactionInfos)
+          this.signTransactionInfoToUnsignedTransactions(state.transactionInfos, state.iacContext),
+          this.signTransactionInfoToUnsignedMessages(state.transactionInfos, state.iacContext)
         ])
 
         return actions.navigationDataLoaded({ mode, title, button, transactions, messages, raw })
@@ -208,7 +209,8 @@ export class DeserializedDetailEffects {
   }
 
   private async signTransactionInfoToUnsignedTransactions(
-    transactionInfo: SignTransactionInfo[]
+    transactionInfo: SignTransactionInfo[],
+    iacContext?: IACContext
   ): Promise<DeserializedUnsignedTransaction[]> {
     return Promise.all(
       transactionInfo
@@ -234,14 +236,18 @@ export class DeserializedDetailEffects {
             id: request.id,
             details,
             data: request.payload as UnsignedTransaction,
+            iacContext,
             wallet,
-            originalProtocolIdentifier: request.protocol !== wallet?.protocol?.symbol ? request.protocol : undefined
+            originalProtocolIdentifier: request.protocol !== wallet?.protocol.symbol ? request.protocol : undefined
           }
         })
     )
   }
 
-  private async signTransactionInfoToUnsignedMessages(transactionInfo: SignTransactionInfo[]): Promise<DeserializedUnsignedMessage[]> {
+  private async signTransactionInfoToUnsignedMessages(
+    transactionInfo: SignTransactionInfo[],
+    iacContext?: IACContext
+  ): Promise<DeserializedUnsignedMessage[]> {
     return Promise.all(
       transactionInfo
         .map((info: SignTransactionInfo): [AirGapWallet, IACMessageDefinitionObjectV3] => [info.wallet, info.signTransactionRequest])
@@ -260,9 +266,10 @@ export class DeserializedDetailEffects {
             id: request.id,
             protocol: request.protocol,
             data,
+            iacContext,
             blake2bHash,
             wallet,
-            originalProtocolIdentifier: request.protocol !== wallet?.protocol?.symbol ? request.protocol : undefined
+            originalProtocolIdentifier: request.protocol !== wallet?.protocol.symbol ? request.protocol : undefined
           }
         })
     )
@@ -294,7 +301,7 @@ export class DeserializedDetailEffects {
     try {
       const signedTransactions: DeserializedSignedTransaction[] = await Promise.all(
         unsignedTransactions.map(async (transaction: DeserializedUnsignedTransaction): Promise<DeserializedSignedTransaction> => {
-          const signed: string = await this.signTransaction(transaction.wallet, transaction.data, bip39Passphrase)
+          const signed: string = await this.signTransaction(transaction.wallet, transaction.data, transaction.iacContext, bip39Passphrase)
 
           return {
             type: 'signed',
@@ -305,6 +312,7 @@ export class DeserializedDetailEffects {
               transaction: signed,
               callbackURL: transaction.data.callbackURL
             },
+            iacContext: transaction.iacContext,
             wallet: transaction.wallet,
             originalProtocolIdentifier: transaction.originalProtocolIdentifier
           }
@@ -326,7 +334,12 @@ export class DeserializedDetailEffects {
     }
   }
 
-  private async signTransaction(wallet: AirGapWallet, transaction: UnsignedTransaction, bip39Passphrase: string): Promise<string> {
+  private async signTransaction(
+    wallet: AirGapWallet,
+    transaction: UnsignedTransaction,
+    iacContext: IACContext | undefined,
+    bip39Passphrase: string
+  ): Promise<string> {
     const secret: MnemonicSecret | undefined = this.secretsService.findByPublicKey(wallet.publicKey)
     if (secret === undefined) {
       throw new Error('Secret not found')
@@ -335,7 +348,15 @@ export class DeserializedDetailEffects {
     const entropy: string = await this.secretsService.retrieveEntropyForSecret(secret)
     const mnemonic: string = bip39.entropyToMnemonic(entropy)
 
-    return this.keyPairService.signWithWallet(wallet, transaction, mnemonic, bip39Passphrase)
+    return this.keyPairService.signWithProtocol(
+      wallet.protocol,
+      transaction,
+      mnemonic,
+      bip39Passphrase,
+      wallet.isExtendedPublicKey,
+      wallet.derivationPath,
+      await this.getChildDerivationPath(wallet.derivationPath, iacContext?.derivationPath)
+    )
   }
 
   private async signMessages(
@@ -346,7 +367,12 @@ export class DeserializedDetailEffects {
     try {
       const signedMessages: DeserializedSignedMessage[] = await Promise.all(
         unsignedMessages.map(async (message: DeserializedUnsignedMessage): Promise<DeserializedSignedMessage> => {
-          const signature: string = await this.signMessage(message.data, bip39Passphrase, message.wallet ?? wallet)
+          const signature: string = await this.signMessage(
+            message.data,
+            message.iacContext,
+            bip39Passphrase,
+            message.wallet ?? wallet
+          )
 
           return {
             type: 'signed',
@@ -358,6 +384,7 @@ export class DeserializedDetailEffects {
               signature,
               callbackURL: message.data.callbackURL
             },
+            iacContext: message.iacContext,
             wallet: message.wallet,
             originalProtocolIdentifier: message.originalProtocolIdentifier
           }
@@ -383,6 +410,7 @@ export class DeserializedDetailEffects {
 
   private async signMessage(
     message: MessageSignRequest,
+    iacContext: IACContext | undefined,
     bip39Passphrase: string,
     wallet?: AirGapWallet,
     protocolIdentifier?: ProtocolSymbols
@@ -400,7 +428,15 @@ export class DeserializedDetailEffects {
     const mnemonic: string = bip39.entropyToMnemonic(entropy)
 
     if (wallet !== undefined) {
-      return this.keyPairService.signWithWallet(wallet, message, mnemonic, bip39Passphrase)
+      return this.keyPairService.signWithProtocol(
+        wallet.protocol,
+        message,
+        mnemonic,
+        bip39Passphrase,
+        wallet.isExtendedPublicKey,
+        wallet.derivationPath,
+        await this.getChildDerivationPath(wallet.derivationPath, iacContext?.derivationPath)
+      )
     } else {
       let protocol: ICoinProtocol | undefined
       try {
@@ -416,7 +452,15 @@ export class DeserializedDetailEffects {
         throw new Error('Protocol not found')
       }
 
-      return this.keyPairService.signWithProtocol(protocol, message, mnemonic, bip39Passphrase, false, protocol.standardDerivationPath)
+      return this.keyPairService.signWithProtocol(
+        protocol,
+        message,
+        mnemonic,
+        bip39Passphrase,
+        false,
+        protocol.standardDerivationPath,
+        await this.getChildDerivationPath(protocol.standardDerivationPath, iacContext?.derivationPath)
+      )
     }
   }
 
@@ -499,5 +543,25 @@ export class DeserializedDetailEffects {
 
   private async getSaplingProtocol(): Promise<TezosSaplingProtocol> {
     return (await this.protocolService.getProtocol(MainProtocolSymbols.XTZ_SHIELDED)) as TezosSaplingProtocol
+  }
+
+  private async getChildDerivationPath(walletDerivationPath: string, accountDerivationPath?: string): Promise<string | undefined> {
+    // WalletDerivationPath is from us, what the user used to create his account
+    // AccountDerivationPath is the more specific
+
+    if (!accountDerivationPath) {
+      return undefined
+    }
+
+    let normalizedDerivationPath: string = accountDerivationPath
+    if (!normalizedDerivationPath.startsWith('m')) {
+      normalizedDerivationPath = `m/${normalizedDerivationPath}`
+    }
+
+    if (!normalizedDerivationPath.startsWith(walletDerivationPath)) {
+      throw new Error('Derivation paths do not match!')
+    }
+
+    return normalizedDerivationPath.slice(walletDerivationPath.length + 1)
   }
 }

@@ -40,6 +40,14 @@ export class AccountAddPage {
     })
   }
 
+  public setDerivationPath() {
+    if (this.selectedProtocol.supportsHD && this.isHDWallet) {
+      this.customDerivationPath = this.selectedProtocol.standardDerivationPath
+    } else {
+      this.customDerivationPath = `${this.selectedProtocol.standardDerivationPath}/0/0`
+    }
+  }
+
   public onSelectedProtocolChange(selectedProtocol: ICoinProtocol): void {
     this.selectedProtocol = selectedProtocol
     this.isHDWallet = this.selectedProtocol.supportsHD
@@ -75,7 +83,7 @@ export class AccountAddPage {
 
             return {
               protocolIdentifier: protocol.identifier,
-              isHDWallet: protocol.supportsHD,
+              isHDWallet: isSelected ? this.isHDWallet : protocol.supportsHD,
               customDerivationPath: isSelected ? this.customDerivationPath : protocol.standardDerivationPath,
               bip39Passphrase: isSelected ? this.bip39Passphrase : '',
               isActive: isSelected

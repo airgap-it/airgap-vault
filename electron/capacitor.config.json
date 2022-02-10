@@ -2,7 +2,7 @@
   "appId": "it.airgap.vault",
   "appName": "AirGap Vault",
   "bundledWebRuntime": false,
-  "npmClient": "npm",
+  "npmClient": "yarn",
   "webDir": "www",
   "plugins": {
     "SplashScreen": {

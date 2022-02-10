@@ -7,9 +7,12 @@ import android.content.SharedPreferences
 import android.content.pm.ApplicationInfo
 import android.provider.Settings
 import android.view.WindowManager
+import android.widget.FrameLayout
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
-import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentContainerView
+import androidx.fragment.app.commit
+import androidx.lifecycle.lifecycleScope
 import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
@@ -18,12 +21,16 @@ import com.scottyab.rootbeer.RootBeer
 import it.airgap.vault.BuildConfig
 import it.airgap.vault.R
 import it.airgap.vault.plugin.PluginError
+import it.airgap.vault.plugin.securityutils.authprompt.AuthPromptFragment
 import it.airgap.vault.plugin.securityutils.storage.Storage
-import it.airgap.vault.util.assertReceived
-import it.airgap.vault.util.logDebug
-import it.airgap.vault.util.releaseCallIfKept
-import it.airgap.vault.util.resolveWithData
+import it.airgap.vault.util.*
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.util.*
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 @CapacitorPlugin(requestCodes = [SecurityUtils.REQUEST_CODE_CONFIRM_DEVICE_CREDENTIALS])
 class SecurityUtils : Plugin() {
@@ -47,6 +54,7 @@ class SecurityUtils : Plugin() {
 
     private var isAuthenticated: Boolean = false
     private var lastBackgroundDate: Date? = null
+    private val authenticationMutex: Mutex = Mutex()
 
     private var automaticLocalAuthentication: Boolean
         get() = sharedPreferences.getBoolean(PREFERENCES_KEY_AUTOMATIC_AUTHENTICATION, false)
@@ -285,7 +293,7 @@ class SecurityUtils : Plugin() {
 
     @PluginMethod
     fun authenticate(call: PluginCall) {
-        authenticateOrContinue(AuthOrigin.VAULT, call, { call.resolve() }, { call.reject("Authentication failed") })
+        authenticateOrContinue(AuthOrigin.VAULT, call, { call.resolve() }, { call.reject("Authentication failed"); true })
     }
 
     @PluginMethod
@@ -359,8 +367,7 @@ class SecurityUtils : Plugin() {
     override fun handleOnResume() {
         super.handleOnResume()
         if (automaticLocalAuthentication) {
-            val lastCallbackId = lastCall?.callbackId
-            authenticateOrContinue(AuthOrigin.VAULT, lastCall, { lastCallbackId?.let { releaseCallIfKept(it) } })
+            authenticateOrContinueOnResume()
         }
     }
 
@@ -369,58 +376,94 @@ class SecurityUtils : Plugin() {
         super.handleOnPause()
     }
 
-    private fun showAuthenticationScreen(onAuthenticated: (() -> Unit)? = null, onFailure: (() -> Unit)? = null) {
-        val executor = ContextCompat.getMainExecutor(context)
-        val biometricPrompt = BiometricPrompt(activity, executor, object : BiometricPrompt.AuthenticationCallback() {
-            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                super.onAuthenticationError(errorCode, errString)
-                onFailure?.invoke()
-            }
+    private fun authenticateOrContinueOnResume() {
+        val lastCallbackId = lastCall?.callbackId
+        authenticateOrContinue(AuthOrigin.VAULT, lastCall, { lastCallbackId?.let { releaseCallIfKept(it) } }, { authenticateOrContinueOnResume(); false })
+    }
 
-            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                super.onAuthenticationSucceeded(result)
-                onAuthenticated?.invoke()
-            }
-
-            override fun onAuthenticationFailed() {
-                super.onAuthenticationFailed()
-                onFailure?.invoke()
-            }
-        })
+    private suspend fun showAuthenticationScreen(onAuthenticated: (() -> Unit)? = null, onFailure: (() -> Boolean)? = null) = suspendCoroutine<Unit> { continuation ->
+        val containerView = FragmentContainerView(context).apply { id = R.id.authPromptFragmentContainerView }
+        val layoutParams = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.MATCH_PARENT,
+        )
 
         activity.runOnUiThread {
-            biometricPrompt.authenticate(biometricPromptInfo)
+            bridge.webView.parent.addView(containerView, layoutParams)
+
+            val fragment = AuthPromptFragment()
+
+            activity.supportFragmentManager.commit {
+                setReorderingAllowed(true)
+                replace(containerView.id, fragment)
+                addToBackStack(null)
+            }
+
+            fragment.resultLiveData.observe(activity) {
+                isAuthenticated = it
+                lastBackgroundDate = null
+
+                val handled = if (it) {
+                    onAuthenticated?.invoke()
+                    true
+                } else {
+                    onFailure?.invoke() ?: true
+                }
+
+                if (handled) {
+                    activity.runOnUiThread {
+                        activity.supportFragmentManager.commit {
+                            remove(fragment)
+                        }
+                        bridge.webView.parent.removeView(activity.findViewById(containerView.id))
+                    }
+                }
+
+                continuation.resume(Unit)
+            }
         }
     }
 
-    private fun createAuthenticationRequestedHandler(call: PluginCall): (Int, () -> Unit) -> Unit =
-        { attemptNo, onAuthenticated ->
-            authenticate(AuthOrigin.SYSTEM, attemptNo, call, onAuthenticated)
-        }
-
-    private fun authenticateOrContinue(origin: AuthOrigin, call: PluginCall? = null, onAuthenticated: (() -> Unit)? = null, onFailure: (() -> Unit)? = null) {
-        if (!needsAuthentication) {
-            onAuthenticated?.invoke()
-        } else {
-            authenticate(
-                    origin,
-                    ++authTries,
+    private fun createAuthenticationRequestedHandler(call: PluginCall): (Int, () -> Unit, () -> Unit) -> Unit =
+        { attemptNo, onAuthenticated, onFailure ->
+            activity.lifecycleScope.launch {
+                authenticate(
+                    AuthOrigin.SYSTEM,
+                    attemptNo,
                     call,
-                    {
-                        onAuthenticated?.invoke()
-                        authTries = 0
-                    },
-                    onFailure
-            )
+                    onAuthenticated,
+                    { onFailure(); true },
+                )
+            }
+        }
+
+    private fun authenticateOrContinue(origin: AuthOrigin, call: PluginCall? = null, onAuthenticated: (() -> Unit)? = null, onFailure: (() -> Boolean)? = null) {
+        activity.lifecycleScope.launch {
+            authenticationMutex.withLock {
+                if (!needsAuthentication) {
+                    onAuthenticated?.invoke()
+                } else {
+                    authenticate(
+                        origin,
+                        ++authTries,
+                        call,
+                        {
+                            onAuthenticated?.invoke()
+                            authTries = 0
+                        },
+                        onFailure
+                    )
+                }
+            }
         }
     }
 
-    private fun authenticate(
+    private suspend fun authenticate(
             origin: AuthOrigin,
             attemptNo: Int,
             call: PluginCall? = null,
             onAuthenticated: (() -> Unit)? = null,
-            onFailure: (() -> Unit)? = null
+            onFailure: (() -> Boolean)? = null
     ) {
         if (call != null && attemptNo > MAX_AUTH_TRIES) {
             val error = when (origin) {
@@ -431,15 +474,7 @@ class SecurityUtils : Plugin() {
             return
         }
 
-        showAuthenticationScreen(onAuthenticated = {
-            isAuthenticated = true
-            lastBackgroundDate = null
-            onAuthenticated?.invoke()
-        }, onFailure = {
-            isAuthenticated = false
-            lastBackgroundDate = null
-            onFailure?.invoke()
-        })
+        showAuthenticationScreen(onAuthenticated, onFailure)
     }
 
     private val PluginCall.alias: String

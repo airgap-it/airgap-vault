@@ -51,8 +51,8 @@ build_android:
     - docker build -f build/android/Dockerfile -t $GOOGLE_TAG_ANDROID_CURRENT --build-arg BUILD_NR="$CI_PIPELINE_ID" --build-arg VERSION="$VERSION" .
     - docker run --name $LOCAL_ANDROID $GOOGLE_TAG_ANDROID_CURRENT echo "container ran."
     - docker cp $LOCAL_ANDROID:/app/android-release-unsigned.apk airgap-vault-release-unsigned-$CI_PIPELINE_ID.apk
-    - docker cp $LOCAL_ANDROID:/app/android-debug.apk airgap-vault-debug-$CI_PIPELINE_ID.apk
-    - docker cp $LOCAL_ANDROID:/app/android-appium.apk airgap-vault-appium-$CI_PIPELINE_ID.apk
+    - docker cp $LOCAL_ANDROID:/app/android-debug-aligned.apk airgap-vault-debug-$CI_PIPELINE_ID.apk
+    - docker cp $LOCAL_ANDROID:/app/android-appium-aligned.apk airgap-vault-appium-$CI_PIPELINE_ID.apk
   after_script:
     - docker rm -f $LOCAL_ANDROID || true
   artifacts:
@@ -107,7 +107,7 @@ build_ios:
     - echo "$IOS_BUILD_JSON" > build.json
   script:
     - export DEVELOPER_DIR=$XCODE_PATH
-    - nvm use 15
+    - nvm use 16
     - yarn install --frozen-lockfile
     - yarn disable-pure-getters
     - yarn configure-mangle
