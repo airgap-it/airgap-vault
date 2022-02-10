@@ -1,6 +1,6 @@
 import { Component } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { Secret } from 'src/app/models/secret'
+import { MnemonicSecret } from 'src/app/models/secret'
 import { DeviceService } from 'src/app/services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
@@ -56,7 +56,7 @@ export class SeedXorImportPage {
       const secretString = await this.seedXOR.combine(this.shares)
 
       this.navigationService
-        .routeWithState('secret-edit', { secret: new Secret(secretString, 'Recovery by SeedXOR') })
+        .routeWithState('secret-edit', { secret: new MnemonicSecret(secretString, 'Recovery by SeedXOR') })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } catch (error) {
       console.log('oops', error)
