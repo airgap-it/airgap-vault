@@ -1,9 +1,10 @@
-import { TranslateService } from '@ngx-translate/core'
-import { SecretsService } from 'src/app/services/secrets/secrets.service'
+import { AirGapWallet, AirGapWalletStatus, MainProtocolSymbols } from '@airgap/coinlib-core'
 import { Component } from '@angular/core'
-import { AirGapWallet } from '@airgap/coinlib-core'
-import { NavParams, ModalController } from '@ionic/angular'
-import { Secret } from 'src/app/models/secret'
+import { ModalController, NavParams } from '@ionic/angular'
+import { TranslateService } from '@ngx-translate/core'
+
+import { MnemonicSecret } from '../../models/secret'
+import { SecretsService } from '../../services/secrets/secrets.service'
 
 @Component({
   selector: 'airgap-select-account',
@@ -16,7 +17,7 @@ export class SelectAccountPage {
   public placeholder: string
 
   public wallets: AirGapWallet[]
-  public symbolFilter: string | undefined
+  public symbolFilter: MainProtocolSymbols | undefined
 
   constructor(
     private readonly secretsService: SecretsService,
@@ -31,13 +32,23 @@ export class SelectAccountPage {
     this.heading = this.translateService.instant(`select-account.${type}.heading`)
     this.placeholder = this.translateService.instant(`select-account.${type}.placeholder`)
 
-    this.secretsService.getSecretsObservable().subscribe((secrets: Secret[]) => {
-      this.wallets = [].concat.apply([], secrets.map((secret) => secret.wallets) as any)
+    this.secretsService.getSecretsObservable().subscribe((secrets: MnemonicSecret[]) => {
+      this.wallets = [].concat.apply(
+        [],
+        secrets.map((secret) =>
+          secret.wallets.filter(
+            (wallet: AirGapWallet) =>
+              wallet.status === AirGapWalletStatus.ACTIVE && (!this.symbolFilter || wallet.protocol.identifier === this.symbolFilter)
+          )
+        ) as any
+      )
     })
   }
 
   public async setWallet(wallet: AirGapWallet) {
-    this.modalController.dismiss(wallet.protocol.identifier).catch((err) => console.error(err))
+    this.modalController
+      .dismiss(this.navParams.get('type') === 'message-signing' ? wallet.protocol.identifier : wallet) // TODO: change to always return wallet, but it will require a change wherever the "message-signing" is used
+      .catch((err) => console.error(err))
   }
 
   public async dismiss() {

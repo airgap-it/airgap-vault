@@ -1,7 +1,7 @@
 import { Component } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 
-import { Secret } from '../../models/secret'
+import { MnemonicSecret } from '../../models/secret'
 import { DeviceService } from '../../services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
@@ -27,7 +27,7 @@ export class SocialRecoveryImportPage {
   }
 
   public ionViewDidEnter(): void {
-    this.deviceService.enableScreenshotProtection({ routeBack: 'secret-create' })
+    this.deviceService.enableScreenshotProtection({ routeBack: 'secret-setup' })
   }
 
   public ionViewWillLeave(): void {
@@ -52,9 +52,9 @@ export class SocialRecoveryImportPage {
 
   public recover(): void {
     try {
-      const secretString: string = Secret.recoverSecretFromShares(this.shares)
+      const secretString: string = MnemonicSecret.recoverSecretFromShares(this.shares)
       this.navigationService
-        .routeWithState('secret-edit', { secret: new Secret(secretString, 'Recovery by Social Recovery') })
+        .routeWithState('secret-add', { secret: new MnemonicSecret(secretString, 'Recovery by Social Recovery') })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } catch (error) {
       console.log('oops', error)

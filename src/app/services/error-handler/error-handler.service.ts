@@ -16,12 +16,57 @@ export enum ErrorCategory {
   OTHER = 'other'
 }
 
+const NUMBER_OF_ERRORS_CACHED = 100
+
+export type ErrorHistoryObject = [
+  ErrorCategory, // category
+  string, // name
+  string, // message
+  string, // stack
+  number // date
+]
+
+export class LocalErrorLogger {
+  private readonly errorHistoryKey: string = 'airgap-vault:ERROR_HISTORY'
+  constructor() {}
+
+  public async addLog(category: ErrorCategory, error: Error): Promise<void> {
+    const storedErrors: ErrorHistoryObject[] = (await this.getErrorHistory()).slice(0, NUMBER_OF_ERRORS_CACHED - 1)
+    storedErrors.unshift([category, error.name, error.message, error.stack, new Date().getTime()])
+    localStorage.setItem(this.errorHistoryKey, JSON.stringify(storedErrors))
+  }
+
+  public async getErrorHistory(): Promise<ErrorHistoryObject[]> {
+    try {
+      return JSON.parse(localStorage.getItem(this.errorHistoryKey)) || []
+    } catch (e) {
+      return []
+    }
+  }
+
+  public async getErrorHistoryFormatted(): Promise<string> {
+    const errorHistory = await this.getErrorHistory()
+
+    return errorHistory
+      .map(([category, name, message, stack, date]) => {
+        return `[${category}](${date})\n${name}:\n${message}\n${stack}`
+      })
+      .join('\n\n')
+  }
+
+  public async clearAll() {
+    localStorage.setItem(this.errorHistoryKey, JSON.stringify([]))
+  }
+}
+
+const errorLogger = new LocalErrorLogger()
+
 type ErrorCallback = (error: Error & { originalError?: Error }) => void
 
 const handleErrorLocal: (category: ErrorCategory) => ErrorCallback = (category?: ErrorCategory): ErrorCallback => {
   return (error: Error & { originalError?: Error }): void => {
-    console.log('saving error locally, category', category)
-    console.error(error.originalError || error)
+    console.log('saving error locally, category', category, error)
+    errorLogger.addLog(category, error)
   }
 }
 

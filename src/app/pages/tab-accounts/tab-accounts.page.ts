@@ -1,12 +1,14 @@
+import { AirGapWallet, AirGapWalletStatus } from '@airgap/coinlib-core'
 import { Component, OnInit } from '@angular/core'
-import { AirGapWallet } from '@airgap/coinlib-core'
+import { Platform } from '@ionic/angular'
 import { BehaviorSubject, Observable } from 'rxjs'
 
-import { Secret } from '../../models/secret'
+import { MnemonicSecret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
+import { ModeService } from '../../services/mode/mode.service'
+import { ModeStrategy } from '../../services/mode/strategy/ModeStrategy'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
-import { Platform } from '@ionic/angular'
 import { SecretEditAction } from '../secret-edit/secret-edit.page'
 
 @Component({
@@ -15,8 +17,8 @@ import { SecretEditAction } from '../secret-edit/secret-edit.page'
   styleUrls: ['./tab-accounts.page.scss']
 })
 export class TabAccountsPage implements OnInit {
-  public readonly secrets: Observable<Secret[]>
-  public activeSecret: Secret
+  public readonly secrets: Observable<MnemonicSecret[]>
+  public activeSecret: MnemonicSecret
 
   public symbolFilter: string | undefined
 
@@ -24,26 +26,29 @@ export class TabAccountsPage implements OnInit {
 
   public readonly isAndroid: boolean
 
+  public readonly AirGapWalletStatus: typeof AirGapWalletStatus = AirGapWalletStatus
+
   constructor(
     private readonly platform: Platform,
     private readonly secretsService: SecretsService,
-    private readonly navigationService: NavigationService
+    private readonly navigationService: NavigationService,
+    private readonly modeService: ModeService
   ) {
     this.secrets = this.secretsService.getSecretsObservable()
     this.isAndroid = this.platform.is('android')
   }
 
   public async ngOnInit(): Promise<void> {
-    this.secretsService.getActiveSecretObservable().subscribe((secret: Secret) => {
+    this.secretsService.getActiveSecretObservable().subscribe((secret: MnemonicSecret) => {
       if (secret && secret.wallets) {
         this.activeSecret = secret
-        this.wallets$.next(secret.wallets)
+        this.wallets$.next([...secret.wallets])
       }
     })
 
-    this.secrets.subscribe(async (secrets: Secret[]) => {
+    this.secrets.subscribe(async (secrets: MnemonicSecret[]) => {
       if (secrets.length === 0) {
-        this.navigationService.route('/secret-create/initial').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+        this.navigationService.route('/secret-setup/initial').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       }
     }) // We should never unsubscribe, because we need to watch this in case a user deletes all his secrets
   }
@@ -60,6 +65,11 @@ export class TabAccountsPage implements OnInit {
     const value: unknown = event.target.value
 
     this.symbolFilter = isValidSymbol(value) ? value.trim().toLowerCase() : undefined
+  }
+
+  public async syncWallets(): Promise<void> {
+    const strategy: ModeStrategy = await this.modeService.strategy()
+    await strategy.syncAll()
   }
 
   public addWallet(): void {

@@ -11,26 +11,33 @@ module.exports = function (config) {
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
       require('karma-jasmine-html-reporter'),
-      require('karma-coverage-istanbul-reporter'),
+      require('karma-coverage'),
       require('karma-spec-reporter'),
       require('@angular-devkit/build-angular/plugins/karma')
     ],
     client: {
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
-    coverageIstanbulReporter: {
-      reports: ['text', 'lcovonly'],
+    coverageReporter: {
+      // specify a common output directory
+      dir: './coverage',
+      reporters: [
+        { type: 'lcov', subdir: 'report-lcov' },
+        { type: 'text', subdir: '.', file: 'text.txt' }
+      ],
       fixWebpackSourcePaths: true
     },
     specReporter: {
       suppressSkipped: false // do not print information about skipped tests
     },
-    reporters: ['spec', 'coverage-istanbul'],
+    reporters: ['progress', 'kjhtml'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
     browsers: ['ChromeHeadlessNoSandbox'],
+    captureTimeout: 120000,
+    browserSocketTimeout: 120000,
     customLaunchers: {
       ChromeHeadlessNoSandbox: {
         base: 'ChromeHeadless',

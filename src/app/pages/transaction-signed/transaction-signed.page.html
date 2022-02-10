@@ -11,7 +11,12 @@
   <h3 [innerHTML]="heading"></h3>
 
   <ion-row class="ion-justify-content-center ion-padding-top">
-    <airgap-qr *ngIf="interactionUrl && qrType === 0" [level]="'L'" [qrdata]="splits" [size]="300"></airgap-qr>
+    <airgap-iac-qr
+      *ngIf="interactionUrl && qrType === 0"
+      [level]="'L'"
+      [messageDefinitionObjects]="interactionUrl"
+      [size]="300"
+    ></airgap-iac-qr>
     <airgap-qr *ngIf="signedTxs && qrType === 1" [level]="'L'" [qrdata]="signedTxs" [size]="300"></airgap-qr>
   </ion-row>
 
@@ -20,13 +25,7 @@
   </ng-container>
 
   <ng-container *ngIf="signedTxs">
-    <ion-item lines="none">
-      <ion-label class="ion-text-wrap">{{ 'transaction-signed.raw-tx_label' | translate }}</ion-label>
-      <ion-toggle slot="end" (ionChange)="switchQR()"></ion-toggle>
-    </ion-item>
-    <ion-row class="ion-padding-vertical ion-margin-bottom">
-      <airgap-signed-transaction [syncProtocolString]="interactionUrl"></airgap-signed-transaction>
-    </ion-row>
+    <airgap-signed-transaction [signedTxs]="interactionUrl"></airgap-signed-transaction>
   </ng-container>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">

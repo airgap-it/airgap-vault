@@ -1,5 +1,5 @@
 import { PermissionsService, PermissionStatus } from '@airgap/angular-core'
-import { ElementRef, Injectable, Renderer2, RendererFactory2, ViewChild, Inject, Directive } from '@angular/core'
+import { ElementRef, Injectable, Renderer2, RendererFactory2, ViewChild, Inject } from '@angular/core'
 import { Platform } from '@ionic/angular'
 import { Observable } from 'rxjs'
 
@@ -12,9 +12,11 @@ import { CAMERA_PREVIEW_PLUGIN } from 'src/app/capacitor-plugins/injection-token
 const blobURL = window.URL.createObjectURL(new Blob([workerJS]))
 const entropyCalculatorWorker = new Worker(blobURL)
 
-@Directive()
 @Injectable({ providedIn: 'root' })
 export class CameraNativeService implements IEntropyGenerator {
+  @ViewChild('cameraCanvas') public cameraCanvas: ElementRef
+  public canvasElement: HTMLCanvasElement
+
   private disabled = false
 
   private cameraIsRunning = false // Prevent multiple start/stops of camera
@@ -39,9 +41,6 @@ export class CameraNativeService implements IEntropyGenerator {
       document.body // fallback if no tags
     ]
   }
-
-  @ViewChild('cameraCanvas') public cameraCanvas: ElementRef
-  public canvasElement: HTMLCanvasElement
 
   private collectedEntropyPercentage: number = 0
 
@@ -106,6 +105,56 @@ export class CameraNativeService implements IEntropyGenerator {
     }
 
     return this.initCamera()
+  }
+
+  public getCollectedEntropyPercentage(): number {
+    return this.collectedEntropyPercentage / 6
+  }
+
+  public setVideoElement(element): void {
+    console.log('only used in browser', element)
+  }
+
+  public stop(): Promise<any> {
+    if (!this.cameraIsRunning) {
+      console.log('CAMERA ALREADY STOPPED, ABORTING')
+      this.uninjectCSS()
+
+      return Promise.reject(null)
+    }
+    // We need to delay the stopCamera call because it crashes on iOS
+    // if it is called while taking a photo
+    if (this.cameraIsTakingPhoto) {
+      this.uninjectCSS()
+
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          console.log('CAMERA IS TAKING PHOTO, DELAYING')
+          resolve(this.stop())
+        }, 200)
+      })
+    }
+    this.uninjectCSS()
+    if (this.cameraInterval) {
+      clearInterval(this.cameraInterval)
+    }
+
+    return new Promise((_resolve, reject) => {
+      this.cameraPreview.stop().then(
+        () => {
+          this.cameraIsRunning = false
+          console.log('camera stopped.')
+        },
+        (error) => {
+          console.log('camera could not be stopped.')
+          reject(error)
+        }
+      )
+    })
+  }
+
+  public getEntropyUpdateObservable(): Observable<Entropy> {
+    return this.entropyObservable
   }
 
   private initCamera(): Promise<void> {
@@ -181,48 +230,6 @@ export class CameraNativeService implements IEntropyGenerator {
     })
   }
 
-  public stop(): Promise<any> {
-    if (!this.cameraIsRunning) {
-      console.log('CAMERA ALREADY STOPPED, ABORTING')
-      this.uninjectCSS()
-
-      return Promise.reject(null)
-    }
-    // We need to delay the stopCamera call because it crashes on iOS
-    // if it is called while taking a photo
-    if (this.cameraIsTakingPhoto) {
-      this.uninjectCSS()
-
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          console.log('CAMERA IS TAKING PHOTO, DELAYING')
-          resolve(this.stop())
-        }, 200)
-      })
-    }
-    this.uninjectCSS()
-    if (this.cameraInterval) {
-      clearInterval(this.cameraInterval)
-    }
-
-    return new Promise((_resolve, reject) => {
-      this.cameraPreview.stop().then(
-        () => {
-          this.cameraIsRunning = false
-          console.log('camera stopped.')
-        },
-        (error) => {
-          console.log('camera could not be stopped.')
-          reject(error)
-        }
-      )
-    })
-  }
-
-  public getEntropyUpdateObservable(): Observable<Entropy> {
-    return this.entropyObservable
-  }
-
   private arrayBufferFromBase64(base64: string) {
     const raw = window.atob(base64)
     const buffer = new ArrayBuffer(raw.length * 2)
@@ -243,13 +250,5 @@ export class CameraNativeService implements IEntropyGenerator {
   private uninjectCSS() {
     // removes injected css
     this.transparentElements.forEach((element) => this.renderer.removeClass(element, this.transparentHTMLClass))
-  }
-
-  public getCollectedEntropyPercentage(): number {
-    return this.collectedEntropyPercentage / 6
-  }
-
-  public setVideoElement(element): void {
-    console.log('only used in browser', element)
   }
 }

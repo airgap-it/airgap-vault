@@ -81,7 +81,7 @@ export class SecureStorageService {
             }
 
             if (errorMessage && errorMessage.toLowerCase().includes('wrong paranoia password')) {
-              throw new Error('Wrong passcode.')
+              throw new Error('Wrong passphrase.')
             }
 
             throw error
@@ -95,5 +95,10 @@ export class SecureStorageService {
         })
       }
     }
+  }
+
+  public async wipe() {
+    // Wipe the whole secure storage
+    await this.securityUtils.destroy()
   }
 }

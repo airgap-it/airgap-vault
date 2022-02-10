@@ -1,3 +1,4 @@
+import { IACContext } from '@airgap/angular-core'
 import {
   AirGapWallet,
   IAirGapTransaction,
@@ -18,6 +19,7 @@ export enum Mode {
 export type Task = 'signTransaction' | 'signMessage' | 'generic'
 
 /**************** Alert ****************/
+
 export interface Bip39PassphraseAlert {
   type: 'bip39Passphrase'
 }
@@ -45,18 +47,22 @@ export type Modal = 'selectSigningAccount'
 
 export interface DeserializedUnsignedTransaction {
   type: 'unsigned'
-  id: string
+  id: number
   details: IAirGapTransaction[]
   data: UnsignedTransaction
+  iacContext?: IACContext
   wallet: AirGapWallet
+  originalProtocolIdentifier?: ProtocolSymbols
 }
 
 export interface DeserializedSignedTransaction {
   type: 'signed'
-  id: string
+  id: number
   details: IAirGapTransaction[]
   data: SignedTransaction & Pick<UnsignedTransaction, 'callbackURL'>
+  iacContext?: IACContext
   wallet: AirGapWallet
+  originalProtocolIdentifier?: ProtocolSymbols
 }
 
 export type DeserializedTransaction = DeserializedUnsignedTransaction | DeserializedSignedTransaction
@@ -69,19 +75,23 @@ export function isDeserializedTransaction(data: unknown): data is DeserializedTr
 
 export interface DeserializedUnsignedMessage {
   type: 'unsigned'
-  id: string
+  id: number
   protocol: ProtocolSymbols | undefined
   data: MessageSignRequest
+  iacContext?: IACContext
   blake2bHash: string | undefined
   wallet: AirGapWallet | undefined
+  originalProtocolIdentifier?: ProtocolSymbols
 }
 
 export interface DeserializedSignedMessage {
   type: 'signed'
-  id: string
+  id: number
   protocol: ProtocolSymbols | undefined
   data: MessageSignResponse & Pick<MessageSignRequest, 'callbackURL'>
+  iacContext?: IACContext
   wallet: AirGapWallet | undefined
+  originalProtocolIdentifier?: ProtocolSymbols
 }
 
 export type DeserializedMessage = DeserializedUnsignedMessage | DeserializedSignedMessage

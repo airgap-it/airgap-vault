@@ -78,11 +78,11 @@ class SecureStorage {
             if self.paranoiaMode {
                 if needsKeyGeneration {
                     prompts += [
-                        LocalAuthentication.PasswordPrompt(title: "Create Secret Password", message: "Please choose your secret password"),
-                        LocalAuthentication.PasswordPrompt(title: "Create Secret Password", message: "Please confirm your secret password")
+                        LocalAuthentication.PasswordPrompt(title: "Set Encryption Password", message: "Please choose your encryption password"),
+                        LocalAuthentication.PasswordPrompt(title: "Set Encryption Password", message: "Please confirm your encryption password")
                     ]
                 } else {
-                    prompts.append(LocalAuthentication.PasswordPrompt(title: "Secret Password", message: "Please provide your secret password"))
+                    prompts.append(LocalAuthentication.PasswordPrompt(title: "Encryption Password", message: "Please provide your encryption password"))
                 }
             }
             LocalAuthentication.shared.fetchContextForSecureItemAccess(using: prompts) { result -> Bool in
@@ -157,5 +157,10 @@ class SecureStorage {
 
     func delete(key: String) throws {
         try Keychain.Password.delete(account: key)
+    }
+    
+    static func delete() throws {
+        try Keychain.Password.delete()
+        _ = Keychain.PrivateKey.delete()
     }
 }

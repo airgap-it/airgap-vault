@@ -210,16 +210,21 @@ extension Keychain.Password {
         return attributes
     }
 
-    public static func delete(account: String, service: String? = nil) throws {
+public static func delete(account: String? = nil, service: String? = nil) throws {
         var query: [AnyHashable:Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: account
+            kSecClass as String: kSecClassGenericPassword
         ]
+        
+        if let account = account {
+            query[kSecAttrAccount as String] = account
+        }
+        
         if let service = service {
             query[kSecAttrService as String] = service
         }
+        
         let status = SecItemDelete(query as CFDictionary)
-        guard status.isSuccess else {
+        guard status.isSuccess || status == errSecItemNotFound else {
             throw VaultError.osStatus(status)
         }
     }
@@ -261,7 +266,7 @@ extension Keychain.PrivateKey {
         return status.isSuccess || status == errSecInteractionNotAllowed
     }
 
-    public static func delete(tag: Data) -> Bool {
+    public static func delete(tag: Data? = nil) -> Bool {
         let query: [AnyHashable:Any] = [
             kSecClass as String: kSecClassKey,
             kSecAttrApplicationTag as String: tag,

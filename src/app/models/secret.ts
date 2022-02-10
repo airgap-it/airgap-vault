@@ -1,49 +1,50 @@
 import { AirGapWallet } from '@airgap/coinlib-core'
 import { UUID } from 'angular2-uuid'
+import { fromSeed } from 'bip32'
 
 import { toBoolean } from '../utils/utils'
 
-import { InteractionSetting } from './../services/interaction/interaction.service'
-import { BIP39Signer } from './BIP39Signer'
+import { BIPSigner } from './BIP39Signer'
 import { Identifiable } from './identifiable'
 
-const signer: BIP39Signer = new BIP39Signer()
+const signer: BIPSigner = new BIPSigner()
 
-export class Secret implements Identifiable {
+// TODO: Implement capabilities
+// enum MnemonicSecretCapability {
+//   ALLOW_SHOW_SECRET = 'ALLOW_SHOW_SECRET',
+//   ALLOW_SOCIAL_RECOVERY = 'ALLOW_SOCIAL_RECOVERY',
+//   ALLOW_BIP85 = 'ALLOW_BIP85',
+// }
+
+export enum SecretType {
+  MNEMONIC = 'mnemonic'
+  //   TWOFACTOR = 'twofactor',
+  //   TEXT = 'text',
+  //   SSH = 'ssh',
+  //   PGP = 'pgp'
+}
+
+// interface SecretAction {
+//   type: SecretType
+//   key: string
+//   title: string
+//   description: string
+//   icon: string
+//   canBeDisabled: boolean
+// }
+
+abstract class Secret implements Identifiable {
   public id: string = UUID.UUID()
   public label: string
 
   public secretHex: string
   public isParanoia: boolean
-  public hasSocialRecovery: boolean
-  public interactionSetting: InteractionSetting
-  public hasRecoveryKey: boolean
 
-  public wallets: AirGapWallet[]
+  // public isDuress: boolean
 
-  private readonly twofactor: string
+  public type: SecretType
 
-  constructor(
-    seed: string | null,
-    label: string = '',
-    isParanoia: boolean = false,
-    interactionSetting: InteractionSetting = InteractionSetting.UNDETERMINED,
-    hasRecoveryKey: boolean = false
-  ) {
-    this.label = label
-    this.isParanoia = isParanoia
-    this.interactionSetting = interactionSetting
-    this.hasRecoveryKey = hasRecoveryKey
-
-    if (seed !== null) {
-      this.secretHex = this.getEntropyFromMnemonic(seed)
-    }
-  }
-
-  public getEntropyFromMnemonic(mnemonic: string): string {
-    // TODO: better check whether this is a mnemonic (validate)
-    return mnemonic && mnemonic.indexOf(' ') > -1 ? signer.mnemonicToEntropy(mnemonic) : mnemonic
-  }
+  // public actions: SecretAction[] = []
 
   public getIdentifier(): string {
     return this.id
@@ -51,6 +52,32 @@ export class Secret implements Identifiable {
 
   public flushSecret(): void {
     delete this.secretHex
+  }
+}
+
+export class MnemonicSecret extends Secret {
+  public hasSocialRecovery: boolean
+  public hasRecoveryKey: boolean
+
+  public fingerprint?: string
+
+  public wallets: AirGapWallet[]
+
+  private readonly twofactor: string
+
+  constructor(seed: string | null, label: string = '', isParanoia: boolean = false, hasRecoveryKey: boolean = false) {
+    super()
+
+    this.label = label
+    this.isParanoia = isParanoia
+    this.hasRecoveryKey = hasRecoveryKey
+    // this.isDuress = false
+    this.type = SecretType.MNEMONIC
+
+    if (seed !== null) {
+      this.secretHex = this.getEntropyFromMnemonic(seed)
+      this.fingerprint = this.getFingerprintFromMnemonic(seed)
+    }
   }
 
   public recoverMnemonicFromHex(hex: string): string {
@@ -69,7 +96,27 @@ export class Secret implements Identifiable {
     return signer.recoverKey(shares)
   }
 
-  public static init(obj: Secret): Secret {
-    return Object.assign(new Secret(null, obj.label), obj)
+  public static init(obj: MnemonicSecret): MnemonicSecret {
+    return Object.assign(new MnemonicSecret(null, obj.label), obj)
+  }
+
+  private getEntropyFromMnemonic(mnemonic: string): string {
+    return this.isMnemonic(mnemonic) ? signer.mnemonicToEntropy(mnemonic) : mnemonic
+  }
+
+  private getMnemonicFromEntropy(entropy: string): string {
+    return this.isMnemonic(entropy) ? entropy : signer.entropyToMnemonic(entropy)
+  }
+
+  private getFingerprintFromMnemonic(entropy: string): string {
+    const mnemonic: string = this.getMnemonicFromEntropy(entropy)
+    const seed: Buffer = signer.mnemonicToSeedSync(mnemonic)
+
+    return fromSeed(seed).fingerprint.toString('hex')
+  }
+
+  private isMnemonic(data: string): boolean {
+    // TODO: better check whether this is a mnemonic (validate)
+    return data && data.indexOf(' ') > -1
   }
 }

@@ -8,14 +8,31 @@
     "component-class-suffix": [true, "Component", "Page"],
     "directive-selector": [true, "attribute", "airgap", "camelCase"],
     "component-selector": [true, "element", "airgap", "kebab-case"],
-    "pipe-naming": [true, "camelCase", "airgap"],
+    "pipe-prefix": [true, "airgap"],
     "semicolon": [true, "never"],
     "member-access": [true],
     "member-ordering": [
       true,
       {
-        "order": ["public-before-private", "static-before-instance", "variables-before-functions"],
-        "alphabetize": true
+        "order": [
+          "public-static-field",
+          "public-static-method",
+          "public-instance-field",
+          "public-constructor",
+          "public-instance-method",
+
+          "protected-static-field",
+          "protected-static-method",
+          "protected-instance-field",
+          "protected-constructor",
+          "protected-instance-method",
+
+          "private-static-field",
+          "private-static-method",
+          "private-instance-field",
+          "private-constructor",
+          "private-instance-method"
+        ]
       }
     ],
     "typedef": [
