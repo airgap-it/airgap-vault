@@ -25,8 +25,8 @@ build_ionic:
 unit:
   stage: test
   script:
-    - docker run --name unit-$CI_COMMIT_SHA $GOOGLE_TAG npm run test-ci
-    - docker run --name lint-$CI_COMMIT_SHA $GOOGLE_TAG npm run lint-ci
+    - docker run --name unit-$CI_COMMIT_SHA $GOOGLE_TAG yarn test-ci
+    - docker run --name lint-$CI_COMMIT_SHA $GOOGLE_TAG yarn lint-ci
     - docker cp unit-$CI_COMMIT_SHA:/app/src/coverage/report-lcov/lcov.info lcov.info
     - docker cp lint-$CI_COMMIT_SHA:/app/lintReport.json lintReport.json
   after_script:
@@ -51,8 +51,8 @@ build_android:
     - docker build -f build/android/Dockerfile -t $GOOGLE_TAG_ANDROID_CURRENT --build-arg BUILD_NR="$CI_PIPELINE_ID" --build-arg VERSION="$VERSION" .
     - docker run --name $LOCAL_ANDROID $GOOGLE_TAG_ANDROID_CURRENT echo "container ran."
     - docker cp $LOCAL_ANDROID:/app/android-release-unsigned.apk airgap-vault-release-unsigned-$CI_PIPELINE_ID.apk
-    - docker cp $LOCAL_ANDROID:/app/android-debug.apk airgap-vault-debug-$CI_PIPELINE_ID.apk
-    - docker cp $LOCAL_ANDROID:/app/android-appium.apk airgap-vault-appium-$CI_PIPELINE_ID.apk
+    - docker cp $LOCAL_ANDROID:/app/android-debug-aligned.apk airgap-vault-debug-$CI_PIPELINE_ID.apk
+    - docker cp $LOCAL_ANDROID:/app/android-appium-aligned.apk airgap-vault-appium-$CI_PIPELINE_ID.apk
   after_script:
     - docker rm -f $LOCAL_ANDROID || true
   artifacts:
@@ -79,7 +79,7 @@ test_android:
 qa:
   stage: qa
   script:
-    - docker create --name qa-$CI_PIPELINE_ID $GOOGLE_TAG npm run sonar-scanner -- -X
+    - docker create --name qa-$CI_PIPELINE_ID $GOOGLE_TAG yarn sonar-scanner -- -X
       -Dsonar.typescript.lcov.reportPaths=lcov.info
       -Dsonar.typescript.tslint.reportPaths=lintReport.json
       -Dsonar.test.inclusions=**/*.spec.ts
@@ -107,14 +107,14 @@ build_ios:
     - echo "$IOS_BUILD_JSON" > build.json
   script:
     - export DEVELOPER_DIR=$XCODE_PATH
-    - nvm use 14
-    - npm install
-    - npm run disable-pure-getters
-    - npm run configure-mangle
-    - npm run apply-diagnostic-modules # manually remove unused cordova-diagnostic-plugin modules
-    - npx ionic info
-    - npx ionic build --prod
-    - npx cap sync ios
+    - nvm use 16
+    - yarn install --frozen-lockfile
+    - yarn disable-pure-getters
+    - yarn configure-mangle
+    - yarn apply-diagnostic-modules # manually remove unused cordova-diagnostic-plugin modules
+    - yarn ionic info
+    - yarn ionic build --prod
+    - yarn cap sync ios
     - xcodebuild -workspace ios/App/App.xcworkspace -scheme "App" -destination generic/platform=iOS -configuration Release archive -archivePath ios/airgap-vault-$VERSION-$CI_PIPELINE_ID.xcarchive MARKETING_VERSION=$VERSION CURRENT_PROJECT_VERSION=$CI_PIPELINE_ID -allowProvisioningUpdates
   artifacts:
     paths:
@@ -130,6 +130,6 @@ publish_ios:
   script:
     - export DEVELOPER_DIR=$XCODE_PATH
     - xcodebuild -exportArchive -archivePath ios/airgap-vault-$VERSION-$CI_PIPELINE_ID.xcarchive -exportOptionsPlist exportOptions.plist -exportPath ios/ -allowProvisioningUpdates
-    - xcrun altool --upload-app -f ios/App.ipa -u $IOS_USERNAME -p $IOS_PASSWORD
+    - xcrun altool --upload-app -f ios/App.ipa -t ios -u $IOS_USERNAME -p $IOS_PASSWORD
   tags:
     - ios

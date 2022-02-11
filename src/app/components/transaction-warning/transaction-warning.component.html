@@ -1,0 +1,18 @@
+<ion-row *ngIf="warnings && warnings.length > 0" class="ion-align-items-center ion-padding-top">
+  <ion-col *ngFor="let warning of warnings" size="12">
+    <ion-item lines="none" [detail]="false" class="ion-margin-vertical" [color]="warning.color">
+      <ion-icon *ngIf="warning.icon" [name]="warning.icon" slot="start" color="dark"></ion-icon>
+      <ion-label color="dark" class="ion-text-wrap">
+        <h3>
+          <strong>{{ warning.title | translate }}</strong>
+        </h3>
+        <p>{{ warning.description | translate }}</p>
+        <!-- <div *ngIf="warning.actions">
+          <ion-button color="light" *ngFor="let action of warning.actions" (click)="doAction(action)">
+            {{ action.text | translate }}
+          </ion-button>
+        </div> -->
+      </ion-label>
+    </ion-item>
+  </ion-col>
+</ion-row>

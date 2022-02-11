@@ -1,6 +1,6 @@
 import { Component } from '@angular/core'
 
-import { Secret } from '../../models/secret'
+import { MnemonicSecret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 
@@ -10,7 +10,7 @@ import { NavigationService } from '../../services/navigation/navigation.service'
   styleUrls: ['./secret-rules.page.scss']
 })
 export class SecretRulesPage {
-  private readonly secret: Secret
+  private readonly secret: MnemonicSecret
 
   constructor(private readonly navigationService: NavigationService) {
     this.secret = this.navigationService.getState().secret

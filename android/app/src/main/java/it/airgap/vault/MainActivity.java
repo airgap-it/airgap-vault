@@ -17,14 +17,9 @@ public class MainActivity extends BridgeActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    // Initializes the Bridge
-    this.init(savedInstanceState, new ArrayList<Class<? extends Plugin>>() {{
-      // Additional plugins you've installed go here
-      // Ex: add(TotallyAwesomePlugin.class);
-      add(CameraPreview.class);
-      add(AppInfo.class);
-      add(SecurityUtils.class);
-      add(SaplingNative.class);
-    }});
+    registerPlugin(CameraPreview.class);
+    registerPlugin(AppInfo.class);
+    registerPlugin(SecurityUtils.class);
+    registerPlugin(SaplingNative.class);
   }
 }

@@ -7,13 +7,14 @@ const routes: Routes = [
   { path: 'tab-scan', loadChildren: () => import('./pages/tab-scan/tab-scan.module').then((m) => m.TabScanPageModule) },
   { path: 'tab-settings', loadChildren: () => import('./pages/tab-settings/tab-settings.module').then((m) => m.TabSettingsPageModule) },
   { path: 'account-add', loadChildren: () => import('./pages/account-add/account-add.module').then((m) => m.AccountAddPageModule) },
-  { path: 'secret-create', loadChildren: () => import('./pages/secret-create/secret-create.module').then((m) => m.SecretCreatePageModule) },
+  { path: 'secret-setup', loadChildren: () => import('./pages/secret-setup/secret-setup.module').then((m) => m.SecretSetupPageModule) },
   {
-    path: 'secret-create/initial',
-    loadChildren: () => import('./pages/secret-create/secret-create.module').then((m) => m.SecretCreatePageModule),
+    path: 'secret-setup/initial',
+    loadChildren: () => import('./pages/secret-setup/secret-setup.module').then((m) => m.SecretSetupPageModule),
     data: { initial: true }
   },
   { path: 'secret-import', loadChildren: () => import('./pages/secret-import/secret-import.module').then((m) => m.SecretImportPageModule) },
+  { path: 'secret-add', loadChildren: () => import('./pages/secret-add/secret-add.module').then((m) => m.SecretAddPageModule) },
   { path: 'secret-edit', loadChildren: () => import('./pages/secret-edit/secret-edit.module').then((m) => m.SecretEditPageModule) },
   { path: 'warning-modal', loadChildren: () => import('./pages/warning-modal/warning-modal.module').then((m) => m.WarningModalPageModule) },
   { path: 'introduction', loadChildren: () => import('./pages/introduction/introduction.module').then((m) => m.IntroductionPageModule) },
@@ -103,10 +104,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/bip85-show/bip85-show.module').then((m) => m.Bip85ShowPageModule)
   },
   {
-    path: 'bip85-validate',
-    loadChildren: () => import('./pages/bip85-validate/bip85-validate.module').then((m) => m.Bip85ValidatePageModule)
-  },
-  {
     path: 'select-account',
     loadChildren: () => import('./pages/select-account/select-account.module').then((m) => m.SelectAccountPageModule)
   },
@@ -117,6 +114,31 @@ const routes: Routes = [
   {
     path: 'migration',
     loadChildren: () => import('./pages/migration/migration.module').then((m) => m.MigrationPageModule)
+  },
+  {
+    path: 'danger-zone',
+    loadChildren: () => import('./pages/danger-zone/danger-zone.module').then((m) => m.DangerZonePageModule)
+  },
+  {
+    path: 'secret-generate-dice',
+    loadChildren: () => import('./pages/secret-generate-dice/secret-generate-dice.module').then((m) => m.SecretGenerateDicePageModule)
+  },
+  {
+    path: 'secret-generate-coin-flip',
+    loadChildren: () =>
+      import('./pages/secret-generate-coin-flip/secret-generate-coin-flip.module').then((m) => m.SecretGenerateCoinFlipPageModule)
+  },
+  {
+    path: 'wordlist',
+    loadChildren: () => import('./pages/wordlist/wordlist.module').then((m) => m.WordlistPageModule)
+  },
+  {
+    path: 'error-history',
+    loadChildren: () => import('./pages/error-history/error-history.module').then((m) => m.ErrorHistoryPageModule)
+  },
+  {
+    path: 'address-explorer',
+    loadChildren: () => import('./pages/address-explorer/address-explorer.module').then((m) => m.AddressExplorerPageModule)
   },
   {
     path: 'pin',
