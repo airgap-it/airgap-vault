@@ -79,6 +79,7 @@ airgap-account-add,
 airgap-account-address,
 airgap-account-share,
 airgap-account-share-select,
+airgap-address-explorer,
 airgap-secret-setup,
 airgap-secret-generate,
 airgap-secret-import,
@@ -106,7 +107,8 @@ airgap-current-secret,
 airgap-bip85-generate,
 airgap-bip85-show,
 airgap-local-authentication-onboarding,
-airgap-deserialized-detail {
+airgap-deserialized-detail,
+airgap-address-explorer {
   --ion-background-color: var(--ion-color-secondary);
   ion-toolbar {
     --background: var(--ion-color-secondary);
@@ -136,5 +138,14 @@ airgap-tab-accounts {
 .ios {
   ion-item {
     --background-activated: transparent;
+  }
+}
+
+airgap-mnemonic-keyboard {
+  @media only screen and (max-width: 360px) {
+    ion-button {
+      --padding-start: 10px;
+      --padding-end: 10px;
+    }
   }
 }

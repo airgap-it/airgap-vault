@@ -129,8 +129,16 @@ const routes: Routes = [
       import('./pages/secret-generate-coin-flip/secret-generate-coin-flip.module').then((m) => m.SecretGenerateCoinFlipPageModule)
   },
   {
+    path: 'wordlist',
+    loadChildren: () => import('./pages/wordlist/wordlist.module').then((m) => m.WordlistPageModule)
+  },
+  {
     path: 'error-history',
     loadChildren: () => import('./pages/error-history/error-history.module').then((m) => m.ErrorHistoryPageModule)
+  },
+  {
+    path: 'address-explorer',
+    loadChildren: () => import('./pages/address-explorer/address-explorer.module').then((m) => m.AddressExplorerPageModule)
   }
 ]
 
