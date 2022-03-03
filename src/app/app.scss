@@ -95,6 +95,18 @@ airgap-tab-accounts {
   }
 }
 
+.deserialized-content {
+  airgap-account-item {
+    ion-item {
+      ion-label {
+        .typography--mono {
+          color: var(--ion-color-light);
+        }
+      }
+    }
+  }
+}
+
 pre {
   background-color: var(--ion-color-light);
   color: var(--ion-color-dark);
