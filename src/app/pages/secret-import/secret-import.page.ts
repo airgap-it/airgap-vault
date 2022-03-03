@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { Component, ElementRef, ViewChild } from '@angular/core'
 import { AlertController } from '@ionic/angular'
 
 import { BIPSigner } from '../../models/BIP39Signer'
@@ -36,6 +36,9 @@ export class SecretImportPage {
 
   private maxWords: number = 24
 
+  @ViewChild('secretContainer', {read: ElementRef})
+  public secretContainer: ElementRef<HTMLElement>
+
   constructor(
     private readonly deviceService: DeviceService,
     private readonly navigationService: NavigationService,
@@ -52,7 +55,6 @@ export class SecretImportPage {
   }
 
   selectWord(index: number) {
-    console.log(index)
     this.selectedWordIndex = index
     this.selectedWord = this.secretWords[this.selectedWordIndex]
 
@@ -95,6 +97,10 @@ export class SecretImportPage {
     this.getLastWord()
 
     this.setWordEmitter.next(this.selectedWord ?? '')
+    
+    if (this.secretContainer) {
+      this.secretContainer.nativeElement.scrollTop = this.secretContainer.nativeElement.scrollHeight
+    }
   }
 
   public ionViewDidEnter(): void {
@@ -141,12 +147,6 @@ export class SecretImportPage {
       return console.error('(addNewWord): secret word list too long')
     }
 
-    const word = this.secretWords[this.selectedWordIndex]
-
-    if (!word) {
-      return console.log('(addNewWord): no word at current position')
-    }
-
     this.secretWords.splice(this.selectedWordIndex + 1, 0, '')
     this.selectedWordIndex++
     this.setWordEmitter.next('')
@@ -163,7 +163,6 @@ export class SecretImportPage {
       for (const word of bip39.wordlists.EN) {
         if (bip39.validateMnemonic([...this.secretWords, word].join(' '))) {
           options.push(word)
-          console.log('LAST WORD', word)
         }
       }
     }
