@@ -238,8 +238,11 @@ export class IACService extends BaseIACService {
       correctWallet = await this.findBaseWallet(unsignedTransaction.publicKey, signTransactionRequest)
     }
 
+    const secret = this.secretsService.findByPublicKey(correctWallet.publicKey)
+
     return {
       wallet: correctWallet,
+      secret,
       signTransactionRequest
     }
   }
@@ -276,8 +279,11 @@ export class IACService extends BaseIACService {
       correctWallet = await this.findBaseWallet(messageSignRequest.publicKey, messageDefinitionObject)
     }
 
+    const secret = this.secretsService.findByPublicKey(correctWallet.publicKey)
+
     return {
       wallet: correctWallet,
+      secret,
       signTransactionRequest: {
         ...messageDefinitionObject,
         payload: {

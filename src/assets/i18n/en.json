@@ -345,7 +345,8 @@
         "message": "Something went wrong!",
         "button_label": "Ok"
       }
-    }
+    },
+    "signing_account": "You're signing with an account from <span class=\"style__strong color__primary\">{{secretLabel}}</span> "
   },
   "transaction-signed": {
     "title": "Signed Transaction",
