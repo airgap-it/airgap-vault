@@ -1,0 +1,43 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>{{ 'onboarding-advanced-mode.title' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-slides pager="true" [options]="slideOpts">
+    <ion-slide>
+      <img src="assets/img/AirGap_Onboarding_Wallet.svg" />
+
+      <h1>Thank you for downloading AirGap Vault!</h1>
+    </ion-slide>
+    <ion-slide>
+      <img src="assets/img/AirGap_Onboarding_Wallet.svg" />
+
+      <h1>Highest Security</h1>
+    </ion-slide>
+    <ion-slide>
+      <img src="assets/img/AirGap_Onboarding_Wallet.svg" />
+
+      <h1>5 minutes</h1>
+      <p>If you are using AirGap for the first time, this setup will take about 5 minutes.</p>
+      (TODO: Should we say that?)
+    </ion-slide>
+    <ion-slide>
+      <img src="assets/img/AirGap_Onboarding_Wallet.svg" />
+
+      <h1>Always Backup Your Seedphrase</h1>
+    </ion-slide>
+    <ion-slide>
+      <img src="assets/img/AirGap_Onboarding_Wallet.svg" />
+      <h1>Let's set up AirGap Vault!</h1>
+
+      <ion-item lines="none">
+        <ion-checkbox [(ngModel)]="disclaimerAccepted" color="primary"></ion-checkbox>
+        <p>I accept the AirGap Terms of Service</p>
+      </ion-item>
+
+      <ion-button [disabled]="!disclaimerAccepted" (click)="next()">Start</ion-button>
+    </ion-slide>
+  </ion-slides>
+</ion-content>

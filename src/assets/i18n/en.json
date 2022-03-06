@@ -43,7 +43,7 @@
     "transaction-unreadable": "We were not able to extract information from this transaction. This does not mean that the transaction is invalid - Please make sure that you know what you are doing, and you can verify that you know that this transaction contains the correct data."
   },
   "introduction": {
-    "title": "The New Crypto Wallet Standard",
+    "title": "Install AirGap Wallet",
     "highest": {
       "label": "Highest Security",
       "text": "With the AirGap <b>two device approach</b> secure key handling becomes more accessible."
@@ -102,7 +102,11 @@
     },
     "passcode": {
       "label": "Encryption Password",
-      "text": "Set an encryption password for your secret. This is an optional setting."
+      "text": "You have to enter this password every time the secret is accessed, eg. when signing a transaction. If you lose this password, you have to re-import your 24 word backup."
+    },
+    "passphrase": {
+      "label": "BIP39 Passphrase",
+      "text": "The BIP39 passphrase has to be entered when creating an account."
     },
     "secret-recovery": {
       "heading": "Secret Recovery",

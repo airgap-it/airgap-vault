@@ -2,17 +2,17 @@ import { Component } from '@angular/core'
 import { ModalController } from '@ionic/angular'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
-import { InstallationType, VaultStorageKey, VaultStorageService } from '../../services/storage/storage.service'
+import { AdvancedModeType, VaultStorageKey, VaultStorageService } from '../../services/storage/storage.service'
 
 @Component({
-  selector: 'airgap-installation-type',
-  templateUrl: './installation-type.page.html',
-  styleUrls: ['./installation-type.page.scss']
+  selector: 'airgap-onboarding-advanced-mode',
+  templateUrl: './onboarding-advanced-mode.page.html',
+  styleUrls: ['./onboarding-advanced-mode.page.scss']
 })
-export class InstallationTypePage {
-  public installationType: InstallationType = InstallationType.UNDETERMINED
+export class OnboardingAdvancedModePage {
+  public advancedModeType: AdvancedModeType = AdvancedModeType.UNDETERMINED
 
-  public installationTypes: typeof InstallationType = InstallationType
+  public advancedModeTypes: typeof AdvancedModeType = AdvancedModeType
 
   /**
    * This will be true if the page is opened as a modal from the settings page.
@@ -20,7 +20,7 @@ export class InstallationTypePage {
   public isSettingsModal: boolean = false
 
   constructor(private readonly modalController: ModalController, private readonly storageService: VaultStorageService) {
-    this.storageService.get(VaultStorageKey.INSTALLATION_TYPE).then((installationType) => (this.installationType = installationType))
+    this.storageService.get(VaultStorageKey.ADVANCED_MODE_TYPE).then((advancedMode) => (this.advancedModeType = advancedMode))
   }
 
   public close() {
@@ -29,7 +29,7 @@ export class InstallationTypePage {
 
   public next() {
     this.storageService
-      .set(VaultStorageKey.INSTALLATION_TYPE, this.installationType)
+      .set(VaultStorageKey.ADVANCED_MODE_TYPE, this.advancedModeType)
       .then(() => {
         this.modalController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
       })

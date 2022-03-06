@@ -1,6 +1,11 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-title>{{ 'installation-type.title' | translate }}</ion-title>
+    <ion-buttons *ngIf="isSettingsModal" slot="end">
+      <ion-button (click)="close()" color="light">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

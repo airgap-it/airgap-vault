@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 
-import { VaultStorageKey, VaultStorageService } from '../storage/storage.service'
+import { AdvancedModeType, VaultStorageKey, VaultStorageService } from '../storage/storage.service'
 
 import { AdvancedModeSerivce } from './strategy/advanced-mode.service'
 import { BasicModeService } from './strategy/basic-mode.service'
@@ -17,8 +17,8 @@ export class ModeService {
   ) {}
 
   public async strategy(): Promise<ModeStrategy> {
-    const advancedMode: boolean = await this.storage.get(VaultStorageKey.ADVANCED_MODE)
+    const advancedMode: AdvancedModeType = await this.storage.get(VaultStorageKey.ADVANCED_MODE_TYPE)
 
-    return advancedMode ? this.advancedModeService : this.basicModeService
+    return advancedMode === AdvancedModeType.ADVANCED ? this.advancedModeService : this.basicModeService
   }
 }

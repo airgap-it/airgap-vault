@@ -19,9 +19,14 @@
       {{ 'tab-settings.guides_label' | translate }}
     </ion-item>
 
-    <ion-item lines="none" (click)="goToInstallationType()" detail="true">
+    <ion-item lines="none" (click)="goToInstallationType()">
       <ion-icon name="list" slot="start"></ion-icon>
       {{ 'tab-settings.installation-type_label' | translate }}
+    </ion-item>
+
+    <ion-item lines="none" (click)="goToAdvancedModeType()">
+      <ion-icon name="list" slot="start"></ion-icon>
+      {{ 'tab-settings.advanced-mode-type_label' | translate }}
     </ion-item>
     <!--
       TODO: Enable once history is in components lib

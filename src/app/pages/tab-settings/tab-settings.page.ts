@@ -9,6 +9,7 @@ import { SecretsService } from '../../services/secrets/secrets.service'
 import { ClipboardService, IACMessageTransport, SerializerService } from '@airgap/angular-core'
 import { IACService } from 'src/app/services/iac/iac.service'
 import { InstallationTypePage } from '../Installation-type/installation-type.page'
+import { OnboardingAdvancedModePage } from '../onboarding-advanced-mode/onboarding-advanced-mode.page'
 
 @Component({
   selector: 'airgap-tab-settings',
@@ -142,6 +143,17 @@ export class TabSettingsPage {
   public async goToInstallationType(): Promise<void> {
     const modal: HTMLIonModalElement = await this.modalController.create({
       component: InstallationTypePage,
+      componentProps: { isSettingsModal: true },
+      backdropDismiss: false
+    })
+
+    modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+  }
+
+  public async goToAdvancedModeType(): Promise<void> {
+    const modal: HTMLIonModalElement = await this.modalController.create({
+      component: OnboardingAdvancedModePage,
+      componentProps: { isSettingsModal: true },
       backdropDismiss: false
     })
 
