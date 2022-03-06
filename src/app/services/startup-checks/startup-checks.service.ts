@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
 import { ModalController } from '@ionic/angular'
 import { ComponentRef, ModalOptions } from '@ionic/core'
+import { InstallationTypePage } from 'src/app/pages/Installation-type/installation-type.page'
 
 import { DistributionOnboardingPage } from '../../pages/distribution-onboarding/distribution-onboarding.page'
 import { IntroductionPage } from '../../pages/introduction/introduction.page'
@@ -8,7 +9,7 @@ import { Warning, WarningModalPage } from '../../pages/warning-modal/warning-mod
 import { DeviceService } from '../device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { SecureStorageService } from '../secure-storage/secure-storage.service'
-import { VaultStorageKey, VaultStorageService } from '../storage/storage.service'
+import { InstallationType, VaultStorageKey, VaultStorageService } from '../storage/storage.service'
 
 export interface Check {
   name: string
@@ -58,6 +59,15 @@ export class StartupChecksService {
           await this.presentModal(WarningModalPage, { errorType: Warning.INITIAL_DISCLAIMER }).catch(
             handleErrorLocal(ErrorCategory.INIT_CHECK)
           )
+        }
+      },
+      {
+        name: 'installationType',
+        expectedOutcome: true,
+        check: (): Promise<boolean> =>
+          this.storageService.get(VaultStorageKey.INSTALLATION_TYPE).then((type) => type !== InstallationType.UNDETERMINED),
+        failureConsequence: async (): Promise<void> => {
+          await this.presentModal(InstallationTypePage, {}).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
         }
       },
       {

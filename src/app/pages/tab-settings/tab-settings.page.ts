@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { AlertController, ToastController } from '@ionic/angular'
+import { AlertController, ModalController, ToastController } from '@ionic/angular'
 import { Observable } from 'rxjs'
 
 import { MnemonicSecret } from '../../models/secret'
@@ -8,6 +8,7 @@ import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
 import { ClipboardService, IACMessageTransport, SerializerService } from '@airgap/angular-core'
 import { IACService } from 'src/app/services/iac/iac.service'
+import { InstallationTypePage } from '../Installation-type/installation-type.page'
 
 @Component({
   selector: 'airgap-tab-settings',
@@ -22,6 +23,7 @@ export class TabSettingsPage {
     private readonly secretsService: SecretsService,
     private readonly alertController: AlertController,
     private readonly toastController: ToastController,
+    private readonly modalController: ModalController,
     private readonly iacService: IACService,
     private readonly clipboardService: ClipboardService,
     private readonly navigationService: NavigationService
@@ -135,6 +137,15 @@ export class TabSettingsPage {
         description
       })
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
+  public async goToInstallationType(): Promise<void> {
+    const modal: HTMLIonModalElement = await this.modalController.create({
+      component: InstallationTypePage,
+      backdropDismiss: false
+    })
+
+    modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 
   public goToBip39Wordlist(): void {
