@@ -36,7 +36,7 @@ export class TabSecretsPage {
   }
 
   public goToNewSecret(): void {
-    this.navigationService.route('/secret-create').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.navigationService.route('/secret-setup').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public goToAccountsList(secret: MnemonicSecret): void {
