@@ -1,9 +1,10 @@
 import { assertNever, UIAction, UIActionStatus, UiEventService, UIResource, UIResourceStatus } from '@airgap/angular-core'
-import { IAirGapTransaction, ProtocolSymbols } from '@airgap/coinlib-core'
+import { AirGapWallet, IAirGapTransaction, ProtocolSymbols } from '@airgap/coinlib-core'
 import { Component, OnDestroy } from '@angular/core'
 import { ModalController } from '@ionic/angular'
 import { AlertOptions, LoadingOptions, ModalOptions, OverlayEventDetail } from '@ionic/core'
 import { Store } from '@ngrx/store'
+import { NavigationService } from 'src/app/services/navigation/navigation.service'
 import { Observable, Subject } from 'rxjs'
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators'
 
@@ -22,6 +23,8 @@ type ModalOnDismissAction = (modalData: OverlayEventDetail<unknown>) => Promise<
   styleUrls: ['./deserialized-detail.page.scss']
 })
 export class DeserializedDetailPage implements OnDestroy {
+  public signingWallet: AirGapWallet | undefined
+  public secretLabel: string | undefined
   public readonly mode$: Observable<Mode | undefined>
   public readonly title$: Observable<string>
   public readonly button$: Observable<string | undefined>
@@ -45,8 +48,16 @@ export class DeserializedDetailPage implements OnDestroy {
   constructor(
     private readonly store: Store<fromDeserializedDetail.State>,
     private readonly uiEventService: UiEventService,
-    private readonly modalController: ModalController
+    private readonly modalController: ModalController,
+    private readonly navigationService: NavigationService
   ) {
+    const state = this.navigationService.getState()
+    if (state.transactionInfos && state.transactionInfos[0]) {
+      const transactionInfos = state.transactionInfos
+      this.signingWallet = transactionInfos[0].wallet
+      this.secretLabel = transactionInfos[0].secret.label
+    }
+
     this.mode$ = this.store.select(fromDeserializedDetail.selectMode)
     this.title$ = this.store.select(fromDeserializedDetail.selectTitle)
     this.button$ = this.store.select(fromDeserializedDetail.selectButton)
