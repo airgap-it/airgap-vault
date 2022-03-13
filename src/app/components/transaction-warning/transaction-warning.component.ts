@@ -12,7 +12,7 @@ export class TransactionWarningComponent {
   public set transaction(value: IAirGapTransaction | undefined) {
     this._transaction = value
     if (value) {
-      this.warnings = value.warnings.map((warning) => {
+      this.warnings = value.warnings?.map((warning) => {
         return {
           ...warning,
           color:

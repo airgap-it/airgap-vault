@@ -100,7 +100,7 @@ export class SecretsService {
     for (let k: number = 0; k < secrets.length; k++) {
       const secret: MnemonicSecret = secrets[k]
       if (secret.wallets) {
-        const serializedWallets: SerializedAirGapWallet[] = (secret.wallets as unknown) as SerializedAirGapWallet[]
+        const serializedWallets: SerializedAirGapWallet[] = secret.wallets as unknown as SerializedAirGapWallet[]
         const wallets = (
           await Promise.all(
             serializedWallets.map(async (serializedWallet) => {
@@ -306,6 +306,37 @@ export class SecretsService {
     return foundWallet
   }
 
+  /**
+   * Find a wallet based on the source fingerprint of the xPub
+   *
+   * @param sourceFingerprint The fingerprint of the xPub
+   * @param protocolIdentifier
+   * @param derivationPath
+   * @returns
+   */
+  public findWalletByXPubFingerprintDerivationPathAndProtocolIdentifier(
+    sourceFingerprint: string,
+    protocolIdentifier: ProtocolSymbols,
+    derivationPath: string
+  ): AirGapWallet | undefined {
+    const allWallets: AirGapWallet[] = this.secretsList
+      .reduce((pv, cv) => pv.concat(cv.wallets), [] as AirGapWallet[])
+      .filter(
+        (wallet) =>
+          wallet.isExtendedPublicKey && // Only extended public keys are relevant
+          wallet.protocol.identifier === protocolIdentifier &&
+          `m/${derivationPath}`.startsWith(wallet.derivationPath)
+      )
+
+    const foundWallet: AirGapWallet | undefined = allWallets.find((wallet: AirGapWallet) => {
+      const bip32PK = bitcoinJS.bip32.fromBase58(new ExtendedPublicKey(wallet.publicKey).toXpub())
+
+      return bip32PK.fingerprint.toString('hex') === sourceFingerprint
+    })
+
+    return foundWallet
+  }
+
   public findBaseWalletByPublicKeyAndProtocolIdentifier(pubKey: string, protocolIdentifier: ProtocolSymbols): AirGapWallet | undefined {
     const secret: MnemonicSecret | undefined = this.findByPublicKey(pubKey)
     if (!secret) {
@@ -350,7 +381,7 @@ export class SecretsService {
       }
       const wallets: (AirGapWallet | SerializedAirGapWallet)[] = secret.wallets.slice(0)
       for (let i = 0; i < storedSecret.wallets.length; ++i) {
-        const serializedWallet = (storedSecret.wallets[i] as unknown) as SerializedAirGapWallet
+        const serializedWallet = storedSecret.wallets[i] as unknown as SerializedAirGapWallet
         const found = wallets.find(
           (wallet) =>
             isAirGapWallet(wallet) &&
@@ -362,7 +393,7 @@ export class SecretsService {
         }
       }
       const result = MnemonicSecret.init(secret)
-      result.wallets = (wallets as unknown) as AirGapWallet[]
+      result.wallets = wallets as unknown as AirGapWallet[]
       return result
     })
 
@@ -447,7 +478,12 @@ export class SecretsService {
 
     const bip32Node: bip32.BIP32Interface = bip32.fromSeed(seed)
 
-    const publicKey: string = await protocol.getPublicKeyFromMnemonic(mnemonic, config.customDerivationPath, config.bip39Passphrase)
+    const publicKey: string =
+      config.isHDWallet &&
+      config.protocolIdentifier ===
+        'eth' /* We need to check for ETH, because BTC returns an xPub for getPublicKeyFromMnemonic and getExtendedPublicKeyFromMnemonic doesn't exist */
+        ? await (protocol as any).getExtendedPublicKeyFromMnemonic(mnemonic, config.customDerivationPath, config.bip39Passphrase)
+        : await protocol.getPublicKeyFromMnemonic(mnemonic, config.customDerivationPath, config.bip39Passphrase)
     const fingerprint: string = bip32Node.fingerprint.toString('hex')
 
     const wallet: AirGapWallet = new AirGapWallet(

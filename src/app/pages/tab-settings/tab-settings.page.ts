@@ -41,6 +41,10 @@ export class TabSettingsPage {
     this.navigationService.route('/interaction-selection-settings').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
+  public goToErrorHistory(): void {
+    this.navigationService.route('/error-history').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
   public async deleteSecret(secret: MnemonicSecret): Promise<void> {
     const alert: HTMLIonAlertElement = await this.alertController.create({
       header: 'Delete ' + secret.label,
@@ -89,6 +93,10 @@ export class TabSettingsPage {
 
   public goToQrSettings(): void {
     this.navigationService.route('/qr-settings').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
+  public goToBip39Wordlist(): void {
+    this.navigationService.route('/wordlist').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public goToDangerZone(): void {

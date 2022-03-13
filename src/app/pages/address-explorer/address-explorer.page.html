@@ -1,0 +1,52 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar transparent>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab-accounts"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Address Explorer</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-segment *ngIf="showChange" (ionChange)="segmentChanged($event)" value="external">
+    <ion-segment-button value="external">
+      <ion-label>Receive</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="internal">
+      <ion-label>Change</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <ion-row class="ion-align-items-center ion-padding-top">
+    <ion-col size="12">
+      <ion-item lines="none" [detail]="false" class="ion-margin-vertical" color="warning">
+        <ion-icon name="warning" slot="start" color="dark"></ion-icon>
+        <ion-label color="dark" class="ion-text-wrap">
+          <h3>
+            <strong>Warning</strong>
+          </h3>
+          <p>
+            Only use those addresses if you know what you are doing. Using the wrong one could mean funds won't show up in your balance!
+          </p>
+        </ion-label>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+
+  <ion-card *ngFor="let address of addresses" color="light">
+    <ion-card-header (click)="toggle(address)">
+      <ion-card-subtitle>{{address.derivationPath}}</ion-card-subtitle>
+      <h6>
+        <span class="address">{{address.address}}</span>
+      </h6>
+    </ion-card-header>
+
+    <ion-card-content *ngIf="address.isExpanded">
+      <airgap-qr [qrdata]="address.address" [level]="'L'" [size]="200"></airgap-qr>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more addresses..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

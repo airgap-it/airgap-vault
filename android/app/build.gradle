@@ -5,11 +5,11 @@ apply plugin: 'kotlin-android-extensions'
 
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdkVersion project.hasProperty('compileSdkVersion') ? rootProject.ext.compileSdkVersion : 31
     defaultConfig {
         applicationId "it.airgap.vault"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        minSdkVersion project.hasProperty('minSdkVersion') ? rootProject.ext.minSdkVersion : 21
+        targetSdkVersion project.hasProperty('targetSdkVersion') ? rootProject.ext.targetSdkVersion : 31
         versionCode 1
         versionName "0.0.0"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
@@ -43,12 +43,12 @@ android {
 }
 
 repositories {
-    maven {
-        url  "https://dl.bintray.com/ionic-team/capacitor"
-    }
+    google()
+    jcenter()
     flatDir{
         dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
     }
+    mavenCentral()
 }
 
 dependencies {
@@ -63,8 +63,18 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
     implementation project(':capacitor-cordova-android-plugins')
 
-    implementation 'com.google.android.material:material:1.2.0'
+    implementation "com.google.android.material:material:$androidxMaterialVersion"
     implementation 'com.scottyab:rootbeer-lib:0.0.7'
+
+    def fragmentVersion = "1.4.0"
+    implementation("androidx.fragment:fragment-ktx:$fragmentVersion")
+
+    def biometricVersion = "1.2.0-alpha04"
+    implementation("androidx.biometric:biometric:$biometricVersion")
+
+    def coroutinesVersion = "1.6.0"
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
 
     def saplingVersion = "0.0.6"
     implementation "com.github.airgap-it:airgap-sapling:$saplingVersion"

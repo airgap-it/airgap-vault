@@ -10,6 +10,13 @@ import { LocalAuthenticationOnboardingPage } from '../local-authentication-onboa
 import { BIP39_PASSPHRASE_ENABLED } from 'src/app/constants/constants'
 import { ProtocolService } from '@airgap/angular-core'
 
+interface ProtocolWrapper {
+  protocol: ICoinProtocol
+  isHDWallet: boolean
+  isChecked: boolean
+  customDerivationPath: string | undefined
+}
+
 @Component({
   selector: 'airgap-account-add',
   templateUrl: './account-add.page.html',
@@ -17,10 +24,12 @@ import { ProtocolService } from '@airgap/angular-core'
 })
 export class AccountAddPage {
   public formValid: boolean = false
-  public protocolList: { protocol: ICoinProtocol; isChecked: boolean }[]
+  public protocolList: ProtocolWrapper[]
+  public isHDWallet: boolean = false
+
+  singleSelectedProtocol: ProtocolWrapper | undefined
 
   public isAdvancedMode: boolean = false
-  public customDerivationPath: string | undefined
   public isBip39PassphraseEnabled: boolean = BIP39_PASSPHRASE_ENABLED
   public revealBip39Passphrase: boolean = false
   public bip39Passphrase: string = ''
@@ -39,7 +48,7 @@ export class AccountAddPage {
           protocol.identifier === MainProtocolSymbols.BTC_SEGWIT ||
           protocol.identifier === MainProtocolSymbols.ETH ||
           this.navigationService.getState().protocol?.identifier === protocol.identifier
-        return { protocol, isChecked: isChecked }
+        return { protocol, isHDWallet: protocol.supportsHD, customDerivationPath: undefined, isChecked: isChecked }
       })
       this.onProtocolSelected()
     })
@@ -51,14 +60,44 @@ export class AccountAddPage {
       const selectedProtocols = this.protocolList.filter((protocol) => protocol.isChecked)
       if (selectedProtocols.length === 0) {
         this.formValid = false
-      } else if (selectedProtocols.length === 1) {
-        this.customDerivationPath = selectedProtocols[0].protocol.standardDerivationPath
-        this.formValid = true
       } else {
-        this.customDerivationPath = undefined
         this.formValid = true
       }
+
+      selectedProtocols.forEach((wrapper) => {
+        wrapper.customDerivationPath = undefined
+      })
+
+      if (selectedProtocols.length === 1) {
+        this.singleSelectedProtocol = selectedProtocols[0]
+        this.singleSelectedProtocol.customDerivationPath = this.singleSelectedProtocol.protocol.standardDerivationPath
+      } else {
+        if (this.singleSelectedProtocol) {
+          this.singleSelectedProtocol.customDerivationPath = undefined
+        }
+        this.singleSelectedProtocol = undefined
+      }
     }, 0)
+  }
+
+  public toggleHDWallet() {
+    // "isHDWallet" can only be toggled if one protocol is checked
+
+    const selectedProtocols = this.protocolList.filter((protocol) => protocol.isChecked)
+    if (selectedProtocols.length === 1) {
+      const selectedProtocol = selectedProtocols[0]
+      if (selectedProtocol.protocol.supportsHD && selectedProtocol.isHDWallet) {
+        selectedProtocol.customDerivationPath = selectedProtocol.protocol.standardDerivationPath
+      } else {
+        selectedProtocol.customDerivationPath = `${selectedProtocol.protocol.standardDerivationPath}/0/0`
+      }
+    }
+
+    if (selectedProtocols.length === 1) {
+      this.singleSelectedProtocol = selectedProtocols[0]
+    } else {
+      this.singleSelectedProtocol = undefined
+    }
   }
 
   public async addWallet(): Promise<void> {
@@ -85,16 +124,18 @@ export class AccountAddPage {
     const addAccount = () => {
       this.secretsService
         .addWallets(
-          this.protocolList.map((protocol: { protocol: ICoinProtocol; isChecked: boolean }) => {
-            // TODO: BIP39 passphrase: Should we also add all "default" wallets?
-            // TODO: BIP39 passphrase: Should we "mark" the wallets (eg. masterFingerprint or hash of PW?)
+          this.protocolList.map((protocolWrapper: ProtocolWrapper) => {
             // TODO: CUSTOM DERIVATION PATH IS CURRENTLY IGNORED
+            const protocol = protocolWrapper.protocol
             return {
-              protocolIdentifier: protocol.protocol.identifier,
-              isHDWallet: protocol.protocol.supportsHD,
-              customDerivationPath: protocol.protocol.standardDerivationPath, // TODO: If custom derivation path is set, should we add others with default derivation?
-              bip39Passphrase: this.bip39Passphrase, // TODO: Was this what we wanted? I think if a BIP39 passphrase is set, it should be applied to all?
-              isActive: protocol.isChecked
+              protocolIdentifier: protocol.identifier,
+              isHDWallet: protocolWrapper.isHDWallet ? protocolWrapper.isHDWallet : protocol.supportsHD,
+              customDerivationPath:
+                protocolWrapper.isChecked && protocolWrapper.customDerivationPath
+                  ? protocolWrapper.customDerivationPath
+                  : protocol.standardDerivationPath, // TODO: If custom derivation path is set, should we add others with default derivation?
+              bip39Passphrase: protocolWrapper.isChecked ? this.bip39Passphrase : '',
+              isActive: protocolWrapper.isChecked
             }
           })
         )

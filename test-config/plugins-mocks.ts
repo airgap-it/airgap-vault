@@ -1,8 +1,13 @@
+// tslint:disable: max-classes-per-file
 import { AppInfoPlugin } from '@airgap/angular-core'
-import { AppPlugin, ClipboardPlugin, SplashScreenPlugin, StatusBarPlugin } from '@capacitor/core'
+import { AppPlugin } from '@capacitor/app'
+import { ClipboardPlugin } from '@capacitor/clipboard'
+import { SplashScreenPlugin } from '@capacitor/splash-screen'
+import { StatusBarPlugin } from '@capacitor/status-bar'
+
+import { SaplingNativePlugin, SecurityUtilsPlugin } from '../src/app/capacitor-plugins/definitions'
 
 import { newSpy } from './unit-test-helper'
-import { SaplingPlugin, SecurityUtilsPlugin } from 'src/app/capacitor-plugins/definitions'
 
 export function createAppSpy(): AppPlugin {
   return jasmine.createSpyObj('AppPlugin', ['addListener', 'openUrl'])
@@ -39,7 +44,7 @@ export function createSecurityUtilsSpy(): SecurityUtilsPlugin {
   ])
 }
 
-export function createSaplingSpy(): SaplingPlugin {
+export function createSaplingSpy(): SaplingNativePlugin {
   return jasmine.createSpyObj('SaplingPlugin', ['isSupported'])
 }
 
@@ -61,6 +66,10 @@ export class AppInfoPluginMock {
       versionCode: 0
     })
   )
+}
+
+export class AppLauncherMock {
+  public openUrl: jasmine.Spy = newSpy('openUrl', Promise.resolve())
 }
 
 export class SaplingPluginMock {

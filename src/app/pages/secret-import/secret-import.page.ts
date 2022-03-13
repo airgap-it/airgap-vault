@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { Component, ElementRef, ViewChild } from '@angular/core'
 import { AlertController } from '@ionic/angular'
 
 import { BIPSigner } from '../../models/BIP39Signer'
@@ -32,6 +32,13 @@ export class SecretImportPage {
 
   public setWordEmitter: Subject<string> = new Subject()
 
+  public keyboardEnabled: boolean = true
+
+  private maxWords: number = 24
+
+  @ViewChild('secretContainer', {read: ElementRef})
+  public secretContainer: ElementRef<HTMLElement>
+
   constructor(
     private readonly deviceService: DeviceService,
     private readonly navigationService: NavigationService,
@@ -39,13 +46,15 @@ export class SecretImportPage {
   ) {
     this.secretWordsValid = this.setWordEmitter.pipe(
       map(() => {
+        const isShorterThanMaxLength = this.selectedWordIndex === -1 && this.secretWords.length < this.maxWords
+        const isEditingWord = this.selectedWordIndex !== -1
+        this.keyboardEnabled = isShorterThanMaxLength || isEditingWord
         return this.isValid()
       })
     )
   }
 
   selectWord(index: number) {
-    console.log(index)
     this.selectedWordIndex = index
     this.selectedWord = this.secretWords[this.selectedWordIndex]
 
@@ -56,6 +65,14 @@ export class SecretImportPage {
     this.setWordEmitter.next(this.selectedWord ?? '')
   }
 
+  wordLastSelected(word: string | undefined) {
+    if (this.secretWords.length !== 23) {
+      return console.error('(wordLastSelected): secret word list is not 23 words long')
+    }
+    this.selectedWordIndex = 23
+    this.wordSelected(word)
+  }
+
   wordSelected(word: string | undefined) {
     if (typeof word === 'undefined') {
       if (this.selectedWordIndex >= 0) {
@@ -64,6 +81,7 @@ export class SecretImportPage {
       } else if (this.selectedWordIndex === -1) {
         this.selectWord(this.secretWords.length - 1)
       }
+      this.getLastWord()
       return
     }
 
@@ -79,6 +97,10 @@ export class SecretImportPage {
     this.getLastWord()
 
     this.setWordEmitter.next(this.selectedWord ?? '')
+    
+    if (this.secretContainer) {
+      this.secretContainer.nativeElement.scrollTop = this.secretContainer.nativeElement.scrollHeight
+    }
   }
 
   public ionViewDidEnter(): void {
@@ -120,6 +142,16 @@ export class SecretImportPage {
     }
   }
 
+  public async addNewWord() {
+    if (this.secretWords.length >= 24) {
+      return console.error('(addNewWord): secret word list too long')
+    }
+
+    this.secretWords.splice(this.selectedWordIndex + 1, 0, '')
+    this.selectedWordIndex++
+    this.setWordEmitter.next('')
+  }
+
   public async mask(enabled: boolean) {
     this.maskWords = enabled
   }
@@ -131,7 +163,6 @@ export class SecretImportPage {
       for (const word of bip39.wordlists.EN) {
         if (bip39.validateMnemonic([...this.secretWords, word].join(' '))) {
           options.push(word)
-          console.log('LAST WORD', word)
         }
       }
     }
