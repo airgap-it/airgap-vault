@@ -1,5 +1,6 @@
 import { AirGapWalletStatus } from '@airgap/coinlib-core'
 import { Component, Input, OnInit } from '@angular/core'
+import { LifehashService } from 'src/app/services/lifehash/lifehash.service'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
 
 import { MnemonicSecret } from '../../models/secret'
@@ -16,9 +17,11 @@ export class SecretItemComponent implements OnInit {
   public activeWallets: string[]
   public hasMoreWallets: number = 0
 
-  constructor(private readonly secretsService: SecretsService) {}
+  public lifehashData: string = ''
 
-  public ngOnInit() {
+  constructor(private readonly secretsService: SecretsService, private readonly lifehashService: LifehashService) {}
+
+  public async ngOnInit() {
     this.secretsService.getActiveSecretObservable().subscribe((secret: MnemonicSecret) => {
       if (secret && secret.wallets) {
         this.getWalletsFromSecret()
@@ -26,6 +29,8 @@ export class SecretItemComponent implements OnInit {
     })
 
     this.getWalletsFromSecret()
+
+    this.lifehashData = await this.lifehashService.generateLifehash(this.secret.fingerprint)
   }
 
   public getWalletsFromSecret() {
