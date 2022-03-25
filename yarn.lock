@@ -2,24 +2,24 @@
 # yarn lockfile v1
 
 
-"@airgap/angular-core@0.0.27-beta.4":
-  version "0.0.27-beta.4"
-  resolved "https://registry.yarnpkg.com/@airgap/angular-core/-/angular-core-0.0.27-beta.4.tgz#852e3c9abdc8c64b5ef2acf9063bc790b0369828"
-  integrity sha512-+sHxKQsozBWjGWSvi5rbql9AtmU73aACSQFI7r0FbZ3Jhf8kXo/jMTm9mD7DtdwpyCe59XdqS+2QCnkkzWr9mw==
+"@airgap/angular-core@0.0.27":
+  version "0.0.27"
+  resolved "https://registry.yarnpkg.com/@airgap/angular-core/-/angular-core-0.0.27.tgz#dce627883f5204395a462e9bd8232b3abd65ae59"
+  integrity sha512-jqvdd8O3iZWE6pN9ISxsIGdAs7NZaX/rAvEK2iKdOYJAtJMF5bPKjFT8unU/NRHD3zEykz14u9dvU59VN9596Q==
   dependencies:
     tslib "^2.2.0"
 
-"@airgap/angular-ngrx@0.0.27-beta.4":
-  version "0.0.27-beta.4"
-  resolved "https://registry.yarnpkg.com/@airgap/angular-ngrx/-/angular-ngrx-0.0.27-beta.4.tgz#2147406d0291bda0bb427f2de36ee971b04e51d0"
-  integrity sha512-fUr+UWU7OiAgjlegtMKZgRY9bcpTQVr4hod9T1Of5ALOOq6uOHVsQvb9vRU5xWqLrt+dBBkxZlT1ZoFprR1iNw==
+"@airgap/angular-ngrx@0.0.27":
+  version "0.0.27"
+  resolved "https://registry.yarnpkg.com/@airgap/angular-ngrx/-/angular-ngrx-0.0.27.tgz#58d2e96e390481c1e381a8d3fce7518deed25d6c"
+  integrity sha512-P1dTpp8/NPhNdGy7aAIl1hsYvklrt4eo2DeLC4BQB8nxqAFNxZKsKb1MmqttJ2QuZwjIAwfKhmqGg1seY210RQ==
   dependencies:
     tslib "^2.2.0"
 
-"@airgap/coinlib-core@0.12.10-beta.4":
-  version "0.12.10-beta.4"
-  resolved "https://registry.yarnpkg.com/@airgap/coinlib-core/-/coinlib-core-0.12.10-beta.4.tgz#8288df58acdeb801c216362cf1a840ca031e218c"
-  integrity sha512-zxdM+21aZwc0+5QBWZQYqVnG5LSFwHU7Pahl6GnWSYjTv5UGRWN6d32p0u6SrwjTOz2bymVmZ67+xlfBu3+3FQ==
+"@airgap/coinlib-core@0.13.0":
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/@airgap/coinlib-core/-/coinlib-core-0.13.0.tgz#0f45310fbd3b03386c4d439bb70db3118a728f01"
+  integrity sha512-MWrORGoqIhqwhrMfdfL/ynOHs5Hru6Zk0BLjIcQIPFOlKElzPFgX2VK9YxLfKh1bCgQ11atOOePwvbNLTwihug==
   dependencies:
     "@airgap/sapling-wasm" "0.0.5"
     "@ethereumjs/common" "2.6.0"
@@ -37,10 +37,10 @@
   resolved "https://registry.npmjs.org/@airgap/sapling-wasm/-/sapling-wasm-0.0.5.tgz"
   integrity sha512-u3dCsqC4WqTlscAU6p5BED+O/tXEDRcIzeOf7OTtz4zoK8wyMX6ZcJImZONhYG6IKu8cSc8eQNwm6fghHL3SxA==
 
-"@airgap/sapling-wasm@0.0.6":
-  version "0.0.6"
-  resolved "https://registry.npmjs.org/@airgap/sapling-wasm/-/sapling-wasm-0.0.6.tgz"
-  integrity sha512-hGD1ZMe3aLIJdjRxq6KVLjMkxza9BW2AZxJEWtVOLAwJDvUyb4yw+i2hnjIKve2kO82m6UJ3tJIDGhbZ4gU6eg==
+"@airgap/sapling-wasm@0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@airgap/sapling-wasm/-/sapling-wasm-0.0.7.tgz#b88356f44807bf91405a9dc7c4111c995f269343"
+  integrity sha512-IMODbGPTBYKuO5ztiHX9C1PTlhqZvmVWv7m7zj5+VMcbBxrk4+jBAf7FYTH5l+IUsNMaHBOuh8Qq3A1b/pm7jQ==
 
 "@angular-devkit/architect@0.1102.14", "@angular-devkit/architect@^0.1102.8":
   version "0.1102.14"
