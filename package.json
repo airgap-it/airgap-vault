@@ -83,7 +83,7 @@
     "cordova-plugin-audioinput": "1.0.1",
     "cordova-plugin-compat": "1.2.0",
     "cordova-plugin-device-motion": "^2.0.1",
-    "cordova-plugin-qrscanner": "3.0.1",
+    "cordova-plugin-qrscanner-11": "3.0.3",
     "cordova-sqlite-storage": "^6.0.0",
     "cordova.plugins.diagnostic": "4.0.10",
     "core-js": "^3.10.1",
