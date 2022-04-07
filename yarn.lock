@@ -3546,10 +3546,10 @@ cordova-plugin-device-motion@^2.0.1:
   resolved "https://registry.npmjs.org/cordova-plugin-device-motion/-/cordova-plugin-device-motion-2.0.1.tgz"
   integrity sha1-f22XTE64/Frljpqt1j2fpQLt7G0=
 
-cordova-plugin-qrscanner@3.0.1:
-  version "3.0.1"
-  resolved "https://registry.npmjs.org/cordova-plugin-qrscanner/-/cordova-plugin-qrscanner-3.0.1.tgz"
-  integrity sha512-xrwOP3nD+VmRSiV0w7chZ5PLw2YwpI9vtLdeoGNYLLzmmjjYbyIof+x9vOEOgjtwrg9S61rukmOZhQAmkzaosA==
+cordova-plugin-qrscanner-11@3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-qrscanner-11/-/cordova-plugin-qrscanner-11-3.0.3.tgz#1360844a7f447d1fb2ae34aa5d4a76847d394fa7"
+  integrity sha512-eKl+3Tv1FTR28l6Nbwm4x0m2erNy5ThwDXhI8gaT64cGcN84Ojy8c3JV9SCZZGyrHLSKTd4NlGVH4904I+EYwg==
   dependencies:
     qrcode-reader "^1.0.4"
     webrtc-adapter "^3.1.4"
