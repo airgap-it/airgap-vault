@@ -41,6 +41,7 @@ public class CameraPreview: CAPPlugin {
                     if let webView = self.webView {
                         webView.isOpaque = false
                         webView.backgroundColor = UIColor.clear
+                        webView.scrollView.backgroundColor = UIColor.clear
 
                         webView.superview?.addSubview(self.previewView)
                         webView.superview?.bringSubviewToFront(webView)
