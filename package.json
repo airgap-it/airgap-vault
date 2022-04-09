@@ -89,7 +89,7 @@
     "core-js": "^3.10.1",
     "js-sha3": "^0.8.0",
     "localforage-cordovasqlitedriver": "^1.8.0",
-    "moment": "^2.27.0",
+    "moment": "^2.29.2",
     "myetherwallet-blockies": "^0.1.1",
     "ngx-moment": "^5.0.0",
     "rxjs": "~6.6.7",
