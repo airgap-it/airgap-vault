@@ -12,7 +12,7 @@
     "start": "ng serve",
     "build": "ng build",
     "build:prod": "ng build --prod",
-    "build:no-sapling": "yarn remove-sapling && yarn prepare-prod-build && ng build --prod",
+    "build:no-sapling": "yarn prepare-prod-build && ng build --prod",
     "build:stats": "ng build --stats-json",
     "build:analyze": "yarn build:stats && webpack-bundle-analyzer ./www/stats.json",
     "build:electron": "ng build --base-href=./",
