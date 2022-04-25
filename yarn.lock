@@ -2,24 +2,24 @@
 # yarn lockfile v1
 
 
-"@airgap/angular-core@0.0.25":
-  version "0.0.25"
-  resolved "https://registry.npmjs.org/@airgap/angular-core/-/angular-core-0.0.25.tgz"
-  integrity sha512-sIPhsaEoC91iWdugWuMivryJfAFSPvvFyj4haXxncNO2fhJE9oMR0yA6K9jqTgtcUoO7o2ExrdRxRKUH5Knd+g==
+"@airgap/angular-core@0.0.28":
+  version "0.0.28"
+  resolved "https://registry.yarnpkg.com/@airgap/angular-core/-/angular-core-0.0.28.tgz#97727df138f3afb492b217aee09671f8c0003031"
+  integrity sha512-bXL7TVZM09DfKE6R37AKY9kIdpbaQl9w2yMy4eWT/7dv1NY3uzxD6y6HJsaWZM7g5JZicCZJaWLVBkYWrVRTxQ==
   dependencies:
     tslib "^2.2.0"
 
-"@airgap/angular-ngrx@0.0.25":
-  version "0.0.25"
-  resolved "https://registry.npmjs.org/@airgap/angular-ngrx/-/angular-ngrx-0.0.25.tgz"
-  integrity sha512-KiJrkDjEXIxVcmihf51b9DMyOuwEFrzAukHbFG2XheFDXtnDMudvoNbaVPL/q1gH++CcsQiSlEyPf3O7ilzYOA==
+"@airgap/angular-ngrx@0.0.28":
+  version "0.0.28"
+  resolved "https://registry.yarnpkg.com/@airgap/angular-ngrx/-/angular-ngrx-0.0.28.tgz#5110121aa43170bec048235d9a21b7ee079dc099"
+  integrity sha512-pybBxK+nQ6yxAgZJ72trlcXG3OIRMo+L1Wc6dVAl1hc19jNT3+9Q9CKysV2y4wdvoUZ+1mUhBLQbbh6uTT7Oww==
   dependencies:
     tslib "^2.2.0"
 
-"@airgap/coinlib-core@0.12.8":
-  version "0.12.8"
-  resolved "https://registry.npmjs.org/@airgap/coinlib-core/-/coinlib-core-0.12.8.tgz"
-  integrity sha512-4iqNOXvZ6bcBJ+aR+AkAiy9e/rnC9osFyerHV2FE5Xc9jChduIV6skCtJxvH8f8jxvvLyeHlOGDqR1cf6Ofc5g==
+"@airgap/coinlib-core@0.13.1":
+  version "0.13.1"
+  resolved "https://registry.yarnpkg.com/@airgap/coinlib-core/-/coinlib-core-0.13.1.tgz#ab40e79b2e6adc1a844ce4b7caccdd6003d5f88e"
+  integrity sha512-dEIHSgUlBYsiXZmcH6uqaQL8kz2NqcGV4pXs+PGz1emo4y+StzSY+IxHj2wyF3R3TkMh7Cf5HWUJDhIKjX32iA==
   dependencies:
     "@airgap/sapling-wasm" "0.0.5"
     "@ethereumjs/common" "2.6.0"
@@ -37,10 +37,10 @@
   resolved "https://registry.npmjs.org/@airgap/sapling-wasm/-/sapling-wasm-0.0.5.tgz"
   integrity sha512-u3dCsqC4WqTlscAU6p5BED+O/tXEDRcIzeOf7OTtz4zoK8wyMX6ZcJImZONhYG6IKu8cSc8eQNwm6fghHL3SxA==
 
-"@airgap/sapling-wasm@0.0.6":
-  version "0.0.6"
-  resolved "https://registry.npmjs.org/@airgap/sapling-wasm/-/sapling-wasm-0.0.6.tgz"
-  integrity sha512-hGD1ZMe3aLIJdjRxq6KVLjMkxza9BW2AZxJEWtVOLAwJDvUyb4yw+i2hnjIKve2kO82m6UJ3tJIDGhbZ4gU6eg==
+"@airgap/sapling-wasm@0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@airgap/sapling-wasm/-/sapling-wasm-0.0.7.tgz#b88356f44807bf91405a9dc7c4111c995f269343"
+  integrity sha512-IMODbGPTBYKuO5ztiHX9C1PTlhqZvmVWv7m7zj5+VMcbBxrk4+jBAf7FYTH5l+IUsNMaHBOuh8Qq3A1b/pm7jQ==
 
 "@ampproject/remapping@1.1.1":
   version "1.1.1"
@@ -3307,10 +3307,10 @@ cordova-plugin-device-motion@^2.0.1:
   resolved "https://registry.npmjs.org/cordova-plugin-device-motion/-/cordova-plugin-device-motion-2.0.1.tgz"
   integrity sha1-f22XTE64/Frljpqt1j2fpQLt7G0=
 
-cordova-plugin-qrscanner@3.0.1:
-  version "3.0.1"
-  resolved "https://registry.npmjs.org/cordova-plugin-qrscanner/-/cordova-plugin-qrscanner-3.0.1.tgz"
-  integrity sha512-xrwOP3nD+VmRSiV0w7chZ5PLw2YwpI9vtLdeoGNYLLzmmjjYbyIof+x9vOEOgjtwrg9S61rukmOZhQAmkzaosA==
+cordova-plugin-qrscanner-11@3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-qrscanner-11/-/cordova-plugin-qrscanner-11-3.0.3.tgz#1360844a7f447d1fb2ae34aa5d4a76847d394fa7"
+  integrity sha512-eKl+3Tv1FTR28l6Nbwm4x0m2erNy5ThwDXhI8gaT64cGcN84Ojy8c3JV9SCZZGyrHLSKTd4NlGVH4904I+EYwg==
   dependencies:
     qrcode-reader "^1.0.4"
     webrtc-adapter "^3.1.4"
