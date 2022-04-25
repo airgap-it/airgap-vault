@@ -18,7 +18,6 @@ RUN yarn global add ionic@5.4.0 @capacitor/core@3.2.5 @capacitor/cli@3.2.5 && ya
 
 # Install app dependencies, using wildcard if package-lock exists and copy capacitor configs and ionic configs
 COPY package.json yarn.lock apply-diagnostic-modules.js capacitor.config.ts ionic.config.json /app/
-COPY config /app/config
 
 # install dependencies
 # run ionic android build
