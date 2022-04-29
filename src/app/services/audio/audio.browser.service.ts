@@ -35,7 +35,7 @@ export class AudioBrowserService implements IEntropyGenerator {
     })
 
     // polyfill getUserMedia
-    navigator.getUserMedia =
+    ;(navigator as any).getUserMedia =
       (navigator as any).getUserMedia ||
       (navigator as any).webkitGetUserMedia ||
       (navigator as any).mozGetUserMedia ||
@@ -46,7 +46,7 @@ export class AudioBrowserService implements IEntropyGenerator {
     this.collectedEntropyPercentage = 0
 
     return new Promise((resolve) => {
-      navigator.getUserMedia(
+      ;(navigator as any).getUserMedia(
         { video: false, audio: true },
         (stream) => {
           const audioContext = new AudioContext()
@@ -77,7 +77,7 @@ export class AudioBrowserService implements IEntropyGenerator {
         this.scriptProcessor.stop()
         this.scriptProcessor.disconnect()
       }
-      resolve()
+      resolve(undefined)
     })
   }
 
