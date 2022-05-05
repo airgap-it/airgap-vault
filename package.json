@@ -39,7 +39,7 @@
   "dependencies": {
     "@airgap/angular-core": "0.0.28",
     "@airgap/angular-ngrx": "0.0.28",
-    "@airgap/coinlib-core": "0.13.1",
+    "@airgap/coinlib-core": "0.13.2",
     "@airgap/sapling-wasm": "0.0.7",
     "@angular/common": "13.2.5",
     "@angular/core": "13.2.5",
@@ -92,6 +92,7 @@
     "moment": "^2.27.0",
     "myetherwallet-blockies": "^0.1.1",
     "ngx-moment": "^5.0.0",
+    "process": "0.11.10",
     "rxjs": "~6.6.7",
     "secrets.js-grempe": "^1.1.0",
     "tslib": "^1.10.0",
