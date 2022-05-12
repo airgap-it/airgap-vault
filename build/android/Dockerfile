@@ -43,8 +43,7 @@ RUN sed -i -e "s/versionCode 1/versionCode $BUILD_NR/g" /app/android/app/build.g
 # this has nothing to do with debug!!!:
 # copy release-apk
 # sign using debug key
-RUN yarn disable-pure-getters \
-    && yarn configure-mangle \
+RUN yarn configure-mangle \
     && yarn apply-diagnostic-modules \
     && yarn jetifier \
     && ionic build --prod \
