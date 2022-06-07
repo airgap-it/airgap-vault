@@ -1,35 +1,39 @@
 <!---
-Please read this!
+1. Before opening a new issue, make sure it isn't a duplicate.
 
-1. Before opening a new issue, make sure to search for keywords in the issues
-filtered by the "bug" label and verify the issue you're about to submit isn't a duplicate.
+2. Include the name of the affected component, eg: account-transaction-list or scan-address
 
-2. Make sure you're including the name of the affected component if applicable, as an example:
-
-account-transaction-list or scan-address
+3. Fill all proposed paragraphs (even with NA, if nothing available)
 --->
 
-### Summary
+## Summary
+<!--- Summarize the bug encountered concisely --->
 
-(Summarize the bug encountered concisely)
 
-### Steps to reproduce
+## Steps to reproduce
+<!--- How one can reproduce the issue - this is very important --->
 
-(How one can reproduce the issue - this is very important)
+## What is the current _bug_ behavior?
+<!--- What actually happens --->
 
-### What is the current _bug_ behavior?
+## What is the expected _correct_ behavior?
+<!--- What you should see instead --->
 
-(What actually happens)
+## Relevant logs, screenshots and/or links
+<!--- Paste any relevant logs - please use code blocks (```) to format console output,
+logs, and code as it's tough to read otherwise. --->
 
-### What is the expected _correct_ behavior?
+## Possible fixes / approach
+<!--- If you can, link to the line of code that might be responsible for the problem or describe how to solve it  --->
 
-(What you should see instead)
+## Additional information
+<!--- anything that might be important for whoever works with this issue  --->
 
-### Relevant logs and/or screenshots
+----
+<!--- if you know already how long it takes, add an estimate eg. 2h or 1d --->
+/estimate
 
-(Paste any relevant logs - please use code blocks (```) to format console output,
-logs, and code as it's tough to read otherwise.)
+<!--- these standard labels will be added to this issue>--->
+/label ~"type::bug" ~"proj::airgap"
 
-### Possible fixes
 
-(If you can, link to the line of code that might be responsible for the problem)

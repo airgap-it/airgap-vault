@@ -8,6 +8,12 @@
 </ion-header>
 
 <ion-content class="deserialized-content ion-padding">
+
+  <ng-container *ngIf="signingWallet !== undefined">
+    <p [innerHTML]="'deserialized-detail.signing_account' | translate: { secretLabel: secretLabel}"></p>
+    <airgap-account-item [wallet]="signingWallet"></airgap-account-item>
+  </ng-container>
+
   <ng-container *ngIf="(mode$ | async) === Mode.SIGN_TRANSACTION">
     <ng-container *ngIf="(transactionsDetails$ | async).status === UIResourceStatus.SUCCESS">
       <airgap-transaction [airGapTxs]="(transactionsDetails$ | async).value"></airgap-transaction>

@@ -76,7 +76,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
 
-    def saplingVersion = "0.0.6"
+    def saplingVersion = "0.0.7"
     implementation "com.github.airgap-it:airgap-sapling:$saplingVersion"
 }
 
