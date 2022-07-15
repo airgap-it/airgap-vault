@@ -31,20 +31,20 @@ describe('HammingBackupService', () => {
   })
 
   it('should combine shares correctly', async () => {
-    expect(service.hamming_backup(X, A)).to.deep.equal([B, C])
+    expect(service.hamming_backup(X, A)).toEqual([B, C])
 
-    expect(service.hamming_backup(A, B)).to.deep.equal([X, C])
-    expect(service.hamming_backup(B, C)).to.deep.equal([X, A])
-    expect(service.hamming_backup(C, A)).to.deep.equal([X, B])
-    expect(service.hamming_backup(B, A)).to.deep.equal([C, X])
-    expect(service.hamming_backup(C, B)).to.deep.equal([A, X])
-    expect(service.hamming_backup(A, C)).to.deep.equal([B, X])
+    expect(service.hamming_backup(A, B)).toEqual([X, C])
+    expect(service.hamming_backup(B, C)).toEqual([X, A])
+    expect(service.hamming_backup(C, A)).toEqual([X, B])
+    expect(service.hamming_backup(B, A)).toEqual([C, X])
+    expect(service.hamming_backup(C, B)).toEqual([A, X])
+    expect(service.hamming_backup(A, C)).toEqual([B, X])
   })
 
   it('should combine all shares as seedxor', async () => {
     const seedxor = new SeedXorService()
 
-    expect(seedxor.combine([A, B, C])).to.deep.equal(X)
+    expect(seedxor.combine([A, B, C])).toEqual(X)
   })
 
   // it('should split shares correctly with known seed', async () => {
