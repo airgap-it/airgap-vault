@@ -44,7 +44,7 @@ describe('HammingBackupService', () => {
   it('should combine all shares as seedxor', async () => {
     const seedxor = new SeedXorService()
 
-    expect(seedxor.combine([A, B, C])).toEqual(X)
+    expect(await seedxor.combine([A, B, C])).toEqual(X)
   })
 
   // it('should split shares correctly with known seed', async () => {
