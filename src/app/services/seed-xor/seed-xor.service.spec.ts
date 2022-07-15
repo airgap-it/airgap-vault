@@ -24,7 +24,7 @@ describe('SeedXorService', () => {
     expect(service).toBeTruthy()
   })
 
-  it('should be combine shares correctly', async () => {
+  it('should combine shares correctly', async () => {
     const res = await service.combine([share1, share2, share3])
     expect(res).toEqual(combined)
   })
