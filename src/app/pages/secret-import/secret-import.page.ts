@@ -36,7 +36,7 @@ export class SecretImportPage {
 
   private maxWords: number = 24
 
-  @ViewChild('secretContainer', {read: ElementRef})
+  @ViewChild('secretContainer', { read: ElementRef })
   public secretContainer: ElementRef<HTMLElement>
 
   constructor(
@@ -57,10 +57,6 @@ export class SecretImportPage {
   selectWord(index: number) {
     this.selectedWordIndex = index
     this.selectedWord = this.secretWords[this.selectedWordIndex]
-
-    if (this.selectedWordIndex === 0 && !this.selectedWord) {
-      this.selectedWordIndex = -1
-    }
 
     this.setWordEmitter.next(this.selectedWord ?? '')
   }
@@ -97,7 +93,7 @@ export class SecretImportPage {
     this.getLastWord()
 
     this.setWordEmitter.next(this.selectedWord ?? '')
-    
+
     if (this.secretContainer) {
       this.secretContainer.nativeElement.scrollTop = this.secretContainer.nativeElement.scrollHeight
     }
