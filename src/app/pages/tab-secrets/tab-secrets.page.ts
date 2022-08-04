@@ -26,6 +26,14 @@ export class TabSecretsPage {
     this.secrets = this.secretsService.getSecretsObservable()
   }
 
+  // TODO JGD NEXT
+  //
+  // - add settings icon to top right
+  // - add settings page
+  // - when adding new account it should not jump back to TabSecretsPage view
+  // - check multi-secret view (scrolling)
+  // - check very long secret name
+
   ionViewWillEnter() {
     // this.secrets.subscribe(async (list) => {
     //   await this.secretsProvider.isReady()
@@ -37,14 +45,6 @@ export class TabSecretsPage {
 
   public goToNewSecret(): void {
     this.navigationService.route('/secret-setup').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-  }
-
-  public goToAccountsList(secret: MnemonicSecret): void {
-    this.navigationService.routeWithState('/accounts-list', { secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-  }
-
-  public goToEditSecret(secret: MnemonicSecret): void {
-    this.navigationService.routeWithState('/secret-edit', { secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public async deleteSecret(secret: MnemonicSecret): Promise<void> {

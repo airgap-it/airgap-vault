@@ -1,5 +1,7 @@
 import { AirGapWalletStatus } from '@airgap/coinlib-core'
 import { Component, Input, OnInit } from '@angular/core'
+import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
+import { NavigationService } from 'src/app/services/navigation/navigation.service'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
 
 import { MnemonicSecret } from '../../models/secret'
@@ -16,7 +18,7 @@ export class SecretItemComponent implements OnInit {
   public activeWallets: string[]
   public hasMoreWallets: number = 0
 
-  constructor(private readonly secretsService: SecretsService) {}
+  constructor(private readonly secretsService: SecretsService, public navigationService: NavigationService) {}
 
   public ngOnInit() {
     this.secretsService.getActiveSecretObservable().subscribe((secret: MnemonicSecret) => {
@@ -40,5 +42,13 @@ export class SecretItemComponent implements OnInit {
     } else {
       this.hasMoreWallets = 0
     }
+  }
+
+  public goToEditSecret(): void {
+    this.navigationService.routeWithState('/secret-edit', { secret: this.secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
+  public goToAccountsList(): void {
+    this.navigationService.routeWithState('/accounts-list', { secret: this.secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }
