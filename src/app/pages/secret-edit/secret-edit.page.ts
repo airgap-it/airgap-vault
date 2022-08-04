@@ -57,7 +57,7 @@ export class SecretEditPage {
 
     await this.dismiss()
 
-    this.navigationService.route('/account-add').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.navigationService.route('').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public async dismiss(): Promise<boolean> {
