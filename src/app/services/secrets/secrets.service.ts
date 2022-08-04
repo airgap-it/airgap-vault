@@ -463,7 +463,7 @@ export class SecretsService {
       existingWallet.status = AirGapWalletStatus.ACTIVE
       return [undefined, existingWallet]
     } else if (newWallet.status === AirGapWalletStatus.ACTIVE && existingWallet.status === AirGapWalletStatus.ACTIVE) {
-      throw new Error('Wallet already exists')
+      return undefined // TODO: Should we error if it already exists?
     } else {
       return undefined
     }

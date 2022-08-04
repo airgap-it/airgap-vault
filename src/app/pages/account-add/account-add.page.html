@@ -9,23 +9,24 @@
 
 <ion-content class="ion-padding">
   <ion-list lines="none">
-    <ion-radio-group [ngModel]="selectedProtocol" (ngModelChange)="onSelectedProtocolChange($event)">
-      <ion-list-header class="ion-no-padding">
-        <ion-label class="font--weight__med white">{{ 'wallet-select-coins.text' | translate }}</ion-label>
-      </ion-list-header>
-      <ion-item detail="false" class="ion-no-padding" *ngFor="let protocol of protocols">
-        <ion-avatar slot="start" class="ion-align-items-center">
-          <airgap-currency-symbol [symbol]="protocol.symbol" [protocolIdentifier]="protocol.identifier"></airgap-currency-symbol>
-        </ion-avatar>
-        <ion-label class="ion-text-wrap">
-          <h2>
-            <span class="font--weight__med">{{ protocol.name }}</span>
-            {{ protocol.symbol }}
-          </h2>
-        </ion-label>
-        <ion-radio [id]="protocol.identifier" [value]="protocol" slot="end"></ion-radio>
-      </ion-item>
-    </ion-radio-group>
+    <ion-list-header class="ion-no-padding">
+      <ion-label class="font--weight__med white">{{ 'wallet-select-coins.text' | translate }}</ion-label>
+    </ion-list-header>
+    <ion-item detail="false" class="ion-no-padding" *ngFor="let protocol of protocolList">
+      <ion-avatar slot="start" class="ion-align-items-center">
+        <airgap-currency-symbol
+          [symbol]="protocol.protocol.symbol"
+          [protocolIdentifier]="protocol.protocol.identifier"
+        ></airgap-currency-symbol>
+      </ion-avatar>
+      <ion-label class="ion-text-wrap">
+        <h2>
+          <span class="font--weight__med">{{ protocol.protocol.name }}</span>
+          {{ protocol.protocol.symbol }}
+        </h2>
+      </ion-label>
+      <ion-checkbox slot="end" value="protocol.protocol" [(ngModel)]="protocol.isChecked" (click)="onProtocolSelected()"></ion-checkbox>
+    </ion-item>
   </ion-list>
 
   <ion-list lines="none" class="ion-padding-vertical ion-margin-bottom">
@@ -37,15 +38,27 @@
     <ng-container *ngIf="isAdvancedMode">
       <ion-item class="ion-no-padding" *ngIf="isAdvancedMode" lines="full">
         <ion-label position="stacked" color="primary">{{ 'wallet-select-coins.custom-path.label' | translate }}</ion-label>
-        <ion-input
-          [(ngModel)]="customDerivationPath"
-          placeholder="{{ 'wallet-select-coins.custom-path.placeholder' | translate }}"
-        ></ion-input>
+        <ng-container *ngIf="!singleSelectedProtocol">
+          <p>Derivation Path can only be set if one protocol is selected.</p>
+          <ng-container *ngIf="!singleSelectedProtocol">
+            <ion-input [disabled]="true" placeholder="{{ 'wallet-select-coins.custom-path.placeholder' | translate }}"></ion-input>
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="singleSelectedProtocol">
+          {{singleSelectedProtocol.customDerivationPath}}
+          <ion-input
+            [(ngModel)]="singleSelectedProtocol.customDerivationPath"
+            placeholder="{{ 'wallet-select-coins.custom-path.placeholder' | translate }}"
+          ></ion-input>
+        </ng-container>
       </ion-item>
 
-      <ion-item *ngIf="selectedProtocol.identifier === 'eth' && selectedProtocol.supportsHD" class="ion-no-padding">
+      <ion-item
+        *ngIf="singleSelectedProtocol && singleSelectedProtocol.protocol.identifier === 'eth' && singleSelectedProtocol.protocol.supportsHD"
+        class="ion-no-padding"
+      >
         {{ 'wallet-select-coins.select-type.hd-wallet_label' | translate }}
-        <ion-checkbox [(ngModel)]="isHDWallet" (ionChange)="setDerivationPath()" slot="end"></ion-checkbox>
+        <ion-checkbox [(ngModel)]="singleSelectedProtocol.isHDWallet" (ionChange)="toggleHDWallet()" slot="end"></ion-checkbox>
       </ion-item>
 
       <ng-container *ngIf="isBip39PassphraseEnabled">
@@ -66,7 +79,7 @@
   </ion-list>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-button [disabled]="!selectedProtocol" color="primary" shape="round" (click)="addWallet()">
+    <ion-button [disabled]="!formValid" color="primary" shape="round" (click)="addWallet()">
       {{ 'wallet-select-coins.create_label' | translate }}
     </ion-button>
   </ion-fab>
