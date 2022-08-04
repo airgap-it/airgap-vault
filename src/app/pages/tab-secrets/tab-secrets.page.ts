@@ -25,15 +25,23 @@ export class TabSecretsPage {
 
   // TODO JGD NEXT
   //
-  // - add settings icon to top right
-  // - add settings page
-  // - when adding new account it should not jump back to TabSecretsPage view
-  // - check multi-secret view (scrolling)
-  // - check very long secret name
-  // - investigate active secret? CurrentSecretComponent
+  // ✅ add settings icon to top right
+  // ✅  add settings page
+  // ✅ check multi-secret view (scrolling)
+  // -  check very long secret name
+  // -  investigate active secret? CurrentSecretComponent
+  // -  check secret generation flow
 
   public goToNewSecret(): void {
     this.navigationService.route('/secret-setup').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
+  public async ngOnInit(): Promise<void> {
+    this.secrets.subscribe(async (secrets: MnemonicSecret[]) => {
+      if (secrets.length === 0) {
+        this.navigationService.route('/secret-setup/initial').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+      }
+    }) // We should never unsubscribe, because we need to watch this in case a user deletes all his secrets
   }
 
   presentAboutPopover(_event) {
