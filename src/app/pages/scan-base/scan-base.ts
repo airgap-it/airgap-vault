@@ -63,6 +63,10 @@ export class ScanBasePage {
   }
 
   public ionViewWillLeave(): void {
+    this.stopScan()
+  }
+
+  protected stopScan() {
     if (this.isMobile) {
       this.scanner.destroy()
     } else if (this.zxingScanner) {
