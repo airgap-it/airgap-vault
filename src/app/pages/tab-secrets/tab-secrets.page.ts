@@ -17,7 +17,6 @@ export class TabSecretsPage {
   constructor(
     public modalController: ModalController,
     public navigationService: NavigationService,
-    // private popoverCtrl: PopoverController,
     private secretsService: SecretsService
   ) {
     this.secrets = this.secretsService.getSecretsObservable()
@@ -42,12 +41,5 @@ export class TabSecretsPage {
         this.navigationService.route('/secret-setup/initial').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       }
     }) // We should never unsubscribe, because we need to watch this in case a user deletes all his secrets
-  }
-
-  presentAboutPopover(_event) {
-    //   let popover = this.popoverCtrl.create(AboutPopoverComponent)
-    //   popover.present({
-    //     ev: event
-    //   })
   }
 }
