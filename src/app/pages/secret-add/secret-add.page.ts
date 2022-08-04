@@ -47,13 +47,11 @@ export class SecretAddPage {
       return
     }
 
-    await this.dismiss()
-    if (this.isGenerating) {
-      this.navigationService.route('/account-add').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-    }
+    this.navigationService.routeWithState('/account-add', { secret: this.secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public async dismiss(): Promise<boolean> {
+    // TODO JGD remove?
     try {
       return this.navigationService.routeToSecretsTab()
     } catch (error) {
