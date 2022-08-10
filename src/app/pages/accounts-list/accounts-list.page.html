@@ -5,10 +5,6 @@
     </ion-buttons>
     <ion-title>{{ 'tab-wallets.title' | translate }}</ion-title>
   </ion-toolbar>
-
-  <ion-toolbar color="secondary">
-    <ion-searchbar placeholder="{{ 'tab-wallets.search_placeholder' | translate }}" (ionInput)="filterItems($event)"></ion-searchbar>
-  </ion-toolbar>
 </ion-header>
 
 <ion-content *ngIf="wallets$" class="ion-padding-horizontal">
@@ -28,15 +24,12 @@
   </ion-item>
 
   <ion-list>
-    <ng-container *ngFor="let wallet of wallets$ | async | walletFilter: { status: AirGapWalletStatus.ACTIVE, symbol: symbolFilter }">
+    <ng-container *ngFor="let wallet of wallets$ | async | walletFilter: { status: AirGapWalletStatus.ACTIVE }">
       <airgap-account-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></airgap-account-item>
     </ng-container>
   </ion-list>
   <ion-row>
-    <div
-      class="empty-list"
-      *ngIf="wallets$ && (wallets$ | async | walletFilter: { status: AirGapWalletStatus.ACTIVE, symbol: symbolFilter }).length === 0"
-    >
+    <div class="empty-list" *ngIf="wallets$ && (wallets$ | async | walletFilter: { status: AirGapWalletStatus.ACTIVE }).length === 0">
       <img src="./assets/img/no-wallet-added-onboarding.svg" />
       <p>
         <strong>{{ 'tab-wallets.empty-state_text' | translate }}</strong>

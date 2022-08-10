@@ -17,8 +17,6 @@ import { SecretEditAction } from '../secret-edit/secret-edit.page'
 export class AccountsListPage implements OnInit {
   public secret: MnemonicSecret
 
-  public symbolFilter: string | undefined
-
   public wallets$: BehaviorSubject<AirGapWallet[]> = new BehaviorSubject<AirGapWallet[]>([])
 
   public readonly isAndroid: boolean
@@ -36,6 +34,8 @@ export class AccountsListPage implements OnInit {
   }
 
   public async ngOnInit(): Promise<void> {
+    // TODO JGD?
+    //
     // TODO: MOVE THIS TO SECRETS TAB
     // this.secrets.subscribe(async (secrets: Secret[]) => {
     //   if (secrets.length === 0) {
@@ -58,16 +58,6 @@ export class AccountsListPage implements OnInit {
 
   public goToReceiveAddress(wallet: AirGapWallet): void {
     this.navigationService.routeWithState('/account-address', { wallet }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-  }
-
-  public filterItems(event: any): void {
-    function isValidSymbol(data: unknown): data is string {
-      return data && typeof data === 'string' && data !== ''
-    }
-
-    const value: unknown = event.target.value
-
-    this.symbolFilter = isValidSymbol(value) ? value.trim().toLowerCase() : undefined
   }
 
   public async syncWallets(): Promise<void> {
