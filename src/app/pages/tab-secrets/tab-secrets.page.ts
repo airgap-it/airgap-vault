@@ -1,10 +1,11 @@
 import { Component } from '@angular/core'
-import { ModalController } from '@ionic/angular'
+import { ModalController, PopoverController } from '@ionic/angular'
 import { MnemonicSecret } from '../../models/secret'
 import { Observable } from 'rxjs'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
+import { TabSecretPopoverComponent } from './tab-secret-popover/tab-secret-popover.component'
 
 @Component({
   selector: 'airgap-tab-secrets',
@@ -16,6 +17,7 @@ export class TabSecretsPage {
   public secretFilter: string | undefined
 
   constructor(
+    private readonly popoverCtrl: PopoverController,
     public modalController: ModalController,
     public navigationService: NavigationService,
     private secretsService: SecretsService
@@ -31,10 +33,6 @@ export class TabSecretsPage {
   // -  check very long secret name
   // -  investigate active secret? CurrentSecretComponent
   // -  check secret generation flow
-
-  public goToNewSecret(): void {
-    this.navigationService.route('/secret-setup').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-  }
 
   public async ngOnInit(): Promise<void> {
     this.secrets.subscribe(async (secrets: MnemonicSecret[]) => {
@@ -52,5 +50,20 @@ export class TabSecretsPage {
     const value: unknown = event.target.value
 
     this.secretFilter = isValidSymbol(value) ? value.trim().toLowerCase() : undefined
+  }
+
+  public async presentPopover(event: Event): Promise<void> {
+    const popover = await this.popoverCtrl.create({
+      component: TabSecretPopoverComponent,
+      componentProps: {
+        onClick: (): void => {
+          popover.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+        }
+      },
+      event,
+      translucent: true
+    })
+
+    popover.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 }
