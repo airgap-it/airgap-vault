@@ -6,6 +6,12 @@
       </ion-buttons>
     </ion-buttons>
     <ion-title>{{ 'tab-wallets.title' | translate }}</ion-title>
+
+    <ion-buttons slot="primary">
+      <ion-button (click)="toggleDeleteView()">
+        <ion-icon slot="icon-only" name="trash"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -28,8 +34,16 @@
   <ion-list>
     <ng-container *ngFor="let wallet of wallets$ | async | walletFilter: { status: AirGapWalletStatus.ACTIVE }">
       <ion-item-sliding>
-        <airgap-account-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></airgap-account-item>
+        <ng-container *ngIf="deleteView">
+          <ion-item>
+            <ion-checkbox slot="start" (click)="onWalletSelected(wallet)"></ion-checkbox>
+            <airgap-account-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></airgap-account-item>
+          </ion-item>
+        </ng-container>
 
+        <ng-container *ngIf="!deleteView">
+          <airgap-account-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></airgap-account-item>
+        </ng-container>
         <ion-item-options side="end">
           <ion-item-option (click)="delete(wallet)">
             <ion-item-option>
@@ -50,21 +64,25 @@
   </ion-row>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <!-- <ion-button color="secondary" shape="round" (click)="addWallet()">
-      <ion-icon slot="start" name="add"></ion-icon>
-      {{ 'tab-wallets.add-wallet_label' | translate }}
-    </ion-button> -->
+    <ng-container *ngIf="deleteView">
+      <ion-button color="secondary" shape="round" (click)="removeWallets(); $event.stopPropagation()">
+        <ion-icon slot="start" name="trash"></ion-icon>
+        {{ 'tab-wallets.delete-accounts_label' | translate }}
+      </ion-button>
+    </ng-container>
 
-    <ion-fab-button color="secondary">
-      <ion-icon name="chevron-up-outline"></ion-icon>
-    </ion-fab-button>
-    <ion-fab-list side="top">
-      <ion-fab-button color="secondary" (click)="syncWallets()">
-        <ion-icon name="sync-outline"></ion-icon>
+    <ng-container *ngIf="!deleteView">
+      <ion-fab-button color="secondary">
+        <ion-icon name="chevron-up-outline"></ion-icon>
       </ion-fab-button>
-      <ion-fab-button color="secondary" (click)="addWallet()">
-        <ion-icon name="add"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list>
+      <ion-fab-list side="top">
+        <ion-fab-button color="secondary" (click)="syncWallets()">
+          <ion-icon name="sync-outline"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button color="secondary" (click)="addWallet()">
+          <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+      </ion-fab-list>
+    </ng-container>
   </ion-fab>
 </ion-content>

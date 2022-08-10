@@ -250,6 +250,10 @@ export class SecretsService {
     return walletList
   }
 
+  public async removeWallets(wallets: AirGapWallet[]): Promise<void[]> {
+    return Promise.all(wallets.map((wallet) => this.removeWallet(wallet)))
+  }
+
   public async removeWallet(wallet: AirGapWallet): Promise<void> {
     const secret: MnemonicSecret | undefined = this.findByPublicKey(wallet.publicKey)
     if (!secret) {

@@ -19,11 +19,10 @@ import { SecretEditAction } from '../secret-edit/secret-edit.page'
 })
 export class AccountsListPage {
   public secret: MnemonicSecret
-
+  public deleteView: boolean = false
   public wallets$: BehaviorSubject<AirGapWallet[]> = new BehaviorSubject<AirGapWallet[]>([])
-
+  public selectedWallets: AirGapWallet[] = []
   public readonly isAndroid: boolean
-
   public readonly AirGapWalletStatus: typeof AirGapWalletStatus = AirGapWalletStatus
 
   constructor(
@@ -39,6 +38,10 @@ export class AccountsListPage {
 
   ionViewWillEnter() {
     this.secret = this.navigationService.getState().secret
+    this.loadWallets()
+  }
+
+  private loadWallets() {
     this.wallets$.next([...this.secret?.wallets].sort((a, b) => a.protocol.name.localeCompare(b.protocol.name)))
   }
 
@@ -95,12 +98,33 @@ export class AccountsListPage {
               text: deleteButton,
               handler: (): void => {
                 this.secretsService.removeWallet(wallet).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
-                this.wallets$.next([...this.secret?.wallets].sort((a, b) => a.protocol.name.localeCompare(b.protocol.name)))
+                this.loadWallets()
               }
             }
           ]
         })
         alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
       })
+  }
+
+  public onWalletSelected(wallet: AirGapWallet): void {
+    if (this.selectedWallets?.includes(wallet)) {
+      const index = this.selectedWallets.indexOf(wallet)
+      if (index > -1) {
+        this.selectedWallets = this.selectedWallets.splice(index, 1)
+      }
+    } else {
+      this.selectedWallets.push(wallet)
+    }
+  }
+
+  public async removeWallets(): Promise<void> {
+    await this.secretsService.removeWallets(this.selectedWallets)
+    this.loadWallets()
+    this.toggleDeleteView()
+  }
+
+  toggleDeleteView() {
+    this.deleteView = !this.deleteView
   }
 }
