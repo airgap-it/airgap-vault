@@ -401,7 +401,6 @@
   },
   "wallet-select-coins": {
     "title": "Add Account",
-    "text": "Select Coin To Use",
     "select-type": {
       "label": "Select Account Type",
       "single-address_label": "Single Address Wallet",

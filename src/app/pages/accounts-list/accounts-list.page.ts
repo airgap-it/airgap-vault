@@ -95,7 +95,7 @@ export class AccountsListPage {
               text: deleteButton,
               handler: (): void => {
                 this.secretsService.removeWallet(wallet).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
-                this.wallets$.next([...this.secret.wallets].sort((a, b) => a.protocol.name.localeCompare(b.protocol.name)))
+                this.wallets$.next([...this.secret?.wallets].sort((a, b) => a.protocol.name.localeCompare(b.protocol.name)))
               }
             }
           ]
