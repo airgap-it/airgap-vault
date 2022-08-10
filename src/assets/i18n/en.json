@@ -269,7 +269,8 @@
   },
   "tab-secrets": {
     "title": "Secrets",
-    "add-secret_label": "Add Secret"
+    "add-secret_label": "Add Secret",
+    "search_placeholder": "Search Secret"
   },
   "tab-wallets": {
     "title": "Accounts",
