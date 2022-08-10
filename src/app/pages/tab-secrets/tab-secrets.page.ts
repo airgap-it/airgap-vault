@@ -25,15 +25,6 @@ export class TabSecretsPage {
     this.secrets = this.secretsService.getSecretsObservable()
   }
 
-  // TODO JGD NEXT
-  //
-  // ✅ add settings icon to top right
-  // ✅  add settings page
-  // ✅ check multi-secret view (scrolling)
-  // -  check very long secret name
-  // -  investigate active secret? CurrentSecretComponent
-  // -  check secret generation flow
-
   public async ngOnInit(): Promise<void> {
     this.secrets.subscribe(async (secrets: MnemonicSecret[]) => {
       if (secrets.length === 0) {

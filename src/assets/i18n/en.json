@@ -1,5 +1,8 @@
 {
   "next": "Next",
+  "account-list": {
+    "delete": "Delete"
+  },
   "add-wallet": {
     "alert_deriving": {
       "text": "Deriving your account..."
@@ -272,6 +275,7 @@
     "add-secret_label": "Add Secret",
     "search_placeholder": "Search Secret"
   },
+
   "tab-wallets": {
     "title": "Accounts",
     "search_placeholder": "Search Currency",

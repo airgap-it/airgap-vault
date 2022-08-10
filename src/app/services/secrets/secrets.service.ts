@@ -351,7 +351,7 @@ export class SecretsService {
   public getActiveSecret(): MnemonicSecret {
     return this.activeSecret || this.secretsList[0]
   }
-
+  xrqd
   public setActiveSecret(secret: MnemonicSecret): void {
     this.activeSecret = secret
     this.activeSecret$.next(secret)

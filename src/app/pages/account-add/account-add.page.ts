@@ -47,7 +47,6 @@ export class AccountAddPage {
   ) {
     const state = this.navigationService.getState()
     this.secret = state.secret
-    debugger
     this.protocolService.getActiveProtocols().then((protocols: ICoinProtocol[]) => {
       this.protocolList = protocols.map((protocol) => {
         const isChecked =

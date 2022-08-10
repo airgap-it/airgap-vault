@@ -1,7 +1,9 @@
 <ion-header class="ion-no-border">
   <ion-toolbar color="secondary">
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/tabs/tab-secrets"></ion-back-button>
+      </ion-buttons>
     </ion-buttons>
     <ion-title>{{ 'tab-wallets.title' | translate }}</ion-title>
   </ion-toolbar>
@@ -25,7 +27,17 @@
 
   <ion-list>
     <ng-container *ngFor="let wallet of wallets$ | async | walletFilter: { status: AirGapWalletStatus.ACTIVE }">
-      <airgap-account-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></airgap-account-item>
+      <ion-item-sliding>
+        <airgap-account-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></airgap-account-item>
+
+        <ion-item-options side="end">
+          <ion-item-option (click)="delete(wallet)">
+            <ion-item-option>
+              <ion-icon slot="icon-only" name="trash"></ion-icon>
+            </ion-item-option>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
     </ng-container>
   </ion-list>
   <ion-row>
