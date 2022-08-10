@@ -13,6 +13,7 @@ import { NavigationService } from 'src/app/services/navigation/navigation.servic
 })
 export class TabSecretsPage {
   public secrets: Observable<MnemonicSecret[]>
+  public secretFilter: string | undefined
 
   constructor(
     public modalController: ModalController,
@@ -41,5 +42,15 @@ export class TabSecretsPage {
         this.navigationService.route('/secret-setup/initial').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       }
     }) // We should never unsubscribe, because we need to watch this in case a user deletes all his secrets
+  }
+
+  public filterItems(event: any): void {
+    function isValidSymbol(data: unknown): data is string {
+      return data && typeof data === 'string' && data !== ''
+    }
+
+    const value: unknown = event.target.value
+
+    this.secretFilter = isValidSymbol(value) ? value.trim().toLowerCase() : undefined
   }
 }
