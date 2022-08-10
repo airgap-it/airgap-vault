@@ -45,7 +45,6 @@
           </ng-container>
         </ng-container>
         <ng-container *ngIf="singleSelectedProtocol">
-          {{singleSelectedProtocol.customDerivationPath}}
           <ion-input
             [(ngModel)]="singleSelectedProtocol.customDerivationPath"
             placeholder="{{ 'wallet-select-coins.custom-path.placeholder' | translate }}"
