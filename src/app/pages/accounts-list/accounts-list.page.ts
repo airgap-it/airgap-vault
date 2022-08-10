@@ -34,9 +34,12 @@ export class AccountsListPage {
     private readonly translateService: TranslateService,
     private readonly secretsService: SecretsService
   ) {
-    this.secret = this.navigationService.getState().secret
-    this.wallets$.next([...this.secret.wallets].sort((a, b) => a.protocol.name.localeCompare(b.protocol.name)))
     this.isAndroid = this.platform.is('android')
+  }
+
+  ionViewWillEnter() {
+    this.secret = this.navigationService.getState().secret
+    this.wallets$.next([...this.secret?.wallets].sort((a, b) => a.protocol.name.localeCompare(b.protocol.name)))
   }
 
   public goToReceiveAddress(wallet: AirGapWallet): void {

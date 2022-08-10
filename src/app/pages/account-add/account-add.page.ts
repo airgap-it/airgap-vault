@@ -146,7 +146,9 @@ export class AccountAddPage {
           })
         )
         .then(() => {
-          this.navigationService.routeToSecretsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+          this.navigationService
+            .routeWithState('/accounts-list', { secret: this.secret }, { replaceUrl: true })
+            .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
         })
         .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
     }
