@@ -36,9 +36,9 @@ export class SecretItemComponent implements OnInit {
       .sort((a, b) => a.protocol.name.localeCompare(b.protocol.name)) // TODO: Use same order as common lib
       .map((wallet) => wallet.protocol.symbol)
 
-    if (this.activeWallets.length > 5) {
-      this.hasMoreWallets = this.activeWallets.length - 5
-      this.activeWallets = this.activeWallets.slice(0, 5)
+    if (this.activeWallets.length > 10) {
+      this.hasMoreWallets = this.activeWallets.length - 10
+      this.activeWallets = this.activeWallets.slice(0, 10)
     } else {
       this.hasMoreWallets = 0
     }
