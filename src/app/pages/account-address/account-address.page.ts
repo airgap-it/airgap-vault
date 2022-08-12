@@ -1,4 +1,4 @@
-import { ClipboardService, DeeplinkService, UiEventService } from '@airgap/angular-core'
+import { ClipboardService, DeeplinkService, QRType, UiEventService } from '@airgap/angular-core'
 import { AirGapWallet, IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
 import { Component } from '@angular/core'
 import { PopoverController } from '@ionic/angular'
@@ -12,6 +12,12 @@ import { isWalletMigrated } from '../../utils/migration'
 
 import { AccountEditPopoverComponent } from './account-edit-popover/account-edit-popover.component'
 
+interface SyncOption {
+  icon: string
+  name: string
+  qrType: QRType
+}
+
 @Component({
   selector: 'airgap-account-address',
   templateUrl: './account-address.page.html',
@@ -19,6 +25,29 @@ import { AccountEditPopoverComponent } from './account-edit-popover/account-edit
 })
 export class AccountAddressPage {
   public wallet: AirGapWallet
+
+  public syncOptions: SyncOption[] = [
+    {
+      icon: 'airgap-wallet-app-logo.png',
+      name: 'AirGap Wallet',
+      qrType: QRType.V3
+    },
+    {
+      icon: 'bluewallet.png',
+      name: 'BlueWallet',
+      qrType: QRType.BC_UR
+    },
+    {
+      icon: 'sparrowwallet.png',
+      name: 'Sparrow Wallet',
+      qrType: QRType.BC_UR
+    },
+    {
+      icon: 'metamask.webp',
+      name: 'MetaMask',
+      qrType: QRType.METAMASK
+    }
+  ]
 
   private shareObject?: IACMessageDefinitionObjectV3[]
   private shareObjectPromise?: Promise<void>
@@ -41,12 +70,13 @@ export class AccountAddressPage {
     this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  public async share(): Promise<void> {
+  public async share(qrFormat: QRType = QRType.V3): Promise<void> {
     await this.waitWalletShareUrl()
 
     this.interactionService.startInteraction({
       operationType: InteractionOperationType.WALLET_SYNC,
-      iacMessage: this.shareObject
+      iacMessage: this.shareObject,
+      qrFormatPreference: qrFormat
     })
   }
 

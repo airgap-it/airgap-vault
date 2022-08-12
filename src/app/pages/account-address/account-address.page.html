@@ -36,12 +36,23 @@
     </ion-col>
   </ion-row>
 
-  <ion-row class="ion-justify-content-center ion-padding-bottom">
-    <airgap-qr [qrdata]="wallet.receivingPublicAddress" [level]="'L'" [size]="300"></airgap-qr>
+  You can sync this account with:
+
+  <ion-row *ngFor="let option of syncOptions" class="ion-padding-bottom">
+    <ion-col size="12">
+      <ion-button expand="block" color="light" (click)="share(option.qrType)" shape="round">
+        <img src="assets/logos/{{option.icon}}" style="width: 24px; height: 24px" />
+        &nbsp; {{option.name}}
+      </ion-button>
+    </ion-col>
   </ion-row>
 
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <!-- <ion-row class="ion-justify-content-center ion-padding-bottom">
+    <airgap-qr [qrdata]="wallet.receivingPublicAddress" [level]="'L'" [size]="300"></airgap-qr>
+  </ion-row> -->
+
+  <!-- <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-button color="light" (click)="share()" shape="round">{{ 'wallet-address.sync_label' | translate }}</ion-button>
     <ion-button color="primary" (click)="done()" shape="round">{{ 'wallet-address.done_label' | translate }}</ion-button>
-  </ion-fab>
+  </ion-fab> -->
 </ion-content>

@@ -1,4 +1,4 @@
-import { DeeplinkService } from '@airgap/angular-core'
+import { DeeplinkService, QRType } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
 import { AirGapWallet, UnsignedTransaction, MessageSignResponse, IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
 
@@ -26,6 +26,7 @@ export interface IInteractionOptions {
   wallets?: AirGapWallet[]
   transactions?: UnsignedTransaction[]
   messageSignResponse?: MessageSignResponse
+  qrFormatPreference?: QRType
 }
 
 @Injectable({
