@@ -2,6 +2,7 @@ import { ClipboardService, DeeplinkService, UiEventService } from '@airgap/angul
 import { AirGapWallet, IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
 import { Component } from '@angular/core'
 import { PopoverController } from '@ionic/angular'
+import { MnemonicSecret } from 'src/app/models/secret'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { InteractionOperationType, InteractionService } from '../../services/interaction/interaction.service'
@@ -19,6 +20,7 @@ import { AccountEditPopoverComponent } from './account-edit-popover/account-edit
 })
 export class AccountAddressPage {
   public wallet: AirGapWallet
+  public secret: MnemonicSecret
 
   private shareObject?: IACMessageDefinitionObjectV3[]
   private shareObjectPromise?: Promise<void>
@@ -33,12 +35,15 @@ export class AccountAddressPage {
     private readonly uiEventService: UiEventService,
     private readonly migrationService: MigrationService,
     private readonly deepLinkService: DeeplinkService
-  ) {
+  ) {}
+
+  ionViewWillEnter() {
     this.wallet = this.navigationService.getState().wallet
+    this.secret = this.navigationService.getState().secret
   }
 
   public done(): void {
-    this.navigationService.routeToSecretsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.navigationService.routeWithState('/accounts-list', { secret: this.secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public async share(): Promise<void> {
@@ -66,7 +71,6 @@ export class AccountAddressPage {
       event,
       translucent: true
     })
-
     return popover.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
   }
 

@@ -37,7 +37,8 @@ export class AccountsListPage {
   }
 
   ionViewWillEnter() {
-    this.secret = this.navigationService.getState().secret
+    this.secret = this.navigationService?.getState()?.secret
+    console.log('this.secret', this.secret)
     this.loadWallets()
   }
 
@@ -46,7 +47,9 @@ export class AccountsListPage {
   }
 
   public goToReceiveAddress(wallet: AirGapWallet): void {
-    this.navigationService.routeWithState('/account-address', { wallet }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.navigationService
+      .routeWithState('/account-address', { wallet: wallet, secret: this.secret })
+      .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public async syncWallets(): Promise<void> {
