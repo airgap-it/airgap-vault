@@ -26,42 +26,7 @@ interface SyncOption {
 export class AccountAddressPage {
   public wallet: AirGapWallet
 
-  public get syncOptions(): SyncOption[] {
-    const defaultOption = {
-      icon: 'airgap-wallet-app-logo.png',
-      name: 'AirGap Wallet',
-      qrType: QRType.V3
-    }
-    switch (this.wallet?.protocol.identifier) {
-      case MainProtocolSymbols.BTC:
-      case MainProtocolSymbols.BTC_SEGWIT:
-        return [
-          {
-            icon: 'bluewallet.png',
-            name: 'BlueWallet',
-            qrType: QRType.BC_UR
-          },
-          {
-            icon: 'sparrowwallet.png',
-            name: 'Sparrow Wallet',
-            qrType: QRType.BC_UR
-          },
-          defaultOption
-        ]
-
-      case MainProtocolSymbols.ETH:
-        return [
-          {
-            icon: 'metamask.webp',
-            name: 'MetaMask',
-            qrType: QRType.METAMASK
-          },
-          defaultOption
-        ]
-      default:
-        return [defaultOption]
-    }
-  }
+  public syncOptions: SyncOption[]
 
   private shareObject?: IACMessageDefinitionObjectV3[]
   private shareObjectPromise?: Promise<void>
@@ -78,6 +43,41 @@ export class AccountAddressPage {
     private readonly deepLinkService: DeeplinkService
   ) {
     this.wallet = this.navigationService.getState().wallet
+    const defaultOption = {
+      icon: 'airgap-wallet-app-logo.png',
+      name: 'AirGap Wallet',
+      qrType: QRType.V3
+    }
+    switch (this.wallet?.protocol.identifier) {
+      case MainProtocolSymbols.BTC:
+      case MainProtocolSymbols.BTC_SEGWIT:
+        this.syncOptions = [
+          {
+            icon: 'bluewallet.png',
+            name: 'BlueWallet',
+            qrType: QRType.BC_UR
+          },
+          {
+            icon: 'sparrowwallet.png',
+            name: 'Sparrow Wallet',
+            qrType: QRType.BC_UR
+          },
+          defaultOption
+        ]
+        break
+      case MainProtocolSymbols.ETH:
+        this.syncOptions = [
+          {
+            icon: 'metamask.webp',
+            name: 'MetaMask',
+            qrType: QRType.METAMASK
+          },
+          defaultOption
+        ]
+        break
+      default:
+        this.syncOptions = [defaultOption]
+    }
   }
 
   public done(): void {
