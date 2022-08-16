@@ -52,6 +52,7 @@ export class AccountAddressPage {
       case MainProtocolSymbols.BTC:
       case MainProtocolSymbols.BTC_SEGWIT:
         this.syncOptions = [
+          defaultOption,
           {
             icon: 'bluewallet.png',
             name: 'BlueWallet',
@@ -61,18 +62,17 @@ export class AccountAddressPage {
             icon: 'sparrowwallet.png',
             name: 'Sparrow Wallet',
             qrType: QRType.BC_UR
-          },
-          defaultOption
+          }
         ]
         break
       case MainProtocolSymbols.ETH:
         this.syncOptions = [
+          defaultOption,
           {
             icon: 'metamask.webp',
             name: 'MetaMask',
             qrType: QRType.METAMASK
-          },
-          defaultOption
+          }
         ]
         break
       default:
