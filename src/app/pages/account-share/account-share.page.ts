@@ -1,9 +1,7 @@
-import { ClipboardService } from '@airgap/angular-core'
+import { ClipboardService, QRType } from '@airgap/angular-core'
 import { IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
 import { Component } from '@angular/core'
-
 import { NavigationService } from '../../services/navigation/navigation.service'
-
 import { ErrorCategory, handleErrorLocal } from './../../services/error-handler/error-handler.service'
 
 @Component({
@@ -13,12 +11,14 @@ import { ErrorCategory, handleErrorLocal } from './../../services/error-handler/
 })
 export class AccountSharePage {
   public interactionUrl: IACMessageDefinitionObjectV3[] = []
+  public qrFormatPreference: QRType
   public splits: string[] = []
 
   displayRawData: boolean = false
 
   constructor(private readonly navigationService: NavigationService, private readonly clipboardService: ClipboardService) {
     this.interactionUrl = this.navigationService.getState().interactionUrl
+    this.qrFormatPreference = this.navigationService.getState().qrFormatPreference
   }
 
   public done(): void {

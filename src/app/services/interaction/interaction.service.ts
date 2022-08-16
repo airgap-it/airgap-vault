@@ -85,7 +85,10 @@ export class InteractionService {
   private navigateToPageByOperationType(interactionOptions: IInteractionOptions): void {
     if (interactionOptions.operationType === InteractionOperationType.WALLET_SYNC) {
       this.navigationService
-        .routeWithState('/account-share', { interactionUrl: interactionOptions.iacMessage })
+        .routeWithState('/account-share', {
+          interactionUrl: interactionOptions.iacMessage,
+          qrFormatPreference: interactionOptions.qrFormatPreference
+        })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } else if (interactionOptions.operationType === InteractionOperationType.TRANSACTION_BROADCAST) {
       this.navigationService

@@ -1,5 +1,5 @@
 import { ClipboardService, DeeplinkService, QRType, UiEventService } from '@airgap/angular-core'
-import { AirGapWallet, IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
+import { AirGapWallet, IACMessageDefinitionObjectV3, MainProtocolSymbols } from '@airgap/coinlib-core'
 import { Component } from '@angular/core'
 import { PopoverController } from '@ionic/angular'
 
@@ -26,28 +26,42 @@ interface SyncOption {
 export class AccountAddressPage {
   public wallet: AirGapWallet
 
-  public syncOptions: SyncOption[] = [
-    {
+  public get syncOptions(): SyncOption[] {
+    const defaultOption = {
       icon: 'airgap-wallet-app-logo.png',
       name: 'AirGap Wallet',
       qrType: QRType.V3
-    },
-    {
-      icon: 'bluewallet.png',
-      name: 'BlueWallet',
-      qrType: QRType.BC_UR
-    },
-    {
-      icon: 'sparrowwallet.png',
-      name: 'Sparrow Wallet',
-      qrType: QRType.BC_UR
-    },
-    {
-      icon: 'metamask.webp',
-      name: 'MetaMask',
-      qrType: QRType.METAMASK
     }
-  ]
+    switch (this.wallet?.protocol.identifier) {
+      case MainProtocolSymbols.BTC:
+      case MainProtocolSymbols.BTC_SEGWIT:
+        return [
+          {
+            icon: 'bluewallet.png',
+            name: 'BlueWallet',
+            qrType: QRType.BC_UR
+          },
+          {
+            icon: 'sparrowwallet.png',
+            name: 'Sparrow Wallet',
+            qrType: QRType.BC_UR
+          },
+          defaultOption
+        ]
+
+      case MainProtocolSymbols.ETH:
+        return [
+          {
+            icon: 'metamask.webp',
+            name: 'MetaMask',
+            qrType: QRType.METAMASK
+          },
+          defaultOption
+        ]
+      default:
+        return [defaultOption]
+    }
+  }
 
   private shareObject?: IACMessageDefinitionObjectV3[]
   private shareObjectPromise?: Promise<void>
