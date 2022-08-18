@@ -121,15 +121,14 @@ export class AppComponent implements AfterViewInit {
 
   private async initializeTranslations(): Promise<void> {
     return this.languageService.init({
-      supportedLanguages: ['en', 'de', 'zh-cn'],
+      supportedLanguages: ['en', 'de', 'zh'],
       defaultLanguage: 'en'
     })
   }
 
   private async initializeProtocols(): Promise<void> {
-    const externalMethodProvider:
-      | TezosSaplingExternalMethodProvider
-      | undefined = await this.saplingNativeService.createExternalMethodProvider()
+    const externalMethodProvider: TezosSaplingExternalMethodProvider | undefined =
+      await this.saplingNativeService.createExternalMethodProvider()
 
     const shieldedTezProtocol: TezosShieldedTezProtocol = new TezosShieldedTezProtocol(
       new TezosSaplingProtocolOptions(
