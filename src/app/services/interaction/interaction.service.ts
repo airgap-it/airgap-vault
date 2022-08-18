@@ -52,6 +52,11 @@ export class InteractionService {
       } else if (interactionOptions.communicationType === InteractionCommunicationType.QR) {
         this.navigateToPageByOperationType(interactionOptions)
       }
+    } else if (
+      interactionOptions.operationType === InteractionOperationType.WALLET_SYNC &&
+      ![QRType.V2, QRType.V3].includes(interactionOptions.qrFormatPreference)
+    ) {
+      this.navigateToPageByOperationType(interactionOptions)
     } else {
       switch (interactionType) {
         case InteractionType.UNDETERMINED:
