@@ -84,13 +84,14 @@ export class AccountAddressPage {
     this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  public async share(qrFormat: QRType = QRType.V3): Promise<void> {
+  public async share(qrFormat: QRType = QRType.V3, walletName: string): Promise<void> {
     await this.waitWalletShareUrl()
 
     this.interactionService.startInteraction({
       operationType: InteractionOperationType.WALLET_SYNC,
       iacMessage: this.shareObject,
-      qrFormatPreference: qrFormat
+      qrFormatPreference: qrFormat,
+      walletName
     })
   }
 

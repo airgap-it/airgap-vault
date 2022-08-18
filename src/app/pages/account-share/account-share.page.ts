@@ -12,6 +12,7 @@ import { ErrorCategory, handleErrorLocal } from './../../services/error-handler/
 export class AccountSharePage {
   public interactionUrl: IACMessageDefinitionObjectV3[] = []
   public qrFormatPreference: QRType
+  public walletName: string
   public splits: string[] = []
 
   displayRawData: boolean = false
@@ -19,6 +20,7 @@ export class AccountSharePage {
   constructor(private readonly navigationService: NavigationService, private readonly clipboardService: ClipboardService) {
     this.interactionUrl = this.navigationService.getState().interactionUrl
     this.qrFormatPreference = this.navigationService.getState().qrFormatPreference
+    this.walletName = this.navigationService.getState().walletName
   }
 
   public done(): void {

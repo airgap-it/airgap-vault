@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <h3 class="ion-padding-bottom" [innerHTML]="'wallet-share.heading' | translate"></h3>
+  <h3 class="ion-padding-bottom" [innerHTML]="'wallet-share.heading' | translate: { walletName: walletName }"></h3>
 
   <ion-row class="ion-justify-content-center ion-padding-bottom" *ngIf="interactionUrl">
     <airgap-iac-qr

@@ -27,6 +27,7 @@ export interface IInteractionOptions {
   transactions?: UnsignedTransaction[]
   messageSignResponse?: MessageSignResponse
   qrFormatPreference?: QRType
+  walletName?: string
 }
 
 @Injectable({
@@ -87,7 +88,8 @@ export class InteractionService {
       this.navigationService
         .routeWithState('/account-share', {
           interactionUrl: interactionOptions.iacMessage,
-          qrFormatPreference: interactionOptions.qrFormatPreference
+          qrFormatPreference: interactionOptions.qrFormatPreference,
+          walletName: interactionOptions.walletName
         })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } else if (interactionOptions.operationType === InteractionOperationType.TRANSACTION_BROADCAST) {
