@@ -1,13 +1,17 @@
 <ion-header class="ion-no-border">
   <ion-toolbar color="secondary">
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/tabs/tab-secrets"></ion-back-button>
+      </ion-buttons>
     </ion-buttons>
     <ion-title>{{ 'tab-wallets.title' | translate }}</ion-title>
-  </ion-toolbar>
 
-  <ion-toolbar color="secondary">
-    <ion-searchbar placeholder="{{ 'tab-wallets.search_placeholder' | translate }}" (ionInput)="filterItems($event)"></ion-searchbar>
+    <ion-buttons slot="primary">
+      <ion-button (click)="toggleDeleteView()">
+        <ion-icon slot="icon-only" name="trash"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -28,15 +32,30 @@
   </ion-item>
 
   <ion-list>
-    <ng-container *ngFor="let wallet of wallets$ | async | walletFilter: { status: AirGapWalletStatus.ACTIVE, symbol: symbolFilter }">
-      <airgap-account-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></airgap-account-item>
+    <ng-container *ngFor="let wallet of wallets$ | async | walletFilter: { status: AirGapWalletStatus.ACTIVE }">
+      <ion-item-sliding>
+        <ng-container *ngIf="deleteView">
+          <ion-item>
+            <ion-checkbox slot="start" (click)="onWalletSelected(wallet)"></ion-checkbox>
+            <airgap-account-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></airgap-account-item>
+          </ion-item>
+        </ng-container>
+
+        <ng-container *ngIf="!deleteView">
+          <airgap-account-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></airgap-account-item>
+        </ng-container>
+        <ion-item-options side="end">
+          <ion-item-option (click)="delete(wallet)">
+            <ion-item-option>
+              <ion-icon slot="icon-only" name="trash"></ion-icon>
+            </ion-item-option>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
     </ng-container>
   </ion-list>
   <ion-row>
-    <div
-      class="empty-list"
-      *ngIf="wallets$ && (wallets$ | async | walletFilter: { status: AirGapWalletStatus.ACTIVE, symbol: symbolFilter }).length === 0"
-    >
+    <div class="empty-list" *ngIf="wallets$ && (wallets$ | async | walletFilter: { status: AirGapWalletStatus.ACTIVE }).length === 0">
       <img src="./assets/img/no-wallet-added-onboarding.svg" />
       <p>
         <strong>{{ 'tab-wallets.empty-state_text' | translate }}</strong>
@@ -45,21 +64,25 @@
   </ion-row>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <!-- <ion-button color="secondary" shape="round" (click)="addWallet()">
-      <ion-icon slot="start" name="add"></ion-icon>
-      {{ 'tab-wallets.add-wallet_label' | translate }}
-    </ion-button> -->
+    <ng-container *ngIf="deleteView">
+      <ion-button color="secondary" shape="round" (click)="removeWallets(); $event.stopPropagation()">
+        <ion-icon slot="start" name="trash"></ion-icon>
+        {{ 'tab-wallets.delete-accounts_label' | translate }}
+      </ion-button>
+    </ng-container>
 
-    <ion-fab-button color="secondary">
-      <ion-icon name="chevron-up-outline"></ion-icon>
-    </ion-fab-button>
-    <ion-fab-list side="top">
-      <ion-fab-button color="secondary" (click)="syncWallets()">
-        <ion-icon name="sync-outline"></ion-icon>
+    <ng-container *ngIf="!deleteView">
+      <ion-fab-button color="secondary">
+        <ion-icon name="chevron-up-outline"></ion-icon>
       </ion-fab-button>
-      <ion-fab-button color="secondary" (click)="addWallet()">
-        <ion-icon name="add"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list>
+      <ion-fab-list side="top">
+        <ion-fab-button color="secondary" (click)="syncWallets()">
+          <ion-icon name="sync-outline"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button color="secondary" (click)="addWallet()">
+          <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+      </ion-fab-list>
+    </ng-container>
   </ion-fab>
 </ion-content>

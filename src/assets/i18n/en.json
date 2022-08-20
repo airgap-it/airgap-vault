@@ -1,5 +1,8 @@
 {
   "next": "Next",
+  "account-list": {
+    "delete": "Delete"
+  },
   "add-wallet": {
     "alert_deriving": {
       "text": "Deriving your account..."
@@ -269,13 +272,16 @@
   },
   "tab-secrets": {
     "title": "Secrets",
-    "add-secret_label": "Add Secret"
+    "add-secret_label": "Add Secret",
+    "search_placeholder": "Search Secret"
   },
+
   "tab-wallets": {
     "title": "Accounts",
     "search_placeholder": "Search Currency",
     "empty-state_text": "Create a new account by selecting a currency and sync it to AirGap Wallet.",
     "add-wallet_label": "Add Account",
+    "delete-accounts_label": "Remove Accounts",
     "generate-recovery-key": {
       "title": "Secret Recovery Key Backup",
       "description": "To always ensure a recovery of your stored secret, a backup of the secret recovery key is needed."
@@ -396,7 +402,6 @@
   },
   "wallet-select-coins": {
     "title": "Add Account",
-    "text": "Select Coin To Use",
     "select-type": {
       "label": "Select Account Type",
       "single-address_label": "Single Address Wallet",

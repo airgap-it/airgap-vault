@@ -1,5 +1,7 @@
 import { AirGapWalletStatus } from '@airgap/coinlib-core'
 import { Component, Input, OnInit } from '@angular/core'
+import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
+import { NavigationService } from 'src/app/services/navigation/navigation.service'
 import { LifehashService } from 'src/app/services/lifehash/lifehash.service'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
 
@@ -19,7 +21,7 @@ export class SecretItemComponent implements OnInit {
 
   public lifehashData: string = ''
 
-  constructor(private readonly secretsService: SecretsService, private readonly lifehashService: LifehashService) {}
+  constructor(private readonly secretsService: SecretsService, public navigationService: NavigationService, private readonly lifehashService: LifehashService) {}
 
   public async ngOnInit() {
     this.secretsService.getActiveSecretObservable().subscribe((secret: MnemonicSecret) => {
@@ -39,11 +41,19 @@ export class SecretItemComponent implements OnInit {
       .sort((a, b) => a.protocol.name.localeCompare(b.protocol.name)) // TODO: Use same order as common lib
       .map((wallet) => wallet.protocol.symbol)
 
-    if (this.activeWallets.length > 5) {
-      this.hasMoreWallets = this.activeWallets.length - 5
-      this.activeWallets = this.activeWallets.slice(0, 5)
+    if (this.activeWallets.length > 10) {
+      this.hasMoreWallets = this.activeWallets.length - 10
+      this.activeWallets = this.activeWallets.slice(0, 10)
     } else {
       this.hasMoreWallets = 0
     }
+  }
+
+  public goToEditSecret(): void {
+    this.navigationService.routeWithState('/secret-edit', { secret: this.secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
+  public goToAccountsList(): void {
+    this.navigationService.routeWithState('/accounts-list', { secret: this.secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

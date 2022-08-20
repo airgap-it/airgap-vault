@@ -1,11 +1,11 @@
 import { Component } from '@angular/core'
-
-import { AlertController, ModalController, ToastController } from '@ionic/angular'
+import { ModalController, PopoverController } from '@ionic/angular'
 import { MnemonicSecret } from '../../models/secret'
 import { Observable } from 'rxjs'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
+import { TabSecretPopoverComponent } from './tab-secret-popover/tab-secret-popover.component'
 
 @Component({
   selector: 'airgap-tab-secrets',
@@ -14,113 +14,47 @@ import { NavigationService } from 'src/app/services/navigation/navigation.servic
 })
 export class TabSecretsPage {
   public secrets: Observable<MnemonicSecret[]>
+  public secretFilter: string | undefined
 
   constructor(
+    private readonly popoverCtrl: PopoverController,
     public modalController: ModalController,
     public navigationService: NavigationService,
-    // private popoverCtrl: PopoverController,
-    private secretsService: SecretsService,
-    private alertController: AlertController,
-    private toastController: ToastController
+    private secretsService: SecretsService
   ) {
     this.secrets = this.secretsService.getSecretsObservable()
   }
 
-  ionViewWillEnter() {
-    // this.secrets.subscribe(async (list) => {
-    //   await this.secretsProvider.isReady()
-    //   if (list.length === 0) {
-    //     this.navController.push(SecretCreatePage)
-    //   }
-    // })
+  public async ngOnInit(): Promise<void> {
+    this.secrets.subscribe(async (secrets: MnemonicSecret[]) => {
+      if (secrets.length === 0) {
+        this.navigationService.route('/secret-setup/initial').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+      }
+    }) // We should never unsubscribe, because we need to watch this in case a user deletes all his secrets
   }
 
-  public goToNewSecret(): void {
-    this.navigationService.route('/secret-setup').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  public filterItems(event: any): void {
+    function isValidSymbol(data: unknown): data is string {
+      return data && typeof data === 'string' && data !== ''
+    }
+
+    const value: unknown = event.target.value
+
+    this.secretFilter = isValidSymbol(value) ? value.trim().toLowerCase() : undefined
   }
 
-  public goToAccountsList(secret: MnemonicSecret): void {
-    this.navigationService.routeWithState('/accounts-list', { secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-  }
-
-  public goToEditSecret(secret: MnemonicSecret): void {
-    this.navigationService.routeWithState('/secret-edit', { secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-  }
-
-  public async deleteSecret(secret: MnemonicSecret): Promise<void> {
-    const alert: HTMLIonAlertElement = await this.alertController.create({
-      header: 'Delete ' + secret.label,
-      subHeader: 'Are you sure you want to delete ' + secret.label + '?',
-      buttons: [
-        {
-          text: 'Delete',
-          handler: async () => {
-            this.secretsService.remove(secret).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
-
-            const toast: HTMLIonToastElement = await this.toastController.create({
-              message: 'Secret deleted',
-              duration: 5000,
-              buttons: [
-                {
-                  text: 'Undo',
-                  role: 'cancel'
-                }
-              ]
-            })
-
-            toast.onDidDismiss().then((role) => {
-              if (role === 'close') {
-                this.secretsService.addOrUpdateSecret(secret).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
-              }
-            })
-
-            toast.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
-          }
-        },
-        {
-          text: 'Cancel'
+  public async presentPopover(event: Event): Promise<void> {
+    const popover = await this.popoverCtrl.create({
+      component: TabSecretPopoverComponent,
+      componentProps: {
+        onClick: (): void => {
+          popover.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
         }
-      ]
+      },
+      event,
+      translucent: true
     })
-    alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
-  }
 
-  // deleteSecret(_secret: Secret) {
-  // this.alertController
-  //   .create({
-  //     title: 'Delete ' + secret.label,
-  //     subTitle: 'Are you sure you want to delete ' + secret.label + '?',
-  //     buttons: [
-  //       {
-  //         text: 'Delete',
-  //         handler: () => {
-  //           this.secretsProvider.remove(secret)
-  //           let toast = this.toastController.create({
-  //             message: 'Secret deleted',
-  //             duration: 5000,
-  //             showCloseButton: true,
-  //             closeButtonText: 'Undo'
-  //           })
-  //           toast.onDidDismiss((data, role) => {
-  //             if (role === 'close') {
-  //               this.secretsProvider.addOrUpdateSecret(secret)
-  //             }
-  //           })
-  //           toast.present()
-  //         }
-  //       },
-  //       {
-  //         text: 'Cancel'
-  //       }
-  //     ]
-  //   })
-  //   .present()
-  // }
-
-  presentAboutPopover(_event) {
-    //   let popover = this.popoverCtrl.create(AboutPopoverComponent)
-    //   popover.present({
-    //     ev: event
-    //   })
+    popover.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 }
