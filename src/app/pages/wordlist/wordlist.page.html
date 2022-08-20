@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar color="secondary">
+    <ion-buttons *ngIf="!isModal" slot="start">
+      <ion-back-button defaultHref="/tabs/tab-settings"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'wordlist.title' | translate }}</ion-title>
+    <ion-buttons *ngIf="isModal" slot="end">
+      <ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar color="secondary">
+    <ion-searchbar placeholder="{{ 'wordlist.search_placeholder' | translate }}" (ionInput)="filterItems($event)"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ng-container>
+    <p *ngIf="filteredWordlist.length === 0" class="ion-padding">
+      No exact match was found. Maybe you have a typo in your word? Check the similar words below.
+    </p>
+    <ion-list *ngIf="filteredWordlist.length > 0">
+      <ion-virtual-scroll [items]="filteredWordlist" approxItemHeight="320px">
+        <ion-item *virtualItem="let item">
+          <ion-label>
+            <h2>
+              <strong>
+                <ion-text color="medium"><span class="typography--mono">{{item.index}}.</span></ion-text>
+                {{item.word}}
+              </strong>
+            </h2>
+          </ion-label>
+
+          <ion-text color="medium">
+            <p>Binary: {{item.binary}}</p>
+          </ion-text>
+        </ion-item>
+      </ion-virtual-scroll>
+    </ion-list>
+    <ion-list *ngIf="filteredWordlist.length < 20">
+      <ion-list-header>Similar Words</ion-list-header>
+      <ion-virtual-scroll [items]="similarWords" approxItemHeight="320px">
+        <ion-item *virtualItem="let item">
+          <ion-label>
+            <h2>
+              <strong>
+                <ion-text color="medium"><span class="typography--mono">{{item.index}}.</span></ion-text>
+                {{item.word}}
+              </strong>
+            </h2>
+          </ion-label>
+
+          <ion-text color="medium">
+            <p>Binary: {{item.binary}}</p>
+          </ion-text>
+        </ion-item>
+      </ion-virtual-scroll>
+    </ion-list>
+  </ng-container>
+</ion-content>

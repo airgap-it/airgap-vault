@@ -5,8 +5,8 @@ import { Action, Store } from '@ngrx/store'
 import { from, of } from 'rxjs'
 import { filter, first, switchMap, tap, withLatestFrom } from 'rxjs/operators'
 
-import { Secret } from '../../models/secret'
-import { InteractionOperationType, InteractionService, InteractionSetting } from '../../services/interaction/interaction.service'
+import { MnemonicSecret } from '../../models/secret'
+import { InteractionOperationType, InteractionService } from '../../services/interaction/interaction.service'
 import { MigrationService } from '../../services/migration/migration.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
 import { ShareUrlService } from '../../services/share-url/share-url.service'
@@ -38,7 +38,7 @@ export class AccountShareSelectEffects {
       this.actions$.pipe(
         ofType(actions.shareUrlGenerated, actions.migrationAlertAccepted),
         tap((action) => {
-          this.syncAccounts(action.shareUrl as IACMessageDefinitionObjectV3[], action.interactionSetting) // JGD remove typecast
+          this.syncAccounts(action.shareUrl as IACMessageDefinitionObjectV3[]) // JGD remove typecast
         })
       ),
     { dispatch: false }
@@ -53,28 +53,22 @@ export class AccountShareSelectEffects {
     private readonly migrationService: MigrationService
   ) {}
 
-  private async generateShareUrl(secrets: Secret[]): Promise<Action> {
+  private async generateShareUrl(secrets: MnemonicSecret[]): Promise<Action> {
     await this.migrationService.runSecretsMigration(secrets)
-    const [migratedSecrets, allMigrated]: [Secret[], boolean] = this.migrationService.deepFilterMigratedSecretsAndWallets(secrets)
+    const [migratedSecrets, allMigrated]: [MnemonicSecret[], boolean] = this.migrationService.deepFilterMigratedSecretsAndWallets(secrets)
     if (migratedSecrets.length === 0) {
       return actions.walletsNotMigrated()
     }
 
     const shareUrl: IACMessageDefinitionObjectV3[] = await this.shareUrlService.generateShareSecretsURL(migratedSecrets)
-    const interactionSetting: InteractionSetting = this.interactionService.getCommonInteractionSetting(migratedSecrets)
 
-    return allMigrated
-      ? actions.shareUrlGenerated({ shareUrl, interactionSetting })
-      : actions.shareUrlGeneratedExcludedLegacy({ shareUrl, interactionSetting })
+    return allMigrated ? actions.shareUrlGenerated({ shareUrl }) : actions.shareUrlGeneratedExcludedLegacy({ shareUrl })
   }
 
-  private syncAccounts(shareUrl: IACMessageDefinitionObjectV3[], interactionSetting: InteractionSetting): void {
-    this.interactionService.startInteraction(
-      {
-        operationType: InteractionOperationType.WALLET_SYNC,
-        iacMessage: shareUrl
-      },
-      interactionSetting
-    )
+  private syncAccounts(shareUrl: IACMessageDefinitionObjectV3[]): void {
+    this.interactionService.startInteraction({
+      operationType: InteractionOperationType.WALLET_SYNC,
+      iacMessage: shareUrl
+    })
   }
 }

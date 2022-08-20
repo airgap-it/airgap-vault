@@ -1,11 +1,14 @@
 package it.airgap.vault.plugin.appinfo
 
-import com.getcapacitor.*
+import com.getcapacitor.Plugin
+import com.getcapacitor.PluginCall
+import com.getcapacitor.PluginMethod
+import com.getcapacitor.annotation.CapacitorPlugin
 import it.airgap.vault.BuildConfig
 import it.airgap.vault.util.applicationContext
 import it.airgap.vault.util.resolveWithData
 
-@NativePlugin
+@CapacitorPlugin
 class AppInfo : Plugin() {
 
     @PluginMethod

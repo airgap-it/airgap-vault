@@ -9,16 +9,16 @@
 /* Begin PBXBuildFile section */
 		2FAD9763203C412B000D30F8 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2FAD9762203C412B000D30F8 /* config.xml */; };
 		49690A7E25C2BF80004A3586 /* VaultError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49690A7D25C2BF80004A3586 /* VaultError.swift */; };
-		49D642732629D22A0066C013 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = 49D642722629D22A0066C013 /* SwiftPackageProductDependency */; };
-		49D642752629D22A0066C013 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = 49D642742629D22A0066C013 /* SwiftPackageProductDependency */; };
+		49D642732629D22A0066C013 /* SaplingFFI in Frameworks */ = {isa = PBXBuildFile; productRef = 49D642722629D22A0066C013 /* SaplingFFI */; };
+		49D642752629D22A0066C013 /* Sapling in Frameworks */ = {isa = PBXBuildFile; productRef = 49D642742629D22A0066C013 /* Sapling */; };
 		50379B232058CBB4000EE86E /* capacitor.config.json in Resources */ = {isa = PBXBuildFile; fileRef = 50379B222058CBB4000EE86E /* capacitor.config.json */; };
 		504EC3081FED79650016851F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504EC3071FED79650016851F /* AppDelegate.swift */; };
 		504EC30D1FED79650016851F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC30B1FED79650016851F /* Main.storyboard */; };
 		504EC30F1FED79650016851F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 504EC30E1FED79650016851F /* Assets.xcassets */; };
 		504EC3121FED79650016851F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC3101FED79650016851F /* LaunchScreen.storyboard */; };
-		50B271D11FEDC1A000F3C39B /* public in Resources */ = {isa = PBXBuildFile; fileRef = 50B271D01FEDC1A000F3C39B /* public */; };
 		885F55E825EE224200D85A88 /* SaplingNative.m in Sources */ = {isa = PBXBuildFile; fileRef = 885F55E725EE224200D85A88 /* SaplingNative.m */; };
 		885F55EB25EE226300D85A88 /* SaplingNative.swift in Sources */ = {isa = PBXBuildFile; fileRef = 885F55EA25EE226300D85A88 /* SaplingNative.swift */; };
+		888556902721A9EC009A831D /* public in Resources */ = {isa = PBXBuildFile; fileRef = 8885568F2721A9EC009A831D /* public */; };
 		88AE2EE823D5C7A500428560 /* SecurityUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AE2EE723D5C7A500428560 /* SecurityUtils.swift */; };
 		88AE2EED23D5CB3200428560 /* PluginCall+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AE2EEC23D5CB3200428560 /* PluginCall+Additions.swift */; };
 		88AE2EEF23D5D7B300428560 /* SecurityUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 88AE2EEE23D5D7B300428560 /* SecurityUtils.m */; };
@@ -45,9 +45,9 @@
 		504EC30E1FED79650016851F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		504EC3111FED79650016851F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		504EC3131FED79650016851F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		50B271D01FEDC1A000F3C39B /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = SOURCE_ROOT; };
 		885F55E725EE224200D85A88 /* SaplingNative.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SaplingNative.m; sourceTree = "<group>"; };
 		885F55EA25EE226300D85A88 /* SaplingNative.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaplingNative.swift; sourceTree = "<group>"; };
+		8885568F2721A9EC009A831D /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
 		88AE2EE723D5C7A500428560 /* SecurityUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityUtils.swift; sourceTree = "<group>"; };
 		88AE2EEC23D5CB3200428560 /* PluginCall+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PluginCall+Additions.swift"; sourceTree = "<group>"; };
 		88AE2EEE23D5D7B300428560 /* SecurityUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecurityUtils.m; sourceTree = "<group>"; };
@@ -72,9 +72,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49D642752629D22A0066C013 /* BuildFile in Frameworks */,
+				49D642752629D22A0066C013 /* Sapling in Frameworks */,
 				A084ECDBA7D38E1E42DFC39D /* Pods_App.framework in Frameworks */,
-				49D642732629D22A0066C013 /* BuildFile in Frameworks */,
+				49D642732629D22A0066C013 /* SaplingFFI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -110,6 +110,7 @@
 		504EC3061FED79650016851F /* App */ = {
 			isa = PBXGroup;
 			children = (
+				8885568F2721A9EC009A831D /* public */,
 				885F55E525EE220A00D85A88 /* SaplingNative */,
 				88AE2EEA23D5CB1300428560 /* Helpers */,
 				88AE2EDC23D5C40800428560 /* SecurityUtils */,
@@ -123,7 +124,6 @@
 				504EC3101FED79650016851F /* LaunchScreen.storyboard */,
 				504EC3131FED79650016851F /* Info.plist */,
 				2FAD9762203C412B000D30F8 /* config.xml */,
-				50B271D01FEDC1A000F3C39B /* public */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -215,8 +215,8 @@
 			);
 			name = App;
 			packageProductDependencies = (
-				49D642722629D22A0066C013 /* SwiftPackageProductDependency */,
-				49D642742629D22A0066C013 /* SwiftPackageProductDependency */,
+				49D642722629D22A0066C013 /* SaplingFFI */,
+				49D642742629D22A0066C013 /* Sapling */,
 			);
 			productName = App;
 			productReference = 504EC3041FED79650016851F /* App.app */;
@@ -248,7 +248,7 @@
 			);
 			mainGroup = 504EC2FB1FED79650016851F;
 			packageReferences = (
-				49D642712629D22A0066C013 /* RemoteSwiftPackageReference */,
+				49D642712629D22A0066C013 /* XCRemoteSwiftPackageReference "airgap-sapling" */,
 			);
 			productRefGroup = 504EC3051FED79650016851F /* Products */;
 			projectDirPath = "";
@@ -265,9 +265,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				504EC3121FED79650016851F /* LaunchScreen.storyboard in Resources */,
-				50B271D11FEDC1A000F3C39B /* public in Resources */,
 				504EC30F1FED79650016851F /* Assets.xcassets in Resources */,
 				50379B232058CBB4000EE86E /* capacitor.config.json in Resources */,
+				888556902721A9EC009A831D /* public in Resources */,
 				504EC30D1FED79650016851F /* Main.storyboard in Resources */,
 				2FAD9763203C412B000D30F8 /* config.xml in Resources */,
 			);
@@ -408,7 +408,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -461,7 +461,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -480,7 +480,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7VLXNQ52UC;
 				INFOPLIST_FILE = App/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -507,7 +507,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7VLXNQ52UC;
 				INFOPLIST_FILE = App/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -546,25 +546,25 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		49D642712629D22A0066C013 /* RemoteSwiftPackageReference */ = {
+		49D642712629D22A0066C013 /* XCRemoteSwiftPackageReference "airgap-sapling" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airgap-it/airgap-sapling";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.0.6;
+				minimumVersion = 0.0.7;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		49D642722629D22A0066C013 /* SwiftPackageProductDependency */ = {
+		49D642722629D22A0066C013 /* SaplingFFI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 49D642712629D22A0066C013 /* RemoteSwiftPackageReference */;
+			package = 49D642712629D22A0066C013 /* XCRemoteSwiftPackageReference "airgap-sapling" */;
 			productName = SaplingFFI;
 		};
-		49D642742629D22A0066C013 /* SwiftPackageProductDependency */ = {
+		49D642742629D22A0066C013 /* Sapling */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 49D642712629D22A0066C013 /* RemoteSwiftPackageReference */;
+			package = 49D642712629D22A0066C013 /* XCRemoteSwiftPackageReference "airgap-sapling" */;
 			productName = Sapling;
 		};
 /* End XCSwiftPackageProductDependency section */

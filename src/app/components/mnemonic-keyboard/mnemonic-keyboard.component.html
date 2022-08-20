@@ -1,0 +1,52 @@
+<div class="input--container">
+  <span class="typography--mono">{{ text }}</span>
+</div>
+
+<ng-container *ngIf="enabled">
+  <ion-row class="suggestion--container">
+    <ion-row class="ion-nowrap horizontal--scroll">
+      <ion-col *ngFor="let suggestion of suggestions">
+        <ion-button shape="round" size="small" [color]="'primary'" class="typography--mono lowercase" (click)="selectWord(suggestion)">
+          {{ suggestion }}
+        </ion-button>
+      </ion-col>
+      <ion-col *ngIf="hiddenSuggestions > 0">
+        <ion-button shape="round" size="small" [color]="'tertiary'" class="typography--mono lowercase">
+          {{ hiddenSuggestions }} more
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <!-- TODO: If we don't have a "placeholder" here, the keyboard goes up and down while typing, which is bad -->
+    <ion-button *ngIf="suggestions.length === 0" shape="round" size="small" [color]="'secondary'" class="typography--mono lowercase">
+      no suggestions
+    </ion-button>
+  </ion-row>
+
+  <div class="content--align__center-center" *ngFor="let row of rows">
+    <ion-button
+      *ngFor="let letter of row"
+      [id]="'key-' + letter.letter"
+      size="small"
+      [color]="letter.active ? 'primary' : 'tertiary'"
+      class="typography--mono lowercase"
+      [disabled]="!letter.enabled"
+      (click)="selectLetter(letter.letter)"
+    >
+      <ng-container *ngIf="letter.letter === '{backspace}'">
+        <ion-icon name="backspace-outline"></ion-icon>
+      </ng-container>
+      <ng-container *ngIf="letter.letter !== '{backspace}'">
+        <span [innerHTML]="letter.letter"></span>
+      </ng-container>
+    </ion-button>
+  </div>
+</ng-container>
+
+<div class="content--align__center-center actions--container">
+  <ion-button (click)="add()"><ion-icon name="add"></ion-icon></ion-button>
+  <ion-button (click)="delete()"><ion-icon name="trash-outline"></ion-icon></ion-button>
+  <ion-button (click)="toggleShuffled()"><ion-icon name="shuffle-outline"></ion-icon></ion-button>
+  <ion-button (click)="paste()"><ion-icon name="clipboard-outline"></ion-icon></ion-button>
+  <ion-button (click)="scramble()"><ion-icon [name]="_maskInput ? 'eye-outline' : 'eye-off-outline'"></ion-icon></ion-button>
+  <ion-button (click)="showWordlist()"><ion-icon name="list"></ion-icon></ion-button>
+</div>

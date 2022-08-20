@@ -2,7 +2,7 @@ import { generateGUID, UIAction, UIActionStatus, UIResource, UIResourceStatus } 
 import { createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store'
 
 import * as fromRoot from '../../app.reducers'
-import { Secret } from '../../models/secret'
+import { MnemonicSecret } from '../../models/secret'
 
 import * as actions from './account-share-select.actions'
 import { Alert, ExcludedLegacyAccountsAlert, WalletsNotMigratedAlert } from './account-share-select.types'
@@ -11,7 +11,7 @@ import { Alert, ExcludedLegacyAccountsAlert, WalletsNotMigratedAlert } from './a
 
 export interface FeatureState {
   // TODO: move secrets to a global state
-  secrets: UIResource<Secret[]>
+  secrets: UIResource<MnemonicSecret[]>
   checkedIds: string[]
 
   alert: UIAction<Alert> | undefined
@@ -41,7 +41,7 @@ export const reducer = createReducer(
       status: UIResourceStatus.SUCCESS,
       value: secrets
     },
-    checkedIds: secrets.map((secret: Secret) => secret.id)
+    checkedIds: secrets.map((secret: MnemonicSecret) => secret.id)
   })),
   on(actions.secretToggled, (state, { secretId }) => {
     const foundIndex: number = state.checkedIds.indexOf(secretId)
@@ -62,14 +62,13 @@ export const reducer = createReducer(
       status: UIActionStatus.PENDING
     }
   })),
-  on(actions.shareUrlGeneratedExcludedLegacy, (state, { shareUrl, interactionSetting }) => ({
+  on(actions.shareUrlGeneratedExcludedLegacy, (state, { shareUrl }) => ({
     ...state,
     alert: {
       id: generateGUID(),
       value: {
         type: 'excludedLegacyAccounts' as ExcludedLegacyAccountsAlert['type'],
-        shareUrl,
-        interactionSetting
+        shareUrl
       },
       status: UIActionStatus.PENDING
     }
@@ -93,9 +92,9 @@ export const selectFeatureState = createFeatureSelector<State, FeatureState>('ac
 
 export const selectSecrets = createSelector(
   selectFeatureState,
-  (state: FeatureState): UIResource<Secret[]> => ({
+  (state: FeatureState): UIResource<MnemonicSecret[]> => ({
     status: state.secrets.status,
-    value: state.secrets.value?.filter((secret: Secret) => secret.wallets.length > 0)
+    value: state.secrets.value?.filter((secret: MnemonicSecret) => secret.wallets.length > 0)
   })
 )
 export const selectCheckedIds = createSelector(selectFeatureState, (state: FeatureState): string[] => state.checkedIds)
@@ -104,20 +103,20 @@ export const selectAlert = createSelector(selectFeatureState, (state: FeatureSta
 export const selectCheckedSecrets = createSelector(
   selectSecrets,
   selectCheckedIds,
-  (secrets: UIResource<Secret[]>, checked: string[]): Secret[] => {
+  (secrets: UIResource<MnemonicSecret[]>, checked: string[]): MnemonicSecret[] => {
     if (secrets.value === undefined || secrets.value.length === 0) {
       return []
     }
 
     const checkedSet: Set<string> = new Set(checked)
 
-    return secrets.value.filter((secret: Secret) => checkedSet.has(secret.id))
+    return secrets.value.filter((secret: MnemonicSecret) => checkedSet.has(secret.id))
   }
 )
 export const selectIsSecretChecked = createSelector(
   selectSecrets,
   selectCheckedIds,
-  (secrets: UIResource<Secret[]>, checked: string[]): Record<string, boolean> => {
+  (secrets: UIResource<MnemonicSecret[]>, checked: string[]): Record<string, boolean> => {
     if (secrets.value === undefined || secrets.value.length === 0) {
       return {}
     }
@@ -125,7 +124,7 @@ export const selectIsSecretChecked = createSelector(
     const checkedSet: Set<string> = new Set(checked)
 
     return secrets.value.reduce(
-      (record: Record<string, boolean>, next: Secret) => Object.assign(record, { [next.id]: checkedSet.has(next.id) }),
+      (record: Record<string, boolean>, next: MnemonicSecret) => Object.assign(record, { [next.id]: checkedSet.has(next.id) }),
       {}
     )
   }

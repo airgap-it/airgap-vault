@@ -1,18 +1,12 @@
-import { DeeplinkService } from '@airgap/angular-core'
+import { DeeplinkService, QRType } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
 import { AirGapWallet, UnsignedTransaction, MessageSignResponse, IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
 
-import { Secret } from '../../models/secret'
 import { assertNever } from '../../utils/utils'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { NavigationService } from '../navigation/navigation.service'
-
-export enum InteractionSetting {
-  UNDETERMINED = 'undetermined',
-  ALWAYS_ASK = 'always',
-  SAME_DEVICE = 'same_device',
-  OFFLINE_DEVICE = 'offline_device'
-}
+import { InteractionType, VaultStorageKey, VaultStorageService } from '../storage/storage.service'
+import { CompanionApp } from 'src/app/pages/account-address/account-address.page'
 
 export enum InteractionCommunicationType {
   QR = 'qr',
@@ -33,22 +27,24 @@ export interface IInteractionOptions {
   wallets?: AirGapWallet[]
   transactions?: UnsignedTransaction[]
   messageSignResponse?: MessageSignResponse
+  companionApp?: CompanionApp
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class InteractionService {
-  constructor(private readonly navigationService: NavigationService, private readonly deepLinkService: DeeplinkService) {}
+  constructor(
+    private readonly navigationService: NavigationService,
+    private readonly deepLinkService: DeeplinkService,
+    private readonly storageService: VaultStorageService
+  ) {}
 
-  public startInteraction(interactionOptions: IInteractionOptions, secret: Secret): void
-  public startInteraction(interactionOptions: IInteractionOptions, interactionSetting: InteractionSetting): void
-  public startInteraction(interactionOptions: IInteractionOptions, secretOrInteractionSetting: Secret | InteractionSetting): void {
-    const interactionSetting: InteractionSetting =
-      typeof secretOrInteractionSetting === 'string' ? secretOrInteractionSetting : secretOrInteractionSetting.interactionSetting
+  public async startInteraction(interactionOptions: IInteractionOptions): Promise<void> {
+    const interactionType = await this.storageService.get(VaultStorageKey.INTERACTION_TYPE)
 
     if (interactionOptions.communicationType) {
-      if (interactionSetting === InteractionSetting.UNDETERMINED) {
+      if (interactionType === InteractionType.UNDETERMINED) {
         this.goToInteractionSelectionSettingsPage(interactionOptions)
       }
       if (interactionOptions.communicationType === InteractionCommunicationType.DEEPLINK) {
@@ -56,33 +52,28 @@ export class InteractionService {
       } else if (interactionOptions.communicationType === InteractionCommunicationType.QR) {
         this.navigateToPageByOperationType(interactionOptions)
       }
+    } else if (
+      interactionOptions.operationType === InteractionOperationType.WALLET_SYNC &&
+      ![QRType.V2, QRType.V3].includes(interactionOptions.companionApp?.qrType)
+    ) {
+      this.navigateToPageByOperationType(interactionOptions)
     } else {
-      switch (interactionSetting) {
-        case InteractionSetting.UNDETERMINED:
+      switch (interactionType) {
+        case InteractionType.UNDETERMINED:
           this.goToInteractionSelectionPage(interactionOptions)
           break
-        case InteractionSetting.ALWAYS_ASK:
+        case InteractionType.ALWAYS_ASK:
           this.goToInteractionSelectionPage(interactionOptions)
           break
-        case InteractionSetting.SAME_DEVICE:
+        case InteractionType.DEEPLINK:
           this.startDeeplink(interactionOptions.iacMessage)
           break
-        case InteractionSetting.OFFLINE_DEVICE:
+        case InteractionType.QR_CODE:
           this.navigateToPageByOperationType(interactionOptions)
           break
         default:
       }
     }
-  }
-
-  public getCommonInteractionSetting(secrets: Secret[]): InteractionSetting {
-    for (let i = 1; i < secrets.length; i++) {
-      if (secrets[i - 1]?.interactionSetting !== secrets[i]?.interactionSetting) {
-        return InteractionSetting.UNDETERMINED
-      }
-    }
-
-    return secrets[0]?.interactionSetting ?? InteractionSetting.UNDETERMINED
   }
 
   private goToInteractionSelectionPage(interactionOptions: IInteractionOptions): void {
@@ -100,7 +91,10 @@ export class InteractionService {
   private navigateToPageByOperationType(interactionOptions: IInteractionOptions): void {
     if (interactionOptions.operationType === InteractionOperationType.WALLET_SYNC) {
       this.navigationService
-        .routeWithState('/account-share', { interactionUrl: interactionOptions.iacMessage })
+        .routeWithState('/account-share', {
+          interactionUrl: interactionOptions.iacMessage,
+          companionApp: interactionOptions.companionApp
+        })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } else if (interactionOptions.operationType === InteractionOperationType.TRANSACTION_BROADCAST) {
       this.navigationService

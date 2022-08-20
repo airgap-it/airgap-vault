@@ -2,6 +2,7 @@
   <ion-list-header>
     <ion-label>{{ 'wallet-edit-delete-popover.settings_label' | translate }}</ion-label>
   </ion-list-header>
+
   <ion-item button detail="false" (click)="copyAddressToClipboard()">
     <ion-icon name="clipboard-outline" color="dark" slot="end"></ion-icon>
     {{ 'wallet-edit-delete-popover.copy_label' | translate }}
@@ -10,8 +11,21 @@
     <ion-icon name="clipboard-outline" color="dark" slot="end"></ion-icon>
     {{ 'wallet-edit-delete-popover.copy_sync_code' | translate }}
   </ion-item>
+  <ion-item button detail="false" (click)="showAddressQR()">
+    <ion-icon name="clipboard-outline" color="dark" slot="end"></ion-icon>
+    {{ 'wallet-edit-delete-popover.show_address_qr' | translate }}
+  </ion-item>
   <ion-item button detail="false" (click)="delete()">
     <ion-icon name="trash" color="dark" slot="end"></ion-icon>
     {{ 'wallet-edit-delete-popover.account-removal_alert.delete_label' | translate }}
+  </ion-item>
+  <ion-item
+    *ngIf="wallet && wallet.isExtendedPublicKey && wallet.protocol.identifier !== 'grs'"
+    button
+    detail="false"
+    (click)="openAddressExplorer()"
+  >
+    <ion-icon name="list" color="dark" slot="end"></ion-icon>
+    Address Explorer
   </ion-item>
 </ion-list>
