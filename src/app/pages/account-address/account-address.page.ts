@@ -1,7 +1,8 @@
-import { ClipboardService, DeeplinkService, UiEventService } from '@airgap/angular-core'
-import { AirGapWallet, IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
-import { Component } from '@angular/core'
-import { PopoverController } from '@ionic/angular'
+import { ClipboardService, DeeplinkService, QRType, UiEventService } from '@airgap/angular-core'
+import { AirGapWallet, IACMessageDefinitionObjectV3, MainProtocolSymbols } from '@airgap/coinlib-core'
+import { Component, ViewChild } from '@angular/core'
+import { Router } from '@angular/router'
+import { IonModal, PopoverController } from '@ionic/angular'
 import { MnemonicSecret } from 'src/app/models/secret'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
@@ -13,18 +14,55 @@ import { isWalletMigrated } from '../../utils/migration'
 
 import { AccountEditPopoverComponent } from './account-edit-popover/account-edit-popover.component'
 
+// TODO: add wallet definition into a service
+export const airgapwallet = {
+  icon: 'airgap-wallet-app-logo.png',
+  name: 'AirGap Wallet',
+  qrType: QRType.V3
+}
+
+const bluewallet = {
+  icon: 'bluewallet.png',
+  name: 'BlueWallet',
+  qrType: QRType.BC_UR
+}
+
+const sparrowwallet = {
+  icon: 'sparrowwallet.png',
+  name: 'Sparrow Wallet',
+  qrType: QRType.BC_UR
+}
+
+const metamask = {
+  icon: 'metamask.webp',
+  name: 'MetaMask',
+  qrType: QRType.METAMASK
+}
+
+export interface CompanionApp {
+  icon: string
+  name: string
+  qrType: QRType
+}
+
 @Component({
   selector: 'airgap-account-address',
   templateUrl: './account-address.page.html',
   styleUrls: ['./account-address.page.scss']
 })
 export class AccountAddressPage {
+  @ViewChild(IonModal) modal: IonModal
+
   public wallet: AirGapWallet
   public secret: MnemonicSecret
+
+  public syncOptions: CompanionApp[]
 
   private shareObject?: IACMessageDefinitionObjectV3[]
   private shareObjectPromise?: Promise<void>
   private walletShareUrl?: string
+
+  presentingElement = null
 
   constructor(
     private readonly popoverCtrl: PopoverController,
@@ -34,24 +72,46 @@ export class AccountAddressPage {
     private readonly navigationService: NavigationService,
     private readonly uiEventService: UiEventService,
     private readonly migrationService: MigrationService,
-    private readonly deepLinkService: DeeplinkService
-  ) {}
+    private readonly deepLinkService: DeeplinkService,
+    private readonly router: Router
+  ) {
+    if (!this.wallet) {
+      this.router.navigate(['/'])
+      throw new Error('No wallet found!')
+    }
+
+    switch (this.wallet?.protocol.identifier) {
+      case MainProtocolSymbols.BTC_SEGWIT:
+        this.syncOptions = [airgapwallet, bluewallet, sparrowwallet]
+        break
+      case MainProtocolSymbols.ETH:
+        this.syncOptions = [airgapwallet, metamask]
+        break
+      default:
+        this.syncOptions = [airgapwallet]
+    }
+  }
 
   ionViewWillEnter() {
     this.wallet = this.navigationService.getState().wallet
     this.secret = this.navigationService.getState().secret
   }
 
+  ngOnInit() {
+    this.presentingElement = document.querySelector('.ion-page')
+  }
+
   public done(): void {
     this.navigationService.routeWithState('/accounts-list', { secret: this.secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  public async share(): Promise<void> {
+  public async share(companionApp: CompanionApp = airgapwallet): Promise<void> {
     await this.waitWalletShareUrl()
 
     this.interactionService.startInteraction({
       operationType: InteractionOperationType.WALLET_SYNC,
-      iacMessage: this.shareObject
+      iacMessage: this.shareObject,
+      companionApp: companionApp
     })
   }
 
@@ -60,6 +120,9 @@ export class AccountAddressPage {
       component: AccountEditPopoverComponent,
       componentProps: {
         wallet: this.wallet,
+        openAddressQR: () => {
+          this.modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+        },
         getWalletShareUrl: async () => {
           await this.waitWalletShareUrl()
           return this.walletShareUrl
