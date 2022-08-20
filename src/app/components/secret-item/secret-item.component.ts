@@ -21,7 +21,11 @@ export class SecretItemComponent implements OnInit {
 
   public lifehashData: string = ''
 
-  constructor(private readonly secretsService: SecretsService, public navigationService: NavigationService, private readonly lifehashService: LifehashService) {}
+  constructor(
+    private readonly secretsService: SecretsService,
+    public navigationService: NavigationService,
+    private readonly lifehashService: LifehashService
+  ) {}
 
   public async ngOnInit() {
     this.secretsService.getActiveSecretObservable().subscribe((secret: MnemonicSecret) => {
@@ -49,7 +53,8 @@ export class SecretItemComponent implements OnInit {
     }
   }
 
-  public goToEditSecret(): void {
+  public goToEditSecret(ev: TouchEvent): void {
+    ev.stopPropagation()
     this.navigationService.routeWithState('/secret-edit', { secret: this.secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
