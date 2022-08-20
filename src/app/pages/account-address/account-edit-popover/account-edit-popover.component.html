@@ -1,20 +1,7 @@
-<ion-popover trigger="click-trigger" triggerAction="click" backdropDismiss="true" dismissOnSelect="true">
-  <ng-template>
-    <airgap-qr [qrdata]="wallet.receivingPublicAddress" [level]="'L'" [size]="200"></airgap-qr>
-
-    <p class="dismiss">Dismiss</p>
-  </ng-template>
-</ion-popover>
-
 <ion-list lines="none" class="ion-no-padding ion-no-margin">
   <ion-list-header>
     <ion-label>{{ 'wallet-edit-delete-popover.settings_label' | translate }}</ion-label>
   </ion-list-header>
-
-  <ion-item button detail="false" id="click-trigger">
-    <ion-icon name="qr-code-outline" color="dark" slot="end"></ion-icon>
-    {{ 'wallet-edit-delete-popover.show_QR' | translate }}
-  </ion-item>
 
   <ion-item button detail="false" (click)="copyAddressToClipboard()">
     <ion-icon name="clipboard-outline" color="dark" slot="end"></ion-icon>
@@ -23,6 +10,10 @@
   <ion-item button detail="false" (click)="copyShareUrlToClipboard()">
     <ion-icon name="clipboard-outline" color="dark" slot="end"></ion-icon>
     {{ 'wallet-edit-delete-popover.copy_sync_code' | translate }}
+  </ion-item>
+  <ion-item button detail="false" (click)="showAddressQR()">
+    <ion-icon name="clipboard-outline" color="dark" slot="end"></ion-icon>
+    {{ 'wallet-edit-delete-popover.show_address_qr' | translate }}
   </ion-item>
   <ion-item button detail="false" (click)="delete()">
     <ion-icon name="trash" color="dark" slot="end"></ion-icon>

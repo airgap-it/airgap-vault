@@ -1,7 +1,8 @@
 import { ClipboardService, DeeplinkService, QRType, UiEventService } from '@airgap/angular-core'
 import { AirGapWallet, IACMessageDefinitionObjectV3, MainProtocolSymbols } from '@airgap/coinlib-core'
-import { Component } from '@angular/core'
-import { PopoverController } from '@ionic/angular'
+import { Component, ViewChild } from '@angular/core'
+import { Router } from '@angular/router'
+import { IonModal, PopoverController } from '@ionic/angular'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { InteractionOperationType, InteractionService } from '../../services/interaction/interaction.service'
@@ -49,6 +50,8 @@ export interface CompanionApp {
   styleUrls: ['./account-address.page.scss']
 })
 export class AccountAddressPage {
+  @ViewChild(IonModal) modal: IonModal
+
   public wallet: AirGapWallet
 
   public syncOptions: CompanionApp[]
@@ -56,6 +59,8 @@ export class AccountAddressPage {
   private shareObject?: IACMessageDefinitionObjectV3[]
   private shareObjectPromise?: Promise<void>
   private walletShareUrl?: string
+
+  presentingElement = null
 
   constructor(
     private readonly popoverCtrl: PopoverController,
@@ -65,9 +70,15 @@ export class AccountAddressPage {
     private readonly navigationService: NavigationService,
     private readonly uiEventService: UiEventService,
     private readonly migrationService: MigrationService,
-    private readonly deepLinkService: DeeplinkService
+    private readonly deepLinkService: DeeplinkService,
+    private readonly router: Router
   ) {
     this.wallet = this.navigationService.getState().wallet
+
+    if (!this.wallet) {
+      this.router.navigate(['/'])
+      throw new Error('No wallet found!')
+    }
 
     switch (this.wallet?.protocol.identifier) {
       case MainProtocolSymbols.BTC_SEGWIT:
@@ -79,6 +90,10 @@ export class AccountAddressPage {
       default:
         this.syncOptions = [defaultOption]
     }
+  }
+
+  ngOnInit() {
+    this.presentingElement = document.querySelector('.ion-page')
   }
 
   public done(): void {
@@ -100,6 +115,9 @@ export class AccountAddressPage {
       component: AccountEditPopoverComponent,
       componentProps: {
         wallet: this.wallet,
+        openAddressQR: () => {
+          this.modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+        },
         getWalletShareUrl: async () => {
           await this.waitWalletShareUrl()
           return this.walletShareUrl

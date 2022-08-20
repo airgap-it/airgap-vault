@@ -17,6 +17,7 @@ import { NavigationService } from 'src/app/services/navigation/navigation.servic
 export class AccountEditPopoverComponent {
   public readonly wallet: AirGapWallet
   private readonly onDelete: Function
+  private readonly openAddressQR: () => void | undefined
   private readonly getWalletShareUrl: () => Promise<string>
 
   constructor(
@@ -42,6 +43,12 @@ export class AccountEditPopoverComponent {
       await this.getWalletShareUrl(),
       this.translateService.instant('wallet-edit-delete-popover.confirm_sync_code_copy')
     )
+
+    await this.popoverController.dismiss()
+  }
+
+  public async showAddressQR(): Promise<void> {
+    this.openAddressQR()
 
     await this.popoverController.dismiss()
   }

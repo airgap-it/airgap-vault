@@ -36,7 +36,7 @@
     </ion-col>
   </ion-row>
 
-  <p class="ion-padding">You can sync this account with:</p>
+  <p class="ion-padding-horizontal ion-padding-bottom">You can sync this account with:</p>
 
   <ion-row *ngFor="let option of syncOptions" class="ion-padding-bottom">
     <ion-col size="12">
@@ -47,12 +47,21 @@
     </ion-col>
   </ion-row>
 
-  <!-- <ion-row class="ion-justify-content-center ion-padding-bottom">
-    <airgap-qr [qrdata]="wallet.receivingPublicAddress" [level]="'L'" [size]="300"></airgap-qr>
-  </ion-row> -->
-
-  <!-- <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-button color="light" (click)="share()" shape="round">{{ 'wallet-address.sync_label' | translate }}</ion-button>
-    <ion-button color="primary" (click)="done()" shape="round">{{ 'wallet-address.done_label' | translate }}</ion-button>
-  </ion-fab> -->
+  <ion-modal #modal trigger="open-modal" [presentingElement]="presentingElement">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Address QR</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="modal.dismiss()">Close</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-row class="ion-justify-content-center ion-padding-bottom">
+          <airgap-qr [qrdata]="wallet.receivingPublicAddress" [level]="'L'" [size]="300"></airgap-qr>
+        </ion-row>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>
