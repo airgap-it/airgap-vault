@@ -1,4 +1,4 @@
-import { DeeplinkService } from '@airgap/angular-core'
+import { DeeplinkService, QRType } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
 import { AirGapWallet, UnsignedTransaction, MessageSignResponse, IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
 
@@ -6,6 +6,7 @@ import { assertNever } from '../../utils/utils'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { NavigationService } from '../navigation/navigation.service'
 import { InteractionType, VaultStorageKey, VaultStorageService } from '../storage/storage.service'
+import { CompanionApp } from 'src/app/pages/account-address/account-address.page'
 
 export enum InteractionCommunicationType {
   QR = 'qr',
@@ -26,6 +27,7 @@ export interface IInteractionOptions {
   wallets?: AirGapWallet[]
   transactions?: UnsignedTransaction[]
   messageSignResponse?: MessageSignResponse
+  companionApp?: CompanionApp
 }
 
 @Injectable({
@@ -50,6 +52,11 @@ export class InteractionService {
       } else if (interactionOptions.communicationType === InteractionCommunicationType.QR) {
         this.navigateToPageByOperationType(interactionOptions)
       }
+    } else if (
+      interactionOptions.operationType === InteractionOperationType.WALLET_SYNC &&
+      ![QRType.V2, QRType.V3].includes(interactionOptions.companionApp?.qrType)
+    ) {
+      this.navigateToPageByOperationType(interactionOptions)
     } else {
       switch (interactionType) {
         case InteractionType.UNDETERMINED:
@@ -84,7 +91,10 @@ export class InteractionService {
   private navigateToPageByOperationType(interactionOptions: IInteractionOptions): void {
     if (interactionOptions.operationType === InteractionOperationType.WALLET_SYNC) {
       this.navigationService
-        .routeWithState('/account-share', { interactionUrl: interactionOptions.iacMessage })
+        .routeWithState('/account-share', {
+          interactionUrl: interactionOptions.iacMessage,
+          companionApp: interactionOptions.companionApp
+        })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } else if (interactionOptions.operationType === InteractionOperationType.TRANSACTION_BROADCAST) {
       this.navigationService
@@ -113,7 +123,7 @@ export class InteractionService {
     this.deepLinkService
       .sameDeviceDeeplink(iacMessage)
       .then(() => {
-        this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+        this.navigationService.routeToSecretsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       })
       .catch(handleErrorLocal(ErrorCategory.DEEPLINK_SERVICE))
   }

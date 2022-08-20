@@ -187,7 +187,8 @@ export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
 
   async showWordlist() {
     const modal: HTMLIonModalElement = await this.modalController.create({
-      component: WordlistPage
+      component: WordlistPage,
+      componentProps: { isModal: true }
     })
 
     modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))

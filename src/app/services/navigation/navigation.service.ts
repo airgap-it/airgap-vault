@@ -44,8 +44,8 @@ export class NavigationService {
     return this.state
   }
 
-  public routeToAccountsTab(clearStack: boolean = false): Promise<boolean> {
-    return this.router.navigateByUrl('/tabs/tab-accounts', { replaceUrl: clearStack })
+  public routeToSecretsTab(clearStack: boolean = false): Promise<boolean> {
+    return this.router.navigateByUrl('/tabs/tab-secrets', { replaceUrl: clearStack })
   }
 
   public routeToScanTab(clearStack: boolean = false): Promise<boolean> {
