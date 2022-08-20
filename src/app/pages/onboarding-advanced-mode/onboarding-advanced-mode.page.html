@@ -18,18 +18,17 @@
     <!-- TODO: Add picture -->
 
     <ion-card-header>
-      <ion-card-title>SIMPLE</ion-card-title>
+      <ion-row>
+        <ion-col>
+          <ion-card-title>SIMPLE</ion-card-title>
+        </ion-col>
+        <ion-col size="1">
+          <ion-checkbox [checked]="advancedModeType === advancedModeTypes.SIMPLE"></ion-checkbox>
+        </ion-col>
+      </ion-row>
     </ion-card-header>
 
-    <ion-card-content>
-      Disable advanced features to simplify the app.
-
-      <ul>
-        <li>Simple Setup</li>
-        <li>Multiple Currencies</li>
-        <li>Social Recovery</li>
-      </ul>
-    </ion-card-content>
+    <ion-card-content>Disable advanced features to simplify the app.</ion-card-content>
   </ion-card>
 
   <!-- TODO: Use better colors for "not selected" and "selected"-->
@@ -40,10 +39,17 @@
     <!-- TODO: Add picture -->
 
     <ion-card-header>
-      <ion-card-title>ADVANCED</ion-card-title>
+      <ion-row>
+        <ion-col>
+          <ion-card-title>ADVANCED</ion-card-title>
+        </ion-col>
+        <ion-col size="1">
+          <ion-checkbox [checked]="advancedModeType === advancedModeTypes.ADVANCED"></ion-checkbox>
+        </ion-col>
+      </ion-row>
     </ion-card-header>
     <ion-card-content>
-      This will enable advanced features like custom derivation paths, BIP39 passphrases and more.
+      This will enable advanced features.
 
       <ul>
         <li>BIP39 Passphrases</li>
