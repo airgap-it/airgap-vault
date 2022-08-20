@@ -2,7 +2,7 @@ import { ClipboardService } from '@airgap/angular-core'
 import { IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
 import { Component } from '@angular/core'
 import { NavigationService } from '../../services/navigation/navigation.service'
-import { CompanionApp } from '../account-address/account-address.page'
+import { airgapwallet, CompanionApp } from '../account-address/account-address.page'
 import { ErrorCategory, handleErrorLocal } from './../../services/error-handler/error-handler.service'
 
 @Component({
@@ -20,7 +20,7 @@ export class AccountSharePage {
 
   constructor(private readonly navigationService: NavigationService, private readonly clipboardService: ClipboardService) {
     this.interactionUrl = this.navigationService.getState().interactionUrl
-    this.companionApp = this.navigationService.getState().companionApp
+    this.companionApp = this.navigationService.getState().companionApp ?? airgapwallet
     this.walletName = this.companionApp.name
   }
 

@@ -14,7 +14,7 @@ import { isWalletMigrated } from '../../utils/migration'
 import { AccountEditPopoverComponent } from './account-edit-popover/account-edit-popover.component'
 
 // TODO: add wallet definition into a service
-const defaultOption = {
+export const airgapwallet = {
   icon: 'airgap-wallet-app-logo.png',
   name: 'AirGap Wallet',
   qrType: QRType.V3
@@ -82,13 +82,13 @@ export class AccountAddressPage {
 
     switch (this.wallet?.protocol.identifier) {
       case MainProtocolSymbols.BTC_SEGWIT:
-        this.syncOptions = [defaultOption, bluewallet, sparrowwallet]
+        this.syncOptions = [airgapwallet, bluewallet, sparrowwallet]
         break
       case MainProtocolSymbols.ETH:
-        this.syncOptions = [defaultOption, metamask]
+        this.syncOptions = [airgapwallet, metamask]
         break
       default:
-        this.syncOptions = [defaultOption]
+        this.syncOptions = [airgapwallet]
     }
   }
 
@@ -100,7 +100,7 @@ export class AccountAddressPage {
     this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  public async share(companionApp: CompanionApp = defaultOption): Promise<void> {
+  public async share(companionApp: CompanionApp = airgapwallet): Promise<void> {
     await this.waitWalletShareUrl()
 
     this.interactionService.startInteraction({
