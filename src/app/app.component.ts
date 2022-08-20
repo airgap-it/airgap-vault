@@ -34,6 +34,11 @@ import { StartupChecksService } from './services/startup-checks/startup-checks.s
 
 declare let window: Window & { airGapHasStarted: boolean }
 
+const defer = (fn: () => void) => {
+  // fn()
+  setTimeout(fn, 200)
+}
+
 @Component({
   selector: 'airgap-root',
   templateUrl: 'app.component.html'
@@ -113,7 +118,10 @@ export class AppComponent implements AfterViewInit {
           })
       } else {
         this.ngZone.run(async () => {
-          this.iacService.handleRequest(data.url, IACMessageTransport.DEEPLINK).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
+          // We defer this call because on iOS the app would sometimes get stuck on a black screen when handling deeplinks.
+          defer(() =>
+            this.iacService.handleRequest(data.url, IACMessageTransport.DEEPLINK).catch(handleErrorLocal(ErrorCategory.SCHEME_ROUTING))
+          )
         })
       }
     })
@@ -121,15 +129,14 @@ export class AppComponent implements AfterViewInit {
 
   private async initializeTranslations(): Promise<void> {
     return this.languageService.init({
-      supportedLanguages: ['en', 'de', 'zh-cn'],
+      supportedLanguages: ['en', 'de', 'zh'],
       defaultLanguage: 'en'
     })
   }
 
   private async initializeProtocols(): Promise<void> {
-    const externalMethodProvider:
-      | TezosSaplingExternalMethodProvider
-      | undefined = await this.saplingNativeService.createExternalMethodProvider()
+    const externalMethodProvider: TezosSaplingExternalMethodProvider | undefined =
+      await this.saplingNativeService.createExternalMethodProvider()
 
     const shieldedTezProtocol: TezosShieldedTezProtocol = new TezosShieldedTezProtocol(
       new TezosSaplingProtocolOptions(
