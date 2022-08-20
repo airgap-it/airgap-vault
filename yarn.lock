@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@airgap/angular-core@^0.0.31":
+"@airgap/angular-core@0.0.31":
   version "0.0.31"
   resolved "https://registry.yarnpkg.com/@airgap/angular-core/-/angular-core-0.0.31.tgz#71be4e9b7d5ee8553a4de93cc6aca3b7a6bf8f07"
   integrity sha512-Pxf1JU0Ye/SAVPDHvyBfUwRNVdk9HBKcI9C1ZR+q7KUnhaL38QjR7D4cdpt/up+P36QJpqnqymrtfG8E9mCHDA==
