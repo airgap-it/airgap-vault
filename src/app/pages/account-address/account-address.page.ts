@@ -12,7 +12,32 @@ import { isWalletMigrated } from '../../utils/migration'
 
 import { AccountEditPopoverComponent } from './account-edit-popover/account-edit-popover.component'
 
-interface SyncOption {
+// TODO: add wallet definition into a service
+const defaultOption = {
+  icon: 'airgap-wallet-app-logo.png',
+  name: 'AirGap Wallet',
+  qrType: QRType.V3
+}
+
+const bluewallet = {
+  icon: 'bluewallet.png',
+  name: 'BlueWallet',
+  qrType: QRType.BC_UR
+}
+
+const sparrowwallet = {
+  icon: 'sparrowwallet.png',
+  name: 'Sparrow Wallet',
+  qrType: QRType.BC_UR
+}
+
+const metamask = {
+  icon: 'metamask.webp',
+  name: 'MetaMask',
+  qrType: QRType.METAMASK
+}
+
+export interface CompanionApp {
   icon: string
   name: string
   qrType: QRType
@@ -26,7 +51,7 @@ interface SyncOption {
 export class AccountAddressPage {
   public wallet: AirGapWallet
 
-  public syncOptions: SyncOption[]
+  public syncOptions: CompanionApp[]
 
   private shareObject?: IACMessageDefinitionObjectV3[]
   private shareObjectPromise?: Promise<void>
@@ -43,37 +68,13 @@ export class AccountAddressPage {
     private readonly deepLinkService: DeeplinkService
   ) {
     this.wallet = this.navigationService.getState().wallet
-    const defaultOption = {
-      icon: 'airgap-wallet-app-logo.png',
-      name: 'AirGap Wallet',
-      qrType: QRType.V3
-    }
+
     switch (this.wallet?.protocol.identifier) {
-      case MainProtocolSymbols.BTC:
       case MainProtocolSymbols.BTC_SEGWIT:
-        this.syncOptions = [
-          defaultOption,
-          {
-            icon: 'bluewallet.png',
-            name: 'BlueWallet',
-            qrType: QRType.BC_UR
-          },
-          {
-            icon: 'sparrowwallet.png',
-            name: 'Sparrow Wallet',
-            qrType: QRType.BC_UR
-          }
-        ]
+        this.syncOptions = [defaultOption, bluewallet, sparrowwallet]
         break
       case MainProtocolSymbols.ETH:
-        this.syncOptions = [
-          defaultOption,
-          {
-            icon: 'metamask.webp',
-            name: 'MetaMask',
-            qrType: QRType.METAMASK
-          }
-        ]
+        this.syncOptions = [defaultOption, metamask]
         break
       default:
         this.syncOptions = [defaultOption]
@@ -84,14 +85,13 @@ export class AccountAddressPage {
     this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  public async share(qrFormat: QRType = QRType.V3, walletName: string): Promise<void> {
+  public async share(companionApp: CompanionApp = defaultOption): Promise<void> {
     await this.waitWalletShareUrl()
 
     this.interactionService.startInteraction({
       operationType: InteractionOperationType.WALLET_SYNC,
       iacMessage: this.shareObject,
-      qrFormatPreference: qrFormat,
-      walletName
+      companionApp: companionApp
     })
   }
 

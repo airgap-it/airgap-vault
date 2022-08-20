@@ -405,9 +405,9 @@
     "create_label": "Create"
   },
   "wallet-share": {
-    "title": "Sync Account",
-    "heading": "This is your Sync QR code, scan it with <span class=\"style__strong color__primary\">AirGap Wallet</span>.",
-    "text": "This QR includes your <b>extended</b> public key, public address and your type of coin. Do not share it publicly!",
+    "title": "Pair Account",
+    "heading": "Scan this QR code with <span class=\"style__strong color__primary\">{{walletName}}</span>.",
+    "text": "This QR includes your public key, address and your type of coin.",
     "same-device_label": "Same-Device-Sync",
     "done_label": "Done"
   },

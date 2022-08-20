@@ -6,6 +6,7 @@ import { assertNever } from '../../utils/utils'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { NavigationService } from '../navigation/navigation.service'
 import { InteractionType, VaultStorageKey, VaultStorageService } from '../storage/storage.service'
+import { CompanionApp } from 'src/app/pages/account-address/account-address.page'
 
 export enum InteractionCommunicationType {
   QR = 'qr',
@@ -26,8 +27,7 @@ export interface IInteractionOptions {
   wallets?: AirGapWallet[]
   transactions?: UnsignedTransaction[]
   messageSignResponse?: MessageSignResponse
-  qrFormatPreference?: QRType
-  walletName?: string
+  companionApp?: CompanionApp
 }
 
 @Injectable({
@@ -54,7 +54,7 @@ export class InteractionService {
       }
     } else if (
       interactionOptions.operationType === InteractionOperationType.WALLET_SYNC &&
-      ![QRType.V2, QRType.V3].includes(interactionOptions.qrFormatPreference)
+      ![QRType.V2, QRType.V3].includes(interactionOptions.companionApp?.qrType)
     ) {
       this.navigateToPageByOperationType(interactionOptions)
     } else {
@@ -93,8 +93,7 @@ export class InteractionService {
       this.navigationService
         .routeWithState('/account-share', {
           interactionUrl: interactionOptions.iacMessage,
-          qrFormatPreference: interactionOptions.qrFormatPreference,
-          walletName: interactionOptions.walletName
+          companionApp: interactionOptions.companionApp
         })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } else if (interactionOptions.operationType === InteractionOperationType.TRANSACTION_BROADCAST) {
