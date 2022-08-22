@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core'
 import { ModalController } from '@ionic/angular'
 import { ComponentRef, ModalOptions } from '@ionic/core'
 import { InstallationTypePage } from 'src/app/pages/Installation-type/installation-type.page'
-import { OnboardingAdvancedModePage } from 'src/app/pages/onboarding-advanced-mode/onboarding-advanced-mode.page'
 import { OnboardingWelcomePage } from 'src/app/pages/onboarding-welcome/onboarding-welcome.page'
 
 import { DistributionOnboardingPage } from '../../pages/distribution-onboarding/distribution-onboarding.page'
@@ -11,11 +10,11 @@ import { Warning, WarningModalPage } from '../../pages/warning-modal/warning-mod
 import { DeviceService } from '../device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { SecureStorageService } from '../secure-storage/secure-storage.service'
-import { AdvancedModeType, InstallationType, VaultStorageKey, VaultStorageService } from '../storage/storage.service'
+import { InstallationType, VaultStorageKey, VaultStorageService } from '../storage/storage.service'
 
 export interface Check {
   name: string
-  expectedOutcome: boolean
+  successOutcome: boolean
   check(): Promise<boolean>
   failureConsequence(): Promise<void>
 }
@@ -35,7 +34,7 @@ export class StartupChecksService {
     this.checks = [
       {
         name: 'rootCheck',
-        expectedOutcome: false,
+        successOutcome: false,
         check: (): Promise<boolean> => this.deviceService.checkForRoot(),
         failureConsequence: async (): Promise<void> => {
           await this.presentModal(WarningModalPage, { errorType: Warning.ROOT }).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
@@ -43,7 +42,7 @@ export class StartupChecksService {
       },
       {
         name: 'deviceSecureCheck',
-        expectedOutcome: true,
+        successOutcome: true,
         check: async (): Promise<boolean> => {
           const result = await this.secureStorageService.isDeviceSecure()
 
@@ -55,7 +54,7 @@ export class StartupChecksService {
       },
       {
         name: 'disclaimerAcceptedCheck',
-        expectedOutcome: true,
+        successOutcome: true,
         check: (): Promise<boolean> => this.storageService.get(VaultStorageKey.DISCLAIMER_INITIAL),
         failureConsequence: async (): Promise<void> => {
           await this.presentModal(OnboardingWelcomePage, {}).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
@@ -63,7 +62,7 @@ export class StartupChecksService {
       },
       {
         name: 'installationType',
-        expectedOutcome: true,
+        successOutcome: true,
         check: (): Promise<boolean> =>
           this.storageService.get(VaultStorageKey.INSTALLATION_TYPE).then((type) => type !== InstallationType.UNDETERMINED),
         failureConsequence: async (): Promise<void> => {
@@ -71,17 +70,8 @@ export class StartupChecksService {
         }
       },
       {
-        name: 'advancedMode',
-        expectedOutcome: true,
-        check: (): Promise<boolean> =>
-          this.storageService.get(VaultStorageKey.ADVANCED_MODE_TYPE).then((type) => type !== AdvancedModeType.UNDETERMINED),
-        failureConsequence: async (): Promise<void> => {
-          await this.presentModal(OnboardingAdvancedModePage, {}).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
-        }
-      },
-      {
         name: 'introductionAcceptedCheck',
-        expectedOutcome: true,
+        successOutcome: true,
         check: (): Promise<boolean> => this.storageService.get(VaultStorageKey.INTRODUCTION_INITIAL),
         failureConsequence: async (): Promise<void> => {
           await this.presentModal(IntroductionPage, {}).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
@@ -89,7 +79,7 @@ export class StartupChecksService {
       },
       {
         name: 'electronCheck',
-        expectedOutcome: true,
+        successOutcome: true,
         check: async (): Promise<boolean> => {
           const isElectron: boolean = await deviceService.checkForElectron()
           const hasShownDisclaimer: boolean = await this.storageService.get(VaultStorageKey.DISCLAIMER_ELECTRON)
@@ -130,7 +120,7 @@ export class StartupChecksService {
   public initChecks(): Promise<void> {
     return new Promise(async (resolve) => {
       for (const check of this.checks) {
-        if (+(await check.check()) !== +check.expectedOutcome) {
+        if (+(await check.check()) !== +check.successOutcome) {
           await check.failureConsequence()
         }
       }
