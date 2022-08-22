@@ -9,11 +9,22 @@
 
 <ion-content class="ion-padding">
   <p class="ion-padding-bottom">{{ 'bip85-show.text' | translate }}</p>
-  <p _ngcontent-luc-c184="" class="font--weight__med">{{ 'bip85-show.mnemonic-length' | translate }}</p>
+  <p class="font--weight__med">{{ 'bip85-show.mnemonic-length' | translate }}</p>
   <h3>{{mnemonicLength}}</h3>
-  <p _ngcontent-luc-c184="" class="font--weight__med">{{ 'bip85-show.index' | translate }}</p>
+  <p class="font--weight__med">{{ 'bip85-show.index' | translate }}</p>
   <h3>{{index}}</h3>
-  <h6 class="typography--mono">{{ childMnemonic }}</h6>
+
+  <ion-row>
+    <ion-col size="3"><img [src]="lifehashData" /></ion-col>
+    <ion-col size="9">
+      <div class="font--weight__med">{{ 'bip85-show.fingerprint' | translate }}</div>
+      <div><h5>{{ childFingerprint}}</h5></div>
+    </ion-col>
+  </ion-row>
+
+  <h6 [id]="isBlurred ? 'blur' : ''" class="typography--mono">{{ isBlurred ? blurText : childMnemonic }}</h6>
+
+  <ion-button [disabled]="!isBlurred" (click)="removeBlur()">Remove Blur</ion-button>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-button shape="round" color="primary" (click)="goToSecretSetupPage()">{{ 'bip85-show.add' | translate }}</ion-button>

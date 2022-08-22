@@ -3,8 +3,8 @@
 
 /** Ionic CSS Variables **/
 :root {
-  --ion-color-primary: #f7296e;
-  --ion-color-primary-rgb: 247, 41, 110;
+  --ion-color-primary: #7f6ced;
+  --ion-color-primary-rgb: 127, 108, 237;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
   --ion-color-primary-shade: #d92461;
@@ -135,6 +135,10 @@ airgap-address-explorer {
 }
 
 airgap-accounts-list {
+  ion-toolbar {
+    --background: var(--ion-color-secondary);
+    --color: var(--ion-color-secondary-contrast);
+  }
   ion-item {
     --detail-icon-color: var(--ion-color-dark);
   }
