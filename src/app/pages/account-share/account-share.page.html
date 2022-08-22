@@ -8,25 +8,37 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <h3 class="ion-padding-bottom" [innerHTML]="'wallet-share.heading' | translate: { walletName: walletName }"></h3>
+  <ion-row class="ion-justify-content-center ion-padding-bottom">
+    <div style="width: 300px">
+      <p
+        class="ion-padding-bottom ion-justify-content-center heading--text"
+        [innerHTML]="'wallet-share.heading' | translate: { walletName: walletName }"
+      ></p>
 
-  <ion-row class="ion-justify-content-center ion-padding-bottom" *ngIf="interactionUrl">
-    <airgap-iac-qr
-      [messageDefinitionObjects]="interactionUrl"
-      [qrFormatPreference]="companionApp.qrType"
-      [level]="'L'"
-      [size]="300"
-    ></airgap-iac-qr>
+      <ion-row class="ion-justify-content-center ion-padding-bottom" *ngIf="interactionUrl">
+        <airgap-iac-qr
+          [messageDefinitionObjects]="interactionUrl"
+          [qrFormatPreference]="companionApp.qrType"
+          [level]="'L'"
+          [size]="300"
+        ></airgap-iac-qr>
+      </ion-row>
+
+      <ion-row class="ion-justify-content-center"><p [innerHTML]="'wallet-share.text' | translate"></p></ion-row>
+
+      <ion-row class="rawdata--container" *ngIf="interactionUrl">
+        <ion-col class="ion-no-padding">
+          <ion-item class="ion-no-padding" lines="none">
+            <ion-label>QR Details</ion-label>
+            <ion-toggle [checked]="displayRawData" (ionChange)="displayRawData = !displayRawData" slot="end"></ion-toggle>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </div>
   </ion-row>
-
-  <ion-row><p [innerHTML]="'wallet-share.text' | translate"></p></ion-row>
 
   <ion-row class="rawdata--container" *ngIf="interactionUrl">
     <ion-col class="ion-no-padding">
-      <ion-item class="ion-no-padding" lines="none">
-        <ion-label>QR Details</ion-label>
-        <ion-toggle [checked]="displayRawData" (ionChange)="displayRawData = !displayRawData" slot="end"></ion-toggle>
-      </ion-item>
       <pre *ngIf="displayRawData" class="ion-no-margin">{{ interactionUrl | json }}</pre>
       <ion-button *ngIf="displayRawData" (click)="copyToClipboard()">Copy data to clipboard</ion-button>
     </ion-col>
