@@ -13,11 +13,15 @@
   <h3>{{mnemonicLength}}</h3>
   <p class="font--weight__med">{{ 'bip85-show.index' | translate }}</p>
   <h3>{{index}}</h3>
-  <p class="font--weight__med">{{ 'bip85-show.fingerprint' | translate }}</p>
-  <h3>
-    <img [src]="lifehashData" />
-    {{ childFingerprint}}
-  </h3>
+
+  <ion-row>
+    <ion-col size="3"><img [src]="lifehashData" /></ion-col>
+    <ion-col size="9">
+      <div class="font--weight__med">{{ 'bip85-show.fingerprint' | translate }}</div>
+      <div><h5>{{ childFingerprint}}</h5></div>
+    </ion-col>
+  </ion-row>
+
   <h6 [id]="isBlurred ? 'blur' : ''" class="typography--mono">{{ isBlurred ? blurText : childMnemonic }}</h6>
 
   <ion-button [disabled]="!isBlurred" (click)="removeBlur()">Remove Blur</ion-button>

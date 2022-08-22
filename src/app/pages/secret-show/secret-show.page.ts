@@ -22,6 +22,8 @@ export class SecretShowPage {
   public lifehashData: string | undefined
 
   public isBlurred: boolean = true
+  blurText =
+    '****** **** ***** **** ******* ***** ***** ****** ***** *** ***** ******* ***** **** ***** ********* ***** ****** ***** **** ***** ******* ***** ****'
 
   constructor(
     private readonly deviceService: DeviceService,

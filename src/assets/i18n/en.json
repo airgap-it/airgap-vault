@@ -174,18 +174,19 @@
     "text": "We've generated your secret, it's a sequence of words.",
     "description": "Make sure you understand these rules that ensure you will always have safe access to your accounts.",
     "rules-list": {
-      "item-1_text": "Make sure you write these words down on a piece of paper.",
-      "item-2_text": "You have to strictly follow the sequence.",
-      "item-3_text": "Check the spelling of each word.",
-      "item-4_text": "Keep the piece of paper in a safe place.",
-      "item-5_text": "Under no circumstance take a screenshot or photo and do not photoscan it.",
-      "item-6_text": "Never upload your key anywhere to the cloud."
+      "item-1_text": "Write these words down on a piece of paper",
+      "item-2_text": "The words need to be in order",
+      "item-3_text": "Check the spelling of each word",
+      "item-4_text": "Keep the piece of paper in a safe place",
+      "item-5_text": "Do not take a screenshot or photo and do not photoscan your key",
+      "item-6_text": "Do not upload your key to the cloud"
     },
     "understood_label": "Understood"
   },
   "secret-show": {
     "title": "This is your recovery phrase",
-    "text": "Write down each word on a piece of paper, remember to follow the rules.",
+    "text": "Write down all words on a piece of paper, remember to follow the rules.",
+    "fingerprint": "Fingerprint",
     "next-step_label": "Next Step",
     "too-fast_alert": {
       "title": "That was fast!",
@@ -240,7 +241,7 @@
   "social-recovery-show-share": {
     "title": "Social Recovery",
     "secret-shares_label": "Secret Share {{currentShare}} of {{shareLength}}",
-    "text": "Write down each word on a piece of paper, remember to follow all the rules."
+    "text": "Write down all words on a piece of paper, remember to follow all the rules."
   },
   "social-recovery-validate-share": {
     "title": "Social Recovery",
@@ -491,6 +492,7 @@
     "text": "Write down all the words on a piece of paper. You will have to verify the mnemonic on the next page.",
     "mnemonic-length": "Mnemonic Length",
     "index": "Index",
+    "fingerprint": "Fingerprint",
     "add": "Add Secret"
   },
   "message-signing-request": {
