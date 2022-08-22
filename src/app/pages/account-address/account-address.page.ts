@@ -75,9 +75,12 @@ export class AccountAddressPage {
     private readonly deepLinkService: DeeplinkService,
     private readonly router: Router
   ) {
+    this.wallet = this.navigationService.getState().wallet
+    this.secret = this.navigationService.getState().secret
+
     if (!this.wallet) {
       this.router.navigate(['/'])
-      throw new Error('No wallet found!')
+      throw new Error('[AccountAddressPage]: No wallet found! Navigating to home page.')
     }
 
     switch (this.wallet?.protocol.identifier) {
@@ -87,14 +90,10 @@ export class AccountAddressPage {
       case MainProtocolSymbols.ETH:
         this.syncOptions = [airgapwallet, metamask]
         break
+
       default:
         this.syncOptions = [airgapwallet]
     }
-  }
-
-  ionViewWillEnter() {
-    this.wallet = this.navigationService.getState().wallet
-    this.secret = this.navigationService.getState().secret
   }
 
   ngOnInit() {

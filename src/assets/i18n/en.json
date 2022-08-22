@@ -201,16 +201,14 @@
   },
   "interaction-selection-settings": {
     "title": "Wallet Interaction",
-    "same-device_heading": "Looks like you're using <span class=\"style__strong color__primary\">AirGap Vault</span> and AirGap Wallet on the <span class=\"style__strong color__primary\">same device</span>.",
-    "offline-device_heading": "Looks like you're using <span class=\"style__strong color__primary\">AirGap Vault</span> on an <span class=\"style__strong color__primary\">offline device</span>.",
-    "text": "You can define where you have AirGap Wallet installed to make the interaction with the Vault a bit simpler.",
+    "heading": "How would you like to interact with AirGap Wallet?",
     "selector": {
       "always": "Always ask",
-      "same-device": "Vault and Wallet on the same device",
-      "offline-device": "Vault is an offline device"
+      "same-device": "App Switching",
+      "offline-device": "QR Code Scanning"
     },
     "continue_label": "Continue",
-    "description": "You can always change your preference in the Settings Tab"
+    "description": "You can always change your preference in the settings"
   },
   "verify-key": {
     "incorrect_text": "Your secret does not match the generated one. Make sure you've chosen the correct words. <br /> To correct mistakes, simply select a wrong word and choose the correct one.",
@@ -275,7 +273,6 @@
     "add-secret_label": "Add Secret",
     "search_placeholder": "Search Secret"
   },
-
   "tab-wallets": {
     "title": "Accounts",
     "search_placeholder": "Search Currency",
@@ -381,11 +378,9 @@
   },
   "interaction-selection": {
     "title": "Wallet Interaction",
-    "heading": "How would you like to interact with <span class=\"style__strong color__primary\">AirGap Wallet</span>?",
-    "same-device_label": "Same Device",
-    "same-device_info": "AirGap Vault and AirGap Wallet are installed on the same device.",
-    "offline-device_label": "Offline Device",
-    "offline-device_info": "AirGap Vault is installed on an offline device, scan the QR code with AirGap Wallet."
+    "heading": "How would you like to interact with AirGap Wallet?",
+    "same-device_label": "App Switching",
+    "offline-device_label": "QR Code Scanning"
   },
   "wallet-edit-delete-popover": {
     "settings_label": "Account Settings",
@@ -417,7 +412,7 @@
   },
   "wallet-share": {
     "title": "Pair Account",
-    "heading": "Scan this QR code with <span class=\"style__strong color__primary\">{{walletName}}</span>.",
+    "heading": "Scan this QR code with {{walletName}}",
     "text": "This QR includes your public key, address and your type of coin.",
     "same-device_label": "Same-Device-Sync",
     "done_label": "Done"
