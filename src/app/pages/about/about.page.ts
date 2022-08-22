@@ -49,33 +49,17 @@ export class AboutPage {
 
   public twitter(): void {
     this.openLinkPage(
-      'GitHub',
-      'https://github.com/airgap-it/airgap-vault',
-      `AirGap Vault is fully open source. Visit the GitHub repository to view the source code.`
+      'Twitter',
+      'https://twitter.com/AirGap_it',
+      `Follow our Twitter account to stay up to date with the latest developments.`
     )
   }
 
   public telegram(): void {
     this.openLinkPage(
-      'GitHub',
-      'https://github.com/airgap-it/airgap-vault',
-      `AirGap Vault is fully open source. Visit the GitHub repository to view the source code.`
-    )
-  }
-
-  public feedback(): void {
-    this.openLinkPage(
-      'Feedback',
-      'hi@airgap.it',
-      `We're always happy to get feedback if you have suggestions or are experiencing bugs. Please write an email to the address below.`
-    )
-  }
-
-  public documentation(): void {
-    this.openLinkPage(
-      'Feedback',
-      'hi@airgap.it',
-      `We're always happy to get feedback if you have suggestions or are experiencing bugs. Please write an email to the address below.`
+      'Telegram',
+      'https://t.me/AirGap',
+      `Join our telegram channel to ask questions and hear about the latest developments.`
     )
   }
 
@@ -85,6 +69,18 @@ export class AboutPage {
       'https://discord.gg/gnWqCQsteh',
       `Join our discord server to ask questions and hear about the latest developments.`
     )
+  }
+
+  public feedback(): void {
+    this.openLinkPage(
+      'Feedback',
+      'hi@airgap.it',
+      `We're always happy to get feedback if you have suggestions or are experiencing bugs. Please write us an email.`
+    )
+  }
+
+  public documentation(): void {
+    this.openLinkPage('Feedback', 'hi@airgap.it', `Our docs offer a comprehensive overview of the features and functionality of our app.`)
   }
 
   private openLinkPage(title: string, link: string, description?: string) {
