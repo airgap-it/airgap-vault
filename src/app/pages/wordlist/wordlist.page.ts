@@ -55,8 +55,6 @@ export class WordlistPage implements OnInit {
 
   async ngOnInit() {
     this.filterItemsByString()
-
-    this.isModal = !!(await this.modalController.getTop())
   }
 
   ngOnChanges() {
