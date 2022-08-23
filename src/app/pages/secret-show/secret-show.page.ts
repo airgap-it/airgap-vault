@@ -1,8 +1,10 @@
 import { Component } from '@angular/core'
 import { AlertController } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
-import { first } from 'rxjs/operators'
+import { Observable } from 'rxjs'
+import { first, map } from 'rxjs/operators'
 import { LifehashService } from 'src/app/services/lifehash/lifehash.service'
+import { AdvancedModeType, VaultStorageKey, VaultStorageService } from 'src/app/services/storage/storage.service'
 
 import { SHOW_SECRET_MIN_TIME_IN_SECONDS } from '../../constants/constants'
 import { MnemonicSecret } from '../../models/secret'
@@ -25,12 +27,17 @@ export class SecretShowPage {
   blurText =
     '****** **** ***** **** ******* ***** ***** ****** ***** *** ***** ******* ***** **** ***** ********* ***** ****** ***** **** ***** ******* ***** ****'
 
+  public isAdvancedMode$: Observable<boolean> = this.storageService
+    .subscribe(VaultStorageKey.ADVANCED_MODE_TYPE)
+    .pipe(map((res) => res === AdvancedModeType.ADVANCED))
+
   constructor(
     private readonly deviceService: DeviceService,
     private readonly navigationService: NavigationService,
     private readonly alertController: AlertController,
     private readonly translateService: TranslateService,
-    private readonly lifehashService: LifehashService
+    private readonly lifehashService: LifehashService,
+    private readonly storageService: VaultStorageService
   ) {
     this.secret = this.navigationService.getState().secret
   }
@@ -44,9 +51,16 @@ export class SecretShowPage {
     this.deviceService.disableScreenshotProtection()
   }
 
-  removeBlur() {
-    this.isBlurred = false
-    setTimeout(() => {
+  public timeout: NodeJS.Timer
+
+  changeBlur() {
+    this.isBlurred = !this.isBlurred
+
+    if (this.timeout) {
+      clearTimeout(this.timeout)
+    }
+
+    this.timeout = setTimeout(() => {
       this.isBlurred = true
     }, 30_000)
   }

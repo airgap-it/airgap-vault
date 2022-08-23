@@ -1,6 +1,7 @@
 import { BaseStorage } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
 import { Storage } from '@ionic/storage'
+import { Observable, ReplaySubject } from 'rxjs'
 
 export enum InteractionType {
   UNDETERMINED = 'UNDETERMINED',
@@ -64,11 +65,32 @@ const defaultValues: VaultStorageKeyReturnDefaults = {
   providedIn: 'root'
 })
 export class VaultStorageService extends BaseStorage<VaultStorageKey, VaultStorageKeyReturnType> {
+  private observables: Record<string, ReplaySubject<any>> = {}
+
   constructor(storage: Storage) {
     super(storage, defaultValues)
   }
 
+  set<K extends VaultStorageKey>(key: K, value: VaultStorageKeyReturnType[K]): Promise<void> {
+    if (this.observables[key]) {
+      this.observables[key].next(value)
+    }
+    return super.set(key, value)
+  }
+
   wipe() {
     return this.storage.clear()
+  }
+
+  subscribe<K extends VaultStorageKey>(key: K): Observable<VaultStorageKeyReturnType[K]> {
+    if (!this.observables[key]) {
+      this.observables[key] = new ReplaySubject(1)
+
+      this.storage.get(key).then((value) => {
+        this.observables[key].next(value ?? defaultValues[key])
+      })
+    }
+
+    return this.observables[key].asObservable()
   }
 }

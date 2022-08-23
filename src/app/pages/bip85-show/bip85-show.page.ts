@@ -1,6 +1,8 @@
 import { Component } from '@angular/core'
 import { BIP32Interface, fromSeed } from 'bip32'
 import { mnemonicToSeed } from 'bip39'
+import { Observable } from 'rxjs'
+import { map } from 'rxjs/operators'
 import { BIPSigner } from 'src/app/models/BIP39Signer'
 import { BIP85 } from 'src/app/models/BIP85'
 import { MnemonicSecret } from 'src/app/models/secret'
@@ -9,6 +11,7 @@ import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/
 import { LifehashService } from 'src/app/services/lifehash/lifehash.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 import { SecureStorage, SecureStorageService } from 'src/app/services/secure-storage/secure-storage.service'
+import { AdvancedModeType, VaultStorageKey, VaultStorageService } from 'src/app/services/storage/storage.service'
 
 @Component({
   selector: 'airgap-bip85-show',
@@ -30,11 +33,16 @@ export class Bip85ShowPage {
   blurText =
     '****** **** ***** **** ******* ***** ***** ****** ***** *** ***** ******* ***** **** ***** ********* ***** ****** ***** **** ***** ******* ***** ****'
 
+  public isAdvancedMode$: Observable<boolean> = this.storageService
+    .subscribe(VaultStorageKey.ADVANCED_MODE_TYPE)
+    .pipe(map((res) => res === AdvancedModeType.ADVANCED))
+
   constructor(
     private readonly deviceService: DeviceService,
     private readonly navigationService: NavigationService,
     private readonly secureStorageService: SecureStorageService,
-    private readonly lifehashService: LifehashService
+    private readonly lifehashService: LifehashService,
+    private readonly storageService: VaultStorageService
   ) {
     if (this.navigationService.getState()) {
       this.secret = this.navigationService.getState().secret
@@ -64,9 +72,16 @@ export class Bip85ShowPage {
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  removeBlur() {
-    this.isBlurred = false
-    setTimeout(() => {
+  public timeout: NodeJS.Timer
+
+  changeBlur() {
+    this.isBlurred = !this.isBlurred
+
+    if (this.timeout) {
+      clearTimeout(this.timeout)
+    }
+
+    this.timeout = setTimeout(() => {
       this.isBlurred = true
     }, 30_000)
   }
