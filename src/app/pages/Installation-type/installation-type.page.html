@@ -29,7 +29,7 @@
           </ion-card-title>
         </ion-col>
         <ion-col size="1">
-          <ion-checkbox [checked]="installationType === installationTypes.ONLINE"></ion-checkbox>
+          <ion-checkbox *ngIf="installationType === installationTypes.ONLINE" [checked]="true"></ion-checkbox>
         </ion-col>
       </ion-row>
     </ion-card-header>
@@ -64,7 +64,7 @@
           </ion-card-title>
         </ion-col>
         <ion-col size="1">
-          <ion-checkbox [checked]="installationType === installationTypes.OFFLINE"></ion-checkbox>
+          <ion-checkbox *ngIf="installationType === installationTypes.OFFLINE" [checked]="true"></ion-checkbox>
         </ion-col>
       </ion-row>
     </ion-card-header>

@@ -23,7 +23,7 @@
           <ion-card-title>SIMPLE</ion-card-title>
         </ion-col>
         <ion-col size="1">
-          <ion-checkbox [checked]="advancedModeType === advancedModeTypes.SIMPLE"></ion-checkbox>
+          <ion-checkbox *ngIf="advancedModeType === advancedModeTypes.SIMPLE" [checked]="true"></ion-checkbox>
         </ion-col>
       </ion-row>
     </ion-card-header>
@@ -44,7 +44,7 @@
           <ion-card-title>ADVANCED</ion-card-title>
         </ion-col>
         <ion-col size="1">
-          <ion-checkbox [checked]="advancedModeType === advancedModeTypes.ADVANCED"></ion-checkbox>
+          <ion-checkbox *ngIf="advancedModeType === advancedModeTypes.ADVANCED" [checked]="true"></ion-checkbox>
         </ion-col>
       </ion-row>
     </ion-card-header>

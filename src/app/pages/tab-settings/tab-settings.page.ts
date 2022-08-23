@@ -10,6 +10,8 @@ import { ClipboardService, IACMessageTransport, SerializerService } from '@airga
 import { IACService } from 'src/app/services/iac/iac.service'
 import { InstallationTypePage } from '../Installation-type/installation-type.page'
 import { OnboardingAdvancedModePage } from '../onboarding-advanced-mode/onboarding-advanced-mode.page'
+import { OnboardingWelcomePage } from '../onboarding-welcome/onboarding-welcome.page'
+import { Warning, WarningModalPage } from '../warning-modal/warning-modal.page'
 
 @Component({
   selector: 'airgap-tab-settings',
@@ -48,6 +50,25 @@ export class TabSettingsPage {
 
   public goToQrSettings(): void {
     this.navigationService.route('/qr-settings').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
+  public async goToOnboarding(): Promise<void> {
+    const modal: HTMLIonModalElement = await this.modalController.create({
+      component: OnboardingWelcomePage,
+      backdropDismiss: false
+    })
+
+    modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+  }
+
+  public async goToDisclaimer(): Promise<void> {
+    const modal: HTMLIonModalElement = await this.modalController.create({
+      component: WarningModalPage,
+      componentProps: { errorType: Warning.INITIAL_DISCLAIMER },
+      backdropDismiss: false
+    })
+
+    modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 
   public async goToInstallationType(): Promise<void> {
