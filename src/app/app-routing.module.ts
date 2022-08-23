@@ -148,10 +148,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/link-page/link-page.module').then((m) => m.LinkPagePageModule)
   },
   {
-    path: 'guides',
-    loadChildren: () => import('./pages/guides/guides.module').then((m) => m.GuidesPageModule)
-  },
-  {
     path: 'address-explorer',
     loadChildren: () => import('./pages/address-explorer/address-explorer.module').then((m) => m.AddressExplorerPageModule)
   }
