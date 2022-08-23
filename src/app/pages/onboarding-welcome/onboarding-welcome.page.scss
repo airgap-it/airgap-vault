@@ -11,8 +11,8 @@ ion-slides {
 }
 
 .swiper-slide img {
-  max-height: 50%;
-  max-width: 80%;
+  max-height: 40%;
+  max-width: 60%;
   margin: 60px 0 40px;
   pointer-events: none;
 }
@@ -25,7 +25,6 @@ p {
   padding: 0 40px;
   font-size: 14px;
   line-height: 1.5;
-  color: var(--ion-color-step-600, #60646b);
 }
 
 p b {
