@@ -1,3 +1,7 @@
 ion-icon {
   color: #ffffff;
 }
+
+ion-content {
+  --padding-bottom: var(--ion-padding, 64px);
+}

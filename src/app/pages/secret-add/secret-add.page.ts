@@ -1,5 +1,9 @@
 import { Component } from '@angular/core'
 import { Platform } from '@ionic/angular'
+import { Observable } from 'rxjs'
+import { map } from 'rxjs/operators'
+import { LifehashService } from 'src/app/services/lifehash/lifehash.service'
+import { AdvancedModeType, VaultStorageKey, VaultStorageService } from 'src/app/services/storage/storage.service'
 import { MnemonicSecret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
@@ -17,15 +21,27 @@ export class SecretAddPage {
 
   public secret: MnemonicSecret
 
+  public lifehashData: string | undefined
+
+  public isAdvancedMode$: Observable<boolean> = this.storageService
+    .subscribe(VaultStorageKey.ADVANCED_MODE_TYPE)
+    .pipe(map((res) => res === AdvancedModeType.ADVANCED))
+
   constructor(
     private readonly secretsService: SecretsService,
     private readonly navigationService: NavigationService,
-    private readonly platform: Platform
+    private readonly platform: Platform,
+    private readonly lifehashService: LifehashService,
+    private readonly storageService: VaultStorageService
   ) {
     if (this.navigationService.getState()) {
       this.isGenerating = this.navigationService.getState().isGenerating
       this.secret = this.navigationService.getState().secret
       this.isAndroid = this.platform.is('android')
+
+      this.lifehashService.generateLifehash(this.secret.fingerprint).then((data) => {
+        this.lifehashData = data
+      })
     }
   }
 

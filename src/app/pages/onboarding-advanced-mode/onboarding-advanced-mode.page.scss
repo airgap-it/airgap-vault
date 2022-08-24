@@ -2,3 +2,7 @@
   height: 40px;
   width: 40px;
 }
+
+ion-content {
+  --padding-bottom: var(--ion-padding, 64px);
+}
