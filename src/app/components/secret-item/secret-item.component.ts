@@ -2,6 +2,7 @@ import { AirGapWalletStatus } from '@airgap/coinlib-core'
 import { Component, Input, OnInit } from '@angular/core'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
+import { LifehashService } from 'src/app/services/lifehash/lifehash.service'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
 
 import { MnemonicSecret } from '../../models/secret'
@@ -18,9 +19,15 @@ export class SecretItemComponent implements OnInit {
   public activeWallets: string[]
   public hasMoreWallets: number = 0
 
-  constructor(private readonly secretsService: SecretsService, public navigationService: NavigationService) {}
+  public lifehashData: string = ''
 
-  public ngOnInit() {
+  constructor(
+    private readonly secretsService: SecretsService,
+    public navigationService: NavigationService,
+    private readonly lifehashService: LifehashService
+  ) {}
+
+  public async ngOnInit() {
     this.secretsService.getActiveSecretObservable().subscribe((secret: MnemonicSecret) => {
       if (secret && secret.wallets) {
         this.getWalletsFromSecret()
@@ -28,6 +35,8 @@ export class SecretItemComponent implements OnInit {
     })
 
     this.getWalletsFromSecret()
+
+    this.lifehashData = await this.lifehashService.generateLifehash(this.secret.fingerprint)
   }
 
   public getWalletsFromSecret() {
@@ -44,7 +53,8 @@ export class SecretItemComponent implements OnInit {
     }
   }
 
-  public goToEditSecret(): void {
+  public goToEditSecret(ev: TouchEvent): void {
+    ev.stopPropagation()
     this.navigationService.routeWithState('/secret-edit', { secret: this.secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
