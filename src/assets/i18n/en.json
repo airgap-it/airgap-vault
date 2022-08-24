@@ -161,6 +161,7 @@
     "heading": "We're generating your secret.",
     "text": "For this we use your video, audio, touch and device acceleration to add additional entropy to your secret.",
     "description": "Move your device around to record audio, video & device acceleration until all shields are full.",
+    "progress_bar": "As a rule of thumb: the more entropy, the better. Continue any time",
     "continue_label": "Continue"
   },
   "secret-import": {

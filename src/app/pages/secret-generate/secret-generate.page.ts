@@ -1,8 +1,6 @@
 import { PermissionsService, PermissionTypes } from '@airgap/angular-core'
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { Platform } from '@ionic/angular'
-import { auditTime } from 'rxjs/operators'
-
 import { TouchEntropyComponent } from '../../components/touch-entropy/touch-entropy.component'
 import { MnemonicSecret } from '../../models/secret'
 import { AudioNativeService } from '../../services/audio/audio.native.servive'
@@ -33,7 +31,9 @@ export class SecretGeneratePage implements OnInit {
 
   private readonly ENTROPY_STARTUP_TIME: number = 5
   private startupTimeWaited: boolean = false
-
+  public percentageNeeded: number
+  public percentageValue: number = 0
+  private percentageInterval: NodeJS.Timer
   public entropy: { isFull: boolean } = {
     isFull: false
   }
@@ -45,7 +45,6 @@ export class SecretGeneratePage implements OnInit {
     public readonly audioService: AudioNativeService,
     private readonly navigationService: NavigationService,
     private readonly platform: Platform,
-    private readonly changeDetectorRef: ChangeDetectorRef,
     private readonly permissionsService: PermissionsService
   ) {
     this.isBrowser = !this.platform.is('hybrid')
@@ -63,6 +62,7 @@ export class SecretGeneratePage implements OnInit {
       this.audioEnabled = this.audioService.getCollectedEntropyPercentage() !== 0
       this.cameraEnabled = this.cameraService.getCollectedEntropyPercentage() !== 0
       this.gyroEnabled = this.gyroService.getCollectedEntropyPercentage() !== 0
+
       // Touch will never be disabled
     }
   }
@@ -88,31 +88,17 @@ export class SecretGeneratePage implements OnInit {
     this.entropyService
       .startEntropyCollection()
       .then(() => {
-        this.entropyService
-          .getEntropyUpdateObservable()
-          .pipe(auditTime(200))
-          .subscribe(() => {
-            this.checkEntropy()
-          })
+        this.entropyService.getEntropyUpdateObservable()
       })
       .catch(handleErrorLocal(ErrorCategory.ENTROPY_COLLECTION))
+    this.percentageInterval = setInterval(this.increasePercentage.bind(this), 100)
   }
 
-  public checkEntropy(): void {
-    this.changeDetectorRef.detectChanges()
-    this.checkEntropySourceStatus()
-
-    const enabledSources: boolean[] = [this.audioEnabled, this.cameraEnabled, this.gyroEnabled, this.touchEnabled]
-    const percentageNeeded: number = enabledSources.reduce((previous: number, isEnabled: boolean) => previous + (isEnabled ? 100 : 0), 0)
-
-    if (
-      Math.min(100, this.audioService.getCollectedEntropyPercentage()) +
-        Math.min(100, this.cameraService.getCollectedEntropyPercentage()) +
-        Math.min(100, this.gyroService.getCollectedEntropyPercentage()) +
-        Math.min(100, this.touchEntropy.getCollectedEntropyPercentage()) >=
-      percentageNeeded
-    ) {
-      this.entropy.isFull = true
+  private increasePercentage() {
+    this.percentageValue = this.percentageValue + 0.01
+    if (this.percentageValue > 1) {
+      clearInterval(this.percentageInterval)
+      return this.goToSecretRulesPage()
     }
   }
 
