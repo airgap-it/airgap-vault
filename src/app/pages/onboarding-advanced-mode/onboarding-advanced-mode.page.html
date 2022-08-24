@@ -1,0 +1,69 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>{{ 'onboarding-advanced-mode.title' | translate }}</ion-title>
+    <ion-buttons *ngIf="isSettingsModal" slot="end">
+      <ion-button (click)="close()" color="light">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- TODO: Use better colors for "not selected" and "selected"-->
+  <ion-card
+    [color]="advancedModeType === advancedModeTypes.SIMPLE ? 'light' : 'tertiary'"
+    (click)="advancedModeType = advancedModeTypes.SIMPLE"
+  >
+    <!-- TODO: Add picture -->
+
+    <ion-card-header>
+      <ion-row>
+        <ion-col>
+          <ion-card-title>SIMPLE</ion-card-title>
+        </ion-col>
+        <ion-col size="1">
+          <ion-checkbox *ngIf="advancedModeType === advancedModeTypes.SIMPLE" [checked]="true"></ion-checkbox>
+        </ion-col>
+      </ion-row>
+    </ion-card-header>
+
+    <ion-card-content>Disable advanced features to simplify the app.</ion-card-content>
+  </ion-card>
+
+  <!-- TODO: Use better colors for "not selected" and "selected"-->
+  <ion-card
+    [color]="advancedModeType === advancedModeTypes.ADVANCED ? 'light' : 'tertiary'"
+    (click)="advancedModeType = advancedModeTypes.ADVANCED"
+  >
+    <!-- TODO: Add picture -->
+
+    <ion-card-header>
+      <ion-row>
+        <ion-col>
+          <ion-card-title>ADVANCED</ion-card-title>
+        </ion-col>
+        <ion-col size="1">
+          <ion-checkbox *ngIf="advancedModeType === advancedModeTypes.ADVANCED" [checked]="true"></ion-checkbox>
+        </ion-col>
+      </ion-row>
+    </ion-card-header>
+    <ion-card-content>
+      This will enable advanced features.
+
+      <ul>
+        <li>BIP39 Passphrases</li>
+        <li>Recovery Phrase Fingerprints</li>
+        <li>Advanced Entropy Collection</li>
+      </ul>
+    </ion-card-content>
+  </ion-card>
+
+  <p *ngIf="!isSettingsModal">You can change this later in the settings.</p>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-button shape="round" color="primary" [disabled]="advancedModeType === advancedModeTypes.UNDETERMINED" (click)="next()">
+      {{ 'introduction.continue_label' | translate }}
+    </ion-button>
+  </ion-fab>
+</ion-content>

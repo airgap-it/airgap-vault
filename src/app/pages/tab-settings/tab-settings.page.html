@@ -10,10 +10,21 @@
       <ion-label>{{ 'tab-settings.information_label' | translate }}</ion-label>
     </ion-list-header>
 
-    <ion-item lines="none" detail="true" (click)="goToAbout()">
+    <ion-item lines="none" (click)="goToAbout()" detail="true">
       <ion-icon slot="start" name="information-circle-outline"></ion-icon>
       <ion-label>{{ 'tab-settings.about' | translate }}</ion-label>
     </ion-item>
+
+    <ion-item lines="none" (click)="goToOnboarding()">
+      <ion-icon name="list" slot="start"></ion-icon>
+      {{ 'tab-settings.welcome-onboarding_label' | translate }}
+    </ion-item>
+
+    <ion-item lines="none" (click)="goToDisclaimer()">
+      <ion-icon name="list" slot="start"></ion-icon>
+      {{ 'tab-settings.disclaimer_label' | translate }}
+    </ion-item>
+
     <!--
       TODO: Enable once history is in components lib
       <ion-item lines="none" detail="true" (click)="goToInteractionHistory()">
@@ -32,31 +43,43 @@
       {{ 'tab-settings.paste-from-clipboard_label' | translate }}
     </ion-item>
 
-    <ion-item (click)="goToQrSettings()">
+    <ion-item (click)="goToQrSettings()" detail="true">
       <ion-icon name="qr-code-outline" slot="start"></ion-icon>
       {{ 'tab-settings.qr-advanced-settings_label' | translate }}
     </ion-item>
 
-    <ion-item (click)="goToInteractionSettings()">
+    <ion-item (click)="goToInteractionSettings()" detail="true">
       <ion-icon src="assets/icons/md-swap_horiz.svg" slot="start"></ion-icon>
       {{ 'tab-settings.interaction-settings_label' | translate }}
     </ion-item>
+  </ion-list>
 
+  <ion-list class="ion-no-border" lines="none">
     <ion-list-header class="ion-no-margin" lines="none">
       <ion-label>{{ 'tab-settings.advanced-settings_label' | translate }}</ion-label>
     </ion-list-header>
 
-    <ion-item (click)="goToBip39Wordlist()">
+    <ion-item lines="none" (click)="goToInstallationType()">
+      <ion-icon name="list" slot="start"></ion-icon>
+      {{ 'tab-settings.installation-type_label' | translate }}
+    </ion-item>
+
+    <ion-item lines="none" (click)="goToAdvancedModeType()">
+      <ion-icon name="list" slot="start"></ion-icon>
+      {{ 'tab-settings.advanced-mode-type_label' | translate }}
+    </ion-item>
+
+    <ion-item (click)="goToBip39Wordlist()" detail="true">
       <ion-icon name="list" slot="start"></ion-icon>
       {{ 'tab-settings.bip39_wordlist_label' | translate }}
     </ion-item>
 
-    <ion-item (click)="goToErrorHistory()">
+    <ion-item (click)="goToErrorHistory()" detail="true">
       <ion-icon name="bug-outline" slot="start"></ion-icon>
       {{ 'tab-settings.error-history_label' | translate }}
     </ion-item>
 
-    <ion-item (click)="goToDangerZone()">
+    <ion-item (click)="goToDangerZone()" detail="true">
       <ion-icon name="warning" slot="start"></ion-icon>
       {{ 'tab-settings.danger-zone_label' | translate }}
     </ion-item>

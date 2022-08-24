@@ -14,7 +14,7 @@
   <p class="font--weight__med">{{ 'bip85-show.index' | translate }}</p>
   <h3>{{index}}</h3>
 
-  <ion-row>
+  <ion-row *ngIf="(isAdvancedMode$ | async)">
     <ion-col size="3"><img [src]="lifehashData" /></ion-col>
     <ion-col size="9">
       <div class="font--weight__med">{{ 'bip85-show.fingerprint' | translate }}</div>
@@ -24,7 +24,7 @@
 
   <h6 [id]="isBlurred ? 'blur' : ''" class="typography--mono">{{ isBlurred ? blurText : childMnemonic }}</h6>
 
-  <ion-button [disabled]="!isBlurred" (click)="removeBlur()">Remove Blur</ion-button>
+  <ion-button (click)="changeBlur()">{{ isBlurred ? 'Show Recovery Phrase' : 'Hide Recovery Phrase'}}</ion-button>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-button shape="round" color="primary" (click)="goToSecretSetupPage()">{{ 'bip85-show.add' | translate }}</ion-button>

@@ -5,11 +5,13 @@ import { ICoinProtocol, MainProtocolSymbols } from '@airgap/coinlib-core'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
-import { VaultStorageKey, VaultStorageService } from '../../services/storage/storage.service'
+import { AdvancedModeType, VaultStorageKey, VaultStorageService } from '../../services/storage/storage.service'
 import { LocalAuthenticationOnboardingPage } from '../local-authentication-onboarding/local-authentication-onboarding.page'
 import { BIP39_PASSPHRASE_ENABLED } from 'src/app/constants/constants'
 import { ProtocolService } from '@airgap/angular-core'
 import { MnemonicSecret } from 'src/app/models/secret'
+import { Observable } from 'rxjs'
+import { map } from 'rxjs/operators'
 
 interface ProtocolWrapper {
   protocol: ICoinProtocol
@@ -36,6 +38,10 @@ export class AccountAddPage {
   public isBip39PassphraseEnabled: boolean = BIP39_PASSPHRASE_ENABLED
   public revealBip39Passphrase: boolean = false
   public bip39Passphrase: string = ''
+
+  public isAppAdvancedMode$: Observable<boolean> = this.storageService
+    .subscribe(VaultStorageKey.ADVANCED_MODE_TYPE)
+    .pipe(map((res) => res === AdvancedModeType.ADVANCED))
 
   constructor(
     private readonly secretsService: SecretsService,

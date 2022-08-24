@@ -144,6 +144,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/error-history/error-history.module').then((m) => m.ErrorHistoryPageModule)
   },
   {
+    path: 'link-page',
+    loadChildren: () => import('./pages/link-page/link-page.module').then((m) => m.LinkPagePageModule)
+  },
+  {
     path: 'address-explorer',
     loadChildren: () => import('./pages/address-explorer/address-explorer.module').then((m) => m.AddressExplorerPageModule)
   }

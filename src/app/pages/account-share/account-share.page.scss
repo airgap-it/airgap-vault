@@ -16,3 +16,7 @@
 .heading--text {
   font-size: 32px;
 }
+
+ion-content {
+  --padding-bottom: var(--ion-padding, 64px);
+}

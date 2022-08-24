@@ -46,7 +46,7 @@
     "transaction-unreadable": "We were not able to extract information from this transaction. This does not mean that the transaction is invalid - Please make sure that you know what you are doing, and you can verify that you know that this transaction contains the correct data."
   },
   "introduction": {
-    "title": "The New Crypto Wallet Standard",
+    "title": "Install AirGap Wallet",
     "highest": {
       "label": "Highest Security",
       "text": "With the AirGap <b>two device approach</b> secure key handling becomes more accessible."
@@ -71,19 +71,16 @@
     "continue_label": "Let's Go"
   },
   "secret-setup": {
-    "heading": "Let's setup AirGap!",
-    "text": "Do you want to create a new secret or import an existing one?",
+    "heading": "Secret Setup",
     "generate": {
       "label": "Generate",
-      "text": "Create a new secret with our secure process to make sure your funds are really safe."
+      "text": "Create a secure secret by using additional entropy from the camera and microphone."
     },
     "import": {
-      "label": "Import",
-      "text": "Import your existing secret to AirGap and create safe transactions."
+      "label": "Import Recovery Phrase"
     },
     "social-recovery": {
-      "label": "Social Recovery",
-      "text": "Recover a lost private key from your social contacts' secret shares."
+      "label": "Import Social Recovery"
     },
     "dice-roll": {
       "label": "Generate with Dice Rolls",
@@ -97,6 +94,7 @@
   "secret-edit": {
     "title": " Your Secret",
     "text": "Give your secret a name and select the security level.",
+    "fingerprint": "Fingerprint",
     "secret_input_label": "Label of your secret",
     "advanced": "Advanced Options",
     "security-level": {
@@ -105,7 +103,11 @@
     },
     "passcode": {
       "label": "Encryption Password",
-      "text": "Set an encryption password for your secret. This is an optional setting."
+      "text": "You have to enter this password every time the secret is accessed, eg. when signing a transaction. If you lose this password, you have to re-import your 24 word backup."
+    },
+    "passphrase": {
+      "label": "BIP39 Passphrase",
+      "text": "The BIP39 passphrase has to be entered when creating an account."
     },
     "secret-recovery": {
       "heading": "Secret Recovery",
@@ -258,6 +260,13 @@
     "about": "About",
     "title": "Settings",
     "information_label": "Information",
+    "faq_label": "FAQ",
+    "feedback_label": "Feedback",
+    "github_label": "GitHub",
+    "twitter_label": "Twitter",
+    "telegram_label": "Telegram",
+    "discord_label": "Discord",
+    "documentation_label": "Documentation",
     "secrets_label": "Secrets",
     "add-settings_label": "Add Secret",
     "interaction-options_label": "Interaction Options",
@@ -522,6 +531,10 @@
   },
   "unsigned-transaction": {
     "sign-tx_label": "Sign Transaction"
+  },
+  "link-page": {
+    "scan-qr": "Scan the QR code to open the link on an online device",
+    "open-link": "Open link on this device"
   },
   "migration": {
     "title": "Accounts Update",

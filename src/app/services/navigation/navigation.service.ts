@@ -14,7 +14,7 @@ interface State {
   providedIn: 'root'
 })
 export class NavigationService {
-  private state: State = {}
+  private state: State | undefined = {}
 
   constructor(private readonly router: Router, private readonly location: Location, private readonly navCtrl: NavController) {}
 

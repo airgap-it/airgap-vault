@@ -6,6 +6,9 @@ import { LifehashService } from 'src/app/services/lifehash/lifehash.service'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
 
 import { MnemonicSecret } from '../../models/secret'
+import { AdvancedModeType, VaultStorageKey, VaultStorageService } from 'src/app/services/storage/storage.service'
+import { Observable } from 'rxjs'
+import { map } from 'rxjs/operators'
 
 @Component({
   selector: 'airgap-secret-item',
@@ -21,10 +24,15 @@ export class SecretItemComponent implements OnInit {
 
   public lifehashData: string = ''
 
+  public isAdvancedMode$: Observable<boolean> = this.storageService
+    .subscribe(VaultStorageKey.ADVANCED_MODE_TYPE)
+    .pipe(map((res) => res === AdvancedModeType.ADVANCED))
+
   constructor(
     private readonly secretsService: SecretsService,
     public navigationService: NavigationService,
-    private readonly lifehashService: LifehashService
+    private readonly lifehashService: LifehashService,
+    private readonly storageService: VaultStorageService
   ) {}
 
   public async ngOnInit() {
