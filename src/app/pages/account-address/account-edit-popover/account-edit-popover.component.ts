@@ -3,7 +3,6 @@ import { AlertController, PopoverController } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 import { AirGapWallet } from '@airgap/coinlib-core'
 import { first } from 'rxjs/operators'
-
 import { ClipboardService } from '@airgap/angular-core'
 import { ErrorCategory, handleErrorLocal } from '../../../services/error-handler/error-handler.service'
 import { SecretsService } from '../../../services/secrets/secrets.service'
@@ -17,6 +16,7 @@ import { NavigationService } from 'src/app/services/navigation/navigation.servic
 export class AccountEditPopoverComponent {
   public readonly wallet: AirGapWallet
   private readonly onDelete: Function
+  private readonly openAddressQR: () => void | undefined
   private readonly getWalletShareUrl: () => Promise<string>
 
   constructor(
@@ -42,6 +42,12 @@ export class AccountEditPopoverComponent {
       await this.getWalletShareUrl(),
       this.translateService.instant('wallet-edit-delete-popover.confirm_sync_code_copy')
     )
+
+    await this.popoverController.dismiss()
+  }
+
+  public async showAddressQR(): Promise<void> {
+    this.openAddressQR()
 
     await this.popoverController.dismiss()
   }
@@ -81,7 +87,6 @@ export class AccountEditPopoverComponent {
             {
               text: deleteButton,
               handler: (): void => {
-                alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
                 this.secretsService
                   .removeWallet(this.wallet)
                   .then(() => {

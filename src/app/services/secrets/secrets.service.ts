@@ -250,6 +250,10 @@ export class SecretsService {
     return walletList
   }
 
+  public async removeWallets(wallets: AirGapWallet[]): Promise<void[]> {
+    return Promise.all(wallets.map((wallet) => this.removeWallet(wallet)))
+  }
+
   public async removeWallet(wallet: AirGapWallet): Promise<void> {
     const secret: MnemonicSecret | undefined = this.findByPublicKey(wallet.publicKey)
     if (!secret) {
@@ -351,7 +355,7 @@ export class SecretsService {
   public getActiveSecret(): MnemonicSecret {
     return this.activeSecret || this.secretsList[0]
   }
-
+  xrqd
   public setActiveSecret(secret: MnemonicSecret): void {
     this.activeSecret = secret
     this.activeSecret$.next(secret)
@@ -409,14 +413,13 @@ export class SecretsService {
     await this.addOrUpdateSecret(secret)
   }
 
-  public async addWallets(configs: AddWalletConifg[]): Promise<void> {
+  public async addWallets(secret: MnemonicSecret, configs: AddWalletConifg[]): Promise<void> {
     const loading: HTMLIonLoadingElement = await this.loadingCtrl.create({
       message: 'Deriving your wallet...'
     })
     loading.present().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
 
     try {
-      const secret: MnemonicSecret = this.getActiveSecret()
       const entropy: string = await this.retrieveEntropyForSecret(secret)
 
       const createdOrUpdated: Either<AirGapWallet, AirGapWallet>[] = (
@@ -464,7 +467,7 @@ export class SecretsService {
       existingWallet.status = AirGapWalletStatus.ACTIVE
       return [undefined, existingWallet]
     } else if (newWallet.status === AirGapWalletStatus.ACTIVE && existingWallet.status === AirGapWalletStatus.ACTIVE) {
-      throw new Error('Wallet already exists')
+      return undefined // TODO: Should we error if it already exists?
     } else {
       return undefined
     }
@@ -527,7 +530,7 @@ export class SecretsService {
     error.ignore = true
 
     await this.showAlert('Error', error.message)
-    await this.navigationService.routeToAccountsTab(true)
+    await this.navigationService.routeToSecretsTab(true)
   }
 }
 

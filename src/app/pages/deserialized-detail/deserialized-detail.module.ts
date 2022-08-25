@@ -6,7 +6,7 @@ import { IonicModule } from '@ionic/angular'
 import { EffectsModule } from '@ngrx/effects'
 import { StoreModule } from '@ngrx/store'
 import { TranslateModule } from '@ngx-translate/core'
-
+import { AirGapAngularCoreModule } from '@airgap/angular-core'
 import { ComponentsModule } from '../../components/components.module'
 
 import { DeserializedDetailEffects } from './deserialized-detail.effects'
@@ -29,7 +29,8 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     TranslateModule,
     StoreModule.forFeature('deserializedDetail', fromDeserializedDetail.reducer),
-    EffectsModule.forFeature([DeserializedDetailEffects])
+    EffectsModule.forFeature([DeserializedDetailEffects]),
+    AirGapAngularCoreModule
   ],
   declarations: [DeserializedDetailPage]
 })

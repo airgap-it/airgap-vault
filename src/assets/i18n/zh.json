@@ -211,7 +211,7 @@
     "wallet-edit-delete-popover.copy_sync_code": "复制同步码",
     "wallet-edit-delete-popover.confirm_address_copy": "地址已经复制到您的剪贴板",
     "wallet-edit-delete-popover.confirm_sync_code_copy": "同步码已经复制到剪贴板",
-    "wallet-share.heading": "请用您的<span class=\"style__strong color__primary\">AirGap钱包</span>扫描同步二维码。",
+    "wallet-share.heading": "请用您的<span class=\"style__strong color__primary\">{{walletName}}</span>扫描同步二维码。",
     "deep-link.not-supported-alert.title": "啊哦",
     "deep-link.not-supported-alert.message": "只有移动设备支持Deeplinking。",
     "deep-link.not-supported-alert.ok": "好",

@@ -2,21 +2,21 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { async, ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { CurrentSecretComponent } from './current-secret.component'
+import { InstallationTypePage } from './installation-type.page'
 
-describe('CurrentSecretComponent', () => {
-  let component: CurrentSecretComponent
-  let fixture: ComponentFixture<CurrentSecretComponent>
+describe('InstallationTypePage', () => {
+  let component: InstallationTypePage
+  let fixture: ComponentFixture<InstallationTypePage>
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CurrentSecretComponent],
+      declarations: [InstallationTypePage],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents()
   }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CurrentSecretComponent)
+    fixture = TestBed.createComponent(InstallationTypePage)
     component = fixture.componentInstance
     fixture.detectChanges()
   })

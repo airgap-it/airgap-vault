@@ -2,21 +2,21 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { async, ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { TabAccountsPage } from './tab-accounts.page'
+import { OnboardingWelcomePage } from './installation-type.page'
 
-describe('TabAccountsPage', () => {
-  let component: TabAccountsPage
-  let fixture: ComponentFixture<TabAccountsPage>
+describe('OnboardingWelcomePage', () => {
+  let component: OnboardingWelcomePage
+  let fixture: ComponentFixture<OnboardingWelcomePage>
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [TabAccountsPage],
+      declarations: [OnboardingWelcomePage],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents()
   }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TabAccountsPage)
+    fixture = TestBed.createComponent(OnboardingWelcomePage)
     component = fixture.componentInstance
     fixture.detectChanges()
   })
