@@ -21,6 +21,7 @@ import { VaultStorageKey, VaultStorageService } from '../storage/storage.service
 import * as bitcoinJS from 'bitcoinjs-lib'
 
 import * as bs58check from 'bs58check'
+import { TranslateService } from '@ngx-translate/core'
 
 class ExtendedPublicKey {
   private readonly rawKey: Buffer
@@ -70,6 +71,7 @@ export class SecretsService {
     private readonly protocolService: ProtocolService,
     private readonly navigationService: NavigationService,
     private readonly loadingCtrl: LoadingController,
+    private readonly translateService: TranslateService,
     private readonly alertCtrl: AlertController
   ) {
     this.ready = this.init()
@@ -154,6 +156,13 @@ export class SecretsService {
       await secureStorage.setItem(secret.id, secret.secretHex)
 
       secret.flushSecret()
+
+      if (this.secretsList.findIndex((item: MnemonicSecret) => item.fingerprint === secret.fingerprint) !== -1) {
+        const title: string = this.translateService.instant('secret-service.alert.title')
+        const message: string = this.translateService.instant('secret-service.alert.message')
+        this.showAlert(title, message)
+        throw new Error('Already added secret')
+      }
 
       // It's a new secret, push to array
       if (this.secretsList.findIndex((item: MnemonicSecret) => item.id === secret.id) === -1) {

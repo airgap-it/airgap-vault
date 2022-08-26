@@ -151,6 +151,12 @@
     },
     "confirm_label": "Confirm"
   },
+  "secret-service": {
+    "alert": {
+      "title":"Duplicate Secret",
+      "message":"You have already added a secret with the same mnemonic"
+    }
+  },
   "secret-edit-delete-popover": {
     "title": "Confirm Secret Removal",
     "text": "Do you really want to remove this secret? You won't be able to restore it without a backup!",

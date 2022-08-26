@@ -52,6 +52,7 @@ export class SecretAddPage {
       handleErrorLocal(ErrorCategory.SECURE_STORAGE)(error)
 
       // TODO: Show error
+      this.navigationService.routeToSecretsTab()
       return
     }
 
