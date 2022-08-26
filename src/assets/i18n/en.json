@@ -45,6 +45,14 @@
   "signed-transaction": {
     "transaction-unreadable": "We were not able to extract information from this transaction. This does not mean that the transaction is invalid - Please make sure that you know what you are doing, and you can verify that you know that this transaction contains the correct data."
   },
+
+  "onboarding-advanced-mode": {
+    "title": "Welcome to AirGap"
+  },
+
+  "installation-type": {
+    "title": "Installation Type"
+  },
   "introduction": {
     "title": "Install AirGap Wallet",
     "highest": {
