@@ -154,7 +154,7 @@
   "secret-service": {
     "alert": {
       "title":"Duplicate Secret",
-      "message":"You have already added a secret with the same mnemonic"
+      "message":"You have already added a secret with the same recovery phrase"
     }
   },
   "secret-edit-delete-popover": {
