@@ -130,4 +130,8 @@ export class AccountsListPage {
   toggleDeleteView() {
     this.deleteView = !this.deleteView
   }
+
+  navigateToSecretsTab() {
+    this.navigationService.routeToSecretsTab()
+  }
 }

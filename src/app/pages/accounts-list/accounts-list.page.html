@@ -1,7 +1,9 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/tab-secrets"></ion-back-button>
+      <ion-button (click)="navigateToSecretsTab()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
     </ion-buttons>
     <ion-title>{{ 'tab-wallets.title' | translate }}</ion-title>
 
