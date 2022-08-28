@@ -45,11 +45,9 @@
   "signed-transaction": {
     "transaction-unreadable": "We were not able to extract information from this transaction. This does not mean that the transaction is invalid - Please make sure that you know what you are doing, and you can verify that you know that this transaction contains the correct data."
   },
-
   "onboarding-advanced-mode": {
     "title": "Welcome to AirGap"
   },
-
   "installation-type": {
     "title": "Installation Type"
   },
@@ -161,13 +159,13 @@
   },
   "secret-service": {
     "alert": {
-      "title":"Duplicate Secret",
-      "message":"You have already added a secret with the same recovery phrase"
+      "title": "Duplicate Secret",
+      "message": "You have already added a secret with the same recovery phrase"
     }
   },
   "secret-edit-delete-popover": {
     "title": "Confirm Secret Removal",
-    "text": "Do you really want to remove this secret? You won't be able to restore it without a backup!",
+    "text": "Do you really want to remove this secret? Make sure you have a backup of your secret recovery phrase. If you don't all your funds will be lost!",
     "cancel_label": "Cancel",
     "delete_label": "Delete"
   },
