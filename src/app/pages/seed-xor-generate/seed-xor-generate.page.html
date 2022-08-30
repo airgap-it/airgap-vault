@@ -1,7 +1,35 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab-secrets"></ion-back-button>
+    </ion-buttons>
     <ion-title>seed-xor-generate</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content></ion-content>
+<ion-content>
+  <ng-container *ngIf="type === 'seed-xor'">
+    <ion-row class="button--rounded">
+      <ion-button
+        shape="round"
+        *ngFor="let i of [2, 3, 4]"
+        color="secondary-light"
+        (click)="setNumberOfShares(i)"
+        [color]="i === numberOfShares ? 'primary' : 'tertiary'"
+      >
+        {{ i }}
+      </ion-button>
+    </ion-row>
+  </ng-container>
+
+  <ion-label>Use Random</ion-label>
+  <ion-toggle [(ngModel)]="useRandom"></ion-toggle>
+  <ng-container *ngIf="useRandom">
+    You chose the random option. Once you leave this page, you will no not be able to re-create those shares anymore. Make sure to write
+    them all down correctly before leaving the page.
+  </ng-container>
+
+  <ion-button (click)="generate()">Generate</ion-button>
+
+  <div *ngFor="let share of shares">{{share.share}}</div>
+</ion-content>

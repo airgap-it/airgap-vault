@@ -86,6 +86,18 @@ export class SecretEditPage {
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
+  public goToSeedXor(): void {
+    this.navigationService
+      .routeWithState('/seed-xor-generate', { secret: this.secret, type: 'seed-xor' })
+      .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
+  public goToSeedXorHamming(): void {
+    this.navigationService
+      .routeWithState('/seed-xor-generate', { secret: this.secret, type: 'seed-xor-hamming' })
+      .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
   public async resetRecoveryPassword(): Promise<void> {
     try {
       const recoveryKey = await this.secretsService.resetRecoveryPassword(this.secret)
