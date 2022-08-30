@@ -4,8 +4,8 @@ import { MnemonicSecret } from 'src/app/models/secret'
 import { DeviceService } from 'src/app/services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
-import { SeedXorService } from 'src/app/services/seed-xor/seed-xor.service'
 import { MnemonicValidator } from 'src/app/validators/mnemonic.validator'
+import { combine as combineSeedXor } from 'seed-xor'
 
 @Component({
   selector: 'airgap-seed-xor-import',
@@ -14,7 +14,6 @@ import { MnemonicValidator } from 'src/app/validators/mnemonic.validator'
 })
 export class SeedXorImportPage {
   constructor(
-    private readonly seedXOR: SeedXorService,
     private readonly deviceService: DeviceService,
     private readonly navigationService: NavigationService,
     public formBuilder: FormBuilder
@@ -53,7 +52,7 @@ export class SeedXorImportPage {
 
   public async recover(): Promise<void> {
     try {
-      const secretString = await this.seedXOR.combine(this.shares)
+      const secretString = await combineSeedXor(this.shares)
 
       this.navigationService
         .routeWithState('secret-edit', { secret: new MnemonicSecret(secretString, 'Recovery by SeedXOR') })
