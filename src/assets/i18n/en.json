@@ -551,7 +551,8 @@
   },
   "link-page": {
     "scan-qr": "Scan the QR code to open the link on an online device",
-    "open-link": "Open link on this device"
+    "copy_label": "Copy Link",
+    "link-clipboard_label": "The link was copied to your clipboard"
   },
   "migration": {
     "title": "Accounts Update",

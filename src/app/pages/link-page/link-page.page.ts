@@ -1,4 +1,6 @@
+import { ClipboardService } from '@airgap/angular-core'
 import { Component } from '@angular/core'
+import { TranslateService } from '@ngx-translate/core'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 @Component({
@@ -11,7 +13,11 @@ export class LinkPagePage {
   link: string
   description: string
 
-  constructor(private readonly navigationService: NavigationService) {
+  constructor(
+    private readonly navigationService: NavigationService,
+    private readonly clipboardService: ClipboardService,
+    private readonly translateService: TranslateService
+  ) {
     const state = this.navigationService.getState()
     if (!state) {
       this.navigationService.routeToSettingsTab(true)
@@ -23,6 +29,6 @@ export class LinkPagePage {
   }
 
   async open() {
-    window.open(this.link, '_blank')
+    await this.clipboardService.copyAndShowToast(this.link, this.translateService.instant('link-page.link-clipboard_label'))
   }
 }
