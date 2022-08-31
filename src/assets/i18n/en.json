@@ -289,7 +289,11 @@
     "advanced-settings_label": "Advanced Settings",
     "bip39_wordlist_label": "BIP39 Wordlist",
     "error-history_label": "Local Error History",
-    "danger-zone_label": "Danger Zone"
+    "danger-zone_label": "Danger Zone",
+    "welcome-onboarding_label": "Welcome/Onboarding",
+    "disclaimer_label": "Disclaimer",
+    "installation-type_label": "Installation Type",
+    "advanced-mode-type_label": "Advanced Mode"
   },
   "tab-secrets": {
     "title": "Secrets",
