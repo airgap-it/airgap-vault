@@ -16,12 +16,12 @@
   dependencies:
     tslib "^2.2.0"
 
-"@airgap/coinlib-core@0.13.5":
-  version "0.13.5"
-  resolved "https://registry.yarnpkg.com/@airgap/coinlib-core/-/coinlib-core-0.13.5.tgz#914de853cf622a641c1b9cbca1fbe28c68f8f6fc"
-  integrity sha512-NSuJg5YnCDz1OxPcLR6mpUox3TJD/PWkeia7AEjfTerK6+rYdY2/W7XUEWJV855RdtmYniZU29nRG4/w39GZuA==
+"@airgap/coinlib-core@0.13.6-beta.3":
+  version "0.13.6-beta.3"
+  resolved "https://registry.yarnpkg.com/@airgap/coinlib-core/-/coinlib-core-0.13.6-beta.3.tgz#257eb0f38b101515099b239a07950f796d8f19e7"
+  integrity sha512-ygoF8LSM3oQY7TT+doOc/ToXe8HESVDuhgxq/Paxxe6XWQHkPWEBTAs5T+xjOvLWByBU1HQ0fD3J1pLT0dwz4Q==
   dependencies:
-    "@airgap/sapling-wasm" "0.0.5"
+    "@airgap/sapling-wasm" "0.0.7"
     "@ethereumjs/common" "2.6.0"
     "@ethereumjs/tx" "3.4.0"
     "@metamask/eth-sig-util" "4.0.0"
@@ -32,11 +32,6 @@
     libsodium-wrappers "0.7.6"
     long "^5.2.0"
     protobufjs "^6.11.2"
-
-"@airgap/sapling-wasm@0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@airgap/sapling-wasm/-/sapling-wasm-0.0.5.tgz#83444fa7792beb383d494e447458be50d1e74577"
-  integrity sha512-u3dCsqC4WqTlscAU6p5BED+O/tXEDRcIzeOf7OTtz4zoK8wyMX6ZcJImZONhYG6IKu8cSc8eQNwm6fghHL3SxA==
 
 "@airgap/sapling-wasm@0.0.7":
   version "0.0.7"
