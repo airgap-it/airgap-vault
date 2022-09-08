@@ -20,7 +20,7 @@ class IsolatedProtocol : Plugin() {
             assertReceived(Param.IDENTIFIER, Param.KEY)
 
             CoroutineScope(Dispatchers.Default).launch {
-                call.resolve(getField(identifier, options.orUndefinedIfEmpty(), key))
+                call.resolve(getField(identifier, options, key))
             }
         }
     }
@@ -31,17 +31,17 @@ class IsolatedProtocol : Plugin() {
             assertReceived(Param.IDENTIFIER, Param.KEY)
 
             CoroutineScope(Dispatchers.Default).launch {
-                call.resolve(callMethod(identifier, options.orUndefinedIfEmpty(), key, args.orNullifEmpty()?.replaceNullWithUndefined()))
+                call.resolve(callMethod(identifier, options, key, args?.replaceNullWithUndefined()))
             }
         }
     }
 
-    private suspend fun getField(identifier: String, options: Any, key: String): Result<JSObject> =
+    private suspend fun getField(identifier: String, options: JSObject?, key: String): Result<JSObject> =
         spawnCoinlibWebView(identifier, options, """
             callback(protocol.${key})
         """.trimIndent())
 
-    private suspend fun callMethod(identifier: String, options: Any, key: String, args: JSArray?): Result<JSObject> {
+    private suspend fun callMethod(identifier: String, options: JSObject?, key: String, args: JSArray?): Result<JSObject> {
         val args = args?.let { "...${args}" } ?: ""
 
         return spawnCoinlibWebView(identifier, options, """
@@ -49,7 +49,7 @@ class IsolatedProtocol : Plugin() {
         """.trimIndent())
     }
 
-    private suspend fun spawnCoinlibWebView(identifier: String, options: Any, getResult: String): Result<JSObject> {
+    private suspend fun spawnCoinlibWebView(identifier: String, options: JSObject?, getResult: String): Result<JSObject> {
         val webViewContext = Dispatchers.Main
 
         val resultDeferred = JSCompletableDeferred()
@@ -75,7 +75,7 @@ class IsolatedProtocol : Plugin() {
                 }
                 
                 function createProtocol(identifier) {
-                    return airgapCoinLib.createProtocolByIdentifier(identifier, $options)
+                    return airgapCoinLib.createProtocolByIdentifier(identifier, ${options.orUndefined()})
                 }
                 
                 function getResult(protocol, callback) {
@@ -104,8 +104,7 @@ class IsolatedProtocol : Plugin() {
         return resultDeferred.await()
     }
 
-    private fun JSArray.orNullifEmpty(): JSArray? = takeIf { it.length() > 0 }
-    private fun JSObject.orUndefinedIfEmpty(): Any = takeIf { it.length() > 0 } ?: JSUndefined
+    private fun JSObject?.orUndefined(): Any = this ?: JSUndefined
 
     private fun JSArray.replaceNullWithUndefined(): JSArray =
         JSArray(toList<Any>().map { if (it == JSObject.NULL) JSUndefined else it })
@@ -118,14 +117,14 @@ class IsolatedProtocol : Plugin() {
     private val PluginCall.identifier: String
         get() = getString(Param.IDENTIFIER)!!
 
-    private val PluginCall.options: JSObject
-        get() = getObject(Param.OPTIONS)
+    private val PluginCall.options: JSObject?
+        get() = getObject(Param.OPTIONS, null)
 
     private val PluginCall.key: String
         get() = getString(Param.KEY)!!
 
-    private val PluginCall.args: JSArray
-        get() = getArray(Param.ARGS)
+    private val PluginCall.args: JSArray?
+        get() = getArray(Param.ARGS, null)
 
     private object Param {
         const val IDENTIFIER = "identifier"
