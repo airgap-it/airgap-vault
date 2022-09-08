@@ -1,6 +1,7 @@
 package it.airgap.vault.plugin.isolatedmodules
 
 import android.webkit.WebView
+import androidx.lifecycle.lifecycleScope
 import com.getcapacitor.*
 import com.getcapacitor.annotation.CapacitorPlugin
 import it.airgap.vault.util.JSCompletableDeferred
@@ -19,7 +20,7 @@ class IsolatedProtocol : Plugin() {
         with(call) {
             assertReceived(Param.IDENTIFIER, Param.KEY)
 
-            CoroutineScope(Dispatchers.Default).launch {
+            activity.lifecycleScope.launch(Dispatchers.Default) {
                 call.resolve(getField(identifier, options, key))
             }
         }
@@ -30,7 +31,7 @@ class IsolatedProtocol : Plugin() {
         with(call) {
             assertReceived(Param.IDENTIFIER, Param.KEY)
 
-            CoroutineScope(Dispatchers.Default).launch {
+            activity.lifecycleScope.launch(Dispatchers.Default) {
                 call.resolve(callMethod(identifier, options, key, args?.replaceNullWithUndefined()))
             }
         }
