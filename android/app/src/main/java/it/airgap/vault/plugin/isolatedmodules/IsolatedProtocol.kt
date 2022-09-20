@@ -7,7 +7,6 @@ import com.getcapacitor.annotation.CapacitorPlugin
 import it.airgap.vault.util.JSCompletableDeferred
 import it.airgap.vault.util.JSUndefined
 import it.airgap.vault.util.assertReceived
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -62,8 +61,8 @@ class IsolatedProtocol : Plugin() {
         }
 
         val html = """
-            <script src="file:///android_asset/$COINLIB_SOURCE" type="text/javascript"></script>
-            <script src="file:///android_asset/$UTILS_SOURCE" type="text/javascript"></script>
+            <script src="$ASSETS_PATH/$COINLIB_SOURCE" type="text/javascript"></script>
+            <script src="$ASSETS_PATH/$UTILS_SOURCE" type="text/javascript"></script>
             <script type="text/javascript">
                 function onError(description) {
                     return createOnError(description, function(error) { 
@@ -83,18 +82,20 @@ class IsolatedProtocol : Plugin() {
                     $getResult
                 }
                 
-                loadCoinlib(function () {
-                    var protocol = createProtocol('$identifier')
-                    getResult(protocol, function(result) {
-                        resultDeferred.completeFromJS(JSON.stringify({ result }))
+                window.onload = function() {
+                    loadCoinlib(function () {
+                        var protocol = createProtocol('$identifier')
+                        getResult(protocol, function(result) {
+                            resultDeferred.completeFromJS(JSON.stringify({ result }))
+                        })
                     })
-                })
+                }
             </script>
         """.trimIndent()
 
         withContext(webViewContext) {
             webView.loadDataWithBaseURL(
-                "file:///android_asset",
+                ASSETS_PATH,
                 html,
                 "text/html",
                 "utf-8",
@@ -135,7 +136,9 @@ class IsolatedProtocol : Plugin() {
     }
 
     companion object {
+        private const val ASSETS_PATH: String = "file:///android_asset"
+
         private const val COINLIB_SOURCE: String = "public/assets/libs/airgap-coin-lib.browserify.js"
-        private const val UTILS_SOURCE: String = "isolated_modules/utils.js"
+        private const val UTILS_SOURCE: String = "public/assets/native/isolated_modules/utils.js"
     }
 }
