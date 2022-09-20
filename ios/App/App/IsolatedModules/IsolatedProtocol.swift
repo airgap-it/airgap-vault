@@ -14,7 +14,7 @@ public class IsolatedProtocol: CAPPlugin, WKNavigationDelegate {
     private static let assetsURL: URL? = Bundle.main.url(forResource: "public", withExtension: nil)?.appendingPathComponent("assets")
     
     private static let coinlibSource: String = "libs/airgap-coin-lib.browserify.js"
-    private static let utilsSource: String = "native/isolated_modules/utils.js"
+    private static let commonSource: String = "native/isolated_modules/protocol_common.js"
     
     @objc func getField(_ call: CAPPluginCall) {
         call.assertReceived(forMethod: "getField", requiredParams: Param.IDENTIFIER, Param.KEY)
@@ -76,8 +76,9 @@ public class IsolatedProtocol: CAPPlugin, WKNavigationDelegate {
         try await spawnCoinlibWebView(
             forProtocol: identifier,
             usingOptions: options,
-            withGetResultScript: """
-                callback(protocol.\(key))
+            for: .getField,
+            injectScript: """
+                var __platform__field = '\(key)'
             """
         )
     }
@@ -90,17 +91,19 @@ public class IsolatedProtocol: CAPPlugin, WKNavigationDelegate {
     ) async throws -> [String: Any] {
         let args: String = try {
             if let args = args {
-                return "...\(try args.toJSONString())"
+                return try args.toJSONString()
             } else {
-                return ""
+                return "[]"
             }
         }()
         
         return try await spawnCoinlibWebView(
             forProtocol: identifier,
             usingOptions: options,
-            withGetResultScript: """
-                protocol.\(key)(\(args)).then(callback).catch(onError())
+            for: .callMethod,
+            injectScript: """
+                var __platform__method = '\(key)'
+                var __platform__args = \(args)
             """
         )
     }
@@ -109,7 +112,8 @@ public class IsolatedProtocol: CAPPlugin, WKNavigationDelegate {
     private func spawnCoinlibWebView(
         forProtocol identifier: String,
         usingOptions options: JSObject?,
-        withGetResultScript getResult: String
+        for action: JSProtocolAction,
+        injectScript script: String? = nil
     ) async throws -> [String: Any] {
         guard let assetsURL = Self.assetsURL else {
             throw Error.fileNotFound
@@ -118,40 +122,27 @@ public class IsolatedProtocol: CAPPlugin, WKNavigationDelegate {
         let callbackHandler = JSCallbackHandler(name: "resultCallbackHandler")
         
         let html = """
-            <script src="\(Self.coinlibSource)" type="text/javascript"></script>
-            <script src="\(Self.utilsSource)" type="text/javascript"></script>
             <script type="text/javascript">
                 function postMessage(message) {
                     window.webkit.messageHandlers.\(callbackHandler.name).postMessage(message)
                 }
+        
+                var __platform__identifier = '\(identifier)'
+                var __platform__options = \(try options?.toJSONString() ?? JSUndefined.value.toJSONString())
+                var __platform__action = '\(action.rawValue)'
+        
+                \(script ?? "")
 
-                function onError(description) {
-                    return createOnError(description, function(error) {
-                        postMessage({ error })
-                    })
+                function __platform__handleError(error) {
+                    postMessage({ error })
                 }
 
-                function loadCoinlib(callback) {
-                    airgapCoinLib.isCoinlibReady().then(callback).catch(onError())
-                }
-
-                function createProtocol(identifier) {
-                    return airgapCoinLib.createProtocolByIdentifier(identifier, \(try options?.toJSONString() ?? JSUndefined.value.toJSONString()))
-                }
-
-                function getResult(protocol, callback) {
-                    \(getResult)
-                }
-
-                window.onload = function() {
-                    loadCoinlib(function () {
-                        var protocol = createProtocol('\(identifier)')
-                        getResult(protocol, function(result) {
-                            postMessage({ result: JSON.stringify({ result }) })
-                        })
-                    })
+                function __platform__handleResult(result) {
+                    postMessage({ result: JSON.stringify({ result }) })
                 }
             </script>
+            <script src="\(Self.coinlibSource)" type="text/javascript"></script>
+            <script src="\(Self.commonSource)" type="text/javascript"></script>
         """
         
         let userContentController = WKUserContentController()
@@ -170,6 +161,11 @@ public class IsolatedProtocol: CAPPlugin, WKNavigationDelegate {
         )
         
         return try await callbackHandler.awaitResult()
+    }
+    
+    enum JSProtocolAction: String {
+        case getField
+        case callMethod
     }
     
     struct Param {

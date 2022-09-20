@@ -37,19 +37,25 @@ class IsolatedProtocol : Plugin() {
     }
 
     private suspend fun getField(identifier: String, options: JSObject?, key: String): Result<JSObject> =
-        spawnCoinlibWebView(identifier, options, """
-            callback(protocol.${key})
+        spawnCoinlibWebView(identifier, options, JSProtocolAction.GetField, """
+            var __platform__field = '$key'
         """.trimIndent())
 
     private suspend fun callMethod(identifier: String, options: JSObject?, key: String, args: JSArray?): Result<JSObject> {
-        val args = args?.let { "...${args}" } ?: ""
+        val args = args?.toString() ?: "[]"
 
-        return spawnCoinlibWebView(identifier, options, """
-            protocol.${key}(${args}).then(callback).catch(onError())
+        return spawnCoinlibWebView(identifier, options, JSProtocolAction.CallMethod, """
+            var __platform__method = '$key'
+            var __platform__args = $args
         """.trimIndent())
     }
 
-    private suspend fun spawnCoinlibWebView(identifier: String, options: JSObject?, getResult: String): Result<JSObject> {
+    private suspend fun spawnCoinlibWebView(
+        identifier: String,
+        options: JSObject?,
+        action: JSProtocolAction,
+        script: String? = null,
+    ): Result<JSObject> {
         val webViewContext = Dispatchers.Main
 
         val resultDeferred = JSCompletableDeferred()
@@ -61,36 +67,23 @@ class IsolatedProtocol : Plugin() {
         }
 
         val html = """
-            <script src="$ASSETS_PATH/$COINLIB_SOURCE" type="text/javascript"></script>
-            <script src="$ASSETS_PATH/$UTILS_SOURCE" type="text/javascript"></script>
             <script type="text/javascript">
-                function onError(description) {
-                    return createOnError(description, function(error) { 
-                        resultDeferred.throwFromJS(error) 
-                    })
-                }
-                    
-                function loadCoinlib(callback) {
-                    airgapCoinLib.isCoinlibReady().then(callback).catch(onError())
+                var __platform__identifier = '$identifier'
+                var __platform__options = ${options.orUndefined()}
+                var __platform__action = '${action.value}'
+                
+                ${script ?: ""}
+                
+                function __platform__handleError(error) {
+                    resultDeferred.throwFromJS(error)
                 }
                 
-                function createProtocol(identifier) {
-                    return airgapCoinLib.createProtocolByIdentifier(identifier, ${options.orUndefined()})
-                }
-                
-                function getResult(protocol, callback) {
-                    $getResult
-                }
-                
-                window.onload = function() {
-                    loadCoinlib(function () {
-                        var protocol = createProtocol('$identifier')
-                        getResult(protocol, function(result) {
-                            resultDeferred.completeFromJS(JSON.stringify({ result }))
-                        })
-                    })
+                function __platform__handleResult(result) {
+                    resultDeferred.completeFromJS(JSON.stringify({ result }))
                 }
             </script>
+            <script src="$ASSETS_PATH/$COINLIB_SOURCE" type="text/javascript"></script>
+            <script src="$ASSETS_PATH/$COMMON_SOURCE" type="text/javascript"></script>
         """.trimIndent()
 
         withContext(webViewContext) {
@@ -128,6 +121,11 @@ class IsolatedProtocol : Plugin() {
     private val PluginCall.args: JSArray?
         get() = getArray(Param.ARGS, null)
 
+    private enum class JSProtocolAction(val value: String) {
+        GetField("getField"),
+        CallMethod("callMethod")
+    }
+
     private object Param {
         const val IDENTIFIER = "identifier"
         const val OPTIONS = "options"
@@ -139,6 +137,6 @@ class IsolatedProtocol : Plugin() {
         private const val ASSETS_PATH: String = "file:///android_asset"
 
         private const val COINLIB_SOURCE: String = "public/assets/libs/airgap-coin-lib.browserify.js"
-        private const val UTILS_SOURCE: String = "public/assets/native/isolated_modules/utils.js"
+        private const val COMMON_SOURCE: String = "public/assets/native/isolated_modules/protocol_common.js"
     }
 }
