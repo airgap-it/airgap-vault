@@ -6,6 +6,7 @@ import com.getcapacitor.*
 import com.getcapacitor.annotation.CapacitorPlugin
 import it.airgap.vault.util.JSCompletableDeferred
 import it.airgap.vault.util.JSUndefined
+import it.airgap.vault.util.addJavascriptInterface
 import it.airgap.vault.util.assertReceived
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -58,11 +59,11 @@ class IsolatedProtocol : Plugin() {
     ): Result<JSObject> {
         val webViewContext = Dispatchers.Main
 
-        val resultDeferred = JSCompletableDeferred()
+        val resultDeferred = JSCompletableDeferred("resultDeferred")
         val webView = withContext(webViewContext) {
             WebView(context).apply {
                 settings.javaScriptEnabled = true
-                addJavascriptInterface(resultDeferred, "resultDeferred")
+                addJavascriptInterface(resultDeferred)
             }
         }
 
@@ -75,11 +76,11 @@ class IsolatedProtocol : Plugin() {
                 ${script ?: ""}
                 
                 function __platform__handleError(error) {
-                    resultDeferred.throwFromJS(error)
+                    ${resultDeferred.name}.throwFromJS(error)
                 }
                 
                 function __platform__handleResult(result) {
-                    resultDeferred.completeFromJS(JSON.stringify({ result }))
+                    ${resultDeferred.name}.completeFromJS(JSON.stringify({ result }))
                 }
             </script>
             <script src="$ASSETS_PATH/$COINLIB_SOURCE" type="text/javascript"></script>

@@ -14,7 +14,7 @@ val JSUndefined: Any by lazy {
     }
 }
 
-class JSCompletableDeferred : CompletableDeferred<Result<JSObject>> by CompletableDeferred() {
+class JSCompletableDeferred(val name: String) : CompletableDeferred<Result<JSObject>> by CompletableDeferred() {
     @JavascriptInterface
     fun completeFromJS(value: String) {
         complete(Result.success(JSObject(value)))
