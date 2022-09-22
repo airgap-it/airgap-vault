@@ -2,24 +2,24 @@
 # yarn lockfile v1
 
 
-"@airgap/angular-core@0.0.31":
-  version "0.0.31"
-  resolved "https://registry.yarnpkg.com/@airgap/angular-core/-/angular-core-0.0.31.tgz#71be4e9b7d5ee8553a4de93cc6aca3b7a6bf8f07"
-  integrity sha512-Pxf1JU0Ye/SAVPDHvyBfUwRNVdk9HBKcI9C1ZR+q7KUnhaL38QjR7D4cdpt/up+P36QJpqnqymrtfG8E9mCHDA==
+"@airgap/angular-core@0.0.32-beta.0":
+  version "0.0.32-beta.0"
+  resolved "https://registry.yarnpkg.com/@airgap/angular-core/-/angular-core-0.0.32-beta.0.tgz#1e0078fc4a51b063f4ddc6bfabeeec6c7756af8f"
+  integrity sha512-MUGGo9KIwxMGVXqML/yuhf1ot0hEg8894ccQQ6IEVP6IjAQzsC5iX4oL9LPaeJJ1OryRexsL4phVRNGae3c74Q==
   dependencies:
     tslib "^2.2.0"
 
-"@airgap/angular-ngrx@0.0.31":
-  version "0.0.31"
-  resolved "https://registry.yarnpkg.com/@airgap/angular-ngrx/-/angular-ngrx-0.0.31.tgz#3e2c60bfbe16d4be86f6fc51c0a28a113a052908"
-  integrity sha512-zCMWlPDqmjZjTRO/h8zam3MbcTWl9H3sbxTcNIacoZ9bUFHTaRk9mTKTcVyk3OhUL4EXrAXYH5wigBNgbGDuvw==
+"@airgap/angular-ngrx@0.0.32-beta.0":
+  version "0.0.32-beta.0"
+  resolved "https://registry.yarnpkg.com/@airgap/angular-ngrx/-/angular-ngrx-0.0.32-beta.0.tgz#c2347926ebd94909e30e489bf3df03f1e4da80bc"
+  integrity sha512-mqwdQ9YMsXu/wPeD/Lo/dSYPOziLeNOWOZFYYbPVGA1PY++SXMw5YF7xpCLLTym2z1/dcnH29hFU4cbyKIf0Ug==
   dependencies:
     tslib "^2.2.0"
 
-"@airgap/coinlib-core@0.13.6-beta.3":
-  version "0.13.6-beta.3"
-  resolved "https://registry.yarnpkg.com/@airgap/coinlib-core/-/coinlib-core-0.13.6-beta.3.tgz#257eb0f38b101515099b239a07950f796d8f19e7"
-  integrity sha512-ygoF8LSM3oQY7TT+doOc/ToXe8HESVDuhgxq/Paxxe6XWQHkPWEBTAs5T+xjOvLWByBU1HQ0fD3J1pLT0dwz4Q==
+"@airgap/coinlib-core@0.13.7-beta.1":
+  version "0.13.7-beta.1"
+  resolved "https://registry.yarnpkg.com/@airgap/coinlib-core/-/coinlib-core-0.13.7-beta.1.tgz#89d0d3e5be2a828e8fb03b3a7119ae5f4065516f"
+  integrity sha512-D7s6a9K5Tttj4DDaj0mtG3Fu62sUSdoeHu9St2IFa6Q/zpHeN/guzTsZq7x7g+SLJTkaUMc+5OxWHqGtfSaYPQ==
   dependencies:
     "@airgap/sapling-wasm" "0.0.7"
     "@ethereumjs/common" "2.6.0"
@@ -27,7 +27,7 @@
     "@metamask/eth-sig-util" "4.0.0"
     "@polkadot/util" "2.0.1"
     "@polkadot/wasm-crypto" "0.20.1"
-    "@taquito/local-forging" "12.1.1"
+    "@taquito/local-forging" "14.0.0"
     bitcoinjs-lib "5.2.0"
     libsodium-wrappers "0.7.6"
     long "^5.2.0"
@@ -1985,23 +1985,24 @@
   resolved "https://registry.yarnpkg.com/@stencil/core/-/core-2.13.0.tgz#993fd74a5c7c8fe8af75848ca9df2211cd05b818"
   integrity sha512-EEKHOHgYpg3/iFUKMXTZJjUayRul7sXDwNw0OGgkEOe4t7JWiibDkzUHuruvpbqEydX+z1+ez5K2bMMY76c2wA==
 
-"@taquito/local-forging@12.1.1":
-  version "12.1.1"
-  resolved "https://registry.yarnpkg.com/@taquito/local-forging/-/local-forging-12.1.1.tgz#b125e7d4fc6ae28af5eaf8c59bbe471048279291"
-  integrity sha512-SUA1YYRIpEGsTy5OfUIgIem0k/QsAzGjDCvf/wl5XV/fVBkP/+GN7uvYoqgJblCmsgtsMBhJFtXgs+D6bjGexg==
+"@taquito/local-forging@14.0.0":
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/@taquito/local-forging/-/local-forging-14.0.0.tgz#6844d90fa530d39ce7aaaa8cd11c8723d494a7d9"
+  integrity sha512-Nm0xGmS1Jzd+tU0a/8Y8XuTghbiPBgHDLo+e4141TK3OAwTzOw0an+w3xK9QVfzvxfIcZBSMjeMZzOwDdiqkJQ==
   dependencies:
-    "@taquito/utils" "^12.1.1"
+    "@taquito/utils" "^14.0.0"
     bignumber.js "^9.0.2"
 
-"@taquito/utils@^12.1.1":
-  version "12.1.1"
-  resolved "https://registry.yarnpkg.com/@taquito/utils/-/utils-12.1.1.tgz#c19008dea05c5146463ab58015ac145fb79c23cb"
-  integrity sha512-GxNSBrA02vwhy56ayWB49VZficB+j2oyhPdlsRb2CguephmyEYnlUaNV27ILa6dPDW+zv6+QWQj6GyqLBRpIlA==
+"@taquito/utils@^14.0.0":
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/@taquito/utils/-/utils-14.0.0.tgz#2fdbf0de677b5ef68e8a6d618a6a996195ae170b"
+  integrity sha512-0RSHn/CzbcbMdldJJIlXyxOvAajwmL6iPKJ6NaRyYJqqLM2CxYjG72KpXVv716pCMV1MbIWsOAr9FKbxW73PsA==
   dependencies:
     "@stablelib/blake2b" "^1.0.1"
     "@stablelib/ed25519" "^1.0.2"
     "@types/bs58check" "^2.1.0"
-    blakejs "^1.1.1"
+    bignumber.js "^9.0.2"
+    blakejs "^1.2.1"
     bs58check "^2.1.2"
     buffer "^6.0.3"
     elliptic "^6.5.4"
@@ -2894,7 +2895,7 @@ bl@^4.1.0:
     inherits "^2.0.4"
     readable-stream "^3.4.0"
 
-blakejs@^1.1.0, blakejs@^1.1.1:
+blakejs@^1.1.0, blakejs@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/blakejs/-/blakejs-1.2.1.tgz#5057e4206eadb4a97f7c0b6e197a505042fc3814"
   integrity sha512-QXUSXI3QVc/gJME0dBpXrag1kbzOqCjCX8/b54ntNyW6sjtoqxqRk3LTmXzaJoh71zMsDCjM+47jS7XiwN/+fQ==
