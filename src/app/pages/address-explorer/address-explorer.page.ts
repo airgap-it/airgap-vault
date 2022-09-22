@@ -90,7 +90,7 @@ export class AddressExplorerPage implements OnInit {
     for (let i = 0; i < 20; i++) {
       const visibilityIndex = this.selectedTab === 'external' ? 0 : 1
       const index = nofAddresses + i
-      const address = (await this.wallet.protocol.getAddressFromExtendedPublicKey(this.xpub, visibilityIndex, index)).getValue()
+      const address = (await this.wallet.protocol.getAddressFromExtendedPublicKey(this.xpub, visibilityIndex, index)).address
 
       const derivationPath = `${this.wallet.derivationPath}/${visibilityIndex}/${index}`
 
