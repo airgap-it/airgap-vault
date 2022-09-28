@@ -16,6 +16,8 @@ export interface FeatureState {
   targetSecrets: UIResource<MnemonicSecret[]>
   targetWalletKeys: string[]
 
+  identifierToNameMap: { [identifier: string]: string }
+
   handledSecretIds: string[]
   handledWalletKeys: string[]
 
@@ -38,6 +40,8 @@ export const initialState: FeatureState = {
   },
   targetWalletKeys: [],
 
+  identifierToNameMap: {},
+
   handledSecretIds: [],
   handledWalletKeys: [],
 
@@ -56,13 +60,15 @@ export const reducer = createReducer(
       value: state.targetSecrets.value
     }
   })),
-  on(actions.navigationDataLoaded, (state, { secrets, targetWalletKeys }) => ({
+  on(actions.navigationDataLoaded, (state, { secrets, targetWalletKeys, identifierToNameMap }) => ({
     ...state,
     targetSecrets: {
       status: UIResourceStatus.SUCCESS,
       value: secrets
     },
     targetWalletKeys,
+
+    identifierToNameMap,
 
     handledSecretIds: [],
     handledWalletKeys: [],
@@ -136,11 +142,9 @@ export const reducer = createReducer(
   on(actions.invalidBip39Passphrase, (state, { protocolIdentifier, publicKey }) => {
     let wallet: AirGapWallet | undefined
     for (const secret of state.targetSecrets.value ?? []) {
-      for (const _wallet of secret.wallets) {
-        if (_wallet.protocol.identifier === protocolIdentifier && _wallet.publicKey === publicKey) {
-          wallet = _wallet
-          break
-        }
+      wallet = (secret.walletsGrouped[protocolIdentifier] ?? {})[publicKey]
+      if (wallet !== undefined) {
+        break
       }
     }
 
@@ -152,7 +156,7 @@ export const reducer = createReducer(
               id: generateGUID(),
               value: {
                 type: 'bip39Passphrase' as Bip39PassphraseAlert['type'],
-                protocolName: wallet.protocol.name,
+                protocolName: state.identifierToNameMap[protocolIdentifier] ?? protocolIdentifier,
                 address: wallet.receivingPublicAddress
               },
               status: UIActionStatus.PENDING

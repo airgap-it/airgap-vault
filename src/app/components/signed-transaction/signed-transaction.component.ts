@@ -67,7 +67,7 @@ export class SignedTransactionComponent {
               if (await this.checkIfSaplingTransaction(payload, signedTx.protocol)) {
                 const saplingProtocol = await this.getSaplingProtocol()
                 return saplingProtocol.getTransactionDetailsFromSigned(payload, {
-                  knownViewingKeys: this.secretsService.getKnownViewingKeys()
+                  knownViewingKeys: await this.secretsService.getKnownViewingKeys()
                 })
               } else {
                 return protocol.getTransactionDetailsFromSigned(payload)
@@ -116,7 +116,7 @@ export class SignedTransactionComponent {
         .reduce((flatten: string[], next: string[]) => flatten.concat(next), [])
 
       console.log(recipients)
-      return recipients.includes(saplingProtocol.options.config.contractAddress)
+      return recipients.includes((await saplingProtocol.getOptions()).config.contractAddress)
     }
 
     return protocolIdentifier === MainProtocolSymbols.XTZ_SHIELDED

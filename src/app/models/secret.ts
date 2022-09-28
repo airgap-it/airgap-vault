@@ -1,3 +1,4 @@
+import { flattened } from '@airgap/angular-core'
 import { AirGapWallet } from '@airgap/coinlib-core'
 import { UUID } from 'angular2-uuid'
 import { fromSeed } from 'bip32'
@@ -61,7 +62,15 @@ export class MnemonicSecret extends Secret {
 
   public fingerprint?: string
 
-  public wallets: AirGapWallet[]
+  public walletsGrouped: {
+    [identifier: string]: {
+      [publicKey: string]: AirGapWallet
+    }
+  } = {}
+
+  public get wallets(): AirGapWallet[] {
+    return flattened(Object.values(this.walletsGrouped).map((innerObject) => Object.values(innerObject)))
+  }
 
   private readonly twofactor: string
 
@@ -78,6 +87,35 @@ export class MnemonicSecret extends Secret {
       this.secretHex = this.getEntropyFromMnemonic(seed)
       this.fingerprint = this.getFingerprintFromMnemonic(seed)
     }
+  }
+
+  public async setWallets(wallets: AirGapWallet[]) {
+    if (Object.values(this.walletsGrouped).length > 0) {
+      this.clearWallets()
+    }
+
+    this.addWallets(wallets)
+  }
+
+  public async addWallets(wallets: AirGapWallet[]) {
+    for (const wallet of wallets) {
+      await this.addWallet(wallet)
+    }
+  }
+
+  public clearWallets() {
+    this.walletsGrouped = {}
+  }
+
+  private async addWallet(wallet: AirGapWallet) {
+    const protocolIdentifier = await wallet.protocol.getIdentifier()
+    const publicKey = wallet.publicKey
+
+    if (this.walletsGrouped[protocolIdentifier] === undefined) {
+      this.walletsGrouped[protocolIdentifier] = {}
+    }
+
+    this.wallets[protocolIdentifier][publicKey] = wallet
   }
 
   public recoverMnemonicFromHex(hex: string): string {

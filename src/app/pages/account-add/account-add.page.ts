@@ -40,18 +40,18 @@ export class AccountAddPage {
     })
   }
 
-  public setDerivationPath() {
-    if (this.selectedProtocol.supportsHD && this.isHDWallet) {
-      this.customDerivationPath = this.selectedProtocol.standardDerivationPath
+  public async setDerivationPath() {
+    if ((await this.selectedProtocol.getSupportsHD()) && this.isHDWallet) {
+      this.customDerivationPath = await this.selectedProtocol.getStandardDerivationPath()
     } else {
-      this.customDerivationPath = `${this.selectedProtocol.standardDerivationPath}/0/0`
+      this.customDerivationPath = `${await this.selectedProtocol.getStandardDerivationPath()}/0/0`
     }
   }
 
-  public onSelectedProtocolChange(selectedProtocol: ICoinProtocol): void {
+  public async onSelectedProtocolChange(selectedProtocol: ICoinProtocol): Promise<void> {
     this.selectedProtocol = selectedProtocol
-    this.isHDWallet = this.selectedProtocol.supportsHD
-    this.customDerivationPath = this.selectedProtocol.standardDerivationPath
+    this.isHDWallet = await this.selectedProtocol.getSupportsHD()
+    this.customDerivationPath = await this.selectedProtocol.getStandardDerivationPath()
   }
 
   public async addWallet(): Promise<void> {
@@ -75,21 +75,24 @@ export class AccountAddPage {
   }
 
   private async addWalletAndReturnToAddressPage(): Promise<void> {
-    const addAccount = () => {
+    const addAccount = async () => {
+      const selectedProtocolIdentifier = await this.selectedProtocol.getIdentifier()
       this.secretsService
         .addWallets(
-          this.protocols.map((protocol: ICoinProtocol) => {
-            const isSelected: boolean = this.selectedProtocol.identifier === protocol.identifier
+          await Promise.all(this.protocols.map(async (protocol: ICoinProtocol) => {
+            const protocolIdentifier = await protocol.getIdentifier()
+
+            const isSelected: boolean = selectedProtocolIdentifier === protocolIdentifier
 
             return {
-              protocolIdentifier: protocol.identifier,
-              isHDWallet: isSelected ? this.isHDWallet : protocol.supportsHD,
-              customDerivationPath: isSelected ? this.customDerivationPath : protocol.standardDerivationPath,
+              protocolIdentifier,
+              isHDWallet: isSelected ? this.isHDWallet : await protocol.getSupportsHD(),
+              customDerivationPath: isSelected ? this.customDerivationPath : await protocol.getStandardDerivationPath(),
               bip39Passphrase: isSelected ? this.bip39Passphrase : '',
               isActive: isSelected
             }
           })
-        )
+        ))
         .then(() => {
           this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
         })

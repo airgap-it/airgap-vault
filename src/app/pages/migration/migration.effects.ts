@@ -1,5 +1,5 @@
 import { ExposedPromiseRegistry, flattened } from '@airgap/angular-core'
-import { AirGapWallet, AirGapWalletStatus } from '@airgap/coinlib-core'
+import { AirGapWallet, AirGapWalletStatus, ProtocolSymbols } from '@airgap/coinlib-core'
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { Action, Store } from '@ngrx/store'
@@ -136,8 +136,10 @@ export class MigrationEffects {
       allSecrets
     )
 
-    return secrets !== undefined && targetWalletKeys !== undefined
-      ? actions.navigationDataLoaded({ secrets, targetWalletKeys })
+    const identifierToNameMap: { [identifier: string]: string } | undefined = secrets !== undefined ? await this.getIdentifierToNameMap(secrets) : undefined
+
+    return secrets !== undefined && targetWalletKeys !== undefined && identifierToNameMap !== undefined
+      ? actions.navigationDataLoaded({ secrets, targetWalletKeys, identifierToNameMap })
       : actions.invalidData()
   }
 
@@ -172,6 +174,20 @@ export class MigrationEffects {
     }
 
     return [undefined, undefined]
+  }
+
+  private async getIdentifierToNameMap(secrets: MnemonicSecret[]): Promise<{ [identifier: string]: string }> {
+    const identifiersAndNames: [ProtocolSymbols, string][] = flattened(
+      await Promise.all(secrets.map((secret: MnemonicSecret) => {
+        return Promise.all(secret.wallets.map(async (wallet: AirGapWallet) => {
+          return [await wallet.protocol.getIdentifier(), await wallet.protocol.getName()] as [ProtocolSymbols, string]
+        }))
+      }))
+    )
+
+    return identifiersAndNames.reduce((obj: { [identifier: string]: string }, next: [ProtocolSymbols, string]) => {
+      return Object.assign(obj, { [next[0]]: next[1] })
+    }, {})
   }
 
   private migrate(secrets: MnemonicSecret[], targetWalletKeys: string[]): Observable<Action> {
@@ -251,7 +267,7 @@ export class MigrationEffects {
   }
 
   private async askForBip39Passphrase(subscriber: Subscriber<Action>, wallet: AirGapWallet): Promise<string | undefined> {
-    subscriber.next(actions.invalidBip39Passphrase({ protocolIdentifier: wallet.protocol.identifier, publicKey: wallet.publicKey }))
+    subscriber.next(actions.invalidBip39Passphrase({ protocolIdentifier: (await wallet.protocol.getIdentifier()), publicKey: wallet.publicKey }))
 
     return this.exposedPromises.yield(PromiseKey.BIP39_PASSPHRASE)
   }

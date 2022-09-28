@@ -15,7 +15,7 @@ export const viewLeft = createAction(`[${featureName}] View Left`)
 export const navigationDataLoading = createAction(`[${featureName}] Navigation Data Loading`)
 export const navigationDataLoaded = createAction(
   `[${featureName}] Navigation Data Loaded`,
-  props<{ secrets: MnemonicSecret[]; targetWalletKeys: string[] }>()
+  props<{ secrets: MnemonicSecret[]; targetWalletKeys: string[], identifierToNameMap: { [identifier: string]: string } }>()
 )
 export const invalidData = createAction(`[${featureName}] Invalid Navigation Data`)
 
