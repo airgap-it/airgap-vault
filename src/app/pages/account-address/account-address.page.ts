@@ -79,21 +79,23 @@ export class AccountAddressPage {
       this.router.navigate(['/'])
       throw new Error('No wallet found!')
     }
-
-    switch (this.wallet?.protocol.identifier) {
-      case MainProtocolSymbols.BTC_SEGWIT:
-        this.syncOptions = [airgapwallet, bluewallet, sparrowwallet]
-        break
-      case MainProtocolSymbols.ETH:
-        this.syncOptions = [airgapwallet, metamask]
-        break
-      default:
-        this.syncOptions = [airgapwallet]
-    }
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.presentingElement = document.querySelector('.ion-page')
+
+    if (this.wallet) {
+      switch (await this.wallet.protocol.getIdentifier()) {
+        case MainProtocolSymbols.BTC_SEGWIT:
+          this.syncOptions = [airgapwallet, bluewallet, sparrowwallet]
+          break
+        case MainProtocolSymbols.ETH:
+          this.syncOptions = [airgapwallet, metamask]
+          break
+        default:
+          this.syncOptions = [airgapwallet]
+      }
+    }
   }
 
   public done(): void {

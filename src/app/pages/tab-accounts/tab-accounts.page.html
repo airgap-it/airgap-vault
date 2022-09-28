@@ -36,7 +36,7 @@
   <ion-row>
     <div
       class="empty-list"
-      *ngIf="wallets$ && (wallets$ | async | walletFilter: { status: AirGapWalletStatus.ACTIVE, symbol: symbolFilter }).length === 0"
+      *ngIf="wallets$ && ((wallets$ | async | walletFilter: { status: AirGapWalletStatus.ACTIVE, symbol: symbolFilter }) | async).length === 0"
     >
       <img src="./assets/img/no-wallet-added-onboarding.svg" />
       <p>
