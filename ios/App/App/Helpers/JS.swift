@@ -27,17 +27,17 @@ class JSCallbackHandler: NSObject, WKScriptMessageHandler {
     
     let name: String
     
-    private var result: Result<[String: Any], Error>?
+    private var resultManager: ResultManager
     private let listenerRegistry: ListenerRegistry
     
     init(name: String) {
         self.name = name
-        self.result = nil
+        self.resultManager = .init()
         self.listenerRegistry = .init()
     }
     
     func awaitResult() async throws -> [String: Any] {
-        if let result = result {
+        if let result = await resultManager.result {
             return try result.get()
         }
         
@@ -45,8 +45,10 @@ class JSCallbackHandler: NSObject, WKScriptMessageHandler {
             Task {
                 await listenerRegistry.add { [weak self] result in
                     continuation.resume(with: result)
-                    if let selfStrong = self {
-                        selfStrong.result = result
+                    
+                    let selfWeak = self
+                    Task {
+                        await selfWeak?.resultManager.setResult(result)
                     }
                 }
             }
@@ -76,6 +78,14 @@ class JSCallbackHandler: NSObject, WKScriptMessageHandler {
             } catch {
                 await listenerRegistry.notifyAll(with: .failure(error))
             }
+        }
+    }
+    
+    private actor ResultManager {
+        private(set) var result: Result<[String: Any], Error>?
+        
+        func setResult(_ result: Result<[String: Any], Error>) {
+            self.result = result
         }
     }
     
