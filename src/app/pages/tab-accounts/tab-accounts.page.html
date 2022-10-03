@@ -28,22 +28,24 @@
     </ion-label>
   </ion-item>
 
-  <ion-list>
-    <ng-container *ngFor="let wallet of wallets$ | async | walletFilter: { status: AirGapWalletStatus.ACTIVE, symbol: symbolFilter }">
-      <airgap-account-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></airgap-account-item>
-    </ng-container>
-  </ion-list>
-  <ion-row>
-    <div
-      class="empty-list"
-      *ngIf="wallets$ && ((wallets$ | async | walletFilter: { status: AirGapWalletStatus.ACTIVE, symbol: symbolFilter }) | async).length === 0"
-    >
-      <img src="./assets/img/no-wallet-added-onboarding.svg" />
-      <p>
-        <strong>{{ 'tab-wallets.empty-state_text' | translate }}</strong>
-      </p>
-    </div>
-  </ion-row>
+  <ng-container *ngIf="(wallets$ | async | walletFilter: { status: AirGapWalletStatus.ACTIVE, symbol: symbolFilter } | async) as wallets">
+    <ion-list>
+      <ng-container *ngFor="let wallet of wallets">
+        <airgap-account-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></airgap-account-item>
+      </ng-container>
+    </ion-list>
+    <ion-row>
+      <div
+        class="empty-list"
+        *ngIf="wallets.length === 0"
+      >
+        <img src="./assets/img/no-wallet-added-onboarding.svg" />
+        <p>
+          <strong>{{ 'tab-wallets.empty-state_text' | translate }}</strong>
+        </p>
+      </div>
+    </ion-row>
+  </ng-container>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <!-- <ion-button color="secondary" shape="round" (click)="addWallet()">

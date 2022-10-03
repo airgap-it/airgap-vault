@@ -126,9 +126,9 @@ export class SecretsService {
             })
           )
         ).filter((wallet) => wallet !== undefined)
-        await secrets[k].setWallets(wallets)
+        secrets[k].wallets = wallets
       } else {
-        secrets[k].clearWallets()
+        secrets[k].wallets = []
       }
     }
 
@@ -136,6 +136,10 @@ export class SecretsService {
   }
 
   public async addOrUpdateSecret(secret: MnemonicSecret, options: { setActive: boolean } = { setActive: true }): Promise<void> {
+    if (!secret.wallets) {
+      secret.wallets = []
+    }
+
     if (!secret.secretHex) {
       this.secretsList[this.secretsList.findIndex((item: MnemonicSecret) => item.id === secret.id)] = secret
 
@@ -382,24 +386,24 @@ export class SecretsService {
       if (storedSecret === undefined) {
         return secret
       }
-      const wallets: (AirGapWallet | SerializedAirGapWallet)[] = secret.wallets.slice(0)
+      const wallets: SerializedAirGapWallet[] = await Promise.all(secret.wallets.slice(0).map((wallet: AirGapWallet) => wallet.toJSON()))
       for (let i = 0; i < storedSecret.wallets.length; ++i) {
         const serializedWallet = storedSecret.wallets[i] as unknown as SerializedAirGapWallet
 
-        const filtered: (AirGapWallet | undefined)[] = await Promise.all(secret.wallets.map(async (wallet: AirGapWallet) => {
+        const filtered: (AirGapWallet | SerializedAirGapWallet | undefined)[] = await Promise.all(secret.wallets.map(async (wallet) => {
           const match = isAirGapWallet(wallet) &&
             (await wallet.protocol.getIdentifier()) === serializedWallet.protocolIdentifier &&
             wallet.publicKey === serializedWallet.publicKey
           
             return match ? wallet : undefined
         }))
-        const found = filtered.find((wallet: AirGapWallet | undefined) => wallet !== undefined)
+        const found = filtered.find((wallet) => wallet !== undefined)
         if (found === undefined) {
           wallets.push(serializedWallet)
         }
       }
       const result = MnemonicSecret.init(secret)
-      await result.setWallets(wallets as unknown as AirGapWallet[])
+      result.wallets = wallets as unknown as AirGapWallet[]
       return result
     }))
 

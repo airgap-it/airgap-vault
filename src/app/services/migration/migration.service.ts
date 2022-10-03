@@ -85,7 +85,7 @@ export class MigrationService {
       }
 
       const newSecret: MnemonicSecret = MnemonicSecret.init(secret)
-      await newSecret.setWallets(migratedWallets)
+      newSecret.wallets = migratedWallets
 
       return newSecret
     }))

@@ -16,6 +16,7 @@ import { retry } from '../../utils/retry'
 
 import * as actions from './migration.actions'
 import * as fromMigration from './migration.reducers'
+import { MigrationMnemonicSecret } from './migration.types'
 
 enum PromiseKey {
   PARANOIA_ACCEPTED = 'paranoiaAccepted',
@@ -136,10 +137,14 @@ export class MigrationEffects {
       allSecrets
     )
 
+    const migrationSecrets: MigrationMnemonicSecret[] | undefined = secrets 
+      ? await Promise.all(secrets.map((secret: MnemonicSecret) => MigrationMnemonicSecret.fromMnemonicSecret(secret))) 
+      : undefined
+
     const identifierToNameMap: { [identifier: string]: string } | undefined = secrets !== undefined ? await this.getIdentifierToNameMap(secrets) : undefined
 
-    return secrets !== undefined && targetWalletKeys !== undefined && identifierToNameMap !== undefined
-      ? actions.navigationDataLoaded({ secrets, targetWalletKeys, identifierToNameMap })
+    return migrationSecrets !== undefined && targetWalletKeys !== undefined && identifierToNameMap !== undefined
+      ? actions.navigationDataLoaded({ secrets: migrationSecrets, targetWalletKeys, identifierToNameMap })
       : actions.invalidData()
   }
 

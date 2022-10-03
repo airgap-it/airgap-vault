@@ -20,7 +20,7 @@
     {{ 'wallet-edit-delete-popover.account-removal_alert.delete_label' | translate }}
   </ion-item>
   <ion-item
-    *ngIf="wallet && wallet.isExtendedPublicKey && (wallet.protocol.getIdentifier() | async) !== 'grs'"
+    *ngIf="wallet && wallet.isExtendedPublicKey && protocolIdentifier && protocolIdentifier !== 'grs'"
     button
     detail="false"
     (click)="openAddressExplorer()"
