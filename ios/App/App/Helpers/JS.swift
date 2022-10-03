@@ -43,8 +43,11 @@ class JSCallbackHandler: NSObject, WKScriptMessageHandler {
         
         return try await withCheckedThrowingContinuation { continuation in
             Task {
-                await listenerRegistry.add {
-                    continuation.resume(with: $0)
+                await listenerRegistry.add { [weak self] result in
+                    continuation.resume(with: result)
+                    if let selfStrong = self {
+                        selfStrong.result = result
+                    }
                 }
             }
         }
@@ -77,17 +80,15 @@ class JSCallbackHandler: NSObject, WKScriptMessageHandler {
     }
     
     private actor ListenerRegistry {
-        private(set) var listeners: [String: Listener] = [:]
+        private(set) var listeners: [Listener] = []
         
         func add(_ listener: @escaping Listener) {
-            listeners[UUID().uuidString] = listener
+            listeners.append(listener)
         }
         
         func notifyAll(with result: Result<[String: Any], Error>) {
-            listeners.keys.forEach {
-                listeners[$0]?(result)
-                listeners.removeValue(forKey: $0)
-            }
+            listeners.forEach { $0(result) }
+            listeners.removeAll()
         }
     }
 }
