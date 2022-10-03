@@ -1,7 +1,7 @@
 import { ProtocolSymbols } from '@airgap/coinlib-core'
 import { createAction, props } from '@ngrx/store'
 
-import { MnemonicSecret } from '../../models/secret'
+import { MigrationMnemonicSecret } from './migration.types'
 
 const featureName = 'Migration'
 
@@ -15,7 +15,7 @@ export const viewLeft = createAction(`[${featureName}] View Left`)
 export const navigationDataLoading = createAction(`[${featureName}] Navigation Data Loading`)
 export const navigationDataLoaded = createAction(
   `[${featureName}] Navigation Data Loaded`,
-  props<{ secrets: MnemonicSecret[]; targetWalletKeys: string[], identifierToNameMap: { [identifier: string]: string } }>()
+  props<{ secrets: MigrationMnemonicSecret[]; targetWalletKeys: string[], identifierToNameMap: { [identifier: string]: string } }>()
 )
 export const invalidData = createAction(`[${featureName}] Invalid Navigation Data`)
 

@@ -1,5 +1,5 @@
 import { ClipboardService, DeeplinkService, QRType, UiEventService } from '@airgap/angular-core'
-import { AirGapWallet, IACMessageDefinitionObjectV3, MainProtocolSymbols } from '@airgap/coinlib-core'
+import { AirGapWallet, IACMessageDefinitionObjectV3, MainProtocolSymbols, ProtocolSymbols } from '@airgap/coinlib-core'
 import { Component, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { IonModal, PopoverController } from '@ionic/angular'
@@ -53,6 +53,9 @@ export class AccountAddressPage {
   @ViewChild(IonModal) modal: IonModal
 
   public wallet: AirGapWallet
+  public protocolSymbol: string
+  public protocolIdentifier: ProtocolSymbols
+  public protocolName: string
 
   public syncOptions: CompanionApp[]
 
@@ -85,7 +88,17 @@ export class AccountAddressPage {
     this.presentingElement = document.querySelector('.ion-page')
 
     if (this.wallet) {
-      switch (await this.wallet.protocol.getIdentifier()) {
+      const [protocolSymbol, protocolIdentifier, protocolName] = await Promise.all([
+        this.wallet.protocol.getSymbol(),
+        this.wallet.protocol.getIdentifier(),
+        this.wallet.protocol.getName()
+      ])
+
+      this.protocolSymbol = protocolSymbol
+      this.protocolIdentifier = protocolIdentifier
+      this.protocolName = protocolName
+
+      switch (protocolIdentifier) {
         case MainProtocolSymbols.BTC_SEGWIT:
           this.syncOptions = [airgapwallet, bluewallet, sparrowwallet]
           break

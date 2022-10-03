@@ -1,7 +1,7 @@
-import { Component } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { AlertController, PopoverController } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
-import { AirGapWallet } from '@airgap/coinlib-core'
+import { AirGapWallet, ProtocolSymbols } from '@airgap/coinlib-core'
 import { first } from 'rxjs/operators'
 
 import { ClipboardService } from '@airgap/angular-core'
@@ -14,8 +14,10 @@ import { NavigationService } from 'src/app/services/navigation/navigation.servic
   templateUrl: 'account-edit-popover.component.html',
   styleUrls: ['./account-edit-popover.component.scss']
 })
-export class AccountEditPopoverComponent {
+export class AccountEditPopoverComponent implements OnInit {
   public readonly wallet: AirGapWallet
+  public protocolIdentifier: ProtocolSymbols
+
   private readonly onDelete: Function
   private readonly openAddressQR: () => void | undefined
   private readonly getWalletShareUrl: () => Promise<string>
@@ -28,6 +30,10 @@ export class AccountEditPopoverComponent {
     private readonly translateService: TranslateService,
     private readonly navigationService: NavigationService
   ) {}
+
+  public async ngOnInit() {
+    this.protocolIdentifier = await this.wallet.protocol.getIdentifier()
+  }
 
   public async copyAddressToClipboard(): Promise<void> {
     await this.clipboardService.copyAndShowToast(
