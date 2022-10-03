@@ -44,11 +44,10 @@ class JSCallbackHandler: NSObject, WKScriptMessageHandler {
         return try await withCheckedThrowingContinuation { continuation in
             Task {
                 await listenerRegistry.add { [weak self] result in
-                    continuation.resume(with: result)
-                    
                     let selfWeak = self
                     Task {
                         await selfWeak?.resultManager.setResult(result)
+                        continuation.resume(with: result)
                     }
                 }
             }
