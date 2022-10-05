@@ -15,7 +15,9 @@ import {
   SPLASH_SCREEN_PLUGIN,
   STATUS_BAR_PLUGIN,
   FILESYSTEM_PLUGIN,
-  UiEventService
+  UiEventService,
+  ISOLATED_PROTOCOL_PLUGIN,
+  IsolatedProtocol
 } from '@airgap/angular-core'
 import { AirGapAngularNgRxModule, currencySymbolNgRxFacade } from '@airgap/angular-ngrx'
 import { PercentPipe } from '@angular/common'
@@ -39,8 +41,8 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
 import * as fromRoot from './app.reducers'
-import { CameraPreview, IsolatedProtocol, SaplingNative, SecurityUtils } from './capacitor-plugins/definitions'
-import { CAMERA_PREVIEW_PLUGIN, ISOLATED_PROTOCOL_PLUGIN, SAPLING_PLUGIN, SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
+import { CameraPreview, SaplingNative, SecurityUtils } from './capacitor-plugins/definitions'
+import { CAMERA_PREVIEW_PLUGIN, SAPLING_PLUGIN, SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
 import { appConfig } from './config/app-config'
 import { DistributionOnboardingPageModule } from './pages/distribution-onboarding/distribution-onboarding.module'
 import { IntroductionPageModule } from './pages/introduction/introduction.module'
