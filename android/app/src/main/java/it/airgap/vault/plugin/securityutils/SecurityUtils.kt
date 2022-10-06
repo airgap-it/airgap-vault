@@ -98,7 +98,7 @@ class SecurityUtils : Plugin() {
     @PluginMethod
     fun initStorage(call: PluginCall) {
         lastCall = call
-        with (call) {
+        with(call) {
             try {
                 assertReceived(Param.ALIAS, Param.IS_PARANOIA)
                 if (isParanoia) {
@@ -131,7 +131,7 @@ class SecurityUtils : Plugin() {
     @PluginMethod
     fun getItem(call: PluginCall) {
         lastCall = call
-        with (call) {
+        with(call) {
             try {
                 assessIntegrity()
                 assertReceived(Param.ALIAS, Param.IS_PARANOIA, Param.FILE_KEY)
@@ -155,7 +155,7 @@ class SecurityUtils : Plugin() {
     @PluginMethod
     fun setItem(call: PluginCall) {
         lastCall = call
-        with (call) {
+        with(call) {
             try {
                 assessIntegrity()
                 assertReceived(Param.ALIAS, Param.IS_PARANOIA, Param.FILE_KEY, Param.VALUE)
@@ -179,7 +179,7 @@ class SecurityUtils : Plugin() {
     @PluginMethod
     fun removeAll(call: PluginCall) {
         lastCall = call
-        with (call) {
+        with(call) {
             try {
                 assertReceived(Param.ALIAS)
 
@@ -244,7 +244,7 @@ class SecurityUtils : Plugin() {
     @PluginMethod
     fun setupParanoiaPassword(call: PluginCall) {
         lastCall = call
-        with (call) {
+        with(call) {
             try {
                 assertReceived(Param.ALIAS, Param.IS_PARANOIA)
 
@@ -267,7 +267,7 @@ class SecurityUtils : Plugin() {
     @PluginMethod
     fun setupRecoveryPassword(call: PluginCall) {
         lastCall = call
-        with (call) {
+        with(call) {
             try {
                 assertReceived(Param.ALIAS, Param.IS_PARANOIA, Param.FILE_KEY, Param.VALUE)
 
@@ -298,7 +298,7 @@ class SecurityUtils : Plugin() {
 
     @PluginMethod
     fun setInvalidationTimeout(call: PluginCall) {
-        with (call) {
+        call.executeCatching {
             assertReceived(Param.TIMEOUT)
             invalidateAfterSeconds = timeout
             resolve()
@@ -314,7 +314,7 @@ class SecurityUtils : Plugin() {
 
     @PluginMethod
     fun toggleAutomaticAuthentication(call: PluginCall) {
-        with (call) {
+        call.executeCatching {
             assertReceived(Param.AUTOMATIC_AUTHENTICATION)
             automaticLocalAuthentication = automaticAuthentication
             resolve()

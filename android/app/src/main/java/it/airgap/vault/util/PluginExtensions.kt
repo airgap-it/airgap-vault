@@ -40,7 +40,7 @@ fun PluginCall.resolveWithData(vararg keyValuePairs: Pair<String, Any>) {
     }
 }
 
-fun PluginCall.tryResolveCatchReject(block: () -> Unit) {
+inline fun PluginCall.tryResolveCatchReject(block: () -> Unit) {
     try {
         block()
         resolve()
@@ -49,9 +49,17 @@ fun PluginCall.tryResolveCatchReject(block: () -> Unit) {
     }
 }
 
-fun PluginCall.tryResolveWithDataCatchReject(block: () -> List<Pair<String, Any>>) {
+inline fun PluginCall.tryResolveWithDataCatchReject(block: () -> List<Pair<String, Any>>) {
     try {
         resolveWithData(*block().toTypedArray())
+    } catch (e: Throwable) {
+        reject(e.message)
+    }
+}
+
+inline fun PluginCall.executeCatching(block: PluginCall.() -> Unit) {
+    try {
+        block()
     } catch (e: Throwable) {
         reject(e.message)
     }
@@ -62,6 +70,6 @@ fun PluginCall.assertReceived(vararg params: String, acceptEmpty: Boolean = fals
     val hasEmpty = !acceptEmpty && params.mapNotNull { getString(it)?.isBlank() }.any { it }
 
     if (!hasAll || hasEmpty) {
-        reject("$methodName requires: ${params.joinToString()}")
+        throw IllegalStateException("$methodName requires: ${params.joinToString()}")
     }
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.lifecycleScope
 import com.getcapacitor.*
 import com.getcapacitor.annotation.CapacitorPlugin
 import it.airgap.vault.util.assertReceived
+import it.airgap.vault.util.executeCatching
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -24,15 +25,13 @@ class IsolatedProtocol : Plugin() {
 
     @PluginMethod
     fun keys(call: PluginCall) {
-        with(call) {
+        call.executeCatching {
             assertReceived(Param.IDENTIFIER)
 
             activity.lifecycleScope.launch {
-                try {
+                executeCatching {
                     val webView = protocolWebViewManager.get() ?: failWithWebViewNotInitialized()
                     resolve(webView.evaluateKeys(identifier, options))
-                } catch (e: Exception) {
-                    reject(e.message, e)
                 }
             }
         }
@@ -40,15 +39,13 @@ class IsolatedProtocol : Plugin() {
 
     @PluginMethod
     fun getField(call: PluginCall) {
-        with(call) {
+        call.executeCatching {
             assertReceived(Param.IDENTIFIER, Param.KEY)
 
             activity.lifecycleScope.launch {
-                try {
+                executeCatching {
                     val webView = protocolWebViewManager.get() ?: failWithWebViewNotInitialized()
                     resolve(webView.evaluateGetField(identifier, options, key))
-                } catch (e: Exception) {
-                    reject(e.message, e)
                 }
             }
         }
@@ -56,23 +53,16 @@ class IsolatedProtocol : Plugin() {
 
     @PluginMethod
     fun callMethod(call: PluginCall) {
-        with(call) {
+        call.executeCatching {
             assertReceived(Param.IDENTIFIER, Param.KEY)
 
             activity.lifecycleScope.launch {
-                try {
+                executeCatching {
                     val webView = protocolWebViewManager.get() ?: failWithWebViewNotInitialized()
                     resolve(webView.evaluateCallMethod(identifier, options, key, args))
-                } catch (e: Exception) {
-                    reject(e.message, e)
                 }
             }
         }
-    }
-
-    private fun PluginCall.resolve(result: Result<JSObject>) {
-        result.onSuccess { resolve(it) }
-        result.onFailure { errorCallback(it.message) }
     }
 
     private val PluginCall.identifier: String
