@@ -1,20 +1,23 @@
 package it.airgap.vault.plugin.isolatedmodules
 
+import android.content.Context
 import androidx.lifecycle.lifecycleScope
 import com.getcapacitor.*
 import com.getcapacitor.annotation.CapacitorPlugin
-import it.airgap.vault.util.JSUndefined
 import it.airgap.vault.util.assertReceived
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 @CapacitorPlugin
 class IsolatedProtocol : Plugin() {
-    private lateinit var webView: ProtocolWebView
+
+    private val protocolWebViewManager: ProtocolWebViewManager = ProtocolWebViewManager()
 
     override fun load() {
         activity.lifecycleScope.launch(Dispatchers.Main) {
-            webView = ProtocolWebView(context)
+            protocolWebViewManager.createWebView(context)
         }
         super.load()
     }
@@ -24,8 +27,13 @@ class IsolatedProtocol : Plugin() {
         with(call) {
             assertReceived(Param.IDENTIFIER)
 
-            activity.lifecycleScope.launch(Dispatchers.Default) {
-                call.resolve(webView.evaluateKeys(identifier, options))
+            activity.lifecycleScope.launch {
+                try {
+                    val webView = protocolWebViewManager.get() ?: failWithWebViewNotInitialized()
+                    resolve(webView.evaluateKeys(identifier, options))
+                } catch (e: Exception) {
+                    reject(e.message, e)
+                }
             }
         }
     }
@@ -35,8 +43,13 @@ class IsolatedProtocol : Plugin() {
         with(call) {
             assertReceived(Param.IDENTIFIER, Param.KEY)
 
-            activity.lifecycleScope.launch(Dispatchers.Default) {
-                call.resolve(webView.evaluateGetField(identifier, options, key))
+            activity.lifecycleScope.launch {
+                try {
+                    val webView = protocolWebViewManager.get() ?: failWithWebViewNotInitialized()
+                    resolve(webView.evaluateGetField(identifier, options, key))
+                } catch (e: Exception) {
+                    reject(e.message, e)
+                }
             }
         }
     }
@@ -46,8 +59,13 @@ class IsolatedProtocol : Plugin() {
         with(call) {
             assertReceived(Param.IDENTIFIER, Param.KEY)
 
-            activity.lifecycleScope.launch(Dispatchers.Default) {
-                call.resolve(webView.evaluateCallMethod(identifier, options, key, args))
+            activity.lifecycleScope.launch {
+                try {
+                    val webView = protocolWebViewManager.get() ?: failWithWebViewNotInitialized()
+                    resolve(webView.evaluateCallMethod(identifier, options, key, args))
+                } catch (e: Exception) {
+                    reject(e.message, e)
+                }
             }
         }
     }
@@ -69,10 +87,25 @@ class IsolatedProtocol : Plugin() {
     private val PluginCall.args: JSArray?
         get() = getArray(Param.ARGS, null)
 
+    private class ProtocolWebViewManager {
+        private val mutex: Mutex = Mutex()
+        private var webView: ProtocolWebView? = null
+
+        suspend fun createWebView(context: Context) = mutex.withLock {
+            webView = ProtocolWebView(context)
+        }
+
+        suspend fun get(): ProtocolWebView? = mutex.withLock {
+            webView
+        }
+    }
+
     private object Param {
         const val IDENTIFIER = "identifier"
         const val OPTIONS = "options"
         const val KEY = "key"
         const val ARGS = "args"
     }
+
+    private fun failWithWebViewNotInitialized(): Nothing = throw IllegalStateException("WebView has not been initialized yet.")
 }

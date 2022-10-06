@@ -36,6 +36,7 @@
 		A33BA9E528D9C4EF00BD8015 /* JS.swift in Sources */ = {isa = PBXBuildFile; fileRef = A33BA9E428D9C4EF00BD8015 /* JS.swift */; };
 		A33BA9E728D9C52D00BD8015 /* JSValue+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A33BA9E628D9C52D00BD8015 /* JSValue+Additions.swift */; };
 		A33BA9E928D9E23E00BD8015 /* WK+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A33BA9E828D9E23E00BD8015 /* WK+Additions.swift */; };
+		A380286828EEEB7C006E824E /* ProtocolWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A380286728EEEB7C006E824E /* ProtocolWebView.swift */; };
 		A3CF6E4D28CA2FA100A9A883 /* IsolatedProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CF6E4C28CA2FA100A9A883 /* IsolatedProtocol.swift */; };
 		A3CF6E4F28CA2FD900A9A883 /* IsolatedProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = A3CF6E4E28CA2FD900A9A883 /* IsolatedProtocol.m */; };
 /* End PBXBuildFile section */
@@ -70,6 +71,7 @@
 		A33BA9E428D9C4EF00BD8015 /* JS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JS.swift; sourceTree = "<group>"; };
 		A33BA9E628D9C52D00BD8015 /* JSValue+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JSValue+Additions.swift"; sourceTree = "<group>"; };
 		A33BA9E828D9E23E00BD8015 /* WK+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WK+Additions.swift"; sourceTree = "<group>"; };
+		A380286728EEEB7C006E824E /* ProtocolWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtocolWebView.swift; sourceTree = "<group>"; };
 		A3CF6E4C28CA2FA100A9A883 /* IsolatedProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsolatedProtocol.swift; sourceTree = "<group>"; };
 		A3CF6E4E28CA2FD900A9A883 /* IsolatedProtocol.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IsolatedProtocol.m; sourceTree = "<group>"; };
 		AF277DCFFFF123FFC6DF26C7 /* Pods_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -215,6 +217,7 @@
 			children = (
 				A3CF6E4C28CA2FA100A9A883 /* IsolatedProtocol.swift */,
 				A3CF6E4E28CA2FD900A9A883 /* IsolatedProtocol.m */,
+				A380286728EEEB7C006E824E /* ProtocolWebView.swift */,
 			);
 			path = IsolatedModules;
 			sourceTree = "<group>";
@@ -347,6 +350,7 @@
 				A3CF6E4D28CA2FA100A9A883 /* IsolatedProtocol.swift in Sources */,
 				885F55E825EE224200D85A88 /* SaplingNative.m in Sources */,
 				49690A7E25C2BF80004A3586 /* VaultError.swift in Sources */,
+				A380286828EEEB7C006E824E /* ProtocolWebView.swift in Sources */,
 				88AE2EF923D5DC8300428560 /* SecureStorage.swift in Sources */,
 				88F9F15623D06A76008351D0 /* CameraPreview.m in Sources */,
 				A33BA9E528D9C4EF00BD8015 /* JS.swift in Sources */,

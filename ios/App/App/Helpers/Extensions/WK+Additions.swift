@@ -10,7 +10,7 @@ import WebKit
 
 extension WKUserContentController {
     
-    func add(_ jsCallbackHandler: JSCallbackHandler) {
-        add(jsCallbackHandler, name: jsCallbackHandler.name)
+    func add<T: WKScriptMessageHandler & Identifiable>(_ scriptMessageHandler: T) where T.ID == String {
+        add(scriptMessageHandler, name: scriptMessageHandler.id)
     }
 }

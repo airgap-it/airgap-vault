@@ -9,6 +9,7 @@
 #import <Capacitor/Capacitor.h>
 
 CAP_PLUGIN(IsolatedProtocol, "IsolatedProtocol",
+           CAP_PLUGIN_METHOD(keys, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(getField, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(callMethod, CAPPluginReturnPromise);
 )

@@ -6,7 +6,10 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.getcapacitor.JSArray
 import com.getcapacitor.JSObject
-import it.airgap.vault.util.*
+import it.airgap.vault.util.JSAsyncResult
+import it.airgap.vault.util.JSUndefined
+import it.airgap.vault.util.addJavascriptInterface
+import it.airgap.vault.util.evaluateJavascript
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -34,26 +37,26 @@ class ProtocolWebView(context: Context) {
         loadUrl("${ASSETS_PATH}/${ISOLATED_PROTOCOL_HTML_SOURCE}")
     }
 
-    suspend fun evaluateKeys(identifier: String, options: JSObject?): Result<JSObject> =
+    suspend fun evaluateKeys(identifier: String, options: JSObject?): JSObject =
         evaluate(identifier, options, JSProtocolAction.Keys)
 
-    suspend fun evaluateGetField(identifier: String, options: JSObject?, key: String): Result<JSObject> =
+    suspend fun evaluateGetField(identifier: String, options: JSObject?, key: String): JSObject =
         evaluate(identifier, options, JSProtocolAction.GetField(key))
 
-    suspend fun evaluateCallMethod(identifier: String, options: JSObject?, key: String, args: JSArray?): Result<JSObject> =
+    suspend fun evaluateCallMethod(identifier: String, options: JSObject?, key: String, args: JSArray?): JSObject =
         evaluate(identifier, options, JSProtocolAction.CallMethod(key, args?.replaceNullWithUndefined()))
 
     private suspend fun evaluate(
         identifier: String,
         options: JSObject?,
         action: JSProtocolAction,
-    ): Result<JSObject> = withContext(Dispatchers.Main) {
+    ): JSObject = withContext(Dispatchers.Main) {
         with(webView) {
             waitUntilLoaded()
             clear()
 
             val resultId = jsAsyncResult.createId()
-            val script = """
+            val script = """    
                 execute(
                     '$identifier',
                     ${options.orUndefined()},
@@ -67,10 +70,10 @@ class ProtocolWebView(context: Context) {
                 );
             """.trimIndent()
 
-            evaluateJavascript(script.minify())
-            jsAsyncResult.await(resultId)
-                .map { JSObject(it) }
-                .also { webView.clear() }
+            evaluateJavascript(script)
+
+            val result = jsAsyncResult.await(resultId).getOrThrow()
+            JSObject(result).also { webView.clear() }
         }
     }
 

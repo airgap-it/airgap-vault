@@ -58,8 +58,9 @@ const ACTION_CALL_METHOD = 'callMethod'
 
 function execute(identifier, options, action, handleResult, handleError) {
   const errorHandler = (description) => {
-    const prefixedDescription = `[${identifier}]${description ? ' ' + description : undefined}`
+    const prefixedDescription = `[${identifier}]${description ? ' ' + description : ''}`
     return createOnError(prefixedDescription, function (error) { 
+      console.error(error)
       handleError(error)
     })
   }
