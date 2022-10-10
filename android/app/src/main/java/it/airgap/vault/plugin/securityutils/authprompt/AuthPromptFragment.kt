@@ -28,7 +28,7 @@ class AuthPromptFragment : Fragment(R.layout.fragment_authenticator) {
     private var _biometricPrompt: BiometricPrompt? = null
     private val biometricPrompt: BiometricPrompt
         get() = _biometricPrompt ?: run {
-            val executor = ContextCompat.getMainExecutor(context)
+            val executor = ContextCompat.getMainExecutor(requireContext())
 
             BiometricPrompt(this, executor, object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
