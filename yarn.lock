@@ -2,17 +2,17 @@
 # yarn lockfile v1
 
 
-"@airgap/angular-core@0.0.32-beta.6":
-  version "0.0.32-beta.6"
-  resolved "https://registry.yarnpkg.com/@airgap/angular-core/-/angular-core-0.0.32-beta.6.tgz#7ed42ed3702dfe86664160d659b719a52deb114a"
-  integrity sha512-xu2TvzawMucC0i2f9X5PbGjLWpvewCyfSPw+f2MS5HjSG5alpzAJzMhIp1Mg8sIVl/8jU/3QE3S2gyQzk5V8OA==
+"@airgap/angular-core@0.0.32-beta.8":
+  version "0.0.32-beta.8"
+  resolved "https://registry.yarnpkg.com/@airgap/angular-core/-/angular-core-0.0.32-beta.8.tgz#e333cf2b8a2f1d9416d08e62487594f476e29b71"
+  integrity sha512-99e32aFTxWNfeMTKd/L4YEmoDt7MVye1uHY+kcrWBpJnNLzMmgPvAJTSaNnHw5q8N7dBaDV09Bp4EMHQ3ZtQ5g==
   dependencies:
     tslib "^2.2.0"
 
-"@airgap/angular-ngrx@0.0.32-beta.6":
-  version "0.0.32-beta.6"
-  resolved "https://registry.yarnpkg.com/@airgap/angular-ngrx/-/angular-ngrx-0.0.32-beta.6.tgz#7600dcd94876afa3e46ba4e1e6b8cf2a6f64e9f9"
-  integrity sha512-4u2qDUxG+iIS0F9S9uqY7BAuNIAs7y/mgKOUnER7btmyc/0wugJzyQQGgBlk5J1OEMLUmuf5ZIXmNOBsqs3t5g==
+"@airgap/angular-ngrx@0.0.32-beta.8":
+  version "0.0.32-beta.8"
+  resolved "https://registry.yarnpkg.com/@airgap/angular-ngrx/-/angular-ngrx-0.0.32-beta.8.tgz#853ae157c308f8f6b45ff179c1ef75c3ce4d4238"
+  integrity sha512-OSTsXGqDXAMGvJJTKuJP0TIGqdRAJyOoI7kKgztUxcaaEJzWmi78ghzZMivdWgYLaaLT6xhw5i1FWckX2ZPSxQ==
   dependencies:
     tslib "^2.2.0"
 
