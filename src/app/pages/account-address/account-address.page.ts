@@ -39,6 +39,12 @@ const metamask = {
   qrType: QRType.METAMASK
 }
 
+const rabby = {
+  icon: 'rabby-wallet.svg',
+  name: 'Rabby',
+  qrType: QRType.METAMASK
+}
+
 export interface CompanionApp {
   icon: string
   name: string
@@ -88,7 +94,7 @@ export class AccountAddressPage {
         this.syncOptions = [airgapwallet, bluewallet, sparrowwallet]
         break
       case MainProtocolSymbols.ETH:
-        this.syncOptions = [airgapwallet, metamask]
+        this.syncOptions = [airgapwallet, metamask, rabby]
         break
 
       default:
