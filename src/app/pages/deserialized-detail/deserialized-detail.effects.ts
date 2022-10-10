@@ -224,7 +224,7 @@ export class DeserializedDetailEffects {
             details = await this.transactionService.getDetailsFromIACMessages([request], {
               overrideProtocol: await this.getSaplingProtocol(),
               data: {
-                knownViewingKeys: this.secretsService.getKnownViewingKeys()
+                knownViewingKeys: await this.secretsService.getKnownViewingKeys()
               }
             })
           } else {
