@@ -1,3 +1,4 @@
+import { ISOLATED_PROTOCOL_PLUGIN, WebIsolatedProtocol } from '@airgap/angular-core'
 import { TestBed } from '@angular/core/testing'
 import { StorageMock } from 'test-config/storage-mock'
 
@@ -20,7 +21,8 @@ describe('SecretsService', () => {
         providers: [
           SecretsService,
           { provide: VaultStorageService, useClass: StorageMock },
-          { provide: SecureStorageService, useClass: SecureStorageServiceMock }
+          { provide: SecureStorageService, useClass: SecureStorageServiceMock },
+          { provide: ISOLATED_PROTOCOL_PLUGIN, useValue: new WebIsolatedProtocol() }
         ]
       })
     )

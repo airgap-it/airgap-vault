@@ -1,4 +1,4 @@
-import { APP_PLUGIN, DeeplinkService } from '@airgap/angular-core'
+import { APP_PLUGIN, DeeplinkService, ISOLATED_PROTOCOL_PLUGIN, WebIsolatedProtocol } from '@airgap/angular-core'
 import { TestBed } from '@angular/core/testing'
 
 import { createAppSpy } from '../../../../test-config/plugins-mocks'
@@ -28,6 +28,7 @@ describe('ModeService', () => {
           InteractionService,
           DeeplinkService,
           { provide: APP_PLUGIN, useValue: appSpy },
+          { provide: ISOLATED_PROTOCOL_PLUGIN, useValue: new WebIsolatedProtocol() },
           { provide: VaultStorageService, useClass: StorageMock },
           { provide: SecureStorageService, useClass: SecureStorageServiceMock }
         ]

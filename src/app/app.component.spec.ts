@@ -1,4 +1,4 @@
-import { APP_PLUGIN, CLIPBOARD_PLUGIN, ProtocolService, SPLASH_SCREEN_PLUGIN, STATUS_BAR_PLUGIN } from '@airgap/angular-core'
+import { APP_PLUGIN, CLIPBOARD_PLUGIN, ISOLATED_PROTOCOL_PLUGIN, ProtocolService, SPLASH_SCREEN_PLUGIN, STATUS_BAR_PLUGIN, WebIsolatedProtocol } from '@airgap/angular-core'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { AppPlugin } from '@capacitor/app'
@@ -62,6 +62,7 @@ describe('AppComponent', () => {
           { provide: STATUS_BAR_PLUGIN, useValue: statusBarSpy },
           { provide: SPLASH_SCREEN_PLUGIN, useValue: splashScreenSpy },
           { provide: CLIPBOARD_PLUGIN, useValue: clipboardSpy },
+          { provide: ISOLATED_PROTOCOL_PLUGIN, useValue: new WebIsolatedProtocol() },
           { provide: Platform, useValue: platformSpy },
           StartupChecksService,
           IACService,
