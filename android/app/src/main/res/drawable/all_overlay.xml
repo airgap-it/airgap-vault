@@ -5,5 +5,5 @@
             <solid android:color="@color/background_screen" />
         </shape>
     </item>
-    <item android:drawable="@drawable/logo_splash" android:gravity="center" />
+    <item android:drawable="@drawable/splash_icon" android:gravity="center" />
 </layer-list>
