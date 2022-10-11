@@ -47,6 +47,15 @@
     </ion-col>
   </ion-row>
 
+  <ng-container *ngIf="showMetaMaskMigrationOnboarding">
+    <ion-row>
+      <ion-col>
+        To use AirGap Vault with MetaMask or Rabby wallet, please migrate this account. To do so, simply remove and re-import this Ethereum
+        account. For help, visit our docs.
+      </ion-col>
+    </ion-row>
+  </ng-container>
+
   <ion-modal #modal trigger="open-modal" [presentingElement]="presentingElement">
     <ng-template>
       <ion-header>

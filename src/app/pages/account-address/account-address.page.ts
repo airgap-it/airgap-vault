@@ -64,6 +64,8 @@ export class AccountAddressPage {
 
   public syncOptions: CompanionApp[]
 
+  public showMetaMaskMigrationOnboarding: boolean = false
+
   private shareObject?: IACMessageDefinitionObjectV3[]
   private shareObjectPromise?: Promise<void>
   private walletShareUrl?: string
@@ -97,6 +99,8 @@ export class AccountAddressPage {
         this.syncOptions = [airgapwallet]
         if (this.wallet.isExtendedPublicKey) {
           this.syncOptions.push(metamask, rabby)
+        } else {
+          this.showMetaMaskMigrationOnboarding = true
         }
         break
 
