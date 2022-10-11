@@ -94,7 +94,10 @@ export class AccountAddressPage {
         this.syncOptions = [airgapwallet, bluewallet, sparrowwallet]
         break
       case MainProtocolSymbols.ETH:
-        this.syncOptions = [airgapwallet, metamask, rabby]
+        this.syncOptions = [airgapwallet]
+        if (this.wallet.isExtendedPublicKey) {
+          this.syncOptions.push(metamask, rabby)
+        }
         break
 
       default:
