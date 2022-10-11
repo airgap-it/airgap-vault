@@ -153,7 +153,7 @@ export class IACService extends BaseIACService {
     const unsignedTransaction: UnsignedTransaction = signTransactionRequest.payload as UnsignedTransaction
 
     // Select wallet by public key and protocol identifier
-    let correctWallet = this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(
+    let correctWallet = await this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(
       unsignedTransaction.publicKey,
       signTransactionRequest.protocol
     )
@@ -169,7 +169,7 @@ export class IACService extends BaseIACService {
         for (const derivation of input.bip32Derivation) {
           const masterFingerprint = derivation.masterFingerprint.toString('hex')
 
-          correctWallet = this.secretsService.findWalletByFingerprintDerivationPathAndProtocolIdentifier(
+          correctWallet = await this.secretsService.findWalletByFingerprintDerivationPathAndProtocolIdentifier(
             masterFingerprint,
             signTransactionRequest.protocol,
             derivation.path,
@@ -257,7 +257,7 @@ export class IACService extends BaseIACService {
   ) {
     const messageSignRequest: MessageSignRequest = messageDefinitionObject.payload as MessageSignRequest
 
-    let correctWallet = this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(
+    let correctWallet = await this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(
       messageSignRequest.publicKey,
       messageDefinitionObject.protocol
     )
@@ -303,7 +303,7 @@ export class IACService extends BaseIACService {
     // and fee for all tokens we support.
     let correctWallet: AirGapWallet | undefined
 
-    const baseWallet: AirGapWallet | undefined = this.secretsService.findBaseWalletByPublicKeyAndProtocolIdentifier(
+    const baseWallet: AirGapWallet | undefined = await this.secretsService.findBaseWalletByPublicKeyAndProtocolIdentifier(
       publicKey,
       messageDefinitionObject.protocol
     )
@@ -339,7 +339,7 @@ export class IACService extends BaseIACService {
   ): Promise<AirGapWallet | undefined> {
     let correctWallet: AirGapWallet | undefined
 
-    correctWallet = this.secretsService.findWalletByXPubFingerprintDerivationPathAndProtocolIdentifier(
+    correctWallet = await this.secretsService.findWalletByXPubFingerprintDerivationPathAndProtocolIdentifier(
       fingerprint,
       protocol,
       derivationPath
