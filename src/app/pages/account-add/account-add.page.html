@@ -15,17 +15,17 @@
       <ion-list-header class="ion-no-padding">
         <ion-label class="font--weight__med white">{{ 'wallet-select-coins.text' | translate }}</ion-label>
       </ion-list-header>
-      <ion-item detail="false" class="ion-no-padding" *ngFor="let protocol of protocols">
+      <ion-item detail="false" class="ion-no-padding" *ngFor="let protocol of protocols; index as i">
         <ion-avatar slot="start" class="ion-align-items-center">
-          <airgap-currency-symbol [symbol]="protocol.symbol" [protocolIdentifier]="protocol.identifier"></airgap-currency-symbol>
+          <airgap-currency-symbol [symbol]="protocolDetails[i].symbol" [protocolIdentifier]="protocolDetails[i].identifier"></airgap-currency-symbol>
         </ion-avatar>
         <ion-label class="ion-text-wrap">
           <h2>
-            <span class="font--weight__med">{{ protocol.name }}</span>
-            {{ protocol.symbol }}
+            <span class="font--weight__med">{{ protocolDetails[i].name }}</span>
+            {{ protocolDetails[i].symbol }}
           </h2>
         </ion-label>
-        <ion-radio [id]="protocol.identifier" [value]="protocol" slot="end"></ion-radio>
+        <ion-radio [id]="protocolDetails[i].identifier" [value]="protocol" slot="end"></ion-radio>
       </ion-item>
     </ion-radio-group>
   </ion-list>
@@ -45,7 +45,7 @@
         ></ion-input>
       </ion-item>
 
-      <ion-item *ngIf="selectedProtocol.identifier === 'eth' && selectedProtocol.supportsHD" class="ion-no-padding">
+      <ion-item *ngIf="selectedProtocolIdentifier === 'eth' && selectedProtocolSupportsHD" class="ion-no-padding">
         {{ 'wallet-select-coins.select-type.hd-wallet_label' | translate }}
         <ion-checkbox [(ngModel)]="isHDWallet" (ionChange)="setDerivationPath()" slot="end"></ion-checkbox>
       </ion-item>

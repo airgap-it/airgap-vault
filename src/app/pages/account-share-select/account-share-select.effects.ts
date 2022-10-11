@@ -55,7 +55,7 @@ export class AccountShareSelectEffects {
 
   private async generateShareUrl(secrets: MnemonicSecret[]): Promise<Action> {
     await this.migrationService.runSecretsMigration(secrets)
-    const [migratedSecrets, allMigrated]: [MnemonicSecret[], boolean] = this.migrationService.deepFilterMigratedSecretsAndWallets(secrets)
+    const [migratedSecrets, allMigrated]: [MnemonicSecret[], boolean] = await this.migrationService.deepFilterMigratedSecretsAndWallets(secrets)
     if (migratedSecrets.length === 0) {
       return actions.walletsNotMigrated()
     }
