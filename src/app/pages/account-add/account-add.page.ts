@@ -1,6 +1,6 @@
 import { Component } from '@angular/core'
 import { ModalController, AlertController } from '@ionic/angular'
-import { ICoinProtocol } from '@airgap/coinlib-core'
+import { ICoinProtocol, ProtocolSymbols } from '@airgap/coinlib-core'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
@@ -10,14 +10,18 @@ import { LocalAuthenticationOnboardingPage } from '../local-authentication-onboa
 import { BIP39_PASSPHRASE_ENABLED } from 'src/app/constants/constants'
 import { ProtocolService } from '@airgap/angular-core'
 
+interface ProtocolDetails {
+  symbol: string
+  identifier: ProtocolSymbols
+  name: string
+}
+
 @Component({
   selector: 'airgap-account-add',
   templateUrl: './account-add.page.html',
   styleUrls: ['./account-add.page.scss']
 })
 export class AccountAddPage {
-  public selectedProtocol: ICoinProtocol
-  public protocols: ICoinProtocol[]
   public isHDWallet: boolean = false
 
   public isAdvancedMode: boolean = false
@@ -25,6 +29,13 @@ export class AccountAddPage {
   public revealBip39Passphrase: boolean = false
   public customDerivationPath: string
   public bip39Passphrase: string = ''
+
+  public protocols: ICoinProtocol[]
+  public protocolDetails: ProtocolDetails[]
+
+  public selectedProtocol: ICoinProtocol
+  public selectedProtocolIdentifier: ProtocolSymbols
+  public selectedProtocolSupportsHD: boolean
 
   constructor(
     private readonly secretsService: SecretsService,
@@ -34,24 +45,40 @@ export class AccountAddPage {
     private readonly navigationService: NavigationService,
     private readonly alertController: AlertController
   ) {
-    this.protocolService.getActiveProtocols().then((protocols: ICoinProtocol[]) => {
+    this.protocolService.getActiveProtocols().then(async (protocols: ICoinProtocol[]) => {
       this.protocols = protocols
+      this.protocolDetails = await Promise.all(protocols.map(async (protocol: ICoinProtocol) => {
+        const [symbol, identifier, name] = await Promise.all([protocol.getSymbol(), protocol.getIdentifier(), protocol.getName()])
+
+        return { symbol, identifier, name }
+      }))
+      
       this.onSelectedProtocolChange(this.navigationService.getState().protocol || this.protocols[0])
     })
   }
 
-  public setDerivationPath() {
-    if (this.selectedProtocol.supportsHD && this.isHDWallet) {
-      this.customDerivationPath = this.selectedProtocol.standardDerivationPath
+  public async setDerivationPath() {
+    if ((await this.selectedProtocol.getSupportsHD()) && this.isHDWallet) {
+      this.customDerivationPath = await this.selectedProtocol.getStandardDerivationPath()
     } else {
-      this.customDerivationPath = `${this.selectedProtocol.standardDerivationPath}/0/0`
+      this.customDerivationPath = `${await this.selectedProtocol.getStandardDerivationPath()}/0/0`
     }
   }
 
-  public onSelectedProtocolChange(selectedProtocol: ICoinProtocol): void {
+  public async onSelectedProtocolChange(selectedProtocol: ICoinProtocol): Promise<void> {
     this.selectedProtocol = selectedProtocol
-    this.isHDWallet = this.selectedProtocol.supportsHD
-    this.customDerivationPath = this.selectedProtocol.standardDerivationPath
+
+    const [selectedProtocolIdentifier, selectedProtocolSupportsHD, selectedProtocolStandardDerivationPath] = await Promise.all([
+      selectedProtocol.getIdentifier(),
+      selectedProtocol.getSupportsHD(),
+      selectedProtocol.getStandardDerivationPath()
+    ])
+
+    this.selectedProtocolIdentifier = selectedProtocolIdentifier
+    this.selectedProtocolSupportsHD = selectedProtocolSupportsHD
+
+    this.isHDWallet = selectedProtocolSupportsHD
+    this.customDerivationPath = selectedProtocolStandardDerivationPath
   }
 
   public async addWallet(): Promise<void> {
@@ -75,21 +102,24 @@ export class AccountAddPage {
   }
 
   private async addWalletAndReturnToAddressPage(): Promise<void> {
-    const addAccount = () => {
+    const addAccount = async () => {
+      const selectedProtocolIdentifier = await this.selectedProtocol.getIdentifier()
       this.secretsService
         .addWallets(
-          this.protocols.map((protocol: ICoinProtocol) => {
-            const isSelected: boolean = this.selectedProtocol.identifier === protocol.identifier
+          await Promise.all(this.protocols.map(async (protocol: ICoinProtocol) => {
+            const protocolIdentifier = await protocol.getIdentifier()
+
+            const isSelected: boolean = selectedProtocolIdentifier === protocolIdentifier
 
             return {
-              protocolIdentifier: protocol.identifier,
-              isHDWallet: isSelected ? this.isHDWallet : protocol.supportsHD,
-              customDerivationPath: isSelected ? this.customDerivationPath : protocol.standardDerivationPath,
+              protocolIdentifier,
+              isHDWallet: isSelected ? this.isHDWallet : await protocol.getSupportsHD(),
+              customDerivationPath: isSelected ? this.customDerivationPath : await protocol.getStandardDerivationPath(),
               bip39Passphrase: isSelected ? this.bip39Passphrase : '',
               isActive: isSelected
             }
           })
-        )
+        ))
         .then(() => {
           this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
         })

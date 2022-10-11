@@ -2,24 +2,24 @@
 # yarn lockfile v1
 
 
-"@airgap/angular-core@0.0.32-beta.0":
-  version "0.0.32-beta.0"
-  resolved "https://registry.yarnpkg.com/@airgap/angular-core/-/angular-core-0.0.32-beta.0.tgz#1e0078fc4a51b063f4ddc6bfabeeec6c7756af8f"
-  integrity sha512-MUGGo9KIwxMGVXqML/yuhf1ot0hEg8894ccQQ6IEVP6IjAQzsC5iX4oL9LPaeJJ1OryRexsL4phVRNGae3c74Q==
+"@airgap/angular-core@0.0.32-beta.3":
+  version "0.0.32-beta.3"
+  resolved "https://registry.yarnpkg.com/@airgap/angular-core/-/angular-core-0.0.32-beta.3.tgz#049d335e836d078df19cb23d64707599204168f2"
+  integrity sha512-dxVn0vo+Mi3R2VGvkr/K9NQj2FEFu5nh6hsDtDhrxgF5m6gBM2aC/iVMv/2CaVUPp0refovD8cyVCTHXixtLsg==
   dependencies:
     tslib "^2.2.0"
 
-"@airgap/angular-ngrx@0.0.32-beta.0":
-  version "0.0.32-beta.0"
-  resolved "https://registry.yarnpkg.com/@airgap/angular-ngrx/-/angular-ngrx-0.0.32-beta.0.tgz#c2347926ebd94909e30e489bf3df03f1e4da80bc"
-  integrity sha512-mqwdQ9YMsXu/wPeD/Lo/dSYPOziLeNOWOZFYYbPVGA1PY++SXMw5YF7xpCLLTym2z1/dcnH29hFU4cbyKIf0Ug==
+"@airgap/angular-ngrx@0.0.32-beta.3":
+  version "0.0.32-beta.3"
+  resolved "https://registry.yarnpkg.com/@airgap/angular-ngrx/-/angular-ngrx-0.0.32-beta.3.tgz#991549f2a29e29bbeeee6719f43be1b87ab9cf87"
+  integrity sha512-yDIziTfz539SbA+fMiG+tS1tHg8ND9gcXsM7+8/SD7VWI8FMAgXScmDttHa/1xP2jdT6ILO/ookwyhrmlWFccA==
   dependencies:
     tslib "^2.2.0"
 
-"@airgap/coinlib-core@0.13.7-beta.1":
-  version "0.13.7-beta.1"
-  resolved "https://registry.yarnpkg.com/@airgap/coinlib-core/-/coinlib-core-0.13.7-beta.1.tgz#89d0d3e5be2a828e8fb03b3a7119ae5f4065516f"
-  integrity sha512-D7s6a9K5Tttj4DDaj0mtG3Fu62sUSdoeHu9St2IFa6Q/zpHeN/guzTsZq7x7g+SLJTkaUMc+5OxWHqGtfSaYPQ==
+"@airgap/coinlib-core@0.13.7-beta.5":
+  version "0.13.7-beta.5"
+  resolved "https://registry.yarnpkg.com/@airgap/coinlib-core/-/coinlib-core-0.13.7-beta.5.tgz#96aec03e18a27feb2d8fbc02bc0f0480d4cf23a3"
+  integrity sha512-N+6y5i72dOTxBdHJewZjsmG49ImpPjPkRSV0fgJxtQpc/HOQOMu2iLIXI9Nz55/7UViAAI0sQqb/HsWvrLUPJA==
   dependencies:
     "@airgap/sapling-wasm" "0.0.7"
     "@ethereumjs/common" "2.6.0"

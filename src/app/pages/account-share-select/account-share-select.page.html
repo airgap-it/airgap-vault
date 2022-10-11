@@ -23,7 +23,7 @@
       </ion-item>
       <ion-list lines="none" *ngIf="(isChecked$ | async)[secret.id]">
         <airgap-account-item
-          *ngFor="let wallet of (secret.wallets | walletFilter: { status: AirGapWalletStatus.ACTIVE })"
+          *ngFor="let wallet of (secret.wallets | walletFilter: { status: AirGapWalletStatus.ACTIVE } | async) || []"
           [wallet]="wallet"
         ></airgap-account-item>
       </ion-list>
