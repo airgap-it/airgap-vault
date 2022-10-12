@@ -39,7 +39,9 @@ export class AccountsListPage {
   ionViewWillEnter() {
     this.secret = this.navigationService?.getState()?.secret
     console.log('this.secret', this.secret)
-    this.loadWallets()
+    if (this.secret) {
+      this.loadWallets()
+    }
   }
 
   private loadWallets() {
@@ -132,6 +134,6 @@ export class AccountsListPage {
   }
 
   navigateToSecretsTab() {
-    this.navigationService.routeToSecretsTab()
+    this.navigationService.routeBack('tabs/tab-secrets')
   }
 }
