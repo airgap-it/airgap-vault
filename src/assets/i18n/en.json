@@ -30,7 +30,7 @@
     "understood_label": "Understood"
   },
   "local-authentication-onboarding": {
-    "heading": "Your secret is accessed with your defined authentication method like <span class=\"style__strong color__primary\">fingerprint</span>,<span class=\"style__strong color__primary\"> face id</span> or <span class=\"style__strong color__primary\">pin code</span>.",
+    "heading": "Your secret is accessed with your <span class=\"style__strong color__primary\">fingerprint</span>,<span class=\"style__strong color__primary\"> face id</span> or <span class=\"style__strong color__primary\">pin code</span>.",
     "text": "Your secret needs to be accessed for account creation and transaction signing.",
     "authenticate_label": "Authenticate"
   },

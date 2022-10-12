@@ -8,15 +8,13 @@
   <img src="assets/img/AirGap_Onboarding_Wallet.svg" />
 
   <p>
-    AirGap Vault is always offline and never connects to the internet. To check your balances and create transactions, you need to use it
-    together with
-    <strong>AirGap Wallet</strong>
-    .
+    AirGap Vault never connects to the internet. To check your balances and create transactions, you need to use it together with AirGap
+    Wallet or another companion app.
   </p>
 
   <p *ngIf="installationType === installationTypes.OFFLINE">
-    Because this device is offline, you will have to install AirGap Wallet on another device, which is connected to the internet. Don't
-    worry, your secrets will never leave AirGap Vault, only public information is shared with AirGap Wallet.
+    Because this device is offline, you will have to install the companion app on another device, which is connected to the internet. Don't
+    worry, your secrets will never leave AirGap Vault, only public information is shared with the companion app.
   </p>
 
   <ion-button *ngIf="installationType === installationTypes.ONLINE" expand="block" shape="round" color="tertiary" (click)="downloadApp()">
