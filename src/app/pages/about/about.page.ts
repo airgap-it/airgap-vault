@@ -80,7 +80,11 @@ export class AboutPage {
   }
 
   public documentation(): void {
-    this.openLinkPage('Feedback', 'hi@airgap.it', `Our docs offer a comprehensive overview of the features and functionality of our app.`)
+    this.openLinkPage(
+      'Documentation',
+      'https://support.airgap.it',
+      `Our docs offer a comprehensive overview of the features and functionality of our app.`
+    )
   }
 
   private openLinkPage(title: string, link: string, description?: string) {
