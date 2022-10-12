@@ -54,14 +54,19 @@
       </ion-item-sliding>
     </ng-container>
   </ion-list>
-  <ion-row *ngIf="wallets$ && (wallets$ | async | walletFilter: { status: AirGapWalletStatus.ACTIVE }).length === 0">
-    <div class="empty-list content--align__center-center">
-      <img class="empty-img" src="./assets/img/no-wallet-added-onboarding.svg" />
-    </div>
-    <p>
-      <strong>{{ 'tab-wallets.empty-state_text' | translate }}</strong>
-    </p>
-  </ion-row>
+
+  <ng-container *ngIf="wallets$ && (wallets$ | async | walletFilter: { status: AirGapWalletStatus.ACTIVE }).length === 0">
+    <ion-row>
+      <ion-col size="12" class="empty-list content--align__center-center">
+        <img class="empty-img" src="./assets/img/no-wallet-added-onboarding.svg" />
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <strong>{{ 'tab-wallets.empty-state_text' | translate }}</strong>
+      </ion-col>
+    </ion-row>
+  </ng-container>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ng-container *ngIf="deleteView">
