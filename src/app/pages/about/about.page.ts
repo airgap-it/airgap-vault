@@ -4,7 +4,7 @@ import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/er
 import { APP_INFO_PLUGIN, AppInfoPlugin } from '@airgap/angular-core'
 import { InstallationType, VaultStorageKey, VaultStorageService } from 'src/app/services/storage/storage.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
-import { AlertController } from '@ionic/angular'
+import { AlertController, Platform } from '@ionic/angular'
 
 @Component({
   selector: 'airgap-about',
@@ -19,6 +19,7 @@ export class AboutPage {
 
   constructor(
     @Inject(APP_INFO_PLUGIN) private readonly appInfo: AppInfoPlugin,
+    private readonly platform: Platform,
     private readonly storage: VaultStorageService,
     private readonly alertController: AlertController,
     private readonly navigationService: NavigationService
@@ -27,12 +28,14 @@ export class AboutPage {
   }
 
   public async updateVersions(): Promise<void> {
-    const appInfo = await this.appInfo.get()
+    if (this.platform.is('hybrid')) {
+      const appInfo = await this.appInfo.get()
 
-    this.appName = appInfo.appName
-    this.packageName = appInfo.packageName
-    this.versionName = appInfo.versionName
-    this.versionCode = appInfo.versionCode
+      this.appName = appInfo.appName
+      this.packageName = appInfo.packageName
+      this.versionName = appInfo.versionName
+      this.versionCode = appInfo.versionCode
+    }
   }
 
   public async review(): Promise<void> {
