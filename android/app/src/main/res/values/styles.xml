@@ -17,9 +17,8 @@
         <item name="android:background">@null</item>
     </style>
 
-
     <style name="AppTheme.NoActionBarLaunch" parent="Theme.SplashScreen">
-        <item name="android:background">@drawable/screen</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_icon</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
