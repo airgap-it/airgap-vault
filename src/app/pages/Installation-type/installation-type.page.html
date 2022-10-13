@@ -12,7 +12,7 @@
 <ion-content class="ion-padding">
   <!-- TODO: Use better colors for "not selected" and "selected"-->
   <ion-card
-    [color]="installationType === installationTypes.ONLINE ? 'tertiary' : 'light'"
+    [color]="installationType === installationTypes.ONLINE ? 'primary' : 'tertiary'"
     (click)="installationType = installationTypes.ONLINE"
   >
     <!-- TODO: Add picture -->
@@ -47,7 +47,7 @@
 
   <!-- TODO: Use better colors for "not selected" and "selected"-->
   <ion-card
-    [color]="installationType === installationTypes.OFFLINE ? 'tertiary' : 'light'"
+    [color]="installationType === installationTypes.OFFLINE ? 'primary' : 'tertiary'"
     (click)="installationType = installationTypes.OFFLINE"
   >
     <!-- TODO: Add picture -->
@@ -76,7 +76,6 @@
       <ul>
         <li>Highest security</li>
         <li>QR communication</li>
-        <li>Internet detection (soon)</li>
       </ul>
     </ion-card-content>
   </ion-card>
