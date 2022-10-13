@@ -1,5 +1,6 @@
 import { AirGapWallet, AirGapWalletStatus } from '@airgap/coinlib-core'
 import { Component } from '@angular/core'
+import { Router } from '@angular/router'
 import { AlertController, Platform } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 import { BehaviorSubject } from 'rxjs'
@@ -31,7 +32,8 @@ export class AccountsListPage {
     private readonly modeService: ModeService,
     private readonly alertCtrl: AlertController,
     private readonly translateService: TranslateService,
-    private readonly secretsService: SecretsService
+    private readonly secretsService: SecretsService,
+    private readonly router: Router
   ) {
     this.isAndroid = this.platform.is('android')
   }
@@ -41,6 +43,9 @@ export class AccountsListPage {
     console.log('this.secret', this.secret)
     if (this.secret) {
       this.loadWallets()
+    } else {
+      this.router.navigate(['/'])
+      throw new Error('[AccountsListPage]: No secret found! Navigating to home page.')
     }
   }
 
