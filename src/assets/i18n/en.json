@@ -99,7 +99,7 @@
   },
   "secret-edit": {
     "title": " Your Secret",
-    "text": "Give your secret a name and select the security level.",
+    "text": "Give your secret a name.",
     "fingerprint": "Fingerprint",
     "secret_input_label": "Label of your secret",
     "advanced": "Advanced Options",
