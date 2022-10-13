@@ -33,6 +33,10 @@
         <br />
         <span class="selectable typography--mono">{{ wallet.derivationPath }}</span>
       </p>
+      <p *ngIf="isAppAdvancedMode$ | async">
+        <ion-chip color="light" *ngIf="wallet.isExtendedPublicKey">HD Wallet</ion-chip>
+        <ion-chip color="light" *ngIf="secret.fingerprint !== wallet.masterFingerprint">BIP39 passphrase</ion-chip>
+      </p>
     </ion-col>
   </ion-row>
 
