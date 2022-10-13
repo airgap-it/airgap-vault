@@ -88,6 +88,7 @@
     "cordova.plugins.diagnostic": "4.0.10",
     "core-js": "^3.10.1",
     "js-sha3": "^0.8.0",
+    "lifehash": "^0.0.2",
     "localforage-cordovasqlitedriver": "^1.8.0",
     "moment": "^2.27.0",
     "myetherwallet-blockies": "^0.1.1",

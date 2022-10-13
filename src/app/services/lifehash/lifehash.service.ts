@@ -1,20 +1,14 @@
 import { Injectable } from '@angular/core'
-
-import instantiate_lifehash, { LifeHashModule } from '../../utils/lifehash/lifehash'
+import { LifeHash, LifeHashVersion } from 'lifehash'
 
 @Injectable({
   providedIn: 'root'
 })
 export class LifehashService {
-  public lifehashInstancePromise: Promise<LifeHashModule>
-
-  constructor() {
-    this.lifehashInstancePromise = instantiate_lifehash()
-  }
+  constructor() {}
 
   public async generateLifehash(str: string) {
-    const img: HTMLImageElement = (await this.lifehashInstancePromise).makeFromUTF8(str, 1, 2)
-
-    return img.src
+    const image = LifeHash.makeFrom(str, LifeHashVersion.version2, 1, true)
+    return image.toDataUrl()
   }
 }
