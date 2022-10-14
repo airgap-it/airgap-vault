@@ -10,7 +10,7 @@ variables:
 stages:
   - build
   - test
-  - qa
+  # - qa
   - native_build
   - native_test
   - publish
@@ -76,29 +76,29 @@ test_android:
   after_script:
     - docker rm -f maven-runner-$CI_PIPELINE_ID || true
 
-qa:
-  stage: qa
-  script:
-    - docker create --name qa-$CI_PIPELINE_ID $GOOGLE_TAG yarn sonar-scanner -- -X
-      -Dsonar.typescript.lcov.reportPaths=lcov.info
-      -Dsonar.typescript.tslint.reportPaths=lintReport.json
-      -Dsonar.test.inclusions=**/*.spec.ts
-      -Dsonar.tests=src/
-      -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts,src/assets/libs/**
-      -Dsonar.sources=src/
-      -Dsonar.host.url=$SONAR_URL
-      -Dsonar.login=$SONAR_LOGIN
-      -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA
-      -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME
-      -Dsonar.gitlab.project_id=$CI_PROJECT_ID
-      -Dsonar.branch.name=$CI_BUILD_REF_NAME
-    - docker cp lcov.info qa-$CI_PIPELINE_ID:/app/lcov.info
-    - docker cp lintReport.json qa-$CI_PIPELINE_ID:/app/lintReport.json
-    - docker start -a qa-$CI_PIPELINE_ID
-  after_script:
-    - docker rm -f qa-$CI_PIPELINE_ID || true
-  tags:
-    - docker
+# qa:
+#   stage: qa
+#   script:
+#     - docker create --name qa-$CI_PIPELINE_ID $GOOGLE_TAG yarn sonar-scanner -- -X
+#       -Dsonar.typescript.lcov.reportPaths=lcov.info
+#       -Dsonar.typescript.tslint.reportPaths=lintReport.json
+#       -Dsonar.test.inclusions=**/*.spec.ts
+#       -Dsonar.tests=src/
+#       -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts,src/assets/libs/**
+#       -Dsonar.sources=src/
+#       -Dsonar.host.url=$SONAR_URL
+#       -Dsonar.login=$SONAR_LOGIN
+#       -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA
+#       -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME
+#       -Dsonar.gitlab.project_id=$CI_PROJECT_ID
+#       -Dsonar.branch.name=$CI_BUILD_REF_NAME
+#     - docker cp lcov.info qa-$CI_PIPELINE_ID:/app/lcov.info
+#     - docker cp lintReport.json qa-$CI_PIPELINE_ID:/app/lintReport.json
+#     - docker start -a qa-$CI_PIPELINE_ID
+#   after_script:
+#     - docker rm -f qa-$CI_PIPELINE_ID || true
+#   tags:
+#     - docker
 
 build_ios:
   stage: native_build
@@ -109,7 +109,6 @@ build_ios:
     - export DEVELOPER_DIR=$XCODE_PATH
     - nvm use 16
     - yarn install --frozen-lockfile
-    - yarn disable-pure-getters
     - yarn configure-mangle
     - yarn apply-diagnostic-modules # manually remove unused cordova-diagnostic-plugin modules
     - yarn ionic info

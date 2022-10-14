@@ -17,8 +17,7 @@ WORKDIR /app
 RUN yarn global add ionic@5.4.0 @capacitor/core@3.2.5 @capacitor/cli@3.2.5 && yarn cache clean --force && yarn global add n && n 16.13.1
 
 # Install app dependencies, using wildcard if package-lock exists and copy capacitor configs and ionic configs
-COPY package.json yarn.lock apply-diagnostic-modules.js capacitor.config.ts ionic.config.json /app
-COPY config /app/config
+COPY package.json yarn.lock apply-diagnostic-modules.js fix-qrscanner-gradle.js capacitor.config.ts ionic.config.json /app/
 
 # install dependencies
 # run ionic android build
@@ -26,9 +25,6 @@ RUN yarn install --frozen-lockfile && mkdir www && ionic info
 
 # Bundle app source
 COPY . /app
-
-# post-install hook, to be safe if it got cached
-RUN node config/patch_crypto.js
 
 # set version code
 ARG BUILD_NR
@@ -47,8 +43,7 @@ RUN sed -i -e "s/versionCode 1/versionCode $BUILD_NR/g" /app/android/app/build.g
 # this has nothing to do with debug!!!:
 # copy release-apk
 # sign using debug key
-RUN yarn disable-pure-getters \
-    && yarn configure-mangle \
+RUN yarn configure-mangle \
     && yarn apply-diagnostic-modules \
     && yarn jetifier \
     && ionic build --prod \

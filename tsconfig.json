@@ -33,7 +33,10 @@
     "paths": {
       "@angular/*": ["./node_modules/@angular/*"],
       "@ionic/*": ["./node_modules/@ionic/*"],
-      "@ngx-translate/*": ["./node_modules/@ngx-translate/*"]
+      "@ngx-translate/*": ["./node_modules/@ngx-translate/*"],
+      "path": ["./node_modules/path-browserify"],
+      "stream": ["./node_modules/stream-browserify"],
+      "crypto": ["./node_modules/crypto-browserify"]
     }
   },
   "angularCompilerOptions": {

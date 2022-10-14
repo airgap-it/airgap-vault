@@ -2,7 +2,6 @@ import { AirGapWallet, AirGapWalletStatus } from '@airgap/coinlib-core'
 import { Component, OnInit } from '@angular/core'
 import { Platform } from '@ionic/angular'
 import { BehaviorSubject, Observable } from 'rxjs'
-
 import { MnemonicSecret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { ModeService } from '../../services/mode/mode.service'
@@ -53,7 +52,7 @@ export class TabAccountsPage implements OnInit {
     }) // We should never unsubscribe, because we need to watch this in case a user deletes all his secrets
   }
 
-  public goToReceiveAddress(wallet: AirGapWallet): void {
+  public async goToReceiveAddress(wallet: AirGapWallet): Promise<void> {
     this.navigationService.routeWithState('/account-address', { wallet }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
