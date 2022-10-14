@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core'
+import { Component } from '@angular/core'
 import { AlertController } from '@ionic/angular'
 import { first } from 'rxjs/operators'
-import { DeviceService } from 'src/app/services/device/device.service'
 import { NetworkService } from 'src/app/services/network/network.service'
-import { SecretsService } from 'src/app/services/secrets/secrets.service'
 import { SecureStorageService } from 'src/app/services/secure-storage/secure-storage.service'
+import { DeviceService } from 'src/app/services/device/device.service'
+import { SecretsService } from 'src/app/services/secrets/secrets.service'
 
 enum CheckStatus {
   UNKNOWN = 'unknown',
@@ -73,11 +73,11 @@ interface CheckItem {
 }
 
 @Component({
-  selector: 'airgap-security-check',
-  templateUrl: './security-check.page.html',
-  styleUrls: ['./security-check.page.scss']
+  selector: 'airgap-tab-security',
+  templateUrl: './tab-security.page.html',
+  styleUrls: ['./tab-security.page.scss']
 })
-export class SecurityCheckPage implements OnInit {
+export class TabSecurityPage {
   groups: CheckGroup[]
 
   checksRunning: boolean = false

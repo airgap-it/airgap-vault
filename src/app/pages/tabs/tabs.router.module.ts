@@ -9,6 +9,15 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
+        path: 'tab-secrets',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../tab-secrets/tab-secrets.module').then((m) => m.TabSecretsPageModule)
+          }
+        ]
+      },
+      {
         path: 'tab-scan',
         children: [
           {
@@ -18,11 +27,11 @@ const routes: Routes = [
         ]
       },
       {
-        path: 'tab-secrets',
+        path: 'tab-security',
         children: [
           {
             path: '',
-            loadChildren: () => import('../tab-secrets/tab-secrets.module').then((m) => m.TabSecretsPageModule)
+            loadChildren: () => import('../tab-security/tab-security.module').then((m) => m.TabSecurityPageModule)
           }
         ]
       },

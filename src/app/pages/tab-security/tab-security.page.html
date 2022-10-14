@@ -1,10 +1,6 @@
-<ion-header>
+<ion-header class="ion-no-border">
   <ion-toolbar color="secondary">
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/tab-settings"></ion-back-button>
-    </ion-buttons>
-
-    <ion-title>{{ 'security-check.title' | translate }}</ion-title>
+    <ion-title>{{ 'tab-security.title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -49,6 +45,6 @@
   <p>
     The checks on this page test several mechanisms that are used throughout our apps and report any issues. This can help catch issues with
     your device or with the software. However, if someone has complete access to your device or can alter the contents of AirGap Vault,
-    these security checks can be manipulated, so a pass is not a definitive indicator that there is absolutely no security issue.
+    these security checks can be manipulated, so make sure you are running AirGap Vault on secure hardware.
   </p>
 </ion-content>

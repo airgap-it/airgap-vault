@@ -122,10 +122,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/migration/migration.module').then((m) => m.MigrationPageModule)
   },
   {
-    path: 'security-check',
-    loadChildren: () => import('./pages/security-check/security-check.module').then((m) => m.SecurityCheckPageModule)
-  },
-  {
     path: 'accounts-list',
     loadChildren: () => import('./pages/accounts-list/accounts-list.module').then((m) => m.AccountsListPageModule)
   },

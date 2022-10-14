@@ -43,10 +43,6 @@ export class TabSettingsPage {
     this.navigationService.route('/interaction-selection-settings').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  public goToSecurityCheck(): void {
-    this.navigationService.route('/security-check').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-  }
-
   public goToErrorHistory(): void {
     this.navigationService.route('/error-history').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
