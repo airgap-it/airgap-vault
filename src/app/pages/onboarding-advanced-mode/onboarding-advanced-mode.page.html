@@ -12,7 +12,7 @@
 <ion-content class="ion-padding">
   <!-- TODO: Use better colors for "not selected" and "selected"-->
   <ion-card
-    [color]="advancedModeType === advancedModeTypes.SIMPLE ? 'light' : 'tertiary'"
+    [color]="advancedModeType === advancedModeTypes.SIMPLE ? 'primary' : 'tertiary'"
     (click)="advancedModeType = advancedModeTypes.SIMPLE"
   >
     <!-- TODO: Add picture -->
@@ -33,7 +33,7 @@
 
   <!-- TODO: Use better colors for "not selected" and "selected"-->
   <ion-card
-    [color]="advancedModeType === advancedModeTypes.ADVANCED ? 'light' : 'tertiary'"
+    [color]="advancedModeType === advancedModeTypes.ADVANCED ? 'primary' : 'tertiary'"
     (click)="advancedModeType = advancedModeTypes.ADVANCED"
   >
     <!-- TODO: Add picture -->
@@ -53,8 +53,8 @@
 
       <ul>
         <li>BIP39 Passphrases</li>
-        <li>Recovery Phrase Fingerprints</li>
-        <li>Advanced Entropy Collection</li>
+        <li>Lifehash Identicons</li>
+        <li>Dice and Coin-Flip Entropy Collection</li>
       </ul>
     </ion-card-content>
   </ion-card>

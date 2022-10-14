@@ -56,6 +56,7 @@ abstract class Secret implements Identifiable {
 }
 
 export class MnemonicSecret extends Secret {
+  public createdAtTimestamp: number
   public hasSocialRecovery: boolean
   public hasRecoveryKey: boolean
 
@@ -77,6 +78,7 @@ export class MnemonicSecret extends Secret {
     if (seed !== null) {
       this.secretHex = this.getEntropyFromMnemonic(seed)
       this.fingerprint = this.getFingerprintFromMnemonic(seed)
+      this.createdAtTimestamp = Date.now()
     }
   }
 

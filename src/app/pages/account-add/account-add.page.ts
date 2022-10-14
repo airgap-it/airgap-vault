@@ -59,6 +59,7 @@ export class AccountAddPage {
           protocol.identifier === MainProtocolSymbols.BTC_SEGWIT ||
           protocol.identifier === MainProtocolSymbols.ETH ||
           this.navigationService.getState().protocol?.identifier === protocol.identifier
+
         return { protocol, isHDWallet: protocol.supportsHD, customDerivationPath: undefined, isChecked: isChecked }
       })
       this.onProtocolSelected()
@@ -137,15 +138,14 @@ export class AccountAddPage {
         .addWallets(
           this.secret,
           this.protocolList.map((protocolWrapper: ProtocolWrapper) => {
-            // TODO: CUSTOM DERIVATION PATH IS CURRENTLY IGNORED
             const protocol = protocolWrapper.protocol
             return {
               protocolIdentifier: protocol.identifier,
-              isHDWallet: protocolWrapper.isHDWallet ? protocolWrapper.isHDWallet : protocol.supportsHD,
+              isHDWallet: protocolWrapper.isChecked ? protocolWrapper.isHDWallet : protocol.supportsHD,
               customDerivationPath:
                 protocolWrapper.isChecked && protocolWrapper.customDerivationPath
                   ? protocolWrapper.customDerivationPath
-                  : protocol.standardDerivationPath, // TODO: If custom derivation path is set, should we add others with default derivation?
+                  : protocol.standardDerivationPath,
               bip39Passphrase: protocolWrapper.isChecked ? this.bip39Passphrase : '',
               isActive: protocolWrapper.isChecked
             }

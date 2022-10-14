@@ -15,15 +15,15 @@
       <ion-label>{{ 'tab-settings.about' | translate }}</ion-label>
     </ion-item>
 
-    <ion-item lines="none" (click)="goToOnboarding()">
-      <ion-icon name="list" slot="start"></ion-icon>
+    <ion-item lines="none" (click)="goToOnboarding()" detail="true">
+      <ion-icon name="book-outline" slot="start"></ion-icon>
       {{ 'tab-settings.welcome-onboarding_label' | translate }}
     </ion-item>
 
-    <ion-item lines="none" (click)="goToDisclaimer()">
+    <!-- <ion-item lines="none" (click)="goToDisclaimer()">
       <ion-icon name="list" slot="start"></ion-icon>
       {{ 'tab-settings.disclaimer_label' | translate }}
-    </ion-item>
+    </ion-item> -->
 
     <!--
       TODO: Enable once history is in components lib
@@ -59,13 +59,13 @@
       <ion-label>{{ 'tab-settings.advanced-settings_label' | translate }}</ion-label>
     </ion-list-header>
 
-    <ion-item lines="none" (click)="goToInstallationType()">
-      <ion-icon name="list" slot="start"></ion-icon>
+    <ion-item lines="none" (click)="goToInstallationType()" detail="true">
+      <ion-icon name="extension-puzzle-outline" slot="start"></ion-icon>
       {{ 'tab-settings.installation-type_label' | translate }}
     </ion-item>
 
-    <ion-item lines="none" (click)="goToAdvancedModeType()">
-      <ion-icon name="list" slot="start"></ion-icon>
+    <ion-item lines="none" (click)="goToAdvancedModeType()" detail="true">
+      <ion-icon name="build-outline" slot="start"></ion-icon>
       {{ 'tab-settings.advanced-mode-type_label' | translate }}
     </ion-item>
 

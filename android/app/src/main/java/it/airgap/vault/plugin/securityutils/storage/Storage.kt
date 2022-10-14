@@ -403,6 +403,8 @@ class Storage(private val context: Context, private val storageAlias: String, pr
     }
 
     private fun generatePasswordKey(passwordFile: SecureFile, passphraseOrPin: String) {
+        if (passphraseOrPin.isBlank()) return
+
         val salt = ByteArray(Constants.KEY_SIZE / 8).also { SecureRandom().nextBytes(it) }
         val inputSecretKey = generateSecretKey(passphraseOrPin, salt)
 

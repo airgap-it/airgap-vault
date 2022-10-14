@@ -30,7 +30,7 @@
     "understood_label": "Understood"
   },
   "local-authentication-onboarding": {
-    "heading": "Your secret is accessed with your defined authentication method like <span class=\"style__strong color__primary\">fingerprint</span>,<span class=\"style__strong color__primary\"> face id</span> or <span class=\"style__strong color__primary\">pin code</span>.",
+    "heading": "Your secret is accessed with your <span class=\"style__strong color__primary\">fingerprint</span>,<span class=\"style__strong color__primary\"> face id</span> or <span class=\"style__strong color__primary\">pin code</span>.",
     "text": "Your secret needs to be accessed for account creation and transaction signing.",
     "authenticate_label": "Authenticate"
   },
@@ -44,6 +44,12 @@
   },
   "signed-transaction": {
     "transaction-unreadable": "We were not able to extract information from this transaction. This does not mean that the transaction is invalid - Please make sure that you know what you are doing, and you can verify that you know that this transaction contains the correct data."
+  },
+  "onboarding-advanced-mode": {
+    "title": "Welcome to AirGap"
+  },
+  "installation-type": {
+    "title": "Installation Type"
   },
   "introduction": {
     "title": "Install AirGap Wallet",
@@ -93,7 +99,7 @@
   },
   "secret-edit": {
     "title": " Your Secret",
-    "text": "Give your secret a name and select the security level.",
+    "text": "Give your secret a name.",
     "fingerprint": "Fingerprint",
     "secret_input_label": "Label of your secret",
     "advanced": "Advanced Options",
@@ -151,9 +157,15 @@
     },
     "confirm_label": "Confirm"
   },
+  "secret-service": {
+    "alert": {
+      "title": "Duplicate Secret",
+      "message": "You have already added a secret with the same recovery phrase"
+    }
+  },
   "secret-edit-delete-popover": {
     "title": "Confirm Secret Removal",
-    "text": "Do you really want to remove this secret? You won't be able to restore it without a backup!",
+    "text": "Do you really want to remove this secret? Make sure you have a backup of your secret recovery phrase. If you don't all your funds will be lost!",
     "cancel_label": "Cancel",
     "delete_label": "Delete"
   },
@@ -161,7 +173,6 @@
     "heading": "We're generating your secret.",
     "text": "For this we use your video, audio, touch and device acceleration to add additional entropy to your secret.",
     "description": "Move your device around to record audio, video & device acceleration until all shields are full.",
-    "progress_bar": "As a rule of thumb: the more entropy, the better. Continue any time",
     "continue_label": "Continue"
   },
   "secret-import": {
@@ -272,12 +283,16 @@
     "add-settings_label": "Add Secret",
     "interaction-options_label": "Interaction Options",
     "paste-from-clipboard_label": "Paste code from clipboard",
-    "qr-advanced-settings_label": "Advanced QR Settings",
-    "interaction-settings_label": "Interaction Settings",
+    "qr-advanced-settings_label": "QR Settings",
+    "interaction-settings_label": "Interaction Preference",
     "advanced-settings_label": "Advanced Settings",
     "bip39_wordlist_label": "BIP39 Wordlist",
     "error-history_label": "Local Error History",
-    "danger-zone_label": "Danger Zone"
+    "danger-zone_label": "Danger Zone",
+    "welcome-onboarding_label": "Welcome",
+    "disclaimer_label": "Disclaimer",
+    "installation-type_label": "Installation Type",
+    "advanced-mode-type_label": "Advanced Mode"
   },
   "tab-secrets": {
     "title": "Secrets",
@@ -535,7 +550,8 @@
   },
   "link-page": {
     "scan-qr": "Scan the QR code to open the link on an online device",
-    "open-link": "Open link on this device"
+    "copy_label": "Copy Link",
+    "link-clipboard_label": "The link was copied to your clipboard"
   },
   "migration": {
     "title": "Accounts Update",

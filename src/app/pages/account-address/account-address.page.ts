@@ -3,7 +3,10 @@ import { AirGapWallet, IACMessageDefinitionObjectV3, MainProtocolSymbols } from 
 import { Component, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { IonModal, PopoverController } from '@ionic/angular'
+import { Observable } from 'rxjs'
+import { map } from 'rxjs/operators'
 import { MnemonicSecret } from 'src/app/models/secret'
+import { AdvancedModeType, VaultStorageKey, VaultStorageService } from 'src/app/services/storage/storage.service'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { InteractionOperationType, InteractionService } from '../../services/interaction/interaction.service'
@@ -39,6 +42,12 @@ const metamask = {
   qrType: QRType.METAMASK
 }
 
+const rabby = {
+  icon: 'rabby-wallet.svg',
+  name: 'Rabby',
+  qrType: QRType.METAMASK
+}
+
 export interface CompanionApp {
   icon: string
   name: string
@@ -58,6 +67,12 @@ export class AccountAddressPage {
 
   public syncOptions: CompanionApp[]
 
+  public showMetaMaskMigrationOnboarding: boolean = false
+
+  public isAppAdvancedMode$: Observable<boolean> = this.storageService
+    .subscribe(VaultStorageKey.ADVANCED_MODE_TYPE)
+    .pipe(map((res) => res === AdvancedModeType.ADVANCED))
+
   private shareObject?: IACMessageDefinitionObjectV3[]
   private shareObjectPromise?: Promise<void>
   private walletShareUrl?: string
@@ -73,6 +88,7 @@ export class AccountAddressPage {
     private readonly uiEventService: UiEventService,
     private readonly migrationService: MigrationService,
     private readonly deepLinkService: DeeplinkService,
+    private readonly storageService: VaultStorageService,
     private readonly router: Router
   ) {
     this.wallet = this.navigationService.getState().wallet
@@ -88,7 +104,12 @@ export class AccountAddressPage {
         this.syncOptions = [airgapwallet, bluewallet, sparrowwallet]
         break
       case MainProtocolSymbols.ETH:
-        this.syncOptions = [airgapwallet, metamask]
+        this.syncOptions = [airgapwallet]
+        if (this.wallet.isExtendedPublicKey) {
+          this.syncOptions.push(metamask, rabby)
+        } else {
+          this.showMetaMaskMigrationOnboarding = true
+        }
         break
 
       default:
