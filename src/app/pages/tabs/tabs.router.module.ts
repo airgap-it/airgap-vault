@@ -9,20 +9,20 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
-        path: 'tab-accounts',
-        children: [
-          {
-            path: '',
-            loadChildren: () => import('../tab-accounts/tab-accounts.module').then((m) => m.TabAccountsPageModule)
-          }
-        ]
-      },
-      {
         path: 'tab-scan',
         children: [
           {
             path: '',
             loadChildren: () => import('../tab-scan/tab-scan.module').then((m) => m.TabScanPageModule)
+          }
+        ]
+      },
+      {
+        path: 'tab-secrets',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../tab-secrets/tab-secrets.module').then((m) => m.TabSecretsPageModule)
           }
         ]
       },
@@ -34,17 +34,12 @@ const routes: Routes = [
             loadChildren: () => import('../tab-settings/tab-settings.module').then((m) => m.TabSettingsPageModule)
           }
         ]
-      },
-      {
-        path: '',
-        redirectTo: '/tabs/tab-accounts',
-        pathMatch: 'full'
       }
     ]
   },
   {
     path: '',
-    redirectTo: '/tabs/tab-accounts',
+    redirectTo: '/tabs/tab-secrets',
     pathMatch: 'full'
   }
 ]

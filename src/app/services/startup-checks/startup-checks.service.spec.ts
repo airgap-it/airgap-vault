@@ -19,6 +19,7 @@ import { SecureStorageService } from '../secure-storage/secure-storage.service'
 
 import { StartupChecksService } from './startup-checks.service'
 import { StatusBarMock, SplashScreenMock } from 'test-config/plugins-mocks'
+import { InstallationType } from '../storage/storage.service'
 
 describe('StartupCheck Service', () => {
   let startupChecksService: StartupChecksService
@@ -61,6 +62,7 @@ describe('StartupCheck Service', () => {
     deviceProvider.isRooted = false
     deviceProvider.isElectron = false
     await storageProvider.set('DISCLAIMER_INITIAL', true)
+    await storageProvider.set('INSTALLATION_TYPE', InstallationType.ONLINE)
     await storageProvider.set('INTRODUCTION_INITIAL', true)
   })
 
@@ -68,103 +70,88 @@ describe('StartupCheck Service', () => {
     expect(startupChecksService instanceof StartupChecksService).toBe(true)
   })
 
-  it(
-    'should show root modal if device is rooted',
-    waitForAsync(() => {
-      deviceProvider.isRooted = true
+  it('should show root modal if device is rooted', waitForAsync(() => {
+    deviceProvider.isRooted = true
 
-      startupChecksService.initChecks().catch((consequence) => {
-        expect(consequence.name).toBe('rootCheck')
+    startupChecksService.initChecks().catch((consequence) => {
+      expect(consequence.name).toBe('rootCheck')
+    })
+  }))
+
+  it('should show disclaimer modal if the disclaimer has not been accepted yet', waitForAsync(async () => {
+    await storageProvider.set('DISCLAIMER_INITIAL', false)
+
+    startupChecksService.checks = startupChecksService.checks.map((check) => {
+      check.failureConsequence = jasmine.createSpy('failureConsequence', async () => {
+        await check.failureConsequence()
+      })
+
+      return check
+    })
+
+    await startupChecksService.initChecks().then(() => {
+      startupChecksService.checks.forEach((check) => {
+        if (check.name === 'disclaimerAcceptedCheck') {
+          expect(check.failureConsequence).toHaveBeenCalled()
+        } else {
+          expect(check.failureConsequence).not.toHaveBeenCalled()
+        }
       })
     })
-  )
+  }))
 
-  it(
-    'should show disclaimer modal if the disclaimer has not been accepted yet',
-    waitForAsync(async () => {
-      await storageProvider.set('DISCLAIMER_INITIAL', false)
+  it('should show the introduction modal if the introduction has not been accepted yet', waitForAsync(async () => {
+    await storageProvider.set('INTRODUCTION_INITIAL', false)
 
-      startupChecksService.checks = startupChecksService.checks.map((check) => {
-        check.failureConsequence = jasmine.createSpy('failureConsequence', async () => {
-          await check.failureConsequence()
-        })
-
-        return check
+    startupChecksService.checks = startupChecksService.checks.map((check) => {
+      check.failureConsequence = jasmine.createSpy('failureConsequence', async () => {
+        await check.failureConsequence()
       })
 
-      await startupChecksService.initChecks().then(() => {
-        startupChecksService.checks.forEach((check) => {
-          if (check.name === 'disclaimerAcceptedCheck') {
-            expect(check.failureConsequence).toHaveBeenCalled()
-          } else {
-            expect(check.failureConsequence).not.toHaveBeenCalled()
-          }
-        })
+      return check
+    })
+
+    await startupChecksService.initChecks().then(() => {
+      startupChecksService.checks.forEach((check) => {
+        if (check.name === 'introductionAcceptedCheck') {
+          expect(check.failureConsequence).toHaveBeenCalled()
+        } else {
+          expect(check.failureConsequence).not.toHaveBeenCalled()
+        }
       })
     })
-  )
+  }))
 
-  it(
-    'should show the introduction modal if the introduction has not been accepted yet',
-    waitForAsync(async () => {
-      await storageProvider.set('INTRODUCTION_INITIAL', false)
+  it('should show the device security modal if device is not secure', waitForAsync(async () => {
+    secureStorage.isSecure = 0
 
-      startupChecksService.checks = startupChecksService.checks.map((check) => {
-        check.failureConsequence = jasmine.createSpy('failureConsequence', async () => {
-          await check.failureConsequence()
-        })
-
-        return check
+    startupChecksService.checks = startupChecksService.checks.map((check) => {
+      check.failureConsequence = jasmine.createSpy('failureConsequence', async () => {
+        await check.failureConsequence()
       })
 
-      await startupChecksService.initChecks().then(() => {
-        startupChecksService.checks.forEach((check) => {
-          if (check.name === 'introductionAcceptedCheck') {
-            expect(check.failureConsequence).toHaveBeenCalled()
-          } else {
-            expect(check.failureConsequence).not.toHaveBeenCalled()
-          }
-        })
+      return check
+    })
+
+    await startupChecksService.initChecks().then(() => {
+      startupChecksService.checks.forEach((check) => {
+        if (check.name === 'deviceSecureCheck') {
+          expect(check.failureConsequence).toHaveBeenCalled()
+        } else {
+          expect(check.failureConsequence).not.toHaveBeenCalled()
+        }
       })
     })
-  )
+  }))
 
-  it(
-    'should show the device security modal if device is not secure',
-    waitForAsync(async () => {
-      secureStorage.isSecure = 0
+  it('should resolve if everything is ok', waitForAsync(async () => {
+    await storageProvider.set('DISCLAIMER_INITIAL', true)
+    await storageProvider.set('INTRODUCTION_INITIAL', true)
 
-      startupChecksService.checks = startupChecksService.checks.map((check) => {
-        check.failureConsequence = jasmine.createSpy('failureConsequence', async () => {
-          await check.failureConsequence()
-        })
+    secureStorage.isSecure = 1
+    deviceProvider.isRooted = false
+    deviceProvider.isElectron = false
 
-        return check
-      })
-
-      await startupChecksService.initChecks().then(() => {
-        startupChecksService.checks.forEach((check) => {
-          if (check.name === 'deviceSecureCheck') {
-            expect(check.failureConsequence).toHaveBeenCalled()
-          } else {
-            expect(check.failureConsequence).not.toHaveBeenCalled()
-          }
-        })
-      })
-    })
-  )
-
-  it(
-    'should resolve if everything is ok',
-    waitForAsync(async () => {
-      await storageProvider.set('DISCLAIMER_INITIAL', true)
-      await storageProvider.set('INTRODUCTION_INITIAL', true)
-
-      secureStorage.isSecure = 1
-      deviceProvider.isRooted = false
-      deviceProvider.isElectron = false
-
-      startupChecksService.initChecks()
-    })
-  )
+    startupChecksService.initChecks()
+  }))
 })

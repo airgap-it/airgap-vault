@@ -1,7 +1,7 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/tab-accounts"></ion-back-button>
+      <ion-back-button defaultHref="/tabs/tab-secrets"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ 'wallet-address.title' | translate }}</ion-title>
 
@@ -13,7 +13,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content *ngIf="wallet" class="ion-padding">
   <ion-row class="ion-padding">
     <ion-col>
       <ion-avatar>
@@ -33,6 +33,10 @@
         <br />
         <span class="selectable typography--mono">{{ wallet.derivationPath }}</span>
       </p>
+      <p *ngIf="isAppAdvancedMode$ | async">
+        <ion-chip color="light" *ngIf="wallet.isExtendedPublicKey">HD Wallet</ion-chip>
+        <ion-chip color="light" *ngIf="secret.fingerprint !== wallet.masterFingerprint">BIP39 passphrase</ion-chip>
+      </p>
     </ion-col>
   </ion-row>
 
@@ -46,6 +50,15 @@
       </ion-button>
     </ion-col>
   </ion-row>
+
+  <ng-container *ngIf="showMetaMaskMigrationOnboarding">
+    <ion-row>
+      <ion-col>
+        To use AirGap Vault with MetaMask or Rabby wallet, please migrate this account. To do so, simply remove and re-add this Ethereum
+        account. For help, visit our docs.
+      </ion-col>
+    </ion-row>
+  </ng-container>
 
   <ion-modal #modal trigger="open-modal" [presentingElement]="presentingElement">
     <ng-template>

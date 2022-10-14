@@ -21,6 +21,7 @@ import { VaultStorageKey, VaultStorageService } from '../storage/storage.service
 import * as bitcoinJS from 'bitcoinjs-lib'
 
 import * as bs58check from 'bs58check'
+import { TranslateService } from '@ngx-translate/core'
 
 class ExtendedPublicKey {
   private readonly rawKey: Buffer
@@ -70,6 +71,7 @@ export class SecretsService {
     private readonly protocolService: ProtocolService,
     private readonly navigationService: NavigationService,
     private readonly loadingCtrl: LoadingController,
+    private readonly translateService: TranslateService,
     private readonly alertCtrl: AlertController
   ) {
     this.ready = this.init()
@@ -154,6 +156,13 @@ export class SecretsService {
       await secureStorage.setItem(secret.id, secret.secretHex)
 
       secret.flushSecret()
+
+      if (this.secretsList.findIndex((item: MnemonicSecret) => item.fingerprint === secret.fingerprint) !== -1) {
+        const title: string = this.translateService.instant('secret-service.alert.title')
+        const message: string = this.translateService.instant('secret-service.alert.message')
+        this.showAlert(title, message)
+        throw new Error('Already added secret')
+      }
 
       // It's a new secret, push to array
       if (this.secretsList.findIndex((item: MnemonicSecret) => item.id === secret.id) === -1) {
@@ -248,6 +257,10 @@ export class SecretsService {
     }
 
     return walletList
+  }
+
+  public async removeWallets(wallets: AirGapWallet[]): Promise<void[]> {
+    return Promise.all(wallets.map((wallet) => this.removeWallet(wallet)))
   }
 
   public async removeWallet(wallet: AirGapWallet): Promise<void> {
@@ -409,14 +422,13 @@ export class SecretsService {
     await this.addOrUpdateSecret(secret)
   }
 
-  public async addWallets(configs: AddWalletConifg[]): Promise<void> {
+  public async addWallets(secret: MnemonicSecret, configs: AddWalletConifg[]): Promise<void> {
     const loading: HTMLIonLoadingElement = await this.loadingCtrl.create({
       message: 'Deriving your wallet...'
     })
     loading.present().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
 
     try {
-      const secret: MnemonicSecret = this.getActiveSecret()
       const entropy: string = await this.retrieveEntropyForSecret(secret)
 
       const createdOrUpdated: Either<AirGapWallet, AirGapWallet>[] = (
@@ -464,7 +476,7 @@ export class SecretsService {
       existingWallet.status = AirGapWalletStatus.ACTIVE
       return [undefined, existingWallet]
     } else if (newWallet.status === AirGapWalletStatus.ACTIVE && existingWallet.status === AirGapWalletStatus.ACTIVE) {
-      throw new Error('Wallet already exists')
+      return undefined // TODO: Should we error if it already exists?
     } else {
       return undefined
     }
@@ -527,7 +539,7 @@ export class SecretsService {
     error.ignore = true
 
     await this.showAlert('Error', error.message)
-    await this.navigationService.routeToAccountsTab(true)
+    await this.navigationService.routeToSecretsTab(true)
   }
 }
 
