@@ -8,13 +8,7 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <h3 *ngIf="initialType === interactionType.DEEPLINK" [innerHTML]="'interaction-selection-settings.same-device_heading' | translate"></h3>
-  <h3
-    *ngIf="initialType === interactionType.QR_CODE"
-    [innerHTML]="'interaction-selection-settings.offline-device_heading' | translate"
-  ></h3>
-
-  <p>{{ 'interaction-selection-settings.text' | translate }}</p>
+  <h3 [innerHTML]="'interaction-selection-settings.heading' | translate"></h3>
 
   <ion-list lines="none" class="ion-padding-vertical">
     <ion-radio-group [(ngModel)]="selectedType">
@@ -33,7 +27,7 @@
     </ion-radio-group>
   </ion-list>
 
-  <p>{{ 'interaction-selection-settings.description' | translate }}</p>
+  <p><i>{{ 'interaction-selection-settings.description' | translate }}</i></p>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-button color="primary" shape="round" (click)="goToNextPage()">

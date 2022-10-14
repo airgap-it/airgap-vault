@@ -14,7 +14,7 @@ interface State {
   providedIn: 'root'
 })
 export class NavigationService {
-  private state: State = {}
+  private state: State | undefined = {}
 
   constructor(private readonly router: Router, private readonly location: Location, private readonly navCtrl: NavController) {}
 
@@ -44,8 +44,8 @@ export class NavigationService {
     return this.state
   }
 
-  public routeToAccountsTab(clearStack: boolean = false): Promise<boolean> {
-    return this.router.navigateByUrl('/tabs/tab-accounts', { replaceUrl: clearStack })
+  public routeToSecretsTab(clearStack: boolean = false): Promise<boolean> {
+    return this.router.navigateByUrl('/tabs/tab-secrets', { replaceUrl: clearStack })
   }
 
   public routeToScanTab(clearStack: boolean = false): Promise<boolean> {

@@ -2,7 +2,7 @@ import { Component } from '@angular/core'
 import { ModalController, Platform } from '@ionic/angular'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
-import { VaultStorageKey, VaultStorageService } from '../../services/storage/storage.service'
+import { InstallationType, VaultStorageKey, VaultStorageService } from '../../services/storage/storage.service'
 
 declare let cordova: any
 
@@ -12,13 +12,19 @@ declare let cordova: any
   styleUrls: ['./introduction.page.scss']
 })
 export class IntroductionPage {
-  public security: string = 'highest'
+  public installationType: InstallationType = InstallationType.UNDETERMINED
+  public installationTypes: typeof InstallationType = InstallationType
 
   constructor(
     private readonly modalController: ModalController,
     private readonly platform: Platform,
     private readonly storageService: VaultStorageService
-  ) {}
+  ) {
+    this.storageService
+      .get(VaultStorageKey.INSTALLATION_TYPE)
+      .then((installationType) => (this.installationType = installationType))
+      .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
+  }
 
   public accept() {
     this.storageService

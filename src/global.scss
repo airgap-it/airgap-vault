@@ -39,3 +39,9 @@ ion-label {
 .from-to-line {
   border-left: 1px solid var(--ion-color-light) !important;
 }
+
+.lifehash {
+  width: 64px;
+  height: 64px;
+  image-rendering: pixelated;
+}
