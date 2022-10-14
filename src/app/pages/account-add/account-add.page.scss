@@ -9,3 +9,7 @@ ion-avatar {
 .white {
   color: white;
 }
+
+ion-content {
+  --padding-bottom: var(--ion-padding, 64px);
+}

@@ -2,3 +2,7 @@ airgap-qr {
   width: 340px;
   height: 340px;
 }
+
+ion-content {
+  --padding-bottom: var(--ion-padding, 64px);
+}

@@ -24,13 +24,13 @@ import it.airgap.vault.plugin.PluginError
 import it.airgap.vault.plugin.securityutils.authprompt.AuthPromptFragment
 import it.airgap.vault.plugin.securityutils.storage.Storage
 import it.airgap.vault.util.*
-import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import java.util.*
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 @CapacitorPlugin(requestCodes = [SecurityUtils.REQUEST_CODE_CONFIRM_DEVICE_CREDENTIALS])
 class SecurityUtils : Plugin() {
@@ -381,45 +381,47 @@ class SecurityUtils : Plugin() {
         authenticateOrContinue(AuthOrigin.VAULT, lastCall, { lastCallbackId?.let { releaseCallIfKept(it) } }, { authenticateOrContinueOnResume(); false })
     }
 
-    private suspend fun showAuthenticationScreen(onAuthenticated: (() -> Unit)? = null, onFailure: (() -> Boolean)? = null) = suspendCoroutine<Unit> { continuation ->
+    private suspend fun showAuthenticationScreen(onAuthenticated: (() -> Unit)? = null, onFailure: (() -> Boolean)? = null) {
         val containerView = FragmentContainerView(context).apply { id = R.id.authPromptFragmentContainerView }
         val layoutParams = FrameLayout.LayoutParams(
             FrameLayout.LayoutParams.MATCH_PARENT,
             FrameLayout.LayoutParams.MATCH_PARENT,
         )
 
-        activity.runOnUiThread {
-            bridge.webView.parent.addView(containerView, layoutParams)
+        coroutineScope {
+            withContext(Dispatchers.Main) {
+                bridge.webView.parent.addView(containerView, layoutParams)
 
-            val fragment = AuthPromptFragment()
+                val fragment = AuthPromptFragment()
 
-            activity.supportFragmentManager.commit {
-                setReorderingAllowed(true)
-                replace(containerView.id, fragment)
-                addToBackStack(null)
-            }
-
-            fragment.resultLiveData.observe(activity) {
-                isAuthenticated = it
-                lastBackgroundDate = null
-
-                val handled = if (it) {
-                    onAuthenticated?.invoke()
-                    true
-                } else {
-                    onFailure?.invoke() ?: true
+                activity.supportFragmentManager.commit {
+                    setReorderingAllowed(true)
+                    replace(containerView.id, fragment)
+                    addToBackStack(null)
                 }
 
-                if (handled) {
-                    activity.runOnUiThread {
-                        activity.supportFragmentManager.commit {
-                            remove(fragment)
+                withContext(Dispatchers.Default) {
+                    val isAuthenticated = fragment.resultDeferred.await()
+
+                    this@SecurityUtils.isAuthenticated = isAuthenticated
+                    this@SecurityUtils.lastBackgroundDate = null
+
+                    val handled = if (isAuthenticated) {
+                        onAuthenticated?.invoke()
+                        true
+                    } else {
+                        onFailure?.invoke() ?: true
+                    }
+
+                    if (handled) {
+                        launch(Dispatchers.Main) {
+                            activity.supportFragmentManager.commit {
+                                remove(fragment)
+                            }
+                            bridge.webView.parent.removeView(activity.findViewById(containerView.id))
                         }
-                        bridge.webView.parent.removeView(activity.findViewById(containerView.id))
                     }
                 }
-
-                continuation.resume(Unit)
             }
         }
     }

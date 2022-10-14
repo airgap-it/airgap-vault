@@ -8,7 +8,6 @@ import { QRCodeModule } from 'angularx-qrcode'
 
 import { PipesModule } from '../pipes/pipes.module'
 
-import { CurrentSecretComponent } from './current-secret/current-secret.component'
 import { EntropyProgressComponent } from './entropy-progress/entropy-progress.component'
 import { GridInputComponent } from './grid-input/grid-input.component'
 import { MessageSignRequestComponent } from './message-sign-request/message-sign-request.component'
@@ -25,7 +24,6 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
 
 @NgModule({
   declarations: [
-    CurrentSecretComponent,
     EntropyProgressComponent,
     ProgressFooterComponent,
     SecretItemComponent,
@@ -42,7 +40,6 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
   ],
   imports: [IonicModule, PipesModule, CommonModule, FormsModule, TranslateModule, QRCodeModule, AirGapAngularCoreModule],
   exports: [
-    CurrentSecretComponent,
     EntropyProgressComponent,
     ProgressFooterComponent,
     SecretItemComponent,
