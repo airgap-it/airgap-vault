@@ -80,6 +80,10 @@ interface CheckItem {
 export class TabSecurityPage {
   groups: CheckGroup[]
 
+  securityScore: number | undefined
+  checksTotal: number = 0
+  checksSuccess: number = 0
+
   checksRunning: boolean = false
 
   constructor(
@@ -187,8 +191,9 @@ export class TabSecurityPage {
             successStatus: async () => CheckStatus.SUCCESS,
             failureStatus: async () => CheckStatus.FAIL,
             check: async () => {
+              const NUMBER_OF_ITERATIONS = 10_000
               const results = new Set()
-              for (let i = 0; i < 10000; i++) {
+              for (let i = 0; i < NUMBER_OF_ITERATIONS; i++) {
                 const random = Math.random()
                 if (results.has(random)) {
                   return false
@@ -196,7 +201,7 @@ export class TabSecurityPage {
                   results.add(random)
                 }
               }
-              for (let i = 0; i < 10000; i++) {
+              for (let i = 0; i < NUMBER_OF_ITERATIONS; i++) {
                 const secureRandomArray = new Uint8Array(32)
                 window.crypto.getRandomValues(secureRandomArray)
                 if (results.has(secureRandomArray.toString())) {
@@ -216,7 +221,6 @@ export class TabSecurityPage {
             successStatus: async () => CheckStatus.SUCCESS,
             failureStatus: async () => CheckStatus.FAIL,
             check: async () => {
-              // Generate address for all protocols from a known seed
               return this.generateAddresses()
             }
           }
@@ -315,6 +319,14 @@ export class TabSecurityPage {
         item.status = (await item.check()) ? await item.successStatus() : await item.failureStatus()
         await new Promise((resolve) => setTimeout(resolve, 100))
 
+        this.checksTotal++
+
+        if (item.status === CheckStatus.SUCCESS) {
+          this.checksSuccess++
+        } else if (item.status === CheckStatus.WARNING) {
+          this.checksSuccess += 0.5
+        }
+
         if (item.status === CheckStatus.FAIL) {
           status = CheckStatus.FAIL
         } else if (status !== CheckStatus.FAIL && item.status === CheckStatus.WARNING) {
@@ -324,6 +336,8 @@ export class TabSecurityPage {
 
       group.status = status
     }
+
+    this.securityScore = Math.round((this.checksSuccess / this.checksTotal) * 100)
 
     this.checksRunning = false
   }
@@ -346,6 +360,7 @@ export class TabSecurityPage {
   }
 
   private generateAddresses() {
-    return true
+    // Generate addresses for all protocols from a known seed
+    return false
   }
 }

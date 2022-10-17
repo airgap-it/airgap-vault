@@ -7,6 +7,18 @@
 <ion-content>
   <ion-button (click)="runChecks()">Run all checks</ion-button>
 
+  <ng-container *ngIf="securityScore">
+    <div class="sc-gauge">
+      <div class="sc-background">
+        <div class="sc-percentage"></div>
+        <div class="sc-mask"></div>
+        <span class="sc-value">{{securityScore}}%</span>
+      </div>
+      <span class="sc-min">0</span>
+      <span class="sc-max">100</span>
+    </div>
+  </ng-container>
+
   <ion-list>
     <ng-container *ngFor="let group of groups">
       <ion-item (click)="toggleShow(group)" detail="true">
