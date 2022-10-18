@@ -2,24 +2,24 @@
 # yarn lockfile v1
 
 
-"@airgap/angular-core@0.0.32":
-  version "0.0.32"
-  resolved "https://registry.yarnpkg.com/@airgap/angular-core/-/angular-core-0.0.32.tgz#7416a1b7d20b7f66b764ba0c446516a6eb4daaa7"
-  integrity sha512-apg08LuiV4DoHRw5yzfAYXLqm2xssiCuNjh7AesLDyeLWyeLsZQFXlJxBbfCWVFntia4y7EDpUkg3auyRxVjWg==
+"@airgap/angular-core@0.0.33-beta.0":
+  version "0.0.33-beta.0"
+  resolved "https://registry.yarnpkg.com/@airgap/angular-core/-/angular-core-0.0.33-beta.0.tgz#45c9b611e9e946ad571b912c945960cdf6a33474"
+  integrity sha512-6AllWHYSFd4IwlG0DaSLnJJNQFYYIr3sQUBhrPwtqb3OwPwOXy8luFihQCIipwM2AS4MNVBK6ALjyo+5AugMyA==
   dependencies:
     tslib "^2.2.0"
 
-"@airgap/angular-ngrx@0.0.32":
-  version "0.0.32"
-  resolved "https://registry.yarnpkg.com/@airgap/angular-ngrx/-/angular-ngrx-0.0.32.tgz#bf5ffd6de9ddd78d13cf07fe848e9af58c2eb285"
-  integrity sha512-6tBI/7ZFzcMY5ZPdobEAAB/q38tHB5UtMuU3E0NYzo0ux3B9bvaqR3T53gyO2d3Cn6FUzxzL9GKeP61dq32PHQ==
+"@airgap/angular-ngrx@0.0.33-beta.0":
+  version "0.0.33-beta.0"
+  resolved "https://registry.yarnpkg.com/@airgap/angular-ngrx/-/angular-ngrx-0.0.33-beta.0.tgz#01de35bf4527c089c021e22e4a224db67d12be41"
+  integrity sha512-togCexBe/QcQODii+LX9/KkZHxatkk1f3X3GAhriNovDrJBlnLubd/ko/NrWgB2n50HdozvYOy/fu8/yXuo5XQ==
   dependencies:
     tslib "^2.2.0"
 
-"@airgap/coinlib-core@0.13.6":
-  version "0.13.6"
-  resolved "https://registry.yarnpkg.com/@airgap/coinlib-core/-/coinlib-core-0.13.6.tgz#d8b8723c2638bc816f268144a006eb6438b289d7"
-  integrity sha512-XW3h+CjI1JTc227oqzGWgRUgSvBvwOzRBZnCupLjNXuXrl0MlkHvXUGdxFiPQaufoco6T+A2mKj6CViXEFoHcA==
+"@airgap/coinlib-core@0.13.7-beta.10":
+  version "0.13.7-beta.10"
+  resolved "https://registry.yarnpkg.com/@airgap/coinlib-core/-/coinlib-core-0.13.7-beta.10.tgz#431e28a48115687837f7df9658e154564fbd4c2c"
+  integrity sha512-SiC4KwsuqPYYytvpUQ1Zbl+RryLNPyRYVW+N7U1NcyZgXVBYlQnS5RSLjMji0qsuUYp+h3+HRAznhtuAwQM6Bw==
   dependencies:
     "@airgap/sapling-wasm" "0.0.7"
     "@ethereumjs/common" "2.6.0"
@@ -2048,7 +2048,7 @@
 
 "@taquito/local-forging@14.0.0":
   version "14.0.0"
-  resolved "https://registry.yarnpkg.com/@taquito/local-forging/-/local-forging-14.0.0.tgz#6844d90fa530d39ce7aaaa8cd11c8723d494a7d9"
+  resolved "https://registry.npmjs.org/@taquito/local-forging/-/local-forging-14.0.0.tgz"
   integrity sha512-Nm0xGmS1Jzd+tU0a/8Y8XuTghbiPBgHDLo+e4141TK3OAwTzOw0an+w3xK9QVfzvxfIcZBSMjeMZzOwDdiqkJQ==
   dependencies:
     "@taquito/utils" "^14.0.0"
@@ -2056,7 +2056,7 @@
 
 "@taquito/utils@^14.0.0":
   version "14.0.0"
-  resolved "https://registry.yarnpkg.com/@taquito/utils/-/utils-14.0.0.tgz#2fdbf0de677b5ef68e8a6d618a6a996195ae170b"
+  resolved "https://registry.npmjs.org/@taquito/utils/-/utils-14.0.0.tgz"
   integrity sha512-0RSHn/CzbcbMdldJJIlXyxOvAajwmL6iPKJ6NaRyYJqqLM2CxYjG72KpXVv716pCMV1MbIWsOAr9FKbxW73PsA==
   dependencies:
     "@stablelib/blake2b" "^1.0.1"
@@ -5971,7 +5971,7 @@ kleur@^3.0.3:
 
 kleur@^4.1.4:
   version "4.1.5"
-  resolved "https://registry.yarnpkg.com/kleur/-/kleur-4.1.5.tgz#95106101795f7050c6c650f350c683febddb1780"
+  resolved "https://registry.npmjs.org/kleur/-/kleur-4.1.5.tgz"
   integrity sha512-o+NO+8WrRiQEE4/7nwRJhN1HWpVmJm511pBHUxPLtp0BUISzlBplORYSmTclCnJvQq2tKu/sgl3xVpkc7ZWuQQ==
 
 klona@^2.0.4, klona@^2.0.5:
