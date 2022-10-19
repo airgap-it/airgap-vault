@@ -22,7 +22,7 @@ class AuthPromptFragment : Fragment(R.layout.fragment_authenticator) {
             setTitle(getString(R.string.biometric_prompt_title))
             setSubtitle(getString(R.string.biometric_prompt_subtitle))
             setDescription(getString(R.string.biometric_prompt_description))
-            setAllowedAuthenticators(BiometricManager.Authenticators.DEVICE_CREDENTIAL or BiometricManager.Authenticators.BIOMETRIC_WEAK)
+            setAllowedAuthenticators(BiometricManager.Authenticators.DEVICE_CREDENTIAL or BiometricManager.Authenticators.BIOMETRIC_STRONG)
         }.build().also { _biometricPromptInfo = it }
 
     private var _biometricPrompt: BiometricPrompt? = null
