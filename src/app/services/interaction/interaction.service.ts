@@ -56,6 +56,7 @@ export class InteractionService {
       }
     } else if (
       interactionOptions.operationType === InteractionOperationType.WALLET_SYNC &&
+      interactionOptions.companionApp &&
       ![QRType.V2, QRType.V3].includes(interactionOptions.companionApp?.qrType)
     ) {
       this.navigateToPageByOperationType(interactionOptions)
@@ -125,7 +126,7 @@ export class InteractionService {
     this.deepLinkService
       .sameDeviceDeeplink(iacMessage)
       .then(() => {
-        this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+        this.navigationService.routeToSecretsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       })
       .catch(handleErrorLocal(ErrorCategory.DEEPLINK_SERVICE))
   }

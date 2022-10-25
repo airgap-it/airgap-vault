@@ -38,7 +38,7 @@ export class AccountShareSelectEffects {
       this.actions$.pipe(
         ofType(actions.shareUrlGenerated, actions.migrationAlertAccepted),
         tap((action) => {
-          this.syncAccounts(action.shareUrl as IACMessageDefinitionObjectV3[]) // JGD remove typecast
+          this.syncAccounts(action.shareUrl)
         })
       ),
     { dispatch: false }

@@ -3,7 +3,6 @@ import { AlertController, PopoverController } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 import { AirGapWallet, ProtocolSymbols } from '@airgap/coinlib-core'
 import { first } from 'rxjs/operators'
-
 import { ClipboardService } from '@airgap/angular-core'
 import { ErrorCategory, handleErrorLocal } from '../../../services/error-handler/error-handler.service'
 import { SecretsService } from '../../../services/secrets/secrets.service'
@@ -94,7 +93,6 @@ export class AccountEditPopoverComponent implements OnInit {
             {
               text: deleteButton,
               handler: (): void => {
-                alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
                 this.secretsService
                   .removeWallet(this.wallet)
                   .then(() => {
