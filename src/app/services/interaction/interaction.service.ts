@@ -1,12 +1,14 @@
 import { DeeplinkService, QRType } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
-import { AirGapWallet, UnsignedTransaction, MessageSignResponse, IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
+import { AirGapWallet, UnsignedTransaction } from '@airgap/coinlib-core'
+import { IACMessageDefinitionObjectV3, MessageSignResponse } from '@airgap/serializer'
 
+import { CompanionApp } from '../../pages/account-address/account-address.page'
 import { assertNever } from '../../utils/utils'
+
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { NavigationService } from '../navigation/navigation.service'
 import { InteractionType, VaultStorageKey, VaultStorageService } from '../storage/storage.service'
-import { CompanionApp } from 'src/app/pages/account-address/account-address.page'
 
 export enum InteractionCommunicationType {
   QR = 'qr',

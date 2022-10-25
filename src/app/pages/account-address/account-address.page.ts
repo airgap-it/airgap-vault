@@ -1,5 +1,6 @@
 import { ClipboardService, DeeplinkService, QRType, UiEventService } from '@airgap/angular-core'
-import { AirGapWallet, IACMessageDefinitionObjectV3, MainProtocolSymbols, ProtocolSymbols } from '@airgap/coinlib-core'
+import { AirGapWallet, MainProtocolSymbols, ProtocolSymbols } from '@airgap/coinlib-core'
+import { IACMessageDefinitionObjectV3 } from '@airgap/serializer'
 import { Component, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { IonModal, PopoverController } from '@ionic/angular'

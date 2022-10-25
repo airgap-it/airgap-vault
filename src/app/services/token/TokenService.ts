@@ -1,15 +1,8 @@
 import { ethTokens, Token } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
-import {
-  EthereumERC20ProtocolConfig,
-  EthereumERC20ProtocolOptions,
-  EthereumProtocolNetwork,
-  GenericERC20,
-  IAirGapTransaction,
-  SignedTransaction,
-  UnsignedTransaction
-} from '@airgap/coinlib-core'
+import { IAirGapTransaction, SignedTransaction, UnsignedTransaction } from '@airgap/coinlib-core'
 import { SubProtocolSymbols } from '@airgap/coinlib-core/utils/ProtocolSymbols'
+import { GenericERC20, EthereumERC20ProtocolOptions, EthereumProtocolNetwork, EthereumERC20ProtocolConfig } from '@airgap/ethereum'
 
 @Injectable({
   providedIn: 'root'

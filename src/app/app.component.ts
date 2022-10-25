@@ -6,12 +6,7 @@ import {
   SPLASH_SCREEN_PLUGIN,
   STATUS_BAR_PLUGIN
 } from '@airgap/angular-core'
-import { TezosSaplingExternalMethodProvider } from '@airgap/coinlib-core'
-import {
-  TezosSaplingProtocolOptions,
-  TezosShieldedTezProtocolConfig
-} from '@airgap/coinlib-core/protocols/tezos/sapling/TezosSaplingProtocolOptions'
-import { TezosShieldedTezProtocol } from '@airgap/coinlib-core/protocols/tezos/sapling/TezosShieldedTezProtocol'
+import { TezosSaplingExternalMethodProvider, TezosShieldedTezProtocol, TezosSaplingProtocolOptions, TezosShieldedTezProtocolConfig } from '@airgap/tezos'
 import { HttpClient } from '@angular/common/http'
 import { AfterViewInit, Component, Inject, NgZone } from '@angular/core'
 import { AppPlugin, URLOpenListenerEvent } from '@capacitor/app'

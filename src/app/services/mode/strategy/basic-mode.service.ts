@@ -1,5 +1,5 @@
 import { UiEventService } from '@airgap/angular-core'
-import { IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
+import { IACMessageDefinitionObjectV3 } from '@airgap/serializer'
 import { Injectable } from '@angular/core'
 import { first } from 'rxjs/operators'
 
