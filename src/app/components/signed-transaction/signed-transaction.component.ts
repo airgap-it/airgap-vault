@@ -1,17 +1,17 @@
 import { ProtocolService, SerializerService, sumAirGapTxValues } from '@airgap/angular-core'
 import { Component, Input } from '@angular/core'
 import {
-  IACMessageDefinitionObjectV3,
   IAirGapTransaction,
   ICoinProtocol,
   MainProtocolSymbols,
   ProtocolSymbols,
-  SignedTransaction,
-  TezosSaplingProtocol
+  SignedTransaction
 } from '@airgap/coinlib-core'
 import BigNumber from 'bignumber.js'
 import { TokenService } from 'src/app/services/token/TokenService'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
+import { IACMessageDefinitionObjectV3 } from '@airgap/serializer'
+import { TezosSaplingProtocol } from '@airgap/tezos'
 
 @Component({
   selector: 'airgap-signed-transaction',
@@ -67,7 +67,7 @@ export class SignedTransactionComponent {
               if (await this.checkIfSaplingTransaction(payload, signedTx.protocol)) {
                 const saplingProtocol = await this.getSaplingProtocol()
                 return saplingProtocol.getTransactionDetailsFromSigned(payload, {
-                  knownViewingKeys: this.secretsService.getKnownViewingKeys()
+                  knownViewingKeys: await this.secretsService.getKnownViewingKeys()
                 })
               } else {
                 return protocol.getTransactionDetailsFromSigned(payload)
@@ -116,7 +116,7 @@ export class SignedTransactionComponent {
         .reduce((flatten: string[], next: string[]) => flatten.concat(next), [])
 
       console.log(recipients)
-      return recipients.includes(saplingProtocol.options.config.contractAddress)
+      return recipients.includes((await saplingProtocol.getOptions()).config.contractAddress)
     }
 
     return protocolIdentifier === MainProtocolSymbols.XTZ_SHIELDED

@@ -1,5 +1,5 @@
 import { UiEventService } from '@airgap/angular-core'
-import { IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
+import { IACMessageDefinitionObjectV3 } from '@airgap/serializer'
 import { Injectable } from '@angular/core'
 import { first } from 'rxjs/operators'
 
@@ -26,7 +26,7 @@ export class BasicModeService implements ModeStrategy {
   public async syncAll(): Promise<void> {
     const secrets: MnemonicSecret[] = await this.secretsService.getSecretsObservable().pipe(first()).toPromise()
     await this.migrationService.runSecretsMigration(secrets)
-    const [migratedSecrets, allMigrated]: [MnemonicSecret[], boolean] = this.migrationService.deepFilterMigratedSecretsAndWallets(secrets)
+    const [migratedSecrets, allMigrated]: [MnemonicSecret[], boolean] = await this.migrationService.deepFilterMigratedSecretsAndWallets(secrets)
     if (migratedSecrets.length === 0) {
       await this.showNoMigratedWalletsAlert()
       return

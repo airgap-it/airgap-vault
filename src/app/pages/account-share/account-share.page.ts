@@ -1,5 +1,5 @@
 import { ClipboardService } from '@airgap/angular-core'
-import { IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
+import { IACMessageDefinitionObjectV3 } from '@airgap/serializer'
 import { Component } from '@angular/core'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { airgapwallet, CompanionApp } from '../account-address/account-address.page'

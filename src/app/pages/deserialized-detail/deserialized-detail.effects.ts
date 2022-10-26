@@ -9,18 +9,15 @@ import {
 } from '@airgap/angular-core'
 import {
   AirGapWallet,
-  IACMessageDefinitionObjectV3,
-  IACMessageType,
   IAirGapTransaction,
   ICoinProtocol,
   MainProtocolSymbols,
-  MessageSignRequest,
   ProtocolSymbols,
   SignedTransaction,
-  TezosCryptoClient,
-  TezosSaplingProtocol,
   UnsignedTransaction
 } from '@airgap/coinlib-core'
+import { IACMessageType, IACMessageDefinitionObjectV3, MessageSignRequest } from '@airgap/serializer'
+import { TezosCryptoClient, TezosSaplingProtocol } from '@airgap/tezos'
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { Action, Store } from '@ngrx/store'
@@ -224,7 +221,7 @@ export class DeserializedDetailEffects {
             details = await this.transactionService.getDetailsFromIACMessages([request], {
               overrideProtocol: await this.getSaplingProtocol(),
               data: {
-                knownViewingKeys: this.secretsService.getKnownViewingKeys()
+                knownViewingKeys: await this.secretsService.getKnownViewingKeys()
               }
             })
           } else {
@@ -238,7 +235,7 @@ export class DeserializedDetailEffects {
             data: request.payload as UnsignedTransaction,
             iacContext,
             wallet,
-            originalProtocolIdentifier: request.protocol !== wallet.protocol.symbol ? request.protocol : undefined
+            originalProtocolIdentifier: request.protocol !== (await wallet.protocol.getSymbol()) ? request.protocol : undefined
           }
         })
     )
@@ -269,7 +266,7 @@ export class DeserializedDetailEffects {
             iacContext,
             blake2bHash,
             wallet,
-            originalProtocolIdentifier: request.protocol !== wallet.protocol.symbol ? request.protocol : undefined
+            originalProtocolIdentifier: request.protocol !== (await wallet.protocol.getSymbol()) ? request.protocol : undefined
           }
         })
     )
@@ -459,8 +456,8 @@ export class DeserializedDetailEffects {
         mnemonic,
         bip39Passphrase,
         false,
-        protocol.standardDerivationPath,
-        await this.getChildDerivationPath(protocol.standardDerivationPath, iacContext?.derivationPath)
+        await protocol.getStandardDerivationPath(),
+        await this.getChildDerivationPath(await protocol.getStandardDerivationPath(), iacContext?.derivationPath)
       )
     }
   }
@@ -476,10 +473,10 @@ export class DeserializedDetailEffects {
   }
 
   private async generateTransactionIACMessages(transactions: DeserializedSignedTransaction[]): Promise<IACMessageDefinitionObjectV3[]> {
-    const signResponses: IACMessageDefinitionObjectV3[] = transactions.map(
-      (transaction: DeserializedSignedTransaction): IACMessageDefinitionObjectV3 => ({
+    const signResponses: IACMessageDefinitionObjectV3[] = await Promise.all(transactions.map(
+      async (transaction: DeserializedSignedTransaction): Promise<IACMessageDefinitionObjectV3> => ({
         id: transaction.id,
-        protocol: transaction.originalProtocolIdentifier ?? transaction.wallet.protocol.identifier,
+        protocol: transaction.originalProtocolIdentifier ?? await transaction.wallet.protocol.getIdentifier(),
         type: IACMessageType.TransactionSignResponse,
         payload: {
           accountIdentifier: transaction.data.accountIdentifier,
@@ -490,7 +487,7 @@ export class DeserializedDetailEffects {
           fee: sumAirGapTxValues(transaction.details, 'fee')
         }
       })
-    )
+    ))
     return signResponses
   }
 
@@ -536,7 +533,7 @@ export class DeserializedDetailEffects {
         .map((details) => details.to)
         .reduce((flatten: string[], next: string[]) => flatten.concat(next), [])
 
-      return recipients.includes(saplingProtocol.options.config.contractAddress)
+      return recipients.includes((await saplingProtocol.getOptions()).config.contractAddress)
     }
 
     return protocolIdentifier === MainProtocolSymbols.XTZ_SHIELDED
