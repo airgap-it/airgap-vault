@@ -2,12 +2,11 @@ import { IACContext } from '@airgap/angular-core'
 import {
   AirGapWallet,
   IAirGapTransaction,
-  MessageSignRequest,
-  MessageSignResponse,
   ProtocolSymbols,
   SignedTransaction,
   UnsignedTransaction
 } from '@airgap/coinlib-core'
+import { MessageSignRequest, MessageSignResponse } from '@airgap/serializer'
 
 export enum Mode {
   SIGN_TRANSACTION = 0,

@@ -1,9 +1,10 @@
 import { Component } from '@angular/core'
-import { AirGapWallet, MessageSignResponse } from '@airgap/coinlib-core'
+import { AirGapWallet } from '@airgap/coinlib-core'
+import { MessageSignResponse } from '@airgap/serializer'
+import { TranslateService } from '@ngx-translate/core'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
-import { TranslateService } from '@ngx-translate/core'
 
 enum TransactionQRType {
   SignedAirGap = 0,
