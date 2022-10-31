@@ -1,9 +1,10 @@
 import { Component } from '@angular/core'
-import { AirGapWallet, MessageSignResponse } from '@airgap/coinlib-core'
+import { AirGapWallet } from '@airgap/coinlib-core'
+import { MessageSignResponse } from '@airgap/serializer'
+import { TranslateService } from '@ngx-translate/core'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
-import { TranslateService } from '@ngx-translate/core'
 
 enum TransactionQRType {
   SignedAirGap = 0,
@@ -42,6 +43,6 @@ export class TransactionSignedPage {
   }
 
   public done(): void {
-    this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.navigationService.routeToSecretsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

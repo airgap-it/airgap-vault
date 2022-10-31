@@ -1,4 +1,4 @@
-import { IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
+import { IACMessageDefinitionObjectV3 } from '@airgap/serializer'
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { Action, Store } from '@ngrx/store'
@@ -38,7 +38,7 @@ export class AccountShareSelectEffects {
       this.actions$.pipe(
         ofType(actions.shareUrlGenerated, actions.migrationAlertAccepted),
         tap((action) => {
-          this.syncAccounts(action.shareUrl as IACMessageDefinitionObjectV3[]) // JGD remove typecast
+          this.syncAccounts(action.shareUrl)
         })
       ),
     { dispatch: false }

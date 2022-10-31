@@ -370,7 +370,7 @@ class Storage(private val context: Context, private val storageAlias: String, pr
                     KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
                     .setDigests(KeyProperties.DIGEST_SHA512)
                     .setUserAuthenticationRequired(true)
-                    .setUserAuthenticationValidityDurationSeconds(15) // TODO: should this be a parameter for users to choose?
+                    .setUserAuthenticationParameters(15, KeyProperties.AUTH_BIOMETRIC_STRONG or KeyProperties.AUTH_DEVICE_CREDENTIAL) // TODO: should this be a parameter for users to choose?
                     .setRandomizedEncryptionRequired(true)
                     .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
                     .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
@@ -403,6 +403,8 @@ class Storage(private val context: Context, private val storageAlias: String, pr
     }
 
     private fun generatePasswordKey(passwordFile: SecureFile, passphraseOrPin: String) {
+        if (passphraseOrPin.isBlank()) return
+
         val salt = ByteArray(Constants.KEY_SIZE / 8).also { SecureRandom().nextBytes(it) }
         val inputSecretKey = generateSecretKey(passphraseOrPin, salt)
 

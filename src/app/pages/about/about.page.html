@@ -8,9 +8,53 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ion-item>{{ appName }}</ion-item>
-  <ion-item>{{ packageName }}</ion-item>
-  <ion-item>{{ versionCode }}</ion-item>
-  <ion-item>{{ versionName }}</ion-item>
+<ion-content>
+  <ion-row class="ion-justify-content-center ion-padding-top ion-padding-bottom">
+    <img width="30%" src="./assets/img/logo.svg" />
+  </ion-row>
+  <ion-row class="ion-justify-content-center ion-padding-bottom">AirGap is a free and open source project.</ion-row>
+
+  <!-- TODO: Add rating plugin -->
+  <!-- <ion-row class="ion-justify-content-center ion-padding-bottom">
+    <ion-button color="primary" shape="round" (click)="review()">Rate AirGap Vault!</ion-button>
+  </ion-row> -->
+
+  <ion-list class="ion-no-padding ion-padding-bottom">
+    <ion-list-header>Social Media</ion-list-header>
+    <ion-item (click)="twitter()" detail="true">
+      <ion-icon name="logo-twitter" slot="start"></ion-icon>
+      {{ 'tab-settings.twitter_label' | translate }}
+    </ion-item>
+    <ion-item (click)="telegram()" detail="true">
+      <ion-icon name="chatbubbles-outline" slot="start"></ion-icon>
+      {{ 'tab-settings.telegram_label' | translate }}
+    </ion-item>
+    <ion-item (click)="discord()" detail="true">
+      <ion-icon name="logo-discord" slot="start"></ion-icon>
+      {{ 'tab-settings.discord_label' | translate }}
+    </ion-item>
+    <ion-list-header>Help</ion-list-header>
+    <ion-item (click)="feedback()" detail="true">
+      <ion-icon name="mail" slot="start"></ion-icon>
+      {{ 'tab-settings.feedback_label' | translate }}
+    </ion-item>
+    <ion-item (click)="documentation()" detail="true">
+      <ion-icon name="document-text-outline" slot="start"></ion-icon>
+      {{ 'tab-settings.documentation_label' | translate }}
+    </ion-item>
+    <ion-list-header>Developers</ion-list-header>
+    <ion-item (click)="github()" detail="true">
+      <ion-icon name="logo-github" slot="start"></ion-icon>
+      {{ 'tab-settings.github_label' | translate }}
+    </ion-item>
+  </ion-list>
+
+  <ion-row class="ion-justify-content-center ion-padding-top ion-padding-bottom">Made in 🇨🇭</ion-row>
+
+  <ion-row class="ion-justify-content-center ion-padding-top">
+    <span class="small-text">{{ appName }} {{ versionName }} (build {{ versionCode }})</span>
+  </ion-row>
+  <ion-row class="ion-justify-content-center">
+    <span class="small-text">{{ packageName }}</span>
+  </ion-row>
 </ion-content>

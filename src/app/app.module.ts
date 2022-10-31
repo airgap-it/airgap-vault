@@ -41,8 +41,8 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
 import * as fromRoot from './app.reducers'
-import { CameraPreview, SaplingNative, SecurityUtils } from './capacitor-plugins/definitions'
-import { CAMERA_PREVIEW_PLUGIN, SAPLING_PLUGIN, SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
+import { CameraPreview, IsolatedProtocol, SaplingNative, SecurityUtils } from './capacitor-plugins/definitions'
+import { CAMERA_PREVIEW_PLUGIN, ISOLATED_PROTOCOL_PLUGIN, SAPLING_PLUGIN, SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
 import { appConfig } from './config/app-config'
 import { DistributionOnboardingPageModule } from './pages/distribution-onboarding/distribution-onboarding.module'
 import { IntroductionPageModule } from './pages/introduction/introduction.module'
@@ -66,6 +66,9 @@ import { ShareUrlService } from './services/share-url/share-url.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
 import { VaultStorageService } from './services/storage/storage.service'
 import { Filesystem } from '@capacitor/filesystem'
+import { InstallationTypePageModule } from './pages/Installation-type/installation-type.module'
+import { OnboardingAdvancedModePageModule } from './pages/onboarding-advanced-mode/onboarding-advanced-mode.module'
+import { OnboardingWelcomePageModule } from './pages/onboarding-welcome/onboarding-welcome.module'
 
 export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
   return new AirGapTranslateLoader(http, { prefix: './assets/i18n/', suffix: '.json' })
@@ -101,6 +104,9 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
     }),
     WarningModalPageModule,
     IntroductionPageModule,
+    InstallationTypePageModule,
+    OnboardingAdvancedModePageModule,
+    OnboardingWelcomePageModule,
     DistributionOnboardingPageModule,
     LocalAuthenticationOnboardingPageModule,
     AirGapAngularCoreModule.forRoot({

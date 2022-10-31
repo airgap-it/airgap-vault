@@ -13,12 +13,12 @@ import it.airgap.vault.plugin.securityutils.SecurityUtils;
 public class MainActivity extends BridgeActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-
     registerPlugin(CameraPreview.class);
     registerPlugin(AppInfo.class);
     registerPlugin(SecurityUtils.class);
     registerPlugin(SaplingNative.class);
     registerPlugin(IsolatedProtocol.class);
+
+    super.onCreate(savedInstanceState);
   }
 }

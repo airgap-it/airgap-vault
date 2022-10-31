@@ -1,5 +1,5 @@
 import { ClipboardService } from '@airgap/angular-core'
-import { IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
+import { IACMessageDefinitionObjectV3 } from '@airgap/serializer'
 import { Component } from '@angular/core'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { airgapwallet, CompanionApp } from '../account-address/account-address.page'
@@ -25,7 +25,7 @@ export class AccountSharePage {
   }
 
   public done(): void {
-    this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.navigationService.routeToSecretsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public copyToClipboard(): void {

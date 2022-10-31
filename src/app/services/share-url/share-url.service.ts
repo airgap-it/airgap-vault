@@ -1,6 +1,6 @@
 import { flattened } from '@airgap/angular-core'
-import { AccountShareResponse, AirGapWallet, AirGapWalletStatus, IACMessageDefinitionObjectV3, IACMessageType } from '@airgap/coinlib-core'
-import { generateId } from '@airgap/coinlib-core/serializer-v3/utils/generateId'
+import { AirGapWallet, AirGapWalletStatus } from '@airgap/coinlib-core'
+import { IACMessageDefinitionObjectV3, generateId, IACMessageType, AccountShareResponse } from '@airgap/serializer'
 
 import { Injectable } from '@angular/core'
 

@@ -1,14 +1,31 @@
 import { Component } from '@angular/core'
 import { ModalController, AlertController } from '@ionic/angular'
-import { ICoinProtocol, ProtocolSymbols } from '@airgap/coinlib-core'
+import { ICoinProtocol, MainProtocolSymbols, ProtocolSymbols } from '@airgap/coinlib-core'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
-import { VaultStorageKey, VaultStorageService } from '../../services/storage/storage.service'
+import { AdvancedModeType, VaultStorageKey, VaultStorageService } from '../../services/storage/storage.service'
 import { LocalAuthenticationOnboardingPage } from '../local-authentication-onboarding/local-authentication-onboarding.page'
 import { BIP39_PASSPHRASE_ENABLED } from 'src/app/constants/constants'
 import { ProtocolService } from '@airgap/angular-core'
+import { MnemonicSecret } from 'src/app/models/secret'
+import { Observable } from 'rxjs'
+import { map } from 'rxjs/operators'
+
+interface ProtocolWrapper {
+  protocol: ICoinProtocol
+  isHDWallet: boolean
+  isChecked: boolean
+  customDerivationPath: string | undefined
+  details: ProtocolDetails
+}
+
+interface ProtocolDetails {
+  symbol: string
+  identifier: ProtocolSymbols
+  name: string
+}
 
 interface ProtocolDetails {
   symbol: string
@@ -22,20 +39,23 @@ interface ProtocolDetails {
   styleUrls: ['./account-add.page.scss']
 })
 export class AccountAddPage {
+  public secret: MnemonicSecret
+  public selectedProtocol: ICoinProtocol
+  public formValid: boolean = false
+  public protocolList: ProtocolWrapper[]
+  public protocolDetails: ProtocolDetails[]
   public isHDWallet: boolean = false
+
+  singleSelectedProtocol: ProtocolWrapper | undefined
 
   public isAdvancedMode: boolean = false
   public isBip39PassphraseEnabled: boolean = BIP39_PASSPHRASE_ENABLED
   public revealBip39Passphrase: boolean = false
-  public customDerivationPath: string
   public bip39Passphrase: string = ''
 
-  public protocols: ICoinProtocol[]
-  public protocolDetails: ProtocolDetails[]
-
-  public selectedProtocol: ICoinProtocol
-  public selectedProtocolIdentifier: ProtocolSymbols
-  public selectedProtocolSupportsHD: boolean
+  public isAppAdvancedMode$: Observable<boolean> = this.storageService
+    .subscribe(VaultStorageKey.ADVANCED_MODE_TYPE)
+    .pipe(map((res) => res === AdvancedModeType.ADVANCED))
 
   constructor(
     private readonly secretsService: SecretsService,
@@ -45,40 +65,83 @@ export class AccountAddPage {
     private readonly navigationService: NavigationService,
     private readonly alertController: AlertController
   ) {
+    const state = this.navigationService.getState()
+    this.secret = state.secret
     this.protocolService.getActiveProtocols().then(async (protocols: ICoinProtocol[]) => {
-      this.protocols = protocols
-      this.protocolDetails = await Promise.all(protocols.map(async (protocol: ICoinProtocol) => {
-        const [symbol, identifier, name] = await Promise.all([protocol.getSymbol(), protocol.getIdentifier(), protocol.getName()])
+      const navigationIdentifier: ProtocolSymbols | undefined = (this.navigationService.getState().protocol)
+        ? await this.navigationService.getState().protocol.getIdentifier()
+        : undefined
 
-        return { symbol, identifier, name }
+      this.protocolList = await Promise.all(protocols.map(async (protocol) => {
+        const [symbol, identifier, name, supportsHD] = await Promise.all([
+          protocol.getSymbol(),
+          protocol.getIdentifier(),
+          protocol.getName(),
+          protocol.getSupportsHD()
+        ])
+
+        const isChecked =
+          identifier === MainProtocolSymbols.BTC_SEGWIT ||
+          identifier === MainProtocolSymbols.ETH ||
+          navigationIdentifier === identifier
+
+        return { 
+          protocol, 
+          isHDWallet: supportsHD, 
+          customDerivationPath: undefined, 
+          isChecked: isChecked, 
+          details: { symbol, identifier, name }
+        }
       }))
-      
-      this.onSelectedProtocolChange(this.navigationService.getState().protocol || this.protocols[0])
+      this.onProtocolSelected()
     })
   }
 
-  public async setDerivationPath() {
-    if ((await this.selectedProtocol.getSupportsHD()) && this.isHDWallet) {
-      this.customDerivationPath = await this.selectedProtocol.getStandardDerivationPath()
-    } else {
-      this.customDerivationPath = `${await this.selectedProtocol.getStandardDerivationPath()}/0/0`
-    }
+  public onProtocolSelected(): void {
+    // Wait 1 tick so "isChecked" is updated
+    setTimeout(async () => {
+      const selectedProtocols = this.protocolList.filter((protocol) => protocol.isChecked)
+      if (selectedProtocols.length === 0) {
+        this.formValid = false
+      } else {
+        this.formValid = true
+      }
+
+      selectedProtocols.forEach((wrapper) => {
+        wrapper.customDerivationPath = undefined
+      })
+
+      if (selectedProtocols.length === 1) {
+        this.singleSelectedProtocol = selectedProtocols[0]
+        this.singleSelectedProtocol.customDerivationPath = await this.singleSelectedProtocol.protocol.getStandardDerivationPath()
+      } else {
+        if (this.singleSelectedProtocol) {
+          this.singleSelectedProtocol.customDerivationPath = undefined
+        }
+        this.singleSelectedProtocol = undefined
+      }
+    }, 0)
   }
 
-  public async onSelectedProtocolChange(selectedProtocol: ICoinProtocol): Promise<void> {
-    this.selectedProtocol = selectedProtocol
+  public async toggleHDWallet() {
+    // "isHDWallet" can only be toggled if one protocol is checked
 
-    const [selectedProtocolIdentifier, selectedProtocolSupportsHD, selectedProtocolStandardDerivationPath] = await Promise.all([
-      selectedProtocol.getIdentifier(),
-      selectedProtocol.getSupportsHD(),
-      selectedProtocol.getStandardDerivationPath()
-    ])
+    const selectedProtocols = this.protocolList.filter((protocol) => protocol.isChecked)
+    if (selectedProtocols.length === 1) {
+      const selectedProtocol = selectedProtocols[0]
+      const standardDerivationPath = await selectedProtocol.protocol.getStandardDerivationPath()
+      if (await selectedProtocol.protocol.getSupportsHD() && selectedProtocol.isHDWallet) {
+        selectedProtocol.customDerivationPath = standardDerivationPath
+      } else {
+        selectedProtocol.customDerivationPath = `${standardDerivationPath}/0/0`
+      }
+    }
 
-    this.selectedProtocolIdentifier = selectedProtocolIdentifier
-    this.selectedProtocolSupportsHD = selectedProtocolSupportsHD
-
-    this.isHDWallet = selectedProtocolSupportsHD
-    this.customDerivationPath = selectedProtocolStandardDerivationPath
+    if (selectedProtocols.length === 1) {
+      this.singleSelectedProtocol = selectedProtocols[0]
+    } else {
+      this.singleSelectedProtocol = undefined
+    }
   }
 
   public async addWallet(): Promise<void> {
@@ -103,25 +166,27 @@ export class AccountAddPage {
 
   private async addWalletAndReturnToAddressPage(): Promise<void> {
     const addAccount = async () => {
-      const selectedProtocolIdentifier = await this.selectedProtocol.getIdentifier()
       this.secretsService
         .addWallets(
-          await Promise.all(this.protocols.map(async (protocol: ICoinProtocol) => {
-            const protocolIdentifier = await protocol.getIdentifier()
-
-            const isSelected: boolean = selectedProtocolIdentifier === protocolIdentifier
-
+          this.secret,
+          await Promise.all(this.protocolList.map(async (protocolWrapper: ProtocolWrapper) => {
+            const protocol = protocolWrapper.protocol
             return {
-              protocolIdentifier,
-              isHDWallet: isSelected ? this.isHDWallet : await protocol.getSupportsHD(),
-              customDerivationPath: isSelected ? this.customDerivationPath : await protocol.getStandardDerivationPath(),
-              bip39Passphrase: isSelected ? this.bip39Passphrase : '',
-              isActive: isSelected
+              protocolIdentifier: await protocol.getIdentifier(),
+              isHDWallet: protocolWrapper.isChecked ? protocolWrapper.isHDWallet : await protocol.getSupportsHD(),
+              customDerivationPath:
+                protocolWrapper.isChecked && protocolWrapper.customDerivationPath
+                  ? protocolWrapper.customDerivationPath
+                  : await protocol.getStandardDerivationPath(),
+              bip39Passphrase: protocolWrapper.isChecked ? this.bip39Passphrase : '',
+              isActive: protocolWrapper.isChecked
             }
-          })
-        ))
+          }))
+        )
         .then(() => {
-          this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+          this.navigationService
+            .routeWithState('/accounts-list', { secret: this.secret }, { replaceUrl: true })
+            .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
         })
         .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
     }

@@ -1,12 +1,14 @@
 import { DeeplinkService, QRType } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
-import { AirGapWallet, UnsignedTransaction, MessageSignResponse, IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
+import { AirGapWallet, UnsignedTransaction } from '@airgap/coinlib-core'
+import { IACMessageDefinitionObjectV3, MessageSignResponse } from '@airgap/serializer'
 
+import { CompanionApp } from '../../pages/account-address/account-address.page'
 import { assertNever } from '../../utils/utils'
+
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { NavigationService } from '../navigation/navigation.service'
 import { InteractionType, VaultStorageKey, VaultStorageService } from '../storage/storage.service'
-import { CompanionApp } from 'src/app/pages/account-address/account-address.page'
 
 export enum InteractionCommunicationType {
   QR = 'qr',
@@ -54,6 +56,7 @@ export class InteractionService {
       }
     } else if (
       interactionOptions.operationType === InteractionOperationType.WALLET_SYNC &&
+      interactionOptions.companionApp &&
       ![QRType.V2, QRType.V3].includes(interactionOptions.companionApp?.qrType)
     ) {
       this.navigateToPageByOperationType(interactionOptions)
@@ -123,7 +126,7 @@ export class InteractionService {
     this.deepLinkService
       .sameDeviceDeeplink(iacMessage)
       .then(() => {
-        this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+        this.navigationService.routeToSecretsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       })
       .catch(handleErrorLocal(ErrorCategory.DEEPLINK_SERVICE))
   }

@@ -9,18 +9,15 @@ import {
 } from '@airgap/angular-core'
 import {
   AirGapWallet,
-  IACMessageDefinitionObjectV3,
-  IACMessageType,
   IAirGapTransaction,
   ICoinProtocol,
   MainProtocolSymbols,
-  MessageSignRequest,
   ProtocolSymbols,
   SignedTransaction,
-  TezosCryptoClient,
-  TezosSaplingProtocol,
   UnsignedTransaction
 } from '@airgap/coinlib-core'
+import { IACMessageType, IACMessageDefinitionObjectV3, MessageSignRequest } from '@airgap/serializer'
+import { TezosCryptoClient, TezosSaplingProtocol } from '@airgap/tezos'
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { Action, Store } from '@ngrx/store'

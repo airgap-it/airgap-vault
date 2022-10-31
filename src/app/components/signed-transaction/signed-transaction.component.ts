@@ -1,17 +1,17 @@
 import { ProtocolService, SerializerService, sumAirGapTxValues } from '@airgap/angular-core'
 import { Component, Input } from '@angular/core'
 import {
-  IACMessageDefinitionObjectV3,
   IAirGapTransaction,
   ICoinProtocol,
   MainProtocolSymbols,
   ProtocolSymbols,
-  SignedTransaction,
-  TezosSaplingProtocol
+  SignedTransaction
 } from '@airgap/coinlib-core'
 import BigNumber from 'bignumber.js'
 import { TokenService } from 'src/app/services/token/TokenService'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
+import { IACMessageDefinitionObjectV3 } from '@airgap/serializer'
+import { TezosSaplingProtocol } from '@airgap/tezos'
 
 @Component({
   selector: 'airgap-signed-transaction',

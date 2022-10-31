@@ -14,11 +14,7 @@ import {
 import {
   AirGapWallet,
   AirGapWalletStatus,
-  IACMessageDefinitionObjectV3,
-  IACMessageType,
   MainProtocolSymbols,
-  MessageSignRequest,
-  RawBitcoinSegwitTransaction,
   UnsignedTransaction
 } from '@airgap/coinlib-core'
 import { Inject, Injectable } from '@angular/core'
@@ -31,7 +27,9 @@ import { SecretsService } from '../secrets/secrets.service'
 import * as bitcoinJS from 'bitcoinjs-lib'
 import { ModalController } from '@ionic/angular'
 import { SelectAccountPage } from 'src/app/pages/select-account/select-account.page'
-import { RawTypedEthereumTransaction } from '@airgap/coinlib-core/serializer/types'
+import { RawBitcoinSegwitTransaction } from '@airgap/bitcoin'
+import { RawTypedEthereumTransaction } from '@airgap/ethereum/types/transaction-ethereum'
+import { IACMessageType, IACMessageDefinitionObjectV3, MessageSignRequest } from '@airgap/serializer'
 
 @Injectable({
   providedIn: 'root'
