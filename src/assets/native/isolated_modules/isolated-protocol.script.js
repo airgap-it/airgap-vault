@@ -25,12 +25,8 @@ function createOnError(description, handler) {
   }
 }
 
-function loadCoinlib(callback, errorHandler) {
-  airgapCoinLib.isCoinlibReady().then(callback).catch(errorHandler('loadCoinlib'))
-}
-
-function createProtocol(identifier, options) {
-  return airgapCoinLib.createProtocolByIdentifier(identifier, options)
+function createProtocol(module, identifier, options) {
+  return module.createProtocolByIdentifier(identifier, options)
 }
 
 function keys(protocol, callback) {
@@ -56,7 +52,7 @@ const ACTION_KEYS = 'keys'
 const ACTION_GET_FIELD = 'getField'
 const ACTION_CALL_METHOD = 'callMethod'
 
-function execute(identifier, options, action, handleResult, handleError) {
+function execute(module, identifier, options, action, handleResult, handleError) {
   const errorHandler = (description) => {
     const prefixedDescription = `[${identifier}]${description ? ' ' + description : ''}`
     return createOnError(prefixedDescription, function (error) { 
@@ -65,24 +61,22 @@ function execute(identifier, options, action, handleResult, handleError) {
     })
   }
 
-  loadCoinlib(function () {
-    try {
-      var protocol = createProtocol(identifier, options)
-      switch (action.type) {
-        case ACTION_KEYS:
-          keys(protocol, handleResult)
-          break
-        case ACTION_GET_FIELD:
-          getField(protocol, action.field, handleResult)
-          break
-        case ACTION_CALL_METHOD:
-          callMethod(protocol, action.method, action.args, handleResult, errorHandler)
-          break
-        default:
-          throw new Error(`Unknown action ${action.type}`)
-      }
-    } catch (error) {
-      errorHandler()(error)
+  try {
+    var protocol = createProtocol(module, identifier, options)
+    switch (action.type) {
+      case ACTION_KEYS:
+        keys(protocol, handleResult)
+        break
+      case ACTION_GET_FIELD:
+        getField(protocol, action.field, handleResult)
+        break
+      case ACTION_CALL_METHOD:
+        callMethod(protocol, action.method, action.args, handleResult, errorHandler)
+        break
+      default:
+        throw new Error(`Unknown action ${action.type}`)
     }
-  }, errorHandler)
+  } catch (error) {
+    errorHandler()(error)
+  }
 }

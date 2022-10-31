@@ -6,15 +6,15 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.getcapacitor.JSArray
 import com.getcapacitor.JSObject
-import it.airgap.vault.util.JSAsyncResult
-import it.airgap.vault.util.JSUndefined
-import it.airgap.vault.util.addJavascriptInterface
-import it.airgap.vault.util.evaluateJavascript
+import it.airgap.vault.util.*
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.util.*
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
-class ProtocolWebView(context: Context) {
+class ProtocolWebView(private val context: Context) {
     private val jsAsyncResult: JSAsyncResult = JSAsyncResult()
 
     private val webViewLoadedDeferred: CompletableDeferred<Unit> = CompletableDeferred()
@@ -37,6 +37,8 @@ class ProtocolWebView(context: Context) {
         loadUrl("${ASSETS_PATH}/${ISOLATED_PROTOCOL_HTML_SOURCE}")
     }
 
+    private val modules: MutableMap<String, String> = mutableMapOf()
+
     suspend fun evaluateKeys(identifier: String, options: JSObject?): JSObject =
         evaluate(identifier, options, JSProtocolAction.Keys)
 
@@ -55,10 +57,13 @@ class ProtocolWebView(context: Context) {
             waitUntilLoaded()
             clear()
 
+            val module = loadModule(identifier) ?: failWithModuleNotFound(identifier)
+
             val resultId = jsAsyncResult.createId()
             val script = """    
                 execute(
-                    '$identifier',
+                    ${module},
+                    '${identifier}',
                     ${options.orUndefined()},
                     $action,
                     function (result) {
@@ -85,6 +90,39 @@ class ProtocolWebView(context: Context) {
     private suspend fun WebView.waitUntilLoaded() {
         webViewLoadedDeferred.await()
     }
+
+    private fun WebView.loadModule(identifier: String): String? {
+        val moduleName = moduleName(identifier) ?: return null
+        if (modules.containsKey(moduleName)) return modules[moduleName]
+
+        val moduleSource = readModuleSource(moduleName)
+        return createJSModule(moduleName).also {
+            modules[moduleName] = it
+            evaluateJavascript(moduleSource)
+        }
+    }
+
+    private fun readModuleSource(name: String): String =
+        context.assets.open("public/assets/libs/airgap-${name}.browserify.js").use { it.readBytes().decodeToString() }
+
+    private fun createJSModule(name: String): String =
+        "airgapCoinLib${name.replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+        }}"
+
+    private fun moduleName(identifier: String): String? =
+        when {
+            identifier.startsWithAny("ae") -> "aeternity"
+            identifier.startsWithAny("astar", "shiden") -> "astar"
+            identifier.startsWithAny("btc") -> "bitcoin"
+            identifier.startsWithAny("cosmos") -> "cosmos"
+            identifier.startsWithAny("eth") -> "ethereum"
+            identifier.startsWithAny("grs") -> "groestlcoin"
+            identifier.startsWithAny("moonbeam", "moonriver", "moonbase") -> "moonbeam"
+            identifier.startsWithAny("polkadot", "kusama") -> "polkadot"
+            identifier.startsWithAny("xtz") -> "tezos"
+            else -> null
+        }
 
     private fun WebView.clear() {
         clearCache(false)
@@ -140,6 +178,8 @@ class ProtocolWebView(context: Context) {
             }
         }
     }
+
+    private fun failWithModuleNotFound(identifier: String): Nothing = throw IllegalStateException("Module $identifier could not be found.")
 
     companion object {
         private const val ASSETS_PATH: String = "file:///android_asset"

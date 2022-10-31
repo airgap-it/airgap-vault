@@ -15,6 +15,8 @@ class ProtocolWebView: NSObject, WKNavigationDelegate {
     private let webView: WKWebView
     private let jsAsyncResult: JSAsyncResult
     
+    private var modules: [String: String] = [:]
+    
     @MainActor
     init(assetsURL: URL) {
         let jsAsyncResult = JSAsyncResult()
@@ -74,6 +76,10 @@ class ProtocolWebView: NSObject, WKNavigationDelegate {
         usingOptions options: JSObject?,
         injectScript script: String? = nil
     ) async throws -> [String: Any] {
+        guard let module = loadModule(identifier) else {
+            throw Error.moduleNotFound(identifier)
+        }
+        
         let resultID = await jsAsyncResult.createID()
         
         let script = """
@@ -82,6 +88,7 @@ class ProtocolWebView: NSObject, WKNavigationDelegate {
             };
             
             execute(
+                \(module),
                 '\(identifier)',
                 \(try options?.toJSONString() ?? JSUndefined.value.toJSONString()),
                 \(try action.toJSONString()),
@@ -100,6 +107,58 @@ class ProtocolWebView: NSObject, WKNavigationDelegate {
         result.replaceKey("result", with: action.resultField)
         
         return result
+    }
+    
+    private func loadModule(_ identifier: String) -> String? {
+        guard let moduleName = moduleName(fromIdentifier: identifier) else { return nil }
+        if let module = modules[moduleName] { return module }
+        
+        guard let moduleSource = readModuleSource(moduleName) else { return nil }
+        let jsModule = createJSModule(moduleName)
+        modules[moduleName] = jsModule
+        
+        webView.evaluateJavaScript(moduleSource, completionHandler: nil)
+        
+        return jsModule
+    }
+    
+    private func readModuleSource(_ name: String) -> String? {
+        let publicURL = Bundle.main.url(forResource: "public", withExtension: nil)
+        guard
+            let sourcePath = publicURL?.appendingPathComponent("assets/libs/airgap-\(name).browserify.js"),
+            let source = FileManager.default.contents(atPath: sourcePath.path)
+        else { return nil }
+        
+        return .init(data: source, encoding: .utf8)
+    }
+    
+    private func createJSModule(_ name: String) -> String {
+        "airgapCoinLib\(name.capitalized)"
+    }
+    
+    private func moduleName(fromIdentifier identifier: String) -> String? {
+        switch identifier {
+        case _ where identifier.starts(withAny: "ae"):
+            return "aeternity"
+        case _ where identifier.starts(withAny: "astar", "shiden"):
+            return "astar"
+        case _ where identifier.starts(withAny: "btc"):
+            return "bitcoin"
+        case _ where identifier.starts(withAny: "cosmos"):
+            return "cosmos"
+        case _ where identifier.starts(withAny: "eth"):
+            return "ethereum"
+        case _ where identifier.starts(withAny: "grs"):
+            return "groestlcoin"
+        case _ where identifier.starts(withAny: "moonbeam", "moonriver", "moonbase"):
+            return "moonbeam"
+        case _ where identifier.starts(withAny: "polkadot", "kusama"):
+            return "polkadot"
+        case _ where identifier.starts(withAny: "xtz"):
+            return "tezos"
+        default:
+            return nil
+        }
     }
     
     enum JSProtocolAction {
@@ -145,6 +204,10 @@ class ProtocolWebView: NSObject, WKNavigationDelegate {
                 """
             }
         }
+    }
+    
+    enum Error: Swift.Error {
+        case moduleNotFound(String)
     }
 }
 

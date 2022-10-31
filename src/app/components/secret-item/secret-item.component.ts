@@ -1,4 +1,4 @@
-import { AirGapWalletStatus } from '@airgap/coinlib-core'
+import { AirGapWallet, AirGapWalletStatus } from '@airgap/coinlib-core'
 import { Component, Input, OnInit } from '@angular/core'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
@@ -47,11 +47,19 @@ export class SecretItemComponent implements OnInit {
     this.lifehashData = await this.lifehashService.generateLifehash(this.secret.fingerprint)
   }
 
-  public getWalletsFromSecret() {
-    this.activeWallets = this.secret.wallets
-      .filter((wallet) => wallet.status === AirGapWalletStatus.ACTIVE)
-      .sort((a, b) => a.protocol.name.localeCompare(b.protocol.name)) // TODO: Use same order as common lib
-      .map((wallet) => wallet.protocol.symbol)
+  public async getWalletsFromSecret() {
+    const activeWallets: AirGapWallet[] = this.secret.wallets.filter((wallet: AirGapWallet) => wallet.status === AirGapWalletStatus.ACTIVE)
+    const comparableActiveWallets: [string, AirGapWallet][] = await Promise.all(activeWallets.map(async (wallet: AirGapWallet) => {
+      return [await wallet.protocol.getName(), wallet] as [string, AirGapWallet]
+    }))
+    const sortedActiveWallets: AirGapWallet[] = comparableActiveWallets
+      .sort((a: [string, AirGapWallet], b: [string, AirGapWallet]) => a[0].localeCompare(b[0])) // TODO: Use same order as common lib
+      .map(([_, wallet]: [string, AirGapWallet]) => wallet)
+      
+    this.activeWallets = await Promise.all(sortedActiveWallets.map(async (wallet: AirGapWallet) => {
+      return wallet.protocol.getSymbol()
+    }))
+    
 
     if (this.activeWallets.length > 10) {
       this.hasMoreWallets = this.activeWallets.length - 10
