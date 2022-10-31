@@ -25,7 +25,7 @@
     "e2e": "ng e2e",
     "postinstall": "jetifier && node apply-diagnostic-modules.js && node fix-qrscanner-gradle.js && yarn browserify-coinlib",
     "sonar-scanner": "sonar-scanner",
-    "browserify-coinlib": "browserify ./node_modules/@airgap/coinlib-core/index.js -s airgapCoinLib -o ./src/assets/libs/airgap-coin-lib.browserify.js",
+    "browserify-coinlib": "browserify ./node_modules/@airgap/coinlib-core/index.js -s airgapCoinLib -o ./src/assets/libs/airgap-coin-lib.browserify.js && browserify ./node_modules/@airgap/aeternity/index.js -s airgapCoinLibAeternity -o ./src/assets/libs/airgap-aeternity.browserify.js && browserify ./node_modules/@airgap/astar/index.js -s airgapCoinLibAstar -o ./src/assets/libs/airgap-astar.browserify.js && browserify ./node_modules/@airgap/bitcoin/index.js -s airgapCoinLibBitcoin -o ./src/assets/libs/airgap-bitcoin.browserify.js && browserify ./node_modules/@airgap/cosmos/index.js -s airgapCoinLibCosmos -o ./src/assets/libs/airgap-cosmos.browserify.js && browserify ./node_modules/@airgap/ethereum/index.js -s airgapCoinLibEthereum -o ./src/assets/libs/airgap-ethereum.browserify.js && browserify ./node_modules/@airgap/groestlcoin/index.js -s airgapCoinLibGroestlcoin -o ./src/assets/libs/airgap-groestlcoin.browserify.js && browserify ./node_modules/@airgap/moonbeam/index.js -s airgapCoinLibMoonbeam -o ./src/assets/libs/airgap-moonbeam.browserify.js && browserify ./node_modules/@airgap/polkadot/index.js -s airgapCoinLibPolkadot -o ./src/assets/libs/airgap-polkadot.browserify.js && browserify ./node_modules/@airgap/tezos/index.js -s airgapCoinLibTezos -o ./src/assets/libs/airgap-tezos.browserify.js",
     "prettier": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "remove-sapling": "replace './assets/sapling/sapling-' './assets/no-sapling-web/sapling-' ./src/app/app.component.ts",
     "prepare-prod-build": "yarn configure-mangle",
@@ -38,8 +38,8 @@
     "apply-diagnostic-modules": "node apply-diagnostic-modules.js"
   },
   "dependencies": {
-    "@airgap/angular-core": "0.0.33-beta.1",
-    "@airgap/angular-ngrx": "0.0.33-beta.1",
+    "@airgap/angular-core": "0.0.33-beta.2",
+    "@airgap/angular-ngrx": "0.0.33-beta.2",
     "@airgap/aeternity": "^0.13.7-beta.12",
     "@airgap/astar": "^0.13.7-beta.12",
     "@airgap/bitcoin": "^0.13.7-beta.12",
