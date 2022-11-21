@@ -124,6 +124,30 @@ $ npm test
 $ npm run install-build-dependencies
 ```
 
+## Translation Service
+
+We use [Transifex](https://www.transifex.com/) for the application translations. If you want to contribute with translating the application you can do so by going to the [AirGap Transifex](https://explore.transifex.com/airgap/airgap/) page.
+
+To import the translations from Transifex to the application, first you will need to install the transifex-cli. You can do so by creating a directory of your choice and intalling in it the package globally by running:
+
+```bash
+curl -o- https://raw.githubusercontent.com/transifex/cli/master/install.sh | bash
+```
+
+You can now restart the terminal and check if it is installed by running:
+
+```bash
+tx --version
+```
+
+Every available language can be found in `src/assets/i18n/<lang>.json` where each json file corresponds to a different language. You can now import the updated translations from Transifex by running:
+
+```bash
+tx pull
+```
+
+This will update all the local translations with the updated ones automatically.
+
 ## Disclosing Security Vulnerabilities
 
 If you discover a security vulnerability within this application, please send an e-mail to hi@airgap.it. All security vulnerabilities will be promptly addressed.
