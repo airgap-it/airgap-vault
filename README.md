@@ -148,6 +148,12 @@ tx pull
 
 This will update all the local translations with the updated ones automatically.
 
+If you want to send new variables from the default language file to transifex, you can do so by running:
+
+```bash
+tx push
+```
+
 ## Disclosing Security Vulnerabilities
 
 If you discover a security vulnerability within this application, please send an e-mail to hi@airgap.it. All security vulnerabilities will be promptly addressed.
