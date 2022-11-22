@@ -1,0 +1,45 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'language-selection-settings.title' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h3 [innerHTML]="'language-selection-settings.heading' | translate"></h3>
+
+  <ion-list lines="none" class="ion-padding-vertical" (ionChange)="changeLanguage($event.detail.value)">
+    <ion-radio-group [(ngModel)]="selectedType">
+      <ion-item detail="false" class="ion-no-padding">
+        <ion-label color="white">{{ 'language-selection-settings.selector.en' | translate }}</ion-label>
+        <ion-radio class="ion-no-margin" slot="end" [value]="languageType.EN"></ion-radio>
+      </ion-item>
+      <ion-item detail="false" class="ion-no-padding">
+        <ion-label color="white">{{ 'language-selection-settings.selector.de' | translate }}</ion-label>
+        <ion-radio class="ion-no-margin" slot="end" [value]="languageType.DE"></ion-radio>
+      </ion-item>
+      <ion-item detail="false" class="ion-no-padding">
+        <ion-label color="white">{{ 'language-selection-settings.selector.es' | translate }}</ion-label>
+        <ion-radio class="ion-no-margin" slot="end" [value]="languageType.ES"></ion-radio>
+      </ion-item>
+      <ion-item detail="false" class="ion-no-padding">
+        <ion-label color="white">{{ 'language-selection-settings.selector.pt_BR' | translate }}</ion-label>
+        <ion-radio class="ion-no-margin" slot="end" [value]="languageType.PT_BR"></ion-radio>
+      </ion-item>
+      <ion-item detail="false" class="ion-no-padding">
+        <ion-label color="white">{{ 'language-selection-settings.selector.zh_CN' | translate }}</ion-label>
+        <ion-radio class="ion-no-margin" slot="end" [value]="languageType.ZH_CN"></ion-radio>
+      </ion-item>
+    </ion-radio-group>
+  </ion-list>
+
+  <p><i>{{ 'interaction-selection-settings.description' | translate }}</i></p>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-button color="primary" shape="round" (click)="goToNextPage()">
+      {{ 'interaction-selection-settings.continue_label' | translate }}
+    </ion-button>
+  </ion-fab>
+</ion-content>

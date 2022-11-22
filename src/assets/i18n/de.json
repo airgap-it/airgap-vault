@@ -1,5 +1,8 @@
 {
   "next": "Weiter",
+  "account-list": {
+    "delete": "Entfernen"
+  },
   "add-wallet": {
     "alert_deriving": {
       "text": "Konto wird erstellt..."
@@ -42,6 +45,12 @@
   "signed-transaction": {
     "transaction-unreadable": "Wir konnten die Daten in dieser Transaktion nicht lesen. Dies bedeutet nicht, dass sie nicht gültig ist - Allerdings sollten Sie diese Transaktion nur bestätigen, falls Sie sich über die Risiken und deren Inhalt im Klaren sind."
   },
+  "onboarding-advanced-mode": {
+    "title": "Welcome to AirGap"
+  },
+  "installation-type": {
+    "title": "Installation Type"
+  },
   "introduction": {
     "title": "Der Neue Krypto-Wallet Standard",
     "highest": {
@@ -69,18 +78,15 @@
   },
   "secret-setup": {
     "heading": "AirGap Einrichten!",
-    "text": "Möchten Sie einen neuen Geheimschlüssel generieren oder einen bestehenden importieren?",
     "generate": {
       "label": "Generieren",
       "text": "Gehen Sie auf Nummer sicher für Ihre Geldmittel, indem Sie einen Geheimschlüssel mit unserem sicheren Prozess erstellen."
     },
     "import": {
-      "label": "Importieren",
-      "text": "Importieren Sie einen bestehenden Geheimschlüssel in AirGap, um sichere Transaktionen durchzuführen."
+      "label": "Importieren"
     },
     "social-recovery": {
-      "label": "Soziale Wiederherstellung",
-      "text": "Stellen Sie einen verlorenen Geheimschlüssel aus Anteilen von Ihren sozialen Kontakten wieder her."
+      "label": "Soziale Wiederherstellung"
     },
     "dice-roll": {
       "label": "Generate with Dice Rolls",
@@ -94,6 +100,7 @@
   "secret-edit": {
     "title": " Ihren Geheimschlüssel",
     "text": "Geheimschlüssel benennen und Sicherheistgrad auswählen.",
+    "fingerprint": "Fingerprint",
     "secret_input_label": "Geheimschlüsselname",
     "advanced": "Advanced Options",
     "security-level": {
@@ -103,6 +110,10 @@
     "passcode": {
       "label": "Passwort",
       "text": "Passwort für Ihre Kontos setzen."
+    },
+    "passphrase": {
+      "label": "BIP39 Passphrase",
+      "text": "The BIP39 passphrase has to be entered when creating an account."
     },
     "secret-recovery": {
       "heading": "Geheimschlüssel Wiederherstellung",
@@ -146,6 +157,12 @@
     },
     "confirm_label": "Bestätigen"
   },
+  "secret-service": {
+    "alert": {
+      "title": "Duplicate Secret",
+      "message": "You have already added a secret with the same recovery phrase"
+    }
+  },
   "secret-edit-delete-popover": {
     "title": "Geheimschlüssel Entfernung bestätigen",
     "text": "Möchten Sie diesen Geheimschlüssel wirklich entfernen? Ohne eine Sicherheitskopie kann dieser nicht wiederhergestellt werden!",
@@ -183,6 +200,7 @@
   "secret-show": {
     "title": "Wiederherstellungs-Satz",
     "text": "Schreiben Sie jedes Wort auf ein Stück Papier. Bedenken Sie dabei, dass alle erwähnten Regeln beachtet werden müssen.",
+    "fingerprint": "Fingerprint",
     "next-step_label": "Nächster Schritt",
     "too-fast_alert": {
       "title": "Das war schnell!",
@@ -198,9 +216,7 @@
   },
   "interaction-selection-settings": {
     "title": "Wallet Interaktion",
-    "same-device_heading": "Es scheint so, als ob Sie <span class=\"style__strong color__primary\">AirGap Vault</span> und AirGap Wallet auf dem <span class=\"style__strong color__primary\">gleichen Gerät</span> verwenden.",
-    "offline-device_heading": "Es scheint so, als ob Sie <span class=\"style__strong color__primary\">AirGap Vault</span> auf einem <span class=\"style__strong color__primary\">offline Gerät</span> verwenden.",
-    "text": "Sie können festlegen, wo Sie AirGap Wallet installiert haben, um die Interaktion mit dem Vault zu vereinfachen.",
+    "heading": "How would you like to interact with AirGap Wallet?",
     "selector": {
       "always": "Immer nachfragen",
       "same-device": "Vault und Wallet auf dem gleichen Gerät",
@@ -208,6 +224,19 @@
     },
     "continue_label": "Weiter",
     "description": "In den Einstellungen kann diese Einstellung im Nachhinein wieder geändert werden"
+  },
+  "language-selection-settings": {
+    "title": "Language Selection",
+    "heading": "Please choose your preferred language",
+    "selector": {
+      "en": "English",
+      "de": "German",
+      "es": "Spanish",
+      "pt_BR": "Portuguese (Brazil)",
+      "zh_CN": "Chinese (China)"
+    },
+    "continue_label": "Continue",
+    "description": "You can always change your preference in the settings"
   },
   "verify-key": {
     "incorrect_text": "Der Geheimschlüssel stimmt nicht mit dem eingegebenen Schlüssel überein. Stellen Sie sicher, dass Sie alle Wörter richtig ausgewählt haben. <br /> Wenn Sie einen Fehler gemacht haben, wählen Sie das falsche Wort aus, um es danach in das richtige Wort zu ändern.",
@@ -256,26 +285,40 @@
     "about": "Über AirGap Vault",
     "title": "Geheimschlüssel",
     "information_label": "Information",
+    "faq_label": "FAQ",
+    "feedback_label": "Feedback",
+    "github_label": "GitHub",
+    "twitter_label": "Twitter",
+    "telegram_label": "Telegram",
+    "discord_label": "Discord",
+    "documentation_label": "Documentation",
     "secrets_label": "Geheimschlüssel",
     "add-settings_label": "Geheimschlüssel hinzufügen",
     "interaction-options_label": "Interaktion Optionen",
     "paste-from-clipboard_label": "Code aus der Zwischenablage einfügen",
     "qr-advanced-settings_label": "Advanced QR Settings",
     "interaction-settings_label": "Interaktion Einstellungen",
+    "preferred-language_label": "Preferred Language",
     "advanced-settings_label": "Advanced Settings",
     "bip39_wordlist_label": "BIP39 Wordlist",
     "error-history_label": "Local Error History",
-    "danger-zone_label": "Danger Zone"
+    "danger-zone_label": "Danger Zone",
+    "welcome-onboarding_label": "Welcome",
+    "disclaimer_label": "Disclaimer",
+    "installation-type_label": "Installation Type",
+    "advanced-mode-type_label": "Advanced Mode"
   },
   "tab-secrets": {
     "title": "Secrets",
-    "add-secret_label": "Add Secret"
+    "add-secret_label": "Add Secret",
+    "search_placeholder": "Search Secret"
   },
   "tab-wallets": {
     "title": "Konten",
     "search_placeholder": "Währung suchen",
     "empty-state_text": "Wählen Sie eine Währung aus, um ein neues Konto zu erstellen und mit AirGap Wallet zu synchronisieren.",
     "add-wallet_label": "Konto hinzufügen",
+    "delete-accounts_label": "Remove Accounts",
     "generate-recovery-key": {
       "title": "Secret Recovery Key Backup",
       "description": "To always ensure a recovery of your stored secret, a backup of the secret recovery key is needed."
@@ -377,14 +420,13 @@
     "title": "Wallet Interaktion",
     "heading": "Wie möchten Sie mit <span class=\"style__strong color__primary\">AirGap Wallet</span> interagieren?",
     "same-device_label": "Gleiches Gerät",
-    "same-device_info": "AirGap Vault und AirGap Wallet sind auf dem gleichen Gerät installiert.",
-    "offline-device_label": "Offline Gerät",
-    "offline-device_info": "AirGap Vault ist auf einem offline Gerät installiert. Lesen Sie den QR Code mit AirGap Wallet ein."
+    "offline-device_label": "Offline Gerät"
   },
   "wallet-edit-delete-popover": {
     "settings_label": "Kontoeinstellungen",
     "copy_label": "Adresse kopieren",
     "copy_sync_code": "Sync Code kopieren",
+    "show_address_qr": "Show Address QR",
     "confirm_address_copy": "Adresse wurde in die Zwischenablage kopiert.",
     "confirm_sync_code_copy": "Sync Code wurde in die Zwischenablage kopiert.",
     "account-removal_alert": {
@@ -396,7 +438,6 @@
   },
   "wallet-select-coins": {
     "title": "Konto hinzufügen",
-    "text": "Wählen Sie die gewünschte Währung aus.",
     "select-type": {
       "label": "Kontotyp auswählen",
       "single-address_label": "Einzeladresse Konto",
@@ -483,14 +524,14 @@
       "header": "BIP-39 Passphrase",
       "message": "You set a BIP39 Passphrase. You will need to enter this passphrase again when you try to derive the same child key!",
       "understand": "I understand"
-    },
-    "blur_label": "Disable Blur"
+    }
   },
   "bip85-show": {
     "title": "Show BIP85 Details",
     "text": "Write down all the words on a piece of paper. You will have to verify the mnemonic on the next page.",
     "mnemonic-length": "Mnemonic Length",
     "index": "Index",
+    "fingerprint": "Fingerprint",
     "add": "Add Secret"
   },
   "message-signing-request": {
@@ -520,6 +561,11 @@
   },
   "unsigned-transaction": {
     "sign-tx_label": "Sign Transaction"
+  },
+  "link-page": {
+    "scan-qr": "Scan the QR code to open the link on an online device",
+    "copy_label": "Copy Link",
+    "link-clipboard_label": "The link was copied to your clipboard"
   },
   "migration": {
     "title": "Accounts Update",

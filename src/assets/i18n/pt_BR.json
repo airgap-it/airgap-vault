@@ -1,5 +1,8 @@
 {
   "next": "Próximo",
+  "account-list": {
+    "delete": "Delete"
+  },
   "add-wallet": {
     "alert_deriving": {
       "text": "Deriving your account..."
@@ -42,6 +45,12 @@
   "signed-transaction": {
     "transaction-unreadable": "Não foi possível extrair informações desta transação. Isso não significa que a transação é inválida - Certifique-se de que sabe o que está fazendo e pode verificar se sabe que esta transação contém os dados corretos."
   },
+  "onboarding-advanced-mode": {
+    "title": "Welcome to AirGap"
+  },
+  "installation-type": {
+    "title": "Installation Type"
+  },
   "introduction": {
     "title": "O novo padrão de carteira de criptografia",
     "highest": {
@@ -69,18 +78,15 @@
   },
   "secret-setup": {
     "heading": "Vamos configurar o AirGap!",
-    "text": "Deseja criar um novo segredo ou importar um existente?",
     "generate": {
       "label": "Gerar",
       "text": "Crie um novo segredo com nosso processo seguro para garantir que seus fundos estejam realmente seguros."
     },
     "import": {
-      "label": "Importar",
-      "text": "Importe seu segredo existente para o AirGap e crie transações seguras."
+      "label": "Importar"
     },
     "social-recovery": {
-      "label": "Social Recovery",
-      "text": "Recover a lost private key from your social contacts' secret shares."
+      "label": "Social Recovery"
     },
     "dice-roll": {
       "label": "Generate with Dice Rolls",
@@ -94,6 +100,7 @@
   "secret-edit": {
     "title": " Your Secret",
     "text": "Dê um nome ao seu segredo e selecione o nível de segurança.",
+    "fingerprint": "Fingerprint",
     "secret_input_label": "Nome do seu segredo",
     "advanced": "Opções avançadas",
     "security-level": {
@@ -103,6 +110,10 @@
     "passcode": {
       "label": "Senha de criptografia",
       "text": "Defina uma senha de criptografia para seu segredo. Esta é uma configuração opcional."
+    },
+    "passphrase": {
+      "label": "BIP39 Passphrase",
+      "text": "The BIP39 passphrase has to be entered when creating an account."
     },
     "secret-recovery": {
       "heading": "Secret Recovery",
@@ -146,6 +157,12 @@
     },
     "confirm_label": "Confirmar"
   },
+  "secret-service": {
+    "alert": {
+      "title": "Duplicate Secret",
+      "message": "You have already added a secret with the same recovery phrase"
+    }
+  },
   "secret-edit-delete-popover": {
     "title": "Confirmar remoção do segredo",
     "text": "Você realmente deseja remover esse segredo? Você não poderá restaurá-lo sem um backup!",
@@ -183,6 +200,7 @@
   "secret-show": {
     "title": "This is your recovery phrase",
     "text": "Write down each word on a piece of paper, remember to follow the rules.",
+    "fingerprint": "Fingerprint",
     "next-step_label": "Next Step",
     "too-fast_alert": {
       "title": "That was fast!",
@@ -198,9 +216,7 @@
   },
   "interaction-selection-settings": {
     "title": "Wallet Interaction",
-    "same-device_heading": "Looks like you're using <span class=\"style__strong color__primary\">AirGap Vault</span> and AirGap Wallet on the <span class=\"style__strong color__primary\">same device</span>.",
-    "offline-device_heading": "Looks like you're using <span class=\"style__strong color__primary\">AirGap Vault</span> on an <span class=\"style__strong color__primary\">offline device</span>.",
-    "text": "You can define where you have AirGap Wallet installed to make the interaction with the Vault a bit simpler.",
+    "heading": "How would you like to interact with AirGap Wallet?",
     "selector": {
       "always": "Always ask",
       "same-device": "Vault and Wallet on the same device",
@@ -208,6 +224,19 @@
     },
     "continue_label": "Continue",
     "description": "You can always change your preference in the Settings Tab"
+  },
+  "language-selection-settings": {
+    "title": "Seleção de idioma",
+    "heading": "Por favor, escolha o seu idioma preferido",
+    "selector": {
+      "en": "English",
+      "de": "German",
+      "es": "Spanish",
+      "pt_BR": "Portuguese (Brazil)",
+      "zh_CN": "Chinese (China)"
+    },
+    "continue_label": "Continue",
+    "description": "Você sempre pode alterar sua preferência nas configurações"
   },
   "verify-key": {
     "incorrect_text": "Your secret does not match the generated one. Make sure you've chosen the correct words. <br /> To correct mistakes, simply select a wrong word and choose the correct one.",
@@ -256,26 +285,40 @@
     "about": "About",
     "title": "Settings",
     "information_label": "Information",
+    "faq_label": "FAQ",
+    "feedback_label": "Feedback",
+    "github_label": "GitHub",
+    "twitter_label": "Twitter",
+    "telegram_label": "Telegram",
+    "discord_label": "Discord",
+    "documentation_label": "Documentation",
     "secrets_label": "Secrets",
     "add-settings_label": "Add Secret",
     "interaction-options_label": "Interaction Options",
     "paste-from-clipboard_label": "Paste code from clipboard",
     "qr-advanced-settings_label": "Advanced QR Settings",
     "interaction-settings_label": "Interaction Settings",
+    "preferred-language_label": "Idioma preferido ",
     "advanced-settings_label": "Advanced Settings",
     "bip39_wordlist_label": "BIP39 Wordlist",
     "error-history_label": "Local Error History",
-    "danger-zone_label": "Danger Zone"
+    "danger-zone_label": "Danger Zone",
+    "welcome-onboarding_label": "Welcome",
+    "disclaimer_label": "Disclaimer",
+    "installation-type_label": "Installation Type",
+    "advanced-mode-type_label": "Advanced Mode"
   },
   "tab-secrets": {
     "title": "Secrets",
-    "add-secret_label": "Add Secret"
+    "add-secret_label": "Add Secret",
+    "search_placeholder": "Search Secret"
   },
   "tab-wallets": {
     "title": "Accounts",
     "search_placeholder": "Search Currency",
     "empty-state_text": "Create a new account by selecting a currency and sync it to AirGap Wallet.",
     "add-wallet_label": "Add Account",
+    "delete-accounts_label": "Remove Accounts",
     "generate-recovery-key": {
       "title": "Secret Recovery Key Backup",
       "description": "To always ensure a recovery of your stored secret, a backup of the secret recovery key is needed."
@@ -377,14 +420,13 @@
     "title": "Wallet Interaction",
     "heading": "How would you like to interact with <span class=\"style__strong color__primary\">AirGap Wallet</span>?",
     "same-device_label": "Same Device",
-    "same-device_info": "AirGap Vault and AirGap Wallet are installed on the same device.",
-    "offline-device_label": "Offline Device",
-    "offline-device_info": "AirGap Vault is installed on an offline device, scan the QR code with AirGap Wallet."
+    "offline-device_label": "Offline Device"
   },
   "wallet-edit-delete-popover": {
     "settings_label": "Account Settings",
     "copy_label": "Copy Address",
     "copy_sync_code": "Copy Sync Code",
+    "show_address_qr": "Show Address QR",
     "confirm_address_copy": "Address was copied to your clipboard",
     "confirm_sync_code_copy": "Sync code was copied to your clipboard",
     "account-removal_alert": {
@@ -396,7 +438,6 @@
   },
   "wallet-select-coins": {
     "title": "Add Account",
-    "text": "Select Coin To Use",
     "select-type": {
       "label": "Select Account Type",
       "single-address_label": "Single Address Wallet",
@@ -483,14 +524,14 @@
       "header": "BIP-39 Passphrase",
       "message": "You set a BIP39 Passphrase. You will need to enter this passphrase again when you try to derive the same child key!",
       "understand": "I understand"
-    },
-    "blur_label": "Disable Blur"
+    }
   },
   "bip85-show": {
     "title": "Show BIP85 Details",
     "text": "Write down all the words on a piece of paper. You will have to verify the mnemonic on the next page.",
     "mnemonic-length": "Mnemonic Length",
     "index": "Index",
+    "fingerprint": "Fingerprint",
     "add": "Add Secret"
   },
   "message-signing-request": {
@@ -520,6 +561,11 @@
   },
   "unsigned-transaction": {
     "sign-tx_label": "Sign Transaction"
+  },
+  "link-page": {
+    "scan-qr": "Scan the QR code to open the link on an online device",
+    "copy_label": "Copy Link",
+    "link-clipboard_label": "The link was copied to your clipboard"
   },
   "migration": {
     "title": "Accounts Update",

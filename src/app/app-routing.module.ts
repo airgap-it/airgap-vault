@@ -62,6 +62,11 @@ const routes: Routes = [
       )
   },
   {
+    path: 'languages-selection-settings',
+    loadChildren: () =>
+      import('./pages/languages-selection-settings/languages-selection-settings.module').then((m) => m.LanguagesSelectionSettingsPageModule)
+  },
+  {
     path: 'local-authentication-onboarding',
     loadChildren: () =>
       import('./pages/local-authentication-onboarding/local-authentication-onboarding.module').then(

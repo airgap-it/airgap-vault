@@ -1,5 +1,8 @@
 {
   "next": "下一步",
+  "account-list": {
+    "delete": "Delete"
+  },
   "add-wallet": {
     "alert_deriving": {
       "text": "导出您的账户..."
@@ -42,6 +45,12 @@
   "signed-transaction": {
     "transaction-unreadable": "我们无法从这个交易中提取信息。但是这不意味交易无效，请确定您的操作，并确保所包含交易数据正常。"
   },
+  "onboarding-advanced-mode": {
+    "title": "Welcome to AirGap"
+  },
+  "installation-type": {
+    "title": "Installation Type"
+  },
   "introduction": {
     "title": "新加密钱包标准",
     "highest": {
@@ -69,18 +78,15 @@
   },
   "secret-setup": {
     "heading": "安装AirGap",
-    "text": "?您想创建新助记词还是导入现有助记词？",
     "generate": {
       "label": "生成新助记词",
       "text": "通过我们的安全流程创建一个新助记词，以确保您的资金真正安全"
     },
     "import": {
-      "label": "导入现有助记词",
-      "text": "将您现有的助记词导入AirGap并创建安全转账"
+      "label": "导入现有助记词"
     },
     "social-recovery": {
-      "label": "社交助记词恢复",
-      "text": "从社交联系人的助记词共享中恢复丢失的私钥"
+      "label": "社交助记词恢复"
     },
     "dice-roll": {
       "label": "Generate with Dice Rolls",
@@ -94,6 +100,7 @@
   "secret-edit": {
     "title": " 您的机密",
     "text": "为您的机密命名并选择安全级别",
+    "fingerprint": "Fingerprint",
     "secret_input_label": "机密名字",
     "advanced": "Advanced Options",
     "security-level": {
@@ -103,6 +110,10 @@
     "passcode": {
       "label": "密码",
       "text": "为您的帐户设置密码"
+    },
+    "passphrase": {
+      "label": "BIP39 Passphrase",
+      "text": "The BIP39 passphrase has to be entered when creating an account."
     },
     "secret-recovery": {
       "heading": "助记词恢复",
@@ -146,6 +157,12 @@
     },
     "confirm_label": "确认"
   },
+  "secret-service": {
+    "alert": {
+      "title": "Duplicate Secret",
+      "message": "You have already added a secret with the same recovery phrase"
+    }
+  },
   "secret-edit-delete-popover": {
     "title": "确认删除机密",
     "text": "你想删除这个机密吗？ 如果没有备份，您将无法恢复它！",
@@ -183,6 +200,7 @@
   "secret-show": {
     "title": "这是你的助记词",
     "text": "在一张纸上写下每个单词，并按照单词顺序。",
+    "fingerprint": "Fingerprint",
     "next-step_label": "下一步",
     "too-fast_alert": {
       "title": "这太快了！",
@@ -198,9 +216,7 @@
   },
   "interaction-selection-settings": {
     "title": "钱包互动",
-    "same-device_heading": "看起来您的<span class=\"style__strong color__primary\">AirGap保险箱</span>和AirGap钱包<span class=\"style__strong color__primary\">在同一台设备</span>上运行。",
-    "offline-device_heading": "看起来您的<span class=\"style__strong color__primary\">AirGap保险箱</span>运行在<span class=\"style__strong color__primary\">离线设备</span>上。",
-    "text": "您可以定义您的AirGap钱包的安装位置，以确保与保险箱互动更方便。",
+    "heading": "How would you like to interact with AirGap Wallet?",
     "selector": {
       "always": "总是询问",
       "same-device": "保险箱和钱包在同一设备",
@@ -208,6 +224,19 @@
     },
     "continue_label": "继续",
     "description": "您可以随时通过设置标签来更改您的设置"
+  },
+  "language-selection-settings": {
+    "title": "Language Selection",
+    "heading": "Please choose your preferred language",
+    "selector": {
+      "en": "English",
+      "de": "German",
+      "es": "Spanish",
+      "pt_BR": "Portuguese (Brazil)",
+      "zh_CN": "Chinese (China)"
+    },
+    "continue_label": "Continue",
+    "description": "You can always change your preference in the settings"
   },
   "verify-key": {
     "incorrect_text": "您的助记词与生成的助记词不匹配。 确保您选择了正确的单词。 <br />要纠正错误，只需选择错误的单词然后选择正确的单词即可。",
@@ -256,26 +285,40 @@
     "about": "关于",
     "title": "设置",
     "information_label": "信息",
+    "faq_label": "FAQ",
+    "feedback_label": "Feedback",
+    "github_label": "GitHub",
+    "twitter_label": "Twitter",
+    "telegram_label": "Telegram",
+    "discord_label": "Discord",
+    "documentation_label": "Documentation",
     "secrets_label": "密钥",
     "add-settings_label": "添加密钥",
     "interaction-options_label": "Interaction Options",
     "paste-from-clipboard_label": "Paste code from clipboard",
     "qr-advanced-settings_label": "Advanced QR Settings",
     "interaction-settings_label": "Interaction Settings",
+    "preferred-language_label": "Preferred Language",
     "advanced-settings_label": "Advanced Settings",
     "bip39_wordlist_label": "BIP39 Wordlist",
     "error-history_label": "Local Error History",
-    "danger-zone_label": "Danger Zone"
+    "danger-zone_label": "Danger Zone",
+    "welcome-onboarding_label": "Welcome",
+    "disclaimer_label": "Disclaimer",
+    "installation-type_label": "Installation Type",
+    "advanced-mode-type_label": "Advanced Mode"
   },
   "tab-secrets": {
     "title": "私钥",
-    "add-secret_label": "增加新的私钥"
+    "add-secret_label": "增加新的私钥",
+    "search_placeholder": "Search Secret"
   },
   "tab-wallets": {
     "title": "账户",
     "search_placeholder": "搜索数字货币",
     "empty-state_text": "通过选择数字货币创建一个新帐户并将其同步到AirGap Wallet。",
     "add-wallet_label": "增加新账户",
+    "delete-accounts_label": "Remove Accounts",
     "generate-recovery-key": {
       "title": "Secret Recovery Key Backup",
       "description": "To always ensure a recovery of your stored secret, a backup of the secret recovery key is needed."
@@ -377,14 +420,13 @@
     "title": "钱包互动",
     "heading": "您希望如何与<span class=\"style__strong color__primary\">AirGap钱包</span>互动？",
     "same-device_label": "同一台设备",
-    "same-device_info": "AirGap保险线与AirGap钱包安装在同一设备。",
-    "offline-device_label": "离线设备",
-    "offline-device_info": "AirGap保险箱安装在离线设备上，用AirGap钱包扫描二维码"
+    "offline-device_label": "离线设备"
   },
   "wallet-edit-delete-popover": {
     "settings_label": "账户设定",
     "copy_label": "复制地址",
     "copy_sync_code": "复制同步码",
+    "show_address_qr": "Show Address QR",
     "confirm_address_copy": "地址已经复制到您的剪贴板",
     "confirm_sync_code_copy": "同步码已经复制到剪贴板",
     "account-removal_alert": {
@@ -396,7 +438,6 @@
   },
   "wallet-select-coins": {
     "title": "增加账户",
-    "text": "选择要使用的数字货币种类",
     "select-type": {
       "label": "选择账户种类",
       "single-address_label": "单一地址钱包",
@@ -483,14 +524,14 @@
       "header": "BIP-39 Passphrase",
       "message": "You set a BIP39 Passphrase. You will need to enter this passphrase again when you try to derive the same child key!",
       "understand": "I understand"
-    },
-    "blur_label": "Disable Blur"
+    }
   },
   "bip85-show": {
     "title": "Show BIP85 Details",
     "text": "Write down all the words on a piece of paper. You will have to verify the mnemonic on the next page.",
     "mnemonic-length": "Mnemonic Length",
     "index": "Index",
+    "fingerprint": "Fingerprint",
     "add": "Add Secret"
   },
   "message-signing-request": {
@@ -520,6 +561,11 @@
   },
   "unsigned-transaction": {
     "sign-tx_label": "Sign Transaction"
+  },
+  "link-page": {
+    "scan-qr": "Scan the QR code to open the link on an online device",
+    "copy_label": "Copy Link",
+    "link-clipboard_label": "The link was copied to your clipboard"
   },
   "migration": {
     "title": "Accounts Update",
