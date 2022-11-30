@@ -124,9 +124,13 @@ $ npm test
 $ npm run install-build-dependencies
 ```
 
-## Translation Service
+## Translations
 
-We use [Transifex](https://www.transifex.com/) for the application translations. If you want to contribute with translating the application you can do so by going to the [AirGap Transifex](https://explore.transifex.com/airgap/airgap/) page.
+We use [Transifex](https://www.transifex.com/) for the application translations.
+
+If you want to contribute with translating the application you can do so by going to the [AirGap Transifex](https://explore.transifex.com/airgap/airgap/) page.
+
+### Updating translations
 
 To import the translations from Transifex to the application, first you will need to install the transifex-cli. You can do so by creating a directory of your choice and intalling in it the package globally by running:
 
