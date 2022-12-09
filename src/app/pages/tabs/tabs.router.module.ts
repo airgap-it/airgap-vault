@@ -18,6 +18,15 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'tab-contacts',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../tab-contacts/tab-contacts.module').then((m) => m.TabContactsPageModule)
+          }
+        ]
+      },
+      {
         path: 'tab-secrets',
         children: [
           {

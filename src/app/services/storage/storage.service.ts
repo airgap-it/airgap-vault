@@ -2,6 +2,7 @@ import { BaseStorage } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
 import { Storage } from '@ionic/storage'
 import { Observable, ReplaySubject } from 'rxjs'
+import { ContactEntry } from 'src/app/pages/tab-contacts/tab-contacts.page'
 
 export enum InteractionType {
   UNDETERMINED = 'UNDETERMINED',
@@ -32,7 +33,8 @@ export enum VaultStorageKey {
   ADVANCED_MODE_TYPE = 'ADVANCED_MODE_TYPE',
   INTERACTION_TYPE = 'INTERACTION_TYPE',
   INSTALLATION_TYPE = 'INSTALLATION_TYPE',
-  AIRGAP_SECRET_LIST = 'airgap-secret-list'
+  AIRGAP_SECRET_LIST = 'airgap-secret-list',
+  AIRGAP_CONTACTS_LIST = 'airgap-contacts-list'
 }
 
 interface VaultStorageKeyReturnType {
@@ -45,6 +47,7 @@ interface VaultStorageKeyReturnType {
   [VaultStorageKey.INTERACTION_TYPE]: InteractionType
   [VaultStorageKey.INSTALLATION_TYPE]: InstallationType
   [VaultStorageKey.AIRGAP_SECRET_LIST]: unknown
+  [VaultStorageKey.AIRGAP_CONTACTS_LIST]: ContactEntry[]
 }
 
 type VaultStorageKeyReturnDefaults = { [key in VaultStorageKey]: VaultStorageKeyReturnType[key] }
@@ -58,7 +61,8 @@ const defaultValues: VaultStorageKeyReturnDefaults = {
   [VaultStorageKey.ADVANCED_MODE_TYPE]: AdvancedModeType.UNDETERMINED,
   [VaultStorageKey.INTERACTION_TYPE]: InteractionType.UNDETERMINED,
   [VaultStorageKey.INSTALLATION_TYPE]: InstallationType.UNDETERMINED,
-  [VaultStorageKey.AIRGAP_SECRET_LIST]: []
+  [VaultStorageKey.AIRGAP_SECRET_LIST]: [],
+  [VaultStorageKey.AIRGAP_CONTACTS_LIST]: []
 }
 
 @Injectable({

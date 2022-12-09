@@ -7,6 +7,7 @@ import { TranslateModule } from '@ngx-translate/core'
 import { QRCodeModule } from 'angularx-qrcode'
 
 import { PipesModule } from '../pipes/pipes.module'
+import { ContactItemComponent } from './contact-item/contact-item.component'
 
 import { EntropyProgressComponent } from './entropy-progress/entropy-progress.component'
 import { GridInputComponent } from './grid-input/grid-input.component'
@@ -27,6 +28,7 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     EntropyProgressComponent,
     ProgressFooterComponent,
     SecretItemComponent,
+    ContactItemComponent,
     SignedTransactionComponent,
     TransactionComponent,
     TransactionWarningComponent,
@@ -43,6 +45,7 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     EntropyProgressComponent,
     ProgressFooterComponent,
     SecretItemComponent,
+    ContactItemComponent,
     SignedTransactionComponent,
     TransactionComponent,
     TransactionWarningComponent,

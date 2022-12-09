@@ -153,6 +153,10 @@ const routes: Routes = [
   {
     path: 'address-explorer',
     loadChildren: () => import('./pages/address-explorer/address-explorer.module').then((m) => m.AddressExplorerPageModule)
+  },
+  {
+    path: 'tab-contacts',
+    loadChildren: () => import('./pages/tab-contacts/tab-contacts.module').then((m) => m.TabContactsPageModule)
   }
 ]
 

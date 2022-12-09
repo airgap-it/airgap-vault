@@ -268,6 +268,10 @@
     "empty-state_heading": "In order to scan QR codes, AirGap Vault needs the <span class=\"style__strong color__primary\">camera permission</span>.",
     "grant-permission_label": "Grant permission"
   },
+
+  "tab-contacts": {
+    "title" : "Contacts"
+  },
   "tab-settings": {
     "about": "About",
     "title": "Settings",
@@ -328,7 +332,8 @@
     "wallets": "Accounts",
     "scanner": "Scanner",
     "secrets": "Secrets",
-    "settings": "Settings"
+    "settings": "Settings",
+    "contacts": "Contacts"
   },
   "deserialized-detail": {
     "sign_text": "You're about to sign:",

@@ -1,0 +1,11 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="secondary">
+    <ion-title>{{ 'tab-contacts.title' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ng-container *ngFor="let contact of contacts">
+    <airgap-contact-item [contact]="contact"></airgap-contact-item>
+  </ng-container>
+</ion-content>
