@@ -1,5 +1,5 @@
 import { assertNever, UIAction, UIActionStatus, UiEventService, UIResource, UIResourceStatus } from '@airgap/angular-core'
-import { AirGapWallet, IAirGapTransaction, ProtocolSymbols } from '@airgap/coinlib-core'
+import { AirGapWallet, IAirGapTransaction, MainProtocolSymbols, ProtocolSymbols } from '@airgap/coinlib-core'
 import { Component, OnDestroy } from '@angular/core'
 import { ModalController } from '@ionic/angular'
 import { AlertOptions, LoadingOptions, ModalOptions, OverlayEventDetail } from '@ionic/core'
@@ -15,7 +15,37 @@ import * as actions from './deserialized-detail.actions'
 import * as fromDeserializedDetail from './deserialized-detail.reducer'
 import { Alert, Modal, Mode, Task, UnsignedMessage } from './deserialized.detail.types'
 
+import * as bip32 from 'bip32'
+import * as bs58check from 'bs58check'
+import { SecretsService } from 'src/app/services/secrets/secrets.service'
+import { MnemonicSecret } from 'src/app/models/secret'
+
 type ModalOnDismissAction = (modalData: OverlayEventDetail<unknown>) => Promise<void>
+
+// https://github.com/satoshilabs/slips/blob/master/slip-0132.md
+class ExtendedPublicKey {
+  private readonly rawKey: Buffer
+  constructor(extendedPublicKey: string) {
+    this.rawKey = bs58check.decode(extendedPublicKey).slice(4)
+  }
+
+  toXpub() {
+    return this.addPrefix('0488b21e')
+  }
+
+  toYPub() {
+    return this.addPrefix('049d7cb2')
+  }
+
+  toZPub() {
+    return this.addPrefix('04b24746')
+  }
+
+  private addPrefix(prefix: string) {
+    const data = Buffer.concat([Buffer.from(prefix, 'hex'), this.rawKey])
+    return bs58check.encode(data)
+  }
+}
 
 @Component({
   selector: 'airgap-deserialized-detail',
@@ -45,11 +75,15 @@ export class DeserializedDetailPage implements OnDestroy {
   private modalElement: HTMLIonModalElement | undefined
   private readonly ngDestroyed$: Subject<void> = new Subject()
 
+  private receiveAddresses: string[] = []
+  private changeAddresses: string[] = []
+
   constructor(
     private readonly store: Store<fromDeserializedDetail.State>,
     private readonly uiEventService: UiEventService,
     private readonly modalController: ModalController,
-    private readonly navigationService: NavigationService
+    private readonly navigationService: NavigationService,
+    private readonly secretsService: SecretsService
   ) {
     const state = this.navigationService.getState()
     if (state.transactionInfos && state.transactionInfos[0]) {
@@ -77,6 +111,56 @@ export class DeserializedDetailPage implements OnDestroy {
     this.modal$.pipe(takeUntil(this.ngDestroyed$)).subscribe(this.showOrDismissModal.bind(this))
 
     this.store.dispatch(actions.viewInitialization())
+  }
+
+  async ngOnInit() {
+    this.secretsService.getSecretsObservable().subscribe(async (secrets: MnemonicSecret[]) => {
+      if (secrets && secrets.length > 0) {
+        console.log('secrets', secrets)
+        this.transactionsDetails$.subscribe((observer) => {
+          console.log('transaction', observer.value?.[0])
+          const transaction = observer.value?.[0]
+          if (
+            transaction &&
+            (transaction.protocolIdentifier === MainProtocolSymbols.BTC ||
+              transaction.protocolIdentifier === MainProtocolSymbols.ETH ||
+              transaction.protocolIdentifier === MainProtocolSymbols.BTC_SEGWIT)
+          ) {
+            for (let i = 0; i < secrets.length; i++) {
+              const wallets = secrets[i].wallets
+              for (let j = 0; j < wallets.length; j++) {
+                const wallet = wallets[j]
+                wallet.protocol.getIdentifier().then(async (protocolIdentifier) => {
+                  console.log('protocolIdentifier', protocolIdentifier)
+                  this.changeAddresses = []
+                  this.receiveAddresses = []
+                  if (
+                    protocolIdentifier === MainProtocolSymbols.BTC &&
+                    (MainProtocolSymbols.BTC === transaction.protocolIdentifier ||
+                      MainProtocolSymbols.BTC_SEGWIT === transaction.protocolIdentifier)
+                  ) {
+                    const xpub = bip32.fromBase58(new ExtendedPublicKey(wallet.publicKey).toXpub()).toBase58()
+                    for (let k = 0; k < 100; k++) {
+                      const receiveAddress = (await wallet.protocol.getAddressFromExtendedPublicKey(xpub, 0, i)).address
+                      const changeAddress = (await wallet.protocol.getAddressFromExtendedPublicKey(xpub, 1, i)).address
+
+                      this.receiveAddresses.push(receiveAddress)
+                      this.changeAddresses.push(changeAddress)
+                    }
+                  } else if (protocolIdentifier === MainProtocolSymbols.ETH && protocolIdentifier === transaction.protocolIdentifier) {
+                    const xpub = bip32.fromBase58(new ExtendedPublicKey(wallet.publicKey).toXpub()).toBase58()
+                    for (let k = 0; k < 100; k++) {
+                      const receiveAddress = (await wallet.protocol.getAddressFromExtendedPublicKey(xpub, 0, i)).address
+                      this.receiveAddresses.push(receiveAddress)
+                    }
+                  }
+                })
+              }
+            }
+          }
+        })
+      }
+    })
   }
 
   public ngOnDestroy(): void {
@@ -130,13 +214,11 @@ export class DeserializedDetailPage implements OnDestroy {
 
       return this.modalElement
         .onWillDismiss()
-        .then(
-          (data: OverlayEventDetail<unknown>): Promise<void> => {
-            this.store.dispatch(actions.modalDismissed({ id: modal.id }))
+        .then((data: OverlayEventDetail<unknown>): Promise<void> => {
+          this.store.dispatch(actions.modalDismissed({ id: modal.id }))
 
-            return onDismissAction(data)
-          }
-        )
+          return onDismissAction(data)
+        })
         .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
     } else {
       this.modalElement = undefined
