@@ -5,7 +5,7 @@
         <h5>
           {{
             aggregatedDetails.totalAmount.toFixed()
-              | amountConverter: { protocol: protocolIdentifier$ | async, maxDigits: undefined }
+              | amountConverter : { protocol: protocolIdentifier$ | async, maxDigits: undefined }
               | async
           }}
         </h5>
@@ -14,7 +14,7 @@
         <h5>{{ aggregatedDetails.numberOfTxs }}</h5>
       </ion-col>
       <ion-col size="4" class="content--align__center-center">
-        <h5>{{ aggregatedDetails.totalFees.toFixed() | feeConverter: { protocol: protocolIdentifier$ | async } | async }}</h5>
+        <h5>{{ aggregatedDetails.totalFees.toFixed() | feeConverter : { protocol: protocolIdentifier$ | async } | async }}</h5>
       </ion-col>
       <ion-col size="4">
         <small>Amount</small>
@@ -30,6 +30,11 @@
 
   <ng-container *ngFor="let airGapTx of airGapTxs">
     <airgap-transaction-warning [transaction]="airGapTx"></airgap-transaction-warning>
-    <airgap-from-to class="ion-padding-horizontal" [transaction]="airGapTx"></airgap-from-to>
+    <ng-container *ngIf="airGapTx.protocolIdentifier !== 'btc_segwit'">
+      <airgap-from-to class="ion-padding-horizontal" [transaction]="airGapTx"></airgap-from-to>
+    </ng-container>
+    <ng-container *ngIf="airGapTx.protocolIdentifier === 'btc_segwit'">
+      <airgap-from-to class="ion-padding-horizontal" [transaction]="airGapTx"></airgap-from-to>
+    </ng-container>
   </ng-container>
 </ng-container>

@@ -6,7 +6,7 @@ import { AlertOptions, LoadingOptions, ModalOptions, OverlayEventDetail } from '
 import { Store } from '@ngrx/store'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 import { Observable, Subject } from 'rxjs'
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators'
+import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { SelectAccountPage } from '../select-account/select-account.page'
@@ -116,9 +116,7 @@ export class DeserializedDetailPage implements OnDestroy {
   async ngOnInit() {
     this.secretsService.getSecretsObservable().subscribe(async (secrets: MnemonicSecret[]) => {
       if (secrets && secrets.length > 0) {
-        console.log('secrets', secrets)
         this.transactionsDetails$.subscribe((observer) => {
-          console.log('transaction', observer.value?.[0])
           const transaction = observer.value?.[0]
           if (
             transaction &&
@@ -131,29 +129,51 @@ export class DeserializedDetailPage implements OnDestroy {
               for (let j = 0; j < wallets.length; j++) {
                 const wallet = wallets[j]
                 wallet.protocol.getIdentifier().then(async (protocolIdentifier) => {
-                  console.log('protocolIdentifier', protocolIdentifier)
                   this.changeAddresses = []
                   this.receiveAddresses = []
                   if (
-                    protocolIdentifier === MainProtocolSymbols.BTC &&
-                    (MainProtocolSymbols.BTC === transaction.protocolIdentifier ||
+                    (protocolIdentifier === MainProtocolSymbols.BTC && MainProtocolSymbols.BTC === transaction.protocolIdentifier) ||
+                    (protocolIdentifier === MainProtocolSymbols.BTC_SEGWIT &&
                       MainProtocolSymbols.BTC_SEGWIT === transaction.protocolIdentifier)
                   ) {
                     const xpub = bip32.fromBase58(new ExtendedPublicKey(wallet.publicKey).toXpub()).toBase58()
-                    for (let k = 0; k < 100; k++) {
-                      const receiveAddress = (await wallet.protocol.getAddressFromExtendedPublicKey(xpub, 0, i)).address
-                      const changeAddress = (await wallet.protocol.getAddressFromExtendedPublicKey(xpub, 1, i)).address
+                    for (let k = 0; k < 40; k++) {
+                      const receiveAddress = (await wallet.protocol.getAddressFromExtendedPublicKey(xpub, 0, k)).address
+                      const changeAddress = (await wallet.protocol.getAddressFromExtendedPublicKey(xpub, 1, k)).address
 
                       this.receiveAddresses.push(receiveAddress)
                       this.changeAddresses.push(changeAddress)
                     }
                   } else if (protocolIdentifier === MainProtocolSymbols.ETH && protocolIdentifier === transaction.protocolIdentifier) {
                     const xpub = bip32.fromBase58(new ExtendedPublicKey(wallet.publicKey).toXpub()).toBase58()
-                    for (let k = 0; k < 100; k++) {
-                      const receiveAddress = (await wallet.protocol.getAddressFromExtendedPublicKey(xpub, 0, i)).address
+                    for (let k = 0; k < 40; k++) {
+                      const receiveAddress = (await wallet.protocol.getAddressFromExtendedPublicKey(xpub, 0, k)).address
                       this.receiveAddresses.push(receiveAddress)
                     }
                   }
+                  const changeAddress = transaction.to.find((address) => this.changeAddresses.includes(address))
+                  const receiveAddress = transaction.to.find((address) => this.receiveAddresses.includes(address))
+
+                  if (receiveAddress) {
+                    transaction.extra = {
+                      ...transaction.extra,
+                      toExtra: {
+                        type: 'Your Receive Address',
+                        address: changeAddress
+                      }
+                    }
+                  }
+                  if (changeAddress) {
+                    transaction.extra = {
+                      ...transaction.extra,
+                      toExtra: {
+                        type: 'Your Change Address',
+                        address: changeAddress
+                      }
+                    }
+                  }
+
+                  this.transactionsDetails$.pipe(map((_) => transaction))
                 })
               }
             }
