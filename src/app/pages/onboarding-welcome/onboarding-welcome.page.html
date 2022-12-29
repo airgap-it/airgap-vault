@@ -42,14 +42,14 @@
     <ion-slide>
       <img src="assets/img/onboarding-terms.svg" />
       <h1>Let's set up AirGap Vault!</h1>
-
+      <!-- 
       <ion-item lines="none">
         <ion-checkbox [(ngModel)]="disclaimerAccepted" color="primary" slot="end"></ion-checkbox>
         <p>I accept the AirGap Terms of Service</p>
-      </ion-item>
+      </ion-item> -->
 
-      <ion-button (click)="readTos()">Read Terms of Service</ion-button>
-      <ion-button [disabled]="!disclaimerAccepted" (click)="next()">Start</ion-button>
+      <ion-button (click)="readDisclaimer()">Read Disclaimer</ion-button>
+      <!-- <ion-button [disabled]="!disclaimerAccepted" (click)="next()">Start</ion-button> -->
     </ion-slide>
   </ion-slides>
 </ion-content>
