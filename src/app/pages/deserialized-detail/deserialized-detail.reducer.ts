@@ -90,7 +90,8 @@ export const reducer = createReducer(
     raw: {
       value: state.raw.value,
       status: UIResourceStatus.LOADING
-    }
+    },
+    bip39PassphraseTries: 0
   })),
   on(actions.navigationDataLoaded, (state, { mode, title, button, transactions, messages, raw }) => ({
     ...state,
@@ -111,7 +112,8 @@ export const reducer = createReducer(
     raw: {
       value: raw,
       status: UIResourceStatus.SUCCESS
-    }
+    },
+    bip39PassphraseTries: 0
   })),
   on(actions.navigationDataLoadingError, (state, { mode, title, button, raw }) => ({
     ...state,
@@ -141,7 +143,8 @@ export const reducer = createReducer(
     transactions: {
       value: (state.transactions.value ?? []).concat(transactions),
       status: state.transactions.status
-    }
+    },
+    bip39PassphraseTries: 0
   })),
   on(actions.messagesSigned, (state, { messages }) => ({
     ...state,
@@ -151,7 +154,8 @@ export const reducer = createReducer(
     messages: {
       value: (state.messages.value ?? []).concat(messages),
       status: state.transactions.status
-    }
+    },
+    bip39PassphraseTries: 0
   })),
   on(actions.loaderDismissed, (state, { id }) => ({
     ...state,
