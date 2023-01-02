@@ -229,6 +229,7 @@
     "title": "Language Selection",
     "heading": "Please choose your preferred language",
     "selector": {
+      "device": "Your Device Language",
       "en": "English",
       "de": "German",
       "es": "Spanish",

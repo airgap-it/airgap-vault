@@ -15,6 +15,10 @@ export class LanguagesSelectionSettingsPage implements OnInit {
   public selectedType: LanguagesType | undefined
   public isEdit: boolean = false
 
+  public get languages(): string[] {
+    return Object.values(LanguagesType)
+  }
+
   constructor(
     private readonly translateService: TranslateService,
     private readonly navigationService: NavigationService,
@@ -31,6 +35,11 @@ export class LanguagesSelectionSettingsPage implements OnInit {
     const deviceLanguage = this.translateService.getBrowserLang()
 
     return savedLanguage || (deviceLanguage as LanguagesType) || LanguagesType.EN
+  }
+
+  public async defaultToDevice() {
+    const deviceLanguage = this.translateService.getBrowserLang() as LanguagesType
+    this.changeLanguage(deviceLanguage)
   }
 
   public async changeLanguage(language: LanguagesType): Promise<void> {

@@ -12,28 +12,17 @@
 
   <ion-list lines="none" class="ion-padding-vertical" (ionChange)="changeLanguage($event.detail.value)">
     <ion-radio-group [(ngModel)]="selectedType">
-      <ion-item detail="false" class="ion-no-padding">
-        <ion-label color="white">{{ 'language-selection-settings.selector.en' | translate }}</ion-label>
-        <ion-radio class="ion-no-margin" slot="end" [value]="languageType.EN"></ion-radio>
-      </ion-item>
-      <ion-item detail="false" class="ion-no-padding">
-        <ion-label color="white">{{ 'language-selection-settings.selector.de' | translate }}</ion-label>
-        <ion-radio class="ion-no-margin" slot="end" [value]="languageType.DE"></ion-radio>
-      </ion-item>
-      <ion-item detail="false" class="ion-no-padding">
-        <ion-label color="white">{{ 'language-selection-settings.selector.es' | translate }}</ion-label>
-        <ion-radio class="ion-no-margin" slot="end" [value]="languageType.ES"></ion-radio>
-      </ion-item>
-      <ion-item detail="false" class="ion-no-padding">
-        <ion-label color="white">{{ 'language-selection-settings.selector.pt_BR' | translate }}</ion-label>
-        <ion-radio class="ion-no-margin" slot="end" [value]="languageType.PT_BR"></ion-radio>
-      </ion-item>
-      <ion-item detail="false" class="ion-no-padding">
-        <ion-label color="white">{{ 'language-selection-settings.selector.zh_CN' | translate }}</ion-label>
-        <ion-radio class="ion-no-margin" slot="end" [value]="languageType.ZH_CN"></ion-radio>
-      </ion-item>
+      <ng-container *ngFor="let language of languages">
+        <ion-item detail="false" class="ion-no-padding">
+          <ion-label color="white">{{ 'language-selection-settings.selector.' + language | translate }}</ion-label>
+          <ion-radio class="ion-no-margin" slot="end" [value]="language"></ion-radio>
+        </ion-item>
+      </ng-container>
     </ion-radio-group>
   </ion-list>
+  <ion-button color="tertiary" shape="round" (click)="defaultToDevice()">
+    {{ 'language-selection-settings.selector.device' | translate }}
+  </ion-button>
 
   <p><i>{{ 'interaction-selection-settings.description' | translate }}</i></p>
 
