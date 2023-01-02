@@ -3,6 +3,14 @@ import { Injectable } from '@angular/core'
 import { Storage } from '@ionic/storage'
 import { Observable, ReplaySubject } from 'rxjs'
 
+export enum LanguagesType {
+  EN = 'en',
+  DE = 'de',
+  ES = 'es',
+  PT_BR = 'pt_BR',
+  ZH_CN = 'zh_CN'
+}
+
 export enum InteractionType {
   UNDETERMINED = 'UNDETERMINED',
   ALWAYS_ASK = 'ALWAYS_ASK',
@@ -31,6 +39,7 @@ export enum VaultStorageKey {
   INTRODUCTION_INITIAL = 'INTRODUCTION_INITIAL',
   ADVANCED_MODE_TYPE = 'ADVANCED_MODE_TYPE',
   INTERACTION_TYPE = 'INTERACTION_TYPE',
+  LANGUAGE_TYPE = 'LANGUAGE_TYPE',
   INSTALLATION_TYPE = 'INSTALLATION_TYPE',
   AIRGAP_SECRET_LIST = 'airgap-secret-list'
 }
@@ -43,6 +52,7 @@ interface VaultStorageKeyReturnType {
   [VaultStorageKey.INTRODUCTION_INITIAL]: boolean
   [VaultStorageKey.ADVANCED_MODE_TYPE]: AdvancedModeType
   [VaultStorageKey.INTERACTION_TYPE]: InteractionType
+  [VaultStorageKey.LANGUAGE_TYPE]: LanguagesType | undefined
   [VaultStorageKey.INSTALLATION_TYPE]: InstallationType
   [VaultStorageKey.AIRGAP_SECRET_LIST]: unknown
 }
@@ -57,6 +67,7 @@ const defaultValues: VaultStorageKeyReturnDefaults = {
   [VaultStorageKey.INTRODUCTION_INITIAL]: false,
   [VaultStorageKey.ADVANCED_MODE_TYPE]: AdvancedModeType.UNDETERMINED,
   [VaultStorageKey.INTERACTION_TYPE]: InteractionType.UNDETERMINED,
+  [VaultStorageKey.LANGUAGE_TYPE]: undefined,
   [VaultStorageKey.INSTALLATION_TYPE]: InstallationType.UNDETERMINED,
   [VaultStorageKey.AIRGAP_SECRET_LIST]: []
 }
