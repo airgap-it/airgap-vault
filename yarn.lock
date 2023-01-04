@@ -16,10 +16,10 @@
   dependencies:
     tslib "^2.2.0"
 
-"@airgap/coinlib-core@0.13.7-beta.25":
-  version "0.13.7-beta.25"
-  resolved "https://registry.yarnpkg.com/@airgap/coinlib-core/-/coinlib-core-0.13.7-beta.25.tgz#4334990fc25e789659061cea5978252d0180eac5"
-  integrity sha512-7xVryt2ryPHih6o7CZuNSMUAPR03he3uYfq2je7asFAI59FT0mROcjluGL8CzkflkQjA9V2IXpbFNh06bStRNQ==
+"@airgap/coinlib-core@0.13.7":
+  version "0.13.7"
+  resolved "https://registry.yarnpkg.com/@airgap/coinlib-core/-/coinlib-core-0.13.7.tgz#cbb5541989ba3d5aca6865e17ed0c63fdaf04441"
+  integrity sha512-3zuyXhPBj894Hjm1om59pRNBSYSg9MGm6SrTe7SF5awAsm1DPwDJIf8Vj9yP/UdZmQuKdXmcLVNBFc6Zygaplw==
   dependencies:
     "@airgap/sapling-wasm" "0.0.7"
     "@ethereumjs/common" "2.6.0"
