@@ -37,7 +37,7 @@ describe('SignedTransactionComponent', () => {
   it(
     'should load the from-to component if a valid tx is given',
     waitForAsync(async () => {
-      const serializer: Serializer = new Serializer()
+      const serializer: Serializer = Serializer.getInstance()
       const serializedTxs = await serializer.serialize([
         new Message(IACMessageType.TransactionSignResponse, MainProtocolSymbols.ETH, {
           accountIdentifier: 'test',

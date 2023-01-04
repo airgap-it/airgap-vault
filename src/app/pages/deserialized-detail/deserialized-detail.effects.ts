@@ -485,7 +485,13 @@ export class DeserializedDetailEffects {
           to: flattenAirGapTxAddresses(transaction.details, 'to'),
           amount: sumAirGapTxValues(transaction.details, 'amount'),
           fee: sumAirGapTxValues(transaction.details, 'fee')
-        }
+        } as any
+        // Before splitting coinlib and introducing v1 protocols, payload was a union of all known messages, protocol specific transactions included.
+        // The common interface defined for the transactions specifies only the `accountIdentifier` and `transaction` fields, the rest seen in the above structure
+        // comes from the signed Bitcoin transaction. The changes introduced for v1 protocols simplified the type of `payload` by removing the protocol specific
+        // messages from the union, basing the type only on the common interface. Because of that, the above no longer compiles unless forced to, therefore `as any`
+        // had to be applied.
+        // !!! This should be adressed and improved during the v0 -> v1 migration !!!
       })
     ))
     return signResponses
