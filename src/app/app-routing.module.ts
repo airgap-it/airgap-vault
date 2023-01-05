@@ -93,6 +93,13 @@ const routes: Routes = [
       )
   },
   {
+    path: 'social-recovery-generate-rules',
+    loadChildren: () =>
+      import('./pages/social-recovery-generate-rules/social-recovery-generate-rules.module').then(
+        (m) => m.SocialRecoveryGenerateRulesPageModule
+      )
+  },
+  {
     path: 'social-recovery-import',
     loadChildren: () => import('./pages/social-recovery-import/social-recovery-import.module').then((m) => m.SocialRecoveryImportPageModule)
   },
