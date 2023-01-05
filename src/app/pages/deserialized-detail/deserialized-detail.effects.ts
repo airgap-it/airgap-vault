@@ -531,15 +531,19 @@ export class DeserializedDetailEffects {
 
   private async checkIfSaplingTransaction(transaction: UnsignedTransaction, protocolIdentifier: ProtocolSymbols): Promise<boolean> {
     if (protocolIdentifier === MainProtocolSymbols.XTZ) {
-      const tezosProtocol: ICoinProtocol = await this.protocolService.getProtocol(protocolIdentifier)
-      const saplingProtocol: TezosSaplingProtocol = await this.getSaplingProtocol()
+      try {
+        const saplingProtocol: TezosSaplingProtocol = await this.getSaplingProtocol()
+        const txDetails: IAirGapTransaction[] = await saplingProtocol.getTransactionDetails(transaction)
+        const recipients: string[] = txDetails
+          .map((details) => details.to)
+          .reduce((flatten: string[], next: string[]) => flatten.concat(next), [])
 
-      const txDetails: IAirGapTransaction[] = await tezosProtocol.getTransactionDetails(transaction)
-      const recipients: string[] = txDetails
-        .map((details) => details.to)
-        .reduce((flatten: string[], next: string[]) => flatten.concat(next), [])
-
-      return recipients.includes((await saplingProtocol.getOptions()).config.contractAddress)
+        // TODO: find better way to check if `transaction` is a Sapling transaction
+        return recipients.some((recipient: string) => recipient.startsWith('zet') || recipient.toLocaleLowerCase() === 'shielded pool')
+      } catch(error) {
+        console.error(error)
+        return false
+      }
     }
 
     return protocolIdentifier === MainProtocolSymbols.XTZ_SHIELDED
