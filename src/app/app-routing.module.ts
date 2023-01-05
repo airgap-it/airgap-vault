@@ -79,6 +79,13 @@ const routes: Routes = [
       import('./pages/secret-generate-onboarding/secret-generate-onboarding.module').then((m) => m.SecretGenerateOnboardingPageModule)
   },
   {
+    path: 'social-recovery-generate-intro',
+    loadChildren: () =>
+      import('./pages/social-recovery-generate-intro/social-recovery-generate-intro.module').then(
+        (m) => m.SocialRecoveryGenerateIntroPageModule
+      )
+  },
+  {
     path: 'social-recovery-import',
     loadChildren: () => import('./pages/social-recovery-import/social-recovery-import.module').then((m) => m.SocialRecoveryImportPageModule)
   },
