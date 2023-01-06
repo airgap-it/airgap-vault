@@ -71,32 +71,29 @@ h2 {
 
 .tags-wrapper {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(95px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   width: 100%;
 
   .tag {
-    --padding-bottom: 8px;
-    --padding-top: 8px;
+    --padding-bottom: 0px;
+    --padding-top: 0px;
     --padding-start: 18px;
     --padding-end: 18px;
-    height: fit-content;
 
     .number {
-      font-size: 0.65rem;
-      line-height: 0.75rem;
+      font-size: 0.75rem;
+      line-height: 1rem;
       color: rgb(192, 192, 192);
       width: 100%;
       text-align: start;
-      margin: 0px;
       margin-right: 4px;
     }
 
     .text {
-      font-size: 0.65rem;
-      line-height: 0.75rem;
+      font-size: 0.75rem;
+      line-height: 1rem;
       text-transform: lowercase;
-      font-weight: 700;
-      margin: 0px;
+      font-weight: 800;
     }
   }
 }
@@ -109,7 +106,7 @@ h2 {
   width: 100%;
   bottom: 0px;
   padding-bottom: 12px;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.4);
 
   ion-button {
     --padding-top: 24px;

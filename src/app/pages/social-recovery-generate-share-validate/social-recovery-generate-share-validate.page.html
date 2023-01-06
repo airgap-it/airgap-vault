@@ -1,0 +1,62 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/secret-edit"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="content-wrapper">
+    <div class="center-wrapper">
+      <div class="states-wrapper">
+        <ion-button
+          class="state"
+          [class.selected]="(i === currentShare && currentShare < shares.length - 1) || (currentShare === shares.length -1 && i === currentShare - 1)"
+          shape="round"
+          *ngFor="let share of shares; let i = index"
+          [color]="i === currentShare ? 'primary' : 'tertiary'"
+        >
+          {{i}}
+        </ion-button>
+      </div>
+      <h2>Tap each word to match the correct order</h2>
+      <ion-row class="secret--container-40 ion-align-items-center">
+        <ion-col id="error" class="ion-padding" *ngIf="!isCompleted && !isCorrect() && promptedWords.length === 0">
+          <p [innerHTML]="'verify-key.incorrect_text' | translate"></p>
+        </ion-col>
+
+        <ion-col
+          id="message"
+          class="ion-padding-top ion-padding-horizontal"
+          *ngIf="isCompleted && isCorrect() && promptedWords.length === 0"
+        >
+          <p class="ion-padding-bottom">{{ 'verify-key.success_text' | translate }}</p>
+          <ion-button color="primary" expand="block" shape="round" (click)="next()">
+            {{ 'verify-key.continue_label' | translate }}
+          </ion-button>
+        </ion-col>
+
+        <ion-col id="wordSelector" class="ion-padding-top" *ngIf="promptedWords.length > 0">
+          <ion-row class="ion-padding-horizontal" *ngFor="let word of promptedWords">
+            <ion-col>
+              <ion-button
+                expand="block"
+                shape="round"
+                [color]="isSelectedWord(word) ? 'primary' : 'tertiary'"
+                class="typography--mono"
+                (click)="useWord(word)"
+              >
+                {{ word }}
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    </div>
+    <div class="buttons-wrapper">
+      <ion-button color="light" fill="clear" (click)="prev()">{{ 'social-recovery-setup.back_label' | translate }}</ion-button>
+      <ion-button color="light" fill="clear" fill="clear" (click)="next()">{{ 'social-recovery-setup.next_label' | translate }}</ion-button>
+    </div>
+  </div>
+</ion-content>

@@ -52,7 +52,7 @@ export class SocialRecoveryGenerateSetupPage {
             this.numberOfRequiredShares
           )
           this.navigationService
-            .routeWithState('/social-recovery-generate-rules', { shares })
+            .routeWithState('/social-recovery-generate-rules', { shares, secret: this.secret })
             .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
         })
         .catch((error) => {
