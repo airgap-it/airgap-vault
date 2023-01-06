@@ -174,7 +174,15 @@
     "intro-state-3-text3": "Although they might look the same, social shares are not the same as your passphrase.",
     "setup-state-1-text1": "Select the number of social shares you wish to create",
     "setup-state-2-text1": "Creating {{numberOfShares}} shares",
-    "setup-state-2-text2": "Select the number of social shares needed to recover your secret"
+    "setup-state-2-text2": "Select the number of social shares needed to recover your secret",
+    "rules-heading": "Keep this rule in mind",
+    "rules-text1": "Write these words down on a piece of paper or a metal plate",
+    "rules-text2": "The words need to be in the correct order",
+    "rules-text3": "Check the spelling of each word",
+    "rules-text4": "Store the written down secret in a safe place",
+    "rules-text5": "Do not take a screenshot or photo and do not photocopy your secret",
+    "rules-text6": "Do not upload your secret to the cloud",
+    "share-show-heading": "Write down all words on a piece of paper, remember to follow the rules. We recommend to enumerate the terms."
   },
   "secret-service": {
     "alert": {

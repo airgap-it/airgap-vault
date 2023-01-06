@@ -8,35 +8,35 @@
 
 <ion-content class="ion-padding">
   <div class="content-wrapper">
-    <h2>Keep this rule in mind</h2>
+    <h2>{{ 'social-recovery-generate.rules-heading' | translate }}</h2>
     <div class="title-wrapper" *ngIf="state == 0">
       <h1>#1</h1>
-      <h3>Write these words down on a piece of paper or a metal plate</h3>
+      <h3>{{ 'social-recovery-generate.rules-text1' | translate }}</h3>
     </div>
 
     <div class="title-wrapper" *ngIf="state == 1">
       <h1>#2</h1>
-      <h3>The words need to be in the correct order</h3>
+      <h3>{{ 'social-recovery-generate.rules-text2' | translate }}</h3>
     </div>
 
     <div class="title-wrapper" *ngIf="state == 2">
       <h1>#3</h1>
-      <h3>Check the spelling of each word</h3>
+      <h3>{{ 'social-recovery-generate.rules-text3' | translate }}</h3>
     </div>
 
     <div class="title-wrapper" *ngIf="state == 3">
       <h1>#4</h1>
-      <h3>Stora the written down secret in a safe place</h3>
+      <h3>{{ 'social-recovery-generate.rules-text4' | translate }}</h3>
     </div>
 
     <div class="title-wrapper" *ngIf="state == 4">
       <h1>#5</h1>
-      <h3>Do not take a screenshot or photo and do not photocopy your secret</h3>
+      <h3>{{ 'social-recovery-generate.rules-text5' | translate }}</h3>
     </div>
 
     <div class="title-wrapper" *ngIf="state == 5">
       <h1>#6</h1>
-      <h3>Do not upload your secret to the cloud</h3>
+      <h3>{{ 'social-recovery-generate.rules-text6' | translate }}</h3>
     </div>
 
     <div class="row-center">
@@ -51,9 +51,11 @@
     </div>
 
     <div class="buttons-wrapper">
-      <ion-button *ngIf="state > 0" color="light" fill="clear" (click)="prevState()">Back</ion-button>
+      <ion-button *ngIf="state > 0" color="light" fill="clear" (click)="prevState()">
+        {{ 'social-recovery-setup.back_label' | translate }}
+      </ion-button>
       <ion-button [color]="5 === state ? 'primary' : 'light'" fill="clear" (click)="nextState()">
-        {{state == 5 ? "Let's Go" : "Next"}}
+        {{(state == 5 ? 'introduction.continue_label' : 'social-recovery-setup.next_label') | translate }}
       </ion-button>
     </div>
   </div>

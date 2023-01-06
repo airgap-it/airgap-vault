@@ -1,5 +1,4 @@
 import { Component } from '@angular/core'
-import { MnemonicSecret } from 'src/app/models/secret'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
@@ -10,14 +9,11 @@ import { NavigationService } from 'src/app/services/navigation/navigation.servic
 })
 export class SocialRecoveryGenerateRulesPage {
   public state: 0 | 1 | 2 | 3 | 4 | 5 = 0
-  public numberOfShares: number = -1
-  public numberOfRequiredShares: number = -1
-  private readonly secret: MnemonicSecret
+  private readonly shares: string[]
 
   constructor(private readonly navigationService: NavigationService) {
-    this.numberOfShares = this.navigationService.getState().numberOfShares
-    this.numberOfRequiredShares = this.navigationService.getState().numberOfRequiredShares
-    this.secret = this.navigationService.getState().secret
+    this.shares = this.navigationService.getState().shares
+    console.log('shares', this.shares)
   }
 
   changeState(i: 0 | 1 | 2 | 3 | 4 | 5) {
@@ -35,10 +31,9 @@ export class SocialRecoveryGenerateRulesPage {
       return
     } else {
       this.navigationService
-        .routeWithState('/social-recovery-generate-rules', {
-          numberOfShares: this.numberOfShares,
-          numberOfRequiredShares: this.numberOfRequiredShares,
-          secret: this.secret
+        .routeWithState('/social-recovery-generate-share-show', {
+          currentShare: 0,
+          shares: this.shares
         })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     }

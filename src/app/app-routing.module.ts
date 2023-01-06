@@ -100,6 +100,13 @@ const routes: Routes = [
       )
   },
   {
+    path: 'social-recovery-generate-share-show',
+    loadChildren: () =>
+      import('./pages/social-recovery-generate-share-show/social-recovery-generate-share-show.module').then(
+        (m) => m.SocialRecoveryGenerateShareShowPageModule
+      )
+  },
+  {
     path: 'social-recovery-import',
     loadChildren: () => import('./pages/social-recovery-import/social-recovery-import.module').then((m) => m.SocialRecoveryImportPageModule)
   },
