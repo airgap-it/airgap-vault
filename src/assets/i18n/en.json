@@ -182,7 +182,12 @@
     "rules-text4": "Store the written down secret in a safe place",
     "rules-text5": "Do not take a screenshot or photo and do not photocopy your secret",
     "rules-text6": "Do not upload your secret to the cloud",
-    "share-show-heading": "Write down all words on a piece of paper, remember to follow the rules. We recommend to enumerate the terms."
+    "share-show-heading": "Write down all words on a piece of paper, remember to follow the rules. We recommend to enumerate the terms.",
+    "finish-title": "Social Recovery Generation Successful!",
+    "finish-header": "You've successfully created social recovery shares for your secret.",
+    "finish-warning-title": "Remember",
+    "finish-warning-paragraph": "You created {{ numberOfShares }} shares, of which you'll need at least {{ sharesRequired }} to recover.",
+    "finish-button": "Finish"
   },
   "secret-service": {
     "alert": {

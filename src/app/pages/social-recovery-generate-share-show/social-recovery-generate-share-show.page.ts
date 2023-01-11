@@ -13,6 +13,7 @@ export class SocialRecoveryGenerateShareShowPage {
   public currentShare: number = 0
   public shares: string[]
   private secret: MnemonicSecret
+  private required: number
 
   get currentShares(): string[] {
     if (this.shares && this.currentShare < this.shares.length) {
@@ -26,6 +27,7 @@ export class SocialRecoveryGenerateShareShowPage {
       this.currentShare = this.navigationService.getState().currentShare
       this.shares = this.navigationService.getState().shares
       this.secret = this.navigationService.getState().secret
+      this.required = this.navigationService.getState().required
     })
   }
 
@@ -34,7 +36,8 @@ export class SocialRecoveryGenerateShareShowPage {
       this.navigationService
         .routeWithState('/social-recovery-generate-rules', {
           shares: this.shares,
-          secret: this.secret
+          secret: this.secret,
+          required: this.required
         })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     else
@@ -42,7 +45,8 @@ export class SocialRecoveryGenerateShareShowPage {
         .routeWithState('/social-recovery-generate-share-validate', {
           shares: this.shares,
           currentShare: this.currentShare - 1,
-          secret: this.secret
+          secret: this.secret,
+          required: this.required
         })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
@@ -52,7 +56,8 @@ export class SocialRecoveryGenerateShareShowPage {
       .routeWithState('/social-recovery-generate-share-validate', {
         shares: this.shares,
         currentShare: this.currentShare,
-        secret: this.secret
+        secret: this.secret,
+        required: this.required
       })
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }

@@ -114,6 +114,13 @@ const routes: Routes = [
       )
   },
   {
+    path: 'social-recovery-generate-finish',
+    loadChildren: () =>
+      import('./pages/social-recovery-generate-finish/social-recovery-generate-finish.module').then(
+        (m) => m.SocialRecoveryGenerateFinishPageModule
+      )
+  },
+  {
     path: 'social-recovery-import',
     loadChildren: () => import('./pages/social-recovery-import/social-recovery-import.module').then((m) => m.SocialRecoveryImportPageModule)
   },

@@ -10,14 +10,14 @@ import { NavigationService } from 'src/app/services/navigation/navigation.servic
 })
 export class SocialRecoveryGenerateRulesPage {
   public state: 0 | 1 | 2 | 3 | 4 | 5 = 0
+  private readonly required: number
   private readonly shares: string[]
   private readonly secret: MnemonicSecret
 
   constructor(private readonly navigationService: NavigationService) {
     this.shares = this.navigationService.getState().shares
     this.secret = this.navigationService.getState().secret
-    console.log('shares', this.shares)
-    console.log('secret', this.secret)
+    this.required = this.navigationService.getState().required
   }
 
   changeState(i: 0 | 1 | 2 | 3 | 4 | 5) {
@@ -38,7 +38,8 @@ export class SocialRecoveryGenerateRulesPage {
         .routeWithState('/social-recovery-generate-share-show', {
           currentShare: 0,
           shares: this.shares,
-          secret: this.secret
+          secret: this.secret,
+          required: this.required
         })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     }
