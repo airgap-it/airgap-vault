@@ -1,4 +1,7 @@
-import { Component } from '@angular/core'
+import { Component, ViewChild } from '@angular/core'
+import { ActivatedRoute } from '@angular/router'
+import { IonContent } from '@ionic/angular'
+import { MnemonicSecret } from 'src/app/models/secret'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
@@ -8,14 +11,17 @@ import { NavigationService } from 'src/app/services/navigation/navigation.servic
   styleUrls: ['./social-recovery-generate-share-validate.page.scss']
 })
 export class SocialRecoveryGenerateShareValidatePage {
+  @ViewChild(IonContent) content: IonContent
+
   public validated: boolean = false
   public currentShare: number = 0
-  public readonly shares: string[]
+  public shares: string[]
 
   public isCompleted: boolean = false
   public currentWords: string[] = []
   public promptedWords: string[] = []
   public selectedWordIndex: number | null = null
+  private secret: MnemonicSecret
 
   get currentShares(): string[] {
     if (this.shares && this.currentShare < this.shares.length) {
@@ -25,47 +31,35 @@ export class SocialRecoveryGenerateShareValidatePage {
     } else return ['No shares generated, something went wrong']
   }
 
-  constructor(private readonly navigationService: NavigationService) {
-    this.currentShare = this.navigationService.getState().currentShare
-    this.shares = this.navigationService.getState().shares
-    console.log('currentShare', this.currentShare)
-    console.log('shares', this.shares)
+  constructor(private readonly navigationService: NavigationService, route: ActivatedRoute) {
+    route.params.subscribe((_) => {
+      this.currentShare = this.navigationService.getState().currentShare
+      this.shares = this.navigationService.getState().shares
+      this.secret = this.navigationService.getState().secret
+    })
   }
 
   public onComplete(isCorrect: boolean) {
     this.validated = isCorrect
   }
 
-  public onContinue() {
-    this.next.bind(this)()
+  public onNext() {
+    if (this.content) this.content.scrollToBottom(500)
   }
 
-  prev() {}
-
-  next() {
+  prev() {
     this.navigationService
-      .routeWithState('/social-recovery-generate-share-show', { shares: this.shares, currentShare: this.currentShare + 1 })
+      .routeWithState('/social-recovery-generate-share-show', { shares: this.shares, currentShare: this.currentShare, secret: this.secret })
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  public isCorrect(): boolean {
-    return (
-      this.currentWords
-        .map((word: string) => (word ? word : '-'))
-        .join(' ')
-        .trim() === this.shares[this.currentShare].trim()
-    )
-  }
-
-  public isSelectedWord(word: string): boolean {
-    if (this.selectedWordIndex !== null) {
-      return this.currentWords[this.selectedWordIndex] === word
-    }
-
-    return false
-  }
-
-  public useWord(word: string): void {
-    console.log('word', word)
+  next() {
+    this.navigationService
+      .routeWithState('/social-recovery-generate-share-show', {
+        shares: this.shares,
+        currentShare: this.currentShare + 1,
+        secret: this.secret
+      })
+      .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

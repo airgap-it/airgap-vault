@@ -268,7 +268,7 @@
   },
   "verify-key": {
     "incorrect_text": "Your secret does not match the generated one. Make sure you've chosen the correct words. <br /> To correct mistakes, simply select a wrong word and choose the correct one.",
-    "success_text": "You have successfully verified this secret.",
+    "success_text": "Share verified successfully!",
     "continue_label": "Continue"
   },
   "social-recovery-import": {

@@ -23,7 +23,7 @@
       <h2>{{ 'social-recovery-generate.share-show-heading' | translate }}</h2>
       <div class="tags-wrapper">
         <ion-button class="tag" shape="round" color="tertiary" *ngFor="let tag of currentShares; let i = index">
-          <p class="number">{{i}}</p>
+          <p class="number">{{i + 1}}</p>
           <p class="text">{{tag}}</p>
         </ion-button>
       </div>

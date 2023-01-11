@@ -1,4 +1,5 @@
 import { Component } from '@angular/core'
+import { ActivatedRoute } from '@angular/router'
 import { MnemonicSecret } from 'src/app/models/secret'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
@@ -10,27 +11,41 @@ import { NavigationService } from 'src/app/services/navigation/navigation.servic
 })
 export class SocialRecoveryGenerateShareShowPage {
   public currentShare: number = 0
-  public readonly shares: string[]
-  private readonly secret: MnemonicSecret
+  public shares: string[]
+  private secret: MnemonicSecret
 
   get currentShares(): string[] {
     if (this.shares && this.currentShare < this.shares.length) {
       const currentShares = this.shares[this.currentShare].split(' ')
-      console.log('currentShares', currentShares)
       return currentShares
     } else return ['No shares generated, something went wrong']
   }
 
-  constructor(private readonly navigationService: NavigationService) {
-    this.currentShare = this.navigationService.getState().currentShare
-    this.shares = this.navigationService.getState().shares
-    this.secret = this.navigationService.getState().secret
-    console.log('currentShare', this.currentShare)
-    console.log('shares', this.shares)
-    console.log('secret', this.secret)
+  constructor(private readonly navigationService: NavigationService, route: ActivatedRoute) {
+    route.params.subscribe((_) => {
+      this.currentShare = this.navigationService.getState().currentShare
+      this.shares = this.navigationService.getState().shares
+      this.secret = this.navigationService.getState().secret
+    })
   }
 
-  prev() {}
+  prev() {
+    if (this.currentShare <= 0)
+      this.navigationService
+        .routeWithState('/social-recovery-generate-rules', {
+          shares: this.shares,
+          secret: this.secret
+        })
+        .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    else
+      this.navigationService
+        .routeWithState('/social-recovery-generate-share-validate', {
+          shares: this.shares,
+          currentShare: this.currentShare - 1,
+          secret: this.secret
+        })
+        .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
 
   next() {
     this.navigationService
