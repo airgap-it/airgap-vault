@@ -1,437 +1,176 @@
-import { flattened, ICoinProtocolAdapter } from '@airgap/angular-core'
+import { flattened, ICoinProtocolAdapter, ICoinSubProtocolAdapter } from '@airgap/angular-core'
 import { AeternityModule } from '@airgap/aeternity/v1'
-import { AeternityTransactionValidatorFactory } from '@airgap/aeternity/v1/serializer/v3/validators/transaction-validator'
-import { aeternityValidators } from '@airgap/aeternity/v1/serializer/v3/validators/validators'
 import { AstarModule } from '@airgap/astar/v1'
-import { AstarTransactionValidatorFactory } from '@airgap/astar/v1/serializer/v3/validators/transaction-validator'
-import { astarValidators } from '@airgap/astar/v1/serializer/v3/validators/validators'
 import { BitcoinModule } from '@airgap/bitcoin/v1'
-import { BitcoinTransactionValidatorFactory } from '@airgap/bitcoin/v1/serializer/v3/validators/transaction-validators'
-import { bitcoinValidators } from '@airgap/bitcoin/v1/serializer/v3/validators/validators'
-import { ICoinProtocol, MainProtocolSymbols, SubProtocolSymbols } from '@airgap/coinlib-core'
-import { validators } from '@airgap/coinlib-core/dependencies/src/validate.js-0.13.1/validate'
+import { ICoinProtocol, ICoinSubProtocol, ProtocolSymbols } from '@airgap/coinlib-core'
 import { CosmosModule } from '@airgap/cosmos/v1'
-import { CosmosTransactionValidatorFactory } from '@airgap/cosmos/v1/serializer/v3/validators/transaction-validators'
-import { CosmosTransaction } from '@airgap/cosmos/v1/data/transaction/CosmosTransaction'
-import { CosmosTransactionSignRequest } from '@airgap/cosmos/v1/serializer/v3/schemas/definitions/transaction-sign-request-cosmos'
 import { EthereumModule } from '@airgap/ethereum/v1'
-import { EthereumTransactionValidatorFactory } from '@airgap/ethereum/v1/serializer/v3/validators/transaction-validator'
 import { GroestlcoinModule } from '@airgap/groestlcoin/v1'
-import { GroestlcoinTransactionValidatorFactory } from '@airgap/groestlcoin/v1/serializer/v3/validators/transaction-validator'
-import { groestlcoinValidators } from '@airgap/groestlcoin/v1/serializer/v3/validators/validators'
-import { AirGapBlockExplorer, AirGapModule, AirGapOfflineProtocol, ProtocolConfiguration } from '@airgap/module-kit'
+import { AirGapBlockExplorer, AirGapModule, AirGapOfflineProtocol, AirGapV3SerializerCompanion, isSubProtocol, ProtocolConfiguration, V3SchemaConfiguration } from '@airgap/module-kit'
 import { MoonbeamModule } from '@airgap/moonbeam/v1'
-import { MoonbeamTransactionValidatorFactory } from '@airgap/moonbeam/v1/serializer/v3/validators/transaction-validator'
-import { moonbeamValidators } from '@airgap/moonbeam/v1/serializer/v3/validators/validators'
 import { PolkadotModule } from '@airgap/polkadot/v1'
-import { PolkadotTransactionValidatorFactory } from '@airgap/polkadot/v1/serializer/v3/validators/transaction-validator'
-import { polkadotValidators } from '@airgap/polkadot/v1/serializer/v3/validators/validators'
 import { TezosModule } from '@airgap/tezos/v1'
-import { TezosTransactionValidatorFactory } from '@airgap/tezos/v1/serializer/v3/validators/transaction-validator'
-import { tezosValidators } from '@airgap/tezos/v1/serializer/v3/validators/validators'
 import { Injectable } from '@angular/core'
-import { IACMessageType, SerializerV3 } from '@airgap/serializer'
+import { SerializerV3, TransactionSignRequest, TransactionSignResponse, TransactionValidator } from '@airgap/serializer'
 
+type LoadedProtocolStatus = 'active' | 'passive'
+
+interface LoadedMainProtocol {
+  type: 'main'
+  status: LoadedProtocolStatus
+  result: ICoinProtocolAdapter
+}
+
+interface LoadedSubProtocol {
+  type: 'sub'
+  status: LoadedProtocolStatus
+  result: [ICoinProtocolAdapter, ICoinSubProtocolAdapter]
+}
+
+type LoadedProtocol = LoadedMainProtocol | LoadedSubProtocol
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProtocolModuleService {
   
-  public async loadProtocols(): Promise<{ active: ICoinProtocol[], passive: ICoinProtocol[] }> {
+  public async loadProtocols(ignore: string[] = []): Promise<{ 
+    activeProtocols: ICoinProtocol[], 
+    passiveProtocols: ICoinProtocol[],
+    activeSubProtocols: [ICoinProtocol, ICoinSubProtocol][],
+    passiveSubProtocols: [ICoinProtocol, ICoinSubProtocol][]
+  }> {
     const modules: AirGapModule[] = [
-      new AeternityModule(),
-      new AstarModule(),
       new BitcoinModule(),
-      new CosmosModule(),
       new EthereumModule(),
+      new TezosModule(),
+      new PolkadotModule(),
+      new CosmosModule(),
+      new AeternityModule(),
       new GroestlcoinModule(),
       new MoonbeamModule(),
-      new PolkadotModule(),
-      new TezosModule()
+      new AstarModule()
     ]
 
-    const activeProtocols: ICoinProtocol[][] = await Promise.all(modules.map((module: AirGapModule) => {
-      const offlineProtocols: string[] = Object.entries(module.supportedProtocols)
-        .filter(([_, configuration]: [string, ProtocolConfiguration]) => configuration.type === 'offline' || configuration.type === 'full')
-        .map(([identifier, _]: [string, ProtocolConfiguration]) => identifier)
+    const loadedProtocols: LoadedProtocol[] = await this.loadFromModules(modules, new Set(ignore))
 
-        return Promise.all(offlineProtocols.map(async (identifier: string) => {
-          const [protocol, blockExplorer]: [AirGapOfflineProtocol, AirGapBlockExplorer] = await Promise.all([
-            module.createOfflineProtocol(identifier),
-            module.createBlockExplorer(identifier)
-          ])
+    const activeProtocols: ICoinProtocol[] = []
+    const passiveProtocols: ICoinProtocol[] = []
+    
+    const activeSubProtocols: [ICoinProtocol, ICoinSubProtocol][] = []
+    const passiveSubProtocols: [ICoinProtocol, ICoinSubProtocol][] = []
 
-          return new ICoinProtocolAdapter(protocol, blockExplorer)
-        }))
-    }))
+    for (const protocol of loadedProtocols) {
+      if (protocol.type === 'main' && protocol.status === 'active') {
+        activeProtocols.push(protocol.result)
+      }
 
-    this.loadSerializerSchemas()
+      if (protocol.type === 'main' && protocol.status === 'passive') {
+        passiveProtocols.push(protocol.result)
+      }
+      
+      if (protocol.type === 'sub' && protocol.status === 'active') {
+        activeSubProtocols.push(protocol.result)
+      }
+
+      if (protocol.type === 'sub' && protocol.status === 'passive') {
+        passiveSubProtocols.push(protocol.result)
+      }
+    }
 
     return {
-      active: flattened(activeProtocols),
-      passive: []
+      activeProtocols,
+      passiveProtocols,
+      activeSubProtocols,
+      passiveSubProtocols
     }
   }
 
-  private loadSerializerSchemas() {
+  private async loadFromModules(modules: AirGapModule[], ignore: Set<string>): Promise<LoadedProtocol[]> {
+    const protocols: LoadedProtocol[][] = await Promise.all(modules.map(async (module: AirGapModule) => {
+      const offlineProtocols: string[] = Object.entries(module.supportedProtocols)
+        .filter(([identifier, configuration]: [string, ProtocolConfiguration]) => configuration.type === 'offline' || configuration.type === 'full' && !ignore.has(identifier))
+        .map(([identifier, _]: [string, ProtocolConfiguration]) => identifier)
 
-    // aeternity
+        const v3SerializerCompanion: AirGapV3SerializerCompanion = await module.createV3SerializerCompanion()
 
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignRequest,
-      { schema: require('@airgap/aeternity/v1/serializer/v3/schemas/generated/transaction-sign-request-aeternity.json') },
-      MainProtocolSymbols.AE
-    )
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignResponse,
-      { schema: require('@airgap/aeternity/v1/serializer/v3/schemas/generated/transaction-sign-response-aeternity.json') },
-      MainProtocolSymbols.AE
-    )
-    
-    SerializerV3.addValidator(MainProtocolSymbols.AE, new AeternityTransactionValidatorFactory())
+        this.loadSerializerValidators(v3SerializerCompanion)
 
-    Object.keys(aeternityValidators).forEach((key: string) => {
-      validators[key] = aeternityValidators[key]
+        const activeProtocols: Record<string, ICoinProtocolAdapter> = {}
+        const activeSubProtocols: [ICoinProtocolAdapter, ICoinSubProtocolAdapter][] = []
+
+        for (const identifier of offlineProtocols) {
+          const adapter: ICoinProtocolAdapter = await this.createProtocolAdapter(module, identifier, v3SerializerCompanion)
+
+          if (adapter instanceof ICoinSubProtocolAdapter) {
+            const mainIdentifier: string = await adapter.v1Protocol.mainProtocol()
+            if (mainIdentifier !in activeProtocols) {
+              const mainAdapter: ICoinProtocolAdapter = await this.createProtocolAdapter(module, mainIdentifier, v3SerializerCompanion)
+              activeProtocols[mainIdentifier] = mainAdapter
+            }
+
+            activeSubProtocols.push([activeProtocols[mainIdentifier], adapter])
+          } else {
+            activeProtocols[identifier] = adapter
+          }
+        }
+
+        const loadedMainProtocols: LoadedProtocol[] = Object.values(activeProtocols).map((protocol) => ({
+          type: 'main',
+          status: 'active',
+          result: protocol
+        }))
+
+        const loadedSubProtocols: LoadedProtocol[] = activeSubProtocols.map((protocol) => ({
+          type: 'sub',
+          status: 'active',
+          result: protocol
+        }))
+
+        return loadedMainProtocols.concat(loadedSubProtocols)
+    }))
+
+    return flattened(protocols)
+  }
+
+  private async createProtocolAdapter(
+    module: AirGapModule, 
+    identifier: string,
+    v3SerializerCompanion: AirGapV3SerializerCompanion
+  ): Promise<ICoinProtocolAdapter> {
+    const [protocol, blockExplorer]: [AirGapOfflineProtocol, AirGapBlockExplorer] = await Promise.all([
+      module.createOfflineProtocol(identifier),
+      module.createBlockExplorer(identifier)
+    ])
+
+    return isSubProtocol(protocol)
+      ? ICoinSubProtocolAdapter.create(protocol, blockExplorer, v3SerializerCompanion)
+      : ICoinProtocolAdapter.create(protocol, blockExplorer, v3SerializerCompanion)
+  }
+
+  private loadSerializerValidators(v3SerializerCompanion: AirGapV3SerializerCompanion) {
+    v3SerializerCompanion.schemas.forEach((configuration: V3SchemaConfiguration) => {
+      SerializerV3.addSchema(configuration.type, configuration.schema, configuration.protocolIdentifier as ProtocolSymbols)
+
+      if (configuration.protocolIdentifier) {
+        SerializerV3.addValidator(configuration.protocolIdentifier as ProtocolSymbols, {
+          create(): TransactionValidator {
+            return new GenericTransactionValidator(configuration.protocolIdentifier, v3SerializerCompanion) 
+          }
+        })
+      }
     })
+  }
+}
 
-    // Astar
+class GenericTransactionValidator implements TransactionValidator {
+  public constructor(private readonly protocolIdentifier: string, private readonly serializerCompanion: AirGapV3SerializerCompanion) {}
 
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignRequest,
-      { schema: require('@airgap/astar/v1/serializer/v3/schemas/generated/transaction-sign-request-astar.json') },
-      MainProtocolSymbols.ASTAR
-    )
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignResponse,
-      { schema: require('@airgap/astar/v1/serializer/v3/schemas/generated/transaction-sign-response-astar.json') },
-      MainProtocolSymbols.ASTAR
-    )
-    
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignRequest,
-      { schema: require('@airgap/astar/v1/serializer/v3/schemas/generated/transaction-sign-request-astar.json') },
-      MainProtocolSymbols.SHIDEN
-    )
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignResponse,
-      { schema: require('@airgap/astar/v1/serializer/v3/schemas/generated/transaction-sign-response-astar.json') },
-      MainProtocolSymbols.SHIDEN
-    )
+  public async validateUnsignedTransaction(transaction: TransactionSignRequest): Promise<any> {
+    return this.serializerCompanion.validateTransactionSignRequest(this.protocolIdentifier, transaction)
+  }
 
-    const astarTransactionValidatorFactory: AstarTransactionValidatorFactory = new AstarTransactionValidatorFactory()
-
-    SerializerV3.addValidator(MainProtocolSymbols.ASTAR, astarTransactionValidatorFactory)
-    SerializerV3.addValidator(MainProtocolSymbols.SHIDEN, astarTransactionValidatorFactory)
-
-    Object.keys(astarValidators).forEach((key: string) => {
-      validators[key] = astarValidators[key]
-    })
-
-    // Bitcoin
-
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignRequest,
-      { schema: require('@airgap/bitcoin/v1/serializer/v3/schemas/generated/transaction-sign-request-bitcoin-segwit.json') },
-      MainProtocolSymbols.BTC_SEGWIT
-    )
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignResponse,
-      { schema: require('@airgap/bitcoin/v1/serializer/v3/schemas/generated/transaction-sign-response-bitcoin-segwit.json') },
-      MainProtocolSymbols.BTC_SEGWIT
-    )
-    
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignRequest,
-      { schema: require('@airgap/bitcoin/v1/serializer/v3/schemas/generated/transaction-sign-request-bitcoin.json') },
-      MainProtocolSymbols.BTC
-    )
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignResponse,
-      { schema: require('@airgap/bitcoin/v1/serializer/v3/schemas/generated/transaction-sign-response-bitcoin.json') },
-      MainProtocolSymbols.BTC
-    )
-    
-    SerializerV3.addValidator(MainProtocolSymbols.BTC, new BitcoinTransactionValidatorFactory())
-
-    Object.keys(bitcoinValidators).forEach((key: string) => {
-      validators[key] = bitcoinValidators[key]
-    })
-
-    // Cosmos
-
-    function unsignedTransactionTransformer(value: CosmosTransactionSignRequest): CosmosTransactionSignRequest {
-      value.transaction = CosmosTransaction.fromJSON(value.transaction) as any
-    
-      return value
-    }
-
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignRequest,
-      { schema: require('@airgap/cosmos/v1/serializer/v3/schemas/generated/transaction-sign-request-cosmos.json'), transformer: unsignedTransactionTransformer },
-      MainProtocolSymbols.COSMOS
-    )
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignResponse,
-      { schema: require('@airgap/cosmos/v1/serializer/v3/schemas/generated/transaction-sign-response-cosmos.json') },
-      MainProtocolSymbols.COSMOS
-    )
-    
-    SerializerV3.addValidator(MainProtocolSymbols.COSMOS, new CosmosTransactionValidatorFactory())
-
-    // Ethereum
-
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignRequest,
-      { schema: require('@airgap/ethereum/v1/serializer/v3/schemas/generated/transaction-sign-request-ethereum.json') },
-      MainProtocolSymbols.ETH
-    )
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignRequest,
-      { schema: require('@airgap/ethereum/v1/serializer/v3/schemas/generated/transaction-sign-request-ethereum-typed.json') },
-      MainProtocolSymbols.ETH
-    )
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignResponse,
-      { schema: require('@airgap/ethereum/v1/serializer/v3/schemas/generated/transaction-sign-response-ethereum.json') },
-      MainProtocolSymbols.ETH
-    )
-    
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignRequest,
-      { schema: require('@airgap/ethereum/v1/serializer/v3/schemas/generated/transaction-sign-request-ethereum.json') },
-      SubProtocolSymbols.ETH_ERC20
-    )
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignResponse,
-      { schema: require('@airgap/ethereum/v1/serializer/v3/schemas/generated/transaction-sign-response-ethereum.json') },
-      SubProtocolSymbols.ETH_ERC20
-    )
-    
-    SerializerV3.addValidator(MainProtocolSymbols.ETH, new EthereumTransactionValidatorFactory())
-
-    // Groestlcoin
-
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignRequest,
-      { schema: require('@airgap/groestlcoin/v1/serializer/v3/schemas/generated/transaction-sign-request-groestlcoin.json') },
-      MainProtocolSymbols.GRS
-    )
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignResponse,
-      { schema: require('@airgap/groestlcoin/v1/serializer/v3/schemas/generated/transaction-sign-response-groestlcoin.json') },
-      MainProtocolSymbols.GRS
-    )
-
-    SerializerV3.addValidator(MainProtocolSymbols.GRS, new GroestlcoinTransactionValidatorFactory())
-
-    Object.keys(groestlcoinValidators).forEach((key: string) => {
-      validators[key] = groestlcoinValidators[key]
-    })
-
-    // Moonbeam
-
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignRequest,
-      { schema: require('@airgap/moonbeam/v1/serializer/v3/schemas/generated/transaction-sign-request-moonbeam.json') },
-      MainProtocolSymbols.MOONBEAM
-    )
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignResponse,
-      { schema: require('@airgap/moonbeam/v1/serializer/v3/schemas/generated/transaction-sign-response-moonbeam.json') },
-      MainProtocolSymbols.MOONBEAM
-    )
-    
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignRequest,
-      { schema: require('@airgap/moonbeam/v1/serializer/v3/schemas/generated/transaction-sign-request-moonbeam.json') },
-      MainProtocolSymbols.MOONRIVER
-    )
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignResponse,
-      { schema: require('@airgap/moonbeam/v1/serializer/v3/schemas/generated/transaction-sign-response-moonbeam.json') },
-      MainProtocolSymbols.MOONRIVER
-    )
-
-    const moonbeamTransactionValidatorFactory: MoonbeamTransactionValidatorFactory = new MoonbeamTransactionValidatorFactory()
-
-    SerializerV3.addValidator(MainProtocolSymbols.MOONBEAM, moonbeamTransactionValidatorFactory)
-    SerializerV3.addValidator(MainProtocolSymbols.MOONRIVER, moonbeamTransactionValidatorFactory)
-
-    Object.keys(moonbeamValidators).forEach((key: string) => {
-      validators[key] = moonbeamValidators[key]
-    })
-
-    // Polkadot
-
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignRequest,
-      { schema: require('@airgap/polkadot/v1/serializer/v3/schemas/generated/transaction-sign-request-polkadot.json') },
-      MainProtocolSymbols.POLKADOT
-    )
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignResponse,
-      { schema: require('@airgap/polkadot/v1/serializer/v3/schemas/generated/transaction-sign-response-polkadot.json') },
-      MainProtocolSymbols.POLKADOT
-    )
-    
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignRequest,
-      { schema: require('@airgap/polkadot/v1/serializer/v3/schemas/generated/transaction-sign-request-polkadot.json') },
-      MainProtocolSymbols.KUSAMA
-    )
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignResponse,
-      { schema: require('@airgap/polkadot/v1/serializer/v3/schemas/generated/transaction-sign-response-polkadot.json') },
-      MainProtocolSymbols.KUSAMA
-    )
-
-    const polkadotTransactionValidatorFactory: PolkadotTransactionValidatorFactory = new PolkadotTransactionValidatorFactory()
-
-    SerializerV3.addValidator(MainProtocolSymbols.POLKADOT, polkadotTransactionValidatorFactory)
-    SerializerV3.addValidator(MainProtocolSymbols.KUSAMA, polkadotTransactionValidatorFactory)
-
-    Object.keys(polkadotValidators).forEach((key: string) => {
-      validators[key] = polkadotValidators[key]
-    })
-
-    // Tezos
-
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignRequest,
-      { schema: require('@airgap/tezos/v1/serializer/v3/schemas/generated/transaction-sign-request-tezos.json') },
-      MainProtocolSymbols.XTZ
-    )
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignResponse,
-      { schema: require('@airgap/tezos/v1/serializer/v3/schemas/generated/transaction-sign-response-tezos.json') },
-      MainProtocolSymbols.XTZ
-    )
-    
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignRequest,
-      { schema: require('@airgap/tezos/v1/serializer/v3/schemas/generated/transaction-sign-request-tezos-sapling.json') },
-      MainProtocolSymbols.XTZ_SHIELDED
-    )
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignResponse,
-      { schema: require('@airgap/tezos/v1/serializer/v3/schemas/generated/transaction-sign-response-tezos-sapling.json') },
-      MainProtocolSymbols.XTZ_SHIELDED
-    )
-    
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignRequest,
-      { schema: require('@airgap/tezos/v1/serializer/v3/schemas/generated/transaction-sign-request-tezos.json') },
-      SubProtocolSymbols.XTZ_BTC
-    )
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignResponse,
-      { schema: require('@airgap/tezos/v1/serializer/v3/schemas/generated/transaction-sign-response-tezos.json') },
-      SubProtocolSymbols.XTZ_BTC
-    )
-    
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignRequest,
-      { schema: require('@airgap/tezos/v1/serializer/v3/schemas/generated/transaction-sign-request-tezos.json') },
-      SubProtocolSymbols.XTZ_ETHTZ
-    )
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignResponse,
-      { schema: require('@airgap/tezos/v1/serializer/v3/schemas/generated/transaction-sign-response-tezos.json') },
-      SubProtocolSymbols.XTZ_ETHTZ
-    )
-    
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignRequest,
-      { schema: require('@airgap/tezos/v1/serializer/v3/schemas/generated/transaction-sign-request-tezos.json') },
-      SubProtocolSymbols.XTZ_KUSD
-    )
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignResponse,
-      { schema: require('@airgap/tezos/v1/serializer/v3/schemas/generated/transaction-sign-response-tezos.json') },
-      SubProtocolSymbols.XTZ_KUSD
-    )
-    
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignRequest,
-      { schema: require('@airgap/tezos/v1/serializer/v3/schemas/generated/transaction-sign-request-tezos.json') },
-      SubProtocolSymbols.XTZ_KT
-    )
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignResponse,
-      { schema: require('@airgap/tezos/v1/serializer/v3/schemas/generated/transaction-sign-response-tezos.json') },
-      SubProtocolSymbols.XTZ_KT
-    )
-    
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignRequest,
-      { schema: require('@airgap/tezos/v1/serializer/v3/schemas/generated/transaction-sign-request-tezos.json') },
-      SubProtocolSymbols.XTZ_USD
-    )
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignResponse,
-      { schema: require('@airgap/tezos/v1/serializer/v3/schemas/generated/transaction-sign-response-tezos.json') },
-      SubProtocolSymbols.XTZ_USD
-    )
-    
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignRequest,
-      { schema: require('@airgap/tezos/v1/serializer/v3/schemas/generated/transaction-sign-request-tezos.json') },
-      SubProtocolSymbols.XTZ_USDT
-    )
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignResponse,
-      { schema: require('@airgap/tezos/v1/serializer/v3/schemas/generated/transaction-sign-response-tezos.json') },
-      SubProtocolSymbols.XTZ_USDT
-    )
-    
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignRequest,
-      { schema: require('@airgap/tezos/v1/serializer/v3/schemas/generated/transaction-sign-request-tezos.json') },
-      SubProtocolSymbols.XTZ_UUSD
-    )
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignResponse,
-      { schema: require('@airgap/tezos/v1/serializer/v3/schemas/generated/transaction-sign-response-tezos.json') },
-      SubProtocolSymbols.XTZ_UUSD
-    )
-    
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignRequest,
-      { schema: require('@airgap/tezos/v1/serializer/v3/schemas/generated/transaction-sign-request-tezos.json') },
-      SubProtocolSymbols.XTZ_YOU
-    )
-    SerializerV3.addSchema(
-      IACMessageType.TransactionSignResponse,
-      { schema: require('@airgap/tezos/v1/serializer/v3/schemas/generated/transaction-sign-response-tezos.json') },
-      SubProtocolSymbols.XTZ_YOU
-    )
-
-    const tezosTransactionValidatorFactory: TezosTransactionValidatorFactory = new TezosTransactionValidatorFactory()
-
-    SerializerV3.addValidator(MainProtocolSymbols.XTZ, tezosTransactionValidatorFactory)
-    SerializerV3.addValidator(MainProtocolSymbols.XTZ, tezosTransactionValidatorFactory)
-    SerializerV3.addValidator(MainProtocolSymbols.XTZ_SHIELDED, tezosTransactionValidatorFactory)
-    SerializerV3.addValidator(MainProtocolSymbols.XTZ_SHIELDED, tezosTransactionValidatorFactory)
-    SerializerV3.addValidator(SubProtocolSymbols.XTZ_BTC, tezosTransactionValidatorFactory)
-    SerializerV3.addValidator(SubProtocolSymbols.XTZ_BTC, tezosTransactionValidatorFactory)
-    SerializerV3.addValidator(SubProtocolSymbols.XTZ_ETHTZ, tezosTransactionValidatorFactory)
-    SerializerV3.addValidator(SubProtocolSymbols.XTZ_ETHTZ, tezosTransactionValidatorFactory)
-    SerializerV3.addValidator(SubProtocolSymbols.XTZ_KUSD, tezosTransactionValidatorFactory)
-    SerializerV3.addValidator(SubProtocolSymbols.XTZ_KUSD, tezosTransactionValidatorFactory)
-    SerializerV3.addValidator(SubProtocolSymbols.XTZ_KT, tezosTransactionValidatorFactory)
-    SerializerV3.addValidator(SubProtocolSymbols.XTZ_KT, tezosTransactionValidatorFactory)
-    SerializerV3.addValidator(SubProtocolSymbols.XTZ_USD, tezosTransactionValidatorFactory)
-    SerializerV3.addValidator(SubProtocolSymbols.XTZ_USD, tezosTransactionValidatorFactory)
-    SerializerV3.addValidator(SubProtocolSymbols.XTZ_USDT, tezosTransactionValidatorFactory)
-    SerializerV3.addValidator(SubProtocolSymbols.XTZ_USDT, tezosTransactionValidatorFactory)
-    SerializerV3.addValidator(SubProtocolSymbols.XTZ_UUSD, tezosTransactionValidatorFactory)
-    SerializerV3.addValidator(SubProtocolSymbols.XTZ_UUSD, tezosTransactionValidatorFactory)
-    SerializerV3.addValidator(SubProtocolSymbols.XTZ_YOU, tezosTransactionValidatorFactory)
-    SerializerV3.addValidator(SubProtocolSymbols.XTZ_YOU, tezosTransactionValidatorFactory)
-
-    Object.keys(tezosValidators).forEach((key: string) => {
-      validators[key] = tezosValidators[key]
-    })
+  public async validateSignedTransaction(transaction: TransactionSignResponse): Promise<any> {
+    return this.serializerCompanion.validateTransactionSignResponse(this.protocolIdentifier, transaction)
   }
 }

@@ -1,5 +1,5 @@
 import { APP_PLUGIN, IACMessageTransport, ProtocolService, SPLASH_SCREEN_PLUGIN, STATUS_BAR_PLUGIN } from '@airgap/angular-core'
-import { ICoinProtocol } from '@airgap/coinlib-core'
+import { MainProtocolSymbols } from '@airgap/coinlib-core'
 import {
   TezosSaplingExternalMethodProvider,
   TezosShieldedTezProtocol,
@@ -134,7 +134,7 @@ export class AppComponent implements AfterViewInit {
   }
 
   private async initializeProtocols(): Promise<void> {
-    const protocols: { active: ICoinProtocol[], passive: ICoinProtocol[] } = await this.protocolModuleService.loadProtocols()
+    const protocols = await this.protocolModuleService.loadProtocols([MainProtocolSymbols.XTZ_SHIELDED])
 
     const externalMethodProvider: TezosSaplingExternalMethodProvider | undefined =
       await this.saplingNativeService.createExternalMethodProvider()
@@ -147,9 +147,11 @@ export class AppComponent implements AfterViewInit {
     )
 
     this.protocolService.init({
-      activeProtocols: protocols.active,
-      passiveProtocols: protocols.passive,
-      extraActiveProtocols: [shieldedTezProtocol]
+      activeProtocols: protocols.activeProtocols,
+      passiveProtocols: protocols.passiveProtocols,
+      extraActiveProtocols: [shieldedTezProtocol],
+      activeSubProtocols: protocols.activeSubProtocols,
+      passiveSubProtocols: protocols.passiveSubProtocols
     })
 
     await shieldedTezProtocol.initParameters(await this.getSaplingParams('spend'), await this.getSaplingParams('output'))
