@@ -1,12 +1,4 @@
-import {
-  assertNever,
-  flattenAirGapTxAddresses,
-  IACContext,
-  KeyPairService,
-  ProtocolService,
-  sumAirGapTxValues,
-  TransactionService
-} from '@airgap/angular-core'
+import { assertNever, IACContext, KeyPairService, ProtocolService, TransactionService } from '@airgap/angular-core'
 import {
   AirGapWallet,
   IAirGapTransaction,
@@ -473,21 +465,19 @@ export class DeserializedDetailEffects {
   }
 
   private async generateTransactionIACMessages(transactions: DeserializedSignedTransaction[]): Promise<IACMessageDefinitionObjectV3[]> {
-    const signResponses: IACMessageDefinitionObjectV3[] = await Promise.all(transactions.map(
-      async (transaction: DeserializedSignedTransaction): Promise<IACMessageDefinitionObjectV3> => ({
-        id: transaction.id,
-        protocol: transaction.originalProtocolIdentifier ?? await transaction.wallet.protocol.getIdentifier(),
-        type: IACMessageType.TransactionSignResponse,
-        payload: {
-          accountIdentifier: transaction.data.accountIdentifier,
-          transaction: transaction.data.transaction,
-          from: flattenAirGapTxAddresses(transaction.details, 'from'),
-          to: flattenAirGapTxAddresses(transaction.details, 'to'),
-          amount: sumAirGapTxValues(transaction.details, 'amount'),
-          fee: sumAirGapTxValues(transaction.details, 'fee')
-        }
-      })
-    ))
+    const signResponses: IACMessageDefinitionObjectV3[] = await Promise.all(
+      transactions.map(
+        async (transaction: DeserializedSignedTransaction): Promise<IACMessageDefinitionObjectV3> => ({
+          id: transaction.id,
+          protocol: transaction.originalProtocolIdentifier ?? (await transaction.wallet.protocol.getIdentifier()),
+          type: IACMessageType.TransactionSignResponse,
+          payload: {
+            accountIdentifier: transaction.data.accountIdentifier,
+            transaction: transaction.data.transaction
+          }
+        })
+      )
+    )
     return signResponses
   }
 
