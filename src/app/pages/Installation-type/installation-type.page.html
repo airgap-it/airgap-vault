@@ -10,6 +10,9 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+  <strong>
+    Select an installation type according to your preference
+  </strong>
   <!-- TODO: Use better colors for "not selected" and "selected"-->
   <ion-card
     [color]="installationType === installationTypes.ONLINE ? 'primary' : 'tertiary'"
@@ -92,7 +95,7 @@
           <ion-card-title>
             hybrid
 
-            <ion-icon name="cloud-offline-outline"></ion-icon>
+            <ion-icon name="qr-code-outline"></ion-icon>
             <!-- Maybe use this shield or another checkmark to indicate which card is selected. 
         <ion-icon name="shield-checkmark-outline"></ion-icon>-->
           </ion-card-title>
