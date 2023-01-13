@@ -39,7 +39,7 @@
 
       <ul>
         <li>High security</li>
-        <li>Same device option</li>
+        <li><strong>Same device communication</strong></li>
         <li>Internet check disabled</li>
       </ul>
     </ion-card-content>
@@ -75,7 +75,41 @@
 
       <ul>
         <li>Highest security</li>
-        <li>QR communication</li>
+        <li><strong>QR communication</strong></li>
+      </ul>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card
+    [color]="installationType === installationTypes.ALWAYS_ASK ? 'primary' : 'tertiary'"
+    (click)="installationType = installationTypes.ALWAYS_ASK"
+  >
+    <!-- TODO: Add picture -->
+
+    <ion-card-header>
+      <ion-row>
+        <ion-col>
+          <ion-card-title>
+            hybrid
+
+            <ion-icon name="cloud-offline-outline"></ion-icon>
+            <!-- Maybe use this shield or another checkmark to indicate which card is selected. 
+        <ion-icon name="shield-checkmark-outline"></ion-icon>-->
+          </ion-card-title>
+        </ion-col>
+        <ion-col size="1">
+          <ion-checkbox *ngIf="installationType === installationTypes.ALWAYS_ASK" [checked]="true"></ion-checkbox>
+        </ion-col>
+      </ion-row>
+    </ion-card-header>
+    <ion-card-content>
+      This is a device which at times may be connected to the internet
+      <ul>
+        <li>High security</li>
+        <li>
+          <strong>Same device and QR communication</strong>
+        </li>
+        <li>Internet check disabled</li>
       </ul>
     </ion-card-content>
   </ion-card>
