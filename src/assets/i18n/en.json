@@ -187,6 +187,7 @@
     "heading": "Make sure you follow these rules",
     "text": "We've generated your secret, it's a sequence of words.",
     "description": "Make sure you understand these rules that ensure you will always have safe access to your accounts.",
+    "confirm": "Please take notice and click the checkboxes:",
     "rules-list": {
       "item-1_text": "Write these words down on a piece of paper",
       "item-2_text": "The words need to be in order",
