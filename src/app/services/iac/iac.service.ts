@@ -23,8 +23,8 @@ import * as bitcoinJS from 'bitcoinjs-lib'
 import { ModalController } from '@ionic/angular'
 import { SelectAccountPage } from 'src/app/pages/select-account/select-account.page'
 import { RawBitcoinSegwitTransaction } from '@airgap/bitcoin'
-import { IACMessageType, IACMessageDefinitionObjectV3, MessageSignRequest } from '@airgap/serializer'
 import { RawTypedEthereumTransaction } from '@airgap/ethereum/v0/types/transaction-ethereum'
+import { IACMessageType, IACMessageDefinitionObjectV3, MessageSignRequest } from '@airgap/serializer'
 
 @Injectable({
   providedIn: 'root'

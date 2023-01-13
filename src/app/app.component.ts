@@ -1,18 +1,17 @@
+import { APP_PLUGIN, IACMessageTransport, ProtocolService, SPLASH_SCREEN_PLUGIN, STATUS_BAR_PLUGIN } from '@airgap/angular-core'
 import {
-  APP_PLUGIN,
-  IACMessageTransport,
-  LanguageService,
-  ProtocolService,
-  SPLASH_SCREEN_PLUGIN,
-  STATUS_BAR_PLUGIN
-} from '@airgap/angular-core'
-import { TezosSaplingExternalMethodProvider, TezosShieldedTezProtocol, TezosSaplingProtocolOptions, TezosShieldedTezProtocolConfig } from '@airgap/tezos'
+  TezosSaplingExternalMethodProvider,
+  TezosShieldedTezProtocol,
+  TezosSaplingProtocolOptions,
+  TezosShieldedTezProtocolConfig
+} from '@airgap/tezos'
 import { HttpClient } from '@angular/common/http'
 import { AfterViewInit, Component, Inject, NgZone } from '@angular/core'
 import { AppPlugin, URLOpenListenerEvent } from '@capacitor/app'
 import { SplashScreenPlugin } from '@capacitor/splash-screen'
 import { StatusBarPlugin, Style } from '@capacitor/status-bar'
 import { Platform } from '@ionic/angular'
+import { TranslateService } from '@ngx-translate/core'
 import { first } from 'rxjs/operators'
 
 import { SecurityUtilsPlugin } from './capacitor-plugins/definitions'
@@ -26,6 +25,7 @@ import { NavigationService } from './services/navigation/navigation.service'
 import { SaplingNativeService } from './services/sapling-native/sapling-native.service'
 import { SecretsService } from './services/secrets/secrets.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
+import { LanguagesType, VaultStorageKey, VaultStorageService } from './services/storage/storage.service'
 
 declare let window: Window & { airGapHasStarted: boolean }
 
@@ -47,7 +47,8 @@ export class AppComponent implements AfterViewInit {
     private readonly platform: Platform,
     private readonly startupChecks: StartupChecksService,
     private readonly iacService: IACService,
-    private readonly languageService: LanguageService,
+    private readonly translateService: TranslateService,
+    private readonly storageService: VaultStorageService,
     private readonly protocolService: ProtocolService,
     private readonly secretsService: SecretsService,
     private readonly ngZone: NgZone,
@@ -123,10 +124,10 @@ export class AppComponent implements AfterViewInit {
   }
 
   private async initializeTranslations(): Promise<void> {
-    return this.languageService.init({
-      supportedLanguages: ['en', 'de', 'zh'],
-      defaultLanguage: 'en'
-    })
+    const savedLanguage = await this.storageService.get(VaultStorageKey.LANGUAGE_TYPE)
+    const deviceLanguage = this.translateService.getBrowserLang()
+    const currentLanguage = savedLanguage || (deviceLanguage as LanguagesType) || LanguagesType.EN
+    await this.translateService.use(currentLanguage).toPromise()
   }
 
   private async initializeProtocols(): Promise<void> {

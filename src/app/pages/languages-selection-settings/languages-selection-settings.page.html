@@ -1,0 +1,34 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'language-selection-settings.title' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h3 [innerHTML]="'language-selection-settings.heading' | translate"></h3>
+
+  <ion-list lines="none" class="ion-padding-vertical" (ionChange)="changeLanguage($event.detail.value)">
+    <ion-radio-group [(ngModel)]="selectedType">
+      <ng-container *ngFor="let language of languages">
+        <ion-item detail="false" class="ion-no-padding">
+          <ion-label color="white">{{ 'language-selection-settings.selector.' + language | translate }}</ion-label>
+          <ion-radio class="ion-no-margin" slot="end" [value]="language"></ion-radio>
+        </ion-item>
+      </ng-container>
+    </ion-radio-group>
+  </ion-list>
+  <ion-button color="tertiary" shape="round" (click)="defaultToDevice()">
+    {{ 'language-selection-settings.selector.device' | translate }}
+  </ion-button>
+
+  <p><i>{{ 'interaction-selection-settings.description' | translate }}</i></p>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-button color="primary" shape="round" (click)="goToNextPage()">
+      {{ 'interaction-selection-settings.continue_label' | translate }}
+    </ion-button>
+  </ion-fab>
+</ion-content>

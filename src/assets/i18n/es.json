@@ -225,20 +225,6 @@
     "continue_label": "Continue",
     "description": "You can always change your preference in the settings"
   },
-  "language-selection-settings": {
-    "title": "Language Selection",
-    "heading": "Please choose your preferred language",
-    "selector": {
-      "device": "Your Device Language",
-      "en": "English",
-      "de": "German",
-      "es": "Spanish",
-      "pt_BR": "Portuguese (Brazil)",
-      "zh_CN": "Chinese (China)"
-    },
-    "continue_label": "Continue",
-    "description": "You can always change your preference in the settings"
-  },
   "verify-key": {
     "incorrect_text": "Your secret does not match the generated one. Make sure you've chosen the correct words. <br /> To correct mistakes, simply select a wrong word and choose the correct one.",
     "success_text": "You have successfully verified this secret.",
@@ -299,7 +285,6 @@
     "paste-from-clipboard_label": "Paste code from clipboard",
     "qr-advanced-settings_label": "QR Settings",
     "interaction-settings_label": "Interaction Preference",
-    "preferred-language_label": "Preferred Language",
     "advanced-settings_label": "Advanced Settings",
     "bip39_wordlist_label": "BIP39 Wordlist",
     "error-history_label": "Local Error History",

@@ -83,15 +83,15 @@
   resolved "https://registry.yarnpkg.com/@airgap/sapling-wasm/-/sapling-wasm-0.0.7.tgz#b88356f44807bf91405a9dc7c4111c995f269343"
   integrity sha512-IMODbGPTBYKuO5ztiHX9C1PTlhqZvmVWv7m7zj5+VMcbBxrk4+jBAf7FYTH5l+IUsNMaHBOuh8Qq3A1b/pm7jQ==
 
-"@airgap/serializer@^0.13.7-beta.12":
-  version "0.13.7-beta.27"
-  resolved "https://registry.yarnpkg.com/@airgap/serializer/-/serializer-0.13.7-beta.27.tgz#46b96c2e8049b82c4ce482eb417162fe151106d1"
-  integrity sha512-XpR4f7QOvrvJncQWTIh74RRQvgWNYKct6NWjIyF0qHOkdiFzphN09snRW00x7ItXvInRPE6/ltKZgE8Tx09jsg==
+"@airgap/serializer@^0.13.8-beta.3":
+  version "0.13.8-beta.3"
+  resolved "https://registry.yarnpkg.com/@airgap/serializer/-/serializer-0.13.8-beta.3.tgz#c2c28fc5ca6708927d25f29ee3b345503fd9b9f5"
+  integrity sha512-pqUhoBU56mHxZ01/rmyX+/GB8fOC4zg8glkH0NfU6vAk+RCAM3135Hmf48+ouriMMQZRXbdIzppUI1FgHJA6wA==
 
-"@airgap/substrate@^0.13.8-beta.8":
-  version "0.13.8-beta.10"
-  resolved "https://registry.yarnpkg.com/@airgap/substrate/-/substrate-0.13.8-beta.10.tgz#1bf1ebf44e72037540bfc68156b973262307e3ce"
-  integrity sha512-lXk9Ywe3MTpZvvVbJMgHEhG6VDF+L6WNKxvQ/eqSnuM4ViiR1DkXME5FPSG457DLXJfpzIy7U1MaIdHaIPPiwA==
+"@airgap/substrate@^0.13.8-beta.3":
+  version "0.13.8-beta.3"
+  resolved "https://registry.yarnpkg.com/@airgap/substrate/-/substrate-0.13.8-beta.3.tgz#f51f0ff92560db734216112173f66825d38950e2"
+  integrity sha512-xzZCiGv0xk4qlRAv4MYD1w1wBtEwEyMro5z3f3BLrCcF7w4GHX9GbyxqJr3HReBqFQrb2G/sD6g0MAJVc2C7sA==
   dependencies:
     "@polkadot/util" "2.0.1"
     "@polkadot/wasm-crypto" "0.20.1"
