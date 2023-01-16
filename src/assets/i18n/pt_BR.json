@@ -198,7 +198,7 @@
     "understood_label": "Understood"
   },
   "secret-show": {
-    "title": "This is your recovery phrase",
+    "title": "Recovery Phrase",
     "text": "Write down each word on a piece of paper, remember to follow the rules.",
     "fingerprint": "Fingerprint",
     "next-step_label": "Next Step",
