@@ -6,6 +6,12 @@
         <ion-icon name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
+
+    <ion-buttons slot="start" *ngIf="isOnboardingFlow">
+      <ion-button (click)="goToOnboardingWelcomePage()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
