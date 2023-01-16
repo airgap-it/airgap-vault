@@ -74,7 +74,8 @@
       "medium_text": "Secure communication through app switching."
     },
     "wallet_install_label": "Install AirGap Wallet",
-    "continue_label": "Skip"
+    "continue_label": "Continue",
+    "skip_label": "Skip"
   },
   "secret-setup": {
     "heading": "Secret Setup",
