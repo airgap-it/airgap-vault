@@ -28,10 +28,10 @@ extension JSArray: JSONConvertible {
             if JSONSerialization.isValidJSONObject(value) {
                 let data = try JSONSerialization.data(withJSONObject: value, options: [])
                 return String(data: data, encoding: .utf8)!
-            } else if let encodable = value as? Encodable {
+            } /*else if let encodable = value as? Encodable {
                 let data = try jsonEncoder.encode(encodable)
                 return String(data: data, encoding: .utf8)!
-            } else if let jsonConvertible = value as? JSONConvertible {
+            } */else if let jsonConvertible = value as? JSONConvertible {
                 return try jsonConvertible.toJSONString()
             } else {
                 throw JSError.invalidJSON
