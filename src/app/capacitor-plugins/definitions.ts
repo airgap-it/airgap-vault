@@ -1,6 +1,7 @@
 import { ICoinProtocol } from '@airgap/coinlib-core'
 import { ProtocolOptions } from '@airgap/coinlib-core/utils/ProtocolOptions'
 import { PluginListenerHandle, registerPlugin } from '@capacitor/core'
+import { Directory } from '@capacitor/filesystem'
 
 export interface CameraPreviewPlugin {
   start({}): Promise<void>
@@ -77,3 +78,14 @@ export interface IsolatedProtocolPlugin {
 }
 
 export const IsolatedProtocol: IsolatedProtocolPlugin = registerPlugin('IsolatedProtocol')
+
+export interface ZipPlugin {
+  unzip(params: {
+    from: string
+    to: string
+    directory?: Directory
+    toDirectory?: Directory
+  }): Promise<void>
+}
+
+export const Zip: ZipPlugin = registerPlugin('Zip')

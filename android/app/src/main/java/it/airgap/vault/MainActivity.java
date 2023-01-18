@@ -9,6 +9,7 @@ import it.airgap.vault.plugin.camerapreview.CameraPreview;
 import it.airgap.vault.plugin.isolatedmodules.IsolatedProtocol;
 import it.airgap.vault.plugin.saplingnative.SaplingNative;
 import it.airgap.vault.plugin.securityutils.SecurityUtils;
+import it.airgap.vault.plugin.zip.Zip;
 
 public class MainActivity extends BridgeActivity {
   @Override
@@ -18,6 +19,7 @@ public class MainActivity extends BridgeActivity {
     registerPlugin(SecurityUtils.class);
     registerPlugin(SaplingNative.class);
     registerPlugin(IsolatedProtocol.class);
+    registerPlugin(Zip.class);
 
     super.onCreate(savedInstanceState);
   }

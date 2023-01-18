@@ -1384,9 +1384,9 @@
     tslib "^2.1.0"
 
 "@capacitor/filesystem@^4.0.0":
-  version "4.1.3"
-  resolved "https://registry.yarnpkg.com/@capacitor/filesystem/-/filesystem-4.1.3.tgz#059d7bcf08ef0c67e429522c3aefe61ebb83aec0"
-  integrity sha512-+k6jcOuYPDfEYuqA1PrsNe/XhgCdiHEH1l6v1Ecih5OYFOoaqqwB0Ksi1OprxNpBcMQQkEW8VBbHoIc32DS6eQ==
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/@capacitor/filesystem/-/filesystem-4.1.4.tgz#021ef707ca199d554042ebc85151416dec07020a"
+  integrity sha512-ivko1RNK4hq63xhMacq8D6D97N5/SAafTsrmY/pghYrG6Cl2SEY0+IgRu7V9/VWeN3FSplyUPucjUTAFQxXN5g==
 
 "@capacitor/ios@^4.0.0":
   version "4.4.0"
@@ -1402,6 +1402,11 @@
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/@capacitor/status-bar/-/status-bar-4.0.1.tgz#d1320add5f4ef383394b94beae45a0c5af7250e1"
   integrity sha512-BmEyOf3m/hAf8bO4hCX0m5gpQPSgd05mGYl+9E841WUZeJjcYlmiG/EBshAUb2uGCVtyNaG36yPXB0r0Ypg+rw==
+
+"@capawesome/capacitor-file-picker@^0.5.8":
+  version "0.5.8"
+  resolved "https://registry.yarnpkg.com/@capawesome/capacitor-file-picker/-/capacitor-file-picker-0.5.8.tgz#cb1e68e432bb7592dd18e6d70cb035f1c77d3bee"
+  integrity sha512-5Q74TQ83NfnrbMBuQPlpjVHcgxWgwrapW3tE/t7hi+FEKtP/Lcu5P/EjxXL9NAmw3FLylP8Nas69cepG9xM5YQ==
 
 "@csstools/postcss-progressive-custom-properties@^1.1.0":
   version "1.3.0"

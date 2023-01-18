@@ -1,4 +1,4 @@
-import { flattened, ICoinProtocolAdapter, ICoinSubProtocolAdapter } from '@airgap/angular-core'
+import { FILESYSTEM_PLUGIN, flattened, ICoinProtocolAdapter, ICoinSubProtocolAdapter } from '@airgap/angular-core'
 import { AeternityModule } from '@airgap/aeternity/v1'
 import { AstarModule } from '@airgap/astar/v1'
 import { BitcoinModule } from '@airgap/bitcoin/v1'
@@ -6,12 +6,15 @@ import { ICoinProtocol, ICoinSubProtocol, ProtocolSymbols } from '@airgap/coinli
 import { CosmosModule } from '@airgap/cosmos/v1'
 import { EthereumModule } from '@airgap/ethereum/v1'
 import { GroestlcoinModule } from '@airgap/groestlcoin/v1'
-import { AirGapBlockExplorer, AirGapModule, AirGapOfflineProtocol, AirGapV3SerializerCompanion, isSubProtocol, ProtocolConfiguration, V3SchemaConfiguration } from '@airgap/module-kit'
+import { AirGapBlockExplorer, AirGapModule, AirGapOfflineProtocol, AirGapV3SerializerCompanion, implementsInterface, isSubProtocol, ProtocolConfiguration, V3SchemaConfiguration } from '@airgap/module-kit'
 import { MoonbeamModule } from '@airgap/moonbeam/v1'
 import { PolkadotModule } from '@airgap/polkadot/v1'
 import { TezosModule } from '@airgap/tezos/v1'
-import { Injectable } from '@angular/core'
+import { Inject, Injectable } from '@angular/core'
 import { SerializerV3, TransactionSignRequest, TransactionSignResponse, TransactionValidator } from '@airgap/serializer'
+import { Directory, FileInfo, FilesystemPlugin, ReaddirResult } from '@capacitor/filesystem'
+import { ZIP_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
+import { ZipPlugin } from 'src/app/capacitor-plugins/definitions'
 
 type LoadedProtocolStatus = 'active' | 'passive'
 
@@ -29,10 +32,38 @@ interface LoadedSubProtocol {
 
 type LoadedProtocol = LoadedMainProtocol | LoadedSubProtocol
 
+export interface ProtocolModuleManifest {
+  name: string
+  version: string
+  author: string
+  signature: string
+  src?: {
+    main?: string
+    module_name?: string
+  }
+  res?: {
+    symbol?: string
+  }
+  include: string[]
+}
+
+const MANIFEST_FILENAME = 'manifest.json'
+
+export interface ProtocolModuleMetadata {
+  manifest: ProtocolModuleManifest
+  path: string
+  directory: Directory
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class ProtocolModuleService {
+
+  public constructor(
+    @Inject(FILESYSTEM_PLUGIN) private readonly filesystem: FilesystemPlugin,
+    @Inject(ZIP_PLUGIN) private readonly zip: ZipPlugin
+  ) {}
   
   public async loadProtocols(ignore: string[] = []): Promise<{ 
     activeProtocols: ICoinProtocol[], 
@@ -159,6 +190,108 @@ export class ProtocolModuleService {
           }
         })
       }
+    })
+  }
+
+  public async readModuleMetadata(name: string, path: string): Promise<ProtocolModuleMetadata> {
+    if (!path.endsWith('.zip')) {
+      throw new Error('Invalid protocol module format, expected .zip')
+    }
+
+    const tempDir = await this.createTempProtocolModuleDir(name)
+
+    try {
+      await this.zip.unzip({
+        from: path,
+        to: tempDir.path,
+        toDirectory: tempDir.directory
+      })
+
+      const root: string | undefined = await this.findModuleRoot(tempDir.path, tempDir.directory)
+      if (root === undefined) {
+        throw new Error('Invalid protocol module structure, manifest not found')
+      }
+
+      const manifest: ProtocolModuleManifest = await this.readManifest(root, tempDir.directory)
+
+      return {
+        manifest,
+        path: root,
+        directory: tempDir.directory
+      }
+    } catch (error) {
+      await this.removeTempProtocolModuleDir(tempDir.path, tempDir.directory)
+      throw error
+    }
+  }
+
+  private async findModuleRoot(path: string, directory: Directory): Promise<string | undefined> {
+    const { type } = await this.filesystem.stat({ path, directory })
+    if (type === 'directory') {
+      return this.findModuleRootInDir(path, directory)
+    } else {
+      return undefined
+    }
+  }
+
+  private async findModuleRootInDir(path: string, directory: Directory): Promise<string | undefined> {
+    const { files }: ReaddirResult = await this.filesystem.readdir({ path, directory })
+    const hasManifest = files.find((file: FileInfo) => file.type === 'file' && file.name === MANIFEST_FILENAME)
+    if (hasManifest) {
+      return path
+    }
+
+    for (const file of files) {
+      if (file.type === 'directory') {
+        const root: string | undefined = await this.findModuleRootInDir(`${path}/${file.name}`, directory)
+        if (root !== undefined) {
+          return root
+        }
+      }
+    }
+
+    return undefined
+  }
+
+  private async readManifest(root: string, directory: Directory): Promise<ProtocolModuleManifest> {
+    const { data } = await this.filesystem.readFile({ path: `${root}/${MANIFEST_FILENAME}`, directory })
+    const manifest: unknown = JSON.parse(Buffer.from(data, 'base64').toString('utf8'))
+    if (!this.isProtocolModuleManifest(manifest)) {
+      throw new Error('Invalid protocol module manifest')
+    }
+
+    return manifest
+  }
+
+  private async createTempProtocolModuleDir(moduleName: string): Promise<{ path: string, directory: Directory }> {
+    const tempDir: string = `protocol-module_${moduleName.replace(/\.zip$/, '')}_${Date.now()}`
+    const directory: Directory = Directory.Cache
+
+    await this.filesystem.mkdir({
+      path: tempDir,
+      directory
+    })
+
+    return { path: tempDir, directory }
+  }
+
+  private async removeTempProtocolModuleDir(path: string, directory: Directory): Promise<void> {
+    return this.filesystem.rmdir({
+      path,
+      directory,
+      recursive: true
+    })
+  }
+
+  private isProtocolModuleManifest(json: unknown): json is ProtocolModuleManifest {
+    return implementsInterface<ProtocolModuleManifest>(json, {
+      author: 'required',
+      include: 'required',
+      name: 'required',
+      res: 'optional',
+      signature: 'required',
+      src: 'optional',
+      version: 'required'
     })
   }
 }
