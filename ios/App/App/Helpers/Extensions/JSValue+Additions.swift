@@ -24,14 +24,14 @@ extension JSArray: JSONConvertible {
     
     func toJSONString() throws -> String {
         let jsonEncoder = JSONEncoder()
-        let elements = try map {
-            if JSONSerialization.isValidJSONObject($0) {
-                let data = try JSONSerialization.data(withJSONObject: $0, options: [])
+        let elements = try map { (value: JSValue) throws -> String in
+            if JSONSerialization.isValidJSONObject(value) {
+                let data = try JSONSerialization.data(withJSONObject: value, options: [])
                 return String(data: data, encoding: .utf8)!
-            } else if let encodable = $0 as? Encodable {
+            } /*else if let encodable = value as? Encodable {
                 let data = try jsonEncoder.encode(encodable)
                 return String(data: data, encoding: .utf8)!
-            } else if let jsonConvertible = $0 as? JSONConvertible {
+            } */else if let jsonConvertible = value as? JSONConvertible {
                 return try jsonConvertible.toJSONString()
             } else {
                 throw JSError.invalidJSON
