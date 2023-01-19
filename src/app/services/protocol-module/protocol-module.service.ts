@@ -52,6 +52,7 @@ const MANIFEST_FILENAME = 'manifest.json'
 export interface ProtocolModuleMetadata {
   manifest: ProtocolModuleManifest
   path: string
+  root: string
   directory: Directory
 }
 
@@ -216,11 +217,12 @@ export class ProtocolModuleService {
 
       return {
         manifest,
-        path: root,
+        path: tempDir.path,
+        root: root.replace(`${tempDir.path}/`, ''),
         directory: tempDir.directory
       }
     } catch (error) {
-      await this.removeTempProtocolModuleDir(tempDir.path, tempDir.directory)
+      await this.removeTempProtocolModuleDir(tempDir.path, tempDir.directory).catch(() => { /* no action */ })
       throw error
     }
   }
@@ -256,15 +258,45 @@ export class ProtocolModuleService {
   private async readManifest(root: string, directory: Directory): Promise<ProtocolModuleManifest> {
     const { data } = await this.filesystem.readFile({ path: `${root}/${MANIFEST_FILENAME}`, directory })
     const manifest: unknown = JSON.parse(Buffer.from(data, 'base64').toString('utf8'))
-    if (!this.isProtocolModuleManifest(manifest)) {
+    if (!isProtocolModuleManifest(manifest)) {
       throw new Error('Invalid protocol module manifest')
     }
 
     return manifest
   }
 
+  public async installModule(metadata: ProtocolModuleMetadata) {
+    const newPath: string = `protocol_modules/${metadata.manifest.name.replace(/\s+/, '_').toLocaleLowerCase()}`
+    const newDirectory: Directory = Directory.Data
+
+    try {
+      for (const file of [MANIFEST_FILENAME, ...metadata.manifest.include]) {
+        const lastSegmentIndex: number = file.lastIndexOf('/')
+        const parent = file.substring(0, lastSegmentIndex).replace(/^\/+/, '')
+
+        await this.filesystem.mkdir({
+          path: `${newPath}/${parent}`,
+          directory: newDirectory,
+          recursive: true
+        }).catch(() => { /* no action */ })
+
+        await this.filesystem.copy({
+          from: `${metadata.path}/${metadata.root}/${file}`,
+          directory: metadata.directory,
+          to: `${newPath}/${file}`,
+          toDirectory: newDirectory
+        })
+      }
+    } catch (error) {
+      await this.removeTempProtocolModuleDir(newPath, newDirectory).catch(() => { /* no action */ })
+      throw error
+    } finally {
+      await this.removeTempProtocolModuleDir(metadata.path, metadata.directory).catch(() => { /* no action */ })
+    }
+  }
+
   private async createTempProtocolModuleDir(moduleName: string): Promise<{ path: string, directory: Directory }> {
-    const tempDir: string = `protocol-module_${moduleName.replace(/\.zip$/, '')}_${Date.now()}`
+    const tempDir: string = `protocolmodule_${moduleName.replace(/\.zip$/, '')}_${Date.now()}`
     const directory: Directory = Directory.Cache
 
     await this.filesystem.mkdir({
@@ -282,18 +314,6 @@ export class ProtocolModuleService {
       recursive: true
     })
   }
-
-  private isProtocolModuleManifest(json: unknown): json is ProtocolModuleManifest {
-    return implementsInterface<ProtocolModuleManifest>(json, {
-      author: 'required',
-      include: 'required',
-      name: 'required',
-      res: 'optional',
-      signature: 'required',
-      src: 'optional',
-      version: 'required'
-    })
-  }
 }
 
 class GenericTransactionValidator implements TransactionValidator {
@@ -306,4 +326,25 @@ class GenericTransactionValidator implements TransactionValidator {
   public async validateSignedTransaction(transaction: TransactionSignResponse): Promise<any> {
     return this.serializerCompanion.validateTransactionSignResponse(this.protocolIdentifier, transaction)
   }
+}
+
+export function isProtocolModuleMetadata(json: unknown): json is ProtocolModuleMetadata {
+  return implementsInterface<ProtocolModuleMetadata>(json, {
+    manifest: 'required',
+    path: 'required',
+    root: 'required',
+    directory: 'required'
+  })
+}
+
+export function isProtocolModuleManifest(json: unknown): json is ProtocolModuleManifest {
+  return implementsInterface<ProtocolModuleManifest>(json, {
+    author: 'required',
+    include: 'required',
+    name: 'required',
+    res: 'optional',
+    signature: 'required',
+    src: 'optional',
+    version: 'required'
+  })
 }

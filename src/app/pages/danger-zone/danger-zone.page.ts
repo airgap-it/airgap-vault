@@ -81,16 +81,17 @@ export class DangerZonePage implements OnInit {
         readData: false
       })
       const { name, path } = files[0]
-      if (!path) {
-        throw new Error(`Can't open the file.`)
-      }
+      // if (!path) {
+      //   throw new Error(`Can't open the file.`)
+      // }
 
       loader = await this.uiEventService.getTranslatedLoader({
         message: 'Loading...'
       })
       await loader.present().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
       const metadata: ProtocolModuleMetadata = await this.protocolModuleService.readModuleMetadata(name, path)
-      metadata
+
+      this.navigationService.routeWithState('/module-preview', { metadata }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } catch (e) {
       console.error('Loading protocol module data failed', e)
       // TODO: show alert

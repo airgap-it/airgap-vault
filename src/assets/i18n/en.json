@@ -615,7 +615,8 @@
         "message": "An error occured while trying to wipe the app. If this error persists, please uninstall and remove the app from your device.",
         "ok": "Ok"
       }
-    }
+    },
+    "load-module_label": "Load Module"
   },
   "secret-generate-dice-roll": {
     "title": "Dice Rolls",
@@ -645,5 +646,26 @@
   "wordlist": {
     "title": "Wordlist",
     "search_placeholder": "Search..."
+  },
+  "module-preview": {
+    "title": "{{ name }} Module Preview",
+    "install-button_label": "Install",
+    "manifest": {
+      "name": {
+        "label": "Name"
+      },
+      "version": {
+        "label": "Version"
+      },
+      "author": {
+        "label": "Author"
+      },
+      "signature": {
+        "label": "Signature"
+      },
+      "include": {
+        "description": "Something about the following files being supposed to be copied over and trusting their content."
+      }
+    }
   }
 }
