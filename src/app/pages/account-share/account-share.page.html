@@ -41,10 +41,13 @@
     <ion-col class="ion-no-padding">
       <pre *ngIf="displayRawData" class="ion-no-margin">{{ interactionUrl | json }}</pre>
       <ion-button *ngIf="displayRawData" (click)="copyToClipboard()">Copy data to clipboard</ion-button>
+      <ion-button class="float-right" *ngIf="displayRawData" color="primary" shape="round" (click)="done()">
+        {{ 'wallet-share.done_label' | translate }}
+      </ion-button>
     </ion-col>
   </ion-row>
 
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="!displayRawData">
     <ion-button color="primary" shape="round" (click)="done()">{{ 'wallet-share.done_label' | translate }}</ion-button>
   </ion-fab>
 </ion-content>
