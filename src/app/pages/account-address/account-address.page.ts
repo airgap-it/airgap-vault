@@ -1,5 +1,6 @@
 import { ClipboardService, DeeplinkService, QRType, UiEventService } from '@airgap/angular-core'
-import { AirGapWallet, IACMessageDefinitionObjectV3, MainProtocolSymbols } from '@airgap/coinlib-core'
+import { AirGapWallet, MainProtocolSymbols, ProtocolSymbols } from '@airgap/coinlib-core'
+import { IACMessageDefinitionObjectV3 } from '@airgap/serializer'
 import { Component, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { IonModal, PopoverController } from '@ionic/angular'
@@ -63,6 +64,9 @@ export class AccountAddressPage {
   @ViewChild(IonModal) modal: IonModal
 
   public wallet: AirGapWallet
+  public protocolSymbol: string
+  public protocolIdentifier: ProtocolSymbols
+  public protocolName: string
   public secret: MnemonicSecret
 
   public syncOptions: CompanionApp[]
@@ -98,27 +102,39 @@ export class AccountAddressPage {
       this.router.navigate(['/'])
       throw new Error('[AccountAddressPage]: No wallet found! Navigating to home page.')
     }
-
-    switch (this.wallet?.protocol.identifier) {
-      case MainProtocolSymbols.BTC_SEGWIT:
-        this.syncOptions = [airgapwallet, bluewallet, sparrowwallet]
-        break
-      case MainProtocolSymbols.ETH:
-        this.syncOptions = [airgapwallet]
-        if (this.wallet.isExtendedPublicKey) {
-          this.syncOptions.push(metamask, rabby)
-        } else {
-          this.showMetaMaskMigrationOnboarding = true
-        }
-        break
-
-      default:
-        this.syncOptions = [airgapwallet]
-    }
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.presentingElement = document.querySelector('.ion-page')
+
+    if (this.wallet) {
+      const [protocolSymbol, protocolIdentifier, protocolName] = await Promise.all([
+        this.wallet.protocol.getSymbol(),
+        this.wallet.protocol.getIdentifier(),
+        this.wallet.protocol.getName()
+      ])
+
+      this.protocolSymbol = protocolSymbol
+      this.protocolIdentifier = protocolIdentifier
+      this.protocolName = protocolName
+
+      switch (protocolIdentifier) {
+        case MainProtocolSymbols.BTC_SEGWIT:
+          this.syncOptions = [airgapwallet, bluewallet, sparrowwallet]
+          break
+        case MainProtocolSymbols.ETH:
+          this.syncOptions = [airgapwallet]
+          if (this.wallet.isExtendedPublicKey) {
+            this.syncOptions.push(metamask, rabby)
+          } else {
+            this.showMetaMaskMigrationOnboarding = true
+          }
+          break
+
+        default:
+          this.syncOptions = [airgapwallet]
+      }
+    }
   }
 
   public done(): void {

@@ -52,6 +52,11 @@
       <ion-icon src="assets/icons/md-swap_horiz.svg" slot="start"></ion-icon>
       {{ 'tab-settings.interaction-settings_label' | translate }}
     </ion-item>
+
+    <ion-item (click)="goToLanguagesSettings()" detail="true">
+      <ion-icon name="language-outline" slot="start"></ion-icon>
+      {{ 'tab-settings.preferred-language_label' | translate }}
+    </ion-item>
   </ion-list>
 
   <ion-list class="ion-no-border" lines="none">

@@ -1,4 +1,4 @@
-import { IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
+import { IACMessageDefinitionObjectV3 } from '@airgap/serializer'
 import { createAction, props } from '@ngrx/store'
 
 import { MnemonicSecret } from '../../models/secret'

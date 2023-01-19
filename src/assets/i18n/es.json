@@ -1,0 +1,634 @@
+{
+  "next": "Next",
+  "account-list": {
+    "delete": "Delete"
+  },
+  "add-wallet": {
+    "alert_deriving": {
+      "text": "Deriving your account..."
+    },
+    "account-exists_alert": {
+      "heading": "Account already exists",
+      "text": "You have already added this specific account. Please change its derivation path to add another address (advanced mode)."
+    },
+    "okay_label": "Okay"
+  },
+  "about": {
+    "label": "About",
+    "version": "Version:",
+    "code": "Code:"
+  },
+  "distribution-onboarding": {
+    "ask-permission": {
+      "heading": "AirGap is <span class=\"style__strong color__primary\"> not persistent</span>, secrets generated will not be stored and need to be <span class=\"style__strong color__primary\">imported again</span> after a restart",
+      "text": "This distribution is intended to securely generate secrets as well as to sign transactions offline, but not for secret storage."
+    },
+    "no-vm": {
+      "heading": "AirGap Vault Distribution should <span class=\"style__strong color__primary\">not</span> be run on a <span class=\"style__strong color__primary\">virtual machine</span>, if the host has network connectivity even if the connectivity has been turned off temporarily. ",
+      "text": "Make sure that the client is disconnected from any network before you generate a new secret or import an existing one."
+    },
+    "understood_label": "Understood"
+  },
+  "local-authentication-onboarding": {
+    "heading": "Your secret is accessed with your <span class=\"style__strong color__primary\">fingerprint</span>,<span class=\"style__strong color__primary\"> face id</span> or <span class=\"style__strong color__primary\">pin code</span>.",
+    "text": "Your secret needs to be accessed for account creation and transaction signing.",
+    "authenticate_label": "Authenticate"
+  },
+  "secret-generate-onboarding": {
+    "heading": "AirGap is going to ask you for <span class=\"style__strong color__primary\">camera</span> and <span class=\"style__strong color__primary\">microphone</span> permissions, to allow a secure secret generation.",
+    "text": "Both permissions are used in order to generate a more secure secret for you.",
+    "grant-permission_label": "Grant Permission"
+  },
+  "current-secret": {
+    "label": "Active Secret:"
+  },
+  "signed-transaction": {
+    "transaction-unreadable": "We were not able to extract information from this transaction. This does not mean that the transaction is invalid - Please make sure that you know what you are doing, and you can verify that you know that this transaction contains the correct data."
+  },
+  "onboarding-advanced-mode": {
+    "title": "Welcome to AirGap"
+  },
+  "installation-type": {
+    "title": "Installation Type"
+  },
+  "introduction": {
+    "title": "Install AirGap Wallet",
+    "highest": {
+      "label": "Highest Security",
+      "text": "With the AirGap <b>two device approach</b> secure key handling becomes more accessible."
+    },
+    "medium": {
+      "label": "Medium Security",
+      "text": "With the AirGap <b>two app approach</b> secure key handling becomes more accessible."
+    },
+    "vault": {
+      "heading": "AirGap Vault",
+      "text": "The private key is generated and securely stored in the AirGap Vault app.<b>You have to install AirGap Vault to use AirGap Wallet</b>"
+    },
+    "wallet": {
+      "heading": "AirGap Wallet",
+      "text": "The wallet application deals only with public information and is responsible for broadcasting transactions to the blockchain."
+    },
+    "communication": {
+      "highest_text": "One-way communication with QR codes.",
+      "medium_text": "Secure communication through app switching."
+    },
+    "wallet_install_label": "Install AirGap Wallet",
+    "continue_label": "Let's Go"
+  },
+  "secret-setup": {
+    "heading": "Secret Setup",
+    "generate": {
+      "label": "Generate",
+      "text": "Create a secure secret by using additional entropy from the camera and microphone."
+    },
+    "import": {
+      "label": "Import Recovery Phrase"
+    },
+    "social-recovery": {
+      "label": "Import Social Recovery"
+    },
+    "dice-roll": {
+      "label": "Generate with Dice Rolls",
+      "text": "Use dice to generate a secure and verifiable recovery phrase."
+    },
+    "coin-flip": {
+      "label": "Generate with Coin Flips",
+      "text": "Use a coin to generate a secure and verifiable recovery phrase."
+    }
+  },
+  "secret-edit": {
+    "title": " Your Secret",
+    "text": "Give your secret a name.",
+    "fingerprint": "Fingerprint",
+    "secret_input_label": "Label of your secret",
+    "advanced": "Advanced Options",
+    "security-level": {
+      "heading": "Security Level",
+      "text": "You can encrypt your secret additionally using a password."
+    },
+    "passcode": {
+      "label": "Encryption Password",
+      "text": "You have to enter this password every time the secret is accessed, eg. when signing a transaction. If you lose this password, you have to re-import your 24 word backup."
+    },
+    "passphrase": {
+      "label": "BIP39 Passphrase",
+      "text": "The BIP39 passphrase has to be entered when creating an account."
+    },
+    "secret-recovery": {
+      "heading": "Secret Recovery",
+      "text": "You can set up your secret recovery mechanisms after the initial setup."
+    },
+    "social-recovery": {
+      "label": "Social Recovery",
+      "text": "Generate a number of secret shares <br /> to distribute to social contacts."
+    },
+    "interaction": {
+      "label": "Vault and Wallet interaction",
+      "text": "Select whether Vault and Wallet are installed on the same device or on separate devices."
+    },
+    "secret-recovery-key": {
+      "label": "Secret Recovery Key",
+      "description": "This recovery key guarantees the recovery of your secret from a corrupted secure storage. You will need the recovery key and your fingerprint, pin, pattern. Store it safely like your recovery phrase.",
+      "generate-text": "Generate a recovery key for your secret",
+      "reset-text": "Reset the recovery key for your secret",
+      "alert": {
+        "title": "Secret Recovery Key",
+        "done": "Done",
+        "copy": "Copy"
+      },
+      "copied": "Recovery key copied",
+      "reset-error": "Could not set the recovery key"
+    },
+    "bip85": {
+      "generate": "Generate BIP85 Child Mnemonic",
+      "text": "Securely generate a child mnemonic out of your master mnemonic."
+    },
+    "show-mnemonic": {
+      "label": "Show Secret",
+      "text": "Display the secret associated with this secret.",
+      "alert": {
+        "title": "Show Secret",
+        "message": "Please beware that the secret should always be kept private as it grants full access to your funds. Under no circumstance take a screenshot or photo. Make sure you are in a safe location where no one else can see your screen.",
+        "understood": "I understand"
+      },
+      "copied": "Recovery key copied",
+      "reset-error": "Could not set the recovery key"
+    },
+    "confirm_label": "Confirm"
+  },
+  "secret-service": {
+    "alert": {
+      "title": "Duplicate Secret",
+      "message": "You have already added a secret with the same recovery phrase"
+    }
+  },
+  "secret-edit-delete-popover": {
+    "title": "Confirm Secret Removal",
+    "text": "Do you really want to remove this secret? Make sure you have a backup of your secret recovery phrase. If you don't all your funds will be lost!",
+    "cancel_label": "Cancel",
+    "delete_label": "Delete"
+  },
+  "secret-generate": {
+    "heading": "We're generating your secret.",
+    "text": "For this we use your video, audio, touch and device acceleration to add additional entropy to your secret.",
+    "description": "Move your device around to record audio, video & device acceleration until all shields are full.",
+    "continue_label": "Continue"
+  },
+  "secret-import": {
+    "title": "Import secret",
+    "text": "You can import an existing secret to AirGap. Fill in the words from your secret.",
+    "placeholder": "wife pulp island ...",
+    "warning": "Please double-check the spelling of your secret.",
+    "import_label": "Import"
+  },
+  "secret-rules": {
+    "title": "Read carefully",
+    "heading": "Make sure you follow these rules",
+    "text": "We've generated your secret, it's a sequence of words.",
+    "description": "Make sure you understand these rules that ensure you will always have safe access to your accounts.",
+    "rules-list": {
+      "item-1_text": "Write these words down on a piece of paper",
+      "item-2_text": "The words need to be in order",
+      "item-3_text": "Check the spelling of each word",
+      "item-4_text": "Keep the piece of paper in a safe place",
+      "item-5_text": "Do not take a screenshot or photo and do not photoscan your key",
+      "item-6_text": "Do not upload your key to the cloud"
+    },
+    "understood_label": "Understood"
+  },
+  "secret-show": {
+    "title": "This is your recovery phrase",
+    "text": "Write down all words on a piece of paper, remember to follow the rules.",
+    "fingerprint": "Fingerprint",
+    "next-step_label": "Next Step",
+    "too-fast_alert": {
+      "title": "That was fast!",
+      "heading": "Are you sure you are not a super human?",
+      "text": "Make sure that you followed all the rules and didn't do anything other than writing down your secret on paper.",
+      "wait_label_p1": "Please wait until at least ",
+      "wait_label_p2": "s are over."
+    }
+  },
+  "secret-validate": {
+    "title": "Verify your recovery phrase",
+    "text": "Match the order of your recovery phrase by selecting the correct words."
+  },
+  "interaction-selection-settings": {
+    "title": "Wallet Interaction",
+    "heading": "How would you like to interact with AirGap Wallet?",
+    "selector": {
+      "always": "Always ask",
+      "same-device": "App Switching",
+      "offline-device": "QR Code Scanning"
+    },
+    "continue_label": "Continue",
+    "description": "You can always change your preference in the settings"
+  },
+  "verify-key": {
+    "incorrect_text": "Your secret does not match the generated one. Make sure you've chosen the correct words. <br /> To correct mistakes, simply select a wrong word and choose the correct one.",
+    "success_text": "You have successfully verified this secret.",
+    "continue_label": "Continue"
+  },
+  "social-recovery-import": {
+    "title": "Social Recovery",
+    "text": "In order to recover your secret from your shares, indicate with how many shares you wish to recover your secret. Keep in mind that you will only be able to successfully recover your secret if you have as many shares for recovery as you have defined in the set up of social recovery.",
+    "share-recovery": {
+      "heading": "Number of Shares for Recovery",
+      "label": "Share Number"
+    },
+    "recover_label": "Recover"
+  },
+  "social-recovery-setup": {
+    "title": "Social Recovery",
+    "text": "With Social Recovery you can create secret shares and distribute them to social contacts you trust. You can recover a lost secret if you have a set number of these secret shares.",
+    "secret-shares": {
+      "label": "Secret Shares",
+      "text": "You can define the amount of shares you wish to generate and the number of shares necessary for a successful recovery of your secret."
+    },
+    "shares-number_label": "Number of secret shares",
+    "shares-recovery_label": "Number of shares needed for recovery",
+    "start_label": "Start",
+    "back_label": "Back",
+    "next_label": "Next"
+  },
+  "social-recovery-show-share": {
+    "title": "Social Recovery",
+    "secret-shares_label": "Secret Share {{currentShare}} of {{shareLength}}",
+    "text": "Write down all words on a piece of paper, remember to follow all the rules."
+  },
+  "social-recovery-validate-share": {
+    "title": "Social Recovery",
+    "text": "Tap each word to match the correct order:"
+  },
+  "tab-scan": {
+    "title": "QR Code Scanner",
+    "text": "Scan a QR Code from AirGap Wallet",
+    "multi-qr_text": "This transaction consists of multiple QR codes. Keep your camera on the changing QRs and wait until all codes are scanned.",
+    "empty-state_heading": "In order to scan QR codes, AirGap Vault needs the <span class=\"style__strong color__primary\">camera permission</span>.",
+    "grant-permission_label": "Grant permission"
+  },
+  "tab-settings": {
+    "about": "About",
+    "title": "Settings",
+    "information_label": "Information",
+    "faq_label": "FAQ",
+    "feedback_label": "Feedback",
+    "github_label": "GitHub",
+    "twitter_label": "Twitter",
+    "telegram_label": "Telegram",
+    "discord_label": "Discord",
+    "documentation_label": "Documentation",
+    "secrets_label": "Secrets",
+    "add-settings_label": "Add Secret",
+    "interaction-options_label": "Interaction Options",
+    "paste-from-clipboard_label": "Paste code from clipboard",
+    "qr-advanced-settings_label": "QR Settings",
+    "interaction-settings_label": "Interaction Preference",
+    "advanced-settings_label": "Advanced Settings",
+    "bip39_wordlist_label": "BIP39 Wordlist",
+    "error-history_label": "Local Error History",
+    "danger-zone_label": "Danger Zone",
+    "welcome-onboarding_label": "Welcome",
+    "disclaimer_label": "Disclaimer",
+    "installation-type_label": "Installation Type",
+    "advanced-mode-type_label": "Advanced Mode"
+  },
+  "tab-secrets": {
+    "title": "Secrets",
+    "add-secret_label": "Add Secret",
+    "search_placeholder": "Search Secret"
+  },
+  "tab-wallets": {
+    "title": "Accounts",
+    "search_placeholder": "Search Currency",
+    "empty-state_text": "Create a new account by selecting a currency and sync it to AirGap Wallet.",
+    "add-wallet_label": "Add Account",
+    "delete-accounts_label": "Remove Accounts",
+    "generate-recovery-key": {
+      "title": "Secret Recovery Key Backup",
+      "description": "To always ensure a recovery of your stored secret, a backup of the secret recovery key is needed."
+    },
+    "incompatible-qr_alert": {
+      "title": "Incompatible QR",
+      "text": "This QR is not a raw transaction.",
+      "okay_label": "Okay"
+    },
+    "no-secret_alert": {
+      "title": "No account found",
+      "text": "You do not have any compatible accounts for this public key in AirGap. Please import your secret and create the corresponding account to sign this transaction.",
+      "okay_label": "Okay"
+    },
+    "raw-tx_alert": {
+      "title": "Select Account",
+      "okay_label": "Okay"
+    }
+  },
+  "tabs": {
+    "wallets": "Accounts",
+    "scanner": "Scanner",
+    "secrets": "Secrets",
+    "settings": "Settings"
+  },
+  "deserialized-detail": {
+    "sign_text": "You're about to sign:",
+    "transaction": {
+      "title": "Sign Transaction",
+      "button_label": "Sign Transaction",
+      "unreadable_warning": "We were not able to extract information from this transaction. This does not mean that the transaction is invalid - Please make sure that you know what you are doing, and you can verify that you know that this transaction contains the correct data."
+    },
+    "message": {
+      "title": "Sign Message",
+      "button_label": "Sign Message"
+    },
+    "loader": {
+      "sign-transaction": {
+        "message": "Signing transaction..."
+      },
+      "sign-message": {
+        "message": "Signing message..."
+      },
+      "generic": {
+        "message": "Loading..."
+      }
+    },
+    "alert": {
+      "bip39-passphrase": {
+        "header": "BIP-39 Passphrase",
+        "message": "If you have set a BIP-39 passphrase, please enter it here.",
+        "input-placeholder_label": "Passphrase",
+        "button_label": "Ok"
+      },
+      "bip39-passphrase-error": {
+        "header": "BIP-39 Passphrase",
+        "message": "Public keys do not match. Did you enter the correct BIP-39 Passphrase?",
+        "button_label": "Ok"
+      },
+      "secret-not-found-error": {
+        "header": "Secret not found",
+        "message": "No secret found for this public key",
+        "button_label": "Ok"
+      },
+      "unknown-error": {
+        "header": "Error",
+        "message": "Something went wrong!",
+        "button_label": "Ok"
+      }
+    },
+    "signing_account": "You're signing with an account from <span class=\"style__strong color__primary\">{{secretLabel}}</span> "
+  },
+  "transaction-signed": {
+    "title": "Signed Transaction",
+    "heading": "This is your signed transaction, scan it with <span class=\"style__strong color__primary\">AirGap Wallet</span>.",
+    "done_label": "Done"
+  },
+  "touch-entropy": {
+    "text": "Draw around with your finger."
+  },
+  "wallet-address": {
+    "title": "Account Address",
+    "address_label": "Address:",
+    "path_label": "Derivation Path:",
+    "sync_label": "Sync Account",
+    "done_label": "Done",
+    "copy-address_modal": {
+      "text": "Address was copied to your clipboard"
+    },
+    "alert": {
+      "wallet-not-migrated": {
+        "header": "The account needs an update",
+        "message": "Can't proceed, please update or re-add the account first.",
+        "button_label": "Ok"
+      }
+    }
+  },
+  "interaction-selection": {
+    "title": "Wallet Interaction",
+    "heading": "How would you like to interact with AirGap Wallet?",
+    "same-device_label": "App Switching",
+    "offline-device_label": "QR Code Scanning"
+  },
+  "wallet-edit-delete-popover": {
+    "settings_label": "Account Settings",
+    "copy_label": "Copy Address",
+    "copy_sync_code": "Copy Sync Code",
+    "show_address_qr": "Show Address QR",
+    "confirm_address_copy": "Address was copied to your clipboard",
+    "confirm_sync_code_copy": "Sync code was copied to your clipboard",
+    "account-removal_alert": {
+      "title": "Confirm Account Removal",
+      "text": "Do you want to remove this account? You can always add it back later if you know its correct derivation path!",
+      "cancel_label": "Cancel",
+      "delete_label": "Delete"
+    }
+  },
+  "wallet-select-coins": {
+    "title": "Add Account",
+    "select-type": {
+      "label": "Select Account Type",
+      "single-address_label": "Single Address Wallet",
+      "hd-wallet_label": "HD Wallet"
+    },
+    "advanced_label": "Advanced Mode",
+    "custom-path": {
+      "label": "Custom Derivation Path",
+      "placeholder": "Custom Derivation Path"
+    },
+    "create_label": "Create"
+  },
+  "wallet-share": {
+    "title": "Pair Account",
+    "heading": "Scan this QR code with {{walletName}}",
+    "text": "This QR includes your public key, address and your type of coin.",
+    "same-device_label": "Same-Device-Sync",
+    "done_label": "Done"
+  },
+  "wallet-share-select": {
+    "title": "Sync Account",
+    "heading": "Select the accounts you'd like to sync with <span class=\"style__strong color__primary\">AirGap Wallet</span>.",
+    "sync_label": "Sync",
+    "alert": {
+      "wallets-not-migrated": {
+        "header": "The accounts need an update",
+        "message": "Can't proceed, please update or re-add the accounts first.",
+        "button_label": "Ok"
+      },
+      "excluded-legacy-accounts": {
+        "header": "Some accounts need an update",
+        "message": "Some of the selected accounts can't be synced and must be updated or re-added. You can still sync the rest of the accounts.",
+        "button-accept_label": "Sync",
+        "button-reject_label": "Cancel"
+      },
+      "unknown-error": {
+        "header": "Error",
+        "message": "Something went wrong!",
+        "button_label": "Ok"
+      }
+    }
+  },
+  "warnings-modal": {
+    "root": {
+      "title": "Your device is rooted",
+      "description": "It seems like you have rooted your device. While we think this is neat, it weakens the security of your device significantly and multiple mechanisms of AirGap can be circumvented by other apps. Therefore, AirGap is not able to run on this device."
+    },
+    "screenshot": {
+      "title": "Screenshot detected",
+      "description": "Looks like you just took a screenshot. Make sure that you never take a screenshot as you might expose your secret key."
+    },
+    "secure-storage": {
+      "title": "Device Unsecure",
+      "description": "Your lockscreen needs to be setup in order to properly encrypt and protect your secrets. After securing your device, please close and restart AirGap.",
+      "button-text_label": "Secure Device"
+    },
+    "network": {
+      "title": "Network Connection detected",
+      "description": "Looks like you have connected this device to a network. The AirGap App has no network priviledges but it is best to disconnect the device entierly from any network.",
+      "button": "Sign Message"
+    },
+    "disclaimer": {
+      "title": "AirGap Disclaimer",
+      "text": "You as the user hereby accept and acknowledge this protocol and all the information provided within to the fullest extent. You as the user confirm that the content this document has been reviewed, tested and understood on their own behalf.",
+      "disclaimer-list": {
+        "text": "To the fullest extent permitted by applicable law:",
+        "item-1_text": "All services provided by Papers AG, its employees, freelancers or other subcontractors are provided without representation and warranty of any kind",
+        "item-2_text": "Papers AG disclaims any and all direct and indirect liability for damage occurring under, or in connection with, this Protocol, especially, but not limited to loss of, or damage to, data, lost profit, compromised / hacked product or system, and or stolen / missing monetary funds."
+      },
+      "description": "You understand the risks involved in this software, including but no limited to losing your secret, thus private keys and access to your funds.",
+      "understood_label": "I understand and accept"
+    }
+  },
+  "bip85-generate": {
+    "title": "Generate BIP85",
+    "text": "BIP85 allows you to securely derive a new mnemonic out of your main mnemonic. As long as you have access to your main mnemonic, you will always be able to re-generate your child mnemonics.",
+    "mnemonic-length": "Mnemonic Length",
+    "index": "Index",
+    "generate": "Generate",
+    "advanced_label": "Advanced Mode",
+    "bip39-passphrase": "BIP-39 Passphrase",
+    "bip39-passphrase-reveal": "Reveal Passphrase",
+    "alert": {
+      "header": "BIP-39 Passphrase",
+      "message": "You set a BIP39 Passphrase. You will need to enter this passphrase again when you try to derive the same child key!",
+      "understand": "I understand"
+    }
+  },
+  "bip85-show": {
+    "title": "Show BIP85 Details",
+    "text": "Write down all the words on a piece of paper. You will have to verify the mnemonic on the next page.",
+    "mnemonic-length": "Mnemonic Length",
+    "index": "Index",
+    "fingerprint": "Fingerprint",
+    "add": "Add Secret"
+  },
+  "message-signing-request": {
+    "title": "Signed Message",
+    "payload_label": "Message to sign. Make sure you know what you are signing.",
+    "blake2b_hash": "Ledger Blake2b hash of the message",
+    "heading": "This is your signed message, scan it with <span class=\"style__strong color__primary\">AirGap Wallet</span>.",
+    "sign_button": "Sign Message"
+  },
+  "message-signing-response": {
+    "text": "Display signed message details"
+  },
+  "qr-settings-page": {
+    "title": "QR Settings"
+  },
+  "select-account": {
+    "message-signing": {
+      "title": "Select Account",
+      "heading": "Please select an account to scan this message with",
+      "placeholder": "Search by identifier"
+    },
+    "psbt": {
+      "title": "Select Account",
+      "heading": "Please select an account to sign this PSBT with",
+      "placeholder": "Search by identifier"
+    }
+  },
+  "unsigned-transaction": {
+    "sign-tx_label": "Sign Transaction"
+  },
+  "link-page": {
+    "scan-qr": "Scan the QR code to open the link on an online device",
+    "copy_label": "Copy Link",
+    "link-clipboard_label": "The link was copied to your clipboard"
+  },
+  "migration": {
+    "title": "Accounts Update",
+    "heading": "Accounts Migration",
+    "list": {
+      "header": "The following secrets and accounts will be updated to support the new simplified onboarding. <br /> <br /> <strong>Note: You may be asked to authenticate and provide a password, if it has been set for any of the displayed secrets or accounts.</strong>"
+    },
+    "button-run_label": "Update",
+    "button-done_label": "Done",
+    "alert": {
+      "paranoia-info": {
+        "header": "Encryption Password",
+        "message": "It looks like you have set an encryption password to additionally secure <span class=\"style__strong color__primary\">{{label}}</span>. You may be be asked to provide it during the update. Skip if you don't want to update this secret now.",
+        "button-ok_label": "Ok",
+        "button-skip_label": "Skip"
+      },
+      "bip39-passphrase": {
+        "header": "BIP-39 Passphrase",
+        "message": "If you have set a BIP-39 passphrase for <span class=\"style__strong color__primary\">{{address}} ({{protocol}})</span>, please enter it here or skip the update of this account.",
+        "input-placeholder_label": "Passphrase",
+        "button-ok_label": "Ok",
+        "button-skip_label": "Skip"
+      },
+      "unknown-error": {
+        "header": "Error",
+        "message": "Something went wrong! Please try again.",
+        "button_label": "Ok"
+      }
+    }
+  },
+  "danger-zone": {
+    "label": "Danger Zone",
+    "description": "The actions on this page are only intended for advanced users. Please be aware of the consequences if you use one of the following features.",
+    "wipe_label": "Reset AirGap Vault",
+    "wipe": {
+      "alert": {
+        "title": "Wipe Vault",
+        "message": "This action will delete all your secrets and reset AirGap Vault to the factory settings.<br /><br /><b>Make sure you have a backup of all your recovery phrases.</b>",
+        "cancel": "Cancel",
+        "ok": "Ok"
+      }
+    },
+    "wipe-error": {
+      "alert": {
+        "title": "Error",
+        "message": "An error occured while trying to wipe the app. If this error persists, please uninstall and remove the app from your device.",
+        "ok": "Ok"
+      }
+    }
+  },
+  "secret-generate-dice-roll": {
+    "title": "Dice Rolls",
+    "label": "Generate Secret with Dice Rolls",
+    "description": "Generating entropy with dice rolls is an advanced feature. It allows you to provide your own entropy and generate a verifiable recovery phrase. Only use this feature if you know how to use it!",
+    "status": "{{ inputLength }} of at least 99 rolls ({{ entropyBits }} bits of entropy)",
+    "type-alert": {
+      "header": "Select Dice Roll Type",
+      "message": "There are multiple standards of how dice roll inputs can be interpreted. Select one of the types below if you want to verify your mnemonic with another tool.",
+      "default": "Default",
+      "coldcard": "ColdCard"
+    }
+  },
+  "secret-generate-coin-flip": {
+    "title": "Coin Flips",
+    "label": "Generate Secret with Coin Flips",
+    "description": "Generating entropy with coin flips is an advanced feature. It allows you to provide your own entropy and generate a verifiable recovery phrase. Only use this feature if you know how to use it!",
+    "status": "{{ inputLength }} of 256 coin flips ({{ inputLength }} bits of entropy)",
+    "head": "Head",
+    "tail": "Tail"
+  },
+  "error-history": {
+    "title": "Error History",
+    "empty_label": "Error list is empty! 🎉",
+    "details_label": "Details"
+  },
+  "wordlist": {
+    "title": "Wordlist",
+    "search_placeholder": "Search..."
+  }
+}

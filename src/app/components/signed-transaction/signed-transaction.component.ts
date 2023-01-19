@@ -1,17 +1,17 @@
 import { ProtocolService, SerializerService, sumAirGapTxValues } from '@airgap/angular-core'
 import { Component, Input } from '@angular/core'
 import {
-  IACMessageDefinitionObjectV3,
   IAirGapTransaction,
   ICoinProtocol,
   MainProtocolSymbols,
   ProtocolSymbols,
-  SignedTransaction,
-  TezosSaplingProtocol
+  SignedTransaction
 } from '@airgap/coinlib-core'
 import BigNumber from 'bignumber.js'
 import { TokenService } from 'src/app/services/token/TokenService'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
+import { IACMessageDefinitionObjectV3 } from '@airgap/serializer'
+import { TezosSaplingProtocol } from '@airgap/tezos'
 
 @Component({
   selector: 'airgap-signed-transaction',
@@ -67,7 +67,7 @@ export class SignedTransactionComponent {
               if (await this.checkIfSaplingTransaction(payload, signedTx.protocol)) {
                 const saplingProtocol = await this.getSaplingProtocol()
                 return saplingProtocol.getTransactionDetailsFromSigned(payload, {
-                  knownViewingKeys: this.secretsService.getKnownViewingKeys()
+                  knownViewingKeys: await this.secretsService.getKnownViewingKeys()
                 })
               } else {
                 return protocol.getTransactionDetailsFromSigned(payload)
@@ -107,16 +107,19 @@ export class SignedTransactionComponent {
 
   private async checkIfSaplingTransaction(transaction: SignedTransaction, protocolIdentifier: ProtocolSymbols): Promise<boolean> {
     if (protocolIdentifier === MainProtocolSymbols.XTZ) {
-      const tezosProtocol: ICoinProtocol = await this.protocolService.getProtocol(protocolIdentifier)
-      const saplingProtocol: TezosSaplingProtocol = await this.getSaplingProtocol()
+      try {
+        const saplingProtocol: TezosSaplingProtocol = await this.getSaplingProtocol()
+        const txDetails: IAirGapTransaction[] = await saplingProtocol.getTransactionDetailsFromSigned(transaction)
+        const recipients: string[] = txDetails
+          .map((details) => details.to)
+          .reduce((flatten: string[], next: string[]) => flatten.concat(next), [])
 
-      const txDetails: IAirGapTransaction[] = await tezosProtocol.getTransactionDetailsFromSigned(transaction)
-      const recipients: string[] = txDetails
-        .map((details) => details.to)
-        .reduce((flatten: string[], next: string[]) => flatten.concat(next), [])
-
-      console.log(recipients)
-      return recipients.includes(saplingProtocol.options.config.contractAddress)
+        // TODO: find better way to check if `transaction` is a Sapling transaction
+        return recipients.some((recipient: string) => recipient.startsWith('zet') || recipient.toLocaleLowerCase() === 'shielded pool')
+      } catch(error) {
+        console.error(error)
+        return false
+      }
     }
 
     return protocolIdentifier === MainProtocolSymbols.XTZ_SHIELDED

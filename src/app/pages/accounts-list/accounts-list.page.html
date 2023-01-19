@@ -31,41 +31,43 @@
     </ion-label>
   </ion-item>
 
-  <ion-list>
-    <ng-container *ngFor="let wallet of wallets$ | async | walletFilter: { status: AirGapWalletStatus.ACTIVE }">
-      <ion-item-sliding>
-        <ng-container *ngIf="deleteView">
-          <ion-item>
-            <ion-checkbox slot="start" (click)="onWalletSelected(wallet)"></ion-checkbox>
+  <ng-container *ngIf="wallets$ && (wallets$ | async | walletFilter: { status: AirGapWalletStatus.ACTIVE } | async) as wallets">
+    <ion-list>
+      <ng-container *ngFor="let wallet of wallets">
+        <ion-item-sliding>
+          <ng-container *ngIf="deleteView">
+            <ion-item>
+              <ion-checkbox slot="start" (click)="onWalletSelected(wallet)"></ion-checkbox>
+              <airgap-account-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></airgap-account-item>
+            </ion-item>
+          </ng-container>
+
+          <ng-container *ngIf="!deleteView">
             <airgap-account-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></airgap-account-item>
-          </ion-item>
-        </ng-container>
-
-        <ng-container *ngIf="!deleteView">
-          <airgap-account-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></airgap-account-item>
-        </ng-container>
-        <ion-item-options side="end">
-          <ion-item-option (click)="delete(wallet)">
-            <ion-item-option>
-              <ion-icon slot="icon-only" name="trash"></ion-icon>
+          </ng-container>
+          <ion-item-options side="end">
+            <ion-item-option (click)="delete(wallet)">
+              <ion-item-option>
+                <ion-icon slot="icon-only" name="trash"></ion-icon>
+              </ion-item-option>
             </ion-item-option>
-          </ion-item-option>
-        </ion-item-options>
-      </ion-item-sliding>
-    </ng-container>
-  </ion-list>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ng-container>
+    </ion-list>
 
-  <ng-container *ngIf="wallets$ && (wallets$ | async | walletFilter: { status: AirGapWalletStatus.ACTIVE }).length === 0">
-    <ion-row>
-      <ion-col size="12" class="empty-list content--align__center-center">
-        <img class="empty-img" src="./assets/img/no-wallet-added-onboarding.svg" />
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size="12">
-        <strong>{{ 'tab-wallets.empty-state_text' | translate }}</strong>
-      </ion-col>
-    </ion-row>
+    <ng-container *ngIf="wallets.length === 0">
+      <ion-row>
+        <ion-col size="12" class="empty-list content--align__center-center">
+          <img class="empty-img" src="./assets/img/no-wallet-added-onboarding.svg" />
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <strong>{{ 'tab-wallets.empty-state_text' | translate }}</strong>
+        </ion-col>
+      </ion-row>
+    </ng-container>
   </ng-container>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">

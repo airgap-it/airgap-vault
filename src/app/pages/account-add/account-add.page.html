@@ -12,14 +12,14 @@
     <ion-item detail="false" class="ion-no-padding" *ngFor="let protocol of protocolList">
       <ion-avatar slot="start" class="ion-align-items-center">
         <airgap-currency-symbol
-          [symbol]="protocol.protocol.symbol"
-          [protocolIdentifier]="protocol.protocol.identifier"
+          [symbol]="protocol.details.symbol"
+          [protocolIdentifier]="protocol.details.identifier"
         ></airgap-currency-symbol>
       </ion-avatar>
       <ion-label class="ion-text-wrap">
         <h2>
-          <span class="font--weight__med">{{ protocol.protocol.name }}</span>
-          {{ protocol.protocol.symbol }}
+          <span class="font--weight__med">{{ protocol.details.name }}</span>
+          {{ protocol.details.symbol }}
         </h2>
       </ion-label>
       <ion-checkbox slot="end" value="protocol.protocol" [(ngModel)]="protocol.isChecked" (click)="onProtocolSelected()"></ion-checkbox>
@@ -50,7 +50,7 @@
       </ion-item>
 
       <ion-item
-        *ngIf="singleSelectedProtocol && singleSelectedProtocol.protocol.identifier === 'eth' && singleSelectedProtocol.protocol.supportsHD"
+        *ngIf="singleSelectedProtocol && singleSelectedProtocol.details.identifier === 'eth' && singleSelectedProtocol.isHDWallet"
         class="ion-no-padding"
       >
         {{ 'wallet-select-coins.select-type.hd-wallet_label' | translate }}

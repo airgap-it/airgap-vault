@@ -1,6 +1,6 @@
 import { flattened } from '@airgap/angular-core'
-import { AccountShareResponse, AirGapWallet, AirGapWalletStatus, IACMessageDefinitionObjectV3, IACMessageType } from '@airgap/coinlib-core'
-import { generateId } from '@airgap/coinlib-core/serializer-v3/utils/generateId'
+import { AirGapWallet, AirGapWalletStatus } from '@airgap/coinlib-core'
+import { IACMessageDefinitionObjectV3, generateId, IACMessageType, AccountShareResponse } from '@airgap/serializer'
 
 import { Injectable } from '@angular/core'
 
@@ -30,7 +30,7 @@ export class ShareUrlService {
 
     const deserializedTxSigningRequest: IACMessageDefinitionObjectV3 = {
       id: generateId(8),
-      protocol: wallet.protocol.identifier,
+      protocol: await wallet.protocol.getIdentifier(),
       type: IACMessageType.AccountShareResponse,
       payload: accountShareResponse
     }
@@ -44,28 +44,32 @@ export class ShareUrlService {
 
   public async generateShareSecretsURL(secrets: MnemonicSecret[]): Promise<IACMessageDefinitionObjectV3[]> {
     const deserializedTxSigningRequests: IACMessageDefinitionObjectV3[] = flattened(
-      secrets.map((secret: MnemonicSecret) => {
-        return secret.wallets
-          .filter((wallet: AirGapWallet) => wallet.status !== AirGapWalletStatus.DELETED)
-          .map((wallet: AirGapWallet) => {
-            const accountShareResponse: AccountShareResponse = {
-              publicKey: wallet.publicKey,
-              isExtendedPublicKey: wallet.isExtendedPublicKey,
-              derivationPath: wallet.derivationPath,
-              masterFingerprint: wallet.masterFingerprint,
-              isActive: wallet.status === AirGapWalletStatus.ACTIVE,
-              groupId: secret.fingerprint,
-              groupLabel: secret.label
-            }
+      await Promise.all(
+        secrets.map((secret: MnemonicSecret) => {
+          return Promise.all(
+            secret.wallets
+              .filter((wallet: AirGapWallet) => wallet.status !== AirGapWalletStatus.DELETED)
+              .map(async (wallet: AirGapWallet) => {
+                const accountShareResponse: AccountShareResponse = {
+                  publicKey: wallet.publicKey,
+                  isExtendedPublicKey: wallet.isExtendedPublicKey,
+                  derivationPath: wallet.derivationPath,
+                  masterFingerprint: wallet.masterFingerprint,
+                  isActive: wallet.status === AirGapWalletStatus.ACTIVE,
+                  groupId: secret.fingerprint,
+                  groupLabel: secret.label
+                }
 
-            return {
-              id: generateId(8),
-              protocol: wallet.protocol.identifier,
-              type: IACMessageType.AccountShareResponse,
-              payload: accountShareResponse
-            }
-          })
-      })
+                return {
+                  id: generateId(8),
+                  protocol: await wallet.protocol.getIdentifier(),
+                  type: IACMessageType.AccountShareResponse,
+                  payload: accountShareResponse
+                }
+              })
+          )
+        })
+      )
     )
 
     return deserializedTxSigningRequests
