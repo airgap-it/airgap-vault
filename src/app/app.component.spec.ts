@@ -1,8 +1,9 @@
-import { APP_PLUGIN, CLIPBOARD_PLUGIN, ProtocolService, SPLASH_SCREEN_PLUGIN, STATUS_BAR_PLUGIN } from '@airgap/angular-core'
+import { APP_PLUGIN, CLIPBOARD_PLUGIN, FILESYSTEM_PLUGIN, ProtocolService, SPLASH_SCREEN_PLUGIN, STATUS_BAR_PLUGIN } from '@airgap/angular-core'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { AppPlugin } from '@capacitor/app'
 import { ClipboardPlugin } from '@capacitor/clipboard'
+import { FilesystemPlugin } from '@capacitor/filesystem'
 import { SplashScreenPlugin } from '@capacitor/splash-screen'
 import { StatusBarPlugin } from '@capacitor/status-bar'
 import { Platform } from '@ionic/angular'
@@ -10,16 +11,18 @@ import { TranslateService } from '@ngx-translate/core'
 import {
   createAppSpy,
   createClipboardSpy,
+  createFilesystemSpy,
   createSaplingSpy,
   createSecurityUtilsSpy,
   createSplashScreenSpy,
-  createStatusBarSpy
+  createStatusBarSpy,
+  createZipSpy
 } from 'test-config/plugins-mocks'
 
 import { UnitHelper } from './../../test-config/unit-test-helper'
 import { AppComponent } from './app.component'
-import { SaplingNativePlugin, SecurityUtilsPlugin } from './capacitor-plugins/definitions'
-import { SAPLING_PLUGIN, SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
+import { SaplingNativePlugin, SecurityUtilsPlugin, ZipPlugin } from './capacitor-plugins/definitions'
+import { SAPLING_PLUGIN, SECURITY_UTILS_PLUGIN, ZIP_PLUGIN } from './capacitor-plugins/injection-tokens'
 import { IACService } from './services/iac/iac.service'
 import { NavigationService } from './services/navigation/navigation.service'
 import { SecretsService } from './services/secrets/secrets.service'
@@ -34,6 +37,8 @@ describe('AppComponent', () => {
   let statusBarSpy: StatusBarPlugin
   let splashScreenSpy: SplashScreenPlugin
   let clipboardSpy: ClipboardPlugin
+  let filesystemSpy: FilesystemPlugin
+  let zipSpy: ZipPlugin
   let platformReadySpy: Promise<void>
   let platformSpy: Platform
   // let component: AppComponent
@@ -46,6 +51,8 @@ describe('AppComponent', () => {
     statusBarSpy = createStatusBarSpy()
     splashScreenSpy = createSplashScreenSpy()
     clipboardSpy = createClipboardSpy()
+    filesystemSpy = createFilesystemSpy()
+    zipSpy = createZipSpy()
     platformReadySpy = Promise.resolve()
     platformSpy = jasmine.createSpyObj('Platform', { ready: platformReadySpy })
 
@@ -62,6 +69,8 @@ describe('AppComponent', () => {
           { provide: STATUS_BAR_PLUGIN, useValue: statusBarSpy },
           { provide: SPLASH_SCREEN_PLUGIN, useValue: splashScreenSpy },
           { provide: CLIPBOARD_PLUGIN, useValue: clipboardSpy },
+          { provide: FILESYSTEM_PLUGIN, useValue: filesystemSpy },
+          { provide: ZIP_PLUGIN, useValue: zipSpy },
           { provide: Platform, useValue: platformSpy },
           StartupChecksService,
           IACService,
