@@ -40,7 +40,6 @@ export class AccountsListPage {
 
   ionViewWillEnter() {
     this.secret = this.navigationService?.getState()?.secret
-    console.log('this.secret', this.secret)
     if (this.secret) {
       this.loadWallets()
     } else {
@@ -49,8 +48,16 @@ export class AccountsListPage {
     }
   }
 
-  private loadWallets() {
-    this.wallets$.next([...this.secret?.wallets].sort((a, b) => a.protocol.name.localeCompare(b.protocol.name)))
+  private async loadWallets() {
+    const comparableWallets: [string, AirGapWallet][] = await Promise.all([...this.secret?.wallets].map(async (wallet: AirGapWallet) => {
+      return [await wallet.protocol.getName(), wallet] as [string, AirGapWallet]
+    }))
+    const sortedWallets: AirGapWallet[] = comparableWallets
+      .sort((a: [string, AirGapWallet], b: [string, AirGapWallet]) => a[0].localeCompare(b[0]))
+      .map(([_, wallet]: [string, AirGapWallet]) => wallet)
+
+    this.wallets$.next(sortedWallets)
+
   }
 
   public goToReceiveAddress(wallet: AirGapWallet): void {

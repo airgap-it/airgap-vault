@@ -501,10 +501,8 @@ export class SecretsService {
     const bip32Node: bip32.BIP32Interface = bip32.fromSeed(seed)
 
     const publicKey: string =
-      config.isHDWallet &&
-      config.protocolIdentifier ===
-        'eth' /* We need to check for ETH, because BTC returns an xPub for getPublicKeyFromMnemonic and getExtendedPublicKeyFromMnemonic doesn't exist */
-        ? await (protocol as any).getExtendedPublicKeyFromMnemonic(mnemonic, config.customDerivationPath, config.bip39Passphrase)
+      config.isHDWallet
+        ? await protocol.getExtendedPublicKeyFromMnemonic(mnemonic, config.customDerivationPath, config.bip39Passphrase)
         : await protocol.getPublicKeyFromMnemonic(mnemonic, config.customDerivationPath, config.bip39Passphrase)
     const fingerprint: string = bip32Node.fingerprint.toString('hex')
 
