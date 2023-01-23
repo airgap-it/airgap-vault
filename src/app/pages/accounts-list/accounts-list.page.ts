@@ -40,7 +40,6 @@ export class AccountsListPage {
 
   ionViewWillEnter() {
     this.secret = this.navigationService?.getState()?.secret
-    console.log('this.secret', this.secret)
     if (this.secret) {
       this.loadWallets()
     } else {
