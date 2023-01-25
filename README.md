@@ -6,11 +6,11 @@
 
 > Self custody made simple and secure. Protect your crypto and store your private keys offline.
 
-[AirGap](https://airgap.it) is a crypto wallet system that lets you secure cypto assets with one secret on an offline device. The AirGap Vault application is installed on a dedicated device that has no connection to any network, thus it is air gapped. The [AirGap Wallet](https://github.com/airgap-it/airgap-wallet) is installed on your everyday smartphone.
+[AirGap](https://airgap.it) is a crypto wallet system that lets you secure crypto assets with one secret on an offline device. The AirGap Vault application is installed on a dedicated device that has no connection to any network, thus it is air gapped. The [AirGap Wallet](https://github.com/airgap-it/airgap-wallet) is installed on your everyday smartphone.
 
 ## Description
 
-AirGap Vault is responsible for secure key generation. Entropy from audio, video, touch and accelerometer are used together with the output of the hardware random number generator. The generated secret is saved in the secure enclave of the device, only accessible by biometric authentication. Accounts for multiple protcols can be created. Transactions are prepared by the AirGap Wallet and then transferred to the offline device via QR code, where it is signed and sent back to the Wallet using another QR code.
+AirGap Vault is responsible for secure key generation. Entropy from audio, video, touch and accelerometer are used together with the output of the hardware random number generator. The generated secret is saved in the secure enclave of the device, only accessible by biometric authentication. Accounts for multiple protocols can be created. Transactions are prepared by the AirGap Wallet and then transferred to the offline device via QR code, where it is signed and sent back to the Wallet using another QR code.
 
 AirGap Vault is a hybrid application (using the same codebase for Android and iOS). Created using AirGap's protocol agnostic `airgap-coin-lib` library to interact with different protocols and our own secure storage implementation.
 
@@ -26,7 +26,7 @@ AirGap Vault is a hybrid application (using the same codebase for Android and iO
 ## Features
 
 - Secure secret generation with added entropy from audio, video, touch and device accelerometer
-- Secure storage using the secure enclave of the device, accessible only by biometric authenticaiton
+- Secure storage using the secure enclave of the device, accessible only by biometric authentication
 - Secure, one-way communication with AirGap Wallet over QR codes or URL-Schemes (app switching)
 - Create accounts for all supported currencies like Aeternity, Bitcoin, Ethereum, Tezos, Cosmos, Kusama, Polkadot, Groestlcoin etc.
 - Sign transactions offline without the secret ever leaving your device
@@ -69,11 +69,11 @@ function seedEntropy(additionalEntropyArray) {
 
 ### Supply Chain Attacks
 
-In the past years, mutliple cryptocurrency wallets have been targeted by attackers to try and steal users funds. One common attack vector is the supply chain attack. In this attack, the attacker tries to compromise a dependency that is used in the wallet and use it to inject malicious code. At AirGap, we take utmost care of evaluating the dependencies we use. We have also introduced a system that separates the dependencies used during testing and development from the dependencies that are used to build and run the project. This reduces the risk of malicious code injection during the build and test steps.
+In the past years, multiple cryptocurrency wallets have been targeted by attackers to try and steal users funds. One common attack vector is the supply chain attack. In this attack, the attacker tries to compromise a dependency that is used in the wallet and use it to inject malicious code. At AirGap, we take utmost care of evaluating the dependencies we use. We have also introduced a system that separates the dependencies used during testing and development from the dependencies that are used to build and run the project. This reduces the risk of malicious code injection during the build and test steps.
 
 ### Verifiable Builds
 
-A very important property of any open source wallet is reprucibility. This means that executable that is downloaded from the Play Store or App Store can be exactly reproduced by compiling the open source code. If this is not the case, it means that there is hidden or removed code in the published version that is not visible in the published source code.
+A very important property of any open source wallet is reproducibility. This means that executable that is downloaded from the Play Store or App Store can be exactly reproduced by compiling the open source code. If this is not the case, it means that there is hidden or removed code in the published version that is not visible in the published source code.
 
 The project [WalletScrutiny](https://walletscrutiny.com/posts/it.airgap.vault/) examines a wide variety of cryptocurrency wallets to determine their reproducibility. We're happy to say that **AirGap Vault** was one of the first wallets to be marked as "reproducible".
 
@@ -132,7 +132,7 @@ If you want to contribute with translating the application you can do so by goin
 
 ### Updating translations
 
-To import the translations from Transifex to the application, first you will need to install the transifex-cli. You can do so by creating a directory of your choice and intalling in it the package globally by running:
+To import the translations from Transifex to the application, first you will need to install the transifex-cli. You can do so by creating a directory of your choice and installing in it the package globally by running:
 
 ```bash
 curl -o- https://raw.githubusercontent.com/transifex/cli/master/install.sh | bash
@@ -164,7 +164,7 @@ If you discover a security vulnerability within this application, please send an
 
 ## Contributing
 
-Before integrating a new feature, please quickly reach out to us in an issue so we can discuss and coordinate the change.
+Before integrating a new feature, please quickly reach out to us with an issue so we can discuss and coordinate the change.
 
 - If you find any bugs, submit an [issue](../../issues) or open [pull-request](../../pulls).
 - If you want to integrate a new blockchain, please read the contributing guidelines in the [airgap-coin-lib](https://github.com/airgap-it/airgap-coin-lib) project.
