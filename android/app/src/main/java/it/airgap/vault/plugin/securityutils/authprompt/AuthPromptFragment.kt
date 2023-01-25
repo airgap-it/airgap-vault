@@ -1,5 +1,6 @@
 package it.airgap.vault.plugin.securityutils.authprompt
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.biometric.BiometricManager
@@ -22,7 +23,10 @@ class AuthPromptFragment : Fragment(R.layout.fragment_authenticator) {
             setTitle(getString(R.string.biometric_prompt_title))
             setSubtitle(getString(R.string.biometric_prompt_subtitle))
             setDescription(getString(R.string.biometric_prompt_description))
-            setAllowedAuthenticators(BiometricManager.Authenticators.DEVICE_CREDENTIAL or BiometricManager.Authenticators.BIOMETRIC_STRONG)
+            setAllowedAuthenticators(
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) BiometricManager.Authenticators.DEVICE_CREDENTIAL or BiometricManager.Authenticators.BIOMETRIC_STRONG
+                else BiometricManager.Authenticators.DEVICE_CREDENTIAL or BiometricManager.Authenticators.BIOMETRIC_WEAK
+            )
         }.build().also { _biometricPromptInfo = it }
 
     private var _biometricPrompt: BiometricPrompt? = null
