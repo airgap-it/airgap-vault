@@ -52,6 +52,7 @@ RUN yarn configure-mangle \
     && /app/android/gradlew --project-dir /app/android clean \
     && /app/android/gradlew --project-dir /app/android build \
     && cp /app/android/app/build/outputs/apk/release/app-release-unsigned.apk android-release-unsigned.apk \
+    && cp /app/android/app/build/outputs/apk/debug/app-debug.apk app-debug.apk \
     && cp android-release-unsigned.apk android-debug.apk \
     && cp /app/android/app/build/outputs/apk/appium/app-appium-unsigned.apk android-appium-unsigned.apk \
     && cp android-appium-unsigned.apk android-appium.apk \
