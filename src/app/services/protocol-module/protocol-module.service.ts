@@ -6,12 +6,21 @@ import { ICoinProtocol, ICoinSubProtocol, ProtocolSymbols } from '@airgap/coinli
 import { CosmosModule } from '@airgap/cosmos/v1'
 import { EthereumModule } from '@airgap/ethereum/v1'
 import { GroestlcoinModule } from '@airgap/groestlcoin/v1'
-import { AirGapBlockExplorer, AirGapModule, AirGapOfflineProtocol, AirGapV3SerializerCompanion, isSubProtocol, ProtocolConfiguration, V3SchemaConfiguration } from '@airgap/module-kit'
+import {
+  AirGapBlockExplorer,
+  AirGapModule,
+  AirGapOfflineProtocol,
+  AirGapV3SerializerCompanion,
+  isSubProtocol,
+  ProtocolConfiguration,
+  V3SchemaConfiguration
+} from '@airgap/module-kit'
 import { MoonbeamModule } from '@airgap/moonbeam/v1'
 import { PolkadotModule } from '@airgap/polkadot/v1'
 import { TezosModule } from '@airgap/tezos/v1'
 import { Injectable } from '@angular/core'
 import { SerializerV3, TransactionSignRequest, TransactionSignResponse, TransactionValidator } from '@airgap/serializer'
+import { ICPModule } from '@airgap/icp/v1'
 
 type LoadedProtocolStatus = 'active' | 'passive'
 
@@ -33,11 +42,10 @@ type LoadedProtocol = LoadedMainProtocol | LoadedSubProtocol
   providedIn: 'root'
 })
 export class ProtocolModuleService {
-  
-  public async loadProtocols(ignore: string[] = []): Promise<{ 
-    activeProtocols: ICoinProtocol[], 
-    passiveProtocols: ICoinProtocol[],
-    activeSubProtocols: [ICoinProtocol, ICoinSubProtocol][],
+  public async loadProtocols(ignore: string[] = []): Promise<{
+    activeProtocols: ICoinProtocol[]
+    passiveProtocols: ICoinProtocol[]
+    activeSubProtocols: [ICoinProtocol, ICoinSubProtocol][]
     passiveSubProtocols: [ICoinProtocol, ICoinSubProtocol][]
   }> {
     const modules: AirGapModule[] = [
@@ -49,14 +57,15 @@ export class ProtocolModuleService {
       new AeternityModule(),
       new GroestlcoinModule(),
       new MoonbeamModule(),
-      new AstarModule()
+      new AstarModule(),
+      new ICPModule()
     ]
 
     const loadedProtocols: LoadedProtocol[] = await this.loadFromModules(modules, new Set(ignore))
 
     const activeProtocols: ICoinProtocol[] = []
     const passiveProtocols: ICoinProtocol[] = []
-    
+
     const activeSubProtocols: [ICoinProtocol, ICoinSubProtocol][] = []
     const passiveSubProtocols: [ICoinProtocol, ICoinSubProtocol][] = []
 
@@ -68,7 +77,7 @@ export class ProtocolModuleService {
       if (protocol.type === 'main' && protocol.status === 'passive') {
         passiveProtocols.push(protocol.result)
       }
-      
+
       if (protocol.type === 'sub' && protocol.status === 'active') {
         activeSubProtocols.push(protocol.result)
       }
@@ -87,10 +96,14 @@ export class ProtocolModuleService {
   }
 
   private async loadFromModules(modules: AirGapModule[], ignore: Set<string>): Promise<LoadedProtocol[]> {
-    const protocols: LoadedProtocol[][] = await Promise.all(modules.map(async (module: AirGapModule) => {
-      const offlineProtocols: string[] = Object.entries(module.supportedProtocols)
-        .filter(([identifier, configuration]: [string, ProtocolConfiguration]) => configuration.type === 'offline' || configuration.type === 'full' && !ignore.has(identifier))
-        .map(([identifier, _]: [string, ProtocolConfiguration]) => identifier)
+    const protocols: LoadedProtocol[][] = await Promise.all(
+      modules.map(async (module: AirGapModule) => {
+        const offlineProtocols: string[] = Object.entries(module.supportedProtocols)
+          .filter(
+            ([identifier, configuration]: [string, ProtocolConfiguration]) =>
+              configuration.type === 'offline' || (configuration.type === 'full' && !ignore.has(identifier))
+          )
+          .map(([identifier, _]: [string, ProtocolConfiguration]) => identifier)
 
         const v3SerializerCompanion: AirGapV3SerializerCompanion = await module.createV3SerializerCompanion()
 
@@ -104,7 +117,7 @@ export class ProtocolModuleService {
 
           if (adapter instanceof ICoinSubProtocolAdapter) {
             const mainIdentifier: string = await adapter.v1Protocol.mainProtocol()
-            if (mainIdentifier !in activeProtocols) {
+            if (mainIdentifier! in activeProtocols) {
               const mainAdapter: ICoinProtocolAdapter = await this.createProtocolAdapter(module, mainIdentifier, v3SerializerCompanion)
               activeProtocols[mainIdentifier] = mainAdapter
             }
@@ -128,13 +141,14 @@ export class ProtocolModuleService {
         }))
 
         return loadedMainProtocols.concat(loadedSubProtocols)
-    }))
+      })
+    )
 
     return flattened(protocols)
   }
 
   private async createProtocolAdapter(
-    module: AirGapModule, 
+    module: AirGapModule,
     identifier: string,
     v3SerializerCompanion: AirGapV3SerializerCompanion
   ): Promise<ICoinProtocolAdapter> {
@@ -155,7 +169,7 @@ export class ProtocolModuleService {
       if (configuration.protocolIdentifier) {
         SerializerV3.addValidator(configuration.protocolIdentifier as ProtocolSymbols, {
           create(): TransactionValidator {
-            return new GenericTransactionValidator(configuration.protocolIdentifier, v3SerializerCompanion) 
+            return new GenericTransactionValidator(configuration.protocolIdentifier, v3SerializerCompanion)
           }
         })
       }
