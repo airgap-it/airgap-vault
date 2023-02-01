@@ -305,7 +305,7 @@ export class DeserializedDetailEffects {
             id: transaction.id,
             details: transaction.details,
             data: {
-              accountIdentifier: transaction.wallet.publicKey.substr(-6),
+              accountIdentifier: transaction.wallet.publicKey,
               transaction: signed,
               callbackURL: transaction.data.callbackURL
             },
