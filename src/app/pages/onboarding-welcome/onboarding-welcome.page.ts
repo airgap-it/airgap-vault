@@ -35,13 +35,15 @@ export class OnboardingWelcomePage {
       .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
   }
 
-  public async readTos() {
+  public async readDisclaimer() {
     const modal: HTMLIonModalElement = await this.modalController.create({
       component: WarningModalPage,
       componentProps: { errorType: Warning.INITIAL_DISCLAIMER },
       backdropDismiss: false
     })
-
+    modal.onDidDismiss().then(() => {
+      this.next()
+    })
     modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 }
