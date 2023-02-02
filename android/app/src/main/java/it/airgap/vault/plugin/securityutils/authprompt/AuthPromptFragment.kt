@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
-import androidx.biometric.auth.AuthPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import it.airgap.vault.R
