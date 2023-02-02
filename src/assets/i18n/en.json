@@ -155,7 +155,13 @@
       "copied": "Recovery key copied",
       "reset-error": "Could not set the recovery key"
     },
-    "confirm_label": "Confirm"
+    "confirm_label": "Confirm",
+    "error_alert": {
+      "title": "Error",
+      "message": "Something went wrong!",
+      "abort-button_label": "Abort",
+      "retry-button_label": "Retry"
+    }
   },
   "secret-service": {
     "alert": {
