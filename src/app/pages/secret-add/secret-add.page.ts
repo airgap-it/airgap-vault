@@ -8,6 +8,7 @@ import { MnemonicSecret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
+import { UiEventService } from '@airgap/angular-core'
 
 @Component({
   selector: 'airgap-secret-add',
@@ -32,7 +33,8 @@ export class SecretAddPage {
     private readonly navigationService: NavigationService,
     private readonly platform: Platform,
     private readonly lifehashService: LifehashService,
-    private readonly storageService: VaultStorageService
+    private readonly storageService: VaultStorageService,
+    private readonly uiEventService: UiEventService
   ) {
     if (this.navigationService.getState()) {
       this.isGenerating = this.navigationService.getState().isGenerating
@@ -51,8 +53,11 @@ export class SecretAddPage {
     } catch (error) {
       handleErrorLocal(ErrorCategory.SECURE_STORAGE)(error)
 
-      // TODO: Show error
-      this.navigationService.routeToSecretsTab()
+      if (error.message !== 'Already added secret' /* a workaround to avoid prompting 2 alerts */) {
+        await this.showErrorAlert()
+      } else {
+        this.navigationService.routeToSecretsTab()
+      }
       return
     }
 
@@ -61,5 +66,27 @@ export class SecretAddPage {
 
   public async togglePasscode(): Promise<void> {
     this.secret.isParanoia = !this.secret.isParanoia
+  }
+
+  private async showErrorAlert() {
+    const alert = await this.uiEventService.getTranslatedAlert({
+      header: 'secret-edit.error_alert.title',
+      message: 'secret-edit.error_alert.message',
+      backdropDismiss: true,
+      buttons: [
+        {
+          text: 'secret-edit.error_alert.abort-button_label',
+          handler: () => {
+            this.navigationService.routeToSecretsTab()
+          }
+        },
+        {
+          text: 'secret-edit.error_alert.retry-button_label',
+          role: 'cancel'
+        }
+      ]
+    })
+
+    await alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
   }
 }
