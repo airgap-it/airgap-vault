@@ -106,7 +106,7 @@ export class AppComponent implements AfterViewInit {
                   const protocol: string = data.url.substr(DEEPLINK_VAULT_ADD_ACCOUNT.length)
                   if (protocol.length > 0) {
                     this.navigationService
-                      .routeWithState('account-add', { protocol })
+                      .routeWithState('account-add', { protocol, secret: secrets[0] })
                       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
                   } else {
                     this.navigationService.route('account-add').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
