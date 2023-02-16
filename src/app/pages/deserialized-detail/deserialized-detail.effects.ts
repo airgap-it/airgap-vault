@@ -305,18 +305,19 @@ export class DeserializedDetailEffects {
           async (transaction: DeserializedUnsignedTransaction): Promise<DeserializedSignedTransaction> => {
             const signed: string = await this.signTransaction(transaction.wallet, transaction.data, transaction.iacContext, bip39Passphrase)
 
-          return {
-            type: 'signed',
-            id: transaction.id,
-            details: transaction.details,
-            data: {
-              accountIdentifier: transaction.wallet.publicKey,
-              transaction: signed,
-              callbackURL: transaction.data.callbackURL
-            },
-            iacContext: transaction.iacContext,
-            wallet: transaction.wallet,
-            originalProtocolIdentifier: transaction.originalProtocolIdentifier
+            return {
+              type: 'signed',
+              id: transaction.id,
+              details: transaction.details,
+              data: {
+                accountIdentifier: transaction.wallet.publicKey,
+                transaction: signed,
+                callbackURL: transaction.data.callbackURL
+              },
+              iacContext: transaction.iacContext,
+              wallet: transaction.wallet,
+              originalProtocolIdentifier: transaction.originalProtocolIdentifier
+            }
           }
         )
       )
