@@ -6,10 +6,19 @@
         <ion-icon name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
+
+    <ion-buttons slot="start" *ngIf="isOnboardingFlow">
+      <ion-button (click)="goToOnboardingWelcomePage()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
+  <strong>
+    Select an installation type according to your preference
+  </strong>
   <!-- TODO: Use better colors for "not selected" and "selected"-->
   <ion-card
     [color]="installationType === installationTypes.ONLINE ? 'primary' : 'tertiary'"
@@ -39,8 +48,7 @@
 
       <ul>
         <li>High security</li>
-        <li>Same device option</li>
-        <li>Internet check disabled</li>
+        <li><strong>Same device communication</strong></li>
       </ul>
     </ion-card-content>
   </ion-card>
@@ -75,7 +83,40 @@
 
       <ul>
         <li>Highest security</li>
-        <li>QR communication</li>
+        <li><strong>QR communication</strong></li>
+      </ul>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card
+    [color]="installationType === installationTypes.ALWAYS_ASK ? 'primary' : 'tertiary'"
+    (click)="installationType = installationTypes.ALWAYS_ASK"
+  >
+    <!-- TODO: Add picture -->
+
+    <ion-card-header>
+      <ion-row>
+        <ion-col>
+          <ion-card-title>
+            hybrid
+
+            <ion-icon name="qr-code-outline"></ion-icon>
+            <!-- Maybe use this shield or another checkmark to indicate which card is selected. 
+        <ion-icon name="shield-checkmark-outline"></ion-icon>-->
+          </ion-card-title>
+        </ion-col>
+        <ion-col size="1">
+          <ion-checkbox *ngIf="installationType === installationTypes.ALWAYS_ASK" [checked]="true"></ion-checkbox>
+        </ion-col>
+      </ion-row>
+    </ion-card-header>
+    <ion-card-content>
+      This is a device which at times may be connected to the internet
+      <ul>
+        <li>High security</li>
+        <li>
+          <strong>Same device and QR communication</strong>
+        </li>
       </ul>
     </ion-card-content>
   </ion-card>

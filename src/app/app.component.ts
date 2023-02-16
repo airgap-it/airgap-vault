@@ -1,4 +1,5 @@
 import { APP_PLUGIN, IACMessageTransport, ProtocolService, SPLASH_SCREEN_PLUGIN, STATUS_BAR_PLUGIN } from '@airgap/angular-core'
+import { MainProtocolSymbols } from '@airgap/coinlib-core'
 import {
   TezosSaplingExternalMethodProvider,
   TezosShieldedTezProtocol,
@@ -22,6 +23,7 @@ import { MnemonicSecret } from './models/secret'
 import { ErrorCategory, handleErrorLocal } from './services/error-handler/error-handler.service'
 import { IACService } from './services/iac/iac.service'
 import { NavigationService } from './services/navigation/navigation.service'
+import { ProtocolModuleService } from './services/protocol-module/protocol-module.service'
 import { SaplingNativeService } from './services/sapling-native/sapling-native.service'
 import { SecretsService } from './services/secrets/secrets.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
@@ -55,6 +57,7 @@ export class AppComponent implements AfterViewInit {
     private readonly navigationService: NavigationService,
     private readonly httpClient: HttpClient,
     private readonly saplingNativeService: SaplingNativeService,
+    private readonly protocolModuleService: ProtocolModuleService,
     @Inject(APP_PLUGIN) private readonly app: AppPlugin,
     @Inject(SECURITY_UTILS_PLUGIN) private readonly securityUtils: SecurityUtilsPlugin,
     @Inject(SPLASH_SCREEN_PLUGIN) private readonly splashScreen: SplashScreenPlugin,
@@ -103,7 +106,7 @@ export class AppComponent implements AfterViewInit {
                   const protocol: string = data.url.substr(DEEPLINK_VAULT_ADD_ACCOUNT.length)
                   if (protocol.length > 0) {
                     this.navigationService
-                      .routeWithState('account-add', { protocol })
+                      .routeWithState('account-add', { protocol, secret: secrets[0] })
                       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
                   } else {
                     this.navigationService.route('account-add').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
@@ -131,6 +134,8 @@ export class AppComponent implements AfterViewInit {
   }
 
   private async initializeProtocols(): Promise<void> {
+    const protocols = await this.protocolModuleService.loadProtocols([MainProtocolSymbols.XTZ_SHIELDED])
+
     const externalMethodProvider: TezosSaplingExternalMethodProvider | undefined =
       await this.saplingNativeService.createExternalMethodProvider()
 
@@ -142,7 +147,11 @@ export class AppComponent implements AfterViewInit {
     )
 
     this.protocolService.init({
-      extraActiveProtocols: [shieldedTezProtocol]
+      activeProtocols: protocols.activeProtocols,
+      passiveProtocols: protocols.passiveProtocols,
+      extraActiveProtocols: [shieldedTezProtocol],
+      activeSubProtocols: protocols.activeSubProtocols,
+      passiveSubProtocols: protocols.passiveSubProtocols
     })
 
     await shieldedTezProtocol.initParameters(await this.getSaplingParams('spend'), await this.getSaplingParams('output'))

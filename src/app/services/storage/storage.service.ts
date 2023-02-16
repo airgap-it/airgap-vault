@@ -21,7 +21,8 @@ export enum InteractionType {
 export enum InstallationType {
   UNDETERMINED = 'UNDETERMINED',
   ONLINE = 'ONLINE',
-  OFFLINE = 'OFFLINE'
+  OFFLINE = 'OFFLINE',
+  ALWAYS_ASK = 'ALWAYS_ASK'
 }
 
 // TODO: rename?
