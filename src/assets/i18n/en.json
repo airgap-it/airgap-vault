@@ -74,7 +74,8 @@
       "medium_text": "Secure communication through app switching."
     },
     "wallet_install_label": "Install AirGap Wallet",
-    "continue_label": "Let's Go"
+    "continue_label": "Continue",
+    "skip_label": "Skip"
   },
   "secret-setup": {
     "heading": "Secret Setup",
@@ -95,7 +96,9 @@
     "coin-flip": {
       "label": "Generate with Coin Flips",
       "text": "Use a coin to generate a secure and verifiable recovery phrase."
-    }
+    },  
+    "advanced": "Advanced Entropy Generation",
+    "advanced_warning": "Allows you to use Dice Rolls or Coin Flips as alternative entropy generation methods. Only use these, if you are familiar with them and know the risks involved. Only use a <span class=\"style__strong\">real-world</span> dice or coin"
   },
   "secret-edit": {
     "title": " Your Secret",
@@ -187,6 +190,7 @@
     "heading": "Make sure you follow these rules",
     "text": "We've generated your secret, it's a sequence of words.",
     "description": "Make sure you understand these rules that ensure you will always have safe access to your accounts.",
+    "confirm": "Please take notice and click the checkboxes:",
     "rules-list": {
       "item-1_text": "Write these words down on a piece of paper",
       "item-2_text": "The words need to be in order",
@@ -198,7 +202,7 @@
     "understood_label": "Understood"
   },
   "secret-show": {
-    "title": "This is your recovery phrase",
+    "title": "Recovery Phrase",
     "text": "Write down all words on a piece of paper, remember to follow the rules.",
     "fingerprint": "Fingerprint",
     "next-step_label": "Next Step",
