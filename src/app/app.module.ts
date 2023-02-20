@@ -15,7 +15,11 @@ import {
   SPLASH_SCREEN_PLUGIN,
   STATUS_BAR_PLUGIN,
   FILESYSTEM_PLUGIN,
-  UiEventService
+  UiEventService,
+  IsolatedModules,
+  ISOLATED_MODULES_PLUGIN,
+  Zip,
+  ZIP_PLUGIN
 } from '@airgap/angular-core'
 import { AirGapAngularNgRxModule, currencySymbolNgRxFacade } from '@airgap/angular-ngrx'
 import { PercentPipe } from '@angular/common'
@@ -28,6 +32,7 @@ import { AppLauncher } from '@capacitor/app-launcher'
 import { Clipboard } from '@capacitor/clipboard'
 import { SplashScreen } from '@capacitor/splash-screen'
 import { StatusBar } from '@capacitor/status-bar'
+import { FilePicker } from '@capawesome/capacitor-file-picker'
 import { DeviceMotion } from '@ionic-native/device-motion/ngx'
 import { Diagnostic } from '@ionic-native/diagnostic/ngx'
 import { IonicModule, IonicRouteStrategy, Platform } from '@ionic/angular'
@@ -39,8 +44,8 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
 import * as fromRoot from './app.reducers'
-import { CameraPreview, IsolatedProtocol, SaplingNative, SecurityUtils } from './capacitor-plugins/definitions'
-import { CAMERA_PREVIEW_PLUGIN, ISOLATED_PROTOCOL_PLUGIN, SAPLING_PLUGIN, SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
+import { CameraPreview, SaplingNative, SecurityUtils } from './capacitor-plugins/definitions'
+import { CAMERA_PREVIEW_PLUGIN, FILE_PICKER_PLUGIN, SAPLING_PLUGIN, SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
 import { appConfig } from './config/app-config'
 import { DistributionOnboardingPageModule } from './pages/distribution-onboarding/distribution-onboarding.module'
 import { IntroductionPageModule } from './pages/introduction/introduction.module'
@@ -125,8 +130,10 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
     { provide: SECURITY_UTILS_PLUGIN, useValue: SecurityUtils },
     { provide: SPLASH_SCREEN_PLUGIN, useValue: SplashScreen },
     { provide: STATUS_BAR_PLUGIN, useValue: StatusBar },
-    { provide: ISOLATED_PROTOCOL_PLUGIN, useValue: IsolatedProtocol },
     { provide: APP_CONFIG, useValue: appConfig },
+    { provide: ZIP_PLUGIN, useValue: Zip },
+    { provide: FILE_PICKER_PLUGIN, useValue: FilePicker },
+    { provide: ISOLATED_MODULES_PLUGIN, useValue: IsolatedModules },
     { provide: ErrorHandler, useClass: ErrorHandlerService },
     Diagnostic,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

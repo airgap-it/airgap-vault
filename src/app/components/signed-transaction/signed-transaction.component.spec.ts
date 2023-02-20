@@ -7,6 +7,7 @@ import { IACMessageType, Message, Serializer } from '@airgap/serializer'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
 import { SecureStorageService } from 'src/app/services/secure-storage/secure-storage.service'
 import { SecureStorageServiceMock } from 'src/app/services/secure-storage/secure-storage.mock'
+import { ISOLATED_MODULES_PLUGIN, WebIsolatedModules } from '@airgap/angular-core'
 
 describe('SignedTransactionComponent', () => {
   let signedTransactionFixture: ComponentFixture<SignedTransactionComponent>
@@ -18,7 +19,11 @@ describe('SignedTransactionComponent', () => {
     TestBed.configureTestingModule(
       unitHelper.testBed({
         declarations: [],
-        providers: [{ provide: SecureStorageService, useClass: SecureStorageServiceMock }, SecretsService]
+        providers: [
+          { provide: SecureStorageService, useClass: SecureStorageServiceMock },
+          { provide: ISOLATED_MODULES_PLUGIN, useValue: new WebIsolatedModules() },
+          SecretsService
+        ]
       })
     )
       .compileComponents()
