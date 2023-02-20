@@ -61,6 +61,10 @@ export class AccountAddPage {
   ) {
     const state = this.navigationService.getState()
     this.secret = state.secret
+  }
+
+  public ionViewWillEnter(): void {
+    const state = this.navigationService.getState()
     this.protocolService.getActiveProtocols().then(async (protocols: ICoinProtocol[]) => {
       const navigationIdentifier: ProtocolSymbols | undefined = state.protocol
 

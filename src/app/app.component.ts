@@ -1,4 +1,4 @@
-import { APP_PLUGIN, IACMessageTransport, ProtocolService, SPLASH_SCREEN_PLUGIN, STATUS_BAR_PLUGIN } from '@airgap/angular-core'
+import { APP_PLUGIN, IACMessageTransport, IsolatedModulesService, ProtocolService, SPLASH_SCREEN_PLUGIN, STATUS_BAR_PLUGIN } from '@airgap/angular-core'
 import { MainProtocolSymbols } from '@airgap/coinlib-core'
 import {
   TezosSaplingExternalMethodProvider,
@@ -23,7 +23,6 @@ import { MnemonicSecret } from './models/secret'
 import { ErrorCategory, handleErrorLocal } from './services/error-handler/error-handler.service'
 import { IACService } from './services/iac/iac.service'
 import { NavigationService } from './services/navigation/navigation.service'
-import { ProtocolModuleService } from './services/protocol-module/protocol-module.service'
 import { SaplingNativeService } from './services/sapling-native/sapling-native.service'
 import { SecretsService } from './services/secrets/secrets.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
@@ -57,7 +56,7 @@ export class AppComponent implements AfterViewInit {
     private readonly navigationService: NavigationService,
     private readonly httpClient: HttpClient,
     private readonly saplingNativeService: SaplingNativeService,
-    private readonly protocolModuleService: ProtocolModuleService,
+    private readonly isolatedModuleService: IsolatedModulesService,
     @Inject(APP_PLUGIN) private readonly app: AppPlugin,
     @Inject(SECURITY_UTILS_PLUGIN) private readonly securityUtils: SecurityUtilsPlugin,
     @Inject(SPLASH_SCREEN_PLUGIN) private readonly splashScreen: SplashScreenPlugin,
@@ -134,7 +133,7 @@ export class AppComponent implements AfterViewInit {
   }
 
   private async initializeProtocols(): Promise<void> {
-    const protocols = await this.protocolModuleService.loadProtocols([MainProtocolSymbols.XTZ_SHIELDED])
+    const protocols = await this.isolatedModuleService.loadProtocols('offline', [MainProtocolSymbols.XTZ_SHIELDED])
 
     const externalMethodProvider: TezosSaplingExternalMethodProvider | undefined =
       await this.saplingNativeService.createExternalMethodProvider()
