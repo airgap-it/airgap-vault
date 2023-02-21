@@ -39,8 +39,8 @@
   },
   "dependencies": {
     "@airgap/aeternity": "0.13.10",
-    "@airgap/angular-core": "0.0.35-beta.4",
-    "@airgap/angular-ngrx": "0.0.35-beta.4",
+    "@airgap/angular-core": "0.0.35-beta.5",
+    "@airgap/angular-ngrx": "0.0.35-beta.5",
     "@airgap/astar": "0.13.10",
     "@airgap/bitcoin": "0.13.10",
     "@airgap/coinlib-core": "0.13.10",

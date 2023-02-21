@@ -20,7 +20,7 @@
     </ng-container>
 
     <ion-grid
-      *ngIf="(transactionsDetails$ | async).status === UIResourceStatus.ERROR 
+      *ngIf="(transactionsDetails$ | async).status === UIResourceStatus.ERROR
         && (rawData$ | async).status === UIResourceStatus.SUCCESS"
     >
       <ion-row>
