@@ -82,15 +82,16 @@ const ISOLATED_PROTOCOL_MODE_ONLINE = 'online'
 const ISOLATED_PROTOCOL_TYPE_MAIN = 'main'
 const ISOLATED_PROTOCOL_TYPE_SUB = 'sub'
 
-function getIsolatedProtocolConfiguration(protocol, mode, blockExplorerMetadata, network) {
+function getIsolatedProtocolConfiguration(protocol, mode, blockExplorerMetadata, network, crypto) {
   return protocol.getMetadata()
     .then((protocolMetadata) => {
       const configuration = {
         mode,
         identifier: protocolMetadata.identifier,
         protocolMetadata,
-        blockExplorerMetadata: blockExplorerMetadata ?? null,
-        network: network ?? null,
+        blockExplorerMetadata: blockExplorerMetadata ? blockExplorerMetadata : null,
+        network: network ? network : null,
+        crypto: crypto ? crypto : null,
         methods: collectMethods(protocol)
       }
 
@@ -122,7 +123,9 @@ function loadOfflineProtocolMetadata(module, protocolIdentifier) {
         return []
       }
 
-      return getIsolatedProtocolConfiguration(protocol, ISOLATED_PROTOCOL_MODE_OFFLINE).then((isolatedProtocol) => [isolatedProtocol])
+      return protocol.getCryptoConfiguration()
+        .then((crypto) => getIsolatedProtocolConfiguration(protocol, ISOLATED_PROTOCOL_MODE_OFFLINE, undefined, undefined, crypto))
+        .then((isolatedProtocol) => [isolatedProtocol])
     })
 }
 
