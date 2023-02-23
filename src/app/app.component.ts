@@ -126,9 +126,12 @@ export class AppComponent implements AfterViewInit {
   }
 
   private async initializeTranslations(): Promise<void> {
+    this.translateService.setDefaultLang(LanguagesType.EN)
+
     const savedLanguage = await this.storageService.get(VaultStorageKey.LANGUAGE_TYPE)
     const deviceLanguage = this.translateService.getBrowserLang()
-    const currentLanguage = savedLanguage || (deviceLanguage as LanguagesType) || LanguagesType.EN
+    const currentLanguage = savedLanguage || (deviceLanguage as LanguagesType)
+
     await this.translateService.use(currentLanguage).toPromise()
   }
 
