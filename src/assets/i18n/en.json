@@ -96,7 +96,7 @@
     "coin-flip": {
       "label": "Generate with Coin Flips",
       "text": "Use a coin to generate a secure and verifiable recovery phrase."
-    },  
+    },
     "advanced": "Advanced Entropy Generation",
     "advanced_warning": "Allows you to use Dice Rolls or Coin Flips as alternative entropy generation methods. Only use these, if you are familiar with them and know the risks involved. Only use a <span class=\"style__strong\">real-world</span> dice or coin"
   },
@@ -677,5 +677,13 @@
         "description": "Something about the following files being supposed to be copied over and trusting their content."
       }
     }
+  },
+  "keyboard": {
+    "paste": "Paste",
+    "add": "Add Word",
+    "delete": "Delete Word",
+    "shuffle": "Shuffle Keys",
+    "mask": "Mask Text",
+    "word_list": "Show Word List"
   }
 }

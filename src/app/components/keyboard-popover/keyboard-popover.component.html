@@ -1,0 +1,25 @@
+<ion-list lines="none" class="ion-no-padding ion-no-margin">
+  <ion-item button detail="false" (click)="add()">
+    <ion-icon slot="start" name="add"></ion-icon>
+    {{ 'keyboard.add' | translate }}
+  </ion-item>
+  <ion-item button detail="false" (click)="delete()">
+    <ion-icon slot="start" name="trash-outline"></ion-icon>
+    {{ 'keyboard.delete' | translate }}
+  </ion-item>
+
+  <ion-item button detail="false" (click)="toggleShuffled()">
+    <ion-icon slot="start" name="shuffle-outline"></ion-icon>
+    {{ 'keyboard.shuffle' | translate }}
+  </ion-item>
+
+  <ion-item button detail="false" (click)="scramble()">
+    <ion-icon slot="start" [name]="maskWords ? 'eye-outline' : 'eye-off-outline'"></ion-icon>
+    {{ 'keyboard.mask' | translate }}
+  </ion-item>
+
+  <ion-item button detail="false" (click)="showWordlist()">
+    <ion-icon slot="start" name="list"></ion-icon>
+    {{ 'keyboard.word_list' | translate }}
+  </ion-item>
+</ion-list>
