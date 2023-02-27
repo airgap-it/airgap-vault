@@ -43,10 +43,11 @@
 </ng-container>
 
 <div class="content--align__center-center actions--container">
-  <ion-button (click)="add()"><ion-icon name="add"></ion-icon></ion-button>
-  <ion-button (click)="delete()"><ion-icon name="trash-outline"></ion-icon></ion-button>
-  <ion-button (click)="toggleShuffled()"><ion-icon name="shuffle-outline"></ion-icon></ion-button>
-  <ion-button (click)="paste()"><ion-icon name="clipboard-outline"></ion-icon></ion-button>
-  <ion-button (click)="scramble()"><ion-icon [name]="_maskInput ? 'eye-outline' : 'eye-off-outline'"></ion-icon></ion-button>
-  <ion-button (click)="showWordlist()"><ion-icon name="list"></ion-icon></ion-button>
+  <ion-button (click)="paste()">
+    <ion-icon name="clipboard-outline"></ion-icon>
+    {{ 'keyboard.paste' | translate }}
+  </ion-button>
+  <ion-button (click)="presentPopover($event)">
+    <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
+  </ion-button>
 </div>
