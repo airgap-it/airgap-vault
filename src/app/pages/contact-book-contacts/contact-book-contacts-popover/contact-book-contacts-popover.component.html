@@ -1,0 +1,15 @@
+<ion-list lines="none" class="ion-no-padding ion-no-margin">
+  <ion-list-header>
+    <ion-label>{{ 'contact-book.label_sort_by' | translate }}</ion-label>
+  </ion-list-header>
+  <ion-list lines="none" class="ion-padding-vertical" (ionChange)="changeSort($event.detail.value)">
+    <ion-radio-group [(ngModel)]="selectedSortType">
+      <ng-container *ngFor="let sortType of sortTypes">
+        <ion-item detail="false" class="ion-no-padding">
+          <ion-label color="white">{{ sortType.label }}</ion-label>
+          <ion-radio class="ion-no-margin" slot="end" [value]="sortType.id"></ion-radio>
+        </ion-item>
+      </ng-container>
+    </ion-radio-group>
+  </ion-list>
+</ion-list>
