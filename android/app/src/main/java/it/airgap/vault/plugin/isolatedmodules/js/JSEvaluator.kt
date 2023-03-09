@@ -22,6 +22,14 @@ class JSEvaluator constructor(
         module.registerFor(protocolIdentifiers)
     }
 
+    fun deregisterModules(identifiers: List<String>) {
+        identifiers.forEach { modules.remove(it) }
+    }
+
+    fun deregisterAllModules() {
+        modules.clear()
+    }
+
     suspend fun evaluatePreviewModule(module: JSModule): JSObject =
         module.environment.run(module, JSModuleAction.Load(null)).also {
             module.appendType(it)

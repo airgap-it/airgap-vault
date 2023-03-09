@@ -14,7 +14,7 @@ public class IsolatedModules: CAPPlugin {
     private let fileExplorer: FileExplorer = .shared
     private lazy var jsEvaluator: JSEvaluator = .init(fileExplorer: fileExplorer)
     
-    @objc func previewModule(_ call: CAPPluginCall) {
+    @objc func previewDynamicModule(_ call: CAPPluginCall) {
         call.assertReceived(forMethod: "previewModule", requiredParams: Param.PATH, Param.DIRECTORY)
         
         do {
@@ -41,7 +41,7 @@ public class IsolatedModules: CAPPlugin {
         }
     }
     
-    @objc func registerModule(_ call: CAPPluginCall) {
+    @objc func registerDynamicModule(_ call: CAPPluginCall) {
         call.assertReceived(forMethod: "registerModule", requiredParams: Param.IDENTIFIER, Param.PROTOCOL_IDENTIFIERS)
         
         do {
@@ -64,7 +64,24 @@ public class IsolatedModules: CAPPlugin {
         }
     }
     
-    @objc func loadModules(_ call: CAPPluginCall) {
+    @objc func removeDynamicModules(_ call: CAPPluginCall) {
+        Task {
+            do {
+                if let identifiers = call.identifiers {
+                    try fileExplorer.removeModules(identifiers)
+                    await jsEvaluator.deregisterModules(identifiers)
+                } else {
+                    try fileExplorer.removeAllModules()
+                    await jsEvaluator.deregisterAllModules()
+                }
+                call.resolve()
+            } catch {
+                call.reject("Error: \(error)")
+            }
+        }
+    }
+    
+    @objc func loadAllModules(_ call: CAPPluginCall) {
         Task {
             do {
                 let protocolType = call.protocolType
@@ -152,6 +169,7 @@ public class IsolatedModules: CAPPlugin {
         static let PATH = "path"
         static let DIRECTORY = "directory"
         static let IDENTIFIER = "identifier"
+        static let IDENTIFIERS = "identifiers"
         static let PROTOCOL_IDENTIFIERS = "protocolIdentifiers"
         static let PROTOCOL_TYPE = "protocolType"
         static let TARGET = "target"
@@ -176,6 +194,15 @@ private extension CAPPluginCall {
     }
     
     var identifier: String? { return getString(IsolatedModules.Param.IDENTIFIER) }
+    var identifiers: [String]? {
+        return getArray(IsolatedModules.Param.IDENTIFIERS)?.compactMap {
+            if let string = $0 as? String {
+                return string
+            } else {
+                return nil
+            }
+        }
+    }
     var protocolIdentifiers: [String]? {
         return getArray(IsolatedModules.Param.PROTOCOL_IDENTIFIERS)?.compactMap {
             if let string = $0 as? String {

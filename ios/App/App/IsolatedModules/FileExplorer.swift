@@ -55,6 +55,14 @@ struct FileExplorer {
         })
     }
     
+    func removeModules(_ identifiers: [String]) throws {
+        try documentExplorer.removeModules(identifiers)
+    }
+    
+    func removeAllModules() throws {
+        try documentExplorer.removeAllModules()
+    }
+    
     func readModuleSources(_ module: JSModule) throws -> [Data] {
         switch module {
         case .asset(let asset):
@@ -77,7 +85,7 @@ struct FileExplorer {
         }
     }
     
-    private func loadModules<T: JSModuleProtocol, E: DynamicSourcesExplorer>(
+    private func loadModules<T: JSModuleProtocol, E: SourcesExplorer>(
         using explorer: E,
         creatingModuleWith moduleInit: (_ identifier: String, _ namespace: String?, _ preferredEnvironment: JSEnvironmentKind, _ sources: [String]) -> T
     ) throws -> [T] where E.T == T {
@@ -107,7 +115,7 @@ struct FileExplorer {
 
 // MARK: AssetsExplorer
 
-private struct AssetsExplorer: DynamicSourcesExplorer {
+private struct AssetsExplorer: SourcesExplorer {
     typealias T = JSModule.Asset
     
     static let assetsURL: URL = Bundle.main.url(forResource: "public", withExtension: nil)!.appendingPathComponent("assets")
@@ -149,23 +157,49 @@ private struct AssetsExplorer: DynamicSourcesExplorer {
 
 // MARK: DocumentExplorer
 
-private struct DocumentExplorer: DynamicSourcesExplorer {
+private struct DocumentExplorer: SourcesExplorer, DynamicSourcesExplorer {
     typealias T = JSModule.Instsalled
     
     private static let modulesDir: String = "protocol_modules"
     
     private let fileManager: FileManager
     
+    private var documentsURL: URL? { fileManager.urls(for: .documentDirectory, in: .userDomainMask).first }
+    private var modulesDirURL: URL? { documentsURL?.appendingPathComponent(Self.modulesDir) }
+    
     init(fileManager: FileManager) {
         self.fileManager = fileManager
     }
     
+    func removeModules(_ identifiers: [String]) throws {
+        guard let modulesDirURL = modulesDirURL else {
+            return
+        }
+        
+        var isDirectory: ObjCBool = true
+        try identifiers.forEach {
+            if fileManager.fileExists(atPath: modulesDirURL.path, isDirectory: &isDirectory) {
+                try fileManager.removeItem(at: modulesDirURL.appendingPathComponent($0))
+            }
+        }
+    }
+    
+    func removeAllModules() throws {
+        var isDirectory: ObjCBool = true
+        guard let modulesDirURL = modulesDirURL, fileManager.fileExists(atPath: modulesDirURL.path, isDirectory: &isDirectory) else {
+            return
+        }
+        
+        try fileManager.removeItem(at: modulesDirURL)
+    }
+    
     func listModules() throws -> [String] {
-        guard let url = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
+        guard let modulesDirURL = modulesDirURL else {
             return []
         }
         
-        let modulesDirPath = url.appendingPathComponent(Self.modulesDir).path
+        let modulesDirPath = modulesDirURL.path
+        
         guard fileManager.fileExists(atPath: modulesDirPath) else {
             return []
         }
@@ -194,15 +228,20 @@ private struct DocumentExplorer: DynamicSourcesExplorer {
     }
 }
 
-// MARK: DynamicSourcesExplorer
+// MARK: SourcesExplorer
 
-private protocol DynamicSourcesExplorer {
+private protocol SourcesExplorer {
     associatedtype T
     
     func listModules() throws -> [String]
     
     func readModuleSources(_ module: T) throws -> [Data]
     func readModuleManifest(_ module: String) throws -> Data
+}
+
+private protocol DynamicSourcesExplorer {
+    func removeModules(_ identifiers: [String]) throws
+    func removeAllModules() throws
 }
 
 // MARK: Extensions
