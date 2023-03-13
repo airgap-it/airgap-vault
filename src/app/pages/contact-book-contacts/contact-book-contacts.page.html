@@ -1,0 +1,99 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start" (click)="onClickBack()">
+      <ion-back-button defaultHref="/tabs/tab-settings"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'contact-book.title_address_book' | translate }}</ion-title>
+    <ion-buttons slot="primary" (click)="onClickNew($event)">
+      <ion-button>
+        <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-toolbar color="secondary">
+    <ion-searchbar placeholder="{{'contact-book.label_search_contacts' | translate}}" (ionInput)="onSearch($event)"></ion-searchbar>
+    <ion-buttons slot="primary" (click)="onClickSort($event)">
+      <ion-button>
+        <ion-icon slot="icon-only" name="funnel"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ng-container [ngSwitch]="sortType">
+    <ng-container *ngSwitchCase="sortEnum.ADDED_BY">
+      <div class="contacts-wrapper" *ngFor="let addedType of getAddedTypesFromContacts()">
+        <h3 class="contacts-letter">{{addedType}}</h3>
+        <div *ngFor="let contact of getContactsFromAddedType(addedType)">
+          <airgap-contact-book-contacts-item
+            [name]="contact.name"
+            [address]="contact.address"
+            [date]="contact.date"
+            [addedFrom]="contact.addedFrom"
+            (click)="onClickItem(contact)"
+          ></airgap-contact-book-contacts-item>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="sortEnum.DATE_CREATION">
+      <div class="contacts-wrapper" *ngFor="let date of getDatesFromContacts()">
+        <h3 class="contacts-letter">{{date}}</h3>
+        <div *ngFor="let contact of getContactsFromDate(date)">
+          <airgap-contact-book-contacts-item
+            [name]="contact.name"
+            [address]="contact.address"
+            [date]="contact.date"
+            [addedFrom]="contact.addedFrom"
+            (click)="onClickItem(contact)"
+          ></airgap-contact-book-contacts-item>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="sortEnum.ADDRESS">
+      <div class="contacts-wrapper" *ngFor="let address of getAddressesFromContacts()">
+        <h3 class="contacts-letter">{{address}}</h3>
+        <div *ngFor="let contact of getContactsFromAddress(address)">
+          <airgap-contact-book-contacts-item
+            [name]="contact.name"
+            [address]="contact.address"
+            [date]="contact.date"
+            [addedFrom]="contact.addedFrom"
+            (click)="onClickItem(contact)"
+          ></airgap-contact-book-contacts-item>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngSwitchDefault>
+      <div class="contacts-wrapper" *ngFor="let letter of getLettersFromNames()">
+        <h3 class="contacts-letter">{{letter}}</h3>
+        <div *ngFor="let contact of getContactsFromLetter(letter)">
+          <airgap-contact-book-contacts-item
+            [name]="contact.name"
+            [address]="contact.address"
+            [date]="contact.date"
+            [addedFrom]="contact.addedFrom"
+            (click)="onClickItem(contact)"
+          ></airgap-contact-book-contacts-item>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="suggestions.length > 0">
+      <div class="suggestions-wrapper">
+        <h3 class="suggestions-header">{{ 'contact-book.label_suggestions' | translate }}</h3>
+        <div *ngFor="let suggestion of suggestions">
+          <airgap-contact-book-contacts-suggestion
+            [address]="suggestion"
+            (onClickAdd)="onClickAddSuggestion(suggestion)"
+            (onClickClose)="onClickCloseSuggestion(suggestion)"
+          ></airgap-contact-book-contacts-suggestion>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+</ion-content>

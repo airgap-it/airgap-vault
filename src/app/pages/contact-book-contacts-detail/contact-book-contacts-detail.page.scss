@@ -1,0 +1,76 @@
+ion-content {
+  --padding-bottom: var(--ion-padding, 64px);
+}
+
+ion-item {
+  margin-bottom: 12px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+ion-list {
+  width: 100%;
+}
+
+ion-item {
+  opacity: 1;
+  color: black;
+  font-weight: 800;
+}
+
+.top-button {
+  font-weight: 600;
+  margin: 0px 12px;
+  cursor: pointer;
+}
+
+.input_disabled {
+  font-weight: 400;
+  color: rgba(128, 128, 128, 0.793);
+}
+
+.input_enabled {
+  font-weight: 400;
+}
+
+.main-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .image-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 24px;
+    margin-top: 24px;
+
+    .image {
+      width: 80px;
+      height: 80px;
+      background-color: pink;
+      border-radius: 100%;
+    }
+  }
+
+  .name {
+    margin: 0px 0px 4px 0px;
+  }
+
+  .added-wrapper {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.666);
+    margin: 0px 0px 24px 0px;
+  }
+
+  .delete-button {
+    width: 100%;
+    background-color: white;
+    font-size: 14px;
+    padding: 0px;
+    height: 38px;
+    color: red;
+    border-radius: 6px;
+    margin-top: 24px;
+  }
+}

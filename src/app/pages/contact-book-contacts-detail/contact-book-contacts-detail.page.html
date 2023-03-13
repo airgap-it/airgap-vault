@@ -1,0 +1,129 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar *ngIf="state === 'view'">
+    <ion-buttons slot="start" (click)="onClickBack()">
+      <ion-back-button defaultHref=""></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end" (click)="onClickEdit()">
+      <p class="top-button">{{ 'contact-book.label_edit' | translate }}</p>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar *ngIf="state === 'new'">
+    <ion-buttons slot="start" (click)="onClickCancel()">
+      <p class="top-button">{{ 'contact-book.label_cancel' | translate }}</p>
+    </ion-buttons>
+    <ion-title>{{ "New Address Entry" }}</ion-title>
+    <ion-buttons slot="end" (click)="onClickFinish()">
+      <p class="top-button">{{ 'contact-book.label_finish' | translate }}</p>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar *ngIf="state === 'edit'">
+    <ion-buttons slot="start" (click)="onClickCancel()">
+      <p class="top-button">{{ 'contact-book.label_cancel' | translate }}</p>
+    </ion-buttons>
+    <ion-buttons slot="end" (click)="onClickFinish()">
+      <p class="top-button">{{ 'contact-book.label_finish' | translate }}</p>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="main-wrapper">
+    <div class="image-wrapper">
+      <airgap-identicon class="image" [address]="contact?.address || ''"></airgap-identicon>
+    </div>
+    <ng-container *ngIf="state === 'view'">
+      <h1 class="name">{{contact?.name || ""}}</h1>
+      <div class="added-wrapper" *ngIf="contact && contact.addedFrom">
+        {{ 'contact-book.label_added_by' | translate }}
+        <ng-container *ngIf="contact && contact.addedFrom === addEnum.QR">
+          <svg
+            fill="currentColor"
+            stroke-width="0"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 1024 1024"
+            height="1em"
+            width="1em"
+            style="overflow: visible;"
+          >
+            <path
+              d="M468 128H160c-17.7 0-32 14.3-32 32v308c0 4.4 3.6 8 8 8h332c4.4 0 8-3.6 8-8V136c0-4.4-3.6-8-8-8zm-56 284H192V192h220v220zm-138-74h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm194 210H136c-4.4 0-8 3.6-8 8v308c0 17.7 14.3 32 32 32h308c4.4 0 8-3.6 8-8V556c0-4.4-3.6-8-8-8zm-56 284H192V612h220v220zm-138-74h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm590-630H556c-4.4 0-8 3.6-8 8v332c0 4.4 3.6 8 8 8h332c4.4 0 8-3.6 8-8V160c0-17.7-14.3-32-32-32zm-32 284H612V192h220v220zm-138-74h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm194 210h-48c-4.4 0-8 3.6-8 8v134h-78V556c0-4.4-3.6-8-8-8H556c-4.4 0-8 3.6-8 8v332c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V644h78v102c0 4.4 3.6 8 8 8h190c4.4 0 8-3.6 8-8V556c0-4.4-3.6-8-8-8zM746 832h-48c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8zm142 0h-48c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8z"
+            ></path>
+          </svg>
+        </ng-container>
+
+        <ng-container *ngIf="contact && contact.addedFrom === addEnum.MANUAL">
+          <svg
+            fill="currentColor"
+            stroke-width="0"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 576 512"
+            height="1em"
+            width="1em"
+            style="overflow: visible;"
+          >
+            <path
+              d="M512 448H64c-35.35 0-64-28.65-64-64V128c0-35.35 28.65-64 64-64h448c35.35 0 64 28.65 64 64v256c0 35.3-28.7 64-64 64zM128 180v-40c0-6.6-5.4-12-12-12H76c-6.62 0-12 5.4-12 12v40c0 6.6 5.38 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-384 96v-40c0-6.6-5.4-12-12-12H76c-6.62 0-12 5.4-12 12v40c0 6.6 5.38 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-384 96v-40c0-6.6-5.4-12-12-12H76c-6.62 0-12 5.4-12 12v40c0 6.6 5.38 12 12 12h40c6.6 0 12-5.4 12-12zm288 0v-40c0-6.6-5.4-12-12-12H172c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h232c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12z"
+            ></path>
+          </svg>
+        </ng-container>
+
+        <ng-container *ngIf="contact && contact.addedFrom === addEnum.RECOMMENDED">
+          <svg
+            fill="currentColor"
+            stroke-width="0"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 384 512"
+            height="1em"
+            width="1em"
+            style="overflow: visible;"
+          >
+            <path
+              d="M112.1 454.3c0 6.297 1.816 12.44 5.284 17.69l17.14 25.69c5.25 7.875 17.17 14.28 26.64 14.28h61.67c9.438 0 21.36-6.401 26.61-14.28l17.08-25.68c2.938-4.438 5.348-12.37 5.348-17.7l.128-39.2H112l.1 39.2zM192 0C90.02.32 16 82.97 16 175.1c0 44.38 16.44 84.84 43.56 115.8 16.53 18.84 42.34 58.23 52.22 91.45.031.25.094.517.125.782h160.2c.031-.265.094-.516.125-.782 9.875-33.22 35.69-72.61 52.22-91.45C351.6 260.8 368 220.4 368 175.1 368 78.8 289.2.004 192 0zm96.4 260.1c-15.66 17.85-35.04 46.3-49.05 75.89h-94.61c-14.01-29.59-33.39-58.04-49.04-75.88C75.24 236.8 64 206.1 64 175.1 64 113.3 112.1 48.25 191.1 48 262.6 48 320 105.4 320 175.1c0 31-11.2 61.7-31.6 85zM176 80c-44.1 0-80 35.9-80 80 0 8.844 7.156 16 16 16s16-7.2 16-16c0-26.47 21.53-48 48-48 8.844 0 16-7.148 16-15.99S184.8 80 176 80z"
+            ></path>
+          </svg>
+        </ng-container>
+
+        <ng-container *ngIf="contact && contact.addedFrom === addEnum.SIGNING">
+          <svg
+            fill="currentColor"
+            stroke-width="0"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 576 512"
+            height="1em"
+            width="1em"
+            style="overflow: visible;"
+          >
+            <path
+              d="M0 64C0 28.65 28.65 0 64 0h160v128c0 17.7 14.3 32 32 32h128v139.6l-94.7 94.7c-8.2 8.2-14 18.5-16.8 29.8l-15.1 60.1c-2.3 9.4-1.7 19 1.4 27.8H64c-35.35 0-64-28.7-64-64V64zm256 64V0l128 128H256zm308.1 122.1c15.7 15.6 15.7 40.9 0 56.6l-29.4 29.4-70.9-71 29.4-29.4c15.6-15.6 40.9-15.6 56.6 0l14.3 14.4zm-252.2 166 129.2-128.3 71 70.9-129.2 129.2c-4.1 4.1-9.3 7-14.9 8.4l-60.1 15.1c-5.5 1.3-11.2-.3-15.2-4.2-4-4-5.6-9.8-4.2-16.1l15-59.3c1.4-5.6 4.3-10.7 8.4-15.7z"
+            ></path>
+          </svg>
+        </ng-container>
+      </div>
+    </ng-container>
+
+    <ion-list>
+      <ion-item mode="md" color="light" *ngIf="state !== 'view'">
+        <ion-label class="ion-no-margin" position="stacked">{{ 'contact-book.label_name' | translate }}</ion-label>
+        <ion-input class="input_enabled" type="text" [value]="contact?.name || undefined" (ionInput)="onChangeName($event)"></ion-input>
+      </ion-item>
+      <ion-item mode="md" color="light" [disabled]="state === 'view'">
+        <ion-label class="ion-no-margin" position="stacked">{{ 'contact-book.label_address' | translate }}</ion-label>
+        <ion-input
+          [class.input_disabled]="state === 'view'"
+          [class.input_enabled]="state !== 'view'"
+          type="text"
+          [value]="contact?.address || undefined"
+          (ionInput)="onChangeAddress($event)"
+        ></ion-input>
+      </ion-item>
+      <ion-item mode="md" color="light" *ngIf="state === 'view'" [disabled]="true">
+        <ion-label class="ion-no-margin" position="stacked">{{ 'contact-book.label_creation_date' | translate }}</ion-label>
+        <ion-input class="input_disabled" type="text" [value]="contact?.date || undefined"></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <button class="delete-button" expand="block" *ngIf="state === 'edit'" (click)="onClickDelete()">
+      {{ 'contact-book.label_delete_entry' | translate }}
+    </button>
+  </div>
+</ion-content>
