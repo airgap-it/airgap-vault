@@ -1,0 +1,23 @@
+ion-content {
+  --padding-bottom: var(--ion-padding, 64px);
+}
+
+ion-toolbar {
+  --background: var(--ion-color-secondary);
+}
+
+ion-toolbar {
+  --color: var(--ion-color-secondary-contrast);
+}
+
+.delete-button {
+  width: calc(100% - 24px);
+  background-color: white;
+  font-size: 14px;
+  padding: 0px;
+  height: 38px;
+  color: red;
+  border-radius: 6px;
+  margin: 24px 12px 0px 12px;
+  border: 1px solid rgb(194, 194, 194);
+}
