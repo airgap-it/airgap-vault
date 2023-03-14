@@ -27,7 +27,7 @@ class JSEvaluator {
     }
     
     func evaluateLoadModules(_ modules: [JSModule], for protocolType: JSProtocolType?) async throws -> [String: Any] {
-        let modulesJSON = try await modules.asyncMap { module in
+        let modulesJSON = try await modules.asyncMap { module -> [String : Any] in
             let json = try await self.webViewEnv.run(.load(.init(protocolType: protocolType)), in: module)
             try await self.modulesManager.registerModule(module, forJSON: json)
             
@@ -131,7 +131,7 @@ class JSEvaluator {
                 throw Error.invalidJSON
             }
             
-            let protocolIdentifiers = try protocols.map { `protocol` in
+            let protocolIdentifiers = try protocols.map { `protocol` -> String in
                 guard let `protocol` = `protocol` as? [String: Any], let identifier = `protocol`["identifier"] as? String else {
                     throw Error.invalidJSON
                 }
