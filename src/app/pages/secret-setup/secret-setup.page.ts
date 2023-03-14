@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core'
+import { ModalController } from '@ionic/angular'
 import { first } from 'rxjs/operators'
 
 import { MnemonicSecret } from '../../models/secret'
@@ -7,6 +8,7 @@ import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/er
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
 import { VaultStorageKey, VaultStorageService } from '../../services/storage/storage.service'
+import { InstallationTypePage } from '../Installation-type/installation-type.page'
 
 @Component({
   selector: 'airgap-secret-setup',
@@ -21,6 +23,7 @@ export class SecretSetupPage implements OnInit {
   constructor(
     private readonly navigationService: NavigationService,
     private readonly secretsService: SecretsService,
+    private readonly modalController: ModalController,
     private readonly deviceService: DeviceService,
     private readonly storageService: VaultStorageService
   ) {}
@@ -67,5 +70,14 @@ export class SecretSetupPage implements OnInit {
 
   public goToCoinFlipPage(): void {
     this.navigationService.route('/secret-generate-coin-flip').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
+  public async goToInstallationTypePage(): Promise<void> {
+    const modal: HTMLIonModalElement = await this.modalController.create({
+      component: InstallationTypePage,
+      backdropDismiss: false
+    })
+
+    modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 }

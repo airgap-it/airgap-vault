@@ -1,6 +1,10 @@
-import { Component, OnInit } from '@angular/core'
+// import { IsolatedModuleMetadata, IsolatedModulesService, UiEventService } from '@airgap/angular-core'
+import { Component, /* Inject, */ OnInit } from '@angular/core'
+// import { FilePickerPlugin, PickFilesResult } from '@capawesome/capacitor-file-picker'
 import { AlertController } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
+// import { FILE_PICKER_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
+// import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 import { SecureStorageService } from 'src/app/services/secure-storage/secure-storage.service'
 import { VaultStorageService } from 'src/app/services/storage/storage.service'
@@ -17,11 +21,14 @@ export class DangerZonePage implements OnInit {
     public readonly storageService: VaultStorageService,
     private readonly secureStorage: SecureStorageService,
     private readonly navigationService: NavigationService
+    // private readonly isolatedModuleService: IsolatedModulesService,
+    // private readonly uiEventService: UiEventService,
+    // @Inject(FILE_PICKER_PLUGIN) private readonly filePicker: FilePickerPlugin
   ) {}
 
   ngOnInit() {}
 
-  async resetVault() {
+  public async resetVault() {
     const alert = await this.alertCtrl.create({
       header: this.translateService.instant('danger-zone.wipe.alert.title'),
       message: this.translateService.instant('danger-zone.wipe.alert.message'),
@@ -51,7 +58,7 @@ export class DangerZonePage implements OnInit {
     alert.present()
   }
 
-  async resetVaultError() {
+  public async resetVaultError() {
     const alert = await this.alertCtrl.create({
       header: this.translateService.instant('danger-zone.wipe-error.alert.title'),
       message: this.translateService.instant('danger-zone.wipe-error.alert.message'),
@@ -63,4 +70,34 @@ export class DangerZonePage implements OnInit {
     })
     alert.present()
   }
+
+  // disable module side-loading until it's production ready
+  // public async loadModule() {
+  //   let loader: HTMLIonLoadingElement | undefined
+
+  //   try {
+  //     const { files }: PickFilesResult = await this.filePicker.pickFiles({ 
+  //       multiple: false,
+  //       readData: false
+  //     })
+  //     const { name, path } = files[0]
+  //     if (!path) {
+  //       throw new Error(`Can't open the file.`)
+  //     }
+
+  //     loader = await this.uiEventService.getTranslatedLoader({
+  //       message: 'Loading...'
+  //     })
+  //     await loader.present().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
+  //     const metadata: IsolatedModuleMetadata = await this.isolatedModuleService.readModuleMetadata(name, path)
+
+  //     this.navigationService.routeWithState('/module-preview', { metadata }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  //   } catch (e) {
+  //     console.error('Loading protocol module data failed', e)
+  //     // TODO: show alert
+  //   } finally {
+  //     loader?.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
+  //     loader = undefined
+  //   }
+  // }
 }

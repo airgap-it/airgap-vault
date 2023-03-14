@@ -8,6 +8,13 @@
 import Foundation
 import Capacitor
 
+extension String: JSONConvertible {
+    
+    func toJSONString() throws -> String {
+        return "\"\(self)\""
+    }
+}
+
 extension JSObject: JSONConvertible {
     
     func toJSONString() throws -> String {
@@ -23,15 +30,15 @@ extension JSObject: JSONConvertible {
 extension JSArray: JSONConvertible {
     
     func toJSONString() throws -> String {
-        let jsonEncoder = JSONEncoder()
-        let elements = try map { (value: JSValue) throws -> String in
+        let elements = try map { value -> String in
             if JSONSerialization.isValidJSONObject(value) {
                 let data = try JSONSerialization.data(withJSONObject: value, options: [])
                 return String(data: data, encoding: .utf8)!
-            } /*else if let encodable = value as? Encodable {
+            } else if let encodable = value as? Encodable {
+                let jsonEncoder = JSONEncoder()
                 let data = try jsonEncoder.encode(encodable)
                 return String(data: data, encoding: .utf8)!
-            } */else if let jsonConvertible = value as? JSONConvertible {
+            } else if let jsonConvertible = value as? JSONConvertible {
                 return try jsonConvertible.toJSONString()
             } else {
                 throw JSError.invalidJSON
@@ -39,5 +46,19 @@ extension JSArray: JSONConvertible {
         }
         
         return "[\(elements.joined(separator: ","))]"
+    }
+}
+
+extension NSNumber: JSONConvertible {
+    
+    func toJSONString() throws -> String {
+        stringValue
+    }
+}
+
+extension NSNull: JSONConvertible {
+    
+    func toJSONString() throws -> String {
+        "null"
     }
 }

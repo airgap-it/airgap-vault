@@ -1,0 +1,11 @@
+<div class="suggestion-wrapper">
+  <div class="suggestion-image-wrapper"><airgap-identicon class="suggestion-image" [address]="address || ''"></airgap-identicon></div>
+  <div class="suggestion-name-wrapper">
+    <p class="suggestion-address">{{ address }}</p>
+  </div>
+  <div class="suggestion-actions">
+    <ion-button class="suggestion-button" (click)="onClickAddHandler()">{{ 'contact-book.label_add' | translate }}</ion-button>
+    <ion-icon (click)="onClickCloseHandler()" name="close" slot="icon-only"></ion-icon>
+    <!-- <ion-button class="suggestion-button" (click)="onClickCloseHandler()">{{ 'contact-book.label_close' | translate }}</ion-button> -->
+  </div>
+</div>

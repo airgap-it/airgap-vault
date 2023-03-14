@@ -6,7 +6,7 @@ import { Observable, ReplaySubject } from 'rxjs'
 export enum LanguagesType {
   EN = 'en',
   DE = 'de',
-  ES = 'es',
+  // ES = 'es',
   PT_BR = 'pt_BR',
   ZH_CN = 'zh_CN'
 }
@@ -21,7 +21,8 @@ export enum InteractionType {
 export enum InstallationType {
   UNDETERMINED = 'UNDETERMINED',
   ONLINE = 'ONLINE',
-  OFFLINE = 'OFFLINE'
+  OFFLINE = 'OFFLINE',
+  ALWAYS_ASK = 'ALWAYS_ASK'
 }
 
 // TODO: rename?
@@ -41,7 +42,12 @@ export enum VaultStorageKey {
   INTERACTION_TYPE = 'INTERACTION_TYPE',
   LANGUAGE_TYPE = 'LANGUAGE_TYPE',
   INSTALLATION_TYPE = 'INSTALLATION_TYPE',
-  AIRGAP_SECRET_LIST = 'airgap-secret-list'
+  AIRGAP_SECRET_LIST = 'airgap-secret-list',
+  AIRGAP_CONTACTS_LIST = 'airgap-contacts-list',
+  AIRGAP_CONTACTS_RECOMMENDED_LIST = 'airgap-contacts-recommended-list',
+  ADDRESS_BOOK_DISABLED = 'ADDRESS_BOOK_DISABLED',
+  ADDRESS_BOOK_SUGGESTIONS_DISABLED = 'ADDRESS_BOOK_SUGGESTIONS_DISABLED',
+  ADDRESS_BOOK_ONBOARDING_DISABLED = 'ADDRESS_BOOK_ONBOARDING_DISABLED'
 }
 
 interface VaultStorageKeyReturnType {
@@ -55,6 +61,11 @@ interface VaultStorageKeyReturnType {
   [VaultStorageKey.LANGUAGE_TYPE]: LanguagesType | undefined
   [VaultStorageKey.INSTALLATION_TYPE]: InstallationType
   [VaultStorageKey.AIRGAP_SECRET_LIST]: unknown
+  [VaultStorageKey.AIRGAP_CONTACTS_LIST]: unknown
+  [VaultStorageKey.AIRGAP_CONTACTS_RECOMMENDED_LIST]: string[]
+  [VaultStorageKey.ADDRESS_BOOK_DISABLED]: boolean
+  [VaultStorageKey.ADDRESS_BOOK_SUGGESTIONS_DISABLED]: boolean
+  [VaultStorageKey.ADDRESS_BOOK_ONBOARDING_DISABLED]: boolean
 }
 
 type VaultStorageKeyReturnDefaults = { [key in VaultStorageKey]: VaultStorageKeyReturnType[key] }
@@ -69,7 +80,12 @@ const defaultValues: VaultStorageKeyReturnDefaults = {
   [VaultStorageKey.INTERACTION_TYPE]: InteractionType.UNDETERMINED,
   [VaultStorageKey.LANGUAGE_TYPE]: undefined,
   [VaultStorageKey.INSTALLATION_TYPE]: InstallationType.UNDETERMINED,
-  [VaultStorageKey.AIRGAP_SECRET_LIST]: []
+  [VaultStorageKey.AIRGAP_SECRET_LIST]: [],
+  [VaultStorageKey.AIRGAP_CONTACTS_LIST]: [],
+  [VaultStorageKey.AIRGAP_CONTACTS_RECOMMENDED_LIST]: [],
+  [VaultStorageKey.ADDRESS_BOOK_DISABLED]: false,
+  [VaultStorageKey.ADDRESS_BOOK_SUGGESTIONS_DISABLED]: false,
+  [VaultStorageKey.ADDRESS_BOOK_ONBOARDING_DISABLED]: false
 }
 
 @Injectable({
