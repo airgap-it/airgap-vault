@@ -23,7 +23,7 @@
     "lint-ci": "ng lint app --format json > ./lintReport.json || true",
     "lint-fix": "tslint --fix --project tsconfig.json",
     "e2e": "ng e2e",
-    "postinstall": "jetifier && node apply-diagnostic-modules.js && node fix-qrscanner-gradle.js && node copy-builtin-modules.js",
+    "postinstall": "jetifier && node apply-diagnostic-modules.js && node fix-qrscanner-gradle.js",
     "sonar-scanner": "sonar-scanner",
     "prettier": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "remove-sapling": "replace './assets/sapling/sapling-' './assets/no-sapling-web/sapling-' ./src/app/app.component.ts",
