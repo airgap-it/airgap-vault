@@ -18,7 +18,7 @@ class IsolatedModules : Plugin() {
     private val fileExplorer: FileExplorer by lazy { FileExplorer(context) }
 
     @PluginMethod
-    fun previewModule(call: PluginCall) {
+    fun previewDynamicModule(call: PluginCall) {
         call.executeCatching {
             assertReceived(Param.PATH, Param.DIRECTORY)
 
@@ -44,7 +44,7 @@ class IsolatedModules : Plugin() {
     }
 
     @PluginMethod
-    fun registerModule(call: PluginCall) {
+    fun registerDynamicModule(call: PluginCall) {
         call.executeCatching {
             assertReceived(Param.IDENTIFIER, Param.PROTOCOL_IDENTIFIERS)
 
@@ -60,7 +60,26 @@ class IsolatedModules : Plugin() {
     }
 
     @PluginMethod
-    fun loadModules(call: PluginCall) {
+    fun removeDynamicModules(call: PluginCall) {
+        activity.lifecycleScope.launch {
+            call.executeCatching {
+                val jsEvaluator = jsEvaluator.await()
+
+                identifiers?.let {
+                    fileExplorer.removeInstalledModules(it)
+                    jsEvaluator.deregisterModules(it)
+                } ?: run {
+                    fileExplorer.removeAllInstalledModules()
+                    jsEvaluator.deregisterAllModules()
+                }
+
+                resolve()
+            }
+        }
+    }
+
+    @PluginMethod
+    fun loadAllModules(call: PluginCall) {
         activity.lifecycleScope.launch {
             call.executeCatching {
                 val modules = fileExplorer.loadAssetModules() + fileExplorer.loadInstalledModules()
@@ -117,6 +136,9 @@ class IsolatedModules : Plugin() {
     private val PluginCall.identifier: String
         get() = getString(Param.IDENTIFIER)!!
 
+    private val PluginCall.identifiers: List<String>?
+        get() = getArray(Param.PROTOCOL_IDENTIFIERS, null)?.toList()
+
     private  val PluginCall.protocolIdentifiers: List<String>
         get() = getArray(Param.PROTOCOL_IDENTIFIERS).toList()
 
@@ -145,6 +167,7 @@ class IsolatedModules : Plugin() {
         const val PATH = "path"
         const val DIRECTORY = "directory"
         const val IDENTIFIER = "identifier"
+        const val IDENTIFIERS = "identifiers"
         const val PROTOCOL_IDENTIFIERS = "protocolIdentifiers"
         const val PROTOCOL_TYPE = "protocolType"
         const val TARGET = "target"
