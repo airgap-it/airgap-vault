@@ -668,7 +668,7 @@
         "ok": "Ok"
       }
     },
-    "load-module_label": "Load Module"
+    "isolated-modules_label": "Isolated Modules"
   },
   "secret-generate-dice-roll": {
     "title": "Dice Rolls",
@@ -698,6 +698,18 @@
   "wordlist": {
     "title": "Wordlist",
     "search_placeholder": "Search..."
+  },
+  "isolated-modules-list": {
+    "title": "Isolated Modules"
+  },
+  "isolated-modules-onboarding": {
+    "title": "Isolated Modules",
+    "content": {
+      "header": "Introducing Isolated Modules",
+      "description": "Load 3rd party modules into your vault to add additional features.",
+      "note": "<strong>Please note:</strong> Installing modules is done at your own risk. The functionality and maintenance of these modules is handled by thirt parties and are not affiliated with AirGap.",
+      "button_label": "Understood"
+    }
   },
   "module-preview": {
     "title": "{{ name }} Module Preview",

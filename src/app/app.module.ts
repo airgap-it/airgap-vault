@@ -72,6 +72,7 @@ import { Filesystem } from '@capacitor/filesystem'
 import { InstallationTypePageModule } from './pages/Installation-type/installation-type.module'
 import { OnboardingAdvancedModePageModule } from './pages/onboarding-advanced-mode/onboarding-advanced-mode.module'
 import { OnboardingWelcomePageModule } from './pages/onboarding-welcome/onboarding-welcome.module'
+import { IsolatedModulesOnboardingPageModule } from './pages/isolated-modules-onboarding/isolated-modules-onboarding.module'
 
 export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
   return new AirGapTranslateLoader(http, { prefix: './assets/i18n/', suffix: '.json' })
@@ -110,6 +111,7 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
     InstallationTypePageModule,
     OnboardingAdvancedModePageModule,
     OnboardingWelcomePageModule,
+    IsolatedModulesOnboardingPageModule,
     DistributionOnboardingPageModule,
     LocalAuthenticationOnboardingPageModule,
     AirGapAngularCoreModule.forRoot({

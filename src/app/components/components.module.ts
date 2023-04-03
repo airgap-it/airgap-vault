@@ -10,6 +10,8 @@ import { PipesModule } from '../pipes/pipes.module'
 
 import { EntropyProgressComponent } from './entropy-progress/entropy-progress.component'
 import { GridInputComponent } from './grid-input/grid-input.component'
+import { IsolatedModulesListComponent } from './isolated-modules-list/isolated-modules-onboarding.component'
+import { IsolatedModulesOnboardingComponent } from './isolated-modules-onboarding/isolated-modules-onboarding.component'
 import { KeyboardPopoverComponent } from './keyboard-popover/keyboard-popover.component'
 import { MessageSignRequestComponent } from './message-sign-request/message-sign-request.component'
 import { MessageSignResponseComponent } from './message-sign-response/message-sign-response.component'
@@ -38,7 +40,9 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     MessageSignResponseComponent,
     GridInputComponent,
     SecretOptionItemComponent,
-    KeyboardPopoverComponent
+    KeyboardPopoverComponent,
+    IsolatedModulesOnboardingComponent,
+    IsolatedModulesListComponent
   ],
   imports: [IonicModule, PipesModule, CommonModule, FormsModule, TranslateModule, QRCodeModule, AirGapAngularCoreModule],
   exports: [
@@ -55,7 +59,9 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     MessageSignResponseComponent,
     GridInputComponent,
     SecretOptionItemComponent,
-    KeyboardPopoverComponent
+    KeyboardPopoverComponent,
+    IsolatedModulesOnboardingComponent,
+    IsolatedModulesListComponent
   ],
   entryComponents: []
 })

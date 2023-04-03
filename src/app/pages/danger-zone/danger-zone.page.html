@@ -16,10 +16,9 @@
       {{ 'danger-zone.wipe_label' | translate }}
     </ion-item>
 
-    <!-- disable module side-loading until it's production ready -->
-    <!-- <ion-item (click)="loadModule()">
-      <ion-icon name="warning" slot="start"></ion-icon>
-      {{ 'danger-zone.load-module_label' | translate }}
-    </ion-item> -->
+    <ion-item (click)="goToIsolatedModules()">
+      <ion-icon name="cube-outline" slot="start"></ion-icon>
+      {{ 'danger-zone.isolated-modules_label' | translate }}
+    </ion-item>
   </ion-list>
 </ion-content>

@@ -1,0 +1,94 @@
+svg {
+  font-size: 6rem;
+}
+
+h3 {
+  font-size: 1.4rem;
+  line-height: 1.5rem;
+  margin-bottom: 2.6rem;
+  text-align: center;
+  max-width: 400px;
+}
+
+p {
+  margin: 0px;
+  max-width: 300px;
+  text-align: center;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+
+  &::before {
+    content: '• ';
+    font-size: 2rem;
+    margin: 0px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  svg {
+    font-size: 1.4rem;
+  }
+}
+
+.note {
+  text-align: start;
+}
+
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
+
+.row-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+
+  .row-button {
+    font-size: large;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.8);
+    width: 12px;
+    height: 12px;
+    padding: 0px;
+  }
+
+  ion-button {
+    --padding-start: 0px;
+    --padding-end: 0px;
+  }
+}
+
+.buttons-wrapper {
+  display: flex;
+  align-items: center;
+  position: fixed;
+  bottom: 20px;
+  left: 0px;
+  width: 100%;
+
+  .button-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    ion-button {
+      --padding-top: 24px;
+      --padding-bottom: 24px;
+      --padding-start: 48px;
+      --padding-end: 48px;
+    }
+  }
+}

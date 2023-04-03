@@ -1,0 +1,22 @@
+<div class="content-container">
+  <div class="main-container ion-padding-vertical">
+    <ion-icon name="cube" size="large"></ion-icon>
+    <h3 class="ion-text-center">{{ 'isolated-modules-onboarding.content.header' | translate }}</h3>
+    <p class="ion-text-center">{{ 'isolated-modules-onboarding.content.description' | translate }}</p>
+  </div>
+
+  <div class="note-container ion-padding-vertical">
+    <p class="ion-text-start" [innerHTML]="'isolated-modules-onboarding.content.note' | translate"></p>
+  </div>
+
+  <div class="button-container">
+    <ion-button 
+      class="content-end" 
+      shape="round" 
+      color="primary" 
+      (click)="acknowledge()"
+    >
+      {{ 'isolated-modules-onboarding.content.button_label' | translate }}
+    </ion-button>
+  </div>
+</div>

@@ -176,6 +176,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/address-explorer/address-explorer.module').then((m) => m.AddressExplorerPageModule)
   },
   {
+    path: 'isolated-modules-list',
+    loadChildren: () => import('./pages/isolated-modules-list/isolated-modules-list.module').then((m) => m.IsolatedModulesListPageModule)
+  },
+  {
     path: 'module-preview',
     loadChildren: () => import('./pages/module-preview/module-preview.module').then((m) => m.ModulePreviewPageModule)
   }
