@@ -8,11 +8,7 @@ import { IsolatedModulesListPageRoutingModule } from './isolated-modules-list-ro
 
 import { IsolatedModulesListPage } from './isolated-modules-list.page'
 import { TranslateModule } from '@ngx-translate/core'
-import { StoreModule } from '@ngrx/store'
 
-import * as fromModulePreview from './isolated-modules-list.reducer'
-import { EffectsModule } from '@ngrx/effects'
-import { IsolatedModulesListEffects } from './isolated-modules-list.effects'
 import { AirGapAngularCoreModule } from '@airgap/angular-core'
 import { ComponentsModule } from '../../components/components.module'
 
@@ -24,8 +20,6 @@ import { ComponentsModule } from '../../components/components.module'
     IsolatedModulesListPageRoutingModule,
     TranslateModule,
     ComponentsModule,
-    StoreModule.forFeature('modulePreview', fromModulePreview.reducer),
-    EffectsModule.forFeature([IsolatedModulesListEffects]),
     AirGapAngularCoreModule
   ],
   declarations: [IsolatedModulesListPage]

@@ -1,8 +1,10 @@
 import { AirGapAngularCoreModule } from '@airgap/angular-core'
+import { AirGapAngularNgRxModule } from '@airgap/angular-ngrx'
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
-import { FormsModule } from '@angular/forms'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { IonicModule } from '@ionic/angular'
+import { ReactiveComponentModule } from '@ngrx/component'
 import { TranslateModule } from '@ngx-translate/core'
 import { QRCodeModule } from 'angularx-qrcode'
 
@@ -10,7 +12,7 @@ import { PipesModule } from '../pipes/pipes.module'
 
 import { EntropyProgressComponent } from './entropy-progress/entropy-progress.component'
 import { GridInputComponent } from './grid-input/grid-input.component'
-import { IsolatedModulesListComponent } from './isolated-modules-list/isolated-modules-onboarding.component'
+import { IsolatedModulesListComponent } from './isolated-modules-list/isolated-modules-list.component'
 import { IsolatedModulesOnboardingComponent } from './isolated-modules-onboarding/isolated-modules-onboarding.component'
 import { KeyboardPopoverComponent } from './keyboard-popover/keyboard-popover.component'
 import { MessageSignRequestComponent } from './message-sign-request/message-sign-request.component'
@@ -44,7 +46,18 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     IsolatedModulesOnboardingComponent,
     IsolatedModulesListComponent
   ],
-  imports: [IonicModule, PipesModule, CommonModule, FormsModule, TranslateModule, QRCodeModule, AirGapAngularCoreModule],
+  imports: [
+    IonicModule,
+    PipesModule,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ReactiveComponentModule,
+    TranslateModule,
+    QRCodeModule,
+    AirGapAngularCoreModule,
+    AirGapAngularNgRxModule
+  ],
   exports: [
     EntropyProgressComponent,
     ProgressFooterComponent,

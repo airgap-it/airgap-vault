@@ -1,0 +1,7 @@
+<ng-container *ngrxLet="facade.modules$ as modules">
+  <div *ngIf="modules.value === undefined ||  modules.value.length === 0" class="empty-container">
+    <ion-icon name="cube" size="large"></ion-icon>
+    <h3 class="ion-text-center">{{ 'isolated-modules-list.empty.header' | translate }}</h3>
+    <p class="ion-text-center">{{ 'isolated-modules-list.empty.description' | translate }}</p>
+  </div>
+</ng-container>

@@ -1987,10 +1987,17 @@
     jsbi "^3.1.5"
     sha.js "^2.4.11"
 
-"@ngrx/component-store@^10.1.2":
-  version "10.1.2"
-  resolved "https://registry.yarnpkg.com/@ngrx/component-store/-/component-store-10.1.2.tgz#49c6e3d721a483fc97ae12e6a3e45b83245f2f9f"
-  integrity sha512-UuI55Ut1mAzGMX/SLHByOeJfC3hD5Z8+qv7aQTV/iHyMdpSdBpj3O92kPbDCSl+jXWGpjFNi45iY7bfOLZNFaQ==
+"@ngrx/component-store@^12.5.1":
+  version "12.5.1"
+  resolved "https://registry.yarnpkg.com/@ngrx/component-store/-/component-store-12.5.1.tgz#768b6c427e163a48dff5cefef12f1c7a1cb0c6ed"
+  integrity sha512-0Jsp9okAHIj3E8MaqmEp0O0/11XnYAUcQ/S8G9UZNFXI2naMPNkOtpuEZ/fxNDOd23hr2PSNJfSv9Em1Q5Eahg==
+  dependencies:
+    tslib "^2.0.0"
+
+"@ngrx/component@^12.5.1":
+  version "12.5.1"
+  resolved "https://registry.yarnpkg.com/@ngrx/component/-/component-12.5.1.tgz#72935cab7b99ee16635c8e8e43c0eee41caf5f8f"
+  integrity sha512-uMy1yQ/ceI8fF73PaUCKwvOu3wEMc2VDauCQom1nS7+X49SDiqwAsy3kvWdkGyaDAgOGvYs1mZlTAbCI8cM8Dg==
   dependencies:
     tslib "^2.0.0"
 

@@ -700,7 +700,11 @@
     "search_placeholder": "Search..."
   },
   "isolated-modules-list": {
-    "title": "Isolated Modules"
+    "title": "Isolated Modules",
+    "empty": {
+      "header": "No Modules Installed",
+      "description": "Tap the \"+\" icon to load a new module from your phone storage"
+    }
   },
   "isolated-modules-onboarding": {
     "title": "Isolated Modules",
