@@ -1,5 +1,5 @@
-// import { IsolatedModuleMetadata, IsolatedModulesService, UiEventService } from '@airgap/angular-core'
-import { Component, /* Inject, */ OnInit } from '@angular/core'
+// import { IsolatedModuleMetadata, ModulesService, UiEventService } from '@airgap/angular-core'
+import { Component, /* Inject, */OnInit } from '@angular/core'
 // import { FilePickerPlugin, PickFilesResult } from '@capawesome/capacitor-file-picker'
 import { AlertController } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
@@ -21,7 +21,7 @@ export class DangerZonePage implements OnInit {
     public readonly storageService: VaultStorageService,
     private readonly secureStorage: SecureStorageService,
     private readonly navigationService: NavigationService
-    // private readonly isolatedModuleService: IsolatedModulesService,
+    // private readonly moduleService: ModulesService,
     // private readonly uiEventService: UiEventService,
     // @Inject(FILE_PICKER_PLUGIN) private readonly filePicker: FilePickerPlugin
   ) {}
@@ -89,7 +89,7 @@ export class DangerZonePage implements OnInit {
   //       message: 'Loading...'
   //     })
   //     await loader.present().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
-  //     const metadata: IsolatedModuleMetadata = await this.isolatedModuleService.readModuleMetadata(name, path)
+  //     const metadata: IsolatedModuleMetadata = await this.moduleService.readModuleMetadata(name, path)
 
   //     this.navigationService.routeWithState('/module-preview', { metadata }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   //   } catch (e) {

@@ -1,4 +1,4 @@
-import { isIsolatedModuleMetadata, IsolatedModuleMetadata, IsolatedModulesService } from '@airgap/angular-core'
+import { isIsolatedModuleMetadata, IsolatedModuleMetadata, ModulesService } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { Action } from '@ngrx/store'
@@ -37,7 +37,7 @@ export class ModulePreviewEffects {
   constructor(
     private readonly actions$: Actions,
     private readonly navigationService: NavigationService,
-    private readonly isolatedModuleService: IsolatedModulesService
+    private readonly moduleService: ModulesService
   ) {}
 
   private async loadNavigationData(): Promise<Action> {
@@ -50,7 +50,7 @@ export class ModulePreviewEffects {
 
   private async installModule(metadata: IsolatedModuleMetadata): Promise<Action> {
     try {
-      await this.isolatedModuleService.installModule(metadata)
+      await this.moduleService.installModule(metadata)
       return actions.moduleInstalled()
     } catch (error) {
       console.error(error)

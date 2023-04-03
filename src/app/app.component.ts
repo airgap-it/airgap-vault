@@ -1,11 +1,6 @@
-import { APP_PLUGIN, IACMessageTransport, IsolatedModulesService, ProtocolService, SPLASH_SCREEN_PLUGIN, STATUS_BAR_PLUGIN } from '@airgap/angular-core'
+import { APP_PLUGIN, createV0TezosShieldedTezProtocol, IACMessageTransport, ICoinProtocolAdapter, ModulesService, ProtocolService, SPLASH_SCREEN_PLUGIN, STATUS_BAR_PLUGIN } from '@airgap/angular-core'
 import { MainProtocolSymbols } from '@airgap/coinlib-core'
-import {
-  TezosSaplingExternalMethodProvider,
-  TezosShieldedTezProtocol,
-  TezosSaplingProtocolOptions,
-  TezosShieldedTezProtocolConfig
-} from '@airgap/tezos'
+import { TezosSaplingExternalMethodProvider, TezosShieldedTezProtocol } from '@airgap/tezos'
 import { HttpClient } from '@angular/common/http'
 import { AfterViewInit, Component, Inject, NgZone } from '@angular/core'
 import { AppPlugin, URLOpenListenerEvent } from '@capacitor/app'
@@ -56,7 +51,7 @@ export class AppComponent implements AfterViewInit {
     private readonly navigationService: NavigationService,
     private readonly httpClient: HttpClient,
     private readonly saplingNativeService: SaplingNativeService,
-    private readonly isolatedModuleService: IsolatedModulesService,
+    private readonly moduleService: ModulesService,
     @Inject(APP_PLUGIN) private readonly app: AppPlugin,
     @Inject(SECURITY_UTILS_PLUGIN) private readonly securityUtils: SecurityUtilsPlugin,
     @Inject(SPLASH_SCREEN_PLUGIN) private readonly splashScreen: SplashScreenPlugin,
@@ -136,27 +131,23 @@ export class AppComponent implements AfterViewInit {
   }
 
   private async initializeProtocols(): Promise<void> {
-    const protocols = await this.isolatedModuleService.loadProtocols('offline', [MainProtocolSymbols.XTZ_SHIELDED])
+    this.moduleService.init()
+    const protocols = await this.moduleService.loadProtocols('offline', [MainProtocolSymbols.XTZ_SHIELDED])
 
     const externalMethodProvider: TezosSaplingExternalMethodProvider | undefined =
       await this.saplingNativeService.createExternalMethodProvider()
 
-    const shieldedTezProtocol: TezosShieldedTezProtocol = new TezosShieldedTezProtocol(
-      new TezosSaplingProtocolOptions(
-        undefined,
-        new TezosShieldedTezProtocolConfig(undefined, undefined, undefined, externalMethodProvider)
-      )
-    )
-
+    const shieldedTezAdapter: ICoinProtocolAdapter<TezosShieldedTezProtocol> = await createV0TezosShieldedTezProtocol({ externalProvider: externalMethodProvider })
+    
     this.protocolService.init({
       activeProtocols: protocols.activeProtocols,
       passiveProtocols: protocols.passiveProtocols,
-      extraActiveProtocols: [shieldedTezProtocol],
+      extraActiveProtocols: [shieldedTezAdapter],
       activeSubProtocols: protocols.activeSubProtocols,
       passiveSubProtocols: protocols.passiveSubProtocols
     })
 
-    await shieldedTezProtocol.initParameters(await this.getSaplingParams('spend'), await this.getSaplingParams('output'))
+    await shieldedTezAdapter.protocolV1.initParameters(await this.getSaplingParams('spend'), await this.getSaplingParams('output'))
   }
 
   private async getSaplingParams(type: 'spend' | 'output'): Promise<Buffer> {

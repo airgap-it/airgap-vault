@@ -27,9 +27,9 @@ import { SecretsService } from '../secrets/secrets.service'
 import * as bitcoinJS from 'bitcoinjs-lib'
 import { ModalController } from '@ionic/angular'
 import { SelectAccountPage } from 'src/app/pages/select-account/select-account.page'
-import { RawBitcoinSegwitTransaction } from '@airgap/bitcoin'
 import { RawTypedEthereumTransaction } from '@airgap/ethereum/v0/types/transaction-ethereum'
 import { IACMessageType, IACMessageDefinitionObjectV3, MessageSignRequest } from '@airgap/serializer'
+import { BitcoinSegwitTransactionSignRequest } from '@airgap/bitcoin'
 
 @Injectable({
   providedIn: 'root'
@@ -161,7 +161,7 @@ export class IACService extends BaseIACService {
 
     // BTC: First we try to find a wallet by matching the masterFingerprint
     if (!correctWallet && signTransactionRequest.protocol === MainProtocolSymbols.BTC_SEGWIT) {
-      const transaction: RawBitcoinSegwitTransaction = unsignedTransaction.transaction
+      const transaction: BitcoinSegwitTransactionSignRequest['transaction'] = unsignedTransaction.transaction
       const decodedPSBT = bitcoinJS.Psbt.fromHex(transaction.psbt)
       for (const input of decodedPSBT.data.inputs) {
         for (const derivation of input.bip32Derivation) {

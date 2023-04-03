@@ -1,4 +1,4 @@
-import { ProtocolService, SerializerService, sumAirGapTxValues } from '@airgap/angular-core'
+import { ICoinProtocolAdapter, ProtocolService, SerializerService, sumAirGapTxValues } from '@airgap/angular-core'
 import { Component, Input } from '@angular/core'
 import { IAirGapTransaction, ICoinProtocol, MainProtocolSymbols, ProtocolSymbols, SignedTransaction } from '@airgap/coinlib-core'
 import BigNumber from 'bignumber.js'
@@ -146,8 +146,8 @@ export class SignedTransactionComponent {
   private async checkIfSaplingTransaction(transaction: SignedTransaction, protocolIdentifier: ProtocolSymbols): Promise<boolean> {
     if (protocolIdentifier === MainProtocolSymbols.XTZ) {
       try {
-        const saplingProtocol: TezosSaplingProtocol = await this.getSaplingProtocol()
-        const txDetails: IAirGapTransaction[] = await saplingProtocol.getTransactionDetailsFromSigned(transaction)
+        const saplingAdapter: ICoinProtocolAdapter<TezosSaplingProtocol> = await this.getSaplingProtocol()
+        const txDetails: IAirGapTransaction[] = await saplingAdapter.getTransactionDetailsFromSigned(transaction)
         const recipients: string[] = txDetails
           .map((details) => details.to)
           .reduce((flatten: string[], next: string[]) => flatten.concat(next), [])
@@ -163,8 +163,13 @@ export class SignedTransactionComponent {
     return protocolIdentifier === MainProtocolSymbols.XTZ_SHIELDED
   }
 
-  private async getSaplingProtocol(): Promise<TezosSaplingProtocol> {
-    return (await this.protocolService.getProtocol(MainProtocolSymbols.XTZ_SHIELDED)) as TezosSaplingProtocol
+  private async getSaplingProtocol(): Promise<ICoinProtocolAdapter<TezosSaplingProtocol>> {
+    const protocol: ICoinProtocol = await this.protocolService.getProtocol(MainProtocolSymbols.XTZ_SHIELDED)
+    if (!(protocol instanceof ICoinProtocolAdapter)) {
+      throw new Error('Unexpected Sapling protocol implementation')
+    }
+
+    return protocol as ICoinProtocolAdapter<TezosSaplingProtocol>
   }
 
   async onClickAddContact(address: string) {
