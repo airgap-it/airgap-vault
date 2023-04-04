@@ -34,6 +34,10 @@ export class IsolatedModulesListPage {
     })
   }
 
+  public ionViewWillLeave() {
+    this.modalController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+  }
+
   public async addModule(): Promise<void> {
     let loader: HTMLIonLoadingElement | undefined
 

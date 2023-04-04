@@ -12,9 +12,13 @@ export class IsolatedModulesOnboardingPage {
   constructor(public readonly storageSerivce: VaultStorageService, public readonly modalController: ModalController) {
   }
 
+  public back() {
+    this.modalController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+  }
+
   public async onDismissed(acknowledged: boolean) {
     await this.storageSerivce.set(VaultStorageKey.ISOLATED_MODULES_ONBOARDING_DISABLED, acknowledged).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
 
-    await this.modalController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+    this.modalController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 }
