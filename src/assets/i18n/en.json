@@ -704,7 +704,8 @@
     "empty": {
       "header": "No Modules Installed",
       "description": "Tap the \"+\" icon to load a new module from your phone storage"
-    }
+    },
+    "install-date": "Install Date: {{ date }}"
   },
   "isolated-modules-onboarding": {
     "title": "Isolated Modules",

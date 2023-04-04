@@ -68,6 +68,10 @@ export class IsolatedModulesListPage {
     }
   }
 
+  public async onModuleSelected(metadata: IsolatedModuleMetadata): Promise<void> {
+    this.navigationService.routeWithState('/isolated-modules-details', { metadata, mode: IsolatedModulesDetailsMode.VIEW_INSTALLED }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
   private async goToOnboardingPage(): Promise<void> {
     const modal: HTMLIonModalElement = await this.modalController.create({
       component: IsolatedModulesOnboardingPage,

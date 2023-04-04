@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core'
 import { ComponentStore } from '@ngrx/component-store'
 import { IsolatedModulesDetailsState } from './isolated-modules-details.types'
 
-const initialStore: IsolatedModulesDetailsState = {
+const initialState: IsolatedModulesDetailsState = {
   manifest: {
     status: UIResourceStatus.IDLE,
     value: undefined
@@ -17,7 +17,7 @@ const initialStore: IsolatedModulesDetailsState = {
 @Injectable()
 export class IsolatedModulesDetailsStore extends ComponentStore<IsolatedModulesDetailsState> {
   constructor() {
-    super(initialStore)
+    super(initialState)
   }
 
   public readonly setData = this.updater((state: IsolatedModulesDetailsState, metadata: IsolatedModuleMetadata) => {

@@ -1,9 +1,9 @@
-import { BaseFacade, UIResource, UIResourceStatus } from '@airgap/angular-core'
+import { BaseFacade, UIResource } from '@airgap/angular-core'
 import { BaseNgRxFacade } from '@airgap/angular-ngrx'
 import { Injectable, InjectionToken } from '@angular/core'
-import { BehaviorSubject, Observable } from 'rxjs'
+import { Observable } from 'rxjs'
 import { IsolatedModulesListStore } from './isolated-modules-list.store'
-import { IsolatedModuleDetails } from './isolated-modules-list.types'
+import { IsolatedModuleDetails, IsolatedModulesListState } from './isolated-modules-list.types'
 
 export const ISOLATED_MODULES_LIST_FACADE = new InjectionToken<IsolatedModulesListFacade>('IsolatedModulesListFacade')
 export type IsolatedModulesListFacade<T extends BaseFacade = BaseFacade> = IIsolatedModulesListFacade & T
@@ -19,6 +19,12 @@ export class IsolatedModulesListNgRxFacade extends BaseNgRxFacade<IsolatedModule
   constructor(store: IsolatedModulesListStore) {
     super(store)
 
-    this.modules$ = new BehaviorSubject({ status: UIResourceStatus.SUCCESS, value: [] })
+    this.modules$ = this.store.select((state: IsolatedModulesListState) => state.modules)
+  }
+
+  public onViewInit() {
+    this.store.onPageLoaded$()
+
+    return super.onViewInit()
   }
 }

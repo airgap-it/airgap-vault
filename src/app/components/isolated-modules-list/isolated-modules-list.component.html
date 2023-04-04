@@ -1,5 +1,5 @@
 <ng-container *ngrxLet="facade.modules$ as modules">
-  <div *ngIf="modules.value === undefined ||  modules.value.length === 0" class="empty-container">
+  <div *ngIf="modules.status !== UIResourceStatus.LOADING && (modules.value === undefined ||  modules.value.length === 0)" class="empty-container">
     <svg
       class="ion-margin-bottom"
       fill="rgba(0, 0, 0, 0.4)"
@@ -14,4 +14,20 @@
     <h3 class="ion-text-center">{{ 'isolated-modules-list.empty.header' | translate }}</h3>
     <p class="ion-text-center ion-no-margin">{{ 'isolated-modules-list.empty.description' | translate }}</p>
   </div>
+  <ion-card *ngFor="let module of modules.value" (click)="selectModule(module)">
+    <ion-card-content>
+      <div class="ion-margin-bottom">
+        <h3>{{ module.metadata.manifest.name }}</h3>
+      </div>
+      <div class="ion-margin-top">
+        <h3>{{ module.metadata.manifest.author }}</h3>
+        <p>{{ module.metadata.manifest.version }}</p>
+      </div>
+      <div class="margin-top-sm" *ngIf="module.installedAt | date: 'dd.MM.yyyy HH:mm' as date ">
+        <p class="date">
+          {{ 'isolated-modules-list.install-date' | translate: { date } }}
+        </p>
+      </div>
+    </ion-card-content>
+  </ion-card>
 </ng-container>
