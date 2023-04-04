@@ -17,6 +17,8 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.guava.asDeferred
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -25,6 +27,8 @@ class JavaScriptEngineEnvironment(
     private val fileExplorer: FileExplorer,
 ) : JSEnvironment {
     private val sandbox: Deferred<JavaScriptSandbox> = JavaScriptSandbox.createConnectedInstanceAsync(context).asDeferred()
+
+    private val isolatedMutex: Mutex = Mutex()
     private val isolates: MutableMap<String, JavaScriptIsolate> = mutableMapOf()
 
     override suspend fun isSupported(): Boolean =
@@ -34,8 +38,8 @@ class JavaScriptEngineEnvironment(
         }
 
     @Throws(JSException::class)
-    override suspend fun run(module: JSModule, action: JSModuleAction): JSObject = withContext(Dispatchers.Default) {
-        useIsolatedModule(module) { jsIsolate ->
+    override suspend fun run(module: JSModule, action: JSModuleAction, keepAlive: Boolean): JSObject = withContext(Dispatchers.Default) {
+        useIsolatedModule(module, keepAlive) { jsIsolate ->
             val namespace = module.namespace?.let { "global.$it" } ?: "global"
 
             val script = """
@@ -62,13 +66,20 @@ class JavaScriptEngineEnvironment(
         }
     }
 
+    override suspend fun reset() {
+        isolates.apply {
+            values.forEach { it.close() }
+            clear()
+        }
+    }
+
     override suspend fun destroy() {
-        isolates.values.forEach { it.close() }
+        reset()
         sandbox.await().close()
     }
 
-    private suspend inline fun <R> useIsolatedModule(module: JSModule, block: (JavaScriptIsolate) -> R): R {
-        val jsIsolate = isolates.getOrPut(module.identifier) {
+    private suspend inline fun <R> useIsolatedModule(module: JSModule, keepAlive: Boolean, block: (JavaScriptIsolate) -> R): R {
+        val createIsolate: suspend () -> JavaScriptIsolate = {
             sandbox.await().createIsolate(IsolateStartupParameters()).also {
                 listOf(
                     it.evaluateJavaScriptAsync(fileExplorer.readJavaScriptEngineUtils().decodeToString()).asDeferred(),
@@ -78,7 +89,13 @@ class JavaScriptEngineEnvironment(
             }
         }
 
-        return block(jsIsolate)
+        val jsIsolate = isolatedMutex.withLock {
+            if (keepAlive) isolates.getOrPut(module.identifier) { createIsolate() } else createIsolate()
+        }
+
+        return block(jsIsolate).also {
+            if (!keepAlive) jsIsolate.close()
+        }
     }
 
     @SuppressLint("RequiresFeature" /* checked in JavaScriptEngineEnvironment#isSupported */)

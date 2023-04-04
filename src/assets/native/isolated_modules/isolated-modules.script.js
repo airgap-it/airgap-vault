@@ -27,14 +27,14 @@ function createOnError(description, handler) {
   }
 }
 
-const UNDEFINED_STRING = 'it.airgap.vault.__UNDEFINED__'
+const UNDEFINED_STRING = 'it.airgap.__UNDEFINED__'
 
 function replaceUndefined(value) {
   if (Array.isArray(value)) {
     return value.map((v) => replaceUndefined(v))
   }
   
-  if (typeof value === 'object') {
+  if (typeof value === 'object' && typeof value !== 'undefined' && value !== null) {
     return Object.entries(value).reduce((obj, [key, value]) => Object.assign(obj, { [key]: replaceUndefined(value) }), {})
   }
 
@@ -91,8 +91,10 @@ function getIsolatedProtocolConfiguration(protocol, mode, blockExplorerMetadata,
         protocolMetadata,
         blockExplorerMetadata: blockExplorerMetadata ? blockExplorerMetadata : null,
         network: network ? network : null,
-        crypto: crypto ? crypto : null,
-        methods: collectMethods(protocol)
+        methods: collectMethods(protocol),
+        cachedValues: {
+          getCryptoConfiguration: crypto
+        }
       }
 
       if (isSubProtocol(protocol)) {
@@ -103,6 +105,11 @@ function getIsolatedProtocolConfiguration(protocol, mode, blockExplorerMetadata,
         ]).then(([subType, mainProtocol, contractAddress]) => ({
           ...configuration,
           type: ISOLATED_PROTOCOL_TYPE_SUB,
+          cachedValues: Object.assign(configuration.cachedValues, {
+            getType: subType,
+            mainProtocol,
+            getContractAddress: contractAddress
+          }),
           subType,
           mainProtocolIdentifier: mainProtocol,
           contractAddress: contractAddress ?? null
@@ -174,9 +181,13 @@ function loadProtocolMetadataFromConfiguration(module, protocolIdentifier, confi
   ]).then(([offline, online]) => offline.concat(online))
 }
 
-function loadProtocols(module, protocolType) {
+function loadProtocols(module, protocolType, ignoreProtocols) {
+  const ignoreProtocolsSet = new Set(ignoreProtocols)
+
   return Promise.all(
-    Object.entries(module.supportedProtocols).map(([protocolIdentifier, configuration]) => loadProtocolMetadataFromConfiguration(module, protocolIdentifier, configuration, protocolType))
+    Object.entries(module.supportedProtocols)
+      .filter(([protocolIdentifier, _]) => !ignoreProtocolsSet.has(protocolIdentifier))
+      .map(([protocolIdentifier, configuration]) => loadProtocolMetadataFromConfiguration(module, protocolIdentifier, configuration, protocolType))
   ).then((protocols) => flattened(protocols))
 }
 
@@ -185,7 +196,8 @@ function load(namespace, moduleIdentifier, action) {
 
   return module.createV3SerializerCompanion()
     .then((v3SerializerCompanion) => 
-      loadProtocols(module, action.protocolType).then((protocols) => ({ identifier: moduleIdentifier, protocols, v3SchemaConfigurations: v3SerializerCompanion.schemas }))
+      loadProtocols(module, action.protocolType, action.ignoreProtocols)
+        .then((protocols) => ({ identifier: moduleIdentifier, protocols, v3SchemaConfigurations: v3SerializerCompanion.schemas }))
     )
 }
 

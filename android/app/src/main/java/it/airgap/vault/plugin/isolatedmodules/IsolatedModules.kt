@@ -11,6 +11,7 @@ import it.airgap.vault.plugin.isolatedmodules.js.*
 import it.airgap.vault.util.*
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 @CapacitorPlugin
 class IsolatedModules : Plugin() {
@@ -84,7 +85,7 @@ class IsolatedModules : Plugin() {
             call.executeCatching {
                 val modules = fileExplorer.loadAssetModules() + fileExplorer.loadInstalledModules()
 
-                resolve(jsEvaluator.await().evaluateLoadModules(modules, protocolType))
+                resolve(jsEvaluator.await().evaluateLoadModules(modules, protocolType, ignoreProtocols))
             }
         }
     }
@@ -120,6 +121,74 @@ class IsolatedModules : Plugin() {
         }
     }
 
+    @PluginMethod
+    fun batchCallMethod(call: PluginCall) {
+        call.executeCatching {
+            assertReceived(Param.OPTIONS)
+
+            activity.lifecycleScope.launch {
+                executeCatching {
+                    val jsEvaluator = jsEvaluator.await()
+
+                    val values = options.toList<JSONObject>().asyncMap { jsonObject ->
+                        try {
+                            val jsObject = JSObject(jsonObject.toString())
+                            assertReceivedIn(jsObject, Param.TARGET, Param.METHOD)
+
+                            val target = jsObject.getString(Param.TARGET)?.let { JSCallMethodTarget.fromString(it) }!!
+                            val method = jsObject.getString(Param.METHOD)!!
+                            val args = if (jsObject.has(Param.ARGS)) JSArray(jsObject.getJSONArray(Param.ARGS).toString()) else null
+                            val protocolIdentifier = jsObject.getString(Param.PROTOCOL_IDENTIFIER)
+                            val networkId = jsObject.getString(Param.NETWORK_ID)
+                            val moduleIdentifier = jsObject.getString(Param.MODULE_IDENTIFIER)
+
+                            val value = when (target) {
+                                JSCallMethodTarget.OfflineProtocol -> {
+                                    assertReceivedIn(jsObject, Param.PROTOCOL_IDENTIFIER)
+                                    jsEvaluator.evaluateCallOfflineProtocolMethod(method, args, protocolIdentifier!!, keepEnvironment = true)
+                                }
+                                JSCallMethodTarget.OnlineProtocol -> {
+                                    assertReceivedIn(jsObject, Param.PROTOCOL_IDENTIFIER)
+                                    jsEvaluator.evaluateCallOnlineProtocolMethod(method, args, protocolIdentifier!!, networkId, keepEnvironment = true)
+                                }
+                                JSCallMethodTarget.BlockExplorer -> {
+                                    assertReceivedIn(jsObject, Param.PROTOCOL_IDENTIFIER)
+                                    jsEvaluator.evaluateCallBlockExplorerMethod(method, args, protocolIdentifier!!, networkId, keepEnvironment = true)
+                                }
+                                JSCallMethodTarget.V3SerializerCompanion -> {
+                                    assertReceivedIn(jsObject, Param.MODULE_IDENTIFIER)
+                                    jsEvaluator.evaluateCallV3SerializerCompanionMethod(method, args, moduleIdentifier!!, keepEnvironment = true)
+                                }
+                            }
+
+                            JSObject("""
+                                {
+                                    "type": "success",
+                                    "value": ${value.getJSObject("value")}
+                                }
+                            """.trimIndent())
+                        } catch (e: Exception) {
+                            JSObject("""
+                                {
+                                    "type": "error",
+                                    "error": "${e.message}"
+                                }
+                            """.trimIndent())
+                        }
+                    }
+
+                    jsEvaluator.reset()
+
+                    resolve(JSObject("""
+                        {
+                            "values": ${JSArray(values)}
+                        }
+                    """.trimMargin()))
+                }
+            }
+        }
+    }
+
     override fun handleOnDestroy() {
         super.handleOnDestroy()
         activity.lifecycleScope.launch {
@@ -145,6 +214,9 @@ class IsolatedModules : Plugin() {
     private val PluginCall.protocolType: JSProtocolType?
         get() = getString(Param.PROTOCOL_TYPE)?.let { JSProtocolType.fromString(it) }
 
+    private val PluginCall.ignoreProtocols: JSArray?
+        get() = getArray(Param.IGNORE_PROTOCOLS, null)
+
     private val PluginCall.target: JSCallMethodTarget
         get() = getString(Param.TARGET)?.let { JSCallMethodTarget.fromString(it) }!!
 
@@ -163,6 +235,9 @@ class IsolatedModules : Plugin() {
     private val PluginCall.networkId: String?
         get() = getString(Param.NETWORK_ID)
 
+    private val PluginCall.options: JSArray
+        get() = getArray(Param.OPTIONS)
+
     private object Param {
         const val PATH = "path"
         const val DIRECTORY = "directory"
@@ -170,11 +245,13 @@ class IsolatedModules : Plugin() {
         const val IDENTIFIERS = "identifiers"
         const val PROTOCOL_IDENTIFIERS = "protocolIdentifiers"
         const val PROTOCOL_TYPE = "protocolType"
+        const val IGNORE_PROTOCOLS = "ignoreProtocols"
         const val TARGET = "target"
         const val METHOD = "method"
         const val ARGS = "args"
         const val PROTOCOL_IDENTIFIER = "protocolIdentifier"
         const val MODULE_IDENTIFIER = "moduleIdentifier"
         const val NETWORK_ID = "networkId"
+        const val OPTIONS = "options"
     }
 }

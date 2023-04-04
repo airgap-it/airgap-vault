@@ -60,11 +60,12 @@ enum class JSCallMethodTarget {
 sealed interface JSModuleAction {
     fun toJson(): String
 
-    data class Load(val protocolType: JSProtocolType?) : JSModuleAction {
+    data class Load(val protocolType: JSProtocolType?, val ignoreProtocols: JSArray?) : JSModuleAction {
         override fun toJson(): String = JSObject("""
                 {
                     "type": "$TYPE",
-                    "protocolType": ${protocolType?.toString().toJson()}
+                    "protocolType": ${protocolType?.toString().toJson()},
+                    "ignoreProtocols": ${ignoreProtocols ?: "[]"}
                 }
             """.trimIndent()).toString()
 

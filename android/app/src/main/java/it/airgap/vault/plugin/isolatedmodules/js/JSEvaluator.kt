@@ -30,14 +30,19 @@ class JSEvaluator constructor(
         modules.clear()
     }
 
-    suspend fun evaluatePreviewModule(module: JSModule): JSObject =
-        module.environment.run(module, JSModuleAction.Load(null)).also {
+    suspend fun evaluatePreviewModule(module: JSModule, keepEnvironment: Boolean = false): JSObject =
+        module.run(JSModuleAction.Load(null, null), keepEnvironment = keepEnvironment).also {
             module.appendType(it)
         }
 
-    suspend fun evaluateLoadModules(modules: List<JSModule>, protocolType: JSProtocolType?): JSObject {
+    suspend fun evaluateLoadModules(
+        modules: List<JSModule>,
+        protocolType: JSProtocolType?,
+        ignoreProtocols: JSArray?,
+        keepEnvironment: Boolean = false
+    ): JSObject {
         val modulesJson = modules.asyncMap { module ->
-            module.environment.run(module, JSModuleAction.Load(protocolType)).also {
+            module.run(JSModuleAction.Load(protocolType, ignoreProtocols), keepEnvironment = keepEnvironment).also {
                 module.appendType(it)
                 module.registerFor(it)
             }
@@ -54,9 +59,10 @@ class JSEvaluator constructor(
         name: String,
         args: JSArray?,
         protocolIdentifier: String,
+        keepEnvironment: Boolean = false
     ): JSObject {
         val module = modules[protocolIdentifier] ?: failWithModuleForProtocolNotFound(protocolIdentifier)
-        return module.environment.run(module, JSModuleAction.CallMethod.OfflineProtocol(name, args, protocolIdentifier))
+        return module.run(JSModuleAction.CallMethod.OfflineProtocol(name, args, protocolIdentifier), keepEnvironment = keepEnvironment)
     }
 
     suspend fun evaluateCallOnlineProtocolMethod(
@@ -64,9 +70,10 @@ class JSEvaluator constructor(
         args: JSArray?,
         protocolIdentifier: String,
         networkId: String?,
+        keepEnvironment: Boolean = false
     ): JSObject {
         val module = modules[protocolIdentifier] ?: failWithModuleForProtocolNotFound(protocolIdentifier)
-        return module.environment.run(module, JSModuleAction.CallMethod.OnlineProtocol(name, args, protocolIdentifier, networkId))
+        return module.run(JSModuleAction.CallMethod.OnlineProtocol(name, args, protocolIdentifier, networkId), keepEnvironment = keepEnvironment)
     }
 
     suspend fun evaluateCallBlockExplorerMethod(
@@ -74,27 +81,36 @@ class JSEvaluator constructor(
         args: JSArray?,
         protocolIdentifier: String,
         networkId: String?,
+        keepEnvironment: Boolean = false
     ): JSObject {
         val module = modules[protocolIdentifier] ?: failWithModuleForProtocolNotFound(protocolIdentifier)
-        return module.environment.run(module, JSModuleAction.CallMethod.BlockExplorer(name, args, protocolIdentifier, networkId))
+        return module.run(JSModuleAction.CallMethod.BlockExplorer(name, args, protocolIdentifier, networkId), keepEnvironment = keepEnvironment)
     }
 
     suspend fun evaluateCallV3SerializerCompanionMethod(
         name: String,
         args: JSArray?,
         moduleIdentifier: String,
+        keepEnvironment: Boolean = false
     ): JSObject {
         val module = modules[moduleIdentifier] ?: failWithModuleNotFound(moduleIdentifier)
-        return module.environment.run(module, JSModuleAction.CallMethod.V3SerializerCompanion(name, args))
+        return module.run(JSModuleAction.CallMethod.V3SerializerCompanion(name, args), keepEnvironment = keepEnvironment)
     }
 
+
+    suspend fun reset() {
+        environments.values.forEach { it?.reset() }
+    }
 
     suspend fun destroy() {
         environments.values.forEach { it?.destroy() }
     }
 
-    private val JSModule.environment: JSEnvironment
-        get() = environments[preferredEnvironment] ?: defaultEnvironment
+    private suspend fun JSModule.run(action: JSModuleAction, keepEnvironment: Boolean): JSObject {
+        val environment = environments[preferredEnvironment] ?: defaultEnvironment
+
+        return environment.run(this, action, keepAlive = keepEnvironment)
+    }
 
     private fun JSModule.appendType(json: JSObject) {
         val type = when (this) {

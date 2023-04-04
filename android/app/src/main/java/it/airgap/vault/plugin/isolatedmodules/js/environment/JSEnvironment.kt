@@ -8,7 +8,8 @@ import it.airgap.vault.util.JSException
 interface JSEnvironment {
     suspend fun isSupported(): Boolean
     @Throws(JSException::class)
-    suspend fun run(module: JSModule, action: JSModuleAction): JSObject
+    suspend fun run(module: JSModule, action: JSModuleAction, keepAlive: Boolean): JSObject
+    suspend fun reset()
     suspend fun destroy()
 
     enum class Type {
