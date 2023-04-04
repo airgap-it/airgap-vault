@@ -21,7 +21,7 @@ public class MainActivity extends BridgeActivity {
     registerPlugin(Zip.class);
 
     // disable true isolation until it's production ready
-    // registerPlugin(IsolatedModules.class);
+     registerPlugin(IsolatedModules.class);
 
     super.onCreate(savedInstanceState);
   }

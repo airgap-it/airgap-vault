@@ -5,10 +5,10 @@ import { ModalController } from '@ionic/angular'
 import { Observable } from 'rxjs'
 import { FILE_PICKER_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
+import { NavigationService } from 'src/app/services/navigation/navigation.service'
 import { VaultStorageKey, VaultStorageService } from 'src/app/services/storage/storage.service'
+import { IsolatedModulesDetailsMode } from '../isolated-modules-details/isolated-modules.details.types'
 import { IsolatedModulesOnboardingPage } from '../isolated-modules-onboarding/isolated-modules-onboarding.page'
-
-// import * as actions from './isolated-modules-list.actions'
 
 @Component({
   selector: 'airgap-isolated-modules-list-page',
@@ -25,9 +25,10 @@ export class IsolatedModulesListPage {
   constructor(
     private readonly storageSerivce: VaultStorageService, 
     private readonly modalController: ModalController,
-    private readonly moduleService: ModulesService,
+    private readonly navigationService: NavigationService,
+    private readonly modulesService: ModulesService,
     private readonly uiEventService: UiEventService,
-    @Inject(FILE_PICKER_PLUGIN) private readonly filePicker: FilePickerPlugin
+    @Inject(FILE_PICKER_PLUGIN) private readonly filePicker: FilePickerPlugin,
   ) {
     this.storageSerivce.get(VaultStorageKey.ISOLATED_MODULES_ONBOARDING_DISABLED).then((value) => {
       if (!value) this.goToOnboardingPage()
@@ -55,11 +56,9 @@ export class IsolatedModulesListPage {
         message: 'Loading...'
       })
       await loader.present().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
-      const metadata: IsolatedModuleMetadata = await this.moduleService.readModuleMetadata(name, path)
+      const metadata: IsolatedModuleMetadata = await this.modulesService.readModuleMetadata(name, path)
 
-      metadata
-
-      // this.navigationService.routeWithState('/module-preview', { metadata }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+      this.navigationService.routeWithState('/isolated-modules-details', { metadata, mode: IsolatedModulesDetailsMode.INSTALL }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } catch (e) {
       console.error('Loading protocol module data failed', e)
       // TODO: show alert

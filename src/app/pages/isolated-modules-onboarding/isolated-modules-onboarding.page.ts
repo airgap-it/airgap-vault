@@ -9,15 +9,15 @@ import { VaultStorageKey, VaultStorageService } from 'src/app/services/storage/s
   styleUrls: ['./isolated-modules-onboarding.page.scss']
 })
 export class IsolatedModulesOnboardingPage {
-  constructor(public readonly storageSerivce: VaultStorageService, public readonly modalController: ModalController) {
+  constructor(private readonly storageSerivce: VaultStorageService, private readonly modalController: ModalController) {
   }
 
   public back() {
     this.modalController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 
-  public async onDismissed(acknowledged: boolean) {
-    await this.storageSerivce.set(VaultStorageKey.ISOLATED_MODULES_ONBOARDING_DISABLED, acknowledged).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
+  public async acknowledge() {
+    await this.storageSerivce.set(VaultStorageKey.ISOLATED_MODULES_ONBOARDING_DISABLED, true).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
 
     this.modalController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }

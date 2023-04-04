@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core'
+import { Component } from '@angular/core'
 
 @Component({
   selector: 'airgap-isolated-modules-onboarding',
@@ -6,10 +6,4 @@ import { Component, EventEmitter, Output } from '@angular/core'
   styleUrls: ['./isolated-modules-onboarding.component.scss']
 })
 export class IsolatedModulesOnboardingComponent {
-  @Output()
-  public onDismissed: EventEmitter<boolean> = new EventEmitter()
-
-  public acknowledge() {
-    this.onDismissed.emit(true)
-  }
 }

@@ -715,12 +715,10 @@
       "button_label": "Understood"
     }
   },
-  "module-preview": {
-    "title": "{{ name }} Module Preview",
-    "install-button_label": "Install",
+  "isolated-modules-details": {
     "manifest": {
       "name": {
-        "label": "Name"
+        "label": "Module Name"
       },
       "version": {
         "label": "Version"
@@ -731,8 +729,26 @@
       "signature": {
         "label": "Signature"
       },
+      "description": {
+        "label": "Description"
+      },
       "include": {
-        "description": "Something about the following files being supposed to be copied over and trusting their content."
+        "label": "Files"
+      }
+    },
+    "button": {
+      "install_label": "Install",
+      "update_label": "Update"
+    },
+    "popover": {
+      "remove_label": "Remove"
+    },
+    "alert": {
+      "remove": {
+        "header": "Remove Module",
+        "message": "Are you sure that you want to remove this module?",
+        "cancel_label": "Cancel",
+        "proceed_label": "Remove"
       }
     }
   },

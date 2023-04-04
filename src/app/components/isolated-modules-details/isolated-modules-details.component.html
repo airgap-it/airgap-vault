@@ -1,0 +1,56 @@
+  <ng-container *ngrxLet="facade.manifest$ as manifest">
+    <ng-container *ngIf="manifest.status === UIResourceStatus.SUCCESS && manifest.value">
+      <ion-card>
+        <ion-card-content>
+          <div class="ion-margin-bottom">
+            <h3>{{ 'isolated-modules-details.manifest.name.label' | translate }}</h3>
+            <p>{{ manifest.value.name }}</p>
+          </div>
+          <div class="ion-margin-top">
+            <h3 class="ion-margin-top">{{ 'isolated-modules-details.manifest.author.label' | translate }}</h3>
+            <p>{{ manifest.value.author }}</p>
+            <div *ngIf="manifest.value.url">
+              <ion-icon name="globe"></ion-icon>
+              <p class="inlined">{{ manifest.value.url }}</p>
+            </div>
+            <div *ngIf="manifest.value.email">
+              <ion-icon name="mail"></ion-icon>
+              <p class="inlined">{{ manifest.value.email }}</p>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+      <ion-card>
+        <ion-card-content>
+          <h3>{{ 'isolated-modules-details.manifest.description.label' | translate }}</h3>
+          <p>{{ manifest.value.description }}</p>
+        </ion-card-content>
+      </ion-card>
+      <ion-card>
+        <ion-card-content>
+          <h3>{{ 'isolated-modules-details.manifest.version.label' | translate }}</h3>
+          <p>{{ manifest.value.version }}</p>
+        </ion-card-content>
+      </ion-card>
+      <ion-card>
+        <ion-card-content>
+          <h3>{{ 'isolated-modules-details.manifest.signature.label' | translate }}</h3>
+          <p>{{ manifest.value.signature }}</p>
+        </ion-card-content>
+      </ion-card>
+      <ion-card>
+        <ion-card-content>
+          <h3>{{ 'isolated-modules-details.manifest.include.label' | translate }}</h3>
+          <ion-list class="ion-padding-top" lines="full">
+            <ion-item 
+              *ngFor="let file of manifest.value.include"
+              detail="false" 
+              class="ion-no-padding"
+            >
+              <p>{{ file }}</p>
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
+  </ng-container>

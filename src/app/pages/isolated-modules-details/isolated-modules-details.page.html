@@ -1,0 +1,49 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/isolated-modules-list"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>{{ metadata.manifest.name }}</ion-title>
+
+    <ion-buttons *ngIf="mode !== undefined" slot="primary">
+      <ion-button 
+        *ngIf="mode === IsolatedModulesDetailsMode.VIEW_INSTALLED" 
+        (click)="presentEditPopover($event)"
+      >
+        <ion-icon slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <airgap-isolated-modules-details [metadata]="metadata"></airgap-isolated-modules-details>
+
+  <div class="ion-padding"></div>
+
+  <ion-fab 
+    *ngIf="mode !== undefined"
+    [ngSwitch]="mode"
+    vertical="bottom" 
+    horizontal="end" 
+    slot="fixed"
+  >
+    <ion-button
+      *ngSwitchCase="IsolatedModulesDetailsMode.INSTALL"
+      color="primary" 
+      shape="round" 
+      (click)="installModule()"
+    >
+      {{ 'isolated-modules-details.button.install_label' | translate }}
+    </ion-button>
+    <ion-button
+      *ngSwitchCase="IsolatedModulesDetailsMode.VIEW_INSTALLED"
+      color="primary" 
+      shape="round" 
+      (click)="updateModule()"
+    >
+      {{ 'isolated-modules-details.button.update_label' | translate }}
+    </ion-button>  
+  </ion-fab>
+</ion-content>
