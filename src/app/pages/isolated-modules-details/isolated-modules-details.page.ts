@@ -69,7 +69,7 @@ export class IsolatedModulesDetailsPage {
 
       // TODO: check if selected module is matching
 
-      this.navigationService.routeWithState('/isolated-modules-details', {
+      this.navigationService.routeWithState(`/isolated-modules-details/${IsolatedModulesDetailsMode.UPDATE}`, {
         metadata: updatedMetadata,
         oldMetadata: this.metadata,
         mode: IsolatedModulesDetailsMode.UPDATE 

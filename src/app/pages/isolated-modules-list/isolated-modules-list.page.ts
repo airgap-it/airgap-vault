@@ -39,7 +39,7 @@ export class IsolatedModulesListPage implements ViewWillEnter, ViewWillLeave {
     try {
       const metadata: IsolatedModuleMetadata = await this.modulesService.loadModule()
 
-      this.navigationService.routeWithState('/isolated-modules-details', { 
+      this.navigationService.routeWithState(`/isolated-modules-details/${IsolatedModulesDetailsMode.INSTALL}`, { 
         metadata, 
         mode: IsolatedModulesDetailsMode.INSTALL 
       }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
@@ -60,7 +60,7 @@ export class IsolatedModulesListPage implements ViewWillEnter, ViewWillLeave {
   }
 
   public async onModuleSelected(metadata: IsolatedModuleMetadata): Promise<void> {
-    this.navigationService.routeWithState('/isolated-modules-details', { metadata, mode: IsolatedModulesDetailsMode.VIEW_INSTALLED }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.navigationService.routeWithState(`/isolated-modules-details/${IsolatedModulesDetailsMode.VIEW_INSTALLED}`, { metadata, mode: IsolatedModulesDetailsMode.VIEW_INSTALLED }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   private async goToOnboardingPage(): Promise<void> {

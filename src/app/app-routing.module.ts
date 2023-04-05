@@ -180,7 +180,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/isolated-modules-list/isolated-modules-list.module').then((m) => m.IsolatedModulesListPageModule)
   },
   {
-    path: 'isolated-modules-details',
+    path: 'isolated-modules-details/:intention',
     loadChildren: () => import('./pages/isolated-modules-details/isolated-modules-details.module').then((m) => m.IsolatedModulesDetailsPageModule)
   }
 ]
