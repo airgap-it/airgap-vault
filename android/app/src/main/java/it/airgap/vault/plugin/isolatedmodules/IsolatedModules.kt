@@ -189,7 +189,7 @@ class IsolatedModules : Plugin() {
                             JSObject("""
                                 {
                                     "type": "success",
-                                    "value": ${value.getJSObject("value")}
+                                    "value": ${value.get("value")}
                                 }
                             """.trimIndent())
                         } catch (e: Exception) {
