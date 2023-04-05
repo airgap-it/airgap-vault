@@ -11,7 +11,7 @@ val JSUndefined: Any by lazy {
     object : Any() {
         override fun equals(other: Any?): Boolean = other == this || other?.equals(null) ?: true
         override fun hashCode(): Int = Objects.hashCode(null)
-        override fun toString(): String = "it.airgap.vault.__UNDEFINED__"
+        override fun toString(): String = "it.airgap.__UNDEFINED__"
     }
 }
 
