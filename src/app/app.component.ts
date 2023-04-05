@@ -1,4 +1,4 @@
-import { APP_PLUGIN, createV0TezosShieldedTezProtocol, IACMessageTransport, ICoinProtocolAdapter, ModulesService, ProtocolService, SPLASH_SCREEN_PLUGIN, STATUS_BAR_PLUGIN } from '@airgap/angular-core'
+import { APP_PLUGIN, createV0TezosShieldedTezProtocol, IACMessageTransport, ICoinProtocolAdapter, ProtocolService, SPLASH_SCREEN_PLUGIN, STATUS_BAR_PLUGIN } from '@airgap/angular-core'
 import { MainProtocolSymbols } from '@airgap/coinlib-core'
 import { TezosSaplingExternalMethodProvider, TezosShieldedTezProtocol } from '@airgap/tezos'
 import { HttpClient } from '@angular/common/http'
@@ -17,6 +17,7 @@ import { ExposedPromise, exposedPromise } from './functions/exposed-promise'
 import { MnemonicSecret } from './models/secret'
 import { ErrorCategory, handleErrorLocal } from './services/error-handler/error-handler.service'
 import { IACService } from './services/iac/iac.service'
+import { VaultModulesService } from './services/modules/modules.service'
 import { NavigationService } from './services/navigation/navigation.service'
 import { SaplingNativeService } from './services/sapling-native/sapling-native.service'
 import { SecretsService } from './services/secrets/secrets.service'
@@ -51,7 +52,7 @@ export class AppComponent implements AfterViewInit {
     private readonly navigationService: NavigationService,
     private readonly httpClient: HttpClient,
     private readonly saplingNativeService: SaplingNativeService,
-    private readonly moduleService: ModulesService,
+    private readonly moduleService: VaultModulesService,
     @Inject(APP_PLUGIN) private readonly app: AppPlugin,
     @Inject(SECURITY_UTILS_PLUGIN) private readonly securityUtils: SecurityUtilsPlugin,
     @Inject(SPLASH_SCREEN_PLUGIN) private readonly splashScreen: SplashScreenPlugin,
@@ -147,10 +148,10 @@ export class AppComponent implements AfterViewInit {
       passiveSubProtocols: protocols.passiveSubProtocols
     })
 
-    await shieldedTezAdapter.protocolV1.initParameters(await this.getSaplingParams('spend'), await this.getSaplingParams('output'))
+    // await shieldedTezAdapter.protocolV1.initParameters(await this.getSaplingParams('spend'), await this.getSaplingParams('output'))
   }
 
-  private async getSaplingParams(type: 'spend' | 'output'): Promise<Buffer> {
+  public async getSaplingParams(type: 'spend' | 'output'): Promise<Buffer> {
     if (this.platform.is('hybrid')) {
       // Sapling params are read and used in a native plugin, there's no need to read them in the Ionic part
       return Buffer.alloc(0)

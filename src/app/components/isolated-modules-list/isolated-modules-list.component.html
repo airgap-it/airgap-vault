@@ -17,11 +17,11 @@
   <ion-card *ngFor="let module of modules.value" (click)="selectModule(module)">
     <ion-card-content>
       <div class="ion-margin-bottom">
-        <h3>{{ module.metadata.manifest.name }}</h3>
+        <h3>{{ module.manifest.name }}</h3>
       </div>
       <div class="ion-margin-top">
-        <h3>{{ module.metadata.manifest.author }}</h3>
-        <p>{{ module.metadata.manifest.version }}</p>
+        <h3>{{ module.manifest.author }}</h3>
+        <p>{{ module.manifest.version }}</p>
       </div>
       <div class="margin-top-sm" *ngIf="module.installedAt | date: 'dd.MM.yyyy HH:mm' as date ">
         <p class="date">

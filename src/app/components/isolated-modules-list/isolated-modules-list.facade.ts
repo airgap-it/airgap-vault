@@ -1,20 +1,20 @@
-import { BaseFacade, UIResource } from '@airgap/angular-core'
+import { BaseFacade, IsolatedModuleInstalledMetadata, UIResource } from '@airgap/angular-core'
 import { BaseNgRxFacade } from '@airgap/angular-ngrx'
 import { Injectable, InjectionToken } from '@angular/core'
 import { Observable } from 'rxjs'
 import { IsolatedModulesListStore } from './isolated-modules-list.store'
-import { IsolatedModuleDetails, IsolatedModulesListState } from './isolated-modules-list.types'
+import { IsolatedModulesListState } from './isolated-modules-list.types'
 
 export const ISOLATED_MODULES_LIST_FACADE = new InjectionToken<IsolatedModulesListFacade>('IsolatedModulesListFacade')
 export type IsolatedModulesListFacade<T extends BaseFacade = BaseFacade> = IIsolatedModulesListFacade & T
 
 export interface IIsolatedModulesListFacade {
-  readonly modules$: Observable<UIResource<IsolatedModuleDetails[]>>
+  readonly modules$: Observable<UIResource<IsolatedModuleInstalledMetadata[]>>
 }
 
 @Injectable()
 export class IsolatedModulesListNgRxFacade extends BaseNgRxFacade<IsolatedModulesListStore> implements IIsolatedModulesListFacade {
-  public readonly modules$: Observable<UIResource<IsolatedModuleDetails[]>>
+  public readonly modules$: Observable<UIResource<IsolatedModuleInstalledMetadata[]>>
 
   constructor(store: IsolatedModulesListStore) {
     super(store)

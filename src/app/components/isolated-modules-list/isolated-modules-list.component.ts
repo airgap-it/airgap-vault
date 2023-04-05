@@ -1,8 +1,8 @@
-import { BaseComponent, IsolatedModuleMetadata, UIResourceStatus } from '@airgap/angular-core'
+import { BaseComponent, IsolatedModuleInstalledMetadata, IsolatedModuleMetadata, UIResourceStatus } from '@airgap/angular-core'
 import { Component, EventEmitter, Inject, Output } from '@angular/core'
+import { ViewWillEnter } from '@ionic/angular'
 import { IsolatedModulesListFacade, IsolatedModulesListNgRxFacade, ISOLATED_MODULES_LIST_FACADE } from './isolated-modules-list.facade'
 import { IsolatedModulesListStore } from './isolated-modules-list.store'
-import { IsolatedModuleDetails } from './isolated-modules-list.types'
 
 @Component({
   selector: 'airgap-isolated-modules-list',
@@ -10,7 +10,7 @@ import { IsolatedModuleDetails } from './isolated-modules-list.types'
   styleUrls: ['./isolated-modules-list.component.scss'],
   providers: [{ provide: ISOLATED_MODULES_LIST_FACADE, useClass: IsolatedModulesListNgRxFacade }, IsolatedModulesListStore]
 })
-export class IsolatedModulesListComponent extends BaseComponent<IsolatedModulesListFacade> {
+export class IsolatedModulesListComponent extends BaseComponent<IsolatedModulesListFacade> implements ViewWillEnter {
   public readonly UIResourceStatus: typeof UIResourceStatus = UIResourceStatus
 
   @Output()
@@ -20,7 +20,11 @@ export class IsolatedModulesListComponent extends BaseComponent<IsolatedModulesL
     super(facade)
   }
 
-  public selectModule(module: IsolatedModuleDetails) {
-    this.onModuleSelected.emit(module.metadata)
+  public ionViewWillEnter(): void {
+    this.facade.onViewInit()
+  }
+
+  public selectModule(module: IsolatedModuleInstalledMetadata) {
+    this.onModuleSelected.emit(module)
   }
 }

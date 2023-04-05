@@ -24,13 +24,12 @@
 
   <ion-fab 
     *ngIf="mode !== undefined"
-    [ngSwitch]="mode"
     vertical="bottom" 
     horizontal="end" 
     slot="fixed"
   >
     <ion-button
-      *ngSwitchCase="IsolatedModulesDetailsMode.INSTALL"
+      *ngIf="mode === IsolatedModulesDetailsMode.INSTALL || mode === IsolatedModulesDetailsMode.UPDATE"
       color="primary" 
       shape="round" 
       (click)="installModule()"
@@ -38,7 +37,7 @@
       {{ 'isolated-modules-details.button.install_label' | translate }}
     </ion-button>
     <ion-button
-      *ngSwitchCase="IsolatedModulesDetailsMode.VIEW_INSTALLED"
+      *ngIf="mode === IsolatedModulesDetailsMode.VIEW_INSTALLED"
       color="primary" 
       shape="round" 
       (click)="updateModule()"
