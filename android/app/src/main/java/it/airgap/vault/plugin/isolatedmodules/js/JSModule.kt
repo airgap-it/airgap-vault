@@ -19,14 +19,19 @@ sealed interface JSModule {
         override val namespace: String?,
         override val preferredEnvironment: JSEnvironment.Type,
         override val sources: List<String>,
-    ) : JSModule
+    ) : JSModule {
+        companion object {}
+    }
 
     data class Installed(
         override val identifier: String,
         override val namespace: String?,
         override val preferredEnvironment: JSEnvironment.Type,
         override val sources: List<String>,
-    ) : JSModule
+        val installedAt: String
+    ) : JSModule {
+        companion object {}
+    }
 
     data class Preview(
         override val identifier: String,
@@ -34,7 +39,11 @@ sealed interface JSModule {
         override val preferredEnvironment: JSEnvironment.Type,
         override val sources: List<String>,
         val path: String,
-    ) : JSModule
+    ) : JSModule {
+        companion object {}
+    }
+
+    companion object {}
 }
 
 enum class JSProtocolType {

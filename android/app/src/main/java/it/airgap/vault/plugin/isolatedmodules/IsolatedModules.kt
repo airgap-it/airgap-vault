@@ -32,11 +32,11 @@ class IsolatedModules : Plugin() {
                     resolve(
                         JSObject(
                             """
-                        {
-                            "module": $moduleJson,
-                            "manifest": ${JSObject(manifest.decodeToString())}
-                        }
-                    """.trimIndent()
+                                {
+                                    "module": $moduleJson,
+                                    "manifest": ${JSObject(manifest.decodeToString())}
+                                }
+                            """.trimIndent()
                         )
                     )
                 }
@@ -55,6 +55,31 @@ class IsolatedModules : Plugin() {
                     jsEvaluator.await().registerModule(module, protocolIdentifiers)
 
                     resolve()
+                }
+            }
+        }
+    }
+
+    @PluginMethod
+    fun readDynamicModule(call: PluginCall) {
+        call.executeCatching {
+            assertReceived(Param.IDENTIFIER)
+
+            activity.lifecycleScope.launch {
+                executeCatching {
+                    val module = fileExplorer.loadInstalledModule(identifier)
+                    val manifest = fileExplorer.readModuleManifest(module)
+
+                    resolve(
+                        JSObject(
+                            """
+                                {
+                                    "manifest": ${JSObject(manifest.decodeToString())},
+                                    "installedAt": "${module.installedAt}"
+                                }
+                            """.trimIndent()
+                        )
+                    )
                 }
             }
         }
@@ -242,7 +267,6 @@ class IsolatedModules : Plugin() {
         const val PATH = "path"
         const val DIRECTORY = "directory"
         const val IDENTIFIER = "identifier"
-        const val IDENTIFIERS = "identifiers"
         const val PROTOCOL_IDENTIFIERS = "protocolIdentifiers"
         const val PROTOCOL_TYPE = "protocolType"
         const val IGNORE_PROTOCOLS = "ignoreProtocols"
