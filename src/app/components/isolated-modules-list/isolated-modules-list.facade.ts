@@ -9,22 +9,30 @@ export const ISOLATED_MODULES_LIST_FACADE = new InjectionToken<IsolatedModulesLi
 export type IsolatedModulesListFacade<T extends BaseFacade = BaseFacade> = IIsolatedModulesListFacade & T
 
 export interface IIsolatedModulesListFacade {
-  readonly modules$: Observable<UIResource<IsolatedModuleInstalledMetadata[]>>
+  readonly allModulesLength$: Observable<number>
+  readonly filteredModules$: Observable<UIResource<IsolatedModuleInstalledMetadata[]>>
+
+  initWithFilter(query: string | undefined)
+  filterModules(query: string | undefined): void
 }
 
 @Injectable()
 export class IsolatedModulesListNgRxFacade extends BaseNgRxFacade<IsolatedModulesListStore> implements IIsolatedModulesListFacade {
-  public readonly modules$: Observable<UIResource<IsolatedModuleInstalledMetadata[]>>
+  public readonly allModulesLength$: Observable<number>
+  public readonly filteredModules$: Observable<UIResource<IsolatedModuleInstalledMetadata[]>>
 
   constructor(store: IsolatedModulesListStore) {
     super(store)
 
-    this.modules$ = this.store.select((state: IsolatedModulesListState) => state.modules)
+    this.allModulesLength$ = this.store.select((state: IsolatedModulesListState) => state.allModules.value?.length ?? 0)
+    this.filteredModules$ = this.store.select((state: IsolatedModulesListState) => state.filteredModules)
   }
 
-  public onViewInit() {
-    this.store.onPageLoaded$()
+  public initWithFilter(query: string | undefined) {
+    this.store.onPageLoaded$(query)
+  }
 
-    return super.onViewInit()
+  public filterModules(query: string | undefined): void {
+    this.store.filterModules(query)
   }
 }

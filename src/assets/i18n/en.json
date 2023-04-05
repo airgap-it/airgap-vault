@@ -705,6 +705,9 @@
       "header": "No Modules Installed",
       "description": "Tap the \"+\" icon to load a new module from your phone storage"
     },
+    "items": {
+      "search_placeholder": "Search isolated modules"
+    },
     "install-date": "Install Date: {{ date }}"
   },
   "isolated-modules-onboarding": {

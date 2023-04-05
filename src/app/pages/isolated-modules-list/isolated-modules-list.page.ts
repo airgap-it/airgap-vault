@@ -1,7 +1,6 @@
-import { IsolatedModuleMetadata, UIResource, UIResourceStatus } from '@airgap/angular-core'
+import { IsolatedModuleMetadata } from '@airgap/angular-core'
 import { Component } from '@angular/core'
-import { ModalController } from '@ionic/angular'
-import { Observable } from 'rxjs'
+import { ModalController, ViewWillEnter, ViewWillLeave } from '@ionic/angular'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 import { VaultModulesService } from 'src/app/services/modules/modules.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
@@ -14,12 +13,8 @@ import { IsolatedModulesOnboardingPage } from '../isolated-modules-onboarding/is
   templateUrl: './isolated-modules-list.page.html',
   styleUrls: ['./isolated-modules-list.page.scss']
 })
-export class IsolatedModulesListPage {
-  public readonly moduleName: string | undefined
-
-  public readonly moduleMetadata$: Observable<UIResource<IsolatedModuleMetadata>>
-
-  public readonly UIResourceStatus: typeof UIResourceStatus = UIResourceStatus
+export class IsolatedModulesListPage implements ViewWillEnter, ViewWillLeave {
+  public filter: string | undefined
 
   constructor(
     private readonly storageSerivce: VaultStorageService, 
@@ -32,7 +27,11 @@ export class IsolatedModulesListPage {
     })
   }
 
-  public ionViewWillLeave() {
+  public ionViewWillEnter(): void {
+    // TODO: refresh
+  }
+
+  public ionViewWillLeave(): void {
     this.modalController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 
@@ -48,6 +47,16 @@ export class IsolatedModulesListPage {
       console.error('Loading protocol module data failed', e)
       // TODO: show alert
     }
+  }
+  
+  public filterModules(event: any) {
+    function isValidQuery(data: unknown): data is string {
+      return data && typeof data === 'string' && data !== ''
+    }
+
+    const value: unknown = event.target.value
+
+    this.filter = isValidQuery(value) ? value.trim() : undefined
   }
 
   public async onModuleSelected(metadata: IsolatedModuleMetadata): Promise<void> {

@@ -12,8 +12,12 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
+
+  <ion-toolbar color="secondary">
+    <ion-searchbar placeholder="{{ 'isolated-modules-list.items.search_placeholder' | translate }}" (ionInput)="filterModules($event)"></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <airgap-isolated-modules-list (onModuleSelected)="onModuleSelected($event)"></airgap-isolated-modules-list>
+  <airgap-isolated-modules-list [filter]="filter" (onModuleSelected)="onModuleSelected($event)"></airgap-isolated-modules-list>
 </ion-content>

@@ -56,7 +56,7 @@ export class IsolatedModulesDetailsPage {
       await this.modulesService.installModule(this.metadata)
     }
 
-    this.navigationService.back()
+    this.navigationService.route('/isolated-modules-list', true).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public async updateModule() {
@@ -96,7 +96,7 @@ export class IsolatedModulesDetailsPage {
               await this.modulesService.removeInstalledModule(this.metadata)
             }
         
-            this.navigationService.back()
+            this.navigationService.route('/isolated-modules-list', true).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
           }
         }
       ]
