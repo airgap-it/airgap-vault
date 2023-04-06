@@ -11,7 +11,11 @@ struct ModuleManifest: Codable {
     let name: String
     let version: String
     let author: String
+    let url: String?
+    let email: String?
+    let repo: String?
     let signature: String
+    let description: String
     let src: Src?
     let res: Res?
     let include: [String]

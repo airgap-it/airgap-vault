@@ -8,7 +8,8 @@
 import Foundation
 
 protocol JSEnvironment {
-    func run(_ action: JSModuleAction, in module: JSModule) async throws -> [String: Any]
+    func run(_ action: JSModuleAction, in module: JSModule, keepAlive: Bool) async throws -> [String: Any]
+    func reset() async throws
     func destroy() async throws
 }
 

@@ -30,13 +30,30 @@ class JSEvaluator {
         await modulesManager.deregisterAllModules()
     }
     
-    func evaluatePreviewModule(_ module: JSModule) async throws -> [String: Any] {
-        return try await self.webViewEnv.run(.load(.init(protocolType: nil)), in: module)
+    func evaluatePreviewModule(
+        _ module: JSModule,
+        ignoringProtocols ignoreProtocols: [String]?,
+        keepEnvironment: Bool = false
+    ) async throws -> [String: Any] {
+        return try await self.webViewEnv.run(
+            .load(.init(protocolType: nil, ignoreProtocols: ignoreProtocols)),
+            in: module,
+            keepAlive: keepEnvironment
+        )
     }
     
-    func evaluateLoadModules(_ modules: [JSModule], for protocolType: JSProtocolType?) async throws -> [String: Any] {
+    func evaluateLoadModules(
+        _ modules: [JSModule],
+        for protocolType: JSProtocolType?,
+        ignoringProtocols ignoreProtocols: [String]?,
+        keepEnvironment: Bool = false
+    ) async throws -> [String: Any] {
         let modulesJSON = try await modules.asyncMap { module -> [String : Any] in
-            let json = try await self.webViewEnv.run(.load(.init(protocolType: protocolType)), in: module)
+            let json = try await self.webViewEnv.run(
+                .load(.init(protocolType: protocolType, ignoreProtocols: ignoreProtocols)),
+                in: module,
+                keepAlive: keepEnvironment
+            )
             try await self.modulesManager.registerModule(module, forJSON: json)
             
             return json
@@ -48,7 +65,8 @@ class JSEvaluator {
     func evaluateCallOfflineProtocolMethod(
         _ name: String,
         ofProtocol protocolIdentifier: String,
-        withArgs args: JSArray?
+        withArgs args: JSArray?,
+        keepEnvironment: Bool = false
     ) async throws -> [String: Any] {
         let modules = await modulesManager.modules
         guard let module = modules[protocolIdentifier] else {
@@ -61,7 +79,8 @@ class JSEvaluator {
                     .init(name: name, args: args, protocolIdentifier: protocolIdentifier)
                 )
             ),
-            in: module
+            in: module,
+            keepAlive: keepEnvironment
         )
     }
     
@@ -69,7 +88,8 @@ class JSEvaluator {
         _ name: String,
         ofProtocol protocolIdentifier: String,
         onNetwork networkID: String?,
-        withArgs args: JSArray?
+        withArgs args: JSArray?,
+        keepEnvironment: Bool = false
     ) async throws -> [String: Any] {
         let modules = await modulesManager.modules
         guard let module = modules[protocolIdentifier] else {
@@ -82,7 +102,8 @@ class JSEvaluator {
                     .init(name: name, args: args, protocolIdentifier: protocolIdentifier, networkID: networkID)
                 )
             ),
-            in: module
+            in: module,
+            keepAlive: keepEnvironment
         )
     }
     
@@ -90,7 +111,8 @@ class JSEvaluator {
         _ name: String,
         ofProtocol protocolIdentifier: String,
         onNetwork networkID: String?,
-        withArgs args: JSArray?
+        withArgs args: JSArray?,
+        keepEnvironment: Bool = false
     ) async throws -> [String: Any] {
         let modules = await modulesManager.modules
         guard let module = modules[protocolIdentifier] else {
@@ -103,14 +125,16 @@ class JSEvaluator {
                     .init(name: name, args: args, protocolIdentifier: protocolIdentifier, networkID: networkID)
                 )
             ),
-            in: module
+            in: module,
+            keepAlive: keepEnvironment
         )
     }
     
     func evaluateCallV3SerializerCompanionMethod(
         _ name: String,
         ofModule moduleIdentifier: String,
-        withArgs args: JSArray?
+        withArgs args: JSArray?,
+        keepEnvironment: Bool = false
     ) async throws -> [String: Any] {
         let modules = await modulesManager.modules
         guard let module = modules[moduleIdentifier] else {
@@ -123,8 +147,13 @@ class JSEvaluator {
                     .init(name: name, args: args)
                 )
             ),
-            in: module
+            in: module,
+            keepAlive: keepEnvironment
         )
+    }
+    
+    func reset() async throws {
+        try await webViewEnv.reset()
     }
     
     func destroy() async throws {
@@ -167,17 +196,5 @@ class JSEvaluator {
     enum Error: Swift.Error {
         case moduleNotFound(String)
         case invalidJSON
-    }
-}
-
-private extension JSArray {
-    func replaceNullWithUndefined() -> JSArray {
-        map {
-            if $0 is NSNull {
-                return JSUndefined.value
-            } else {
-                return $0
-            }
-        }
     }
 }

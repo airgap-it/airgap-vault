@@ -27,21 +27,21 @@ struct FileExplorer {
         try assetsExplorer.readIsolatedModulesScript()
     }
     
-    func loadAssetModules() throws -> [JSModule] {
-        try loadModules(using: assetsExplorer, creatingModuleWith: JSModule.Asset.init).map { .asset($0) }
+    func loadAssetModules() throws -> [JSModule.Asset] {
+        try loadModules(using: assetsExplorer, creatingModuleWith: JSModule.Asset.init)
     }
     
-    func loadInstalledModule(_ identifier: String) throws -> JSModule {
+    func loadInstalledModule(_ identifier: String) throws -> JSModule.Installed {
         let manifest = try documentExplorer.readModuleManifest(identifier)
         
-        return .installed(try loadModule(identifier, fromManifest: manifest, creatingModuleWith: JSModule.Instsalled.init))
+        return try loadModule(identifier, fromManifest: manifest, creatingModuleWith: JSModule.Installed.getInit(using: documentExplorer))
     }
     
-    func loadInstalledModules() throws -> [JSModule] {
-        try loadModules(using: documentExplorer, creatingModuleWith: JSModule.Instsalled.init).map { .installed($0) }
+    func loadInstalledModules() throws -> [JSModule.Installed] {
+        try loadModules(using: documentExplorer, creatingModuleWith: JSModule.Installed.getInit(using: documentExplorer))
     }
     
-    func loadPreviewModule(atPath path: String, locatedIn directory: Directory) throws -> JSModule {        
+    func loadPreviewModule(atPath path: String, locatedIn directory: Directory) throws -> JSModule.Preview {
         guard let directory = fileManager.getDirectory(from: directory),
               let url = fileManager.urls(for: directory, in: .userDomainMask).first?.appendingPathComponent(path) else {
             throw Error.invalidDirectory
@@ -50,9 +50,7 @@ struct FileExplorer {
         let identifier = url.pathComponents.last ?? "module"
         let manifest = try fileManager.contents(at: url.appendingPathComponent(FileExplorer.manifestFilename))
         
-        return .preview(try loadModule(identifier, fromManifest: manifest) { identifier, namespace, preferredEnvironment, sources in
-            JSModule.Preview(identifier: identifier, namespace: namespace, preferredEnvironment: preferredEnvironment, sources: sources, path: url)
-        })
+        return try loadModule(identifier, fromManifest: manifest, creatingModuleWith: JSModule.Preview.getInit(withURL: url))
     }
     
     func removeModules(_ identifiers: [String]) throws {
@@ -87,7 +85,7 @@ struct FileExplorer {
     
     private func loadModules<T: JSModuleProtocol, E: SourcesExplorer>(
         using explorer: E,
-        creatingModuleWith moduleInit: (_ identifier: String, _ namespace: String?, _ preferredEnvironment: JSEnvironmentKind, _ sources: [String]) -> T
+        creatingModuleWith moduleInit: JSModuleInit<T>
     ) throws -> [T] where E.T == T {
         try explorer.listModules().map { module in
             try loadModule(module, fromManifest: try explorer.readModuleManifest(module), creatingModuleWith: moduleInit)
@@ -97,7 +95,7 @@ struct FileExplorer {
     private func loadModule<T: JSModuleProtocol>(
         _ identifier: String,
         fromManifest manifestData: Data,
-        creatingModuleWith moduleInit: (_ identifier: String, _ namespace: String?, _ preferredEnvironment: JSEnvironmentKind, _ sources: [String]) -> T
+        creatingModuleWith moduleInit: JSModuleInit<T>
     ) throws -> T {
         let jsonDecoder = JSONDecoder()
     
@@ -158,7 +156,7 @@ private struct AssetsExplorer: SourcesExplorer {
 // MARK: DocumentExplorer
 
 private struct DocumentExplorer: SourcesExplorer, DynamicSourcesExplorer {
-    typealias T = JSModule.Instsalled
+    typealias T = JSModule.Installed
     
     private static let modulesDir: String = "protocol_modules"
     
@@ -193,6 +191,18 @@ private struct DocumentExplorer: SourcesExplorer, DynamicSourcesExplorer {
         try fileManager.removeItem(at: modulesDirURL)
     }
     
+    func getInstalledTimestamp(forIdentifier identifier: String) -> String {
+        guard let attributes = try? fileManager.attributesOfItem(atPath: modulePath(identifier)) else {
+            return ""
+        }
+        
+        guard let creationDate = attributes[.creationDate] as? Date else {
+            return ""
+        }
+        
+        return String(Int(creationDate.timeIntervalSince1970))
+    }
+    
     func listModules() throws -> [String] {
         guard let modulesDirURL = modulesDirURL else {
             return []
@@ -207,11 +217,16 @@ private struct DocumentExplorer: SourcesExplorer, DynamicSourcesExplorer {
         return try fileManager.contentsOfDirectory(atPath: modulesDirPath)
     }
     
-    func modulePath(_ module: String, ofPath path: String) throws -> String {
-        return "\(Self.modulesDir)/\(module)/\(path)"
+    func modulePath(_ module: String, ofPath path: String? = nil) -> String {
+        let moduleDir = "\(Self.modulesDir)/\(module)"
+        guard let path = path else {
+            return moduleDir
+        }
+        
+        return "\(moduleDir)/\(path)"
     }
     
-    func readModuleSources(_ module: JSModule.Instsalled) throws -> [Data] {
+    func readModuleSources(_ module: JSModule.Installed) throws -> [Data] {
         try module.sources.lazy.map { try readData(atPath: modulePath(module.identifier, ofPath: $0)) }
     }
     
@@ -242,9 +257,39 @@ private protocol SourcesExplorer {
 private protocol DynamicSourcesExplorer {
     func removeModules(_ identifiers: [String]) throws
     func removeAllModules() throws
+    
+    func getInstalledTimestamp(forIdentifier identifier: String) -> String
 }
 
 // MARK: Extensions
+
+private extension JSModule.Installed {
+    static func getInit<T: DynamicSourcesExplorer>(using explorer: T) -> JSModuleInit<JSModule.Installed> {
+        { (identifier, namespace, preferredEnvironment, sources) -> JSModule.Installed in
+                .init(
+                    identifier: identifier,
+                    namespace: namespace,
+                    preferredEnvironment: preferredEnvironment,
+                    sources: sources,
+                    installedAt: explorer.getInstalledTimestamp(forIdentifier: identifier)
+                )
+        }
+    }
+}
+
+private extension JSModule.Preview {
+    static func getInit(withURL url: URL) -> JSModuleInit<JSModule.Preview> {
+        { (identifier, namespace, preferredEnvironment, sources) -> JSModule.Preview in
+            .init(
+                identifier: identifier,
+                namespace: namespace,
+                preferredEnvironment: preferredEnvironment,
+                sources: sources,
+                path: url
+            )
+        }
+    }
+}
 
 private extension FileExplorer {
     static let manifestFilename: String = "manifest.json"
@@ -264,3 +309,7 @@ private enum Error: Swift.Error {
     case invalidPath
     case invalidDirectory
 }
+
+// MARK: Aliases
+
+typealias JSModuleInit<T: JSModuleProtocol> = (_ identifier: String, _ namespace: String?, _ preferredEnvironment: JSEnvironmentKind, _ sources: [String]) -> T

@@ -12,7 +12,7 @@ import Capacitor
 
 enum JSModule {
     case asset(Asset)
-    case installed(Instsalled)
+    case installed(Installed)
     case preview(Preview)
     
     var identifier: String {
@@ -66,11 +66,12 @@ enum JSModule {
         let sources: [String]
     }
     
-    struct Instsalled: JSModuleProtocol {
+    struct Installed: JSModuleProtocol {
         let identifier: String
         let namespace: String?
         let preferredEnvironment: JSEnvironmentKind
         let sources: [String]
+        let installedAt: String
     }
     
     struct Preview: JSModuleProtocol {
@@ -134,12 +135,16 @@ enum JSModuleAction: JSONConvertible {
     
     struct Load: JSONConvertible {
         let protocolType: JSProtocolType?
+        let ignoreProtocols: JSArray?
         
         func toJSONString() throws -> String {
+            let ignoreProtocols = try ignoreProtocols?.toJSONString() ?? "[]"
+            
             return """
                 {
                     "type": "\(JSModuleAction.loadType)",
-                    "protocolType": \(try protocolType?.toJSONString() ?? (try JSUndefined.value.toJSONString()))
+                    "protocolType": \(try protocolType?.toJSONString() ?? (try JSUndefined.value.toJSONString())),
+                    "ignoreProtocols": \(ignoreProtocols)
                 }
             """
         }
@@ -170,7 +175,7 @@ enum JSModuleAction: JSONConvertible {
             args: JSArray?,
             partial partialJSON: String
         ) throws -> String {
-            let args = try args?.replaceNullWithUndefined().toJSONString() ?? "[]"
+            let args = try args?.toJSONString() ?? "[]"
             let objectJSON = """
                 {
                     "type": "\(JSModuleAction.callMethodType)",

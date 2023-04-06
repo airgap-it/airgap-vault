@@ -8,11 +8,12 @@
 #import <Foundation/Foundation.h>
 #import <Capacitor/Capacitor.h>
 
-// disable true isolation until it's production ready
-//CAP_PLUGIN(IsolatedModules, "IsolatedModules",
-//           CAP_PLUGIN_METHOD(previewDynamicModule, CAPPluginReturnPromise);
-//           CAP_PLUGIN_METHOD(registerDynamicModule, CAPPluginReturnPromise);
-//           CAP_PLUGIN_METHOD(removeDynamicModules, CAPPluginReturnPromise);
-//           CAP_PLUGIN_METHOD(loadAllModules, CAPPluginReturnPromise);
-//           CAP_PLUGIN_METHOD(callMethod, CAPPluginReturnPromise);
-//)
+CAP_PLUGIN(IsolatedModules, "IsolatedModules",
+           CAP_PLUGIN_METHOD(previewDynamicModule, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(registerDynamicModule, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(readDynamicModule, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(removeDynamicModules, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(loadAllModules, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(callMethod, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(batchCallMethod, CAPPluginReturnPromise);
+)
