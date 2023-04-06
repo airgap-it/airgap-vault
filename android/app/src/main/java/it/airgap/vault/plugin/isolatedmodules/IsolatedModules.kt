@@ -231,7 +231,7 @@ class IsolatedModules : Plugin() {
         get() = getString(Param.IDENTIFIER)!!
 
     private val PluginCall.identifiers: List<String>?
-        get() = getArray(Param.PROTOCOL_IDENTIFIERS, null)?.toList()
+        get() = getArray(Param.IDENTIFIERS, null)?.toList()
 
     private  val PluginCall.protocolIdentifiers: List<String>
         get() = getArray(Param.PROTOCOL_IDENTIFIERS).toList()
@@ -267,6 +267,7 @@ class IsolatedModules : Plugin() {
         const val PATH = "path"
         const val DIRECTORY = "directory"
         const val IDENTIFIER = "identifier"
+        const val IDENTIFIERS = "identifiers"
         const val PROTOCOL_IDENTIFIERS = "protocolIdentifiers"
         const val PROTOCOL_TYPE = "protocolType"
         const val IGNORE_PROTOCOLS = "ignoreProtocols"

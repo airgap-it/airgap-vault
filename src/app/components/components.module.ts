@@ -12,9 +12,6 @@ import { PipesModule } from '../pipes/pipes.module'
 
 import { EntropyProgressComponent } from './entropy-progress/entropy-progress.component'
 import { GridInputComponent } from './grid-input/grid-input.component'
-import { IsolatedModulesDetailsComponent } from './isolated-modules-details/isolated-modules-details.component'
-import { IsolatedModulesListComponent } from './isolated-modules-list/isolated-modules-list.component'
-import { IsolatedModulesOnboardingComponent } from './isolated-modules-onboarding/isolated-modules-onboarding.component'
 import { KeyboardPopoverComponent } from './keyboard-popover/keyboard-popover.component'
 import { MessageSignRequestComponent } from './message-sign-request/message-sign-request.component'
 import { MessageSignResponseComponent } from './message-sign-response/message-sign-response.component'
@@ -43,10 +40,7 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     MessageSignResponseComponent,
     GridInputComponent,
     SecretOptionItemComponent,
-    KeyboardPopoverComponent,
-    IsolatedModulesOnboardingComponent,
-    IsolatedModulesListComponent,
-    IsolatedModulesDetailsComponent
+    KeyboardPopoverComponent
   ],
   imports: [
     IonicModule,
@@ -74,10 +68,7 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     MessageSignResponseComponent,
     GridInputComponent,
     SecretOptionItemComponent,
-    KeyboardPopoverComponent,
-    IsolatedModulesOnboardingComponent,
-    IsolatedModulesListComponent,
-    IsolatedModulesDetailsComponent
+    KeyboardPopoverComponent
   ],
   entryComponents: []
 })

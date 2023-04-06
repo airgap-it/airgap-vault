@@ -1,5 +1,5 @@
-import { IsolatedModuleMetadata } from '@airgap/angular-core'
-import { Component } from '@angular/core'
+import { IsolatedModuleMetadata, IsolatedModulesListPageFacade, ISOLATED_MODULES_LIST_PAGE_FACADE } from '@airgap/angular-core'
+import { Component, Inject, OnInit } from '@angular/core'
 import { ModalController, ViewWillEnter, ViewWillLeave } from '@ionic/angular'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 import { VaultModulesService } from 'src/app/services/modules/modules.service'
@@ -13,22 +13,25 @@ import { IsolatedModulesOnboardingPage } from '../isolated-modules-onboarding/is
   templateUrl: './isolated-modules-list.page.html',
   styleUrls: ['./isolated-modules-list.page.scss']
 })
-export class IsolatedModulesListPage implements ViewWillEnter, ViewWillLeave {
-  public filter: string | undefined
-
+export class IsolatedModulesListPage implements OnInit, ViewWillEnter, ViewWillLeave {
   constructor(
-    private readonly storageSerivce: VaultStorageService, 
+    @Inject(ISOLATED_MODULES_LIST_PAGE_FACADE) public readonly facade: IsolatedModulesListPageFacade,
     private readonly modalController: ModalController,
+    private readonly storageService: VaultStorageService,
     private readonly navigationService: NavigationService,
     private readonly modulesService: VaultModulesService
   ) {
-    this.storageSerivce.get(VaultStorageKey.ISOLATED_MODULES_ONBOARDING_DISABLED).then((value) => {
+    this.storageService.get(VaultStorageKey.ISOLATED_MODULES_ONBOARDING_DISABLED).then((value) => {
       if (!value) this.goToOnboardingPage()
     })
   }
 
+  public ngOnInit(): void {
+    this.facade.onViewInit()
+  }
+
   public ionViewWillEnter(): void {
-    // TODO: refresh
+    this.facade.onViewWillEnter()
   }
 
   public ionViewWillLeave(): void {
@@ -36,6 +39,7 @@ export class IsolatedModulesListPage implements ViewWillEnter, ViewWillLeave {
   }
 
   public async addModule(): Promise<void> {
+    // TODO: move to common components
     try {
       const metadata: IsolatedModuleMetadata = await this.modulesService.loadModule()
 
@@ -55,8 +59,7 @@ export class IsolatedModulesListPage implements ViewWillEnter, ViewWillLeave {
     }
 
     const value: unknown = event.target.value
-
-    this.filter = isValidQuery(value) ? value.trim() : undefined
+    this.facade.onFilterQueryChanged(isValidQuery(value) ? value.trim() : undefined)
   }
 
   public async onModuleSelected(metadata: IsolatedModuleMetadata): Promise<void> {

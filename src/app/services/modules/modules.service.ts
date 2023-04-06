@@ -20,6 +20,7 @@ export class VaultModulesService extends BaseModulesService {
     super(modulesController, protocolService)
   }
 
+  // TODO: move to common components
   public async loadModule(): Promise<IsolatedModulePreviewMetadata> {
     let loader: HTMLIonLoadingElement | undefined
 
@@ -34,7 +35,7 @@ export class VaultModulesService extends BaseModulesService {
       }
 
       loader = await this.uiEventService.getTranslatedLoader({
-        message: 'loader.generic.message'
+        message: 'isolated-modules.loader_message'
       })
       await loader.present().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
 

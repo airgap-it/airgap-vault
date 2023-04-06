@@ -699,63 +699,6 @@
     "title": "Wordlist",
     "search_placeholder": "Search..."
   },
-  "isolated-modules-list": {
-    "title": "Isolated Modules",
-    "empty": {
-      "header": "No Modules Installed",
-      "description": "Tap the \"+\" icon to load a new module from your phone storage"
-    },
-    "items": {
-      "search_placeholder": "Search isolated modules"
-    },
-    "install-date": "Install Date: {{ date }}"
-  },
-  "isolated-modules-onboarding": {
-    "title": "Isolated Modules",
-    "content": {
-      "header": "Introducing Isolated Modules",
-      "description": "Load 3rd party modules into your vault to add additional features.",
-      "note": "<strong>Please note:</strong> Installing modules is done at your own risk. The functionality and maintenance of these modules is handled by thirt parties and are not affiliated with AirGap.",
-      "button_label": "Understood"
-    }
-  },
-  "isolated-modules-details": {
-    "manifest": {
-      "name": {
-        "label": "Module Name"
-      },
-      "version": {
-        "label": "Version"
-      },
-      "author": {
-        "label": "Author"
-      },
-      "signature": {
-        "label": "Signature"
-      },
-      "description": {
-        "label": "Description"
-      },
-      "include": {
-        "label": "Files"
-      }
-    },
-    "button": {
-      "install_label": "Install",
-      "update_label": "Update"
-    },
-    "popover": {
-      "remove_label": "Remove"
-    },
-    "alert": {
-      "remove": {
-        "header": "Remove Module",
-        "message": "Are you sure that you want to remove this module?",
-        "cancel_label": "Cancel",
-        "proceed_label": "Remove"
-      }
-    }
-  },
   "keyboard": {
     "paste": "Paste",
     "add": "Add Word",
@@ -763,5 +706,8 @@
     "shuffle": "Shuffle Keys",
     "mask": "Mask Text",
     "word_list": "Show Word List"
+  },
+  "isolated-modules": {
+    "loader_message": "Loading..."
   }
 }

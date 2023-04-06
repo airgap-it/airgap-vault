@@ -55,9 +55,11 @@ class WebViewEnvironment(
     }
 
     override suspend fun reset() {
-        webViews.apply {
-            values.forEach { it.first.destroy() }
-            clear()
+        webViewsMutex.withLock {
+            webViews.apply {
+                values.forEach { it.first.destroy() }
+                clear()
+            }
         }
     }
     override suspend fun destroy() {

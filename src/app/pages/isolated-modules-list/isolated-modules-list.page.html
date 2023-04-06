@@ -19,5 +19,9 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <airgap-isolated-modules-list [filter]="filter" (onModuleSelected)="onModuleSelected($event)"></airgap-isolated-modules-list>
+  <airgap-isolated-modules-list 
+    [modules]="facade.modules$ | ngrxPush" 
+    [filter]="facade.filter$ | ngrxPush" 
+    (onModuleSelected)="onModuleSelected($event)"
+  ></airgap-isolated-modules-list>
 </ion-content>

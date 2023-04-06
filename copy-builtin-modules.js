@@ -66,6 +66,7 @@ function createAssetModule(module) {
     version: packageJson.version,
     author: packageJson.author,
     signature: "" /* TODO */,
+    description: "",
     src: {
       namespace
     },
