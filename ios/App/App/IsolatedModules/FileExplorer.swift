@@ -131,8 +131,12 @@ private struct AssetsExplorer: SourcesExplorer {
     }
     
     func listModules() throws -> [String] {
-        let url = Self.assetsURL.appendingPathComponent(Self.modulesDir)
-        return try fileManager.contentsOfDirectory(atPath: url.path)
+        let path = Self.assetsURL.appendingPathComponent(Self.modulesDir).path
+        guard fileManager.fileExists(atPath: path) else {
+            return []
+        }
+        
+        return try fileManager.contentsOfDirectory(atPath: path)
     }
     
     func modulePath(_ module: String, forPath path: String) throws -> String {
@@ -219,7 +223,7 @@ private struct DocumentExplorer: SourcesExplorer, DynamicSourcesExplorer {
             return ""
         }
         
-        return String(Int(creationDate.timeIntervalSince1970))
+        return String(Int64((creationDate.timeIntervalSince1970 * 1000.0).rounded()))
     }
     
     func listModules() throws -> [String] {
