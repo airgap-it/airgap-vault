@@ -97,7 +97,6 @@ class JSEvaluator constructor(
         return module.run(JSModuleAction.CallMethod.V3SerializerCompanion(name, args), keepEnvironment = keepEnvironment)
     }
 
-
     suspend fun reset() {
         environments.values.forEach { it?.reset() }
     }

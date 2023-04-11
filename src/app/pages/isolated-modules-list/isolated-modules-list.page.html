@@ -13,9 +13,11 @@
     </ion-buttons>
   </ion-toolbar>
 
-  <ion-toolbar color="secondary">
-    <ion-searchbar placeholder="{{ 'isolated-modules-list.items.search_placeholder' | translate }}" (ionInput)="filterModules($event)"></ion-searchbar>
-  </ion-toolbar>
+  <ng-container *ngrxLet="facade.modules$ as modules">
+    <ion-toolbar *ngIf="modules.value.length > 0" color="secondary">
+      <ion-searchbar placeholder="{{ 'isolated-modules-list.items.search_placeholder' | translate }}" (ionInput)="filterModules($event)"></ion-searchbar>
+    </ion-toolbar>
+  </ng-container>
 </ion-header>
 
 <ion-content class="ion-padding">

@@ -17,8 +17,8 @@ interface StaticSourcesExplorer {
     fun readIsolatedModulesScript(): ByteArray
 }
 
-interface DynamicSourcesExplorer {
-    fun removeModules(identifiers: List<String>)
+interface DynamicSourcesExplorer<in M : JSModule> {
+    fun removeModules(modules: List<M>)
     fun removeAllModules()
 
     fun getInstalledTimestamp(identifier: String): String
@@ -33,7 +33,13 @@ interface SourcesExplorer<in M : JSModule> {
 
 private const val MANIFEST_FILENAME = "manifest.json"
 
-private typealias JSModuleConstructor<T> = (identifier: String, namespace: String?, preferredEnvironment: JSEnvironment.Type, paths: List<String>) -> T
+private typealias JSModuleConstructor<T> = (
+    identifier: String,
+    namespace: String?,
+    preferredEnvironment: JSEnvironment.Type,
+    paths: List<String>,
+    manifest: JSObject
+) -> T
 
 class FileExplorer private constructor(
     private val context: Context,
@@ -60,7 +66,7 @@ class FileExplorer private constructor(
     }
 
     fun removeInstalledModules(identifiers: List<String>) {
-        filesExplorer.removeModules(identifiers)
+        filesExplorer.removeModules(identifiers.map { loadInstalledModule(it) })
     }
 
     fun removeAllInstalledModules() {
@@ -82,28 +88,38 @@ class FileExplorer private constructor(
         }
 
     private val JSModule.Asset.Companion.constructor: JSModuleConstructor<JSModule.Asset>
-        get() = JSModule::Asset
+        get() = { identifier, namespace, preferredEnvironment, paths, _ ->
+            JSModule.Asset(identifier, namespace, preferredEnvironment, paths)
+        }
 
     private val JSModule.Installed.Companion.constructor: JSModuleConstructor<JSModule.Installed>
-        get() = { identifier, namespace, preferredEnvironment, paths ->
+        get() = { identifier, namespace, preferredEnvironment, paths, manifest ->
+            val symbols = manifest
+                .getJSObject("res")
+                ?.getJSObject("symbol")
+                ?.keys()
+                ?.asSequence()
+                ?.toList()
+
             JSModule.Installed(
                 identifier,
                 namespace,
                 preferredEnvironment,
                 paths,
+                symbols ?: emptyList(),
                 filesExplorer.getInstalledTimestamp(identifier)
             )
         }
 
-    private fun JSModule.Preview.Companion.constructor(moduleDir: File): JSModuleConstructor<JSModule.Preview> = { identifier, namespace, preferredEnvironment, paths ->
-            JSModule.Preview(
-                identifier,
-                namespace,
-                preferredEnvironment,
-                paths,
-                moduleDir.absolutePath
-            )
-        }
+    private fun JSModule.Preview.Companion.constructor(moduleDir: File): JSModuleConstructor<JSModule.Preview> = { identifier, namespace, preferredEnvironment, paths, _ ->
+        JSModule.Preview(
+            identifier,
+            namespace,
+            preferredEnvironment,
+            paths,
+            moduleDir.absolutePath
+        )
+    }
 
     private fun <T : JSModule> loadModules(
         explorer: SourcesExplorer<T>,
@@ -128,7 +144,7 @@ class FileExplorer private constructor(
             }
         }
 
-        return constructor(identifier, namespace, preferredEnvironment, sources)
+        return constructor(identifier, namespace, preferredEnvironment, sources, manifest)
     }
 }
 
@@ -153,13 +169,21 @@ private class AssetsExplorer(private val context: Context) : StaticSourcesExplor
     }
 }
 
-private class FilesExplorer(private val context: Context) : DynamicSourcesExplorer, SourcesExplorer<JSModule.Installed>  {
+private class FilesExplorer(private val context: Context) : DynamicSourcesExplorer<JSModule.Installed>, SourcesExplorer<JSModule.Installed>  {
     private val modulesDir: File
         get() = File(context.filesDir, MODULES_DIR)
 
-    override fun removeModules(identifiers: List<String>) {
-        identifiers.forEach {
-            File(modulesDir, it).deleteRecursively()
+    private val symbolsDir: File
+        get() = File(modulesDir, SYMBOLS_DIR)
+
+    override fun removeModules(modules: List<JSModule.Installed>) {
+        val symbols = symbolsDir.list()?.toSet() ?: emptySet()
+        modules.forEach { module ->
+            File(modulesDir, module.identifier).deleteRecursively()
+            module.symbols.forEach {
+                if (symbols.contains(it)) File(symbolsDir, it).delete()
+                if (symbols.contains(symbolMetadata(it))) File(symbolsDir, symbolMetadata(it)).delete()
+            }
         }
     }
 
@@ -178,7 +202,8 @@ private class FilesExplorer(private val context: Context) : DynamicSourcesExplor
         return timestamp.toString()
     }
 
-    override fun listModules(): List<String> = modulesDir.list()?.toList() ?: emptyList()
+    override fun listModules(): List<String> =
+        modulesDir.list()?.toList()?.filter { it != SYMBOLS_DIR } ?: emptyList()
 
     override fun readModuleSources(module: JSModule.Installed): Sequence<ByteArray> =
         module.sources.asSequence().map { File(modulesDir, modulePath(module.identifier, it)).readBytes() }
@@ -187,7 +212,10 @@ private class FilesExplorer(private val context: Context) : DynamicSourcesExplor
     private fun modulePath(module: String, path: String): String =
         "${module.trimStart('/')}/${path.trimStart('/')}"
 
+    private fun symbolMetadata(symbol: String): String = "${symbol}.metadata"
+
     companion object {
-        private const val MODULES_DIR = "protocol_modules"
+        private const val MODULES_DIR = "__airgap_protocol_modules__"
+        private const val SYMBOLS_DIR = "__symbols__"
     }
 }
