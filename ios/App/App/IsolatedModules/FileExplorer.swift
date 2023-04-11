@@ -28,7 +28,7 @@ struct FileExplorer {
     }
     
     func loadAssetModules() throws -> [JSModule.Asset] {
-        try loadModules(using: assetsExplorer, creatingModuleWith: JSModule.Asset.init)
+        try loadModules(using: assetsExplorer, creatingModuleWith: JSModule.Asset.getInit())
     }
     
     func loadInstalledModule(_ identifier: String) throws -> JSModule.Installed {
@@ -54,7 +54,7 @@ struct FileExplorer {
     }
     
     func removeModules(_ identifiers: [String]) throws {
-        try documentExplorer.removeModules(identifiers)
+        try documentExplorer.removeModules(identifiers.map({ try loadInstalledModule($0) }))
     }
     
     func removeAllModules() throws {
@@ -107,7 +107,7 @@ struct FileExplorer {
             return source
         }
         
-        return moduleInit(identifier, namespace, preferredEnvironment, sources)
+        return moduleInit(identifier, namespace, preferredEnvironment, sources, manifest)
     }
 }
 
@@ -158,26 +158,41 @@ private struct AssetsExplorer: SourcesExplorer {
 private struct DocumentExplorer: SourcesExplorer, DynamicSourcesExplorer {
     typealias T = JSModule.Installed
     
-    private static let modulesDir: String = "protocol_modules"
+    private static let modulesDir: String = "__airgap_protocol_modules__"
+    private static let symbolsDir: String = "__symbols__"
     
     private let fileManager: FileManager
     
     private var documentsURL: URL? { fileManager.urls(for: .documentDirectory, in: .userDomainMask).first }
     private var modulesDirURL: URL? { documentsURL?.appendingPathComponent(Self.modulesDir) }
+    private var symbolsDirURL: URL? { modulesDirURL?.appendingPathComponent(Self.symbolsDir) }
     
     init(fileManager: FileManager) {
         self.fileManager = fileManager
     }
     
-    func removeModules(_ identifiers: [String]) throws {
+    func removeModules(_ modules: [JSModule.Installed]) throws {
         guard let modulesDirURL = modulesDirURL else {
             return
         }
         
+        guard let symbolsDirURL = symbolsDirURL else {
+            return
+        }
+        
         var isDirectory: ObjCBool = true
-        try identifiers.forEach {
+        try modules.forEach { module in
             if fileManager.fileExists(atPath: modulesDirURL.path, isDirectory: &isDirectory) {
-                try fileManager.removeItem(at: modulesDirURL.appendingPathComponent($0))
+                try fileManager.removeItem(at: modulesDirURL.appendingPathComponent(module.identifier))
+            }
+            
+            for symbol in module.symbols {
+                guard fileManager.fileExists(atPath: symbolsDirURL.path, isDirectory: &isDirectory) else {
+                    continue
+                }
+                
+                try? fileManager.removeItem(at: symbolsDirURL.appendingPathComponent(symbol))
+                try? fileManager.removeItem(at: symbolsDirURL.appendingPathComponent("\(symbol).metadata"))
             }
         }
     }
@@ -192,7 +207,11 @@ private struct DocumentExplorer: SourcesExplorer, DynamicSourcesExplorer {
     }
     
     func getInstalledTimestamp(forIdentifier identifier: String) -> String {
-        guard let attributes = try? fileManager.attributesOfItem(atPath: modulePath(identifier)) else {
+        guard let moduleDirURL = modulesDirURL?.appendingPathComponent(identifier) else {
+            return ""
+        }
+        
+        guard let attributes = try? fileManager.attributesOfItem(atPath: moduleDirURL.path) else {
             return ""
         }
         
@@ -214,7 +233,7 @@ private struct DocumentExplorer: SourcesExplorer, DynamicSourcesExplorer {
             return []
         }
         
-        return try fileManager.contentsOfDirectory(atPath: modulesDirPath)
+        return try fileManager.contentsOfDirectory(atPath: modulesDirPath).filter { $0 != Self.symbolsDir }
     }
     
     func modulePath(_ module: String, ofPath path: String? = nil) -> String {
@@ -255,7 +274,9 @@ private protocol SourcesExplorer {
 }
 
 private protocol DynamicSourcesExplorer {
-    func removeModules(_ identifiers: [String]) throws
+    associatedtype T
+    
+    func removeModules(_ identifiers: [T]) throws
     func removeAllModules() throws
     
     func getInstalledTimestamp(forIdentifier identifier: String) -> String
@@ -263,14 +284,28 @@ private protocol DynamicSourcesExplorer {
 
 // MARK: Extensions
 
+private extension JSModule.Asset {
+    static func getInit() -> JSModuleInit<JSModule.Asset> {
+        { (identifier, namespace, preferredEnvironment, sources, _) -> JSModule.Asset in
+            .init(
+                identifier: identifier,
+                namespace: namespace,
+                preferredEnvironment: preferredEnvironment,
+                sources: sources
+            )
+        }
+    }
+}
+
 private extension JSModule.Installed {
     static func getInit<T: DynamicSourcesExplorer>(using explorer: T) -> JSModuleInit<JSModule.Installed> {
-        { (identifier, namespace, preferredEnvironment, sources) -> JSModule.Installed in
+        { (identifier, namespace, preferredEnvironment, sources, manifest) -> JSModule.Installed in
                 .init(
                     identifier: identifier,
                     namespace: namespace,
                     preferredEnvironment: preferredEnvironment,
                     sources: sources,
+                    symbols: Array((manifest.res?.symbol ?? [:]).keys),
                     installedAt: explorer.getInstalledTimestamp(forIdentifier: identifier)
                 )
         }
@@ -279,7 +314,7 @@ private extension JSModule.Installed {
 
 private extension JSModule.Preview {
     static func getInit(withURL url: URL) -> JSModuleInit<JSModule.Preview> {
-        { (identifier, namespace, preferredEnvironment, sources) -> JSModule.Preview in
+        { (identifier, namespace, preferredEnvironment, sources, _) -> JSModule.Preview in
             .init(
                 identifier: identifier,
                 namespace: namespace,
@@ -312,4 +347,4 @@ private enum Error: Swift.Error {
 
 // MARK: Aliases
 
-typealias JSModuleInit<T: JSModuleProtocol> = (_ identifier: String, _ namespace: String?, _ preferredEnvironment: JSEnvironmentKind, _ sources: [String]) -> T
+typealias JSModuleInit<T: JSModuleProtocol> = (_ identifier: String, _ namespace: String?, _ preferredEnvironment: JSEnvironmentKind, _ sources: [String], _ manifest: ModuleManifest) -> T

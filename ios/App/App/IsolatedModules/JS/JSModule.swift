@@ -71,6 +71,7 @@ enum JSModule {
         let namespace: String?
         let preferredEnvironment: JSEnvironmentKind
         let sources: [String]
+        let symbols: [String]
         let installedAt: String
     }
     

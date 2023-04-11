@@ -49,11 +49,21 @@ class JSEvaluator {
         keepEnvironment: Bool = false
     ) async throws -> [String: Any] {
         let modulesJSON = try await modules.asyncMap { module -> [String : Any] in
-            let json = try await self.webViewEnv.run(
+            var json = try await self.webViewEnv.run(
                 .load(.init(protocolType: protocolType, ignoreProtocols: ignoreProtocols)),
                 in: module,
                 keepAlive: keepEnvironment
             )
+            
+            json["type"] = {
+                switch module {
+                case .asset(_):
+                    return "static"
+                case .installed(_), .preview(_):
+                    return "dynamic"
+                }
+            }()
+            
             try await self.modulesManager.registerModule(module, forJSON: json)
             
             return json

@@ -26,7 +26,7 @@ struct ModuleManifest: Codable {
     }
     
     struct Res: Codable {
-        let symbol: String?
+        let symbol: [String: String]
     }
     
     struct JSEnv: Codable {
