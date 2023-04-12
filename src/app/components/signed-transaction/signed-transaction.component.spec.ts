@@ -7,7 +7,8 @@ import { IACMessageType, Message, Serializer } from '@airgap/serializer'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
 import { SecureStorageService } from 'src/app/services/secure-storage/secure-storage.service'
 import { SecureStorageServiceMock } from 'src/app/services/secure-storage/secure-storage.mock'
-import { ISOLATED_MODULES_PLUGIN, WebIsolatedModules } from '@airgap/angular-core'
+import { FILESYSTEM_PLUGIN, ISOLATED_MODULES_PLUGIN, WebIsolatedModules, ZIP_PLUGIN } from '@airgap/angular-core'
+import { FilesystemMock, ZipMock } from 'test-config/ionic-mocks'
 
 describe('SignedTransactionComponent', () => {
   let signedTransactionFixture: ComponentFixture<SignedTransactionComponent>
@@ -22,6 +23,8 @@ describe('SignedTransactionComponent', () => {
         providers: [
           { provide: SecureStorageService, useClass: SecureStorageServiceMock },
           { provide: ISOLATED_MODULES_PLUGIN, useValue: new WebIsolatedModules() },
+          { provide: FILESYSTEM_PLUGIN, useClass: FilesystemMock },
+          { provide: ZIP_PLUGIN, useClass: ZipMock },
           SecretsService
         ]
       })
