@@ -1,7 +1,6 @@
 package it.airgap.vault.plugin.isolatedmodules.js.environment
 
 import android.content.Context
-import android.content.res.AssetManager
 import android.os.Build
 import android.view.View
 import android.webkit.WebSettings
@@ -14,8 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentMap
 
 class WebViewEnvironment(
     private val context: Context,
@@ -24,14 +21,14 @@ class WebViewEnvironment(
     override suspend fun isSupported(): Boolean = true
 
     private val webViewsMutex: Mutex = Mutex()
-    private val webViews: ConcurrentMap<String, Pair<WebView, JSAsyncResult>> = ConcurrentHashMap()
+    private val webViews: MutableMap<String, WebViewRegistry> = mutableMapOf()
 
     private val runMutex: Mutex = Mutex()
 
     @Throws(JSException::class)
-    override suspend fun run(module: JSModule, action: JSModuleAction, keepAlive: Boolean): JSObject = withContext(Dispatchers.Main) {
+    override suspend fun run(module: JSModule, action: JSModuleAction, ref: String?): JSObject = withContext(Dispatchers.Main) {
         runMutex.withLock {
-            useIsolatedModule(module, keepAlive) { webView, jsAsyncResult ->
+            useIsolatedModule(module, ref) { webView, jsAsyncResult ->
                 val resultId = jsAsyncResult.createId()
                 val script = """
                     execute(
@@ -54,19 +51,21 @@ class WebViewEnvironment(
         }
     }
 
-    override suspend fun reset() {
+    override suspend fun reset(runRef: String) {
+        webViewsMutex.withLock {
+            webViews.remove(runRef)?.reset()
+        }
+    }
+    override suspend fun destroy() {
         webViewsMutex.withLock {
             webViews.apply {
-                values.forEach { it.first.destroy() }
+                values.forEach { it.reset() }
                 clear()
             }
         }
     }
-    override suspend fun destroy() {
-        reset()
-    }
 
-    private suspend inline fun <R> useIsolatedModule(module: JSModule, keepAlive: Boolean, block: (WebView, JSAsyncResult) -> R): R {
+    private suspend inline fun <R> useIsolatedModule(module: JSModule, runRef: String?, block: (WebView, JSAsyncResult) -> R): R {
         val createWebView = {
             val jsAsyncResult = JSAsyncResult()
             val webView = WebView(context).apply {
@@ -101,11 +100,23 @@ class WebViewEnvironment(
         }
 
         val (webView, jsAsyncResult) = webViewsMutex.withLock {
-            if (keepAlive) webViews.getOrPut(module.identifier) { createWebView() } else createWebView()
+            if (runRef != null) webViews.getOrPut(runRef, module) { createWebView() } else createWebView()
         }
 
         return block(webView, jsAsyncResult).also {
-            if (!keepAlive) webView.destroy()
+            if (runRef == null) webView.destroy()
+        }
+    }
+
+    private suspend inline fun MutableMap<String, WebViewRegistry>.getOrPut(
+        runRef: String,
+        module: JSModule,
+        defaultValue: () -> Pair<WebView, JSAsyncResult>
+    ): Pair<WebView, JSAsyncResult> = getOrPut(runRef) { WebViewRegistry() }.getOrPut(module) { defaultValue() }
+
+    private class WebViewRegistry : JSEnvironment.SandboxRegistry<Pair<WebView, JSAsyncResult>>() {
+        override suspend fun Pair<WebView, JSAsyncResult>.reset() {
+            first.destroy()
         }
     }
 }

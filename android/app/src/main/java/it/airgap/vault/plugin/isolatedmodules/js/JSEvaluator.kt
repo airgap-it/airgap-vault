@@ -30,8 +30,13 @@ class JSEvaluator constructor(
         modules.clear()
     }
 
-    suspend fun evaluatePreviewModule(module: JSModule, keepEnvironment: Boolean = false): JSObject =
-        module.run(JSModuleAction.Load(null, null), keepEnvironment = keepEnvironment).also {
+    suspend inline fun <T> singleRun(block: (runRef: String) -> T): T {
+        val runRef = UUID.randomUUID().toString()
+        return block(runRef).also { reset(runRef) }
+    }
+
+    suspend fun evaluatePreviewModule(module: JSModule, runRef: String? = null): JSObject =
+        module.run(JSModuleAction.Load(null, null), runRef).also {
             module.appendType(it)
         }
 
@@ -39,10 +44,10 @@ class JSEvaluator constructor(
         modules: List<JSModule>,
         protocolType: JSProtocolType?,
         ignoreProtocols: JSArray?,
-        keepEnvironment: Boolean = false
+        runRef: String? = null
     ): JSObject {
         val modulesJson = modules.asyncMap { module ->
-            module.run(JSModuleAction.Load(protocolType, ignoreProtocols), keepEnvironment = keepEnvironment).also {
+            module.run(JSModuleAction.Load(protocolType, ignoreProtocols), runRef).also {
                 module.appendType(it)
                 module.registerFor(it)
             }
@@ -59,10 +64,10 @@ class JSEvaluator constructor(
         name: String,
         args: JSArray?,
         protocolIdentifier: String,
-        keepEnvironment: Boolean = false
+        runRef: String? = null
     ): JSObject {
         val module = modules[protocolIdentifier] ?: failWithModuleForProtocolNotFound(protocolIdentifier)
-        return module.run(JSModuleAction.CallMethod.OfflineProtocol(name, args, protocolIdentifier), keepEnvironment = keepEnvironment)
+        return module.run(JSModuleAction.CallMethod.OfflineProtocol(name, args, protocolIdentifier), runRef)
     }
 
     suspend fun evaluateCallOnlineProtocolMethod(
@@ -70,10 +75,10 @@ class JSEvaluator constructor(
         args: JSArray?,
         protocolIdentifier: String,
         networkId: String?,
-        keepEnvironment: Boolean = false
+        runRef: String? = null
     ): JSObject {
         val module = modules[protocolIdentifier] ?: failWithModuleForProtocolNotFound(protocolIdentifier)
-        return module.run(JSModuleAction.CallMethod.OnlineProtocol(name, args, protocolIdentifier, networkId), keepEnvironment = keepEnvironment)
+        return module.run(JSModuleAction.CallMethod.OnlineProtocol(name, args, protocolIdentifier, networkId), runRef)
     }
 
     suspend fun evaluateCallBlockExplorerMethod(
@@ -81,34 +86,34 @@ class JSEvaluator constructor(
         args: JSArray?,
         protocolIdentifier: String,
         networkId: String?,
-        keepEnvironment: Boolean = false
+        runRef: String? = null
     ): JSObject {
         val module = modules[protocolIdentifier] ?: failWithModuleForProtocolNotFound(protocolIdentifier)
-        return module.run(JSModuleAction.CallMethod.BlockExplorer(name, args, protocolIdentifier, networkId), keepEnvironment = keepEnvironment)
+        return module.run(JSModuleAction.CallMethod.BlockExplorer(name, args, protocolIdentifier, networkId), runRef)
     }
 
     suspend fun evaluateCallV3SerializerCompanionMethod(
         name: String,
         args: JSArray?,
         moduleIdentifier: String,
-        keepEnvironment: Boolean = false
+        runRef: String? = null
     ): JSObject {
         val module = modules[moduleIdentifier] ?: failWithModuleNotFound(moduleIdentifier)
-        return module.run(JSModuleAction.CallMethod.V3SerializerCompanion(name, args), keepEnvironment = keepEnvironment)
+        return module.run(JSModuleAction.CallMethod.V3SerializerCompanion(name, args), runRef)
     }
 
-    suspend fun reset() {
-        environments.values.forEach { it?.reset() }
+    suspend fun reset(runRef: String) {
+        environments.values.forEach { it?.reset(runRef) }
     }
 
     suspend fun destroy() {
         environments.values.forEach { it?.destroy() }
     }
 
-    private suspend fun JSModule.run(action: JSModuleAction, keepEnvironment: Boolean): JSObject {
+    private suspend fun JSModule.run(action: JSModuleAction, runRef: String? = null): JSObject {
         val environment = environments[preferredEnvironment] ?: defaultEnvironment
 
-        return environment.run(this, action, keepAlive = keepEnvironment)
+        return environment.run(this, action, runRef)
     }
 
     private fun JSModule.appendType(json: JSObject) {

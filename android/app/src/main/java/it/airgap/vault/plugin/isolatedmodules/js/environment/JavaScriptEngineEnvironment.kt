@@ -2,7 +2,6 @@ package it.airgap.vault.plugin.isolatedmodules.js.environment
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.AssetManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.javascriptengine.IsolateStartupParameters
@@ -12,7 +11,6 @@ import com.getcapacitor.JSObject
 import it.airgap.vault.plugin.isolatedmodules.FileExplorer
 import it.airgap.vault.plugin.isolatedmodules.js.*
 import it.airgap.vault.util.JSException
-import it.airgap.vault.util.readBytes
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.awaitAll
@@ -29,7 +27,7 @@ class JavaScriptEngineEnvironment(
     private val sandbox: Deferred<JavaScriptSandbox> = JavaScriptSandbox.createConnectedInstanceAsync(context).asDeferred()
 
     private val isolatedMutex: Mutex = Mutex()
-    private val isolates: MutableMap<String, JavaScriptIsolate> = mutableMapOf()
+    private val isolates: MutableMap<String, JavaScriptIsolateRegistry> = mutableMapOf()
 
     override suspend fun isSupported(): Boolean =
         JavaScriptSandbox.isSupported() && sandbox.await().let {
@@ -38,8 +36,8 @@ class JavaScriptEngineEnvironment(
         }
 
     @Throws(JSException::class)
-    override suspend fun run(module: JSModule, action: JSModuleAction, keepAlive: Boolean): JSObject = withContext(Dispatchers.Default) {
-        useIsolatedModule(module, keepAlive) { jsIsolate ->
+    override suspend fun run(module: JSModule, action: JSModuleAction, ref: String?): JSObject = withContext(Dispatchers.Default) {
+        useIsolatedModule(module, ref) { jsIsolate ->
             val namespace = module.namespace?.let { "global.$it" } ?: "global"
 
             val script = """
@@ -66,19 +64,23 @@ class JavaScriptEngineEnvironment(
         }
     }
 
-    override suspend fun reset() {
-        isolates.apply {
-            values.forEach { it.close() }
-            clear()
+    override suspend fun reset(runRef: String) {
+        isolatedMutex.withLock {
+            isolates.remove(runRef)?.reset()
         }
     }
 
     override suspend fun destroy() {
-        reset()
+        isolatedMutex.withLock {
+            isolates.apply {
+                values.forEach { it.reset() }
+                clear()
+            }
+        }
         sandbox.await().close()
     }
 
-    private suspend inline fun <R> useIsolatedModule(module: JSModule, keepAlive: Boolean, block: (JavaScriptIsolate) -> R): R {
+    private suspend inline fun <R> useIsolatedModule(module: JSModule, runRef: String?, block: (JavaScriptIsolate) -> R): R {
         val createIsolate: suspend () -> JavaScriptIsolate = {
             sandbox.await().createIsolate(IsolateStartupParameters()).also {
                 listOf(
@@ -90,11 +92,11 @@ class JavaScriptEngineEnvironment(
         }
 
         val jsIsolate = isolatedMutex.withLock {
-            if (keepAlive) isolates.getOrPut(module.identifier) { createIsolate() } else createIsolate()
+            if (runRef != null) isolates.getOrPut(runRef, module) { createIsolate() } else createIsolate()
         }
 
         return block(jsIsolate).also {
-            if (!keepAlive) jsIsolate.close()
+            if (runRef == null) jsIsolate.close()
         }
     }
 
@@ -110,6 +112,18 @@ class JavaScriptEngineEnvironment(
                     eval(string);
                 });
             """.trimIndent()).asDeferred().await()
+        }
+    }
+
+    private suspend inline fun MutableMap<String, JavaScriptIsolateRegistry>.getOrPut(
+        runRef: String,
+        module: JSModule,
+        defaultValue: () -> JavaScriptIsolate
+    ): JavaScriptIsolate = getOrPut(runRef) { JavaScriptIsolateRegistry() }.getOrPut(module) { defaultValue() }
+
+    private class JavaScriptIsolateRegistry : JSEnvironment.SandboxRegistry<JavaScriptIsolate>() {
+        override suspend fun JavaScriptIsolate.reset() {
+            close()
         }
     }
 }

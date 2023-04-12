@@ -155,54 +155,54 @@ class IsolatedModules : Plugin() {
                 executeCatching {
                     val jsEvaluator = jsEvaluator.await()
 
-                    val values = options.toList<JSONObject>().asyncMap { jsonObject ->
-                        try {
-                            val jsObject = JSObject(jsonObject.toString())
-                            assertReceivedIn(jsObject, Param.TARGET, Param.METHOD)
+                    val values = jsEvaluator.singleRun { runRef ->
+                        options.toList<JSONObject>().asyncMap { jsonObject ->
+                            try {
+                                val jsObject = JSObject(jsonObject.toString())
+                                assertReceivedIn(jsObject, Param.TARGET, Param.METHOD)
 
-                            val target = jsObject.getString(Param.TARGET)?.let { JSCallMethodTarget.fromString(it) }!!
-                            val method = jsObject.getString(Param.METHOD)!!
-                            val args = if (jsObject.has(Param.ARGS)) JSArray(jsObject.getJSONArray(Param.ARGS).toString()) else null
-                            val protocolIdentifier = jsObject.getString(Param.PROTOCOL_IDENTIFIER)
-                            val networkId = jsObject.getString(Param.NETWORK_ID)
-                            val moduleIdentifier = jsObject.getString(Param.MODULE_IDENTIFIER)
+                                val target = jsObject.getString(Param.TARGET)?.let { JSCallMethodTarget.fromString(it) }!!
+                                val method = jsObject.getString(Param.METHOD)!!
+                                val args = if (jsObject.has(Param.ARGS)) JSArray(jsObject.getJSONArray(Param.ARGS).toString()) else null
+                                val protocolIdentifier = jsObject.getString(Param.PROTOCOL_IDENTIFIER)
+                                val networkId = jsObject.getString(Param.NETWORK_ID)
+                                val moduleIdentifier = jsObject.getString(Param.MODULE_IDENTIFIER)
 
-                            val value = when (target) {
-                                JSCallMethodTarget.OfflineProtocol -> {
-                                    assertReceivedIn(jsObject, Param.PROTOCOL_IDENTIFIER)
-                                    jsEvaluator.evaluateCallOfflineProtocolMethod(method, args, protocolIdentifier!!, keepEnvironment = true)
+                                val value = when (target) {
+                                    JSCallMethodTarget.OfflineProtocol -> {
+                                        assertReceivedIn(jsObject, Param.PROTOCOL_IDENTIFIER)
+                                        jsEvaluator.evaluateCallOfflineProtocolMethod(method, args, protocolIdentifier!!, runRef)
+                                    }
+                                    JSCallMethodTarget.OnlineProtocol -> {
+                                        assertReceivedIn(jsObject, Param.PROTOCOL_IDENTIFIER)
+                                        jsEvaluator.evaluateCallOnlineProtocolMethod(method, args, protocolIdentifier!!, networkId, runRef)
+                                    }
+                                    JSCallMethodTarget.BlockExplorer -> {
+                                        assertReceivedIn(jsObject, Param.PROTOCOL_IDENTIFIER)
+                                        jsEvaluator.evaluateCallBlockExplorerMethod(method, args, protocolIdentifier!!, networkId, runRef)
+                                    }
+                                    JSCallMethodTarget.V3SerializerCompanion -> {
+                                        assertReceivedIn(jsObject, Param.MODULE_IDENTIFIER)
+                                        jsEvaluator.evaluateCallV3SerializerCompanionMethod(method, args, moduleIdentifier!!, runRef)
+                                    }
                                 }
-                                JSCallMethodTarget.OnlineProtocol -> {
-                                    assertReceivedIn(jsObject, Param.PROTOCOL_IDENTIFIER)
-                                    jsEvaluator.evaluateCallOnlineProtocolMethod(method, args, protocolIdentifier!!, networkId, keepEnvironment = true)
-                                }
-                                JSCallMethodTarget.BlockExplorer -> {
-                                    assertReceivedIn(jsObject, Param.PROTOCOL_IDENTIFIER)
-                                    jsEvaluator.evaluateCallBlockExplorerMethod(method, args, protocolIdentifier!!, networkId, keepEnvironment = true)
-                                }
-                                JSCallMethodTarget.V3SerializerCompanion -> {
-                                    assertReceivedIn(jsObject, Param.MODULE_IDENTIFIER)
-                                    jsEvaluator.evaluateCallV3SerializerCompanionMethod(method, args, moduleIdentifier!!, keepEnvironment = true)
-                                }
+
+                                JSObject("""
+                                    {
+                                        "type": "success",
+                                        "value": ${value.get("value")}
+                                    }
+                                """.trimIndent())
+                            } catch (e: Exception) {
+                                JSObject("""
+                                    {
+                                        "type": "error",
+                                        "error": "${e.message}"
+                                    }
+                                """.trimIndent())
                             }
-
-                            JSObject("""
-                                {
-                                    "type": "success",
-                                    "value": ${value.get("value")}
-                                }
-                            """.trimIndent())
-                        } catch (e: Exception) {
-                            JSObject("""
-                                {
-                                    "type": "error",
-                                    "error": "${e.message}"
-                                }
-                            """.trimIndent())
                         }
                     }
-
-                    jsEvaluator.reset()
 
                     resolve(JSObject("""
                         {
