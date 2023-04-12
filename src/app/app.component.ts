@@ -1,6 +1,16 @@
+import { AeternityModule } from '@airgap/aeternity'
 import { APP_PLUGIN, createV0TezosShieldedTezProtocol, IACMessageTransport, ICoinProtocolAdapter, ProtocolService, SPLASH_SCREEN_PLUGIN, STATUS_BAR_PLUGIN } from '@airgap/angular-core'
+import { AstarModule } from '@airgap/astar'
+import { BitcoinModule } from '@airgap/bitcoin'
 import { MainProtocolSymbols } from '@airgap/coinlib-core'
-import { TezosSaplingExternalMethodProvider, TezosShieldedTezProtocol } from '@airgap/tezos'
+import { CoreumModule } from '@airgap/coreum'
+import { CosmosModule } from '@airgap/cosmos'
+import { EthereumModule } from '@airgap/ethereum'
+import { GroestlcoinModule } from '@airgap/groestlcoin'
+import { ICPModule } from '@airgap/icp'
+import { MoonbeamModule } from '@airgap/moonbeam'
+import { PolkadotModule } from '@airgap/polkadot'
+import { TezosModule, TezosSaplingExternalMethodProvider, TezosShieldedTezProtocol } from '@airgap/tezos'
 import { HttpClient } from '@angular/common/http'
 import { AfterViewInit, Component, Inject, NgZone } from '@angular/core'
 import { AppPlugin, URLOpenListenerEvent } from '@capacitor/app'
@@ -132,7 +142,19 @@ export class AppComponent implements AfterViewInit {
   }
 
   private async initializeProtocols(): Promise<void> {
-    this.moduleService.init()
+    this.moduleService.init([
+      new BitcoinModule(),
+      new EthereumModule(),
+      new TezosModule(),
+      new PolkadotModule(),
+      new CosmosModule(),
+      new AeternityModule(),
+      new GroestlcoinModule(),
+      new MoonbeamModule(),
+      new AstarModule(),
+      new ICPModule(),
+      new CoreumModule()
+    ])
     const protocols = await this.moduleService.loadProtocols('offline', [MainProtocolSymbols.XTZ_SHIELDED])
 
     const externalMethodProvider: TezosSaplingExternalMethodProvider | undefined =
