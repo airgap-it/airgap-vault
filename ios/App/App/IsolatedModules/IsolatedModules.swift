@@ -210,97 +210,97 @@ public class IsolatedModules: CAPPlugin {
             
             Task {
                 do {
-                    let values = try await options.asyncMap { jsValue in
-                        do {
-                            guard let jsObject = jsValue as? JSObject else {
-                                throw Error.invalidData
-                            }
-                            
-                            call.assertReceived(in: jsObject, forMethod: "batchCallMethod", requiredParams: Param.TARGET, Param.METHOD)
-                            
-                            guard let targetRaw = jsObject[Param.TARGET] as? String,
-                                  let target = JSCallMethodTarget.init(rawValue: targetRaw),
-                                  let method = jsObject[Param.METHOD] as? String else {
-                                throw Error.invalidData
-                            }
-                            
-                            let args = jsObject[Param.ARGS] as? JSArray
-                            let protocolIdentifier = jsObject[Param.PROTOCOL_IDENTIFIER] as? String
-                            let networkID = jsObject[Param.NETWORK_ID] as? String
-                            let moduleIdentifier = jsObject[Param.MODULE_IDENTIFIER] as? String
-                            
-                            let value = try await {
-                                switch target {
-                                case .offlineProtocol:
-                                    call.assertReceived(in: jsObject, forMethod: "batchCallMethod", requiredParams: Param.PROTOCOL_IDENTIFIER)
-                                    
-                                    guard let protocolIdentifier = protocolIdentifier else {
-                                        throw Error.invalidData
-                                    }
-                                    
-                                    return try await self.jsEvaluator.evaluateCallOfflineProtocolMethod(
-                                        method,
-                                        ofProtocol: protocolIdentifier,
-                                        withArgs: args,
-                                        keepEnvironment: true
-                                    )
-                                case .onlineProtocol:
-                                    call.assertReceived(in: jsObject, forMethod: "batchCallMethod", requiredParams: Param.PROTOCOL_IDENTIFIER)
-                                    
-                                    guard let protocolIdentifier = protocolIdentifier else {
-                                        throw Error.invalidData
-                                    }
-                                    
-                                    return try await self.jsEvaluator.evaluateCallOnlineProtocolMethod(
-                                        method,
-                                        ofProtocol: protocolIdentifier,
-                                        onNetwork: networkID,
-                                        withArgs: args,
-                                        keepEnvironment: true
-                                    )
-                                case .blockExplorer:
-                                    call.assertReceived(in: jsObject, forMethod: "batchCallMethod", requiredParams: Param.PROTOCOL_IDENTIFIER)
-                                    
-                                    guard let protocolIdentifier = protocolIdentifier else {
-                                        throw Error.invalidData
-                                    }
-                                    
-                                    return try await self.jsEvaluator.evaluateCallBlockExplorerMethod(
-                                        method,
-                                        ofProtocol: protocolIdentifier,
-                                        onNetwork: networkID,
-                                        withArgs: args,
-                                        keepEnvironment: true
-                                    )
-                                case .v3SerializerCompanion:
-                                    call.assertReceived(in: jsObject, forMethod: "batchCallMethod", requiredParams: Param.MODULE_IDENTIFIER)
-                                    
-                                    guard let moduleIdentifier = moduleIdentifier else {
-                                        throw Error.invalidData
-                                    }
-                                    
-                                    return try await self.jsEvaluator.evaluateCallV3SerializerCompanionMethod(
-                                        method,
-                                        ofModule: moduleIdentifier,
-                                        withArgs: args,
-                                        keepEnvironment: true
-                                    )
+                    let values = try await self.jsEvaluator.singleRun { runRef in
+                        try await options.asyncMap { jsValue in
+                            do {
+                                guard let jsObject = jsValue as? JSObject else {
+                                    throw Error.invalidData
                                 }
-                            }()
-                            
-                            return [
-                                "type": "success",
-                                "value": value["value"]
-                            ]
-                        } catch {
-                            return [
-                                "type": "error",
-                                "error": "\(error)"
-                            ]
+                                
+                                call.assertReceived(in: jsObject, forMethod: "batchCallMethod", requiredParams: Param.TARGET, Param.METHOD)
+                                
+                                guard let targetRaw = jsObject[Param.TARGET] as? String,
+                                      let target = JSCallMethodTarget.init(rawValue: targetRaw),
+                                      let method = jsObject[Param.METHOD] as? String else {
+                                    throw Error.invalidData
+                                }
+                                
+                                let args = jsObject[Param.ARGS] as? JSArray
+                                let protocolIdentifier = jsObject[Param.PROTOCOL_IDENTIFIER] as? String
+                                let networkID = jsObject[Param.NETWORK_ID] as? String
+                                let moduleIdentifier = jsObject[Param.MODULE_IDENTIFIER] as? String
+                                
+                                let value = try await {
+                                    switch target {
+                                    case .offlineProtocol:
+                                        call.assertReceived(in: jsObject, forMethod: "batchCallMethod", requiredParams: Param.PROTOCOL_IDENTIFIER)
+                                        
+                                        guard let protocolIdentifier = protocolIdentifier else {
+                                            throw Error.invalidData
+                                        }
+                                        
+                                        return try await self.jsEvaluator.evaluateCallOfflineProtocolMethod(
+                                            method,
+                                            ofProtocol: protocolIdentifier,
+                                            withArgs: args,
+                                            runRef: runRef
+                                        )
+                                    case .onlineProtocol:
+                                        call.assertReceived(in: jsObject, forMethod: "batchCallMethod", requiredParams: Param.PROTOCOL_IDENTIFIER)
+                                        
+                                        guard let protocolIdentifier = protocolIdentifier else {
+                                            throw Error.invalidData
+                                        }
+                                        
+                                        return try await self.jsEvaluator.evaluateCallOnlineProtocolMethod(
+                                            method,
+                                            ofProtocol: protocolIdentifier,
+                                            onNetwork: networkID,
+                                            withArgs: args,
+                                            runRef: runRef
+                                        )
+                                    case .blockExplorer:
+                                        call.assertReceived(in: jsObject, forMethod: "batchCallMethod", requiredParams: Param.PROTOCOL_IDENTIFIER)
+                                        
+                                        guard let protocolIdentifier = protocolIdentifier else {
+                                            throw Error.invalidData
+                                        }
+                                        
+                                        return try await self.jsEvaluator.evaluateCallBlockExplorerMethod(
+                                            method,
+                                            ofProtocol: protocolIdentifier,
+                                            onNetwork: networkID,
+                                            withArgs: args,
+                                            runRef: runRef
+                                        )
+                                    case .v3SerializerCompanion:
+                                        call.assertReceived(in: jsObject, forMethod: "batchCallMethod", requiredParams: Param.MODULE_IDENTIFIER)
+                                        
+                                        guard let moduleIdentifier = moduleIdentifier else {
+                                            throw Error.invalidData
+                                        }
+                                        
+                                        return try await self.jsEvaluator.evaluateCallV3SerializerCompanionMethod(
+                                            method,
+                                            ofModule: moduleIdentifier,
+                                            withArgs: args,
+                                            runRef: runRef
+                                        )
+                                    }
+                                }()
+                                
+                                return [
+                                    "type": "success",
+                                    "value": value["value"]
+                                ]
+                            } catch {
+                                return [
+                                    "type": "error",
+                                    "error": "\(error)"
+                                ]
+                            }
                         }
                     }
-                    
-                    try await jsEvaluator.reset()
                     
                     call.resolve([
                         "values": values

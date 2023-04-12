@@ -30,15 +30,23 @@ class JSEvaluator {
         await modulesManager.deregisterAllModules()
     }
     
+    func singleRun<T>(_ block: (_ runRef: String) async throws -> T) async throws -> T {
+        let runRef = UUID().uuidString
+        let result = try await block(runRef)
+        try await reset(runRef: runRef)
+        
+        return result
+    }
+    
     func evaluatePreviewModule(
         _ module: JSModule,
         ignoringProtocols ignoreProtocols: [String]?,
-        keepEnvironment: Bool = false
+        runRef: String? = nil
     ) async throws -> [String: Any] {
         return try await self.webViewEnv.run(
             .load(.init(protocolType: nil, ignoreProtocols: ignoreProtocols)),
             in: module,
-            keepAlive: keepEnvironment
+            ref: runRef
         )
     }
     
@@ -46,13 +54,13 @@ class JSEvaluator {
         _ modules: [JSModule],
         for protocolType: JSProtocolType?,
         ignoringProtocols ignoreProtocols: [String]?,
-        keepEnvironment: Bool = false
+        runRef: String? = nil
     ) async throws -> [String: Any] {
         let modulesJSON = try await modules.asyncMap { module -> [String : Any] in
             var json = try await self.webViewEnv.run(
                 .load(.init(protocolType: protocolType, ignoreProtocols: ignoreProtocols)),
                 in: module,
-                keepAlive: keepEnvironment
+                ref: runRef
             )
             
             json["type"] = {
@@ -76,7 +84,7 @@ class JSEvaluator {
         _ name: String,
         ofProtocol protocolIdentifier: String,
         withArgs args: JSArray?,
-        keepEnvironment: Bool = false
+        runRef: String? = nil
     ) async throws -> [String: Any] {
         let modules = await modulesManager.modules
         guard let module = modules[protocolIdentifier] else {
@@ -90,7 +98,7 @@ class JSEvaluator {
                 )
             ),
             in: module,
-            keepAlive: keepEnvironment
+            ref: runRef
         )
     }
     
@@ -99,7 +107,7 @@ class JSEvaluator {
         ofProtocol protocolIdentifier: String,
         onNetwork networkID: String?,
         withArgs args: JSArray?,
-        keepEnvironment: Bool = false
+        runRef: String? = nil
     ) async throws -> [String: Any] {
         let modules = await modulesManager.modules
         guard let module = modules[protocolIdentifier] else {
@@ -113,7 +121,7 @@ class JSEvaluator {
                 )
             ),
             in: module,
-            keepAlive: keepEnvironment
+            ref: runRef
         )
     }
     
@@ -122,7 +130,7 @@ class JSEvaluator {
         ofProtocol protocolIdentifier: String,
         onNetwork networkID: String?,
         withArgs args: JSArray?,
-        keepEnvironment: Bool = false
+        runRef: String? = nil
     ) async throws -> [String: Any] {
         let modules = await modulesManager.modules
         guard let module = modules[protocolIdentifier] else {
@@ -136,7 +144,7 @@ class JSEvaluator {
                 )
             ),
             in: module,
-            keepAlive: keepEnvironment
+            ref: runRef
         )
     }
     
@@ -144,7 +152,7 @@ class JSEvaluator {
         _ name: String,
         ofModule moduleIdentifier: String,
         withArgs args: JSArray?,
-        keepEnvironment: Bool = false
+        runRef: String? = nil
     ) async throws -> [String: Any] {
         let modules = await modulesManager.modules
         guard let module = modules[moduleIdentifier] else {
@@ -158,12 +166,12 @@ class JSEvaluator {
                 )
             ),
             in: module,
-            keepAlive: keepEnvironment
+            ref: runRef
         )
     }
     
-    func reset() async throws {
-        try await webViewEnv.reset()
+    func reset(runRef: String) async throws {
+        try await webViewEnv.reset(runRef: runRef)
     }
     
     func destroy() async throws {

@@ -18,13 +18,13 @@ class WebViewEnvironment: NSObject, JSEnvironment, WKNavigationDelegate {
     }
     
     @MainActor
-    func run(_ action: JSModuleAction, in module: JSModule, keepAlive: Bool) async throws -> [String: Any] {
-        let (webView, userContentController, jsAsyncResult) = try await getOrCreateWebView(for: module, keepAlive: keepAlive)
+    func run(_ action: JSModuleAction, in module: JSModule, ref runRef: String?) async throws -> [String: Any] {
+        let (webView, userContentController, jsAsyncResult) = try await getOrCreateWebView(for: module, runRef: runRef)
         
         do {
             defer {
-                if !keepAlive {
-                    onError(webView: webView, userContentController: userContentController, jsAsyncResult: jsAsyncResult)
+                if runRef == nil {
+                    onFinish(webView: webView, userContentController: userContentController, jsAsyncResult: jsAsyncResult)
                 }
             }
             
@@ -58,17 +58,25 @@ class WebViewEnvironment: NSObject, JSEnvironment, WKNavigationDelegate {
         }
     }
     
-    func reset() async throws {
-        await webViewManager.removeAll()
+    func reset(runRef: String) async throws {
+        let webViews = await webViewManager.getAll(for: runRef) ?? []
+        for (webView, userContentController, jsAsyncResult) in webViews {
+            await onFinish(webView: webView, userContentController: userContentController, jsAsyncResult: jsAsyncResult)
+        }
+        await webViewManager.remove(at: runRef)
     }
     
     func destroy() async throws {
-        try await reset()
+        let webViews = await webViewManager.getAll()
+        for (webView, userContentController, jsAsyncResult) in webViews {
+            await onFinish(webView: webView, userContentController: userContentController, jsAsyncResult: jsAsyncResult)
+        }
+        await webViewManager.removeAll()
     }
     
     @MainActor
-    private func getOrCreateWebView(for module: JSModule, keepAlive: Bool) async throws -> (WKWebView, WKUserContentController, JSAsyncResult) {
-        guard let webViewTuple = await webViewManager.webViews[module.identifier] else {
+    private func getOrCreateWebView(for module: JSModule, runRef: String?) async throws -> (WKWebView, WKUserContentController, JSAsyncResult) {
+        guard let runRef = runRef, let webViewTuple = await webViewManager.get(for: runRef, and: module) else {
             let jsAsyncResult = JSAsyncResult()
             
             let userContentController = WKUserContentController()
@@ -95,8 +103,9 @@ class WebViewEnvironment: NSObject, JSEnvironment, WKNavigationDelegate {
                     try await webView.evaluateJavaScriptAsync(string)
                 }
                 
-                if keepAlive {
+                if let runRef = runRef {
                     await webViewManager.add(
+                        runRef: runRef,
                         for: module,
                         webView: webView,
                         userContentController: userContentController,
@@ -106,7 +115,7 @@ class WebViewEnvironment: NSObject, JSEnvironment, WKNavigationDelegate {
                 
                 return (webView, userContentController, jsAsyncResult)
             } catch {
-                onError(webView: webView, userContentController: userContentController, jsAsyncResult: jsAsyncResult)
+                onFinish(webView: webView, userContentController: userContentController, jsAsyncResult: jsAsyncResult)
                 throw error
             }
         }
@@ -114,28 +123,73 @@ class WebViewEnvironment: NSObject, JSEnvironment, WKNavigationDelegate {
         return webViewTuple
     }
     
-    private func onError(webView: WKWebView, userContentController: WKUserContentController, jsAsyncResult: JSAsyncResult) {
+    @MainActor
+    private func onFinish(webView: WKWebView, userContentController: WKUserContentController, jsAsyncResult: JSAsyncResult) {
         userContentController.remove(jsAsyncResult)
         webView.stopLoading()
         webView.scrollView.delegate = nil
         webView.navigationDelegate = nil
-        webView.removeFromSuperview()
+        if webView.superview != nil {
+            webView.removeFromSuperview()
+        }
     }
     
     private actor WebViewManager {
-        private(set) var webViews: [String: (WKWebView, WKUserContentController, JSAsyncResult)] = [:]
+        private(set) var webViews: [String: RunManager] = [:]
         
         func add(
+            runRef: String,
             for module: JSModule,
             webView: WKWebView,
             userContentController: WKUserContentController,
             jsAsyncResult: JSAsyncResult
         ) {
-            webViews[module.identifier] = (webView, userContentController, jsAsyncResult)
+            if webViews[runRef] == nil {
+                webViews[runRef] = .init()
+            }
+            
+            webViews[runRef]?.add(for: module, webView: webView, userContentController: userContentController, jsAsyncResult: jsAsyncResult)
+        }
+        
+        func get(for runRef: String, and module: JSModule) -> (WKWebView, WKUserContentController, JSAsyncResult)? {
+            webViews[runRef]?.webViews[module.identifier]
+        }
+        
+        func getAll(for runRef: String) -> [(WKWebView, WKUserContentController, JSAsyncResult)]? {
+            guard let values = webViews[runRef]?.webViews.values else {
+                return nil
+            }
+            
+            return Array(values)
+        }
+        
+        func getAll() -> [(WKWebView, WKUserContentController, JSAsyncResult)] {
+            webViews.values.flatMap { Array($0.webViews.values) }
+        }
+        
+        func remove(at runRef: String) {
+            webViews.removeValue(forKey: runRef)
         }
         
         func removeAll() {
             webViews.removeAll()
+        }
+        
+        class RunManager {
+            private(set) var webViews: [String: (WKWebView, WKUserContentController, JSAsyncResult)] = [:]
+            
+            func add(
+                for module: JSModule,
+                webView: WKWebView,
+                userContentController: WKUserContentController,
+                jsAsyncResult: JSAsyncResult
+            ) {
+                webViews[module.identifier] = (webView, userContentController, jsAsyncResult)
+            }
+            
+            func removeAll() {
+                webViews.removeAll()
+            }
         }
     }
     
