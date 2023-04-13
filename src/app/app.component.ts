@@ -1,4 +1,11 @@
-import { APP_PLUGIN, IACMessageTransport, IsolatedModulesService, ProtocolService, SPLASH_SCREEN_PLUGIN, STATUS_BAR_PLUGIN } from '@airgap/angular-core'
+import {
+  APP_PLUGIN,
+  IACMessageTransport,
+  IsolatedModulesService,
+  ProtocolService,
+  SPLASH_SCREEN_PLUGIN,
+  STATUS_BAR_PLUGIN
+} from '@airgap/angular-core'
 import { MainProtocolSymbols } from '@airgap/coinlib-core'
 import {
   TezosSaplingExternalMethodProvider,
@@ -27,6 +34,7 @@ import { SaplingNativeService } from './services/sapling-native/sapling-native.s
 import { SecretsService } from './services/secrets/secrets.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
 import { LanguagesType, VaultStorageKey, VaultStorageService } from './services/storage/storage.service'
+import { Router } from '@angular/router'
 
 declare let window: Window & { airGapHasStarted: boolean }
 
@@ -57,6 +65,7 @@ export class AppComponent implements AfterViewInit {
     private readonly httpClient: HttpClient,
     private readonly saplingNativeService: SaplingNativeService,
     private readonly isolatedModuleService: IsolatedModulesService,
+    private readonly router: Router,
     @Inject(APP_PLUGIN) private readonly app: AppPlugin,
     @Inject(SECURITY_UTILS_PLUGIN) private readonly securityUtils: SecurityUtilsPlugin,
     @Inject(SPLASH_SCREEN_PLUGIN) private readonly splashScreen: SplashScreenPlugin,
@@ -89,6 +98,11 @@ export class AppComponent implements AfterViewInit {
 
   public async ngAfterViewInit(): Promise<void> {
     await this.platform.ready()
+    if (this.platform.is('android')) {
+      this.platform.backButton.subscribeWithPriority(-1, () => {
+        this.navigationService.handleBackNavigation(this.router.url)
+      })
+    }
     this.app.addListener('appUrlOpen', async (data: URLOpenListenerEvent) => {
       await this.isInitialized.promise
       if (data.url === DEEPLINK_VAULT_PREFIX || data.url.startsWith(DEEPLINK_VAULT_ADD_ACCOUNT)) {
@@ -138,8 +152,9 @@ export class AppComponent implements AfterViewInit {
   private async initializeProtocols(): Promise<void> {
     const protocols = await this.isolatedModuleService.loadProtocols('offline', [MainProtocolSymbols.XTZ_SHIELDED])
 
-    const externalMethodProvider: TezosSaplingExternalMethodProvider | undefined =
-      await this.saplingNativeService.createExternalMethodProvider()
+    const externalMethodProvider:
+      | TezosSaplingExternalMethodProvider
+      | undefined = await this.saplingNativeService.createExternalMethodProvider()
 
     const shieldedTezProtocol: TezosShieldedTezProtocol = new TezosShieldedTezProtocol(
       new TezosSaplingProtocolOptions(
