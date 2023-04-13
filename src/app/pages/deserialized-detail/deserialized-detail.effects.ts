@@ -9,18 +9,15 @@ import {
 } from '@airgap/angular-core'
 import {
   AirGapWallet,
-  IACMessageDefinitionObjectV3,
-  IACMessageType,
   IAirGapTransaction,
   ICoinProtocol,
   MainProtocolSymbols,
-  MessageSignRequest,
   ProtocolSymbols,
   SignedTransaction,
-  TezosCryptoClient,
-  TezosSaplingProtocol,
   UnsignedTransaction
 } from '@airgap/coinlib-core'
+import { IACMessageType, IACMessageDefinitionObjectV3, MessageSignRequest } from '@airgap/serializer'
+import { TezosCryptoClient, TezosSaplingProtocol } from '@airgap/tezos'
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { Action, Store } from '@ngrx/store'
@@ -224,7 +221,7 @@ export class DeserializedDetailEffects {
             details = await this.transactionService.getDetailsFromIACMessages([request], {
               overrideProtocol: await this.getSaplingProtocol(),
               data: {
-                knownViewingKeys: this.secretsService.getKnownViewingKeys()
+                knownViewingKeys: await this.secretsService.getKnownViewingKeys()
               }
             })
           } else {
@@ -238,7 +235,7 @@ export class DeserializedDetailEffects {
             data: request.payload as UnsignedTransaction,
             iacContext,
             wallet,
-            originalProtocolIdentifier: request.protocol !== wallet.protocol.symbol ? request.protocol : undefined
+            originalProtocolIdentifier: request.protocol !== (await wallet.protocol.getSymbol()) ? request.protocol : undefined
           }
         })
     )
@@ -269,7 +266,7 @@ export class DeserializedDetailEffects {
             iacContext,
             blake2bHash,
             wallet,
-            originalProtocolIdentifier: request.protocol !== wallet.protocol.symbol ? request.protocol : undefined
+            originalProtocolIdentifier: request.protocol !== (await wallet.protocol.getSymbol()) ? request.protocol : undefined
           }
         })
     )
@@ -308,7 +305,7 @@ export class DeserializedDetailEffects {
             id: transaction.id,
             details: transaction.details,
             data: {
-              accountIdentifier: transaction.wallet.publicKey.substr(-6),
+              accountIdentifier: transaction.wallet.publicKey,
               transaction: signed,
               callbackURL: transaction.data.callbackURL
             },
@@ -459,8 +456,8 @@ export class DeserializedDetailEffects {
         mnemonic,
         bip39Passphrase,
         false,
-        protocol.standardDerivationPath,
-        await this.getChildDerivationPath(protocol.standardDerivationPath, iacContext?.derivationPath)
+        await protocol.getStandardDerivationPath(),
+        await this.getChildDerivationPath(await protocol.getStandardDerivationPath(), iacContext?.derivationPath)
       )
     }
   }
@@ -476,10 +473,10 @@ export class DeserializedDetailEffects {
   }
 
   private async generateTransactionIACMessages(transactions: DeserializedSignedTransaction[]): Promise<IACMessageDefinitionObjectV3[]> {
-    const signResponses: IACMessageDefinitionObjectV3[] = transactions.map(
-      (transaction: DeserializedSignedTransaction): IACMessageDefinitionObjectV3 => ({
+    const signResponses: IACMessageDefinitionObjectV3[] = await Promise.all(transactions.map(
+      async (transaction: DeserializedSignedTransaction): Promise<IACMessageDefinitionObjectV3> => ({
         id: transaction.id,
-        protocol: transaction.originalProtocolIdentifier ?? transaction.wallet.protocol.identifier,
+        protocol: transaction.originalProtocolIdentifier ?? await transaction.wallet.protocol.getIdentifier(),
         type: IACMessageType.TransactionSignResponse,
         payload: {
           accountIdentifier: transaction.data.accountIdentifier,
@@ -488,9 +485,15 @@ export class DeserializedDetailEffects {
           to: flattenAirGapTxAddresses(transaction.details, 'to'),
           amount: sumAirGapTxValues(transaction.details, 'amount'),
           fee: sumAirGapTxValues(transaction.details, 'fee')
-        }
+        } as any
+        // Before splitting coinlib and introducing v1 protocols, payload was a union of all known messages, protocol specific transactions included.
+        // The common interface defined for the transactions specifies only the `accountIdentifier` and `transaction` fields, the rest seen in the above structure
+        // comes from the signed Bitcoin transaction. The changes introduced for v1 protocols simplified the type of `payload` by removing the protocol specific
+        // messages from the union, basing the type only on the common interface. Because of that, the above no longer compiles unless forced to, therefore `as any`
+        // had to be applied.
+        // !!! This should be adressed and improved during the v0 -> v1 migration !!!
       })
-    )
+    ))
     return signResponses
   }
 
@@ -528,15 +531,19 @@ export class DeserializedDetailEffects {
 
   private async checkIfSaplingTransaction(transaction: UnsignedTransaction, protocolIdentifier: ProtocolSymbols): Promise<boolean> {
     if (protocolIdentifier === MainProtocolSymbols.XTZ) {
-      const tezosProtocol: ICoinProtocol = await this.protocolService.getProtocol(protocolIdentifier)
-      const saplingProtocol: TezosSaplingProtocol = await this.getSaplingProtocol()
+      try {
+        const saplingProtocol: TezosSaplingProtocol = await this.getSaplingProtocol()
+        const txDetails: IAirGapTransaction[] = await saplingProtocol.getTransactionDetails(transaction)
+        const recipients: string[] = txDetails
+          .map((details) => details.to)
+          .reduce((flatten: string[], next: string[]) => flatten.concat(next), [])
 
-      const txDetails: IAirGapTransaction[] = await tezosProtocol.getTransactionDetails(transaction)
-      const recipients: string[] = txDetails
-        .map((details) => details.to)
-        .reduce((flatten: string[], next: string[]) => flatten.concat(next), [])
-
-      return recipients.includes(saplingProtocol.options.config.contractAddress)
+        // TODO: find better way to check if `transaction` is a Sapling transaction
+        return recipients.some((recipient: string) => recipient.startsWith('zet') || recipient.toLocaleLowerCase() === 'shielded pool')
+      } catch(error) {
+        console.error(error)
+        return false
+      }
     }
 
     return protocolIdentifier === MainProtocolSymbols.XTZ_SHIELDED

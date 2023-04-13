@@ -51,16 +51,17 @@ export class AddressExplorerPage implements OnInit {
 
   constructor(private readonly navigationService: NavigationService) {
     this.wallet = this.navigationService.getState().wallet
-    if (this.wallet.protocol.identifier === MainProtocolSymbols.ETH) {
-      this.showChange = false
-    }
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     if (this.wallet) {
       // this.fingerprint = this.wallet.masterFingerprint
       this.xpub = bip32.fromBase58(new ExtendedPublicKey(this.wallet.publicKey).toXpub()).toBase58()
       this.clearAddresses()
+
+      if ((await this.wallet.protocol.getIdentifier()) === MainProtocolSymbols.ETH) {
+        this.showChange = false
+      }
     }
   }
 
@@ -90,7 +91,7 @@ export class AddressExplorerPage implements OnInit {
     for (let i = 0; i < 20; i++) {
       const visibilityIndex = this.selectedTab === 'external' ? 0 : 1
       const index = nofAddresses + i
-      const address = (await this.wallet.protocol.getAddressFromExtendedPublicKey(this.xpub, visibilityIndex, index)).getValue()
+      const address = (await this.wallet.protocol.getAddressFromExtendedPublicKey(this.xpub, visibilityIndex, index)).address
 
       const derivationPath = `${this.wallet.derivationPath}/${visibilityIndex}/${index}`
 

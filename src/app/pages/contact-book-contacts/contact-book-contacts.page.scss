@@ -1,0 +1,35 @@
+ion-content {
+  --padding-bottom: var(--ion-padding, 64px);
+}
+
+ion-toolbar {
+  --background: var(--ion-color-secondary);
+}
+
+ion-toolbar {
+  --color: var(--ion-color-secondary-contrast);
+}
+
+.contacts-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .contacts-letter {
+    border-bottom: 1px solid black;
+    margin: 24px 0px 0px 0px;
+  }
+}
+
+.suggestions-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+
+  .suggestions-header {
+    font-size: 1rem;
+    margin-bottom: 0px;
+    font-weight: 800;
+  }
+}

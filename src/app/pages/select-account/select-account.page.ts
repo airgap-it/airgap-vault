@@ -1,3 +1,4 @@
+import { flattened } from '@airgap/angular-core'
 import { AirGapWallet, AirGapWalletStatus, MainProtocolSymbols } from '@airgap/coinlib-core'
 import { Component } from '@angular/core'
 import { ModalController, NavParams } from '@ionic/angular'
@@ -32,22 +33,22 @@ export class SelectAccountPage {
     this.heading = this.translateService.instant(`select-account.${type}.heading`)
     this.placeholder = this.translateService.instant(`select-account.${type}.placeholder`)
 
-    this.secretsService.getSecretsObservable().subscribe((secrets: MnemonicSecret[]) => {
-      this.wallets = [].concat.apply(
-        [],
-        secrets.map((secret) =>
-          secret.wallets.filter(
-            (wallet: AirGapWallet) =>
-              wallet.status === AirGapWalletStatus.ACTIVE && (!this.symbolFilter || wallet.protocol.identifier === this.symbolFilter)
-          )
-        ) as any
-      )
+    this.secretsService.getSecretsObservable().subscribe(async (secrets: MnemonicSecret[]) => {
+      const wallets: (AirGapWallet | undefined)[][] = await Promise.all(secrets.map((secret) => Promise.all(
+        secret.wallets.map(async (wallet: AirGapWallet) => {
+          return wallet.status === AirGapWalletStatus.ACTIVE && (!this.symbolFilter || (await wallet.protocol.getIdentifier() === this.symbolFilter))
+            ? wallet
+            : undefined
+          })
+      )))
+
+      this.wallets = flattened(wallets).filter((wallet: AirGapWallet | undefined) => wallet !== undefined)
     })
   }
 
   public async setWallet(wallet: AirGapWallet) {
     this.modalController
-      .dismiss(this.navParams.get('type') === 'message-signing' ? wallet.protocol.identifier : wallet) // TODO: change to always return wallet, but it will require a change wherever the "message-signing" is used
+      .dismiss(this.navParams.get('type') === 'message-signing' ? (await wallet.protocol.getIdentifier()) : wallet) // TODO: change to always return wallet, but it will require a change wherever the "message-signing" is used
       .catch((err) => console.error(err))
   }
 

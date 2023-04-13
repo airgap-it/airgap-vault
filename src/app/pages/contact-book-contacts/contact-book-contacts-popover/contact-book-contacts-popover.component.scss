@@ -1,0 +1,20 @@
+ion-list {
+  padding: 6px;
+}
+
+ion-list-header {
+  padding: 6px;
+  height: 0px;
+
+  ion-label {
+    font-size: 20px;
+    font-weight: 800;
+  }
+}
+
+ion-item {
+  ion-label {
+    font-size: 12px;
+    font-weight: 800;
+  }
+}

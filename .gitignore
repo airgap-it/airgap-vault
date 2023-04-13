@@ -36,4 +36,4 @@ $RECYCLE.BIN/
 Thumbs.db
 UserInterfaceState.xcuserstate
 
-src/assets/libs/airgap-coin-lib.browserify.js
+src/assets/protocol_modules/

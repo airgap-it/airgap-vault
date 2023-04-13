@@ -1,0 +1,8 @@
+[main]
+host = https://www.transifex.com
+
+[o:airgap:p:airgap:r:vault-enjson]
+file_filter  = src/assets/i18n/<lang>.json
+source_file  = src/assets/i18n/en.json
+type         = KEYVALUEJSON
+minimum_perc = 0

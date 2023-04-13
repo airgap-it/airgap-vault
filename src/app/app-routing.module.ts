@@ -62,6 +62,11 @@ const routes: Routes = [
       )
   },
   {
+    path: 'languages-selection-settings',
+    loadChildren: () =>
+      import('./pages/languages-selection-settings/languages-selection-settings.module').then((m) => m.LanguagesSelectionSettingsPageModule)
+  },
+  {
     path: 'local-authentication-onboarding',
     loadChildren: () =>
       import('./pages/local-authentication-onboarding/local-authentication-onboarding.module').then(
@@ -92,6 +97,22 @@ const routes: Routes = [
       import('./pages/social-recovery-validate-share/social-recovery-validate-share.module').then(
         (m) => m.SocialRecoveryValidateSharePageModule
       )
+  },
+  {
+    path: 'contact-book-contacts',
+    loadChildren: () => import('./pages/contact-book-contacts/contact-book-contacts.module').then((m) => m.ContactBookContactsPageModule)
+  },
+  {
+    path: 'contact-book-contacts-detail',
+    loadChildren: () => import('./pages/contact-book-contacts-detail/contact-book-contacts-detail.module').then((m) => m.ContactBookContactsDetailPageModule)
+  },
+  {
+    path: 'contact-book-onboarding',
+    loadChildren: () => import('./pages/contact-book-onboarding/contact-book-onboarding.module').then((m) => m.ContactBookOnboardingPageModule)
+  },
+  {
+    path: 'contact-book-settings',
+    loadChildren: () => import('./pages/contact-book-settings/contact-book-settings.module').then((m) => m.ContactBookOnboardingPageModule)
   },
   {
     path: 'deserialized-detail',
@@ -153,6 +174,10 @@ const routes: Routes = [
   {
     path: 'address-explorer',
     loadChildren: () => import('./pages/address-explorer/address-explorer.module').then((m) => m.AddressExplorerPageModule)
+  },
+  {
+    path: 'module-preview',
+    loadChildren: () => import('./pages/module-preview/module-preview.module').then((m) => m.ModulePreviewPageModule)
   },
   {
     path: 'seed-xor-generate',

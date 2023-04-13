@@ -1,11 +1,12 @@
 import { ClipboardService } from '@airgap/angular-core'
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
-import { ModalController } from '@ionic/angular'
+import { ModalController, PopoverController } from '@ionic/angular'
 
 import * as bip39 from 'bip39'
 import { Observable, Subscription } from 'rxjs'
 import { WordlistPage } from 'src/app/pages/wordlist/wordlist.page'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
+import { KeyboardPopoverComponent } from '../keyboard-popover/keyboard-popover.component'
 
 function shuffle(arr: string): string {
   const array = arr.split('')
@@ -69,7 +70,11 @@ export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription = new Subscription()
 
-  constructor(private readonly clipboardService: ClipboardService, private readonly modalController: ModalController) {
+  constructor(
+    private readonly clipboardService: ClipboardService,
+    private readonly modalController: ModalController,
+    private readonly popoverCtrl: PopoverController
+  ) {
     this.paintKeyboard()
   }
 
@@ -192,5 +197,36 @@ export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
     })
 
     modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+  }
+
+  public async presentPopover(event: Event): Promise<void> {
+    const popover = await this.popoverCtrl.create({
+      component: KeyboardPopoverComponent,
+      componentProps: {
+        onClick: (): void => {
+          popover.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+        },
+        onAdd: (): void => {
+          this.add()
+        },
+        onDelete: (): void => {
+          this.delete()
+        },
+        onScramble: (): void => {
+          this.scramble()
+        },
+        onShowWordlist: (): void => {
+          this.showWordlist()
+        },
+        onToggleShuffled: (): void => {
+          this.toggleShuffled()
+        },
+        maskWords: this._maskInput
+      },
+      event,
+      translucent: true
+    })
+
+    popover.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 }

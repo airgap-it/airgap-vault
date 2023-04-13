@@ -1,0 +1,648 @@
+{
+  "next": "下一步",
+  "account-list": {
+    "delete": "Delete"
+  },
+  "add-wallet": {
+    "alert_deriving": {
+      "text": "导出您的账户..."
+    },
+    "account-exists_alert": {
+      "heading": "账户已存在",
+      "text": "您已添加此特定帐户。 请更改派生路径，以添加其他地址（高级模式）。"
+    },
+    "okay_label": "确定"
+  },
+  "about": {
+    "label": "关于",
+    "version": "版本：",
+    "code": "代码："
+  },
+  "distribution-onboarding": {
+    "ask-permission": {
+      "heading": "AirGap是<span class = \"style__strong color__primary \">非持久性的</ span>，生成的助记词将不会被存储，并且需要在重新启动后再次<span class = \"style__strong color__primary \">重新导入</ span>",
+      "text": "此版本旨在安全地生成助记词以及离线转账签名，但不会存储助记词"
+    },
+    "no-vm": {
+      "heading": "如果宿主机有网络连接，即使该连接处于暂时关闭状态， AirGap Vault发行版也<span class=\"style__strong color__primary\">不应</span>在<span class=\"style__strong color__primary\">虚拟机</span>上运行。 ",
+      "text": "在生成新助记词或导入现有助记词之前，请确保客户端已断开所有网络连接"
+    },
+    "understood_label": "确认了解"
+  },
+  "local-authentication-onboarding": {
+    "heading": "您的密钥是通过您定义的身份验证方法访问的，如<span class=\"style__strong color__primary\">指纹</span>、<span class=\"style__strong color__primary\">脸部识别</span>或<span class=\"style__strong color__primary\">密码</span>",
+    "text": "您需要访问您的密钥以进行帐户创建和交易签名。",
+    "authenticate_label": "认证"
+  },
+  "secret-generate-onboarding": {
+    "heading": "AirGap将要求您开放<span class = \"style__strong color__primary \"> 摄像头 </ span>和<span class = \"style__strong color__primary \">麦克风</ span>权限，来确保助记词安全、随机。",
+    "text": "这两个权限都用于为您生成更安全的助记词。",
+    "grant-permission_label": "授予权限"
+  },
+  "current-secret": {
+    "label": "有效助记词"
+  },
+  "signed-transaction": {
+    "transaction-unreadable": "我们无法从这个交易中提取信息。但是这不意味交易无效，请确定您的操作，并确保所包含交易数据正常。"
+  },
+  "onboarding-advanced-mode": {
+    "title": "Welcome to AirGap"
+  },
+  "installation-type": {
+    "title": "Installation Type"
+  },
+  "introduction": {
+    "title": "新加密钱包标准",
+    "highest": {
+      "label": "最高安全级别",
+      "text": "AirGap的<b>两套设备结合使用</b>的方法，使得安全密钥操作更便捷。"
+    },
+    "medium": {
+      "label": "中等安全级别",
+      "text": "AirGap的<b>两种应用程序结合</b>的方式，使得安全密钥操作更便捷。"
+    },
+    "vault": {
+      "heading": "AirGap Vault",
+      "text": "助记词生成并安全存储在Air Gap Vault应用程序中。<b>您必须安装Air Gap Vault才能使用AirGap Wallet</b>"
+    },
+    "wallet": {
+      "heading": "AirGap Wallet",
+      "text": "钱包应用程序仅处理公共信息，并负责向区块链广播交易。"
+    },
+    "communication": {
+      "highest_text": "通过二维码的单向通信",
+      "medium_text": "通过应用切换实现安全通信"
+    },
+    "wallet_install_label": "安装AirGap Wallet",
+    "continue_label": "开始吧"
+  },
+  "secret-setup": {
+    "heading": "安装AirGap",
+    "generate": {
+      "label": "生成新助记词",
+      "text": "通过我们的安全流程创建一个新助记词，以确保您的资金真正安全"
+    },
+    "import": {
+      "label": "导入现有助记词"
+    },
+    "social-recovery": {
+      "label": "社交助记词恢复"
+    },
+    "dice-roll": {
+      "label": "Generate with Dice Rolls",
+      "text": "Use dice to generate a secure and verifiable recovery phrase."
+    },
+    "coin-flip": {
+      "label": "Generate with Coin Flips",
+      "text": "Use a coin to generate a secure and verifiable recovery phrase."
+    }
+  },
+  "secret-edit": {
+    "title": " 您的机密",
+    "text": "为您的机密命名并选择安全级别",
+    "fingerprint": "Fingerprint",
+    "secret_input_label": "机密名字",
+    "advanced": "Advanced Options",
+    "security-level": {
+      "heading": "安全等级",
+      "text": "您可以使用一个密码来给您的密钥再次加密。"
+    },
+    "passcode": {
+      "label": "密码",
+      "text": "为您的帐户设置密码"
+    },
+    "passphrase": {
+      "label": "BIP39 Passphrase",
+      "text": "The BIP39 passphrase has to be entered when creating an account."
+    },
+    "secret-recovery": {
+      "heading": "助记词恢复",
+      "text": "您可以在初始设置后设置您的助记词恢复机制。"
+    },
+    "social-recovery": {
+      "label": "社交助记词恢复",
+      "text": "生成许多秘钥共享<br/>以分发给社交联系人。"
+    },
+    "interaction": {
+      "label": "保险箱与钱包互动",
+      "text": "选择保险箱和钱包装在同一台设备还是不同设备。"
+    },
+    "secret-recovery-key": {
+      "label": "Secret Recovery Key",
+      "description": "This recovery key guarantees the recovery of your secret from a corrupted secure storage. You will need the recovery key and your fingerprint, pin, pattern. Store it safely like your recovery phrase.",
+      "generate-text": "Generate a recovery key for your secret",
+      "reset-text": "Reset the recovery key for your secret",
+      "alert": {
+        "title": "Secret Recovery Key",
+        "done": "Done",
+        "copy": "Copy"
+      },
+      "copied": "Recovery key copied",
+      "reset-error": "Could not set the recovery key"
+    },
+    "bip85": {
+      "generate": "Generate BIP85 Child Mnemonic",
+      "text": "Securely generate a child mnemonic out of your master mnemonic."
+    },
+    "show-mnemonic": {
+      "label": "Show Secret",
+      "text": "Display the secret associated with this secret.",
+      "alert": {
+        "title": "Show Secret",
+        "message": "Please beware that the secret should always be kept private as it grants full access to your funds. Under no circumstance take a screenshot or photo. Make sure you are in a safe location where no one else can see your screen.",
+        "understood": "I understand"
+      },
+      "copied": "Recovery key copied",
+      "reset-error": "Could not set the recovery key"
+    },
+    "confirm_label": "确认"
+  },
+  "secret-service": {
+    "alert": {
+      "title": "Duplicate Secret",
+      "message": "You have already added a secret with the same recovery phrase"
+    }
+  },
+  "secret-edit-delete-popover": {
+    "title": "确认删除机密",
+    "text": "你想删除这个机密吗？ 如果没有备份，您将无法恢复它！",
+    "cancel_label": "取消",
+    "delete_label": "删除"
+  },
+  "secret-generate": {
+    "heading": "我们正在生成你的助记词",
+    "text": "为此，我们需要使用您的视频、音频、触摸和设备移动来确保您的助记词的随机性",
+    "description": "移动您的设备来记录音频、视频和加速，直到所有数值显示100%。",
+    "continue_label": "下一步"
+  },
+  "secret-import": {
+    "title": "导入现有助记词",
+    "text": "您可以将现有助记词导入AirGap。 请填写你的助记词",
+    "placeholder": "wife pulp island ...",
+    "warning": "请再次检查您的助记词拼写",
+    "import_label": "确认导入"
+  },
+  "secret-rules": {
+    "title": "请完整阅读",
+    "heading": "请确认您遵守这些规则",
+    "text": "助记词已产生，他是一系列单词组合。",
+    "description": "请确保您了解这些规则，以保证您可以始终安全访问您的帐户",
+    "rules-list": {
+      "item-1_text": "确保你把这些助记词写在一张纸上。",
+      "item-2_text": "你必须严格按照助记词顺序",
+      "item-3_text": "检查每个单词的拼写",
+      "item-4_text": "请将纸张放在安全的地方。",
+      "item-5_text": "在任何情况下都不要截屏或拍照，也不要对照片进行扫描",
+      "item-6_text": "切勿将助记词上传到云端"
+    },
+    "understood_label": "确认了解"
+  },
+  "secret-show": {
+    "title": "这是你的助记词",
+    "text": "在一张纸上写下每个单词，并按照单词顺序。",
+    "fingerprint": "Fingerprint",
+    "next-step_label": "下一步",
+    "too-fast_alert": {
+      "title": "这太快了！",
+      "heading": "你确定你不是一个超人？",
+      "text": "确保您遵守所有规则，除了在纸上写下您的助记词以外没有做任何其他事情",
+      "wait_label_p1": "请稍等片刻 ",
+      "wait_label_p2": "一切搞定"
+    }
+  },
+  "secret-validate": {
+    "title": "验证您的助记词",
+    "text": "选择正确的单词，并匹配助记词的顺序。"
+  },
+  "interaction-selection-settings": {
+    "title": "钱包互动",
+    "heading": "How would you like to interact with AirGap Wallet?",
+    "selector": {
+      "always": "总是询问",
+      "same-device": "保险箱和钱包在同一设备",
+      "offline-device": "保险箱在离线设备上"
+    },
+    "continue_label": "继续",
+    "description": "您可以随时通过设置标签来更改您的设置"
+  },
+  "language-selection-settings": {
+    "title": "Language Selection",
+    "heading": "Please choose your preferred language",
+    "selector": {
+      "en": "English",
+      "de": "German",
+      "es": "Spanish",
+      "pt_BR": "Portuguese (Brazil)",
+      "zh_CN": "Chinese (China)"
+    },
+    "continue_label": "Continue",
+    "description": "You can always change your preference in the settings"
+  },
+  "verify-key": {
+    "incorrect_text": "您的助记词与生成的助记词不匹配。 确保您选择了正确的单词。 <br />要纠正错误，只需选择错误的单词然后选择正确的单词即可。",
+    "success_text": "您已成功验证此助记词",
+    "continue_label": "下一步"
+  },
+  "social-recovery-import": {
+    "title": "社交助记词恢复",
+    "text": "为了从您的分享中恢复您的助记词，请指明您希望收回您的助记词的分享数量。 请记住，如果您拥有与社交助记词恢复设置中定义的一样多的恢复数量，您才能成功恢复您的助记词",
+    "share-recovery": {
+      "heading": "恢复助记词的分享数量",
+      "label": "分享数量"
+    },
+    "recover_label": "恢复助记词"
+  },
+  "social-recovery-setup": {
+    "title": "社交助记词恢复",
+    "text": "使用社交助记词恢复，您可以创建助记词共享并将其交给您信任的社交联系人。如果您有一定数量的助记词共享联系人，您可以恢复丢失的助记词。",
+    "secret-shares": {
+      "label": "助记词分享",
+      "text": "您可以定义要生成的共享数量以及成功恢复助记词所需的共享数量"
+    },
+    "shares-number_label": "助记词共享数",
+    "shares-recovery_label": "助记词恢复所需共享联系人数量",
+    "start_label": "Start",
+    "back_label": "返回",
+    "next_label": "下一步"
+  },
+  "social-recovery-show-share": {
+    "title": "社交助记词恢复",
+    "secret-shares_label": "Secret Share {{currentShare}} of {{shareLength}}",
+    "text": ".在一张纸上写下每个助记词，并匹配助记词的顺序。"
+  },
+  "social-recovery-validate-share": {
+    "title": "社交助记词恢复",
+    "text": "点击每个单词，并按照正确的顺序"
+  },
+  "tab-scan": {
+    "title": "二维码扫描",
+    "text": "扫描二维码",
+    "multi-qr_text": "This transaction consists of multiple QR codes. Keep your camera on the changing QRs and wait until all codes are scanned.",
+    "empty-state_heading": "为了能够扫描二维码，AirGap Vault需要<span class = \"style__strong color__primary \">摄像头权限</ span>。",
+    "grant-permission_label": "授予权限"
+  },
+  "tab-settings": {
+    "about": "关于",
+    "title": "设置",
+    "information_label": "信息",
+    "faq_label": "FAQ",
+    "feedback_label": "Feedback",
+    "github_label": "GitHub",
+    "twitter_label": "Twitter",
+    "telegram_label": "Telegram",
+    "discord_label": "Discord",
+    "documentation_label": "Documentation",
+    "secrets_label": "密钥",
+    "add-settings_label": "添加密钥",
+    "interaction-options_label": "Interaction Options",
+    "paste-from-clipboard_label": "Paste code from clipboard",
+    "qr-advanced-settings_label": "Advanced QR Settings",
+    "interaction-settings_label": "Interaction Settings",
+    "preferred-language_label": "Preferred Language",
+    "advanced-settings_label": "Advanced Settings",
+    "bip39_wordlist_label": "BIP39 Wordlist",
+    "error-history_label": "Local Error History",
+    "danger-zone_label": "Danger Zone",
+    "welcome-onboarding_label": "Welcome",
+    "disclaimer_label": "Disclaimer",
+    "installation-type_label": "Installation Type",
+    "advanced-mode-type_label": "Advanced Mode"
+  },
+  "tab-secrets": {
+    "title": "私钥",
+    "add-secret_label": "增加新的私钥",
+    "search_placeholder": "Search Secret"
+  },
+  "tab-wallets": {
+    "title": "账户",
+    "search_placeholder": "搜索数字货币",
+    "empty-state_text": "通过选择数字货币创建一个新帐户并将其同步到AirGap Wallet。",
+    "add-wallet_label": "增加新账户",
+    "delete-accounts_label": "Remove Accounts",
+    "generate-recovery-key": {
+      "title": "Secret Recovery Key Backup",
+      "description": "To always ensure a recovery of your stored secret, a backup of the secret recovery key is needed."
+    },
+    "incompatible-qr_alert": {
+      "title": "二维码不匹配",
+      "text": "此二维码不匹配",
+      "okay_label": "确定"
+    },
+    "no-secret_alert": {
+      "title": "找不到帐号",
+      "text": "您在AirGap中没有此公钥的任何匹配帐户。 请导入您的助记词并创建相应的帐户以签署此交易",
+      "okay_label": "确定"
+    },
+    "raw-tx_alert": {
+      "title": "选择账户",
+      "okay_label": "确定"
+    }
+  },
+  "tabs": {
+    "wallets": "账户",
+    "scanner": "扫描",
+    "secrets": "私钥",
+    "settings": "设置"
+  },
+  "deserialized-detail": {
+    "sign_text": "You're about to sign:",
+    "transaction": {
+      "title": "Sign Transaction",
+      "button_label": "Sign Transaction",
+      "unreadable_warning": "We were not able to extract information from this transaction. This does not mean that the transaction is invalid - Please make sure that you know what you are doing, and you can verify that you know that this transaction contains the correct data."
+    },
+    "message": {
+      "title": "Sign Message",
+      "button_label": "Sign Message"
+    },
+    "loader": {
+      "sign-transaction": {
+        "message": "Signing transaction..."
+      },
+      "sign-message": {
+        "message": "Signing message..."
+      },
+      "generic": {
+        "message": "Loading..."
+      }
+    },
+    "alert": {
+      "bip39-passphrase": {
+        "header": "BIP-39 Passphrase",
+        "message": "If you have set a BIP-39 passphrase, please enter it here.",
+        "input-placeholder_label": "Passphrase",
+        "button_label": "Ok"
+      },
+      "bip39-passphrase-error": {
+        "header": "BIP-39 Passphrase",
+        "message": "Public keys do not match. Did you enter the correct BIP-39 Passphrase?",
+        "button_label": "Ok"
+      },
+      "secret-not-found-error": {
+        "header": "Secret not found",
+        "message": "No secret found for this public key",
+        "button_label": "Ok"
+      },
+      "unknown-error": {
+        "header": "Error",
+        "message": "Something went wrong!",
+        "button_label": "Ok"
+      }
+    },
+    "signing_account": "You're signing with an account from <span class=\"style__strong color__primary\">{{secretLabel}}</span> "
+  },
+  "transaction-signed": {
+    "title": "已签名转账",
+    "heading": "已签名的交易信息，请用<span class=\"style__strong color__primary\">AirGap钱包</span>扫描。",
+    "done_label": "完成"
+  },
+  "touch-entropy": {
+    "text": "用手指画画"
+  },
+  "wallet-address": {
+    "title": "账户地址",
+    "address_label": "地址：",
+    "path_label": "派生路径：",
+    "sync_label": "同步帐户",
+    "done_label": "完成",
+    "copy-address_modal": {
+      "text": "地址已复制到剪贴板"
+    },
+    "alert": {
+      "wallet-not-migrated": {
+        "header": "The account needs an update",
+        "message": "Can't proceed, please update or re-add the account first.",
+        "button_label": "Ok"
+      }
+    }
+  },
+  "interaction-selection": {
+    "title": "钱包互动",
+    "heading": "您希望如何与<span class=\"style__strong color__primary\">AirGap钱包</span>互动？",
+    "same-device_label": "同一台设备",
+    "offline-device_label": "离线设备"
+  },
+  "wallet-edit-delete-popover": {
+    "settings_label": "账户设定",
+    "copy_label": "复制地址",
+    "copy_sync_code": "复制同步码",
+    "show_address_qr": "Show Address QR",
+    "confirm_address_copy": "地址已经复制到您的剪贴板",
+    "confirm_sync_code_copy": "同步码已经复制到剪贴板",
+    "account-removal_alert": {
+      "title": "确认删除帐户",
+      "text": "确认要删除此帐户吗？ 如果您知道其正确的派生路径/数字货币种类，您可以随时将其添加回来",
+      "cancel_label": "取消",
+      "delete_label": "确认删除"
+    }
+  },
+  "wallet-select-coins": {
+    "title": "增加账户",
+    "select-type": {
+      "label": "选择账户种类",
+      "single-address_label": "单一地址钱包",
+      "hd-wallet_label": "HD钱包"
+    },
+    "advanced_label": "高级模式",
+    "custom-path": {
+      "label": "自定义派生路径",
+      "placeholder": "自定义派生路径"
+    },
+    "create_label": "创建"
+  },
+  "wallet-share": {
+    "title": "同步帐户",
+    "heading": "请用您的<span class=\"style__strong color__primary\">AirGap钱包</span>扫描同步二维码。",
+    "text": "此二维码包含您的<b>扩展</b>公钥、公共地址和您的代币类型。不要公开分享！",
+    "same-device_label": "同设备内部同步。",
+    "done_label": "完成"
+  },
+  "wallet-share-select": {
+    "title": "Sync Account",
+    "heading": "Select the accounts you'd like to sync with <span class=\"style__strong color__primary\">AirGap Wallet</span>.",
+    "sync_label": "Sync",
+    "alert": {
+      "wallets-not-migrated": {
+        "header": "The accounts need an update",
+        "message": "Can't proceed, please update or re-add the accounts first.",
+        "button_label": "Ok"
+      },
+      "excluded-legacy-accounts": {
+        "header": "Some accounts need an update",
+        "message": "Some of the selected accounts can't be synced and must be updated or re-added. You can still sync the rest of the accounts.",
+        "button-accept_label": "Sync",
+        "button-reject_label": "Cancel"
+      },
+      "unknown-error": {
+        "header": "Error",
+        "message": "Something went wrong!",
+        "button_label": "Ok"
+      }
+    }
+  },
+  "warnings-modal": {
+    "root": {
+      "title": "Your device is rooted",
+      "description": "It seems like you have rooted your device. While we think this is neat, it weakens the security of your device significantly and multiple mechanisms of AirGap can be circumvented by other apps. Therefore, AirGap is not able to run on this device."
+    },
+    "screenshot": {
+      "title": "Screenshot detected",
+      "description": "Looks like you just took a screenshot. Make sure that you never take a screenshot as you might expose your secret key."
+    },
+    "secure-storage": {
+      "title": "Device Unsecure",
+      "description": "Your lockscreen needs to be setup in order to properly encrypt and protect your secrets. After securing your device, please close and restart AirGap.",
+      "button-text_label": "Secure Device"
+    },
+    "network": {
+      "title": "Network Connection detected",
+      "description": "Looks like you have connected this device to a network. The AirGap App has no network priviledges but it is best to disconnect the device entierly from any network.",
+      "button": "Sign Message"
+    },
+    "disclaimer": {
+      "title": "AirGap免责声明",
+      "text": "您作为用户在此确认并接受本协议所提供的所有信息。 您作为用户确认本文档的内容已经过自己的审核、测试和理解。",
+      "disclaimer-list": {
+        "text": "在适用法律允许的最大范围内：",
+        "item-1_text": "及其员工，自由职业者或其他分包商提供的所有服务均不提供任何形式的陈述和保证",
+        "item-2_text": "Papers GmbH对本协议项下或与本协议有关的损害不承担任何直接和间接责任，尤其是但不限于：数据丢失或损坏、利润损失、受损/被黑/攻击的产品或系统、和/或 被盗/缺少货币资金"
+      },
+      "description": "您了解此软件涉及的风险，包括但不限于：丢失您的账户，私钥和资金访问权",
+      "understood_label": "我理解并接受"
+    }
+  },
+  "bip85-generate": {
+    "title": "Generate BIP85",
+    "text": "BIP85 allows you to securely derive a new mnemonic out of your main mnemonic. As long as you have access to your main mnemonic, you will always be able to re-generate your child mnemonics.",
+    "mnemonic-length": "Mnemonic Length",
+    "index": "Index",
+    "generate": "Generate",
+    "advanced_label": "Advanced Mode",
+    "bip39-passphrase": "BIP-39 Passphrase",
+    "bip39-passphrase-reveal": "Reveal Passphrase",
+    "alert": {
+      "header": "BIP-39 Passphrase",
+      "message": "You set a BIP39 Passphrase. You will need to enter this passphrase again when you try to derive the same child key!",
+      "understand": "I understand"
+    }
+  },
+  "bip85-show": {
+    "title": "Show BIP85 Details",
+    "text": "Write down all the words on a piece of paper. You will have to verify the mnemonic on the next page.",
+    "mnemonic-length": "Mnemonic Length",
+    "index": "Index",
+    "fingerprint": "Fingerprint",
+    "add": "Add Secret"
+  },
+  "message-signing-request": {
+    "title": "Signed Message",
+    "payload_label": "Message to sign. Make sure you know what you are signing.",
+    "blake2b_hash": "Ledger Blake2b hash of the message",
+    "heading": "This is your signed message, scan it with <span class=\"style__strong color__primary\">AirGap Wallet</span>.",
+    "sign_button": "Sign Message"
+  },
+  "message-signing-response": {
+    "text": "Display signed message details"
+  },
+  "qr-settings-page": {
+    "title": "QR Settings"
+  },
+  "select-account": {
+    "message-signing": {
+      "title": "Select Account",
+      "heading": "Please select an account to scan this message with",
+      "placeholder": "Search by identifier"
+    },
+    "psbt": {
+      "title": "Select Account",
+      "heading": "Please select an account to sign this PSBT with",
+      "placeholder": "Search by identifier"
+    }
+  },
+  "unsigned-transaction": {
+    "sign-tx_label": "Sign Transaction"
+  },
+  "link-page": {
+    "scan-qr": "Scan the QR code to open the link on an online device",
+    "copy_label": "Copy Link",
+    "link-clipboard_label": "The link was copied to your clipboard"
+  },
+  "migration": {
+    "title": "Accounts Update",
+    "heading": "Accounts Migration",
+    "list": {
+      "header": "The following secrets and accounts will be updated to support the new simplified onboarding. <br /> <br /> <strong>Note: You may be asked to authenticate and provide a password, if it has been set for any of the displayed secrets or accounts.</strong>"
+    },
+    "button-run_label": "Update",
+    "button-done_label": "Done",
+    "alert": {
+      "paranoia-info": {
+        "header": "Encryption Password",
+        "message": "It looks like you have set an encryption password to additionally secure <span class=\"style__strong color__primary\">{{label}}</span>. You may be be asked to provide it during the update. Skip if you don't want to update this secret now.",
+        "button-ok_label": "Ok",
+        "button-skip_label": "Skip"
+      },
+      "bip39-passphrase": {
+        "header": "BIP-39 Passphrase",
+        "message": "If you have set a BIP-39 passphrase for <span class=\"style__strong color__primary\">{{address}} ({{protocol}})</span>, please enter it here or skip the update of this account.",
+        "input-placeholder_label": "Passphrase",
+        "button-ok_label": "Ok",
+        "button-skip_label": "Skip"
+      },
+      "unknown-error": {
+        "header": "Error",
+        "message": "Something went wrong! Please try again.",
+        "button_label": "Ok"
+      }
+    }
+  },
+  "danger-zone": {
+    "label": "Danger Zone",
+    "description": "The actions on this page are only intended for advanced users. Please be aware of the consequences if you use one of the following features.",
+    "wipe_label": "Reset AirGap Vault",
+    "wipe": {
+      "alert": {
+        "title": "Wipe Vault",
+        "message": "This action will delete all your secrets and reset AirGap Vault to the factory settings.<br /><br /><b>Make sure you have a backup of all your recovery phrases.</b>",
+        "cancel": "Cancel",
+        "ok": "Ok"
+      }
+    },
+    "wipe-error": {
+      "alert": {
+        "title": "Error",
+        "message": "An error occured while trying to wipe the app. If this error persists, please uninstall and remove the app from your device.",
+        "ok": "Ok"
+      }
+    }
+  },
+  "secret-generate-dice-roll": {
+    "title": "Dice Rolls",
+    "label": "Generate Secret with Dice Rolls",
+    "description": "Generating entropy with dice rolls is an advanced feature. It allows you to provide your own entropy and generate a verifiable recovery phrase. Only use this feature if you know how to use it!",
+    "status": "{{ inputLength }} of at least 99 rolls ({{ entropyBits }} bits of entropy)",
+    "type-alert": {
+      "header": "Select Dice Roll Type",
+      "message": "There are multiple standards of how dice roll inputs can be interpreted. Select one of the types below if you want to verify your mnemonic with another tool.",
+      "default": "Default",
+      "coldcard": "ColdCard"
+    }
+  },
+  "secret-generate-coin-flip": {
+    "title": "Coin Flips",
+    "label": "Generate Secret with Coin Flips",
+    "description": "Generating entropy with coin flips is an advanced feature. It allows you to provide your own entropy and generate a verifiable recovery phrase. Only use this feature if you know how to use it!",
+    "status": "{{ inputLength }} of 256 coin flips ({{ inputLength }} bits of entropy)",
+    "head": "Head",
+    "tail": "Tail"
+  },
+  "error-history": {
+    "title": "Error History",
+    "empty_label": "Error list is empty! 🎉",
+    "details_label": "Details"
+  },
+  "wordlist": {
+    "title": "Wordlist",
+    "search_placeholder": "Search..."
+  }
+}

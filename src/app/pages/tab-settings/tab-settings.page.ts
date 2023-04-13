@@ -11,6 +11,7 @@ import { IACService } from 'src/app/services/iac/iac.service'
 import { InstallationTypePage } from '../Installation-type/installation-type.page'
 import { OnboardingAdvancedModePage } from '../onboarding-advanced-mode/onboarding-advanced-mode.page'
 import { OnboardingWelcomePage } from '../onboarding-welcome/onboarding-welcome.page'
+import { ContactsService } from 'src/app/services/contacts/contacts.service'
 
 @Component({
   selector: 'airgap-tab-settings',
@@ -26,7 +27,8 @@ export class TabSettingsPage {
     private readonly modalController: ModalController,
     private readonly iacService: IACService,
     private readonly clipboardService: ClipboardService,
-    private readonly navigationService: NavigationService
+    private readonly navigationService: NavigationService,
+    private readonly contactsService: ContactsService
   ) {
     this.secrets = this.secretsService.getSecretsObservable()
   }
@@ -43,12 +45,28 @@ export class TabSettingsPage {
     this.navigationService.route('/interaction-selection-settings').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
+  public goToLanguagesSettings(): void {
+    this.navigationService.route('/languages-selection-settings').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
   public goToErrorHistory(): void {
     this.navigationService.route('/error-history').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public goToQrSettings(): void {
     this.navigationService.route('/qr-settings').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
+  public async goToAddressBook(): Promise<void> {
+    if (await this.contactsService.isOnboardingEnabled())
+      this.navigationService.route('/contact-book-onboarding').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    else this.navigationService.route('/contact-book-contacts').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
+  public async goToAddressBookSettings(): Promise<void> {
+    if (await this.contactsService.isOnboardingEnabled())
+      this.navigationService.route('/contact-book-onboarding').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    else this.navigationService.route('/contact-book-settings').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public async goToOnboarding(): Promise<void> {

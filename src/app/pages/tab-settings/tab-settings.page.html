@@ -52,6 +52,11 @@
       <ion-icon src="assets/icons/md-swap_horiz.svg" slot="start"></ion-icon>
       {{ 'tab-settings.interaction-settings_label' | translate }}
     </ion-item>
+
+    <ion-item (click)="goToLanguagesSettings()" detail="true">
+      <ion-icon name="language-outline" slot="start"></ion-icon>
+      {{ 'tab-settings.preferred-language_label' | translate }}
+    </ion-item>
   </ion-list>
 
   <ion-list class="ion-no-border" lines="none">
@@ -82,6 +87,22 @@
     <ion-item (click)="goToDangerZone()" detail="true">
       <ion-icon name="warning" slot="start"></ion-icon>
       {{ 'tab-settings.danger-zone_label' | translate }}
+    </ion-item>
+  </ion-list>
+
+  <ion-list class="ion-no-border" lines="none">
+    <ion-list-header class="ion-no-margin" lines="none">
+      <ion-label>{{ 'tab-settings.advanced-features_label' | translate }}</ion-label>
+    </ion-list-header>
+
+    <ion-item lines="none" (click)="goToAddressBook()" detail="true">
+      <ion-icon name="book-outline" slot="start"></ion-icon>
+      {{ 'tab-settings.address_book_label' | translate }}
+    </ion-item>
+
+    <ion-item lines="none" (click)="goToAddressBookSettings()" detail="true">
+      <ion-icon name="book-outline" slot="start"></ion-icon>
+      {{ 'tab-settings.configure_address_book_label' | translate }}
     </ion-item>
   </ion-list>
 </ion-content>

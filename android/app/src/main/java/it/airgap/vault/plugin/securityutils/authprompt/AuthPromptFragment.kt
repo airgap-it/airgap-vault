@@ -1,5 +1,6 @@
 package it.airgap.vault.plugin.securityutils.authprompt
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.biometric.BiometricManager
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment
 import it.airgap.vault.R
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
+import java.util.concurrent.atomic.AtomicInteger
 
 class AuthPromptFragment : Fragment(R.layout.fragment_authenticator) {
 
@@ -16,13 +18,18 @@ class AuthPromptFragment : Fragment(R.layout.fragment_authenticator) {
     val resultDeferred: Deferred<Boolean>
         get() = _resultDeferred
 
+    private val attempts: AtomicInteger = AtomicInteger(0)
+
     private var _biometricPromptInfo: BiometricPrompt.PromptInfo? = null
     private val biometricPromptInfo: BiometricPrompt.PromptInfo
         get() = _biometricPromptInfo ?: BiometricPrompt.PromptInfo.Builder().apply {
             setTitle(getString(R.string.biometric_prompt_title))
             setSubtitle(getString(R.string.biometric_prompt_subtitle))
             setDescription(getString(R.string.biometric_prompt_description))
-            setAllowedAuthenticators(BiometricManager.Authenticators.DEVICE_CREDENTIAL or BiometricManager.Authenticators.BIOMETRIC_WEAK)
+            setAllowedAuthenticators(
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) BiometricManager.Authenticators.DEVICE_CREDENTIAL or BiometricManager.Authenticators.BIOMETRIC_STRONG
+                else BiometricManager.Authenticators.DEVICE_CREDENTIAL or BiometricManager.Authenticators.BIOMETRIC_WEAK
+            )
         }.build().also { _biometricPromptInfo = it }
 
     private var _biometricPrompt: BiometricPrompt? = null
@@ -33,17 +40,21 @@ class AuthPromptFragment : Fragment(R.layout.fragment_authenticator) {
             BiometricPrompt(this, executor, object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     super.onAuthenticationError(errorCode, errString)
+                    attempts.set(0)
                     _resultDeferred.complete(false)
                 }
 
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
+                    attempts.set(0)
                     _resultDeferred.complete(true)
                 }
 
                 override fun onAuthenticationFailed() {
                     super.onAuthenticationFailed()
-                    _resultDeferred.complete(false)
+                    if (attempts.incrementAndGet() >= MAX_AUTH_TRIES) {
+                        _resultDeferred.complete(false)
+                    }
                 }
             })
         }.also { _biometricPrompt = it }
@@ -59,5 +70,9 @@ class AuthPromptFragment : Fragment(R.layout.fragment_authenticator) {
         _biometricPromptInfo = null
 
         super.onDestroyView()
+    }
+
+    companion object {
+        private const val MAX_AUTH_TRIES = 3
     }
 }

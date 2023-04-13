@@ -1,0 +1,170 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab-settings"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'contact-book.title_address_book' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ng-container *ngIf="state == 0">
+    <div class="content-wrapper">
+      <svg
+        fill="currentColor"
+        stroke-width="0"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 448 512"
+        height="1em"
+        width="1em"
+        style="overflow: visible;"
+      >
+        <path
+          d="M448 336V48c0-26.51-21.5-48-48-48H96C42.98 0 0 42.98 0 96v320c0 53.02 42.98 96 96 96h320c17.67 0 32-14.33 32-31.1 0-11.72-6.607-21.52-16-27.1v-81.36c9.8-9.64 16-22.24 16-36.44zM143.1 128h192c9.7 0 16.9 7.2 16.9 16s-7.2 16-16 16H143.1c-7.9 0-15.1-7.2-15.1-16s7.2-16 15.1-16zm0 64h192c9.7 0 16.9 7.2 16.9 16s-7.2 16-16 16H143.1c-7.9 0-15.1-7.2-15.1-16s7.2-16 15.1-16zM384 448H96c-17.67 0-32-14.33-32-32s14.33-32 32-32h288v64z"
+        ></path>
+      </svg>
+      <h3>{{ 'contact-book.title_address_book' | translate }}</h3>
+      <p>{{ 'contact-book.label_welcome_personal_address_book' | translate }}</p>
+      <p>{{ 'contact-book.label_this_allows_to' | translate }}</p>
+      <ul>
+        <li>{{ 'contact-book.label_indentify_addresses_you_interact' | translate }}</li>
+        <li>{{ 'contact-book.label_store_manage_entries' | translate }}</li>
+      </ul>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="state == 1">
+    <div class="content-wrapper">
+      <svg
+        fill="currentColor"
+        stroke-width="0"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 640 512"
+        height="1em"
+        width="1em"
+        style="overflow: visible;"
+      >
+        <path
+          d="M224 256c70.7 0 128-57.31 128-128S294.7 0 224 0 96 57.31 96 128s57.3 128 128 128zm50.7 48H173.3C77.61 304 0 381.6 0 477.3 0 496.5 15.52 512 34.66 512h378.7c19.14 0 34.64-15.5 34.64-34.7 0-95.7-77.6-173.3-173.3-173.3zM616 200h-48v-48c0-13.2-10.7-24-24-24s-24 10.75-24 24v48h-48c-13.2 0-24 10.8-24 24s10.75 24 24 24h48v48c0 13.3 10.8 24 24 24s24-10.75 24-24v-48h48c13.3 0 24-10.7 24-24s-10.7-24-24-24z"
+        ></path>
+      </svg>
+      <h3>{{ 'contact-book.label_add_address_entries' | translate }}</h3>
+      <p>{{ 'contact-book.label_several_ways' | translate }}</p>
+      <ul>
+        <li>
+          <svg
+            fill="currentColor"
+            stroke-width="0"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 1024 1024"
+            height="1em"
+            width="1em"
+            style="overflow: visible;"
+          >
+            <path
+              d="M468 128H160c-17.7 0-32 14.3-32 32v308c0 4.4 3.6 8 8 8h332c4.4 0 8-3.6 8-8V136c0-4.4-3.6-8-8-8zm-56 284H192V192h220v220zm-138-74h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm194 210H136c-4.4 0-8 3.6-8 8v308c0 17.7 14.3 32 32 32h308c4.4 0 8-3.6 8-8V556c0-4.4-3.6-8-8-8zm-56 284H192V612h220v220zm-138-74h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm590-630H556c-4.4 0-8 3.6-8 8v332c0 4.4 3.6 8 8 8h332c4.4 0 8-3.6 8-8V160c0-17.7-14.3-32-32-32zm-32 284H612V192h220v220zm-138-74h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm194 210h-48c-4.4 0-8 3.6-8 8v134h-78V556c0-4.4-3.6-8-8-8H556c-4.4 0-8 3.6-8 8v332c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V644h78v102c0 4.4 3.6 8 8 8h190c4.4 0 8-3.6 8-8V556c0-4.4-3.6-8-8-8zM746 832h-48c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8zm142 0h-48c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8z"
+            ></path>
+          </svg>
+          {{ 'contact-book.label_scan_qr' | translate }}
+        </li>
+        <li>
+          <svg
+            fill="currentColor"
+            stroke-width="0"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 576 512"
+            height="1em"
+            width="1em"
+            style="overflow: visible;"
+          >
+            <path
+              d="M512 448H64c-35.35 0-64-28.65-64-64V128c0-35.35 28.65-64 64-64h448c35.35 0 64 28.65 64 64v256c0 35.3-28.7 64-64 64zM128 180v-40c0-6.6-5.4-12-12-12H76c-6.62 0-12 5.4-12 12v40c0 6.6 5.38 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-384 96v-40c0-6.6-5.4-12-12-12H76c-6.62 0-12 5.4-12 12v40c0 6.6 5.38 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-384 96v-40c0-6.6-5.4-12-12-12H76c-6.62 0-12 5.4-12 12v40c0 6.6 5.38 12 12 12h40c6.6 0 12-5.4 12-12zm288 0v-40c0-6.6-5.4-12-12-12H172c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h232c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12z"
+            ></path>
+          </svg>
+          {{ 'contact-book.label_manual_entry' | translate }}
+        </li>
+        <li>
+          <svg
+            fill="currentColor"
+            stroke-width="0"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 384 512"
+            height="1em"
+            width="1em"
+            style="overflow: visible;"
+          >
+            <path
+              d="M112.1 454.3c0 6.297 1.816 12.44 5.284 17.69l17.14 25.69c5.25 7.875 17.17 14.28 26.64 14.28h61.67c9.438 0 21.36-6.401 26.61-14.28l17.08-25.68c2.938-4.438 5.348-12.37 5.348-17.7l.128-39.2H112l.1 39.2zM192 0C90.02.32 16 82.97 16 175.1c0 44.38 16.44 84.84 43.56 115.8 16.53 18.84 42.34 58.23 52.22 91.45.031.25.094.517.125.782h160.2c.031-.265.094-.516.125-.782 9.875-33.22 35.69-72.61 52.22-91.45C351.6 260.8 368 220.4 368 175.1 368 78.8 289.2.004 192 0zm96.4 260.1c-15.66 17.85-35.04 46.3-49.05 75.89h-94.61c-14.01-29.59-33.39-58.04-49.04-75.88C75.24 236.8 64 206.1 64 175.1 64 113.3 112.1 48.25 191.1 48 262.6 48 320 105.4 320 175.1c0 31-11.2 61.7-31.6 85zM176 80c-44.1 0-80 35.9-80 80 0 8.844 7.156 16 16 16s16-7.2 16-16c0-26.47 21.53-48 48-48 8.844 0 16-7.148 16-15.99S184.8 80 176 80z"
+            ></path>
+          </svg>
+          {{ 'contact-book.label_recommended_by_us' | translate }}
+        </li>
+        <li>
+          <svg
+            fill="currentColor"
+            stroke-width="0"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 576 512"
+            height="1em"
+            width="1em"
+            style="overflow: visible;"
+          >
+            <path
+              d="M0 64C0 28.65 28.65 0 64 0h160v128c0 17.7 14.3 32 32 32h128v139.6l-94.7 94.7c-8.2 8.2-14 18.5-16.8 29.8l-15.1 60.1c-2.3 9.4-1.7 19 1.4 27.8H64c-35.35 0-64-28.7-64-64V64zm256 64V0l128 128H256zm308.1 122.1c15.7 15.6 15.7 40.9 0 56.6l-29.4 29.4-70.9-71 29.4-29.4c15.6-15.6 40.9-15.6 56.6 0l14.3 14.4zm-252.2 166 129.2-128.3 71 70.9-129.2 129.2c-4.1 4.1-9.3 7-14.9 8.4l-60.1 15.1c-5.5 1.3-11.2-.3-15.2-4.2-4-4-5.6-9.8-4.2-16.1l15-59.3c1.4-5.6 4.3-10.7 8.4-15.7z"
+            ></path>
+          </svg>
+          {{ 'contact-book.label_while_signing' | translate }}
+        </li>
+      </ul>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="state == 2">
+    <div class="content-wrapper">
+      <svg
+        fill="currentColor"
+        stroke-width="0"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 384 512"
+        height="1em"
+        width="1em"
+        style="overflow: visible;"
+      >
+        <path
+          d="M112.1 454.3c0 6.297 1.816 12.44 5.284 17.69l17.14 25.69c5.25 7.875 17.17 14.28 26.64 14.28h61.67c9.438 0 21.36-6.401 26.61-14.28l17.08-25.68c2.938-4.438 5.348-12.37 5.348-17.7l.128-39.2H112l.1 39.2zM192 0C90.02.32 16 82.97 16 175.1c0 44.38 16.44 84.84 43.56 115.8 16.53 18.84 42.34 58.23 52.22 91.45.031.25.094.517.125.782h160.2c.031-.265.094-.516.125-.782 9.875-33.22 35.69-72.61 52.22-91.45C351.6 260.8 368 220.4 368 175.1 368 78.8 289.2.004 192 0zm96.4 260.1c-15.66 17.85-35.04 46.3-49.05 75.89h-94.61c-14.01-29.59-33.39-58.04-49.04-75.88C75.24 236.8 64 206.1 64 175.1 64 113.3 112.1 48.25 191.1 48 262.6 48 320 105.4 320 175.1c0 31-11.2 61.7-31.6 85zM176 80c-44.1 0-80 35.9-80 80 0 8.844 7.156 16 16 16s16-7.2 16-16c0-26.47 21.53-48 48-48 8.844 0 16-7.148 16-15.99S184.8 80 176 80z"
+        ></path>
+      </svg>
+      <h3>{{ 'contact-book.label_recommendations' | translate }}</h3>
+      <p>{{ 'contact-book.label_recommendation_on_who' | translate }}</p>
+      <div class="suggestion-wrapper">
+        <p>{{ 'contact-book.label_suggestions' | translate }}</p>
+        <ion-toggle [checked]="suggestionsEnabled" (ionChange)="onToggleSuggestion($event)" slot="end"></ion-toggle>
+      </div>
+      <p class="note">{{ 'contact-book.label_note_disable' | translate }}</p>
+    </div>
+  </ng-container>
+
+  <div class="row-center">
+    <ion-button
+      class="row-button"
+      shape="round"
+      color="tertiary"
+      *ngFor="let i of [0, 1, 2]"
+      (click)="changeState(i)"
+      [color]="i === state ? 'light' : 'medium'"
+    ></ion-button>
+  </div>
+
+  <div class="buttons-wrapper">
+    <div class="button-wrapper">
+      <ion-button *ngIf="state > 0" color="light" fill="clear" (click)="prev()">
+        {{ 'social-recovery-setup.back_label' | translate }}
+      </ion-button>
+    </div>
+    <div class="button-wrapper">
+      <ion-button [color]="2 === state ? 'primary' : 'light'" fill="clear" (click)="next()">
+        {{(state == 2 ? 'introduction.continue_label' : 'social-recovery-setup.next_label') | translate }}
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

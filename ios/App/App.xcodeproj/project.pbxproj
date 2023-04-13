@@ -33,6 +33,21 @@
 		88F9F15423D06A00008351D0 /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88F9F15323D06A00008351D0 /* CameraPreview.swift */; };
 		88F9F15623D06A76008351D0 /* CameraPreview.m in Sources */ = {isa = PBXBuildFile; fileRef = 88F9F15523D06A76008351D0 /* CameraPreview.m */; };
 		A084ECDBA7D38E1E42DFC39D /* Pods_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF277DCFFFF123FFC6DF26C7 /* Pods_App.framework */; };
+		A33BA9E528D9C4EF00BD8015 /* JS.swift in Sources */ = {isa = PBXBuildFile; fileRef = A33BA9E428D9C4EF00BD8015 /* JS.swift */; };
+		A33BA9E728D9C52D00BD8015 /* JSValue+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A33BA9E628D9C52D00BD8015 /* JSValue+Additions.swift */; };
+		A33BA9E928D9E23E00BD8015 /* WK+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A33BA9E828D9E23E00BD8015 /* WK+Additions.swift */; };
+		A351B44A2979338800BE0DC9 /* Zip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A351B4492979338800BE0DC9 /* Zip.swift */; };
+		A351B44E297965EF00BE0DC9 /* Zip.m in Sources */ = {isa = PBXBuildFile; fileRef = A351B44D297965EF00BE0DC9 /* Zip.m */; };
+		A357ED09299BD8EA00EDCA39 /* Filesystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A357ED08299BD8EA00EDCA39 /* Filesystem.swift */; };
+		A3C53AA1299247640059E997 /* JSEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3C53AA0299247640059E997 /* JSEnvironment.swift */; };
+		A3C53AA3299259FC0059E997 /* WebViewEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3C53AA2299259FC0059E997 /* WebViewEnvironment.swift */; };
+		A3C53AA52992711E0059E997 /* Sequence+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3C53AA42992711E0059E997 /* Sequence+Additions.swift */; };
+		A3CE61BC2993D827009216A2 /* FileExplorer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CE61BB2993D827009216A2 /* FileExplorer.swift */; };
+		A3CE61BE2993DF43009216A2 /* ModuleManifest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CE61BD2993DF43009216A2 /* ModuleManifest.swift */; };
+		A3CF6E4D28CA2FA100A9A883 /* IsolatedModules.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CF6E4C28CA2FA100A9A883 /* IsolatedModules.swift */; };
+		A3CF6E4F28CA2FD900A9A883 /* IsolatedModules.m in Sources */ = {isa = PBXBuildFile; fileRef = A3CF6E4E28CA2FD900A9A883 /* IsolatedModules.m */; };
+		A3E4DE8F299157C2009F3C8D /* JSModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E4DE8E299157C2009F3C8D /* JSModule.swift */; };
+		A3E4DE9129915E12009F3C8D /* JSEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E4DE9029915E12009F3C8D /* JSEvaluator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,6 +77,21 @@
 		88F9F15123D069E9008351D0 /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 		88F9F15323D06A00008351D0 /* CameraPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
 		88F9F15523D06A76008351D0 /* CameraPreview.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CameraPreview.m; sourceTree = "<group>"; };
+		A33BA9E428D9C4EF00BD8015 /* JS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JS.swift; sourceTree = "<group>"; };
+		A33BA9E628D9C52D00BD8015 /* JSValue+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JSValue+Additions.swift"; sourceTree = "<group>"; };
+		A33BA9E828D9E23E00BD8015 /* WK+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WK+Additions.swift"; sourceTree = "<group>"; };
+		A351B4492979338800BE0DC9 /* Zip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Zip.swift; sourceTree = "<group>"; };
+		A351B44D297965EF00BE0DC9 /* Zip.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Zip.m; sourceTree = "<group>"; };
+		A357ED08299BD8EA00EDCA39 /* Filesystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filesystem.swift; sourceTree = "<group>"; };
+		A3C53AA0299247640059E997 /* JSEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSEnvironment.swift; sourceTree = "<group>"; };
+		A3C53AA2299259FC0059E997 /* WebViewEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewEnvironment.swift; sourceTree = "<group>"; };
+		A3C53AA42992711E0059E997 /* Sequence+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+Additions.swift"; sourceTree = "<group>"; };
+		A3CE61BB2993D827009216A2 /* FileExplorer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileExplorer.swift; sourceTree = "<group>"; };
+		A3CE61BD2993DF43009216A2 /* ModuleManifest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleManifest.swift; sourceTree = "<group>"; };
+		A3CF6E4C28CA2FA100A9A883 /* IsolatedModules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsolatedModules.swift; sourceTree = "<group>"; };
+		A3CF6E4E28CA2FD900A9A883 /* IsolatedModules.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IsolatedModules.m; sourceTree = "<group>"; };
+		A3E4DE8E299157C2009F3C8D /* JSModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSModule.swift; sourceTree = "<group>"; };
+		A3E4DE9029915E12009F3C8D /* JSEvaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSEvaluator.swift; sourceTree = "<group>"; };
 		AF277DCFFFF123FFC6DF26C7 /* Pods_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF51FD2D460BCFE21FA515B2 /* Pods-App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App.release.xcconfig"; path = "Pods/Target Support Files/Pods-App/Pods-App.release.xcconfig"; sourceTree = "<group>"; };
 		FC68EB0AF532CFC21C3344DD /* Pods-App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App.debug.xcconfig"; path = "Pods/Target Support Files/Pods-App/Pods-App.debug.xcconfig"; sourceTree = "<group>"; };
@@ -110,6 +140,8 @@
 		504EC3061FED79650016851F /* App */ = {
 			isa = PBXGroup;
 			children = (
+				A351B4482979337600BE0DC9 /* Zip */,
+				A36CA3BE28CA2AAE00635173 /* IsolatedModules */,
 				8885568F2721A9EC009A831D /* public */,
 				885F55E525EE220A00D85A88 /* SaplingNative */,
 				88AE2EEA23D5CB1300428560 /* Helpers */,
@@ -165,6 +197,8 @@
 			isa = PBXGroup;
 			children = (
 				88AE2EEB23D5CB1C00428560 /* Extensions */,
+				A33BA9E428D9C4EF00BD8015 /* JS.swift */,
+				A357ED08299BD8EA00EDCA39 /* Filesystem.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -173,6 +207,9 @@
 			isa = PBXGroup;
 			children = (
 				88AE2EEC23D5CB3200428560 /* PluginCall+Additions.swift */,
+				A33BA9E628D9C52D00BD8015 /* JSValue+Additions.swift */,
+				A33BA9E828D9E23E00BD8015 /* WK+Additions.swift */,
+				A3C53AA42992711E0059E997 /* Sequence+Additions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -194,6 +231,46 @@
 				88F9F15523D06A76008351D0 /* CameraPreview.m */,
 			);
 			path = Camera;
+			sourceTree = "<group>";
+		};
+		A351B4482979337600BE0DC9 /* Zip */ = {
+			isa = PBXGroup;
+			children = (
+				A351B4492979338800BE0DC9 /* Zip.swift */,
+				A351B44D297965EF00BE0DC9 /* Zip.m */,
+			);
+			path = Zip;
+			sourceTree = "<group>";
+		};
+		A36CA3BE28CA2AAE00635173 /* IsolatedModules */ = {
+			isa = PBXGroup;
+			children = (
+				A3E4DE8D299157B1009F3C8D /* JS */,
+				A3CF6E4C28CA2FA100A9A883 /* IsolatedModules.swift */,
+				A3CF6E4E28CA2FD900A9A883 /* IsolatedModules.m */,
+				A3CE61BB2993D827009216A2 /* FileExplorer.swift */,
+				A3CE61BD2993DF43009216A2 /* ModuleManifest.swift */,
+			);
+			path = IsolatedModules;
+			sourceTree = "<group>";
+		};
+		A3E4DE8D299157B1009F3C8D /* JS */ = {
+			isa = PBXGroup;
+			children = (
+				A3E4DE9229915E20009F3C8D /* Environment */,
+				A3E4DE9029915E12009F3C8D /* JSEvaluator.swift */,
+				A3E4DE8E299157C2009F3C8D /* JSModule.swift */,
+			);
+			path = JS;
+			sourceTree = "<group>";
+		};
+		A3E4DE9229915E20009F3C8D /* Environment */ = {
+			isa = PBXGroup;
+			children = (
+				A3C53AA0299247640059E997 /* JSEnvironment.swift */,
+				A3C53AA2299259FC0059E997 /* WebViewEnvironment.swift */,
+			);
+			path = Environment;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -317,21 +394,36 @@
 			buildActionMask = 2147483647;
 			files = (
 				88AE2EF323D5DC3900428560 /* Keychain.swift in Sources */,
+				A3C53AA3299259FC0059E997 /* WebViewEnvironment.swift in Sources */,
+				A33BA9E928D9E23E00BD8015 /* WK+Additions.swift in Sources */,
 				88F9F14723D059AE008351D0 /* AppInfo.m in Sources */,
+				A351B44E297965EF00BE0DC9 /* Zip.m in Sources */,
+				A3CF6E4F28CA2FD900A9A883 /* IsolatedModules.m in Sources */,
+				A33BA9E728D9C52D00BD8015 /* JSValue+Additions.swift in Sources */,
+				A3CF6E4D28CA2FA100A9A883 /* IsolatedModules.swift in Sources */,
+				A3E4DE8F299157C2009F3C8D /* JSModule.swift in Sources */,
 				885F55E825EE224200D85A88 /* SaplingNative.m in Sources */,
 				49690A7E25C2BF80004A3586 /* VaultError.swift in Sources */,
+				A3C53AA1299247640059E997 /* JSEnvironment.swift in Sources */,
 				88AE2EF923D5DC8300428560 /* SecureStorage.swift in Sources */,
 				88F9F15623D06A76008351D0 /* CameraPreview.m in Sources */,
+				A33BA9E528D9C4EF00BD8015 /* JS.swift in Sources */,
 				88AE2EF523D5DC5100428560 /* LocalAuthentication.swift in Sources */,
+				A357ED09299BD8EA00EDCA39 /* Filesystem.swift in Sources */,
+				A3CE61BE2993DF43009216A2 /* ModuleManifest.swift in Sources */,
 				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
+				A3C53AA52992711E0059E997 /* Sequence+Additions.swift in Sources */,
 				88AE2EEF23D5D7B300428560 /* SecurityUtils.m in Sources */,
 				88F9F15423D06A00008351D0 /* CameraPreview.swift in Sources */,
+				A351B44A2979338800BE0DC9 /* Zip.swift in Sources */,
 				88AE2EF123D5DC2400428560 /* DeviceIntegrity.swift in Sources */,
 				885F55EB25EE226300D85A88 /* SaplingNative.swift in Sources */,
+				A3E4DE9129915E12009F3C8D /* JSEvaluator.swift in Sources */,
 				88AE2EED23D5CB3200428560 /* PluginCall+Additions.swift in Sources */,
 				88F9F14423D058DD008351D0 /* AppInfo.swift in Sources */,
 				88AE2EE823D5C7A500428560 /* SecurityUtils.swift in Sources */,
 				88F9F15223D069E9008351D0 /* CameraController.swift in Sources */,
+				A3CE61BC2993D827009216A2 /* FileExplorer.swift in Sources */,
 				88AE2EF723D5DC7400428560 /* SecureScreen.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

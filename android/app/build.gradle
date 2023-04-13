@@ -37,7 +37,7 @@ android {
     kotlinOptions {
         jvmTarget = '11'
     }
-    lintOptions {
+    lint {
         abortOnError false
     }
 }
@@ -59,6 +59,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     implementation "androidx.exifinterface:exifinterface:$androidxExifinterfaceVersion"
     implementation project(':capacitor-android')
+    implementation 'androidx.webkit:webkit:1.4.0'
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test:core:$androidxTestCoreVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
@@ -71,7 +72,7 @@ dependencies {
     def fragmentVersion = "1.4.0"
     implementation("androidx.fragment:fragment-ktx:$fragmentVersion")
 
-    def biometricVersion = "1.2.0-alpha04"
+    def biometricVersion = "1.2.0-alpha05"
     implementation("androidx.biometric:biometric:$biometricVersion")
 
     def coroutinesVersion = "1.6.0"
@@ -80,6 +81,10 @@ dependencies {
 
     def saplingVersion = "0.0.7"
     implementation "com.github.airgap-it:airgap-sapling:$saplingVersion"
+
+    implementation "androidx.javascriptengine:javascriptengine:1.0.0-alpha03"
+    implementation 'com.google.guava:listenablefuture:1.0'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-guava:$coroutinesVersion"
 }
 
 

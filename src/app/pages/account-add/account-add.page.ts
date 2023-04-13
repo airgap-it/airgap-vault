@@ -1,6 +1,6 @@
 import { Component } from '@angular/core'
 import { ModalController, AlertController } from '@ionic/angular'
-import { ICoinProtocol, MainProtocolSymbols } from '@airgap/coinlib-core'
+import { ICoinProtocol, ProtocolSymbols } from '@airgap/coinlib-core'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
@@ -18,6 +18,13 @@ interface ProtocolWrapper {
   isHDWallet: boolean
   isChecked: boolean
   customDerivationPath: string | undefined
+  details: ProtocolDetails
+}
+
+interface ProtocolDetails {
+  symbol: string
+  identifier: ProtocolSymbols
+  name: string
 }
 
 @Component({
@@ -30,6 +37,7 @@ export class AccountAddPage {
   public selectedProtocol: ICoinProtocol
   public formValid: boolean = false
   public protocolList: ProtocolWrapper[]
+  public protocolDetails: ProtocolDetails[]
   public isHDWallet: boolean = false
 
   singleSelectedProtocol: ProtocolWrapper | undefined
@@ -53,22 +61,37 @@ export class AccountAddPage {
   ) {
     const state = this.navigationService.getState()
     this.secret = state.secret
-    this.protocolService.getActiveProtocols().then((protocols: ICoinProtocol[]) => {
-      this.protocolList = protocols.map((protocol) => {
-        const isChecked =
-          protocol.identifier === MainProtocolSymbols.BTC_SEGWIT ||
-          protocol.identifier === MainProtocolSymbols.ETH ||
-          this.navigationService.getState().protocol?.identifier === protocol.identifier
+  }
 
-        return { protocol, isHDWallet: protocol.supportsHD, customDerivationPath: undefined, isChecked: isChecked }
-      })
+  public ionViewWillEnter(): void {
+    const state = this.navigationService.getState()
+    this.protocolService.getActiveProtocols().then(async (protocols: ICoinProtocol[]) => {
+      const navigationIdentifier: ProtocolSymbols | undefined = state.protocol
+
+      this.protocolList = await Promise.all(protocols.map(async (protocol) => {
+        const [symbol, identifier, name, supportsHD] = await Promise.all([
+          protocol.getSymbol(),
+          protocol.getIdentifier(),
+          protocol.getName(),
+          protocol.getSupportsHD()
+        ])
+        const isChecked = navigationIdentifier === identifier
+
+        return {
+          protocol,
+          isHDWallet: supportsHD,
+          customDerivationPath: undefined,
+          isChecked: isChecked,
+          details: { symbol, identifier, name }
+        }
+      }))
       this.onProtocolSelected()
     })
   }
 
   public onProtocolSelected(): void {
     // Wait 1 tick so "isChecked" is updated
-    setTimeout(() => {
+    setTimeout(async () => {
       const selectedProtocols = this.protocolList.filter((protocol) => protocol.isChecked)
       if (selectedProtocols.length === 0) {
         this.formValid = false
@@ -82,7 +105,7 @@ export class AccountAddPage {
 
       if (selectedProtocols.length === 1) {
         this.singleSelectedProtocol = selectedProtocols[0]
-        this.singleSelectedProtocol.customDerivationPath = this.singleSelectedProtocol.protocol.standardDerivationPath
+        this.singleSelectedProtocol.customDerivationPath = await this.singleSelectedProtocol.protocol.getStandardDerivationPath()
       } else {
         if (this.singleSelectedProtocol) {
           this.singleSelectedProtocol.customDerivationPath = undefined
@@ -92,16 +115,17 @@ export class AccountAddPage {
     }, 0)
   }
 
-  public toggleHDWallet() {
+  public async toggleHDWallet() {
     // "isHDWallet" can only be toggled if one protocol is checked
 
     const selectedProtocols = this.protocolList.filter((protocol) => protocol.isChecked)
     if (selectedProtocols.length === 1) {
       const selectedProtocol = selectedProtocols[0]
-      if (selectedProtocol.protocol.supportsHD && selectedProtocol.isHDWallet) {
-        selectedProtocol.customDerivationPath = selectedProtocol.protocol.standardDerivationPath
+      const standardDerivationPath = await selectedProtocol.protocol.getStandardDerivationPath()
+      if (await selectedProtocol.protocol.getSupportsHD() && selectedProtocol.isHDWallet) {
+        selectedProtocol.customDerivationPath = standardDerivationPath
       } else {
-        selectedProtocol.customDerivationPath = `${selectedProtocol.protocol.standardDerivationPath}/0/0`
+        selectedProtocol.customDerivationPath = `${standardDerivationPath}/0/0`
       }
     }
 
@@ -133,23 +157,23 @@ export class AccountAddPage {
   }
 
   private async addWalletAndReturnToAddressPage(): Promise<void> {
-    const addAccount = () => {
+    const addAccount = async () => {
       this.secretsService
         .addWallets(
           this.secret,
-          this.protocolList.map((protocolWrapper: ProtocolWrapper) => {
+          await Promise.all(this.protocolList.map(async (protocolWrapper: ProtocolWrapper) => {
             const protocol = protocolWrapper.protocol
             return {
-              protocolIdentifier: protocol.identifier,
-              isHDWallet: protocolWrapper.isChecked ? protocolWrapper.isHDWallet : protocol.supportsHD,
+              protocolIdentifier: await protocol.getIdentifier(),
+              isHDWallet: protocolWrapper.isChecked ? protocolWrapper.isHDWallet : await protocol.getSupportsHD(),
               customDerivationPath:
                 protocolWrapper.isChecked && protocolWrapper.customDerivationPath
                   ? protocolWrapper.customDerivationPath
-                  : protocol.standardDerivationPath,
+                  : await protocol.getStandardDerivationPath(),
               bip39Passphrase: protocolWrapper.isChecked ? this.bip39Passphrase : '',
               isActive: protocolWrapper.isChecked
             }
-          })
+          }))
         )
         .then(() => {
           this.navigationService
