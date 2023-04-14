@@ -310,8 +310,13 @@
   },
   "tab-secrets": {
     "title": "Secrets",
-    "add-secret_label": "Add Secret",
-    "search_placeholder": "Search Secret"
+    "add-secret_label": "Secret hinzufügen",
+    "search_placeholder": "Secrets durchsuchen",
+    "tab-secret-popover":{
+      "title":"Secret Verwaltung",
+      "add-secret_label": "Secret hinzufügen",
+      "sync-all_label": "Alle synchronisieren"
+    }
   },
   "tab-wallets": {
     "title": "Konten",
