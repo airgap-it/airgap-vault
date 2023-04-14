@@ -78,7 +78,7 @@ export class NavigationService {
     return this.router.navigateByUrl(settingsPath, { replaceUrl: clearStack })
   }
 
-  handleBackNavigation(currentPath: string) {
+  handleAndroidBackNavigation(currentPath: string) {
     if (currentPath === rootPath) {
       App.exitApp()
       return

@@ -109,7 +109,7 @@ export class AppComponent implements AfterViewInit {
             return
           }
         } else {
-          this.navigationService.handleBackNavigation(this.router.url)
+          this.navigationService.handleAndroidBackNavigation(this.router.url)
         }
       })
     }
