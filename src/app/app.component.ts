@@ -18,7 +18,7 @@ import { AfterViewInit, Component, Inject, NgZone } from '@angular/core'
 import { AppPlugin, URLOpenListenerEvent } from '@capacitor/app'
 import { SplashScreenPlugin } from '@capacitor/splash-screen'
 import { StatusBarPlugin, Style } from '@capacitor/status-bar'
-import { Platform } from '@ionic/angular'
+import { ModalController, Platform } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 import { first } from 'rxjs/operators'
 
@@ -66,6 +66,8 @@ export class AppComponent implements AfterViewInit {
     private readonly saplingNativeService: SaplingNativeService,
     private readonly isolatedModuleService: IsolatedModulesService,
     private readonly router: Router,
+    private readonly modalController: ModalController,
+
     @Inject(APP_PLUGIN) private readonly app: AppPlugin,
     @Inject(SECURITY_UTILS_PLUGIN) private readonly securityUtils: SecurityUtilsPlugin,
     @Inject(SPLASH_SCREEN_PLUGIN) private readonly splashScreen: SplashScreenPlugin,
@@ -99,8 +101,16 @@ export class AppComponent implements AfterViewInit {
   public async ngAfterViewInit(): Promise<void> {
     await this.platform.ready()
     if (this.platform.is('android')) {
-      this.platform.backButton.subscribeWithPriority(-1, () => {
-        this.navigationService.handleBackNavigation(this.router.url)
+      this.platform.backButton.subscribeWithPriority(-1, async () => {
+        if (this.modalController.getTop()) {
+          const modal = await this.modalController.getTop()
+          if (modal) {
+            this.modalController.dismiss()
+            return
+          }
+        } else {
+          this.navigationService.handleBackNavigation(this.router.url)
+        }
       })
     }
     this.app.addListener('appUrlOpen', async (data: URLOpenListenerEvent) => {
