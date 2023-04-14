@@ -315,7 +315,7 @@
     "tab-secret-popover":{
       "title":"Secret Verwaltung",
       "add-secret_label": "Secret hinzufügen",
-      "sync-all_label": "Alle synchronisieren"
+      "sync-all_label": "Alle Accounts mit AirGap Wallet synchronisieren"
     }
   },
   "tab-wallets": {
