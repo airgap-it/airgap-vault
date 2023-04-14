@@ -12,8 +12,25 @@ interface State {
 }
 
 const rootPath: string = '/tabs/tab-secrets'
+const settingsPath: string = '/tabs/tab-settings'
+const scanPath: string = '/tabs/tab-scan'
 
-const paths: { path: string; prevPath: string }[] = [{ path: '/tabs/tab-settings', prevPath: rootPath }]
+const paths: { path: string; prevPath: string }[] = [
+  { path: settingsPath, prevPath: rootPath },
+  { path: '/about', prevPath: settingsPath },
+  { path: '/qr-settings', prevPath: settingsPath },
+  { path: '/languages-selection-settings', prevPath: settingsPath },
+  { path: '/wordlist', prevPath: settingsPath },
+  { path: '/error-history', prevPath: settingsPath },
+  { path: '/danger-zone', prevPath: settingsPath },
+  { path: '/contact-book-onboarding', prevPath: settingsPath },
+  { path: '/contact-book-contacts', prevPath: settingsPath },
+  { path: '/contact-book-contacts-detail', prevPath: '/contact-book-contacts' },
+  { path: scanPath, prevPath: rootPath },
+  { path: '/accounts-list', prevPath: rootPath },
+  { path: '/account-address', prevPath: '/accounts-list' },
+  { path: '/secret-setup', prevPath: rootPath }
+]
 
 @Injectable({
   providedIn: 'root'
@@ -50,15 +67,15 @@ export class NavigationService {
   }
 
   public routeToSecretsTab(clearStack: boolean = false): Promise<boolean> {
-    return this.router.navigateByUrl('/tabs/tab-secrets', { replaceUrl: clearStack })
+    return this.router.navigateByUrl(rootPath, { replaceUrl: clearStack })
   }
 
   public routeToScanTab(clearStack: boolean = false): Promise<boolean> {
-    return this.router.navigateByUrl('/tabs/tab-scan', { replaceUrl: clearStack })
+    return this.router.navigateByUrl(scanPath, { replaceUrl: clearStack })
   }
 
   public routeToSettingsTab(clearStack: boolean = false): Promise<boolean> {
-    return this.router.navigateByUrl('/tabs/tab-settings', { replaceUrl: clearStack })
+    return this.router.navigateByUrl(settingsPath, { replaceUrl: clearStack })
   }
 
   handleBackNavigation(currentPath: string) {
