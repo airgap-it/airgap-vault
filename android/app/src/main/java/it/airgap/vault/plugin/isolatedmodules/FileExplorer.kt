@@ -6,6 +6,7 @@ import com.getcapacitor.JSObject
 import it.airgap.vault.plugin.isolatedmodules.js.JSModule
 import it.airgap.vault.plugin.isolatedmodules.js.environment.JSEnvironment
 import it.airgap.vault.util.Directory
+import it.airgap.vault.util.asHexString
 import it.airgap.vault.util.getDirectory
 import it.airgap.vault.util.readBytes
 import java.io.File
@@ -32,6 +33,7 @@ interface SourcesExplorer<in M : JSModule> {
 }
 
 private const val MANIFEST_FILENAME = "manifest.json"
+private const val SIGNATURE_FILENAME = "module.sig"
 
 private typealias JSModuleConstructor<T> = (
     identifier: String,
@@ -61,8 +63,9 @@ class FileExplorer private constructor(
     fun loadPreviewModule(path: String, directory: Directory): JSModule.Preview {
         val moduleDir = File(context.getDirectory(directory), path)
         val manifest = JSObject(File(moduleDir, MANIFEST_FILENAME).readBytes().decodeToString())
+        val signature = File(moduleDir, SIGNATURE_FILENAME).readBytes().asHexString()
 
-        return loadModule(moduleDir.name, manifest, JSModule.Preview.constructor(moduleDir))
+        return loadModule(moduleDir.name, manifest, JSModule.Preview.constructor(moduleDir, signature))
     }
 
     fun removeInstalledModules(identifiers: List<String>) {
@@ -111,13 +114,14 @@ class FileExplorer private constructor(
             )
         }
 
-    private fun JSModule.Preview.Companion.constructor(moduleDir: File): JSModuleConstructor<JSModule.Preview> = { identifier, namespace, preferredEnvironment, paths, _ ->
+    private fun JSModule.Preview.Companion.constructor(moduleDir: File, signature: String): JSModuleConstructor<JSModule.Preview> = { identifier, namespace, preferredEnvironment, paths, _ ->
         JSModule.Preview(
             identifier,
             namespace,
             preferredEnvironment,
             paths,
-            moduleDir.absolutePath
+            moduleDir.absolutePath,
+            signature
         )
     }
 

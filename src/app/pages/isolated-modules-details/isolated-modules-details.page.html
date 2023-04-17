@@ -18,7 +18,7 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <airgap-isolated-modules-details [metadata]="metadata"></airgap-isolated-modules-details>
+  <airgap-isolated-modules-details [metadata]="metadata" (isVerified)="onIsVerified($event)"></airgap-isolated-modules-details>
 
   <div class="ion-padding"></div>
 
@@ -31,7 +31,8 @@
     <ion-button
       *ngIf="mode === IsolatedModulesDetailsMode.INSTALL || mode === IsolatedModulesDetailsMode.UPDATE"
       color="primary" 
-      shape="round" 
+      shape="round"
+      [disabled]="!isVerified"
       (click)="installModule()"
     >
       {{ 'isolated-modules-details.button.install_label' | translate }}

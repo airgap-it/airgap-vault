@@ -18,6 +18,8 @@ export class IsolatedModulesDetailsPage {
   public readonly metadata: IsolatedModuleMetadata
   private readonly oldMetadata: IsolatedModuleMetadata
 
+  public isVerified: boolean = false
+
   public readonly mode: IsolatedModulesDetailsMode
   
   constructor(
@@ -67,7 +69,9 @@ export class IsolatedModulesDetailsPage {
     try {
       const updatedMetadata: IsolatedModuleMetadata = await this.modulesService.loadModule()
 
-      // TODO: check if selected module is matching
+      if (this.getNormalizedPublicKey(this.metadata) !== this.getNormalizedPublicKey(updatedMetadata)) {
+        throw new Error('Public keys don\'t match')
+      }
 
       this.navigationService.routeWithState(`/isolated-modules-details/${IsolatedModulesDetailsMode.UPDATE}`, {
         metadata: updatedMetadata,
@@ -101,5 +105,13 @@ export class IsolatedModulesDetailsPage {
         }
       ]
     }).catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
+  }
+
+  public onIsVerified(isVerified) {
+    this.isVerified = isVerified
+  }
+
+  private getNormalizedPublicKey(metadata: IsolatedModuleMetadata): string {
+    return metadata.manifest.publicKey.toLowerCase().replace(/^0x/, '')
   }
 }

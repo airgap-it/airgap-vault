@@ -49,8 +49,9 @@ struct FileExplorer {
         
         let identifier = url.pathComponents.last ?? "module"
         let manifest = try fileManager.contents(at: url.appendingPathComponent(FileExplorer.manifestFilename))
+        let signature = try fileManager.contents(at: url.appendingPathComponent(FileExplorer.signatureFilename))
         
-        return try loadModule(identifier, fromManifest: manifest, creatingModuleWith: JSModule.Preview.getInit(withURL: url))
+        return try loadModule(identifier, fromManifest: manifest, creatingModuleWith: JSModule.Preview.getInit(withURL: url, andSignature: signature))
     }
     
     func removeModules(_ identifiers: [String]) throws {
@@ -317,14 +318,15 @@ private extension JSModule.Installed {
 }
 
 private extension JSModule.Preview {
-    static func getInit(withURL url: URL) -> JSModuleInit<JSModule.Preview> {
+    static func getInit(withURL url: URL, andSignature signature: Data) -> JSModuleInit<JSModule.Preview> {
         { (identifier, namespace, preferredEnvironment, sources, _) -> JSModule.Preview in
             .init(
                 identifier: identifier,
                 namespace: namespace,
                 preferredEnvironment: preferredEnvironment,
                 sources: sources,
-                path: url
+                path: url,
+                signature: signature
             )
         }
     }
@@ -332,6 +334,7 @@ private extension JSModule.Preview {
 
 private extension FileExplorer {
     static let manifestFilename: String = "manifest.json"
+    static let signatureFilename: String = "module.sig"
 }
 
 private extension FileManager {

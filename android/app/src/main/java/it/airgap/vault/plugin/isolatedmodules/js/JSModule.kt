@@ -40,6 +40,7 @@ sealed interface JSModule {
         override val preferredEnvironment: JSEnvironment.Type,
         override val sources: List<String>,
         val path: String,
+        val signature: String
     ) : JSModule {
         companion object {}
     }

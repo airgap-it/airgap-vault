@@ -14,7 +14,7 @@ struct ModuleManifest: Codable {
     let url: String?
     let email: String?
     let repo: String?
-    let signature: String
+    let publicKey: String
     let description: String
     let src: Src?
     let res: Res?

@@ -7,7 +7,7 @@
 
 import Foundation
 import Capacitor
-import WebKit
+import CryptoKit
 
 @objc(IsolatedModules)
 public class IsolatedModules: CAPPlugin {
@@ -15,7 +15,7 @@ public class IsolatedModules: CAPPlugin {
     private lazy var jsEvaluator: JSEvaluator = .init(fileExplorer: fileExplorer)
     
     @objc func previewDynamicModule(_ call: CAPPluginCall) {
-        call.assertReceived(forMethod: "previewModule", requiredParams: Param.PATH, Param.DIRECTORY)
+        call.assertReceived(forMethod: "previewDynamicModule", requiredParams: Param.PATH, Param.DIRECTORY)
         
         do {
             guard let path = call.path, let directory = call.directory else {
@@ -44,8 +44,41 @@ public class IsolatedModules: CAPPlugin {
         }
     }
     
+    @objc func verifyDynamicModule(_ call: CAPPluginCall) {
+        call.assertReceived(forMethod: "verifyDynamicModule", requiredParams: Param.PATH, Param.DIRECTORY)
+        
+        do {
+            guard let path = call.path, let directory = call.directory else {
+                throw Error.invalidData
+            }
+            
+            Task {
+                do {
+                    let module = try fileExplorer.loadPreviewModule(atPath: path, locatedIn: directory)
+                    let manifest = try fileExplorer.readModuleManifest(.preview(module))
+                    let sources = try fileExplorer.readModuleSources(.preview(module))
+                    
+                    let message = (sources + [manifest]).reduce(Data()) { acc, next in acc + next }
+
+                    let jsonDecoder = JSONDecoder()
+                    let publicKey = try jsonDecoder.decode(ModuleManifest.self, from: manifest).publicKey
+
+                    let verified = try Curve25519.Signing.PublicKey(rawRepresentation: publicKey.asBytes()).isValidSignature(module.signature, for: message)
+                    
+                    call.resolve([
+                        "verified": verified
+                    ])
+                } catch {
+                    call.reject("Error: \(error)")
+                }
+            }
+        } catch {
+            call.reject("Error: \(error)")
+        }
+    }
+    
     @objc func registerDynamicModule(_ call: CAPPluginCall) {
-        call.assertReceived(forMethod: "registerModule", requiredParams: Param.IDENTIFIER, Param.PROTOCOL_IDENTIFIERS)
+        call.assertReceived(forMethod: "registerDynamicModule", requiredParams: Param.IDENTIFIER, Param.PROTOCOL_IDENTIFIERS)
         
         do {
             guard let identifier = call.identifier, let protocolIdentifiers = call.protocolIdentifiers else {

@@ -81,6 +81,7 @@ enum JSModule {
         let preferredEnvironment: JSEnvironmentKind
         let sources: [String]
         let path: URL
+        let signature: Data
     }
 }
 
