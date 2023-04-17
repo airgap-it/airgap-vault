@@ -21,41 +21,37 @@ class WebViewEnvironment: NSObject, JSEnvironment, WKNavigationDelegate {
     func run(_ action: JSModuleAction, in module: JSModule, ref runRef: String?) async throws -> [String: Any] {
         let (webView, userContentController, jsAsyncResult) = try await getOrCreateWebView(for: module, runRef: runRef)
         
-        do {
-            defer {
-                if runRef == nil {
-                    onFinish(webView: webView, userContentController: userContentController, jsAsyncResult: jsAsyncResult)
-                }
+        defer {
+            if runRef == nil {
+                onFinish(webView: webView, userContentController: userContentController, jsAsyncResult: jsAsyncResult)
             }
-            
-            let resultID = await jsAsyncResult.createID()
-            let script = """
-                function postMessage(message) {
-                    window.webkit.messageHandlers.\(jsAsyncResult.id).postMessage({ ...message, id: "\(resultID)" });
-                };
-            
-                execute(
-                    \(try module.namespace ?? (try JSUndefined.value.toJSONString())),
-                    '\(module.identifier)',
-                    \(try action.toJSONString()),
-                    function (result) {
-                        postMessage({ result: JSON.parse(JSON.stringify(result)) });
-                    },
-                    function (error) {
-                        postMessage({ error })
-                    }
-                );
-            """
-            
-            webView.evaluateJavaScript(script, completionHandler: nil)
-            guard let result = try await jsAsyncResult.awaitResultWithID(resultID) as? [String: Any] else {
-                throw Error.invalidResult
-            }
-            
-            return result
-        } catch {
-            throw error
         }
+        
+        let resultID = await jsAsyncResult.createID()
+        let script = """
+            function postMessage(message) {
+                window.webkit.messageHandlers.\(jsAsyncResult.id).postMessage({ ...message, id: "\(resultID)" });
+            };
+        
+            execute(
+                \(try module.namespace ?? (try JSUndefined.value.toJSONString())),
+                '\(module.identifier)',
+                \(try action.toJSONString()),
+                function (result) {
+                    postMessage({ result: JSON.parse(JSON.stringify(result)) });
+                },
+                function (error) {
+                    postMessage({ error })
+                }
+            );
+        """
+        
+        webView.evaluateJavaScript(script, completionHandler: nil)
+        guard let result = try await jsAsyncResult.awaitResultWithID(resultID) as? [String: Any] else {
+            throw Error.invalidResult
+        }
+        
+        return result
     }
     
     func reset(runRef: String) async throws {
