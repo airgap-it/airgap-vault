@@ -28,7 +28,7 @@ interface DynamicSourcesExplorer<in M : JSModule> {
 interface SourcesExplorer<in M : JSModule> {
     fun listModules(): List<String>
 
-    fun readModuleSources(module: M): Sequence<ByteArray>
+    fun readModuleFiles(module: M, predicate: ((String) -> Boolean) = { true }): Sequence<ByteArray>
     fun readModuleManifest(module: String): ByteArray
 }
 
@@ -39,7 +39,7 @@ private typealias JSModuleConstructor<T> = (
     identifier: String,
     namespace: String?,
     preferredEnvironment: JSEnvironment.Type,
-    paths: List<String>,
+    files: List<String>,
     manifest: JSObject
 ) -> T
 
@@ -76,12 +76,15 @@ class FileExplorer private constructor(
         filesExplorer.removeAllModules()
     }
 
-    fun readModuleSources(module: JSModule): Sequence<ByteArray> =
+    fun readModuleFiles(module: JSModule, predicate: (String) -> Boolean = { true }): Sequence<ByteArray> =
         when (module) {
-            is JSModule.Asset -> assetsExplorer.readModuleSources(module)
-            is JSModule.Installed -> filesExplorer.readModuleSources(module)
-            is JSModule.Preview -> module.sources.asSequence().map { File(module.path, it).readBytes() }
+            is JSModule.Asset -> assetsExplorer.readModuleFiles(module, predicate)
+            is JSModule.Installed -> filesExplorer.readModuleFiles(module, predicate)
+            is JSModule.Preview -> module.files.asSequence().filter(predicate).map { File(module.path, it).readBytes() }
         }
+
+    fun readModuleSources(module: JSModule): Sequence<ByteArray> =
+        readModuleFiles(module) { it.endsWith(".js") }
 
     fun readModuleManifest(module: JSModule): ByteArray =
         when (module) {
@@ -91,12 +94,12 @@ class FileExplorer private constructor(
         }
 
     private val JSModule.Asset.Companion.constructor: JSModuleConstructor<JSModule.Asset>
-        get() = { identifier, namespace, preferredEnvironment, paths, _ ->
-            JSModule.Asset(identifier, namespace, preferredEnvironment, paths)
+        get() = { identifier, namespace, preferredEnvironment, files, _ ->
+            JSModule.Asset(identifier, namespace, preferredEnvironment, files)
         }
 
     private val JSModule.Installed.Companion.constructor: JSModuleConstructor<JSModule.Installed>
-        get() = { identifier, namespace, preferredEnvironment, paths, manifest ->
+        get() = { identifier, namespace, preferredEnvironment, files, manifest ->
             val symbols = manifest
                 .getJSObject("res")
                 ?.getJSObject("symbol")
@@ -108,18 +111,18 @@ class FileExplorer private constructor(
                 identifier,
                 namespace,
                 preferredEnvironment,
-                paths,
+                files,
                 symbols ?: emptyList(),
                 filesExplorer.getInstalledTimestamp(identifier)
             )
         }
 
-    private fun JSModule.Preview.Companion.constructor(moduleDir: File, signature: String): JSModuleConstructor<JSModule.Preview> = { identifier, namespace, preferredEnvironment, paths, _ ->
+    private fun JSModule.Preview.Companion.constructor(moduleDir: File, signature: String): JSModuleConstructor<JSModule.Preview> = { identifier, namespace, preferredEnvironment, files, _ ->
         JSModule.Preview(
             identifier,
             namespace,
             preferredEnvironment,
-            paths,
+            files,
             moduleDir.absolutePath,
             signature
         )
@@ -140,15 +143,14 @@ class FileExplorer private constructor(
     ): T {
         val namespace = manifest.getJSObject("src")?.getString("namespace")
         val preferredEnvironment = manifest.getJSObject("jsenv")?.getString("android")?.let { JSEnvironment.Type.fromString(it) } ?: JSEnvironment.Type.JavaScriptEngine
-        val sources = buildList {
+        val files = buildList {
             val include = manifest.getJSONArray("include")
             for (i in 0 until include.length()) {
-                val source = include.getString(i).takeIf { it.endsWith(".js") } ?: continue
-                add(source.trimStart('/'))
+                add(include.getString(i).trimStart('/'))
             }
         }
 
-        return constructor(identifier, namespace, preferredEnvironment, sources, manifest)
+        return constructor(identifier, namespace, preferredEnvironment, files, manifest)
     }
 }
 
@@ -158,8 +160,11 @@ private class AssetsExplorer(private val context: Context) : StaticSourcesExplor
 
     override fun listModules(): List<String> = context.assets.list(MODULES_DIR)?.toList() ?: emptyList()
 
-    override fun readModuleSources(module: JSModule.Asset): Sequence<ByteArray> =
-        module.sources.asSequence().map { context.assets.readBytes(modulePath(module.identifier, it))}
+    override fun readModuleFiles(module: JSModule.Asset, predicate: (String) -> Boolean): Sequence<ByteArray> =
+        module.files
+            .asSequence()
+            .filter(predicate)
+            .map { context.assets.readBytes(modulePath(module.identifier, it))}
     override fun readModuleManifest(module: String): ByteArray = context.assets.readBytes(modulePath(module, MANIFEST_FILENAME))
 
     private fun modulePath(module: String, path: String): String =
@@ -209,8 +214,11 @@ private class FilesExplorer(private val context: Context) : DynamicSourcesExplor
     override fun listModules(): List<String> =
         modulesDir.list()?.toList()?.filter { it != SYMBOLS_DIR } ?: emptyList()
 
-    override fun readModuleSources(module: JSModule.Installed): Sequence<ByteArray> =
-        module.sources.asSequence().map { File(modulesDir, modulePath(module.identifier, it)).readBytes() }
+    override fun readModuleFiles(module: JSModule.Installed, predicate: (String) -> Boolean): Sequence<ByteArray> =
+        module.files
+            .asSequence()
+            .filter(predicate)
+            .map { File(modulesDir, modulePath(module.identifier, it)).readBytes() }
     override fun readModuleManifest(module: String): ByteArray = File(modulesDir, modulePath(module, MANIFEST_FILENAME)).readBytes()
 
     private fun modulePath(module: String, path: String): String =

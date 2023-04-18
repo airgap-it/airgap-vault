@@ -55,9 +55,9 @@ class IsolatedModules : Plugin() {
                 executeCatching {
                     val module = fileExplorer.loadPreviewModule(path, directory)
                     val manifest = fileExplorer.readModuleManifest(module)
-                    val sources = fileExplorer.readModuleSources(module)
+                    val files = fileExplorer.readModuleFiles(module)
 
-                    val message = (sources + manifest).reduce(ByteArray::plus)
+                    val message = (files + manifest).reduce(ByteArray::plus)
                     val publicKey = JSObject(manifest.decodeToString()).getString("publicKey")!!
 
                     val verified = Ed25519Signer()
