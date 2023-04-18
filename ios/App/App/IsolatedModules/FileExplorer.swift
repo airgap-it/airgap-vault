@@ -62,15 +62,19 @@ struct FileExplorer {
         try documentExplorer.removeAllModules()
     }
     
-    func readModuleSources(_ module: JSModule) throws -> [Data] {
+    func readModuleFiles(_ module: JSModule, _ isIncluded: (String) -> Bool = { _ in true }) throws -> [Data] {
         switch module {
         case .asset(let asset):
-            return try assetsExplorer.readModuleSources(asset)
+            return try assetsExplorer.readModuleFiles(asset, isIncluded)
         case .installed(let installed):
-            return try documentExplorer.readModuleSources(installed)
+            return try documentExplorer.readModuleFiles(installed, isIncluded)
         case .preview(let preview):
-            return try preview.sources.lazy.map { try fileManager.contents(at: preview.path.appendingPathComponent($0)) }
+            return try preview.files.lazy.filter(isIncluded).map { try fileManager.contents(at: preview.path.appendingPathComponent($0)) }
         }
+    }
+    
+    func readModuleSources(_ module: JSModule) throws -> [Data] {
+        try readModuleFiles(module) { $0.hasSuffix(".js") }
     }
     
     func readModuleManifest(_ module: JSModule) throws -> Data {
@@ -103,12 +107,8 @@ struct FileExplorer {
         let manifest = try jsonDecoder.decode(ModuleManifest.self, from: manifestData)
         let namespace = manifest.src?.namespace
         let preferredEnvironment = manifest.jsenv?.ios ?? .webview
-        let sources: [String] = manifest.include.compactMap { source in
-            guard source.hasSuffix(".js") else { return nil }
-            return source
-        }
         
-        return moduleInit(identifier, namespace, preferredEnvironment, sources, manifest)
+        return moduleInit(identifier, namespace, preferredEnvironment, manifest.include, manifest)
     }
 }
 
@@ -144,8 +144,10 @@ private struct AssetsExplorer: SourcesExplorer {
         "\(Self.modulesDir)/\(module)/\(path)"
     }
     
-    func readModuleSources(_ module: JSModule.Asset) throws -> [Data] {
-        try module.sources.lazy.map { try readData(atPath: modulePath(module.identifier, forPath: $0)) }
+    func readModuleFiles(_ module: JSModule.Asset, _ isIncluded: (String) -> Bool) throws -> [Data] {
+        try module.files.lazy
+            .filter(isIncluded)
+            .map { try readData(atPath: modulePath(module.identifier, forPath: $0)) }
     }
     
     func readModuleManifest(_ module: String) throws -> Data {
@@ -250,8 +252,10 @@ private struct DocumentExplorer: SourcesExplorer, DynamicSourcesExplorer {
         return "\(moduleDir)/\(path)"
     }
     
-    func readModuleSources(_ module: JSModule.Installed) throws -> [Data] {
-        try module.sources.lazy.map { try readData(atPath: modulePath(module.identifier, ofPath: $0)) }
+    func readModuleFiles(_ module: JSModule.Installed, _ isIncluded: (String) -> Bool) throws -> [Data] {
+        try module.files.lazy
+            .filter(isIncluded)
+            .map { try readData(atPath: modulePath(module.identifier, ofPath: $0)) }
     }
     
     func readModuleManifest(_ module: String) throws -> Data {
@@ -274,7 +278,7 @@ private protocol SourcesExplorer {
     
     func listModules() throws -> [String]
     
-    func readModuleSources(_ module: T) throws -> [Data]
+    func readModuleFiles(_ module: T, _ isIncluded: (String) -> Bool) throws -> [Data]
     func readModuleManifest(_ module: String) throws -> Data
 }
 
@@ -291,12 +295,12 @@ private protocol DynamicSourcesExplorer {
 
 private extension JSModule.Asset {
     static func getInit() -> JSModuleInit<JSModule.Asset> {
-        { (identifier, namespace, preferredEnvironment, sources, _) -> JSModule.Asset in
+        { (identifier, namespace, preferredEnvironment, files, _) -> JSModule.Asset in
             .init(
                 identifier: identifier,
                 namespace: namespace,
                 preferredEnvironment: preferredEnvironment,
-                sources: sources
+                files: files
             )
         }
     }
@@ -304,12 +308,12 @@ private extension JSModule.Asset {
 
 private extension JSModule.Installed {
     static func getInit<T: DynamicSourcesExplorer>(using explorer: T) -> JSModuleInit<JSModule.Installed> {
-        { (identifier, namespace, preferredEnvironment, sources, manifest) -> JSModule.Installed in
+        { (identifier, namespace, preferredEnvironment, files, manifest) -> JSModule.Installed in
                 .init(
                     identifier: identifier,
                     namespace: namespace,
                     preferredEnvironment: preferredEnvironment,
-                    sources: sources,
+                    files: files,
                     symbols: Array((manifest.res?.symbol ?? [:]).keys),
                     installedAt: explorer.getInstalledTimestamp(forIdentifier: identifier)
                 )
@@ -319,12 +323,12 @@ private extension JSModule.Installed {
 
 private extension JSModule.Preview {
     static func getInit(withURL url: URL, andSignature signature: Data) -> JSModuleInit<JSModule.Preview> {
-        { (identifier, namespace, preferredEnvironment, sources, _) -> JSModule.Preview in
+        { (identifier, namespace, preferredEnvironment, files, _) -> JSModule.Preview in
             .init(
                 identifier: identifier,
                 namespace: namespace,
                 preferredEnvironment: preferredEnvironment,
-                sources: sources,
+                files: files,
                 path: url,
                 signature: signature
             )

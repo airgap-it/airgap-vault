@@ -56,9 +56,9 @@ public class IsolatedModules: CAPPlugin {
                 do {
                     let module = try fileExplorer.loadPreviewModule(atPath: path, locatedIn: directory)
                     let manifest = try fileExplorer.readModuleManifest(.preview(module))
-                    let sources = try fileExplorer.readModuleSources(.preview(module))
+                    let files = try fileExplorer.readModuleFiles(.preview(module))
                     
-                    let message = (sources + [manifest]).reduce(Data()) { acc, next in acc + next }
+                    let message = (files + [manifest]).reduce(Data()) { acc, next in acc + next }
 
                     let jsonDecoder = JSONDecoder()
                     let publicKey = try jsonDecoder.decode(ModuleManifest.self, from: manifest).publicKey

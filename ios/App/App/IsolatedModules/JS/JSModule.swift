@@ -51,11 +51,11 @@ enum JSModule {
     var sources: [String] {
         switch self {
         case .asset(let asset):
-            return asset.sources
+            return asset.files
         case .installed(let installed):
-            return installed.sources
+            return installed.files
         case .preview(let preview):
-            return preview.sources
+            return preview.files
         }
     }
     
@@ -63,14 +63,14 @@ enum JSModule {
         let identifier: String
         let namespace: String?
         let preferredEnvironment: JSEnvironmentKind
-        let sources: [String]
+        let files: [String]
     }
     
     struct Installed: JSModuleProtocol {
         let identifier: String
         let namespace: String?
         let preferredEnvironment: JSEnvironmentKind
-        let sources: [String]
+        let files: [String]
         let symbols: [String]
         let installedAt: String
     }
@@ -79,7 +79,7 @@ enum JSModule {
         let identifier: String
         let namespace: String?
         let preferredEnvironment: JSEnvironmentKind
-        let sources: [String]
+        let files: [String]
         let path: URL
         let signature: Data
     }
@@ -89,7 +89,7 @@ protocol JSModuleProtocol {
     var identifier: String { get }
     var namespace: String? { get }
     var preferredEnvironment: JSEnvironmentKind { get }
-    var sources: [String] { get }
+    var files: [String] { get }
 }
 
 // MARK: JSProtocolType
