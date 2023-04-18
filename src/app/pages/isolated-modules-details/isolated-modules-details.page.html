@@ -35,7 +35,7 @@
       [disabled]="!isVerified"
       (click)="installModule()"
     >
-      {{ 'isolated-modules-details.button.install_label' | translate }}
+      {{ 'isolated-modules-details-page.button.install_label' | translate }}
     </ion-button>
     <ion-button
       *ngIf="mode === IsolatedModulesDetailsMode.VIEW_INSTALLED"
@@ -43,7 +43,7 @@
       shape="round" 
       (click)="updateModule()"
     >
-      {{ 'isolated-modules-details.button.update_label' | translate }}
+      {{ 'isolated-modules-details-page.button.update_label' | translate }}
     </ion-button>  
   </ion-fab>
 </ion-content>

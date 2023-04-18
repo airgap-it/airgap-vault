@@ -1,4 +1,4 @@
-import { IsolatedModuleMetadata, IsolatedModulesListPageFacade, ISOLATED_MODULES_LIST_PAGE_FACADE } from '@airgap/angular-core'
+import { IsolatedModuleMetadata, IsolatedModulesListPageFacade, ISOLATED_MODULES_LIST_PAGE_FACADE, UiEventService } from '@airgap/angular-core'
 import { Component, Inject, OnInit } from '@angular/core'
 import { ModalController, ViewWillEnter, ViewWillLeave } from '@ionic/angular'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
@@ -17,6 +17,7 @@ export class IsolatedModulesListPage implements OnInit, ViewWillEnter, ViewWillL
   constructor(
     @Inject(ISOLATED_MODULES_LIST_PAGE_FACADE) public readonly facade: IsolatedModulesListPageFacade,
     private readonly modalController: ModalController,
+    private readonly uiEventService: UiEventService,
     private readonly storageService: VaultStorageService,
     private readonly navigationService: NavigationService,
     private readonly modulesService: VaultModulesService
@@ -48,8 +49,16 @@ export class IsolatedModulesListPage implements OnInit, ViewWillEnter, ViewWillL
         mode: IsolatedModulesDetailsMode.INSTALL 
       }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } catch (e) {
-      console.error('Loading protocol module data failed', e)
-      // TODO: show alert
+      this.uiEventService.showTranslatedAlert({
+        header: `isolated-modules-list-page.alert.add.failed.header`,
+        message: `isolated-modules-list-page.alert.add.failed.message`,
+        buttons: [
+          {
+            text: `isolated-modules-list-page.alert.add.failed.ok_label`,
+            role: 'cancel'
+          }
+        ]
+      }).catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
     }
   }
   
