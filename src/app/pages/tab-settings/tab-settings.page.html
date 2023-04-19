@@ -6,7 +6,7 @@
 
 <ion-content>
   <ion-list-header>
-    <ion-label>Settings</ion-label>
+    <ion-label>{{ 'tab-settings.settings_label' | translate }}</ion-label>
   </ion-list-header>
   <ion-item (click)="goToQrSettings()" detail="true">
     <ion-icon name="qr-code-outline" slot="start"></ion-icon>
@@ -33,19 +33,38 @@
   </ion-item>
 
   <!-- TODO START Tim: figure out structure -->
-  <ion-item lines="True" (click)="goToAddressBook()" detail="true">
+  <ion-item lines="none" (click)="goToAddressBook()" detail="true">
     <ion-icon name="book-outline" slot="start"></ion-icon>
     {{ 'tab-settings.address_book_label' | translate }}
   </ion-item>
 
-  <ion-item lines="True" (click)="goToAddressBookSettings()" detail="true">
-    <ion-icon name="book-outline" slot="start"></ion-icon>
-    {{ 'tab-settings.configure_address_book_label' | translate }}
+  <ion-list-header>
+    <ion-label style="padding-left: 56px;">
+      {{ 'tab-settings.address_book_settings_label' | translate }}
+    </ion-label>
+  </ion-list-header>
+
+  <ion-item>
+    <ion-icon name="" slot="start"></ion-icon>
+    {{ 'contact-book.label_enable_address_book' | translate }}
+    <ion-toggle [checked]="bookEnabled" (ionChange)="toggleAddressBook($event)" slot="end"></ion-toggle>
   </ion-item>
+  <ion-item>
+    <ion-icon name="" slot="start"></ion-icon>
+    {{ 'contact-book.label_enable_suggestions' | translate }}
+    <ion-toggle [checked]="suggestionsEnabled" (ionChange)="toggleEnableSuggestions($event)" slot="end"></ion-toggle>
+  </ion-item>
+
+  <ion-item (click)="onClickDelete()" detail="true">
+    <ion-icon name="" slot="start"></ion-icon>
+    <ion-icon name="warning" slot="start"></ion-icon>
+    {{ 'contact-book.button_delete_entries' | translate }}
+  </ion-item>
+
   <!-- TODO END -->
 
   <ion-list-header>
-    <ion-label>Actions</ion-label>
+    <ion-label>{{ 'tab-settings.actions_label' | translate }}</ion-label>
   </ion-list-header>
   <ion-item (click)="pasteClipboard()">
     <ion-icon name="return-up-forward-outline" slot="start"></ion-icon>

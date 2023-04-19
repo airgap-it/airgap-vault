@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { AlertController, ModalController } from '@ionic/angular'
 import { Observable } from 'rxjs'
 
@@ -21,8 +21,10 @@ import { VaultStorageService } from 'src/app/services/storage/storage.service'
   templateUrl: './tab-settings.page.html',
   styleUrls: ['./tab-settings.page.scss']
 })
-export class TabSettingsPage {
+export class TabSettingsPage implements OnInit {
   public readonly secrets: Observable<MnemonicSecret[]>
+  public bookEnabled: boolean = true
+  public suggestionsEnabled: boolean
 
   constructor(
     public readonly serializerService: SerializerService,
@@ -38,6 +40,11 @@ export class TabSettingsPage {
     public readonly storageService: VaultStorageService
   ) {
     this.secrets = this.secretsService.getSecretsObservable()
+  }
+
+  async ngOnInit(): Promise<void> {
+    this.contactsService.isBookEnabled().then((value: boolean) => (this.bookEnabled = value))
+    this.contactsService.isSuggestionsEnabled().then((value: boolean) => (this.suggestionsEnabled = value))
   }
 
   public goToAbout(): void {
@@ -167,6 +174,41 @@ export class TabSettingsPage {
       buttons: [
         {
           text: this.translateService.instant('danger-zone.wipe-error.alert.ok')
+        }
+      ]
+    })
+    alert.present()
+  }
+
+  public async toggleAddressBook(event: any) {
+    const value = event.detail.checked
+    await this.contactsService.setBookEnable(value)
+  }
+
+  public async toggleEnableSuggestions(event: any) {
+    const value = event.detail.checked
+    await this.contactsService.setSuggestionsEnable(value)
+  }
+
+  public async onClickDelete() {
+    const alert = await this.alertCtrl.create({
+      header: this.translateService.instant('contacts-delete-popover.title'),
+      message: this.translateService.instant('contacts-delete-popover.text'),
+      buttons: [
+        {
+          text: this.translateService.instant('contacts-delete-popover.cancel_label'),
+          role: 'cancel'
+        },
+        {
+          text: this.translateService.instant('contacts-delete-popover.delete_label'),
+          handler: async () => {
+            try {
+              await this.contactsService.deleteAllContacts()
+              await this.contactsService.setOnboardingEnable(true)
+            } catch (e) {
+              console.error('Deleting Entries failed', e)
+            }
+          }
         }
       ]
     })

@@ -324,6 +324,12 @@
     "label_suggestions": "Suggestions",
     "label_note_disable": "Note: You can disable this option later in the settings"
   },
+    "contacts-delete-popover": {
+    "title": "Reset Entries",
+    "text": "This action will delete all of your saved entries. Do you want to continue?",
+    "cancel_label": "Cancel",
+    "delete_label": "Ok"
+  },
   "tab-scan": {
     "title": "QR Code Scanner",
     "text": "Scan a QR Code from AirGap Wallet",
@@ -359,7 +365,9 @@
     "advanced-mode-type_label": "Advanced Mode",
     "advanced-features_label": "Advanced Features",
     "address_book_label": "Address Book",
-    "configure_address_book_label": "Configure Address Book"
+    "address_book_settings_label": "Address Book Settings",
+    "settings_label": "Settings",
+    "actions_label": "Actions"
   },
   "tab-secrets": {
     "title": "Secrets",
