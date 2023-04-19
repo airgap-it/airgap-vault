@@ -22,7 +22,6 @@ const paths: { path: string; prevPath: string }[] = [
   { path: '/languages-selection-settings', prevPath: settingsPath },
   { path: '/wordlist', prevPath: settingsPath },
   { path: '/error-history', prevPath: settingsPath },
-  { path: '/danger-zone', prevPath: settingsPath },
   { path: '/contact-book-onboarding', prevPath: settingsPath },
   { path: '/contact-book-contacts', prevPath: settingsPath },
   { path: '/contact-book-contacts-detail', prevPath: '/contact-book-contacts' },

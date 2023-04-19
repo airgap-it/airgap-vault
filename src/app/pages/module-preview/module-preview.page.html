@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="secondary">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/danger-zone"></ion-back-button>
+      <ion-back-button defaultHref="/tabs/tab-settings"></ion-back-button>
     </ion-buttons>
 
     <ion-title>{{ 'module-preview.title' | translate: { name: moduleName } }}</ion-title>
@@ -10,7 +10,6 @@
 
 <ng-container class="ion-padding" *ngIf="(moduleMetadata$ | async) as metadata">
   <ion-content *ngIf="metadata.status === UIResourceStatus.SUCCESS">
-
     <ion-row class="ion-align-items-center ion-padding-top ion-padding-bottom">
       <airgap-titled-text
         [title]="'module-preview.manifest.name.label' | translate"
