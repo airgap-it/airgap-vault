@@ -38,7 +38,7 @@ export class UnitHelper {
     alertController: new AlertControllerMock(),
     loadingController: new LoadingControllerMock(),
     modalController: new ModalControllerMock(),
-    clipboard: new ClipboardMock()
+    clipboard: new ClipboardMock(),
   }
 
   public testBed(testBed: TestModuleMetadata, useIonicOnlyTestBed: boolean = false): TestModuleMetadata {

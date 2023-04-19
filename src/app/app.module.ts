@@ -44,8 +44,8 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
 import * as fromRoot from './app.reducers'
-import { CameraPreview, SaplingNative, SecurityUtils } from './capacitor-plugins/definitions'
-import { CAMERA_PREVIEW_PLUGIN, FILE_PICKER_PLUGIN, SAPLING_PLUGIN, SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
+import { CameraPreview, Environment, SaplingNative, SecurityUtils } from './capacitor-plugins/definitions'
+import { CAMERA_PREVIEW_PLUGIN, ENVIRONMENT_PLUGIN, FILE_PICKER_PLUGIN, SAPLING_PLUGIN, SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
 import { appConfig } from './config/app-config'
 import { DistributionOnboardingPageModule } from './pages/distribution-onboarding/distribution-onboarding.module'
 import { IntroductionPageModule } from './pages/introduction/introduction.module'
@@ -134,6 +134,7 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
     { provide: ZIP_PLUGIN, useValue: Zip },
     { provide: FILE_PICKER_PLUGIN, useValue: FilePicker },
     { provide: ISOLATED_MODULES_PLUGIN, useValue: IsolatedModules },
+    { provide: ENVIRONMENT_PLUGIN, useValue: Environment },
     { provide: ErrorHandler, useClass: ErrorHandlerService },
     Diagnostic,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

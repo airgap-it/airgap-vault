@@ -67,7 +67,6 @@ export class AppComponent implements AfterViewInit {
     private readonly isolatedModuleService: IsolatedModulesService,
     private readonly router: Router,
     private readonly modalController: ModalController,
-
     @Inject(APP_PLUGIN) private readonly app: AppPlugin,
     @Inject(SECURITY_UTILS_PLUGIN) private readonly securityUtils: SecurityUtilsPlugin,
     @Inject(SPLASH_SCREEN_PLUGIN) private readonly splashScreen: SplashScreenPlugin,
