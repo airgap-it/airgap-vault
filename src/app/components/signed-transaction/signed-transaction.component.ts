@@ -1,17 +1,15 @@
 import { ProtocolService, SerializerService, sumAirGapTxValues } from '@airgap/angular-core'
 import { Component, Input } from '@angular/core'
-import {
-  IAirGapTransaction,
-  ICoinProtocol,
-  MainProtocolSymbols,
-  ProtocolSymbols,
-  SignedTransaction
-} from '@airgap/coinlib-core'
+import { IAirGapTransaction, ICoinProtocol, MainProtocolSymbols, ProtocolSymbols, SignedTransaction } from '@airgap/coinlib-core'
 import BigNumber from 'bignumber.js'
 import { TokenService } from 'src/app/services/token/TokenService'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
 import { IACMessageDefinitionObjectV3 } from '@airgap/serializer'
 import { TezosSaplingProtocol } from '@airgap/tezos'
+import { NavigationService } from 'src/app/services/navigation/navigation.service'
+import { ContactsService } from 'src/app/services/contacts/contacts.service'
+import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
+import { AddType } from 'src/app/services/contacts/contacts.service'
 
 @Component({
   selector: 'airgap-signed-transaction',
@@ -25,6 +23,7 @@ export class SignedTransactionComponent {
   @Input()
   public syncProtocolString: string
 
+  public addressesNotOnContactBook: string[] = []
   public airGapTxs: IAirGapTransaction[]
   public fallbackActivated: boolean = false
   public rawTxData: string
@@ -40,7 +39,9 @@ export class SignedTransactionComponent {
     private readonly protocolService: ProtocolService,
     private readonly serializerService: SerializerService,
     private readonly tokenService: TokenService,
-    private readonly secretsService: SecretsService
+    private readonly secretsService: SecretsService,
+    private readonly navigationService: NavigationService,
+    private readonly contactsService: ContactsService
   ) {
     //
   }
@@ -103,20 +104,60 @@ export class SignedTransactionComponent {
         this.rawTxData = (this.signedTxs[0].payload as SignedTransaction).transaction
       }
     }
+
+    this.checkAdressesNames()
+  }
+
+  public async checkAdressesNames() {
+    // Check for addresses in contact book
+    if (this.airGapTxs && this.airGapTxs.length > 0) {
+      const isBookenabled = await this.contactsService.isBookEnabled()
+      if (isBookenabled) {
+        this.addressesNotOnContactBook = []
+        for (let i = 0; i < this.airGapTxs.length; i++) {
+          this.airGapTxs[i].extra = { names: {} }
+          const transaction = this.airGapTxs[i]
+          const toAddresses = transaction.to
+          for (let j = 0; j < toAddresses.length; j++) {
+            const toAddress = toAddresses[j]
+            const hasContactBookAddress = await this.contactsService.isAddressInContacts(toAddress)
+            if (!hasContactBookAddress) this.addressesNotOnContactBook.push(toAddress)
+            else {
+              const name = await this.contactsService.getContactName(toAddress)
+              if (name) this.airGapTxs[i].extra.names[toAddress] = name
+            }
+          }
+          const fromAddresses = transaction.from
+          for (let j = 0; j < fromAddresses.length; j++) {
+            const fromAddress = fromAddresses[j]
+            const hasContactBookAddress = await this.contactsService.isAddressInContacts(fromAddress)
+            if (!hasContactBookAddress && !this.addressesNotOnContactBook.includes(fromAddress))
+              this.addressesNotOnContactBook.push(fromAddress)
+            else {
+              const name = await this.contactsService.getContactName(fromAddress)
+              if (name) this.airGapTxs[i].extra.names[fromAddress] = name
+            }
+          }
+        }
+      }
+    }
   }
 
   private async checkIfSaplingTransaction(transaction: SignedTransaction, protocolIdentifier: ProtocolSymbols): Promise<boolean> {
     if (protocolIdentifier === MainProtocolSymbols.XTZ) {
-      const tezosProtocol: ICoinProtocol = await this.protocolService.getProtocol(protocolIdentifier)
-      const saplingProtocol: TezosSaplingProtocol = await this.getSaplingProtocol()
+      try {
+        const saplingProtocol: TezosSaplingProtocol = await this.getSaplingProtocol()
+        const txDetails: IAirGapTransaction[] = await saplingProtocol.getTransactionDetailsFromSigned(transaction)
+        const recipients: string[] = txDetails
+          .map((details) => details.to)
+          .reduce((flatten: string[], next: string[]) => flatten.concat(next), [])
 
-      const txDetails: IAirGapTransaction[] = await tezosProtocol.getTransactionDetailsFromSigned(transaction)
-      const recipients: string[] = txDetails
-        .map((details) => details.to)
-        .reduce((flatten: string[], next: string[]) => flatten.concat(next), [])
-
-      console.log(recipients)
-      return recipients.includes((await saplingProtocol.getOptions()).config.contractAddress)
+        // TODO: find better way to check if `transaction` is a Sapling transaction
+        return recipients.some((recipient: string) => recipient.startsWith('zet') || recipient.toLocaleLowerCase() === 'shielded pool')
+      } catch (error) {
+        console.error(error)
+        return false
+      }
     }
 
     return protocolIdentifier === MainProtocolSymbols.XTZ_SHIELDED
@@ -124,5 +165,24 @@ export class SignedTransactionComponent {
 
   private async getSaplingProtocol(): Promise<TezosSaplingProtocol> {
     return (await this.protocolService.getProtocol(MainProtocolSymbols.XTZ_SHIELDED)) as TezosSaplingProtocol
+  }
+
+  async onClickAddContact(address: string) {
+    this.navigationService
+      .routeWithState('/contact-book-contacts-detail', { isNew: true, address, addType: AddType.SIGNING })
+      .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
+  async onClickDontAddContact(address: string) {
+    await this.contactsService.addSuggestion(address)
+    const index = this.addressesNotOnContactBook.findIndex((address) => address === address)
+    if (index >= 0) {
+      this.addressesNotOnContactBook.splice(index, 1)
+    }
+  }
+
+  async onClickDisableContact() {
+    await this.contactsService.setBookEnable(false)
+    this.addressesNotOnContactBook = []
   }
 }

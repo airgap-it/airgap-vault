@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="it.airgap.vault">
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="it.airgap.vault">
+
+    <uses-sdk tools:overrideLibrary="androidx.javascriptengine" />
+
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"

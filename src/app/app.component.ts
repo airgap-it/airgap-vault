@@ -1,4 +1,12 @@
-import { APP_PLUGIN, IACMessageTransport, ProtocolService, SPLASH_SCREEN_PLUGIN, STATUS_BAR_PLUGIN } from '@airgap/angular-core'
+import {
+  APP_PLUGIN,
+  IACMessageTransport,
+  IsolatedModulesService,
+  ProtocolService,
+  SPLASH_SCREEN_PLUGIN,
+  STATUS_BAR_PLUGIN
+} from '@airgap/angular-core'
+import { MainProtocolSymbols } from '@airgap/coinlib-core'
 import {
   TezosSaplingExternalMethodProvider,
   TezosShieldedTezProtocol,
@@ -10,7 +18,7 @@ import { AfterViewInit, Component, Inject, NgZone } from '@angular/core'
 import { AppPlugin, URLOpenListenerEvent } from '@capacitor/app'
 import { SplashScreenPlugin } from '@capacitor/splash-screen'
 import { StatusBarPlugin, Style } from '@capacitor/status-bar'
-import { Platform } from '@ionic/angular'
+import { ModalController, Platform } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 import { first } from 'rxjs/operators'
 
@@ -26,6 +34,7 @@ import { SaplingNativeService } from './services/sapling-native/sapling-native.s
 import { SecretsService } from './services/secrets/secrets.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
 import { LanguagesType, VaultStorageKey, VaultStorageService } from './services/storage/storage.service'
+import { Router } from '@angular/router'
 
 declare let window: Window & { airGapHasStarted: boolean }
 
@@ -55,6 +64,10 @@ export class AppComponent implements AfterViewInit {
     private readonly navigationService: NavigationService,
     private readonly httpClient: HttpClient,
     private readonly saplingNativeService: SaplingNativeService,
+    private readonly isolatedModuleService: IsolatedModulesService,
+    private readonly router: Router,
+    private readonly modalController: ModalController,
+
     @Inject(APP_PLUGIN) private readonly app: AppPlugin,
     @Inject(SECURITY_UTILS_PLUGIN) private readonly securityUtils: SecurityUtilsPlugin,
     @Inject(SPLASH_SCREEN_PLUGIN) private readonly splashScreen: SplashScreenPlugin,
@@ -87,6 +100,19 @@ export class AppComponent implements AfterViewInit {
 
   public async ngAfterViewInit(): Promise<void> {
     await this.platform.ready()
+    if (this.platform.is('android')) {
+      this.platform.backButton.subscribeWithPriority(-1, async () => {
+        if (this.modalController.getTop()) {
+          const modal = await this.modalController.getTop()
+          if (modal) {
+            this.modalController.dismiss()
+            return
+          }
+        } else {
+          this.navigationService.handleAndroidBackNavigation(this.router.url)
+        }
+      })
+    }
     this.app.addListener('appUrlOpen', async (data: URLOpenListenerEvent) => {
       await this.isInitialized.promise
       if (data.url === DEEPLINK_VAULT_PREFIX || data.url.startsWith(DEEPLINK_VAULT_ADD_ACCOUNT)) {
@@ -103,7 +129,7 @@ export class AppComponent implements AfterViewInit {
                   const protocol: string = data.url.substr(DEEPLINK_VAULT_ADD_ACCOUNT.length)
                   if (protocol.length > 0) {
                     this.navigationService
-                      .routeWithState('account-add', { protocol })
+                      .routeWithState('account-add', { protocol, secret: secrets[0] })
                       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
                   } else {
                     this.navigationService.route('account-add').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
@@ -124,15 +150,21 @@ export class AppComponent implements AfterViewInit {
   }
 
   private async initializeTranslations(): Promise<void> {
+    this.translateService.setDefaultLang(LanguagesType.EN)
+
     const savedLanguage = await this.storageService.get(VaultStorageKey.LANGUAGE_TYPE)
     const deviceLanguage = this.translateService.getBrowserLang()
-    const currentLanguage = savedLanguage || (deviceLanguage as LanguagesType) || LanguagesType.EN
+    const currentLanguage = savedLanguage || (deviceLanguage as LanguagesType)
+
     await this.translateService.use(currentLanguage).toPromise()
   }
 
   private async initializeProtocols(): Promise<void> {
-    const externalMethodProvider: TezosSaplingExternalMethodProvider | undefined =
-      await this.saplingNativeService.createExternalMethodProvider()
+    const protocols = await this.isolatedModuleService.loadProtocols('offline', [MainProtocolSymbols.XTZ_SHIELDED])
+
+    const externalMethodProvider:
+      | TezosSaplingExternalMethodProvider
+      | undefined = await this.saplingNativeService.createExternalMethodProvider()
 
     const shieldedTezProtocol: TezosShieldedTezProtocol = new TezosShieldedTezProtocol(
       new TezosSaplingProtocolOptions(
@@ -142,7 +174,11 @@ export class AppComponent implements AfterViewInit {
     )
 
     this.protocolService.init({
-      extraActiveProtocols: [shieldedTezProtocol]
+      activeProtocols: protocols.activeProtocols,
+      passiveProtocols: protocols.passiveProtocols,
+      extraActiveProtocols: [shieldedTezProtocol],
+      activeSubProtocols: protocols.activeSubProtocols,
+      passiveSubProtocols: protocols.passiveSubProtocols
     })
 
     await shieldedTezProtocol.initParameters(await this.getSaplingParams('spend'), await this.getSaplingParams('output'))

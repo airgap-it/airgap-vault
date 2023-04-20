@@ -22,21 +22,25 @@ protocol JSONConvertible {
     func toJSONString() throws -> String
 }
 
-class JSCallbackHandler: NSObject, WKScriptMessageHandler {
-    private typealias Listener = (Result<[String: Any], Error>) -> ()
+class JSAsyncResult: NSObject, Identifiable, WKScriptMessageHandler {
+    private typealias Listener = (Result<Any, Error>) -> ()
     
-    let name: String
+    private static let defaultName: String = "jsAsyncResult"
     
+    private static let fieldResult: String = "result"
+    private static let fieldError: String = "error"
+    
+    public let id: String
     private var resultManager: ResultManager
     private let listenerRegistry: ListenerRegistry
     
-    init(name: String) {
-        self.name = name
+    init(id: String = "\(JSAsyncResult.defaultName)\(Int(Date().timeIntervalSince1970))") {
+        self.id = id
         self.resultManager = .init()
         self.listenerRegistry = .init()
     }
     
-    func awaitResult() async throws -> [String: Any] {
+    func awaitResult() async throws -> Any {
         if let result = await resultManager.result {
             return try result.get()
         }
@@ -55,20 +59,15 @@ class JSCallbackHandler: NSObject, WKScriptMessageHandler {
     }
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        guard message.name == name, let body = message.body as? [String: String] else { return }
-        
+        guard message.name == id, let body = message.body as? [String: Any] else { return }
+
         Task {
             do {
-                let result = body["result"]
-                let error = body["error"]
-                
+                let result = body[Self.fieldResult]
+                let error = body[Self.fieldError]
+
                 if let result = result, error == nil {
-                    let deserialized = try JSONSerialization.jsonObject(with: .init(result.utf8))
-                    if let dictionary = deserialized as? [String: Any] {
-                        await listenerRegistry.notifyAll(with: .success(dictionary))
-                    } else {
-                        await listenerRegistry.notifyAll(with: .success(["result": deserialized]))
-                    }
+                    await listenerRegistry.notifyAll(with: .success(result))
                 } else if let error = error {
                     throw JSError.fromScript(error)
                 } else {
@@ -81,9 +80,9 @@ class JSCallbackHandler: NSObject, WKScriptMessageHandler {
     }
     
     private actor ResultManager {
-        private(set) var result: Result<[String: Any], Error>?
+        private(set) var result: Result<Any, Error>?
         
-        func setResult(_ result: Result<[String: Any], Error>) {
+        func setResult(_ result: Result<Any, Error>) {
             self.result = result
         }
     }
@@ -95,14 +94,13 @@ class JSCallbackHandler: NSObject, WKScriptMessageHandler {
             listeners.append(listener)
         }
         
-        func notifyAll(with result: Result<[String: Any], Error>) {
+        func notifyAll(with result: Result<Any, Error>) {
             listeners.forEach { $0(result) }
             listeners.removeAll()
         }
     }
 }
-
 enum JSError: Swift.Error {
     case invalidJSON
-    case fromScript(String)
+    case fromScript(Any)
 }

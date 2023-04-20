@@ -1,6 +1,6 @@
 import { Component } from '@angular/core'
 import { ModalController, AlertController } from '@ionic/angular'
-import { ICoinProtocol, MainProtocolSymbols, ProtocolSymbols } from '@airgap/coinlib-core'
+import { ICoinProtocol, ProtocolSymbols } from '@airgap/coinlib-core'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
@@ -61,10 +61,12 @@ export class AccountAddPage {
   ) {
     const state = this.navigationService.getState()
     this.secret = state.secret
+  }
+
+  public ionViewWillEnter(): void {
+    const state = this.navigationService.getState()
     this.protocolService.getActiveProtocols().then(async (protocols: ICoinProtocol[]) => {
-      const navigationIdentifier: ProtocolSymbols | undefined = (this.navigationService.getState().protocol)
-        ? await this.navigationService.getState().protocol.getIdentifier()
-        : undefined
+      const navigationIdentifier: ProtocolSymbols | undefined = state.protocol
 
       this.protocolList = await Promise.all(protocols.map(async (protocol) => {
         const [symbol, identifier, name, supportsHD] = await Promise.all([
@@ -73,17 +75,13 @@ export class AccountAddPage {
           protocol.getName(),
           protocol.getSupportsHD()
         ])
+        const isChecked = navigationIdentifier === identifier
 
-        const isChecked =
-          identifier === MainProtocolSymbols.BTC_SEGWIT ||
-          identifier === MainProtocolSymbols.ETH ||
-          navigationIdentifier === identifier
-
-        return { 
-          protocol, 
-          isHDWallet: supportsHD, 
-          customDerivationPath: undefined, 
-          isChecked: isChecked, 
+        return {
+          protocol,
+          isHDWallet: supportsHD,
+          customDerivationPath: undefined,
+          isChecked: isChecked,
           details: { symbol, identifier, name }
         }
       }))

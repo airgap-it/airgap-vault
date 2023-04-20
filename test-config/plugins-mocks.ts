@@ -1,7 +1,8 @@
 // tslint:disable: max-classes-per-file
-import { AppInfoPlugin } from '@airgap/angular-core'
+import { AppInfoPlugin, IsolatedModulesPlugin, ZipPlugin } from '@airgap/angular-core'
 import { AppPlugin } from '@capacitor/app'
 import { ClipboardPlugin } from '@capacitor/clipboard'
+import { FilesystemPlugin } from '@capacitor/filesystem'
 import { SplashScreenPlugin } from '@capacitor/splash-screen'
 import { StatusBarPlugin } from '@capacitor/status-bar'
 
@@ -54,6 +55,18 @@ export function createSplashScreenSpy(): SplashScreenPlugin {
 
 export function createStatusBarSpy(): StatusBarPlugin {
   return jasmine.createSpyObj('StatusBarPlugin', ['setStyle', 'setBackgroundColor'])
+}
+
+export function createFilesystemSpy(): FilesystemPlugin {
+  return jasmine.createSpyObj('FilesystemPlugin', ['stat', 'mkdir', 'rmdir', 'readdir', 'readFile', 'copy'])
+}
+
+export function createZipSpy(): ZipPlugin {
+  return jasmine.createSpyObj('ZipPlugin', ['unzip'])
+}
+
+export function createIsolatedModulesSpy(): IsolatedModulesPlugin {
+  return jasmine.createSpyObj('IsolatedModulesPlugin', ['loadModules', 'callMethod'])
 }
 
 export class AppInfoPluginMock {

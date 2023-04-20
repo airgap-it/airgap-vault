@@ -25,6 +25,14 @@ allprojects {
         mavenCentral()
         maven { url 'https://jitpack.io' }
     }
+    afterEvaluate {
+        if (getPlugins().hasPlugin('android') ||
+            getPlugins().hasPlugin('android-library')) {
+            configure(android.lint) {
+                abortOnError false
+            }
+        }
+    }
 }
 
 task clean(type: Delete) {

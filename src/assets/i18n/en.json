@@ -74,7 +74,8 @@
       "medium_text": "Secure communication through app switching."
     },
     "wallet_install_label": "Install AirGap Wallet",
-    "continue_label": "Let's Go"
+    "continue_label": "Continue",
+    "skip_label": "Skip"
   },
   "secret-setup": {
     "heading": "Secret Setup",
@@ -95,7 +96,9 @@
     "coin-flip": {
       "label": "Generate with Coin Flips",
       "text": "Use a coin to generate a secure and verifiable recovery phrase."
-    }
+    },
+    "advanced": "Advanced Entropy Generation",
+    "advanced_warning": "Allows you to use Dice Rolls or Coin Flips as alternative entropy generation methods. Only use these, if you are familiar with them and know the risks involved. Only use a <span class=\"style__strong\">real-world</span> dice or coin"
   },
   "secret-edit": {
     "title": " Your Secret",
@@ -155,7 +158,13 @@
       "copied": "Recovery key copied",
       "reset-error": "Could not set the recovery key"
     },
-    "confirm_label": "Confirm"
+    "confirm_label": "Confirm",
+    "error_alert": {
+      "title": "Error",
+      "message": "Something went wrong!",
+      "abort-button_label": "Abort",
+      "retry-button_label": "Retry"
+    }
   },
   "social-recovery-generate": {
     "intro-state-1-title": "Social Recovery",
@@ -219,6 +228,7 @@
     "heading": "Make sure you follow these rules",
     "text": "We've generated your secret, it's a sequence of words.",
     "description": "Make sure you understand these rules that ensure you will always have safe access to your accounts.",
+    "confirm": "Please take notice and click the checkboxes:",
     "rules-list": {
       "item-1_text": "Write these words down on a piece of paper",
       "item-2_text": "The words need to be in order",
@@ -230,7 +240,7 @@
     "understood_label": "Understood"
   },
   "secret-show": {
-    "title": "This is your recovery phrase",
+    "title": "Recovery Phrase",
     "text": "Write down all words on a piece of paper, remember to follow the rules.",
     "fingerprint": "Fingerprint",
     "next-step_label": "Next Step",
@@ -307,6 +317,45 @@
     "title": "Social Recovery",
     "text": "Tap each word to match the correct order:"
   },
+  "contact-book": {
+    "label_add": "Add",
+    "label_edit": "Edit",
+    "label_cancel": "Cancel",
+    "label_finish": "Finish",
+    "label_close": "Close",
+    "label_sort_by": "Sort by",
+    "label_search_contacts": "Search contacts",
+    "label_added_by": "added by",
+    "label_name": "Name",
+    "label_address": "Address",
+    "label_transactions": "Transactions",
+    "label_creation_date": "Creation date",
+    "label_delete_entry": "Delete address entry",
+
+    "title_settings": "Address Book Settings",
+    "label_enable_suggestions": "Enable suggestions",
+    "label_enable_address_book": "Enable address book",
+    "button_delete_entries": "Reset entries",
+
+    "title_address_book": "Address Book",
+    "label_welcome_personal_address_book": "Welcome to your personal address book",
+    "label_this_allows_to": "This allows you to",
+    "label_indentify_addresses_you_interact": "Identify addresses you interact with",
+    "label_store_manage_entries": "Store and manage address entries",
+    "label_look_transactions_histories": "Look at relevant transactions histories and much more!",
+
+    "label_add_address_entries": "Add Address Entries",
+    "label_several_ways": "There's several ways how to add new entries to your address book:",
+    "label_scan_qr": "Scan the address QR code",
+    "label_manual_entry": "Manual entry",
+    "label_recommended_by_us": "Recommended by us",
+    "label_while_signing": "While signing transactions",
+
+    "label_recommendations": "Recommendations",
+    "label_recommendation_on_who": "We'll make recommendations on who to add based on addresses you interact with frequently",
+    "label_suggestions": "Suggestions",
+    "label_note_disable": "Note: You can disable this option later in the settings"
+  },
   "tab-scan": {
     "title": "QR Code Scanner",
     "text": "Scan a QR Code from AirGap Wallet",
@@ -339,7 +388,10 @@
     "welcome-onboarding_label": "Welcome",
     "disclaimer_label": "Disclaimer",
     "installation-type_label": "Installation Type",
-    "advanced-mode-type_label": "Advanced Mode"
+    "advanced-mode-type_label": "Advanced Mode",
+    "advanced-features_label": "Advanced Features",
+    "address_book_label": "Address Book",
+    "configure_address_book_label": "Configure Address Book"
   },
   "tab-secrets": {
     "title": "Secrets",
@@ -647,7 +699,8 @@
         "message": "An error occured while trying to wipe the app. If this error persists, please uninstall and remove the app from your device.",
         "ok": "Ok"
       }
-    }
+    },
+    "load-module_label": "Load Module"
   },
   "secret-generate-dice-roll": {
     "title": "Dice Rolls",
@@ -677,5 +730,34 @@
   "wordlist": {
     "title": "Wordlist",
     "search_placeholder": "Search..."
+  },
+  "module-preview": {
+    "title": "{{ name }} Module Preview",
+    "install-button_label": "Install",
+    "manifest": {
+      "name": {
+        "label": "Name"
+      },
+      "version": {
+        "label": "Version"
+      },
+      "author": {
+        "label": "Author"
+      },
+      "signature": {
+        "label": "Signature"
+      },
+      "include": {
+        "description": "Something about the following files being supposed to be copied over and trusting their content."
+      }
+    }
+  },
+  "keyboard": {
+    "paste": "Paste",
+    "add": "Add Word",
+    "delete": "Delete Word",
+    "shuffle": "Shuffle Keys",
+    "mask": "Mask Text",
+    "word_list": "Show Word List"
   }
 }
