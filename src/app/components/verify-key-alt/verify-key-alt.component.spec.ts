@@ -32,7 +32,7 @@ describe('Component: VerifyKey', () => {
     const words = component.secret.split(' ')
 
     // validate onComplete Event is True
-    component.onContinue.subscribe((event) => {
+    component.onComplete.subscribe((event) => {
       expect(event).toBeTruthy()
     })
 
@@ -51,7 +51,7 @@ describe('Component: VerifyKey', () => {
     const words = component.secret.split(' ')
 
     // validate onComplete Event is False
-    component.onContinue.subscribe((event) => {
+    component.onComplete.subscribe((event) => {
       expect(event).toBeFalsy()
     })
 
