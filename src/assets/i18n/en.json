@@ -324,11 +324,17 @@
     "label_suggestions": "Suggestions",
     "label_note_disable": "Note: You can disable this option later in the settings"
   },
-    "contacts-delete-popover": {
+  "contacts-delete-popover": {
     "title": "Reset Entries",
     "text": "This action will delete all of your saved entries. Do you want to continue?",
     "cancel_label": "Cancel",
     "delete_label": "Ok"
+  },
+  "contact-book-scan": {
+    "title": "Contact Book QR Code Scanner",
+    "text": "Scan a QR code of an address to add it to your contacts",
+    "empty-state_heading": "In order to scan QR codes, AirGap Vault needs the <span class=\"style__strong color__primary\">camera permission</span>.",
+    "grant-permission_label": "Grant permission"
   },
   "tab-scan": {
     "title": "QR Code Scanner",
