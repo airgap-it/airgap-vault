@@ -1,0 +1,105 @@
+.button--rounded ion-button {
+  --padding-end: 0;
+  --padding-start: 0;
+  width: 40px;
+  height: 40px;
+}
+
+ion-content {
+  --padding-bottom: var(--ion-padding, 64px);
+}
+
+h1 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  margin-bottom: 2rem;
+}
+
+p {
+  text-align: center;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  margin-block-start: 0px;
+  margin-block-end: 0px;
+  margin-bottom: 0.8rem;
+  max-width: 300px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+h2 {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  margin-bottom: 0.825rem;
+}
+
+h3 {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0px;
+}
+
+svg {
+  fill: white;
+  height: 78px;
+}
+
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: 10px;
+  left: 0;
+  width: 100%;
+}
+
+.triple-svgs {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 200px;
+  height: 160px;
+
+  .svg-1 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+
+  .svg-3 {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
+}
+
+.row-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  .row-button {
+    height: 100%;
+    font-size: large;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.8);
+    width: 50px;
+    height: 50px;
+  }
+}
+
+.divider {
+  height: 4rem;
+}
