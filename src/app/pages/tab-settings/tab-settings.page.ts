@@ -1,5 +1,5 @@
-import { Component } from '@angular/core'
-import { ModalController } from '@ionic/angular'
+import { Component, OnInit } from '@angular/core'
+import { AlertController, ModalController } from '@ionic/angular'
 import { Observable } from 'rxjs'
 
 import { MnemonicSecret } from '../../models/secret'
@@ -12,14 +12,19 @@ import { InstallationTypePage } from '../Installation-type/installation-type.pag
 import { OnboardingAdvancedModePage } from '../onboarding-advanced-mode/onboarding-advanced-mode.page'
 import { OnboardingWelcomePage } from '../onboarding-welcome/onboarding-welcome.page'
 import { ContactsService } from 'src/app/services/contacts/contacts.service'
+import { TranslateService } from '@ngx-translate/core'
+import { SecureStorageService } from 'src/app/services/secure-storage/secure-storage.service'
+import { VaultStorageService } from 'src/app/services/storage/storage.service'
 
 @Component({
   selector: 'airgap-tab-settings',
   templateUrl: './tab-settings.page.html',
   styleUrls: ['./tab-settings.page.scss']
 })
-export class TabSettingsPage {
+export class TabSettingsPage implements OnInit {
   public readonly secrets: Observable<MnemonicSecret[]>
+  public bookEnabled: boolean = true
+  public suggestionsEnabled: boolean
 
   constructor(
     public readonly serializerService: SerializerService,
@@ -28,9 +33,18 @@ export class TabSettingsPage {
     private readonly iacService: IACService,
     private readonly clipboardService: ClipboardService,
     private readonly navigationService: NavigationService,
-    private readonly contactsService: ContactsService
+    private readonly contactsService: ContactsService,
+    private readonly translateService: TranslateService,
+    private readonly alertCtrl: AlertController,
+    private readonly secureStorage: SecureStorageService,
+    public readonly storageService: VaultStorageService
   ) {
     this.secrets = this.secretsService.getSecretsObservable()
+  }
+
+  async ngOnInit(): Promise<void> {
+    this.contactsService.isBookEnabled().then((value: boolean) => (this.bookEnabled = value))
+    this.contactsService.isSuggestionsEnabled().then((value: boolean) => (this.suggestionsEnabled = value))
   }
 
   public goToAbout(): void {
@@ -78,16 +92,6 @@ export class TabSettingsPage {
     modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 
-  // public async goToDisclaimer(): Promise<void> {
-  //   const modal: HTMLIonModalElement = await this.modalController.create({
-  //     component: WarningModalPage,
-  //     componentProps: { errorType: Warning.SECURE_STORAGE },
-  //     backdropDismiss: false
-  //   })
-
-  //   modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
-  // }
-
   public async goToInstallationType(): Promise<void> {
     const modal: HTMLIonModalElement = await this.modalController.create({
       component: InstallationTypePage,
@@ -112,10 +116,6 @@ export class TabSettingsPage {
     this.navigationService.route('/wordlist').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  public goToDangerZone(): void {
-    this.navigationService.route('/danger-zone').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-  }
-
   public pasteClipboard(): void {
     this.clipboardService.paste().then(
       (text: string) => {
@@ -126,5 +126,83 @@ export class TabSettingsPage {
         console.error('Error: ' + err)
       }
     )
+  }
+
+  public async resetVault() {
+    const alert = await this.alertCtrl.create({
+      header: this.translateService.instant('danger-zone.wipe.alert.title'),
+      message: this.translateService.instant('danger-zone.wipe.alert.message'),
+      buttons: [
+        {
+          text: this.translateService.instant('danger-zone.wipe.alert.cancel'),
+          role: 'cancel'
+        },
+        {
+          text: this.translateService.instant('danger-zone.wipe.alert.ok'),
+          handler: async () => {
+            try {
+              await this.secureStorage.wipe()
+              await this.storageService.wipe()
+            } catch (e) {
+              console.error('Wiping failed', e)
+              return this.resetVaultError()
+            }
+
+            this.navigationService.route('/').then(() => {
+              location.reload()
+            })
+          }
+        }
+      ]
+    })
+    alert.present()
+  }
+
+  public async resetVaultError() {
+    const alert = await this.alertCtrl.create({
+      header: this.translateService.instant('danger-zone.wipe-error.alert.title'),
+      message: this.translateService.instant('danger-zone.wipe-error.alert.message'),
+      buttons: [
+        {
+          text: this.translateService.instant('danger-zone.wipe-error.alert.ok')
+        }
+      ]
+    })
+    alert.present()
+  }
+
+  public async toggleAddressBook(event: any) {
+    const value = event.detail.checked
+    await this.contactsService.setBookEnable(value)
+  }
+
+  public async toggleEnableSuggestions(event: any) {
+    const value = event.detail.checked
+    await this.contactsService.setSuggestionsEnable(value)
+  }
+
+  public async onClickDelete() {
+    const alert = await this.alertCtrl.create({
+      header: this.translateService.instant('contacts-delete-popover.title'),
+      message: this.translateService.instant('contacts-delete-popover.text'),
+      buttons: [
+        {
+          text: this.translateService.instant('contacts-delete-popover.cancel_label'),
+          role: 'cancel'
+        },
+        {
+          text: this.translateService.instant('contacts-delete-popover.delete_label'),
+          handler: async () => {
+            try {
+              await this.contactsService.deleteAllContacts()
+              await this.contactsService.setOnboardingEnable(true)
+            } catch (e) {
+              console.error('Deleting Entries failed', e)
+            }
+          }
+        }
+      ]
+    })
+    alert.present()
   }
 }
