@@ -37,6 +37,12 @@ const sparrowwallet = {
   qrType: QRType.BC_UR
 }
 
+const specterwallet = {
+  icon: 'specterwallet.png',
+  name: 'Specter Wallet',
+  qrType: QRType.BC_UR
+}
+
 const metamask = {
   icon: 'metamask.webp',
   name: 'MetaMask',
@@ -120,7 +126,7 @@ export class AccountAddressPage {
 
       switch (protocolIdentifier) {
         case MainProtocolSymbols.BTC_SEGWIT:
-          this.syncOptions = [airgapwallet, bluewallet, sparrowwallet]
+          this.syncOptions = [airgapwallet, bluewallet, sparrowwallet, specterwallet]
           break
         case MainProtocolSymbols.ETH:
           this.syncOptions = [airgapwallet]
