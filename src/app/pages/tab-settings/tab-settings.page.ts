@@ -92,16 +92,6 @@ export class TabSettingsPage implements OnInit {
     modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 
-  // public async goToDisclaimer(): Promise<void> {
-  //   const modal: HTMLIonModalElement = await this.modalController.create({
-  //     component: WarningModalPage,
-  //     componentProps: { errorType: Warning.SECURE_STORAGE },
-  //     backdropDismiss: false
-  //   })
-
-  //   modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
-  // }
-
   public async goToInstallationType(): Promise<void> {
     const modal: HTMLIonModalElement = await this.modalController.create({
       component: InstallationTypePage,
@@ -167,6 +157,7 @@ export class TabSettingsPage implements OnInit {
     })
     alert.present()
   }
+
   public async resetVaultError() {
     const alert = await this.alertCtrl.create({
       header: this.translateService.instant('danger-zone.wipe-error.alert.title'),
