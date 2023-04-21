@@ -28,7 +28,8 @@ const paths: { path: string; prevPath: string }[] = [
   { path: scanPath, prevPath: rootPath },
   { path: '/accounts-list', prevPath: rootPath },
   { path: '/account-address', prevPath: '/accounts-list' },
-  { path: '/secret-setup', prevPath: rootPath }
+  { path: '/secret-setup', prevPath: rootPath },
+  { path: '/contact-book-scan', prevPath: '/contact-book-contacts-detail' }
 ]
 
 @Injectable({

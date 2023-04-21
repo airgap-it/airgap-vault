@@ -116,6 +116,12 @@ const routes: Routes = [
     path: 'contact-book-settings',
     loadChildren: () => import('./pages/contact-book-settings/contact-book-settings.module').then((m) => m.ContactBookOnboardingPageModule)
   },
+
+  {
+    path: 'contact-book-scan',
+    loadChildren: () => import('./pages/contact-book-scan/contact-book-scan.module').then((m) => m.ContactBookScanPageModule)
+  },
+
   {
     path: 'deserialized-detail',
     loadChildren: () => import('./pages/deserialized-detail/deserialized-detail.module').then((m) => m.DeserializedDetailPageModule)

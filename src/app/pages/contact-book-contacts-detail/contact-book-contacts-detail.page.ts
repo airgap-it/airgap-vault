@@ -18,8 +18,8 @@ export class ContactBookContactsDetailPage {
 
   ionViewWillEnter() {
     const state = this.navigationService?.getState()
+
     if (state.isNew) {
-      this.state = 'new'
       this.contact = {} as ContactType
       if (state.addType && state.addType === AddType.RECOMMENDED && state.address && state.address.length > 0) {
         this.contact.address = state.address
@@ -27,6 +27,9 @@ export class ContactBookContactsDetailPage {
       } else if (state.addType && state.addType === AddType.SIGNING && state.address && state.address.length > 0) {
         this.contact.address = state.address
         this.contact.addedFrom = AddType.SIGNING
+      } else if (state.addType && state.addType === AddType.QR && state.address && state.address.length > 0) {
+        this.contact.address = state.address
+        this.contact.addedFrom = AddType.QR
       } else {
         this.contact.addedFrom = AddType.MANUAL
       }
@@ -97,5 +100,9 @@ export class ContactBookContactsDetailPage {
       this.contact = {} as ContactType
     }
     this.contact.address = event.target.value
+  }
+
+  onClickQRCode() {
+    this.navigationService.route('/contact-book-scan')
   }
 }
