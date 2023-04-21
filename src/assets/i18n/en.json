@@ -166,6 +166,38 @@
       "retry-button_label": "Retry"
     }
   },
+  "social-recovery-generate": {
+    "intro-state-1-title": "Social Recovery",
+    "intro-state-1-text1": "With Social Recovery, you can create secret shares and distribute them to social contacts you trust.",
+    "intro-state-1-text2": "You can recover a lost secret if you have a set number of these secret shares.",
+    "intro-state-2-title": "Distribute Your Shares",
+    "intro-state-2-text1": "The idea is to have different shares, which by itself are useless, but together allow you to restore your secret.",
+    "intro-state-2-text2": "You can distribute these shares to different locations or people you trust.",
+    "intro-state-2-text3": "So don't worry, your grandma won't be able to restore your secret with the share that you stored at her place.",
+    "intro-state-3-title1": "How Social Recovery Works",
+    "intro-state-3-title2": "Choose Number of Shares",
+    "intro-state-3-text1": "Begin by specifying how many social shares you'd like to create. You'll alsso need to define how many shares are needed to recover your secret.",
+    "intro-state-3-title3": "Store and Verify Each Share",
+    "intro-state-3-text2": "We will create different social shares for you. Make a note of for each of them. In a next step, you'll be asked to verify each share to make sure that you've copied them correctly.",
+    "intro-state-3-title4": "Not the Same as Your Passphrase",
+    "intro-state-3-text3": "Although they might look the same, social shares are not the same as your passphrase.",
+    "setup-state-1-text1": "Select the number of social shares you wish to create",
+    "setup-state-2-text1": "Creating {{numberOfShares}} shares",
+    "setup-state-2-text2": "Select the number of social shares needed to recover your secret",
+    "rules-heading": "Keep this rule in mind",
+    "rules-text1": "Write these words down on a piece of paper or a metal plate",
+    "rules-text2": "The words need to be in the correct order",
+    "rules-text3": "Check the spelling of each word",
+    "rules-text4": "Store the written down secret in a safe place",
+    "rules-text5": "Do not take a screenshot or photo and do not photocopy your secret",
+    "rules-text6": "Do not upload your secret to the cloud",
+    "share-show-heading": "Write down all words on a piece of paper, remember to follow the rules. We recommend to enumerate the terms.",
+    "finish-title": "Social Recovery Generation Successful!",
+    "finish-header": "You've successfully created social recovery shares for your secret.",
+    "finish-warning-title": "Remember",
+    "finish-warning-paragraph": "You created {{ numberOfShares }} shares, of which you'll need at least {{ sharesRequired }} to recover.",
+    "finish-button": "Finish"
+  },
   "secret-service": {
     "alert": {
       "title": "Duplicate Secret",
@@ -251,7 +283,7 @@
   },
   "verify-key": {
     "incorrect_text": "Your secret does not match the generated one. Make sure you've chosen the correct words. <br /> To correct mistakes, simply select a wrong word and choose the correct one.",
-    "success_text": "You have successfully verified this secret.",
+    "success_text": "Share verified successfully!",
     "continue_label": "Continue"
   },
   "social-recovery-import": {

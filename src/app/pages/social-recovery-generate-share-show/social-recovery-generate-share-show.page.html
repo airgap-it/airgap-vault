@@ -1,0 +1,36 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/secret-edit"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="content-wrapper">
+    <div class="center-wrapper">
+      <div class="states-wrapper">
+        <ion-button
+          class="state"
+          [class.selected]="(i === currentShare && currentShare < shares.length - 1) || (currentShare === shares.length -1 && i === currentShare - 1)"
+          shape="round"
+          *ngFor="let share of shares; let i = index"
+          [color]="i === currentShare ? 'primary' : 'tertiary'"
+        >
+          {{i}}
+        </ion-button>
+      </div>
+      <h2>{{ 'social-recovery-generate.share-show-heading' | translate }}</h2>
+      <div class="tags-wrapper">
+        <ion-button class="tag" shape="round" color="tertiary" *ngFor="let tag of currentShares; let i = index">
+          <p class="number">{{i + 1}}</p>
+          <p class="text">{{tag}}</p>
+        </ion-button>
+      </div>
+    </div>
+    <div class="buttons-wrapper">
+      <ion-button color="light" fill="clear" (click)="prev()">{{ 'social-recovery-setup.back_label' | translate }}</ion-button>
+      <ion-button color="light" fill="clear" fill="clear" (click)="next()">{{ 'social-recovery-setup.next_label' | translate }}</ion-button>
+    </div>
+  </div>
+</ion-content>
