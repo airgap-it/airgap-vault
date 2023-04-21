@@ -18,6 +18,8 @@ export class IsolatedModulesDetailsPage {
   public readonly metadata: IsolatedModuleMetadata
   private readonly oldMetadata: IsolatedModuleMetadata
 
+  public isVerified: boolean = false
+
   public readonly mode: IsolatedModulesDetailsMode
   
   constructor(
@@ -65,9 +67,8 @@ export class IsolatedModulesDetailsPage {
     }
 
     try {
-      const updatedMetadata: IsolatedModuleMetadata = await this.modulesService.loadModule()
-
-      // TODO: check if selected module is matching
+      const updatedMetadata: IsolatedModuleMetadata = await this.loadUpdate()
+      this.checkUpdatePublicKey(updatedMetadata)
 
       this.navigationService.routeWithState(`/isolated-modules-details/${IsolatedModulesDetailsMode.UPDATE}`, {
         metadata: updatedMetadata,
@@ -75,22 +76,34 @@ export class IsolatedModulesDetailsPage {
         mode: IsolatedModulesDetailsMode.UPDATE 
       }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } catch (e) {
-      console.error('Loading protocol module data failed', e)
-      // TODO: show alert
+      const alertType = typeof e === 'object' && 'type' in e
+        ? e.type
+        : 'generic'
+
+      this.uiEventService.showTranslatedAlert({
+        header: `isolated-modules-details-page.alert.update.${alertType}.header`,
+        message: `isolated-modules-details-page.alert.update.${alertType}.message`,
+        buttons: [
+          {
+            text: `isolated-modules-details-page.alert.update.${alertType}.ok_label`,
+            role: 'cancel'
+          }
+        ]
+      }).catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
     }
   }
 
   public removeModule() {
     this.uiEventService.showTranslatedAlert({
-      header: 'isolated-modules-details.alert.remove.header',
-      message: 'isolated-modules-details.alert.remove.message',
+      header: 'isolated-modules-details-page.alert.remove.header',
+      message: 'isolated-modules-details-page.alert.remove.message',
       buttons: [
         {
-          text: 'isolated-modules-details.alert.remove.cancel_label',
+          text: 'isolated-modules-details-page.alert.remove.cancel_label',
           role: 'cancel'
         },
         {
-          text: 'isolated-modules-details.alert.remove.proceed_label',
+          text: 'isolated-modules-details-page.alert.remove.proceed_label',
           handler: async (): Promise<void> => {
             if (this.metadata && this.metadata.type === 'installed') {
               await this.modulesService.removeInstalledModule(this.metadata)
@@ -101,5 +114,28 @@ export class IsolatedModulesDetailsPage {
         }
       ]
     }).catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
+  }
+
+  public onIsVerified(isVerified) {
+    this.isVerified = isVerified
+  }
+
+  private async loadUpdate(): Promise<IsolatedModuleMetadata> {
+    try {
+      return await this.modulesService.loadModule()
+    } catch (e) {
+      console.error(e)
+      throw { type: 'load-failed' }
+    }
+  }
+
+  private checkUpdatePublicKey(updatedMetadata: IsolatedModuleMetadata) {
+    if (this.getNormalizedPublicKey(this.metadata) !== this.getNormalizedPublicKey(updatedMetadata)) {
+     throw { type: 'different-public-key' }
+    }
+  }
+
+  private getNormalizedPublicKey(metadata: IsolatedModuleMetadata): string {
+    return metadata.manifest.publicKey.toLowerCase().replace(/^0x/, '')
   }
 }
