@@ -11,6 +11,8 @@ import it.airgap.vault.plugin.isolatedmodules.js.*
 import it.airgap.vault.util.*
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.launch
+import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters
+import org.bouncycastle.crypto.signers.Ed25519Signer
 import org.json.JSONObject
 
 @CapacitorPlugin
@@ -35,6 +37,41 @@ class IsolatedModules : Plugin() {
                                 {
                                     "module": $moduleJson,
                                     "manifest": ${JSObject(manifest.decodeToString())}
+                                }
+                            """.trimIndent()
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    @PluginMethod
+    fun verifyDynamicModule(call: PluginCall) {
+        call.executeCatching {
+            assertReceived(Param.PATH, Param.DIRECTORY)
+
+            activity.lifecycleScope.launch {
+                executeCatching {
+                    val module = fileExplorer.loadPreviewModule(path, directory)
+                    val manifest = fileExplorer.readModuleManifest(module)
+                    val files = fileExplorer.readModuleFiles(module)
+
+                    val message = (files + manifest).reduce(ByteArray::plus)
+                    val publicKey = JSObject(manifest.decodeToString()).getString("publicKey")!!
+
+                    val verified = Ed25519Signer()
+                        .apply {
+                            init(false, Ed25519PublicKeyParameters(publicKey.asByteArray()))
+                            update(message, 0, message.size)
+                        }
+                        .verifySignature(module.signature.asByteArray())
+
+                    resolve(
+                        JSObject(
+                            """
+                                {
+                                    "verified": $verified
                                 }
                             """.trimIndent()
                         )

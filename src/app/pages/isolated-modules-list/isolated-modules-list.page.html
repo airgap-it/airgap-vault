@@ -4,7 +4,7 @@
       <ion-back-button defaultHref="/danger-zone"></ion-back-button>
     </ion-buttons>
 
-    <ion-title>{{ 'isolated-modules-list.title' | translate }}</ion-title>
+    <ion-title>{{ 'isolated-modules-list-page.title' | translate }}</ion-title>
 
     <ion-buttons slot="primary">
       <ion-button (click)="addModule()">
@@ -15,7 +15,7 @@
 
   <ng-container *ngrxLet="facade.modules$ as modules">
     <ion-toolbar *ngIf="modules.value.length > 0" color="secondary">
-      <ion-searchbar placeholder="{{ 'isolated-modules-list.items.search_placeholder' | translate }}" (ionInput)="filterModules($event)"></ion-searchbar>
+      <ion-searchbar placeholder="{{ 'isolated-modules-list-page.items.search_placeholder' | translate }}" (ionInput)="filterModules($event)"></ion-searchbar>
     </ion-toolbar>
   </ng-container>
 </ion-header>

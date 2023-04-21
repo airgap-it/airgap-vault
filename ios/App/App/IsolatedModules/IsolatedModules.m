@@ -10,6 +10,7 @@
 
 CAP_PLUGIN(IsolatedModules, "IsolatedModules",
            CAP_PLUGIN_METHOD(previewDynamicModule, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(verifyDynamicModule, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(registerDynamicModule, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(readDynamicModule, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(removeDynamicModules, CAPPluginReturnPromise);
