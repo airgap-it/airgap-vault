@@ -104,11 +104,13 @@ const routes: Routes = [
   },
   {
     path: 'contact-book-contacts-detail',
-    loadChildren: () => import('./pages/contact-book-contacts-detail/contact-book-contacts-detail.module').then((m) => m.ContactBookContactsDetailPageModule)
+    loadChildren: () =>
+      import('./pages/contact-book-contacts-detail/contact-book-contacts-detail.module').then((m) => m.ContactBookContactsDetailPageModule)
   },
   {
     path: 'contact-book-onboarding',
-    loadChildren: () => import('./pages/contact-book-onboarding/contact-book-onboarding.module').then((m) => m.ContactBookOnboardingPageModule)
+    loadChildren: () =>
+      import('./pages/contact-book-onboarding/contact-book-onboarding.module').then((m) => m.ContactBookOnboardingPageModule)
   },
   {
     path: 'contact-book-settings',
@@ -145,10 +147,6 @@ const routes: Routes = [
   {
     path: 'accounts-list',
     loadChildren: () => import('./pages/accounts-list/accounts-list.module').then((m) => m.AccountsListPageModule)
-  },
-  {
-    path: 'danger-zone',
-    loadChildren: () => import('./pages/danger-zone/danger-zone.module').then((m) => m.DangerZonePageModule)
   },
   {
     path: 'secret-generate-dice',
