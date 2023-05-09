@@ -49,10 +49,20 @@
     "title": "Welcome to AirGap"
   },
   "installation-type": {
-    "title": "Installation Type"
+    "title": "Installationsart",
+    "setup_label": "Wie ist Ihre Konfiguration?",
+    "setup_text": "Um die Vault richtig zu konfigurieren, geben Sie uns bitte an, wie Sie die Konnektivität Ihres Geräts einrichten möchten. Dies wird uns dabei helfen, die ideale Interaktion mit anderen Wallets zu bestimmen.",
+    "online_label": "online",
+    "online_text": "Dieses Gerät ist mit dem Internet verbunden.",
+    "offline_label": "offline",
+    "offline_text": "Dies ist ein dediziertes Offline-Gerät. Es wird niemals mit dem Internet verbunden sein."
   },
   "introduction": {
     "title": "Der Neue Krypto-Wallet Standard",
+    "header": "Interaktion mit Ihrem {{installationType}}-Gerät",
+    "online-desc": "AirGap Vault ist von Design her nie mit einem Online-Dienst verbunden. Ihre Secrets verlassen AirGap Vault nie und sind daher vor Online-Bedrohungen geschützt. Verwenden Sie eine Begleit-App wie AirGap Wallet, um Ihren Kontostand zu überprüfen und Transaktionen durchzuführen.",
+    "offline-desc": "AirGap Vault ist von Design her nie mit einem Online-Dienst verbunden. Verwenden Sie eine Begleit-App wie AirGap Wallet, um Ihren Kontostand zu überprüfen und Transaktionen durchzuführen.",
+    "offline-companion_text": "Installieren Sie die Begleit-App auf einem Gerät mit Internetzugang und seien Sie versichert, dass nur öffentliche Informationen zwischen den beiden Apps ausgetauscht werden. Ihre Secrets verlassen nie den AirGap Vault und bleiben so vor Online-Bedrohungen geschützt.",
     "highest": {
       "label": "Höchste Sicherheit",
       "text": "Mit dem AirGap <b>zwei-Geräte Ansatz</b> wird der sichere Umgang mit Geheimschlüssel zugänglicher."
@@ -214,16 +224,19 @@
     "title": "Verifizierung Wiederherstellungs-Satz",
     "text": "Ordnen Sie die Wörter in die richtige Reihenfolge, indem Sie jeweils das betreffende Wort anwählen."
   },
+
   "interaction-selection-settings": {
-    "title": "Wallet Interaktion",
-    "heading": "How would you like to interact with AirGap Wallet?",
+    "header": "Setup",
+    "title": "Wallet-Interaktion",
+    "heading": "Wie möchten Sie mit AirGap Wallet interagieren?",
     "selector": {
       "always": "Immer nachfragen",
-      "same-device": "Vault und Wallet auf dem gleichen Gerät",
-      "offline-device": "Vault auf einem offline Gerät"
+      "same-device": "App-Switching",
+      "offline-device": "QR-Code-Scannen"
     },
+    "connectivity_text": "Da dieses Gerät eine Verbindung hat, können Sie die Interaktionsoptionen mit anderen Wallets an Ihre Bedürfnisse anpassen. Um App-Switching zu aktivieren, installieren Sie die AirGap Wallet-App.",
     "continue_label": "Weiter",
-    "description": "In den Einstellungen kann diese Einstellung im Nachhinein wieder geändert werden"
+    "description": "Diese Einstellung kann später in den Einstellungen geändert werden"
   },
   "language-selection-settings": {
     "title": "Language Selection",
@@ -312,8 +325,17 @@
     "welcome-onboarding_label": "Welcome",
     "disclaimer_label": "Disclaimer",
     "installation-type_label": "Installation Type",
-    "advanced-mode-type_label": "Advanced Mode"
+    "advanced-mode-type_label": "Advanced Mode",
+    "vault-interaction_label": "Vault Interaktion"
   },
+
+  "vault-interaction-settings": {
+    "heading": "Vault-Interaktion",
+    "title": "Vault-Interaktion",
+    "device-connected_text": "Gerät ist mit dem Internet verbunden",
+    "note_text": "<span class=\"style__strong\">Hinweis:</span> Diese Einstellung ändert NICHT die Verbindungseinstellungen Ihres Geräts."
+  },
+
   "tab-secrets": {
     "title": "Secrets",
     "add-secret_label": "Secret hinzufügen",

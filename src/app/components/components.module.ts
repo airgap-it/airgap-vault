@@ -25,6 +25,7 @@ import { TransactionWarningComponent } from './transaction-warning/transaction-w
 import { TransactionComponent } from './transaction/transaction.component'
 import { VerifyKeyAltComponent } from './verify-key-alt/verify-key-alt.component'
 import { VerifyKeyComponent } from './verify-key/verify-key.component'
+import { InteractionSelectionComponent } from './interaction-selection/interaction-selection.component'
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     MessageSignResponseComponent,
     GridInputComponent,
     SecretOptionItemComponent,
-    KeyboardPopoverComponent
+    KeyboardPopoverComponent,
+    InteractionSelectionComponent
   ],
   imports: [
     IonicModule,
@@ -71,7 +73,8 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     MessageSignResponseComponent,
     GridInputComponent,
     SecretOptionItemComponent,
-    KeyboardPopoverComponent
+    KeyboardPopoverComponent,
+    InteractionSelectionComponent
   ],
   entryComponents: []
 })

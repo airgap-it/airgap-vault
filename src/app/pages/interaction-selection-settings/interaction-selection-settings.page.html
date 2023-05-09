@@ -3,31 +3,22 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ 'interaction-selection-settings.title' | translate }}</ion-title>
+    <ion-title>{{ 'interaction-selection-settings.header' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <h3 [innerHTML]="'interaction-selection-settings.heading' | translate"></h3>
+  <ion-header style="margin-top: 30%; margin-bottom: 5%;">
+    <h1><strong>{{ 'interaction-selection-settings.title' | translate }}</strong></h1>
+  </ion-header>
 
-  <ion-list lines="none" class="ion-padding-vertical">
-    <ion-radio-group [(ngModel)]="selectedType">
-      <ion-item detail="false" class="ion-no-padding">
-        <ion-label color="white">{{ 'interaction-selection-settings.selector.always' | translate }}</ion-label>
-        <ion-radio class="ion-no-margin" slot="end" [value]="interactionType.ALWAYS_ASK"></ion-radio>
-      </ion-item>
-      <ion-item detail="false" class="ion-no-padding">
-        <ion-label color="white">{{ 'interaction-selection-settings.selector.same-device' | translate }}</ion-label>
-        <ion-radio class="ion-no-margin" slot="end" [value]="interactionType.DEEPLINK"></ion-radio>
-      </ion-item>
-      <ion-item detail="false" class="ion-no-padding">
-        <ion-label color="white">{{ 'interaction-selection-settings.selector.offline-device' | translate }}</ion-label>
-        <ion-radio class="ion-no-margin" slot="end" [value]="interactionType.QR_CODE"></ion-radio>
-      </ion-item>
-    </ion-radio-group>
-  </ion-list>
+  <p style="margin-bottom: 10%;">
+    {{ 'interaction-selection-settings.connectivity_text' | translate }}
+  </p>
 
-  <p><i>{{ 'interaction-selection-settings.description' | translate }}</i></p>
+  <airgap-interaction-selection></airgap-interaction-selection>
+
+  <p style="margin-top: 5%;"><i>{{ 'interaction-selection-settings.description' | translate }}</i></p>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-button color="primary" shape="round" (click)="goToNextPage()">
