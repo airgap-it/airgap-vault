@@ -21,6 +21,7 @@ import { TouchEntropyComponent } from './touch-entropy/touch-entropy.component'
 import { TraceInputDirective } from './trace-input/trace-input.directive'
 import { TransactionWarningComponent } from './transaction-warning/transaction-warning.component'
 import { TransactionComponent } from './transaction/transaction.component'
+import { VerifyKeyAltComponent } from './verify-key-alt/verify-key-alt.component'
 import { VerifyKeyComponent } from './verify-key/verify-key.component'
 
 @NgModule({
@@ -34,6 +35,7 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     TouchEntropyComponent,
     TraceInputDirective,
     VerifyKeyComponent,
+    VerifyKeyAltComponent,
     MessageSignRequestComponent,
     MessageSignResponseComponent,
     GridInputComponent,
@@ -51,6 +53,7 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     TouchEntropyComponent,
     TraceInputDirective,
     VerifyKeyComponent,
+    VerifyKeyAltComponent,
     MessageSignRequestComponent,
     MessageSignResponseComponent,
     GridInputComponent,

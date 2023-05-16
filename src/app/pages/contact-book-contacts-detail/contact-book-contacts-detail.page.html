@@ -121,6 +121,9 @@
         <ion-input class="input_disabled" type="text" [value]="contact?.date || undefined"></ion-input>
       </ion-item>
     </ion-list>
+    <ion-button fill="outline" size="large" poition="center" *ngIf="state !== 'view'" (click)="onClickQRCode()">
+      <ion-icon slot="icon-only" name="qr-code-outline"></ion-icon>
+    </ion-button>
 
     <button class="delete-button" expand="block" *ngIf="state === 'edit'" (click)="onClickDelete()">
       {{ 'contact-book.label_delete_entry' | translate }}

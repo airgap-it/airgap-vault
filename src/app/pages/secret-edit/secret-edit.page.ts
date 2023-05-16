@@ -93,7 +93,7 @@ export class SecretEditPage {
 
   public goToSocialRecoverySetup(): void {
     this.navigationService
-      .routeWithState('/social-recovery-setup', { secret: this.secret })
+      .routeWithState('/social-recovery-generate-intro', { secret: this.secret })
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 

@@ -14,7 +14,12 @@ interface StaticSourcesExplorer {
     fun readIsolatedModulesScript(): ByteArray
 }
 
-interface DynamicSourcesExplorer<in M : JSModule> {
+interface DynamicSourcesExplorer {
+    fun removeModules(identifiers: List<String>)
+    fun removeAllModules()
+}
+
+interface SourcesExplorer<in M : JSModule> {
     fun listModules(): List<String>
 
     fun readModuleSources(module: M): Sequence<ByteArray>
@@ -55,6 +60,14 @@ class FileExplorer private constructor(
         }
     }
 
+    fun removeInstalledModules(identifiers: List<String>) {
+        filesExplorer.removeModules(identifiers)
+    }
+
+    fun removeAllInstalledModules() {
+        filesExplorer.removeAllModules()
+    }
+
     fun readModuleSources(module: JSModule): Sequence<ByteArray> =
         when (module) {
             is JSModule.Asset -> assetsExplorer.readModuleSources(module)
@@ -70,7 +83,7 @@ class FileExplorer private constructor(
         }
 
     private fun <T : JSModule> loadModules(
-        explorer: DynamicSourcesExplorer<T>,
+        explorer: SourcesExplorer<T>,
         constructor: (identifier: String, namespace: String?, preferredEnvironment: JSEnvironment.Type, paths: List<String>) -> T,
     ): List<T> = explorer.listModules().map { module ->
         val manifest = JSObject(explorer.readModuleManifest(module).decodeToString())
@@ -96,7 +109,7 @@ class FileExplorer private constructor(
     }
 }
 
-private class AssetsExplorer(private val context: Context) : StaticSourcesExplorer, DynamicSourcesExplorer<JSModule.Asset> {
+private class AssetsExplorer(private val context: Context) : StaticSourcesExplorer, SourcesExplorer<JSModule.Asset>  {
     override fun readJavaScriptEngineUtils(): ByteArray = context.assets.readBytes(JAVA_SCRIPT_ENGINE_UTILS)
     override fun readIsolatedModulesScript(): ByteArray = context.assets.readBytes(SCRIPT)
 
@@ -117,9 +130,19 @@ private class AssetsExplorer(private val context: Context) : StaticSourcesExplor
     }
 }
 
-private class FilesExplorer(private val context: Context) : DynamicSourcesExplorer<JSModule.Installed> {
+private class FilesExplorer(private val context: Context) : DynamicSourcesExplorer, SourcesExplorer<JSModule.Installed>  {
     private val modulesDir: File
         get() = File(context.filesDir, MODULES_DIR)
+
+    override fun removeModules(identifiers: List<String>) {
+        identifiers.forEach {
+            File(modulesDir, it).deleteRecursively()
+        }
+    }
+
+    override fun removeAllModules() {
+        modulesDir.deleteRecursively()
+    }
 
     override fun listModules(): List<String> = modulesDir.list()?.toList() ?: emptyList()
 

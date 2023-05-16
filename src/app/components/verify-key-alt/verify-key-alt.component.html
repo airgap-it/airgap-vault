@@ -1,0 +1,53 @@
+<div class="tags-wrapper">
+  <ion-button
+    class="tag"
+    shape="round"
+    color="tertiary"
+    *ngFor="let word of currentSelectedWords; let i = index"
+    [color]="selectedWordIndex === i ? 'primary' : 'tertiary'"
+    (click)="selectWord(i)"
+  >
+    <p class="number">{{ i + 1 }}</p>
+    <p class="text">{{ word }}</p>
+  </ion-button>
+  <ion-button class="tag current" fill="outline" shape="round" color="tertiary" *ngIf="currentSelectedWords.length < splittedSecret.length">
+    <p class="number">{{ currentSelectedWords.length + 1 }}</p>
+    <p class="text">{{ '' }}</p>
+  </ion-button>
+</div>
+
+<ion-row class="secret--container-40 ion-align-items-center">
+  <ion-col id="error" class="ion-padding error-wrapper" *ngIf="!isCompleted && !isCorrect() && promptedWords.length === 0">
+    <svg fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em" style="overflow: visible">
+      <path
+        d="M256 48C141.31 48 48 141.31 48 256s93.31 208 208 208 208-93.31 208-208S370.69 48 256 48zm75.31 260.69a16 16 0 11-22.62 22.62L256 278.63l-52.69 52.68a16 16 0 01-22.62-22.62L233.37 256l-52.68-52.69a16 16 0 0122.62-22.62L256 233.37l52.69-52.68a16 16 0 0122.62 22.62L278.63 256z"
+      ></path>
+    </svg>
+    <p [innerHTML]="'verify-key.incorrect_text' | translate"></p>
+  </ion-col>
+
+  <ion-col id="message" class="ion-padding error-wrapper" *ngIf="isCompleted && isCorrect() && promptedWords.length === 0">
+    <svg fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em" style="overflow: visible">
+      <path
+        d="M0 256C0 114.6 114.6 0 256 0s256 114.6 256 256-114.6 256-256 256S0 397.4 0 256zm371.8-44.2c10.9-10.9 10.9-28.7 0-39.6-10.9-10.9-28.7-10.9-39.6 0L224 280.4l-44.2-44.2c-10.9-10.9-28.7-10.9-39.6 0-10.9 10.9-10.9 28.7 0 39.6l64 64c10.9 10.9 28.7 10.9 39.6 0l128-128z"
+      ></path>
+    </svg>
+    <p class="ion-padding-bottom">{{ 'verify-key.success_text' | translate }}</p>
+  </ion-col>
+
+  <ion-col id="wordSelector" class="ion-padding-top" *ngIf="promptedWords.length > 0">
+    <ion-row class="ion-padding-horizontal" *ngFor="let word of promptedWords">
+      <ion-col>
+        <ion-button
+          expand="block"
+          shape="round"
+          [color]="isSelectedWord(word) ? 'primary' : 'tertiary'"
+          class="typography--mono"
+          (click)="useWord(word)"
+        >
+          {{ word }}
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-col>
+</ion-row>

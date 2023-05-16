@@ -22,6 +22,14 @@ class JSEvaluator {
         await modulesManager.registerModule(module, forProtocols: protocolIdentifiers)
     }
     
+    func deregisterModules(_ identifiers: [String]) async {
+        await modulesManager.deregisterModules(identifiers)
+    }
+    
+    func deregisterAllModules() async {
+        await modulesManager.deregisterAllModules()
+    }
+    
     func evaluatePreviewModule(_ module: JSModule) async throws -> [String: Any] {
         return try await self.webViewEnv.run(.load(.init(protocolType: nil)), in: module)
     }
@@ -145,6 +153,14 @@ class JSEvaluator {
         func registerModule(_ module: JSModule, forProtocols protocolIdentifiers: [String]) {
             modules[module.identifier] = module
             protocolIdentifiers.forEach { identifier in modules[identifier] = module }
+        }
+        
+        func deregisterModules(_ identifiers: [String]) {
+            identifiers.forEach { modules.removeValue(forKey: $0) }
+        }
+        
+        func deregisterAllModules() {
+            modules.removeAll()
         }
     }
     

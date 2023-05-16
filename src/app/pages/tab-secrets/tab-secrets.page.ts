@@ -6,6 +6,8 @@ import { SecretsService } from 'src/app/services/secrets/secrets.service'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 import { TabSecretPopoverComponent } from './tab-secret-popover/tab-secret-popover.component'
+import { ModeService } from 'src/app/services/mode/mode.service'
+import { ModeStrategy } from 'src/app/services/mode/strategy/ModeStrategy'
 
 @Component({
   selector: 'airgap-tab-secrets',
@@ -20,7 +22,8 @@ export class TabSecretsPage {
     private readonly popoverCtrl: PopoverController,
     public modalController: ModalController,
     public navigationService: NavigationService,
-    private secretsService: SecretsService
+    private secretsService: SecretsService,
+    private readonly modeService: ModeService
   ) {
     this.secrets = this.secretsService.getSecretsObservable()
   }
@@ -47,7 +50,11 @@ export class TabSecretsPage {
     const popover = await this.popoverCtrl.create({
       component: TabSecretPopoverComponent,
       componentProps: {
-        onClick: (): void => {
+        onClickNewSecret: (): void => {
+          popover.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+        },
+        onClickSyncWallets: (): void => {
+          this.syncWallets()
           popover.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
         }
       },
@@ -56,5 +63,10 @@ export class TabSecretsPage {
     })
 
     popover.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+  }
+
+  public async syncWallets(): Promise<void> {
+    const strategy: ModeStrategy = await this.modeService.strategy()
+    await strategy.syncAll()
   }
 }
