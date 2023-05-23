@@ -1,8 +1,10 @@
 import { AirGapAngularCoreModule } from '@airgap/angular-core'
+import { AirGapAngularNgRxModule } from '@airgap/angular-ngrx'
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
-import { FormsModule } from '@angular/forms'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { IonicModule } from '@ionic/angular'
+import { ReactiveComponentModule } from '@ngrx/component'
 import { TranslateModule } from '@ngx-translate/core'
 import { QRCodeModule } from 'angularx-qrcode'
 
@@ -42,7 +44,18 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     SecretOptionItemComponent,
     KeyboardPopoverComponent
   ],
-  imports: [IonicModule, PipesModule, CommonModule, FormsModule, TranslateModule, QRCodeModule, AirGapAngularCoreModule],
+  imports: [
+    IonicModule,
+    PipesModule,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ReactiveComponentModule,
+    TranslateModule,
+    QRCodeModule,
+    AirGapAngularCoreModule,
+    AirGapAngularNgRxModule
+  ],
   exports: [
     EntropyProgressComponent,
     ProgressFooterComponent,

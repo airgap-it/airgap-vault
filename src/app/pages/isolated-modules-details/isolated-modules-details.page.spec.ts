@@ -1,20 +1,19 @@
 // import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
 // import { IonicModule } from '@ionic/angular'
+// import { IsolatedModulesDetailsPage } from './isolated-modules-details.page'
 
-// import { ModulePreviewPage } from './module-preview.page'
-
-// describe('ModulePreviewPage', () => {
-//   let component: ModulePreviewPage
-//   let fixture: ComponentFixture<ModulePreviewPage>
+// describe('IsolatedModulesDetailsPage', () => {
+//   let component: IsolatedModulesDetailsPage
+//   let fixture: ComponentFixture<IsolatedModulesDetailsPage>
 
 //   beforeEach(
 //     waitForAsync(() => {
 //       TestBed.configureTestingModule({
-//         declarations: [ModulePreviewPage],
+//         declarations: [IsolatedModulesDetailsPage],
 //         imports: [IonicModule.forRoot()]
 //       }).compileComponents()
 
-//       fixture = TestBed.createComponent(ModulePreviewPage)
+//       fixture = TestBed.createComponent(IsolatedModulesDetailsPage)
 //       component = fixture.componentInstance
 //       fixture.detectChanges()
 //     })

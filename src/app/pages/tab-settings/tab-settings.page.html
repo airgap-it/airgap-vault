@@ -37,6 +37,11 @@
     {{ 'tab-settings.advanced-mode-type_label' | translate }}
   </ion-item>
 
+  <ion-item lines="True" (click)="goToIsolatedModules()" detail="true">
+    <ion-icon name="cube-outline" slot="start"></ion-icon>
+    {{ 'danger-zone.isolated-modules_label' | translate }}
+  </ion-item>
+
   <ion-list-header>
     <ion-label>{{ 'tab-settings.actions_label' | translate }}</ion-label>
   </ion-list-header>

@@ -11,7 +11,11 @@ struct ModuleManifest: Codable {
     let name: String
     let version: String
     let author: String
-    let signature: String
+    let url: String?
+    let email: String?
+    let repository: String?
+    let publicKey: String
+    let description: String
     let src: Src?
     let res: Res?
     let include: [String]
@@ -22,7 +26,7 @@ struct ModuleManifest: Codable {
     }
     
     struct Res: Codable {
-        let symbol: String?
+        let symbol: [String: String]
     }
     
     struct JSEnv: Codable {

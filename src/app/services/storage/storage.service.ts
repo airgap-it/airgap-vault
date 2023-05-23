@@ -47,7 +47,8 @@ export enum VaultStorageKey {
   AIRGAP_CONTACTS_RECOMMENDED_LIST = 'airgap-contacts-recommended-list',
   ADDRESS_BOOK_DISABLED = 'ADDRESS_BOOK_DISABLED',
   ADDRESS_BOOK_SUGGESTIONS_DISABLED = 'ADDRESS_BOOK_SUGGESTIONS_DISABLED',
-  ADDRESS_BOOK_ONBOARDING_DISABLED = 'ADDRESS_BOOK_ONBOARDING_DISABLED'
+  ADDRESS_BOOK_ONBOARDING_DISABLED = 'ADDRESS_BOOK_ONBOARDING_DISABLED',
+  ISOLATED_MODULES_ONBOARDING_DISABLED = 'ISOLATED_MODULES_ONBOARDING_DISABLED'
 }
 
 interface VaultStorageKeyReturnType {
@@ -66,6 +67,7 @@ interface VaultStorageKeyReturnType {
   [VaultStorageKey.ADDRESS_BOOK_DISABLED]: boolean
   [VaultStorageKey.ADDRESS_BOOK_SUGGESTIONS_DISABLED]: boolean
   [VaultStorageKey.ADDRESS_BOOK_ONBOARDING_DISABLED]: boolean
+  [VaultStorageKey.ISOLATED_MODULES_ONBOARDING_DISABLED]: boolean
 }
 
 type VaultStorageKeyReturnDefaults = { [key in VaultStorageKey]: VaultStorageKeyReturnType[key] }
@@ -85,7 +87,8 @@ const defaultValues: VaultStorageKeyReturnDefaults = {
   [VaultStorageKey.AIRGAP_CONTACTS_RECOMMENDED_LIST]: [],
   [VaultStorageKey.ADDRESS_BOOK_DISABLED]: false,
   [VaultStorageKey.ADDRESS_BOOK_SUGGESTIONS_DISABLED]: false,
-  [VaultStorageKey.ADDRESS_BOOK_ONBOARDING_DISABLED]: false
+  [VaultStorageKey.ADDRESS_BOOK_ONBOARDING_DISABLED]: false,
+  [VaultStorageKey.ISOLATED_MODULES_ONBOARDING_DISABLED]: false
 }
 
 @Injectable({
