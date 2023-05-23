@@ -65,7 +65,8 @@ function createAssetModule(module) {
     name: packageJson.name,
     version: packageJson.version,
     author: packageJson.author,
-    signature: "" /* TODO */,
+    publicKey: "" /* TODO */,
+    description: "",
     src: {
       namespace
     },

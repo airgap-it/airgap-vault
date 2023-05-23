@@ -11,6 +11,9 @@ import it.airgap.vault.plugin.isolatedmodules.js.*
 import it.airgap.vault.util.*
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.launch
+import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters
+import org.bouncycastle.crypto.signers.Ed25519Signer
+import org.json.JSONObject
 
 @CapacitorPlugin
 class IsolatedModules : Plugin() {
@@ -31,11 +34,46 @@ class IsolatedModules : Plugin() {
                     resolve(
                         JSObject(
                             """
-                        {
-                            "module": $moduleJson,
-                            "manifest": ${JSObject(manifest.decodeToString())}
+                                {
+                                    "module": $moduleJson,
+                                    "manifest": ${JSObject(manifest.decodeToString())}
+                                }
+                            """.trimIndent()
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    @PluginMethod
+    fun verifyDynamicModule(call: PluginCall) {
+        call.executeCatching {
+            assertReceived(Param.PATH, Param.DIRECTORY)
+
+            activity.lifecycleScope.launch {
+                executeCatching {
+                    val module = fileExplorer.loadPreviewModule(path, directory)
+                    val manifest = fileExplorer.readModuleManifest(module)
+                    val files = fileExplorer.readModuleFiles(module)
+
+                    val message = (files + manifest).reduce(ByteArray::plus)
+                    val publicKey = JSObject(manifest.decodeToString()).getString("publicKey")!!
+
+                    val verified = Ed25519Signer()
+                        .apply {
+                            init(false, Ed25519PublicKeyParameters(publicKey.asByteArray()))
+                            update(message, 0, message.size)
                         }
-                    """.trimIndent()
+                        .verifySignature(module.signature.asByteArray())
+
+                    resolve(
+                        JSObject(
+                            """
+                                {
+                                    "verified": $verified
+                                }
+                            """.trimIndent()
                         )
                     )
                 }
@@ -54,6 +92,31 @@ class IsolatedModules : Plugin() {
                     jsEvaluator.await().registerModule(module, protocolIdentifiers)
 
                     resolve()
+                }
+            }
+        }
+    }
+
+    @PluginMethod
+    fun readDynamicModule(call: PluginCall) {
+        call.executeCatching {
+            assertReceived(Param.IDENTIFIER)
+
+            activity.lifecycleScope.launch {
+                executeCatching {
+                    val module = fileExplorer.loadInstalledModule(identifier)
+                    val manifest = fileExplorer.readModuleManifest(module)
+
+                    resolve(
+                        JSObject(
+                            """
+                                {
+                                    "manifest": ${JSObject(manifest.decodeToString())},
+                                    "installedAt": "${module.installedAt}"
+                                }
+                            """.trimIndent()
+                        )
+                    )
                 }
             }
         }
@@ -84,7 +147,7 @@ class IsolatedModules : Plugin() {
             call.executeCatching {
                 val modules = fileExplorer.loadAssetModules() + fileExplorer.loadInstalledModules()
 
-                resolve(jsEvaluator.await().evaluateLoadModules(modules, protocolType))
+                resolve(jsEvaluator.await().evaluateLoadModules(modules, protocolType, ignoreProtocols))
             }
         }
     }
@@ -120,6 +183,74 @@ class IsolatedModules : Plugin() {
         }
     }
 
+    @PluginMethod
+    fun batchCallMethod(call: PluginCall) {
+        call.executeCatching {
+            assertReceived(Param.OPTIONS)
+
+            activity.lifecycleScope.launch {
+                executeCatching {
+                    val jsEvaluator = jsEvaluator.await()
+
+                    val values = jsEvaluator.singleRun { runRef ->
+                        options.toList<JSONObject>().asyncMap { jsonObject ->
+                            try {
+                                val jsObject = JSObject(jsonObject.toString())
+                                assertReceivedIn(jsObject, Param.TARGET, Param.METHOD)
+
+                                val target = jsObject.getString(Param.TARGET)?.let { JSCallMethodTarget.fromString(it) }!!
+                                val method = jsObject.getString(Param.METHOD)!!
+                                val args = if (jsObject.has(Param.ARGS)) JSArray(jsObject.getJSONArray(Param.ARGS).toString()) else null
+                                val protocolIdentifier = jsObject.getString(Param.PROTOCOL_IDENTIFIER)
+                                val networkId = jsObject.getString(Param.NETWORK_ID)
+                                val moduleIdentifier = jsObject.getString(Param.MODULE_IDENTIFIER)
+
+                                val value = when (target) {
+                                    JSCallMethodTarget.OfflineProtocol -> {
+                                        assertReceivedIn(jsObject, Param.PROTOCOL_IDENTIFIER)
+                                        jsEvaluator.evaluateCallOfflineProtocolMethod(method, args, protocolIdentifier!!, runRef)
+                                    }
+                                    JSCallMethodTarget.OnlineProtocol -> {
+                                        assertReceivedIn(jsObject, Param.PROTOCOL_IDENTIFIER)
+                                        jsEvaluator.evaluateCallOnlineProtocolMethod(method, args, protocolIdentifier!!, networkId, runRef)
+                                    }
+                                    JSCallMethodTarget.BlockExplorer -> {
+                                        assertReceivedIn(jsObject, Param.PROTOCOL_IDENTIFIER)
+                                        jsEvaluator.evaluateCallBlockExplorerMethod(method, args, protocolIdentifier!!, networkId, runRef)
+                                    }
+                                    JSCallMethodTarget.V3SerializerCompanion -> {
+                                        assertReceivedIn(jsObject, Param.MODULE_IDENTIFIER)
+                                        jsEvaluator.evaluateCallV3SerializerCompanionMethod(method, args, moduleIdentifier!!, runRef)
+                                    }
+                                }
+
+                                JSObject("""
+                                    {
+                                        "type": "success",
+                                        "value": ${value.get("value")}
+                                    }
+                                """.trimIndent())
+                            } catch (e: Exception) {
+                                JSObject("""
+                                    {
+                                        "type": "error",
+                                        "error": "${e.message}"
+                                    }
+                                """.trimIndent())
+                            }
+                        }
+                    }
+
+                    resolve(JSObject("""
+                        {
+                            "values": ${JSArray(values)}
+                        }
+                    """.trimMargin()))
+                }
+            }
+        }
+    }
+
     override fun handleOnDestroy() {
         super.handleOnDestroy()
         activity.lifecycleScope.launch {
@@ -137,13 +268,16 @@ class IsolatedModules : Plugin() {
         get() = getString(Param.IDENTIFIER)!!
 
     private val PluginCall.identifiers: List<String>?
-        get() = getArray(Param.PROTOCOL_IDENTIFIERS, null)?.toList()
+        get() = getArray(Param.IDENTIFIERS, null)?.toList()
 
     private  val PluginCall.protocolIdentifiers: List<String>
         get() = getArray(Param.PROTOCOL_IDENTIFIERS).toList()
 
     private val PluginCall.protocolType: JSProtocolType?
         get() = getString(Param.PROTOCOL_TYPE)?.let { JSProtocolType.fromString(it) }
+
+    private val PluginCall.ignoreProtocols: JSArray?
+        get() = getArray(Param.IGNORE_PROTOCOLS, null)
 
     private val PluginCall.target: JSCallMethodTarget
         get() = getString(Param.TARGET)?.let { JSCallMethodTarget.fromString(it) }!!
@@ -163,6 +297,9 @@ class IsolatedModules : Plugin() {
     private val PluginCall.networkId: String?
         get() = getString(Param.NETWORK_ID)
 
+    private val PluginCall.options: JSArray
+        get() = getArray(Param.OPTIONS)
+
     private object Param {
         const val PATH = "path"
         const val DIRECTORY = "directory"
@@ -170,11 +307,13 @@ class IsolatedModules : Plugin() {
         const val IDENTIFIERS = "identifiers"
         const val PROTOCOL_IDENTIFIERS = "protocolIdentifiers"
         const val PROTOCOL_TYPE = "protocolType"
+        const val IGNORE_PROTOCOLS = "ignoreProtocols"
         const val TARGET = "target"
         const val METHOD = "method"
         const val ARGS = "args"
         const val PROTOCOL_IDENTIFIER = "protocolIdentifier"
         const val MODULE_IDENTIFIER = "moduleIdentifier"
         const val NETWORK_ID = "networkId"
+        const val OPTIONS = "options"
     }
 }

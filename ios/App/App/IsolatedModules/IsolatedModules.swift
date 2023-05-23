@@ -7,7 +7,7 @@
 
 import Foundation
 import Capacitor
-import WebKit
+import CryptoKit
 
 @objc(IsolatedModules)
 public class IsolatedModules: CAPPlugin {
@@ -15,7 +15,7 @@ public class IsolatedModules: CAPPlugin {
     private lazy var jsEvaluator: JSEvaluator = .init(fileExplorer: fileExplorer)
     
     @objc func previewDynamicModule(_ call: CAPPluginCall) {
-        call.assertReceived(forMethod: "previewModule", requiredParams: Param.PATH, Param.DIRECTORY)
+        call.assertReceived(forMethod: "previewDynamicModule", requiredParams: Param.PATH, Param.DIRECTORY)
         
         do {
             guard let path = call.path, let directory = call.directory else {
@@ -25,8 +25,11 @@ public class IsolatedModules: CAPPlugin {
             Task {
                 do {
                     let module = try fileExplorer.loadPreviewModule(atPath: path, locatedIn: directory)
-                    let manifest = try fileExplorer.readModuleManifest(module)
-                    let moduleJSON = try await jsEvaluator.evaluatePreviewModule(module)
+                    let manifest = try fileExplorer.readModuleManifest(.preview(module))
+                    let moduleJSON = try await jsEvaluator.evaluatePreviewModule(
+                        .preview(module),
+                        ignoringProtocols: call.ignoreProtocols
+                    )
                     
                     call.resolve([
                         "module": moduleJSON,
@@ -41,8 +44,41 @@ public class IsolatedModules: CAPPlugin {
         }
     }
     
+    @objc func verifyDynamicModule(_ call: CAPPluginCall) {
+        call.assertReceived(forMethod: "verifyDynamicModule", requiredParams: Param.PATH, Param.DIRECTORY)
+        
+        do {
+            guard let path = call.path, let directory = call.directory else {
+                throw Error.invalidData
+            }
+            
+            Task {
+                do {
+                    let module = try fileExplorer.loadPreviewModule(atPath: path, locatedIn: directory)
+                    let manifest = try fileExplorer.readModuleManifest(.preview(module))
+                    let files = try fileExplorer.readModuleFiles(.preview(module))
+                    
+                    let message = (files + [manifest]).reduce(Data()) { acc, next in acc + next }
+
+                    let jsonDecoder = JSONDecoder()
+                    let publicKey = try jsonDecoder.decode(ModuleManifest.self, from: manifest).publicKey
+
+                    let verified = try Curve25519.Signing.PublicKey(rawRepresentation: publicKey.asBytes()).isValidSignature(module.signature, for: message)
+                    
+                    call.resolve([
+                        "verified": verified
+                    ])
+                } catch {
+                    call.reject("Error: \(error)")
+                }
+            }
+        } catch {
+            call.reject("Error: \(error)")
+        }
+    }
+    
     @objc func registerDynamicModule(_ call: CAPPluginCall) {
-        call.assertReceived(forMethod: "registerModule", requiredParams: Param.IDENTIFIER, Param.PROTOCOL_IDENTIFIERS)
+        call.assertReceived(forMethod: "registerDynamicModule", requiredParams: Param.IDENTIFIER, Param.PROTOCOL_IDENTIFIERS)
         
         do {
             guard let identifier = call.identifier, let protocolIdentifiers = call.protocolIdentifiers else {
@@ -52,9 +88,35 @@ public class IsolatedModules: CAPPlugin {
             Task {
                 do {
                     let module = try fileExplorer.loadInstalledModule(identifier)
-                    await jsEvaluator.registerModule(module, forProtocols: protocolIdentifiers)
+                    await jsEvaluator.registerModule(.installed(module), forProtocols: protocolIdentifiers)
                     
                     call.resolve()
+                } catch {
+                    call.reject("Error: \(error)")
+                }
+            }
+        } catch {
+            call.reject("Error: \(error)")
+        }
+    }
+    
+    @objc func readDynamicModule(_ call: CAPPluginCall) {
+        call.assertReceived(forMethod: "readDynamicModule", requiredParams: Param.IDENTIFIER)
+        
+        do {
+            guard let identifier = call.identifier else {
+                throw Error.invalidData
+            }
+            
+            Task {
+                do {
+                    let module = try fileExplorer.loadInstalledModule(identifier)
+                    let manifest = try fileExplorer.readModuleManifest(.installed(module))
+                    
+                    call.resolve([
+                        "manifest": try JSONSerialization.jsonObject(with: manifest),
+                        "installedAt": "\(module.installedAt)"
+                    ])
                 } catch {
                     call.reject("Error: \(error)")
                 }
@@ -85,9 +147,15 @@ public class IsolatedModules: CAPPlugin {
         Task {
             do {
                 let protocolType = call.protocolType
-                let modules: [JSModule] = try fileExplorer.loadAssetModules() + (try fileExplorer.loadInstalledModules())
+                let modules: [JSModule] = try fileExplorer.loadAssetModules().map({ .asset($0) }) + (try fileExplorer.loadInstalledModules().map({ .installed($0) }))
                 
-                call.resolve(try await jsEvaluator.evaluateLoadModules(modules, for: protocolType))
+                call.resolve(
+                    try await jsEvaluator.evaluateLoadModules(
+                        modules,
+                        for: protocolType,
+                        ignoringProtocols: call.ignoreProtocols
+                    )
+                )
             } catch {
                 call.reject("Error: \(error)")
             }
@@ -165,6 +233,120 @@ public class IsolatedModules: CAPPlugin {
         }
     }
     
+    @objc func batchCallMethod(_ call: CAPPluginCall) {
+        call.assertReceived(forMethod: "batchCallMethod", requiredParams: Param.OPTIONS)
+        
+        do {
+            guard let options = call.options else {
+                throw Error.invalidData
+            }
+            
+            Task {
+                do {
+                    let values = try await self.jsEvaluator.singleRun { runRef in
+                        try await options.asyncMap { jsValue in
+                            do {
+                                guard let jsObject = jsValue as? JSObject else {
+                                    throw Error.invalidData
+                                }
+                                
+                                call.assertReceived(in: jsObject, forMethod: "batchCallMethod", requiredParams: Param.TARGET, Param.METHOD)
+                                
+                                guard let targetRaw = jsObject[Param.TARGET] as? String,
+                                      let target = JSCallMethodTarget.init(rawValue: targetRaw),
+                                      let method = jsObject[Param.METHOD] as? String else {
+                                    throw Error.invalidData
+                                }
+                                
+                                let args = jsObject[Param.ARGS] as? JSArray
+                                let protocolIdentifier = jsObject[Param.PROTOCOL_IDENTIFIER] as? String
+                                let networkID = jsObject[Param.NETWORK_ID] as? String
+                                let moduleIdentifier = jsObject[Param.MODULE_IDENTIFIER] as? String
+                                
+                                let value = try await {
+                                    switch target {
+                                    case .offlineProtocol:
+                                        call.assertReceived(in: jsObject, forMethod: "batchCallMethod", requiredParams: Param.PROTOCOL_IDENTIFIER)
+                                        
+                                        guard let protocolIdentifier = protocolIdentifier else {
+                                            throw Error.invalidData
+                                        }
+                                        
+                                        return try await self.jsEvaluator.evaluateCallOfflineProtocolMethod(
+                                            method,
+                                            ofProtocol: protocolIdentifier,
+                                            withArgs: args,
+                                            runRef: runRef
+                                        )
+                                    case .onlineProtocol:
+                                        call.assertReceived(in: jsObject, forMethod: "batchCallMethod", requiredParams: Param.PROTOCOL_IDENTIFIER)
+                                        
+                                        guard let protocolIdentifier = protocolIdentifier else {
+                                            throw Error.invalidData
+                                        }
+                                        
+                                        return try await self.jsEvaluator.evaluateCallOnlineProtocolMethod(
+                                            method,
+                                            ofProtocol: protocolIdentifier,
+                                            onNetwork: networkID,
+                                            withArgs: args,
+                                            runRef: runRef
+                                        )
+                                    case .blockExplorer:
+                                        call.assertReceived(in: jsObject, forMethod: "batchCallMethod", requiredParams: Param.PROTOCOL_IDENTIFIER)
+                                        
+                                        guard let protocolIdentifier = protocolIdentifier else {
+                                            throw Error.invalidData
+                                        }
+                                        
+                                        return try await self.jsEvaluator.evaluateCallBlockExplorerMethod(
+                                            method,
+                                            ofProtocol: protocolIdentifier,
+                                            onNetwork: networkID,
+                                            withArgs: args,
+                                            runRef: runRef
+                                        )
+                                    case .v3SerializerCompanion:
+                                        call.assertReceived(in: jsObject, forMethod: "batchCallMethod", requiredParams: Param.MODULE_IDENTIFIER)
+                                        
+                                        guard let moduleIdentifier = moduleIdentifier else {
+                                            throw Error.invalidData
+                                        }
+                                        
+                                        return try await self.jsEvaluator.evaluateCallV3SerializerCompanionMethod(
+                                            method,
+                                            ofModule: moduleIdentifier,
+                                            withArgs: args,
+                                            runRef: runRef
+                                        )
+                                    }
+                                }()
+                                
+                                return [
+                                    "type": "success",
+                                    "value": value["value"]
+                                ]
+                            } catch {
+                                return [
+                                    "type": "error",
+                                    "error": "\(error)"
+                                ]
+                            }
+                        }
+                    }
+                    
+                    call.resolve([
+                        "values": values
+                    ])
+                } catch {
+                    call.reject("Error: \(error)")
+                }
+            }
+        } catch {
+            call.reject("Error: \(error)")
+        }
+    }
+    
     struct Param {
         static let PATH = "path"
         static let DIRECTORY = "directory"
@@ -172,12 +354,14 @@ public class IsolatedModules: CAPPlugin {
         static let IDENTIFIERS = "identifiers"
         static let PROTOCOL_IDENTIFIERS = "protocolIdentifiers"
         static let PROTOCOL_TYPE = "protocolType"
+        static let IGNORE_PROTOCOLS = "ignoreProtocols"
         static let TARGET = "target"
         static let METHOD = "method"
         static let ARGS = "args"
         static let PROTOCOL_IDENTIFIER = "protocolIdentifier"
         static let MODULE_IDENTIFIER = "moduleIdentifier"
         static let NETWORK_ID = "networkId"
+        static let OPTIONS = "options"
     }
     
     enum Error: Swift.Error {
@@ -218,16 +402,28 @@ private extension CAPPluginCall {
         return .init(rawValue: protocolType)
     }
     
+    var ignoreProtocols: [String]? {
+        return getArray(IsolatedModules.Param.IGNORE_PROTOCOLS)?.compactMap {
+            if let string = $0 as? String {
+                return string
+            } else {
+                return nil
+            }
+        }
+    }
+    
     var target: JSCallMethodTarget? {
         guard let target = getString(IsolatedModules.Param.TARGET) else { return nil }
         return .init(rawValue: target)
     }
     
     var method: String? { return getString(IsolatedModules.Param.METHOD) }
-    var args: JSArray? { return getArray(IsolatedModules.Param.ARGS)}
+    var args: JSArray? { return getArray(IsolatedModules.Param.ARGS) }
     
     var protocolIdentifier: String? { return getString(IsolatedModules.Param.PROTOCOL_IDENTIFIER) }
     var moduleIdentifier: String? { return getString(IsolatedModules.Param.MODULE_IDENTIFIER) }
     
     var networkID: String? { return getString(IsolatedModules.Param.NETWORK_ID) }
+    
+    var options: JSArray? { return getArray(IsolatedModules.Param.OPTIONS) }
 }
