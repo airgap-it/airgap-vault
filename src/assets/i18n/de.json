@@ -188,7 +188,7 @@
     "text": "Wir haben Ihren Geheimschlüssel generiert, er besteht aus eine Wortabfolge.",
     "description": "Stellen Sie sicher, dass Sie die nachfolgenden Regeln verstanden haben und einhalten werden. Diese ermöglichen einen sicheren Zugriff auf Ihre Konten.",
     "rules-list": {
-      "item-1_text": "Notieren Sie die Wortabfolge auf einem Stück Papier.",
+      "item-1_text": "Notieren Sie die Wortabfolge auf einem Stück Papier oder gravieren Sie sie auf eine Metal Recovery Plate.",
       "item-2_text": "Halten Sie die Wortabfolge strikt ein.",
       "item-3_text": "Überprüfen Sie die Schreibweise jedes Wortes.",
       "item-4_text": "Bewahren Sie das Stück Papier an einem sicheren Ort auf!",
@@ -274,6 +274,12 @@
     "title": "Soziale Wiederherstellung",
     "text": "Ordnen Sie die Wörter in die richtige Reihenfolge, indem Sie jeweils das betreffende Wort anwählen."
   },
+  "contacts-delete-popover": { 
+    "title": "Einträge zurücksetzen", 
+    "text": "Diese Aktion wird alle Ihre gespeicherten Einträge löschen. Möchten Sie fortfahren?", 
+    "cancel_label": "Abbrechen", 
+    "delete_label": "Ok" 
+  },
   "tab-scan": {
     "title": "QR Code Scanner",
     "text": "QR Code von AirGap Wallet einlesen.",
@@ -310,8 +316,13 @@
   },
   "tab-secrets": {
     "title": "Secrets",
-    "add-secret_label": "Add Secret",
-    "search_placeholder": "Search Secret"
+    "add-secret_label": "Secret hinzufügen",
+    "search_placeholder": "Secrets durchsuchen",
+    "tab-secret-popover":{
+      "title":"Secret Verwaltung",
+      "add-secret_label": "Secret hinzufügen",
+      "sync-all_label": "Alle Accounts mit AirGap Wallet synchronisieren"
+    }
   },
   "tab-wallets": {
     "title": "Konten",

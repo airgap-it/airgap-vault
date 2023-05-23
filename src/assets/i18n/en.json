@@ -166,6 +166,38 @@
       "retry-button_label": "Retry"
     }
   },
+  "social-recovery-generate": {
+    "intro-state-1-title": "Social Recovery",
+    "intro-state-1-text1": "With Social Recovery, you can create secret shares and distribute them to social contacts you trust.",
+    "intro-state-1-text2": "You can recover a lost secret if you have a set number of these secret shares.",
+    "intro-state-2-title": "Distribute Your Shares",
+    "intro-state-2-text1": "The idea is to have different shares, which by itself are useless, but together allow you to restore your secret.",
+    "intro-state-2-text2": "You can distribute these shares to different locations or people you trust.",
+    "intro-state-2-text3": "So don't worry, your grandma won't be able to restore your secret with the share that you stored at her place.",
+    "intro-state-3-title1": "How Social Recovery Works",
+    "intro-state-3-title2": "Choose Number of Shares",
+    "intro-state-3-text1": "Begin by specifying how many social shares you'd like to create. You'll alsso need to define how many shares are needed to recover your secret.",
+    "intro-state-3-title3": "Store and Verify Each Share",
+    "intro-state-3-text2": "We will create different social shares for you. Make a note of for each of them. In a next step, you'll be asked to verify each share to make sure that you've copied them correctly.",
+    "intro-state-3-title4": "Not the Same as Your Passphrase",
+    "intro-state-3-text3": "Although they might look the same, social shares are not the same as your passphrase.",
+    "setup-state-1-text1": "Select the number of social shares you wish to create",
+    "setup-state-2-text1": "Creating {{numberOfShares}} shares",
+    "setup-state-2-text2": "Select the number of social shares needed to recover your secret",
+    "rules-heading": "Keep this rule in mind",
+    "rules-text1": "Write these words down on a piece of paper or a metal plate",
+    "rules-text2": "The words need to be in the correct order",
+    "rules-text3": "Check the spelling of each word",
+    "rules-text4": "Store the written down secret in a safe place",
+    "rules-text5": "Do not take a screenshot or photo and do not photocopy your secret",
+    "rules-text6": "Do not upload your secret to the cloud",
+    "share-show-heading": "Write down all words on a piece of paper, remember to follow the rules. We recommend to enumerate the terms.",
+    "finish-title": "Social Recovery Generation Successful!",
+    "finish-header": "You've successfully created social recovery shares for your secret.",
+    "finish-warning-title": "Remember",
+    "finish-warning-paragraph": "You created {{ numberOfShares }} shares, of which you'll need at least {{ sharesRequired }} to recover.",
+    "finish-button": "Finish"
+  },
   "secret-service": {
     "alert": {
       "title": "Duplicate Secret",
@@ -198,7 +230,7 @@
     "description": "Make sure you understand these rules that ensure you will always have safe access to your accounts.",
     "confirm": "Please take notice and click the checkboxes:",
     "rules-list": {
-      "item-1_text": "Write these words down on a piece of paper",
+      "item-1_text": "Write these words down on a piece of paper or engrave it on a Metal Recovery Plate",
       "item-2_text": "The words need to be in order",
       "item-3_text": "Check the spelling of each word",
       "item-4_text": "Keep the piece of paper in a safe place",
@@ -251,7 +283,7 @@
   },
   "verify-key": {
     "incorrect_text": "Your secret does not match the generated one. Make sure you've chosen the correct words. <br /> To correct mistakes, simply select a wrong word and choose the correct one.",
-    "success_text": "You have successfully verified this secret.",
+    "success_text": "Share verified successfully!",
     "continue_label": "Continue"
   },
   "social-recovery-import": {
@@ -324,6 +356,18 @@
     "label_suggestions": "Suggestions",
     "label_note_disable": "Note: You can disable this option later in the settings"
   },
+  "contacts-delete-popover": {
+    "title": "Reset Entries",
+    "text": "This action will delete all of your saved entries. Do you want to continue?",
+    "cancel_label": "Cancel",
+    "delete_label": "Ok"
+  },
+  "contact-book-scan": {
+    "title": "Contact Book QR Code Scanner",
+    "text": "Scan a QR code of an address to add it to your contacts",
+    "empty-state_heading": "In order to scan QR codes, AirGap Vault needs the <span class=\"style__strong color__primary\">camera permission</span>.",
+    "grant-permission_label": "Grant permission"
+  },
   "tab-scan": {
     "title": "QR Code Scanner",
     "text": "Scan a QR Code from AirGap Wallet",
@@ -359,12 +403,20 @@
     "advanced-mode-type_label": "Advanced Mode",
     "advanced-features_label": "Advanced Features",
     "address_book_label": "Address Book",
-    "configure_address_book_label": "Configure Address Book"
+    "address_book_settings_label": "Address Book Settings",
+    "settings_label": "Settings",
+    "actions_label": "Actions"
   },
   "tab-secrets": {
-    "title": "Secrets",
+    "title": "Secret",
     "add-secret_label": "Add Secret",
-    "search_placeholder": "Search Secret"
+    "search_placeholder": "Search Secret",
+    "tab-secret-popover":{
+      "title":"Secret Management",
+      "add-secret_label": "Add Secret",
+      "sync-all_label": "Sync all accounts with AirGap Wallet"
+
+    }
   },
   "tab-wallets": {
     "title": "Accounts",

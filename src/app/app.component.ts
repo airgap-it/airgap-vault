@@ -16,7 +16,7 @@ import { AfterViewInit, Component, Inject, NgZone } from '@angular/core'
 import { AppPlugin, URLOpenListenerEvent } from '@capacitor/app'
 import { SplashScreenPlugin } from '@capacitor/splash-screen'
 import { StatusBarPlugin, Style } from '@capacitor/status-bar'
-import { Platform } from '@ionic/angular'
+import { ModalController, Platform } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 import { first } from 'rxjs/operators'
 
@@ -33,6 +33,7 @@ import { SaplingNativeService } from './services/sapling-native/sapling-native.s
 import { SecretsService } from './services/secrets/secrets.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
 import { LanguagesType, VaultStorageKey, VaultStorageService } from './services/storage/storage.service'
+import { Router } from '@angular/router'
 
 declare let window: Window & { airGapHasStarted: boolean }
 
@@ -63,6 +64,9 @@ export class AppComponent implements AfterViewInit {
     private readonly httpClient: HttpClient,
     private readonly saplingNativeService: SaplingNativeService,
     private readonly moduleService: VaultModulesService,
+    private readonly router: Router,
+    private readonly modalController: ModalController,
+
     @Inject(APP_PLUGIN) private readonly app: AppPlugin,
     @Inject(SECURITY_UTILS_PLUGIN) private readonly securityUtils: SecurityUtilsPlugin,
     @Inject(SPLASH_SCREEN_PLUGIN) private readonly splashScreen: SplashScreenPlugin,
@@ -95,6 +99,19 @@ export class AppComponent implements AfterViewInit {
 
   public async ngAfterViewInit(): Promise<void> {
     await this.platform.ready()
+    if (this.platform.is('android')) {
+      this.platform.backButton.subscribeWithPriority(-1, async () => {
+        if (this.modalController.getTop()) {
+          const modal = await this.modalController.getTop()
+          if (modal) {
+            this.modalController.dismiss()
+            return
+          }
+        } else {
+          this.navigationService.handleAndroidBackNavigation(this.router.url)
+        }
+      })
+    }
     this.app.addListener('appUrlOpen', async (data: URLOpenListenerEvent) => {
       await this.isInitialized.promise
       if (data.url === DEEPLINK_VAULT_PREFIX || data.url.startsWith(DEEPLINK_VAULT_ADD_ACCOUNT)) {
@@ -157,8 +174,9 @@ export class AppComponent implements AfterViewInit {
     ])
     const protocols = await this.moduleService.loadProtocols('offline', [MainProtocolSymbols.XTZ_SHIELDED])
 
-    const externalMethodProvider: TezosSaplingExternalMethodProvider | undefined =
-      await this.saplingNativeService.createExternalMethodProvider()
+    const externalMethodProvider:
+      | TezosSaplingExternalMethodProvider
+      | undefined = await this.saplingNativeService.createExternalMethodProvider()
 
     const shieldedTezAdapter: ICoinProtocolAdapter<TezosShieldedTezProtocol> = await createV0TezosShieldedTezProtocol({ externalProvider: externalMethodProvider })
     
