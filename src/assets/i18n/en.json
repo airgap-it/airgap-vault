@@ -720,7 +720,7 @@
         "ok": "Ok"
       }
     },
-    "load-module_label": "Load Module"
+    "isolated-modules_label": "Isolated Modules"
   },
   "secret-generate-dice-roll": {
     "title": "Dice Rolls",
@@ -751,27 +751,6 @@
     "title": "Wordlist",
     "search_placeholder": "Search..."
   },
-  "module-preview": {
-    "title": "{{ name }} Module Preview",
-    "install-button_label": "Install",
-    "manifest": {
-      "name": {
-        "label": "Name"
-      },
-      "version": {
-        "label": "Version"
-      },
-      "author": {
-        "label": "Author"
-      },
-      "signature": {
-        "label": "Signature"
-      },
-      "include": {
-        "description": "Something about the following files being supposed to be copied over and trusting their content."
-      }
-    }
-  },
   "keyboard": {
     "paste": "Paste",
     "add": "Add Word",
@@ -779,5 +758,57 @@
     "shuffle": "Shuffle Keys",
     "mask": "Mask Text",
     "word_list": "Show Word List"
+  },
+  "isolated-modules": {
+    "loader_message": "Loading..."
+  },
+  "isolated-modules-list-page": {
+    "title": "Isolated Modules",
+    "items": {
+      "search_placeholder": "Search isolated modules"
+    },
+    "alert": {
+      "add": {
+        "failed": {
+          "header": "Add Module Failed",
+          "message": "Something went wrong! Please try again.",
+          "ok_label": "Ok"
+        }
+      }
+    }
+  },
+  "isolated-modules-details-page": {
+    "button": {
+      "install_label": "Install",
+      "update_label": "Update"
+    },
+    "popover": {
+      "remove_label": "Remove"
+    },
+    "alert": {
+      "remove": {
+        "header": "Remove Module",
+        "message": "Are you sure that you want to remove this module?",
+        "cancel_label": "Cancel",
+        "proceed_label": "Remove"
+      },
+      "update": {
+        "generic": {
+          "header": "Update Module Failed",
+          "message": "Something went wrong! The module couldn't be updated.",
+          "ok_label": "Ok"
+        },
+        "load-failed": {
+          "header": "Update Module Failed",
+          "message": "Something went wrong! The new module couldn't be loaded.",
+          "ok_label": "Ok"
+        },
+        "different-public-key": {
+          "header": "Update Module Failed",
+          "message": "You can't update this module with the selected package, the authors (public keys) are different.",
+          "ok_label": "Ok"
+        }
+      }
+    }
   }
 }

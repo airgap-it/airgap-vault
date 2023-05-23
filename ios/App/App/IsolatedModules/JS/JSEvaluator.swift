@@ -30,13 +30,48 @@ class JSEvaluator {
         await modulesManager.deregisterAllModules()
     }
     
-    func evaluatePreviewModule(_ module: JSModule) async throws -> [String: Any] {
-        return try await self.webViewEnv.run(.load(.init(protocolType: nil)), in: module)
+    func singleRun<T>(_ block: (_ runRef: String) async throws -> T) async throws -> T {
+        let runRef = UUID().uuidString
+        let result = try await block(runRef)
+        try await reset(runRef: runRef)
+        
+        return result
     }
     
-    func evaluateLoadModules(_ modules: [JSModule], for protocolType: JSProtocolType?) async throws -> [String: Any] {
+    func evaluatePreviewModule(
+        _ module: JSModule,
+        ignoringProtocols ignoreProtocols: [String]?,
+        runRef: String? = nil
+    ) async throws -> [String: Any] {
+        return try await self.webViewEnv.run(
+            .load(.init(protocolType: nil, ignoreProtocols: ignoreProtocols)),
+            in: module,
+            ref: runRef
+        )
+    }
+    
+    func evaluateLoadModules(
+        _ modules: [JSModule],
+        for protocolType: JSProtocolType?,
+        ignoringProtocols ignoreProtocols: [String]?,
+        runRef: String? = nil
+    ) async throws -> [String: Any] {
         let modulesJSON = try await modules.asyncMap { module -> [String : Any] in
-            let json = try await self.webViewEnv.run(.load(.init(protocolType: protocolType)), in: module)
+            var json = try await self.webViewEnv.run(
+                .load(.init(protocolType: protocolType, ignoreProtocols: ignoreProtocols)),
+                in: module,
+                ref: runRef
+            )
+            
+            json["type"] = {
+                switch module {
+                case .asset(_):
+                    return "static"
+                case .installed(_), .preview(_):
+                    return "dynamic"
+                }
+            }()
+            
             try await self.modulesManager.registerModule(module, forJSON: json)
             
             return json
@@ -48,7 +83,8 @@ class JSEvaluator {
     func evaluateCallOfflineProtocolMethod(
         _ name: String,
         ofProtocol protocolIdentifier: String,
-        withArgs args: JSArray?
+        withArgs args: JSArray?,
+        runRef: String? = nil
     ) async throws -> [String: Any] {
         let modules = await modulesManager.modules
         guard let module = modules[protocolIdentifier] else {
@@ -61,7 +97,8 @@ class JSEvaluator {
                     .init(name: name, args: args, protocolIdentifier: protocolIdentifier)
                 )
             ),
-            in: module
+            in: module,
+            ref: runRef
         )
     }
     
@@ -69,7 +106,8 @@ class JSEvaluator {
         _ name: String,
         ofProtocol protocolIdentifier: String,
         onNetwork networkID: String?,
-        withArgs args: JSArray?
+        withArgs args: JSArray?,
+        runRef: String? = nil
     ) async throws -> [String: Any] {
         let modules = await modulesManager.modules
         guard let module = modules[protocolIdentifier] else {
@@ -82,7 +120,8 @@ class JSEvaluator {
                     .init(name: name, args: args, protocolIdentifier: protocolIdentifier, networkID: networkID)
                 )
             ),
-            in: module
+            in: module,
+            ref: runRef
         )
     }
     
@@ -90,7 +129,8 @@ class JSEvaluator {
         _ name: String,
         ofProtocol protocolIdentifier: String,
         onNetwork networkID: String?,
-        withArgs args: JSArray?
+        withArgs args: JSArray?,
+        runRef: String? = nil
     ) async throws -> [String: Any] {
         let modules = await modulesManager.modules
         guard let module = modules[protocolIdentifier] else {
@@ -103,14 +143,16 @@ class JSEvaluator {
                     .init(name: name, args: args, protocolIdentifier: protocolIdentifier, networkID: networkID)
                 )
             ),
-            in: module
+            in: module,
+            ref: runRef
         )
     }
     
     func evaluateCallV3SerializerCompanionMethod(
         _ name: String,
         ofModule moduleIdentifier: String,
-        withArgs args: JSArray?
+        withArgs args: JSArray?,
+        runRef: String? = nil
     ) async throws -> [String: Any] {
         let modules = await modulesManager.modules
         guard let module = modules[moduleIdentifier] else {
@@ -123,8 +165,13 @@ class JSEvaluator {
                     .init(name: name, args: args)
                 )
             ),
-            in: module
+            in: module,
+            ref: runRef
         )
+    }
+    
+    func reset(runRef: String) async throws {
+        try await webViewEnv.reset(runRef: runRef)
     }
     
     func destroy() async throws {
@@ -167,17 +214,5 @@ class JSEvaluator {
     enum Error: Swift.Error {
         case moduleNotFound(String)
         case invalidJSON
-    }
-}
-
-private extension JSArray {
-    func replaceNullWithUndefined() -> JSArray {
-        map {
-            if $0 is NSNull {
-                return JSUndefined.value
-            } else {
-                return $0
-            }
-        }
     }
 }
