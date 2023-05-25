@@ -13,6 +13,7 @@ ion-list {
 .item-text-wrap {
   white-space: normal !important;
 }
+
 .radio-list {
   border: 4px dotted #ccc;
   border-radius: 10px;
@@ -36,9 +37,6 @@ ion-list {
   font-size: 40px;
 }
 
-
-
-
 ion-radio::part(container) {
   width: 20px;
   height: 20px;
@@ -46,8 +44,6 @@ ion-radio::part(container) {
   border-radius: 50%;
   border: 2px solid #ddd;
 }
-
-
 
 ion-radio::part(mark) {
   background: none;
