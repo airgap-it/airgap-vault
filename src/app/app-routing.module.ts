@@ -79,6 +79,48 @@ const routes: Routes = [
       import('./pages/secret-generate-onboarding/secret-generate-onboarding.module').then((m) => m.SecretGenerateOnboardingPageModule)
   },
   {
+    path: 'social-recovery-generate-intro',
+    loadChildren: () =>
+      import('./pages/social-recovery-generate-intro/social-recovery-generate-intro.module').then(
+        (m) => m.SocialRecoveryGenerateIntroPageModule
+      )
+  },
+  {
+    path: 'social-recovery-generate-setup',
+    loadChildren: () =>
+      import('./pages/social-recovery-generate-setup/social-recovery-generate-setup.module').then(
+        (m) => m.SocialRecoveryGenerateSetupPageModule
+      )
+  },
+  {
+    path: 'social-recovery-generate-rules',
+    loadChildren: () =>
+      import('./pages/social-recovery-generate-rules/social-recovery-generate-rules.module').then(
+        (m) => m.SocialRecoveryGenerateRulesPageModule
+      )
+  },
+  {
+    path: 'social-recovery-generate-share-show',
+    loadChildren: () =>
+      import('./pages/social-recovery-generate-share-show/social-recovery-generate-share-show.module').then(
+        (m) => m.SocialRecoveryGenerateShareShowPageModule
+      )
+  },
+  {
+    path: 'social-recovery-generate-share-validate',
+    loadChildren: () =>
+      import('./pages/social-recovery-generate-share-validate/social-recovery-generate-share-validate.module').then(
+        (m) => m.SocialRecoveryGenerateShareValidatePageModule
+      )
+  },
+  {
+    path: 'social-recovery-generate-finish',
+    loadChildren: () =>
+      import('./pages/social-recovery-generate-finish/social-recovery-generate-finish.module').then(
+        (m) => m.SocialRecoveryGenerateFinishPageModule
+      )
+  },
+  {
     path: 'social-recovery-import',
     loadChildren: () => import('./pages/social-recovery-import/social-recovery-import.module').then((m) => m.SocialRecoveryImportPageModule)
   },
@@ -116,6 +158,12 @@ const routes: Routes = [
     path: 'contact-book-settings',
     loadChildren: () => import('./pages/contact-book-settings/contact-book-settings.module').then((m) => m.ContactBookOnboardingPageModule)
   },
+
+  {
+    path: 'contact-book-scan',
+    loadChildren: () => import('./pages/contact-book-scan/contact-book-scan.module').then((m) => m.ContactBookScanPageModule)
+  },
+
   {
     path: 'deserialized-detail',
     loadChildren: () => import('./pages/deserialized-detail/deserialized-detail.module').then((m) => m.DeserializedDetailPageModule)
@@ -139,6 +187,11 @@ const routes: Routes = [
   {
     path: 'qr-settings',
     loadChildren: () => import('./pages/qr-settings/qr-settings.module').then((m) => m.QrSettingsPageModule)
+  },
+  {
+    path: 'vault-interaction-settings',
+    loadChildren: () =>
+      import('./pages/vault-interaction-settings/vault-interaction-settings.module').then((m) => m.VaultInteractionSettingsPageModule)
   },
   {
     path: 'migration',
@@ -174,8 +227,12 @@ const routes: Routes = [
     loadChildren: () => import('./pages/address-explorer/address-explorer.module').then((m) => m.AddressExplorerPageModule)
   },
   {
-    path: 'module-preview',
-    loadChildren: () => import('./pages/module-preview/module-preview.module').then((m) => m.ModulePreviewPageModule)
+    path: 'isolated-modules-list',
+    loadChildren: () => import('./pages/isolated-modules-list/isolated-modules-list.module').then((m) => m.IsolatedModulesListPageModule)
+  },
+  {
+    path: 'isolated-modules-details/:intention',
+    loadChildren: () => import('./pages/isolated-modules-details/isolated-modules-details.module').then((m) => m.IsolatedModulesDetailsPageModule)
   }
 ]
 

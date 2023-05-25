@@ -40,6 +40,7 @@
 		A33BA9E928D9E23E00BD8015 /* WK+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A33BA9E828D9E23E00BD8015 /* WK+Additions.swift */; };
 		A351B44A2979338800BE0DC9 /* Zip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A351B4492979338800BE0DC9 /* Zip.swift */; };
 		A351B44E297965EF00BE0DC9 /* Zip.m in Sources */ = {isa = PBXBuildFile; fileRef = A351B44D297965EF00BE0DC9 /* Zip.m */; };
+		A35472FD29ED9C7C00AFD5A7 /* Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = A35472FC29ED9C7C00AFD5A7 /* Hex.swift */; };
 		A357ED09299BD8EA00EDCA39 /* Filesystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A357ED08299BD8EA00EDCA39 /* Filesystem.swift */; };
 		A3C53AA1299247640059E997 /* JSEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3C53AA0299247640059E997 /* JSEnvironment.swift */; };
 		A3C53AA3299259FC0059E997 /* WebViewEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3C53AA2299259FC0059E997 /* WebViewEnvironment.swift */; };
@@ -86,6 +87,7 @@
 		A33BA9E828D9E23E00BD8015 /* WK+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WK+Additions.swift"; sourceTree = "<group>"; };
 		A351B4492979338800BE0DC9 /* Zip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Zip.swift; sourceTree = "<group>"; };
 		A351B44D297965EF00BE0DC9 /* Zip.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Zip.m; sourceTree = "<group>"; };
+		A35472FC29ED9C7C00AFD5A7 /* Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hex.swift; sourceTree = "<group>"; };
 		A357ED08299BD8EA00EDCA39 /* Filesystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filesystem.swift; sourceTree = "<group>"; };
 		A3C53AA0299247640059E997 /* JSEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSEnvironment.swift; sourceTree = "<group>"; };
 		A3C53AA2299259FC0059E997 /* WebViewEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewEnvironment.swift; sourceTree = "<group>"; };
@@ -202,8 +204,9 @@
 			isa = PBXGroup;
 			children = (
 				88AE2EEB23D5CB1C00428560 /* Extensions */,
-				A33BA9E428D9C4EF00BD8015 /* JS.swift */,
 				A357ED08299BD8EA00EDCA39 /* Filesystem.swift */,
+				A35472FC29ED9C7C00AFD5A7 /* Hex.swift */,
+				A33BA9E428D9C4EF00BD8015 /* JS.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -441,6 +444,7 @@
 				A3CE61BC2993D827009216A2 /* FileExplorer.swift in Sources */,
 				88AE2EF723D5DC7400428560 /* SecureScreen.swift in Sources */,
 				A3226AAE29F1305F0006ACCA /* Environment.swift in Sources */,
+				A35472FD29ED9C7C00AFD5A7 /* Hex.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

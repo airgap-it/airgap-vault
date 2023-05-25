@@ -28,7 +28,8 @@ const paths: { path: string; prevPath: string }[] = [
   { path: scanPath, prevPath: rootPath },
   { path: '/accounts-list', prevPath: rootPath },
   { path: '/account-address', prevPath: '/accounts-list' },
-  { path: '/secret-setup', prevPath: rootPath }
+  { path: '/secret-setup', prevPath: rootPath },
+  { path: '/contact-book-scan', prevPath: '/contact-book-contacts-detail' }
 ]
 
 @Injectable({
@@ -43,8 +44,8 @@ export class NavigationService {
     return router.navigate([route, object.getIdentifier()])
   }
 
-  public route(route: string): Promise<boolean> {
-    return this.router.navigateByUrl(route)
+  public route(route: string, clearStack: boolean = false): Promise<boolean> {
+    return this.router.navigateByUrl(route, { replaceUrl: clearStack })
   }
 
   public async routeWithState(route: string, object: State, options?: NavigationBehaviorOptions): Promise<boolean> {

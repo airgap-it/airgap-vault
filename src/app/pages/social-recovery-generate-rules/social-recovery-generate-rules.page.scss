@@ -1,0 +1,82 @@
+.button--rounded ion-button {
+  --padding-end: 0;
+  --padding-start: 0;
+  width: 40px;
+  height: 40px;
+}
+
+ion-content {
+  --padding-bottom: var(--ion-padding, 64px);
+}
+
+h1 {
+  font-size: 3rem;
+  line-height: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  margin-bottom: 2rem;
+}
+
+h3 {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  margin-bottom: 0.825rem;
+  text-align: center;
+  max-width: 400px;
+}
+
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 80vh;
+}
+
+.title-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.row-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  .row-button {
+    font-size: large;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.8);
+    width: 20px;
+    height: 20px;
+    padding: 0px;
+  }
+
+  ion-button {
+    --padding-start: 0px;
+    --padding-end: 0px;
+  }
+}
+
+.buttons-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  position: fixed;
+  width: 100%;
+  bottom: 20px;
+
+  ion-button {
+    --padding-top: 24px;
+    --padding-bottom: 24px;
+    --padding-start: 48px;
+    --padding-end: 48px;
+  }
+}

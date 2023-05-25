@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterTestingModule } from '@angular/router/testing'
 import { AlertController, IonicModule, NavController, Platform, ToastController } from '@ionic/angular'
 import { IonicStorageModule, Storage } from '@ionic/storage'
+import { StoreModule } from '@ngrx/store'
 import { TranslateFakeLoader, TranslateLoader, TranslateModule } from '@ngx-translate/core'
 
 import { ComponentsModule } from '../src/app/components/components.module'
@@ -16,11 +17,13 @@ import {
   AlertControllerMock,
   ClipboardMock,
   DeeplinkMock,
+  FilesystemMock,
   LoadingControllerMock,
   ModalControllerMock,
   NavControllerMock,
   PlatformMock,
-  ToastControllerMock
+  ToastControllerMock,
+  ZipMock
 } from './ionic-mocks'
 import { AppInfoPluginMock, AppLauncherMock, SaplingPluginMock, SplashScreenMock, StatusBarMock } from './plugins-mocks'
 import { StorageMock } from './storage-mock'
@@ -39,6 +42,8 @@ export class UnitHelper {
     loadingController: new LoadingControllerMock(),
     modalController: new ModalControllerMock(),
     clipboard: new ClipboardMock(),
+    filesystem: new FilesystemMock(),
+    zip: new ZipMock()
   }
 
   public testBed(testBed: TestModuleMetadata, useIonicOnlyTestBed: boolean = false): TestModuleMetadata {
@@ -57,7 +62,8 @@ export class UnitHelper {
       }),
       TranslateModule.forRoot({
         loader: { provide: TranslateLoader, useClass: TranslateFakeLoader }
-      })
+      }),
+      StoreModule.forRoot({})
     ]
     const mandatoryProviders: any[] = [
       { provide: NavController, useClass: NavControllerMock },

@@ -66,12 +66,15 @@ inline fun PluginCall.executeCatching(block: PluginCall.() -> Unit) {
     }
 }
 
-@Throws(IllegalStateException::class)
 fun PluginCall.assertReceived(vararg params: String, acceptEmpty: Boolean = false) {
-    val hasAll = params.map { data.isNull(it) }.all { !it }
-    val hasEmpty = !acceptEmpty && params.mapNotNull { getString(it)?.isBlank() }.any { it }
+    assertReceivedIn(data, *params, acceptEmpty = acceptEmpty)
+}
+
+fun PluginCall.assertReceivedIn(jsObject: JSObject, vararg params: String, acceptEmpty: Boolean = false) {
+    val hasAll = params.map { jsObject.isNull(it) }.all { !it }
+    val hasEmpty = !acceptEmpty && params.mapNotNull {jsObject.getString(it)?.isBlank() }.any { it }
 
     if (!hasAll || hasEmpty) {
-        throw IllegalStateException("$methodName requires: ${params.joinToString()}")
+        reject("$methodName requires: ${params.joinToString()}")
     }
 }

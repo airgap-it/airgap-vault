@@ -8,12 +8,12 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-row class="ion-padding">
+  <ion-row class="ion-justify-content-center ion-padding-bottom">
     <ion-col>
       <p>{{ description }}</p>
-      <!-- <airgap-qr *ngIf="link" [qrdata]="link"></airgap-qr> -->
       <p>{{ link }}</p>
-      <!-- <p>{{ 'link-page.scan-qr' | translate }}</p> -->
+      <p [innerHTML]="'link-page.scan-qr' | translate: { urlDescription: urlDescription }"></p>
+      <airgap-qr *ngIf="link" [qrdata]="link"></airgap-qr>
     </ion-col>
   </ion-row>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">

@@ -6,12 +6,14 @@ import { ClipboardPlugin } from '@capacitor/clipboard'
 import { FilesystemPlugin } from '@capacitor/filesystem'
 import { SplashScreenPlugin } from '@capacitor/splash-screen'
 import { StatusBarPlugin } from '@capacitor/status-bar'
+import { FilePickerPlugin } from '@capawesome/capacitor-file-picker'
 import { Platform } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 import {
   createAppSpy,
   createClipboardSpy,
   createEnvironmentSpy,
+  createFilePickerSpy,
   createFilesystemSpy,
   createIsolatedModulesSpy,
   createSaplingSpy,
@@ -24,7 +26,7 @@ import {
 import { UnitHelper } from './../../test-config/unit-test-helper'
 import { AppComponent } from './app.component'
 import { EnvironmentPlugin, SaplingNativePlugin, SecurityUtilsPlugin } from './capacitor-plugins/definitions'
-import { ENVIRONMENT_PLUGIN, SAPLING_PLUGIN, SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
+import { ENVIRONMENT_PLUGIN, FILE_PICKER_PLUGIN, SAPLING_PLUGIN, SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
 import { IACService } from './services/iac/iac.service'
 import { NavigationService } from './services/navigation/navigation.service'
 import { SecretsService } from './services/secrets/secrets.service'
@@ -43,6 +45,7 @@ describe('AppComponent', () => {
   let zipSpy: ZipPlugin
   let isolatedModulesSpy: IsolatedModulesPlugin
   let environmentSpy: EnvironmentPlugin
+  let filePickerSpy: FilePickerPlugin
   let platformReadySpy: Promise<void>
   let platformSpy: Platform
   // let component: AppComponent
@@ -59,6 +62,7 @@ describe('AppComponent', () => {
     zipSpy = createZipSpy()
     isolatedModulesSpy = createIsolatedModulesSpy()
     environmentSpy = createEnvironmentSpy()
+    filePickerSpy = createFilePickerSpy()
     platformReadySpy = Promise.resolve()
     platformSpy = jasmine.createSpyObj('Platform', { ready: platformReadySpy })
 
@@ -79,6 +83,7 @@ describe('AppComponent', () => {
           { provide: ZIP_PLUGIN, useValue: zipSpy },
           { provide: ISOLATED_MODULES_PLUGIN, useValue: isolatedModulesSpy },
           { provide: ENVIRONMENT_PLUGIN, useValue: environmentSpy },
+          { provide: FILE_PICKER_PLUGIN, useValue: filePickerSpy },
           { provide: Platform, useValue: platformSpy },
           StartupChecksService,
           IACService,

@@ -3,7 +3,6 @@ package it.airgap.vault.plugin.isolatedmodules.js
 import com.getcapacitor.JSArray
 import com.getcapacitor.JSObject
 import it.airgap.vault.plugin.isolatedmodules.js.environment.JSEnvironment
-import it.airgap.vault.util.JSUndefined
 import it.airgap.vault.util.assign
 import it.airgap.vault.util.toJson
 import java.util.*
@@ -12,29 +11,40 @@ sealed interface JSModule {
     val identifier: String
     val namespace: String?
     val preferredEnvironment: JSEnvironment.Type
-    val sources: List<String>
+    val files: List<String>
 
     data class Asset(
         override val identifier: String,
         override val namespace: String?,
         override val preferredEnvironment: JSEnvironment.Type,
-        override val sources: List<String>,
-    ) : JSModule
+        override val files: List<String>,
+    ) : JSModule {
+        companion object {}
+    }
 
     data class Installed(
         override val identifier: String,
         override val namespace: String?,
         override val preferredEnvironment: JSEnvironment.Type,
-        override val sources: List<String>,
-    ) : JSModule
+        override val files: List<String>,
+        val symbols: List<String>,
+        val installedAt: String
+    ) : JSModule {
+        companion object {}
+    }
 
     data class Preview(
         override val identifier: String,
         override val namespace: String?,
         override val preferredEnvironment: JSEnvironment.Type,
-        override val sources: List<String>,
+        override val files: List<String>,
         val path: String,
-    ) : JSModule
+        val signature: String
+    ) : JSModule {
+        companion object {}
+    }
+
+    companion object {}
 }
 
 enum class JSProtocolType {
@@ -60,11 +70,12 @@ enum class JSCallMethodTarget {
 sealed interface JSModuleAction {
     fun toJson(): String
 
-    data class Load(val protocolType: JSProtocolType?) : JSModuleAction {
+    data class Load(val protocolType: JSProtocolType?, val ignoreProtocols: JSArray?) : JSModuleAction {
         override fun toJson(): String = JSObject("""
                 {
                     "type": "$TYPE",
-                    "protocolType": ${protocolType?.toString().toJson()}
+                    "protocolType": ${protocolType?.toString().toJson()},
+                    "ignoreProtocols": ${ignoreProtocols ?: "[]"}
                 }
             """.trimIndent()).toString()
 
