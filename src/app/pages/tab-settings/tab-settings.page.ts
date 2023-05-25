@@ -8,7 +8,6 @@ import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
 import { ClipboardService, IACMessageTransport, SerializerService } from '@airgap/angular-core'
 import { IACService } from 'src/app/services/iac/iac.service'
-import { InstallationTypePage } from '../Installation-type/installation-type.page'
 import { OnboardingAdvancedModePage } from '../onboarding-advanced-mode/onboarding-advanced-mode.page'
 import { OnboardingWelcomePage } from '../onboarding-welcome/onboarding-welcome.page'
 import { ContactsService } from 'src/app/services/contacts/contacts.service'
@@ -50,10 +49,6 @@ export class TabSettingsPage implements OnInit {
     this.navigationService.route('/interaction-history').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  public goToInteractionSettings(): void {
-    this.navigationService.route('/interaction-selection-settings').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-  }
-
   public goToLanguagesSettings(): void {
     this.navigationService.route('/languages-selection-settings').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
@@ -67,30 +62,24 @@ export class TabSettingsPage implements OnInit {
   }
 
   public async goToAddressBook(): Promise<void> {
-    if (await this.contactsService.isOnboardingEnabled())
+    if (await this.contactsService.isOnboardingEnabled()) {
       this.navigationService.route('/contact-book-onboarding').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-    else this.navigationService.route('/contact-book-contacts').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    } else {
+      this.navigationService.route('/contact-book-contacts').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    }
   }
 
   public async goToAddressBookSettings(): Promise<void> {
-    if (await this.contactsService.isOnboardingEnabled())
+    if (await this.contactsService.isOnboardingEnabled()) {
       this.navigationService.route('/contact-book-onboarding').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-    else this.navigationService.route('/contact-book-settings').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    } else {
+      this.navigationService.route('/contact-book-settings').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    }
   }
 
   public async goToOnboarding(): Promise<void> {
     const modal: HTMLIonModalElement = await this.modalController.create({
       component: OnboardingWelcomePage,
-      backdropDismiss: false
-    })
-
-    modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
-  }
-
-  public async goToInstallationType(): Promise<void> {
-    const modal: HTMLIonModalElement = await this.modalController.create({
-      component: InstallationTypePage,
-      componentProps: { isSettingsModal: true },
       backdropDismiss: false
     })
 
@@ -113,6 +102,11 @@ export class TabSettingsPage implements OnInit {
 
   public async goToIsolatedModules() {
     this.navigationService.route('/isolated-modules-list').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
+  public goToVaultInteraction(): void {
+    console.log('navigating to vault interaction')
+    this.navigationService.route('/vault-interaction-settings').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public pasteClipboard(): void {

@@ -49,10 +49,22 @@
     "title": "Welcome to AirGap"
   },
   "installation-type": {
-    "title": "Installation Type"
+    "title": "Installation Type",
+    "setup_label": "What's your setup?",
+    "setup_text": "To configure the Vault correctly, tell us how you intend to set up your device's connectivity. This will help us to determine the ideal interaction with other wallets",
+    "online_label": "online",
+    "online_text": "This device is connected to the internet",
+    "offline_label": "offline",
+    "offline_text": "This is a dedicated offline device. It will never be connected to the internet"
   },
   "introduction": {
     "title": "Install AirGap Wallet",
+    "header": "Interacting With Your {{installationType}} Device",
+    "online-desc": "By design, AirGap Vault never connects with any online service. Your secrets never leave AirGap Vault and are therefore safe from online threats. To check your balance and create transactions, use a companion app like AirGap Wallet",
+    "offline-desc": "By design, AirGap Vault never connects with any online service. To check your balance and create transactions, use a companion app like AirGap Wallet",
+    "offline-companion_text": "Install the companion app on a device with internet access, and rest assured that only public information is shared between the two apps. Your secrets never leave the AirGap Vault, keeping them safe from online threats",
+
+
     "highest": {
       "label": "Highest Security",
       "text": "With the AirGap <b>two device approach</b> secure key handling becomes more accessible."
@@ -257,13 +269,15 @@
     "text": "Match the order of your recovery phrase by selecting the correct words."
   },
   "interaction-selection-settings": {
+    "header": "Setup", 
     "title": "Wallet Interaction",
     "heading": "How would you like to interact with AirGap Wallet?",
     "selector": {
       "always": "Always ask",
       "same-device": "App Switching",
-      "offline-device": "QR Code Scanning"
+      "offline-device": "QR-Code Scanning"
     },
+    "connectivity_text": "Since this device has connectivity, you can customize the interaction options with other wallets to fit your needs. To enable App-Switching, be sure to install the AirGap Wallet app",
     "continue_label": "Continue",
     "description": "You can always change your preference in the settings"
   },
@@ -405,7 +419,14 @@
     "address_book_label": "Address Book",
     "address_book_settings_label": "Address Book Settings",
     "settings_label": "Settings",
-    "actions_label": "Actions"
+    "actions_label": "Actions",
+    "vault-interaction_label": "Vault Interaction"
+  },
+  "vault-interaction-settings": {
+    "heading": "Vault Interaction",
+    "title": "Vault Interaction",
+    "device-connected_text": "Device is connected to the internet",
+    "note_text": "<span class=\"style__strong\">Note: </span> This settings does NOT alter the connection of your device"
   },
   "tab-secrets": {
     "title": "Secret",

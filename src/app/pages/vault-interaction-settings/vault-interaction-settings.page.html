@@ -1,0 +1,31 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab-settings"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'vault-interaction-settings.heading' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-subtitle>{{ 'vault-interaction-settings.title' | translate }}</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-item lines="none">
+          <ion-icon name="wifi-outline" slot="start"></ion-icon>
+          {{ 'vault-interaction-settings.device-connected_text' | translate }}
+          <ion-toggle [checked]="connectionEnabled" (ionChange)="toggleEnableConnection($event)" slot="end"></ion-toggle>
+        </ion-item>
+        <airgap-interaction-selection *ngIf="connectionEnabled"></airgap-interaction-selection>
+
+        <ion-item lines="none">
+          <p [innerHTML]="'vault-interaction-settings.note_text' | translate"></p>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+</ion-content>
