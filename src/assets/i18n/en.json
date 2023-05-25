@@ -668,7 +668,7 @@
     "sign-tx_label": "Sign Transaction"
   },
   "link-page": {
-    "scan-qr": "Scan the QR code to open the link on an online device",
+    "scan-qr": "Scan this QR code with an online device to {{urlDescription}}",
     "copy_label": "Copy Link",
     "link-clipboard_label": "The link was copied to your clipboard"
   },
