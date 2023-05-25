@@ -189,6 +189,11 @@ const routes: Routes = [
     loadChildren: () => import('./pages/qr-settings/qr-settings.module').then((m) => m.QrSettingsPageModule)
   },
   {
+    path: 'vault-interaction-settings',
+    loadChildren: () =>
+      import('./pages/vault-interaction-settings/vault-interaction-settings.module').then((m) => m.VaultInteractionSettingsPageModule)
+  },
+  {
     path: 'migration',
     loadChildren: () => import('./pages/migration/migration.module').then((m) => m.MigrationPageModule)
   },

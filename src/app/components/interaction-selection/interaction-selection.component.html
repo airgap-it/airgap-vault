@@ -1,0 +1,22 @@
+<ion-list lines="none" class="ion-padding-vertical radio-list" (ionChange)="changeInteraction($event.detail.value)">
+  <ion-radio-group [(ngModel)]="selectedType" class="radio-group">
+    <ion-item detail="false">
+      <ion-radio slot="start" [value]="interactionType.DEEPLINK" labelPlacement="end"></ion-radio>
+      <ion-label [ngClass]="{ selected: selectedType === interactionType.DEEPLINK }" color="white">
+        {{ 'interaction-selection-settings.selector.same-device' | translate }}
+      </ion-label>
+    </ion-item>
+    <ion-item detail="false">
+      <ion-radio slot="start" [value]="interactionType.QR_CODE" labelPlacement="end"></ion-radio>
+      <ion-label [ngClass]="{ selected: selectedType === interactionType.QR_CODE }" color="white">
+        {{ 'interaction-selection-settings.selector.offline-device' | translate }}
+      </ion-label>
+    </ion-item>
+    <ion-item detail="false">
+      <ion-radio slot="start" [value]="interactionType.ALWAYS_ASK" labelPlacement="end"></ion-radio>
+      <ion-label [ngClass]="{ selected: selectedType === interactionType.ALWAYS_ASK }" color="white">
+        {{ 'interaction-selection-settings.selector.always' | translate }}
+      </ion-label>
+    </ion-item>
+  </ion-radio-group>
+</ion-list>

@@ -1,0 +1,69 @@
+ion-list {
+  ion-radio-group {
+    ion-item {
+      margin-left: 5%;
+      ion-label {
+        margin-left: 5%;
+        font-size: 20px;
+      }
+    }
+  }
+}
+
+.item-text-wrap {
+  white-space: normal !important;
+}
+
+.radio-list {
+  border: 4px dotted #ccc;
+  border-radius: 10px;
+  border-color: var(--ion-color-primary);
+
+}
+
+.radio-group {
+  background-color:#fff;
+}
+
+.custom-item {
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+}
+
+.selected {
+  color: var(--ion-color-primary);
+  font-weight: bold;
+  font-size: 40px;
+}
+
+ion-radio::part(container) {
+  width: 20px;
+  height: 20px;
+
+  border-radius: 50%;
+  border: 2px solid #ddd;
+}
+
+ion-radio::part(mark) {
+  background: none;
+  transition: none;
+  transform: none;
+  border-radius: 0;
+}
+
+ion-radio.radio-checked::part(container) {
+  background: #6815ec;
+  border-color: transparent;
+}
+
+ion-radio.radio-checked::part(mark) {
+  width: 4px;
+  height: 8px;
+
+  border-width: 0px 2px 2px 0px;
+  border-style: solid;
+  border-color: #fff;
+
+  transform: rotate(45deg);
+}

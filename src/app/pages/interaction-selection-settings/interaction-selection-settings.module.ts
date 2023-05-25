@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular'
 import { TranslateModule } from '@ngx-translate/core'
 
 import { InteractionSelectionSettingsPage } from './interaction-selection-settings.page'
+import { ComponentsModule } from '../../components/components.module'
 
 const routes: Routes = [
   {
@@ -15,7 +16,7 @@ const routes: Routes = [
 ]
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule],
-  declarations: [InteractionSelectionSettingsPage]
+  declarations: [InteractionSelectionSettingsPage],
+  imports: [CommonModule, FormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule, ComponentsModule]
 })
 export class InteractionSelectionSettingsPageModule {}

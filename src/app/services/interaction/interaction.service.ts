@@ -36,17 +36,35 @@ export interface IInteractionOptions {
   providedIn: 'root'
 })
 export class InteractionService {
+  interactionType: InteractionType
+
   constructor(
     private readonly navigationService: NavigationService,
     private readonly deepLinkService: DeeplinkService,
     private readonly storageService: VaultStorageService
-  ) {}
+  ) {
+    this.storageService.get(VaultStorageKey.INTERACTION_TYPE).then((type) => (this.interactionType = type))
+  }
+
+  resetInteractionType() {
+    this.changeInteractionType(InteractionType.ALWAYS_ASK)
+  }
+
+  changeInteractionType(newType: InteractionType) {
+    this.interactionType = newType
+    this.storageService.set(VaultStorageKey.INTERACTION_TYPE, this.interactionType).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
+  }
+
+  async getInteractionType() {
+    this.interactionType = await this.storageService.get(VaultStorageKey.INTERACTION_TYPE)
+    return this.interactionType
+  }
 
   public async startInteraction(interactionOptions: IInteractionOptions): Promise<void> {
-    const interactionType = await this.storageService.get(VaultStorageKey.INTERACTION_TYPE)
+    await this.getInteractionType()
 
     if (interactionOptions.communicationType) {
-      if (interactionType === InteractionType.UNDETERMINED) {
+      if (this.interactionType === InteractionType.UNDETERMINED) {
         this.goToInteractionSelectionSettingsPage(interactionOptions)
       }
       if (interactionOptions.communicationType === InteractionCommunicationType.DEEPLINK) {
@@ -61,7 +79,7 @@ export class InteractionService {
     ) {
       this.navigateToPageByOperationType(interactionOptions)
     } else {
-      switch (interactionType) {
+      switch (this.interactionType) {
         case InteractionType.UNDETERMINED:
           this.goToInteractionSelectionPage(interactionOptions)
           break

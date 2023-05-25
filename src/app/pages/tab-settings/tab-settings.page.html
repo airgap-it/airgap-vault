@@ -13,13 +13,9 @@
     {{ 'tab-settings.qr-advanced-settings_label' | translate }}
   </ion-item>
 
-  <ion-item (click)="goToInteractionSettings()" detail="true">
-    <ion-icon src="assets/icons/md-swap_horiz.svg" slot="start"></ion-icon>
-    {{ 'tab-settings.interaction-settings_label' | translate }}
-  </ion-item>
-  <ion-item lines="True" (click)="goToInstallationType()" detail="true">
-    <ion-icon name="extension-puzzle-outline" slot="start"></ion-icon>
-    {{ 'tab-settings.installation-type_label' | translate }}
+  <ion-item lines="True" (click)="goToVaultInteraction()" detail="true">
+    <ion-icon name="wallet-outline" slot="start"></ion-icon>
+    {{ 'tab-settings.vault-interaction_label' | translate }}
   </ion-item>
 
   <ion-item (click)="goToLanguagesSettings()" detail="true">
