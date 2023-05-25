@@ -4,7 +4,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content *ngIf="context$ | async as context">
   <ion-list-header>
     <ion-label>{{ 'tab-settings.settings_label' | translate }}</ion-label>
   </ion-list-header>
@@ -13,7 +13,7 @@
     {{ 'tab-settings.qr-advanced-settings_label' | translate }}
   </ion-item>
 
-  <ion-item lines="True" (click)="goToVaultInteraction()" detail="true">
+  <ion-item *ngIf="context !== 'knox'" lines="True" (click)="goToVaultInteraction()" detail="true">
     <ion-icon name="wallet-outline" slot="start"></ion-icon>
     {{ 'tab-settings.vault-interaction_label' | translate }}
   </ion-item>
