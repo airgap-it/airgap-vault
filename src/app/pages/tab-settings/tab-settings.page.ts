@@ -14,6 +14,7 @@ import { ContactsService } from 'src/app/services/contacts/contacts.service'
 import { TranslateService } from '@ngx-translate/core'
 import { SecureStorageService } from 'src/app/services/secure-storage/secure-storage.service'
 import { VaultStorageService } from 'src/app/services/storage/storage.service'
+import { EnvironmentContext, EnvironmentService } from 'src/app/services/environment/environment.service'
 
 @Component({
   selector: 'airgap-tab-settings',
@@ -21,7 +22,8 @@ import { VaultStorageService } from 'src/app/services/storage/storage.service'
   styleUrls: ['./tab-settings.page.scss']
 })
 export class TabSettingsPage implements OnInit {
-  public readonly secrets: Observable<MnemonicSecret[]>
+  public readonly secrets$: Observable<MnemonicSecret[]>
+  public readonly context$: Observable<EnvironmentContext>
 
   constructor(
     public readonly serializerService: SerializerService,
@@ -34,9 +36,11 @@ export class TabSettingsPage implements OnInit {
     private readonly translateService: TranslateService,
     private readonly alertCtrl: AlertController,
     private readonly secureStorage: SecureStorageService,
-    public readonly storageService: VaultStorageService
+    public readonly storageService: VaultStorageService,
+    private readonly environmentService: EnvironmentService
   ) {
-    this.secrets = this.secretsService.getSecretsObservable()
+    this.secrets$ = this.secretsService.getSecretsObservable()
+    this.context$ = this.environmentService.getContextObservable()
   }
 
   ngOnInit() {}

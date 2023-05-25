@@ -6,6 +6,7 @@ import com.getcapacitor.BridgeActivity;
 
 import it.airgap.vault.plugin.appinfo.AppInfo;
 import it.airgap.vault.plugin.camerapreview.CameraPreview;
+import it.airgap.vault.plugin.environment.Environment;
 import it.airgap.vault.plugin.isolatedmodules.IsolatedModules;
 import it.airgap.vault.plugin.saplingnative.SaplingNative;
 import it.airgap.vault.plugin.securityutils.SecurityUtils;
@@ -19,6 +20,7 @@ public class MainActivity extends BridgeActivity {
     registerPlugin(SecurityUtils.class);
     registerPlugin(SaplingNative.class);
     registerPlugin(Zip.class);
+    registerPlugin(Environment.class);
 
     registerPlugin(IsolatedModules.class);
 
