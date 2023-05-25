@@ -62,15 +62,19 @@ export class TabSettingsPage implements OnInit {
   }
 
   public async goToAddressBook(): Promise<void> {
-    if (await this.contactsService.isOnboardingEnabled())
+    if (await this.contactsService.isOnboardingEnabled()) {
       this.navigationService.route('/contact-book-onboarding').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-    else this.navigationService.route('/contact-book-contacts').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    } else {
+      this.navigationService.route('/contact-book-contacts').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    }
   }
 
   public async goToAddressBookSettings(): Promise<void> {
-    if (await this.contactsService.isOnboardingEnabled())
+    if (await this.contactsService.isOnboardingEnabled()) {
       this.navigationService.route('/contact-book-onboarding').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-    else this.navigationService.route('/contact-book-settings').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    } else {
+      this.navigationService.route('/contact-book-settings').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    }
   }
 
   public async goToOnboarding(): Promise<void> {
