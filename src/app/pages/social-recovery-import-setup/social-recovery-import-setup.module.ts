@@ -4,17 +4,17 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule, Routes } from '@angular/router'
 import { IonicModule } from '@ionic/angular'
 import { TranslateModule } from '@ngx-translate/core'
-import { SocialRecoveryImportIntroPage } from './social-recovery-import-intro.page'
+import { SocialRecoveryImportSetupPage } from './social-recovery-import-setup.page'
 
 const routes: Routes = [
   {
     path: '',
-    component: SocialRecoveryImportIntroPage
+    component: SocialRecoveryImportSetupPage
   }
 ]
 
 @NgModule({
   imports: [CommonModule, FormsModule, ReactiveFormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule],
-  declarations: [SocialRecoveryImportIntroPage]
+  declarations: [SocialRecoveryImportSetupPage]
 })
-export class SocialRecoveryImportIntroPagePageModule {}
+export class SocialRecoveryImportSetupPageModule {}

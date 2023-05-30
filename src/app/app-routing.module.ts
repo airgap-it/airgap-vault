@@ -127,9 +127,12 @@ const routes: Routes = [
   {
     path: 'social-recovery-import-intro',
     loadChildren: () =>
-      import('./pages/social-recovery-import-intro/social-recovery-generate-intro.module').then(
-        (m) => m.SocialRecoveryImportIntroPagePageModule
-      )
+      import('./pages/social-recovery-import-intro/social-recovery-import-intro.module').then((m) => m.SocialRecoveryImportIntroPageModule)
+  },
+  {
+    path: 'social-recovery-import-setup',
+    loadChildren: () =>
+      import('./pages/social-recovery-import-setup/social-recovery-import-setup.module').then((m) => m.SocialRecoveryImportSetupPageModule)
   },
   {
     path: 'social-recovery-setup',
