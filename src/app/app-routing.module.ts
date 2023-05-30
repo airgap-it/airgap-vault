@@ -125,6 +125,13 @@ const routes: Routes = [
     loadChildren: () => import('./pages/social-recovery-import/social-recovery-import.module').then((m) => m.SocialRecoveryImportPageModule)
   },
   {
+    path: 'social-recovery-import-intro',
+    loadChildren: () =>
+      import('./pages/social-recovery-import-intro/social-recovery-generate-intro.module').then(
+        (m) => m.SocialRecoveryImportIntroPagePageModule
+      )
+  },
+  {
     path: 'social-recovery-setup',
     loadChildren: () => import('./pages/social-recovery-setup/social-recovery-setup.module').then((m) => m.SocialRecoverySetupPageModule)
   },
@@ -232,7 +239,8 @@ const routes: Routes = [
   },
   {
     path: 'isolated-modules-details/:intention',
-    loadChildren: () => import('./pages/isolated-modules-details/isolated-modules-details.module').then((m) => m.IsolatedModulesDetailsPageModule)
+    loadChildren: () =>
+      import('./pages/isolated-modules-details/isolated-modules-details.module').then((m) => m.IsolatedModulesDetailsPageModule)
   }
 ]
 
