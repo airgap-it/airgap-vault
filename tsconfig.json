@@ -36,7 +36,10 @@
       "@ngx-translate/*": ["./node_modules/@ngx-translate/*"],
       "path": ["./node_modules/path-browserify"],
       "stream": ["./node_modules/stream-browserify"],
-      "crypto": ["./node_modules/crypto-browserify"]
+      "crypto": ["./node_modules/crypto-browserify"],
+      "http": ["./node_modules/stream-http"],
+      "https": ["./node_modules/https-browserify"],
+      "zlib": ["./node_modules/browserify-zlib"]
     }
   },
   "angularCompilerOptions": {
