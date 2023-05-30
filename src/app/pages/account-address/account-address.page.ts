@@ -129,6 +129,7 @@ export class AccountAddressPage {
           this.syncOptions = [airgapwallet, bluewallet, sparrowwallet, specterwallet]
           break
         case MainProtocolSymbols.ETH:
+        case MainProtocolSymbols.OPTIMISM:
           this.syncOptions = [airgapwallet]
           if (this.wallet.isExtendedPublicKey) {
             this.syncOptions.push(metamask, rabby)

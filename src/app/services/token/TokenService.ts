@@ -1,4 +1,4 @@
-import { createV0ERC20Token, ICoinSubProtocolAdapter } from '@airgap/angular-core'
+import { createV0EthereumERC20Token, ICoinSubProtocolAdapter } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
 import { IAirGapTransaction, SignedTransaction, UnsignedTransaction } from '@airgap/coinlib-core'
 import { ERC20Token, ERC20TokenMetadata, erc20Tokens } from '@airgap/ethereum'
@@ -13,7 +13,7 @@ export class TokenService {
   ): Promise<IAirGapTransaction> {
     const token: ERC20TokenMetadata | undefined = Object.values(erc20Tokens).find((token: ERC20TokenMetadata) => token.contractAddress.toLowerCase() === tx.to[0].toLowerCase())
     if (token) {
-      const genericErc20: ICoinSubProtocolAdapter<ERC20Token> = await createV0ERC20Token(token)
+      const genericErc20: ICoinSubProtocolAdapter<ERC20Token> = await createV0EthereumERC20Token(token)
 
       const transactions: IAirGapTransaction[] = await genericErc20.getTransactionDetailsFromSigned(signedTransaction)
 
@@ -30,7 +30,7 @@ export class TokenService {
   public async getTokenTransferDetails(tx: IAirGapTransaction, unsignedTransaction: UnsignedTransaction): Promise<IAirGapTransaction> {
     const token: ERC20TokenMetadata | undefined = Object.values(erc20Tokens).find((token: ERC20TokenMetadata) => token.contractAddress.toLowerCase() === tx.to[0].toLowerCase())
     if (token) {
-      const genericErc20: ICoinSubProtocolAdapter<ERC20Token> = await createV0ERC20Token(token)
+      const genericErc20: ICoinSubProtocolAdapter<ERC20Token> = await createV0EthereumERC20Token(token)
 
       const transactions: IAirGapTransaction[] = await genericErc20.getTransactionDetails(unsignedTransaction)
 
