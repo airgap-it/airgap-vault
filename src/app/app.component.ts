@@ -9,6 +9,7 @@ import { EthereumModule } from '@airgap/ethereum'
 import { GroestlcoinModule } from '@airgap/groestlcoin'
 import { ICPModule } from '@airgap/icp'
 import { MoonbeamModule } from '@airgap/moonbeam'
+import { OptimismModule } from '@airgap/optimism'
 import { PolkadotModule } from '@airgap/polkadot'
 import { TezosModule, TezosSaplingExternalMethodProvider, TezosShieldedTezProtocol } from '@airgap/tezos'
 import { HttpClient } from '@angular/common/http'
@@ -169,7 +170,8 @@ export class AppComponent implements AfterViewInit {
       new MoonbeamModule(),
       new AstarModule(),
       new ICPModule(),
-      new CoreumModule()
+      new CoreumModule(),
+      new OptimismModule()
     ])
     const protocols = await this.moduleService.loadProtocols('offline', [MainProtocolSymbols.XTZ_SHIELDED])
 
