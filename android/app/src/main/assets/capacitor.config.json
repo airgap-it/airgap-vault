@@ -8,5 +8,8 @@
 			"launchAutoHide": false,
 			"androidSplashResourceName": "screen"
 		}
+	},
+	"server": {
+		"androidScheme": "http"
 	}
 }

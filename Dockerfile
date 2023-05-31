@@ -33,6 +33,7 @@ COPY install-test-deps.js /app
 COPY package.json /app
 COPY yarn.lock /app
 COPY apply-diagnostic-modules.js /app
+COPY patch-dependency-versions.js /app
 COPY fix-qrscanner-gradle.js /app
 COPY copy-builtin-modules.js /app
 

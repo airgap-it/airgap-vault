@@ -6,9 +6,9 @@ RUN apt-get update -y && apt-get install -y \
     pkg-config  \
     libjpeg-dev \
     libcairo2-dev \
-    openjdk-11-jdk-headless
+    openjdk-17-jdk-headless
 
-ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 
 # create app directory
 RUN mkdir /app
@@ -17,7 +17,7 @@ WORKDIR /app
 RUN yarn cache clean --force && yarn global add n && n 16.13.1
 
 # Install app dependencies, using wildcard if package-lock exists and copy capacitor configs and ionic configs
-COPY package.json yarn.lock apply-diagnostic-modules.js fix-qrscanner-gradle.js capacitor.config.ts ionic.config.json copy-builtin-modules.js /app/
+COPY package.json yarn.lock apply-diagnostic-modules.js patch-dependency-versions.js fix-qrscanner-gradle.js capacitor.config.ts ionic.config.json copy-builtin-modules.js /app/
 
 # install dependencies
 # run ionic android build
