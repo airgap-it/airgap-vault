@@ -222,7 +222,8 @@ export class DeserializedDetailEffects {
             details = await this.transactionService.getDetailsFromIACMessages([request], {
               overrideProtocol: await this.getSaplingProtocol(),
               data: {
-                knownViewingKeys: await this.secretsService.getKnownViewingKeys()
+                knownViewingKeys: await this.secretsService.getKnownViewingKeys(),
+                transactionOwner: request.protocol
               }
             })
           } else {
@@ -534,7 +535,7 @@ export class DeserializedDetailEffects {
     if (protocolIdentifier === MainProtocolSymbols.XTZ) {
       try {
         const saplingAdapter: ICoinProtocolAdapter<TezosSaplingProtocol> = await this.getSaplingProtocol()
-        const txDetails: IAirGapTransaction[] = await saplingAdapter.getTransactionDetails(transaction)
+        const txDetails: IAirGapTransaction[] = await saplingAdapter.getTransactionDetails(transaction, { transactionOwner: protocolIdentifier })
         const recipients: string[] = txDetails
           .map((details) => details.to)
           .reduce((flatten: string[], next: string[]) => flatten.concat(next), [])
