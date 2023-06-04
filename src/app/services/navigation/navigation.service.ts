@@ -66,6 +66,10 @@ export class NavigationService {
     return this.state
   }
 
+  public resetState(): void {
+    this.state = {}
+  }
+
   public routeToSecretsTab(clearStack: boolean = false): Promise<boolean> {
     return this.router.navigateByUrl(rootPath, { replaceUrl: clearStack })
   }

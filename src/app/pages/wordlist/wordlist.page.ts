@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { ModalController } from '@ionic/angular'
 import * as bip39 from 'bip39'
+import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 const levenshteinDistance = (str1: string = '', str2: string = '') => {
   const track = Array(str2.length + 1)
@@ -28,6 +29,7 @@ const levenshteinDistance = (str1: string = '', str2: string = '') => {
 interface Word {
   word: string
   index: number
+  hex: string
   binary: string
 }
 
@@ -45,12 +47,19 @@ export class WordlistPage implements OnInit {
 
   public isModal: boolean = false
 
-  constructor(private readonly modalController: ModalController) {
-    this.wordlist = bip39.wordlists.english.map((word, index) => ({
-      word,
-      index,
-      binary: index.toString(2).padStart(11, '0')
-    }))
+  constructor(private readonly modalController: ModalController, private readonly navigationService: NavigationService) {
+    if (this.navigationService.getState() && this.navigationService.getState().wordlist) {
+      this.wordlist = this.navigationService.getState().wordlist
+      this.navigationService.resetState()
+    } else {
+      // Default to BIP39 wordlist in english
+      this.wordlist = bip39.wordlists.english.map((word, index) => ({
+        word,
+        index,
+        hex: index.toString(16).padStart(3, '0'),
+        binary: index.toString(2).padStart(11, '0')
+      }))
+    }
   }
 
   async ngOnInit() {

@@ -15,6 +15,7 @@ import { TranslateService } from '@ngx-translate/core'
 import { SecureStorageService } from 'src/app/services/secure-storage/secure-storage.service'
 import { VaultStorageService } from 'src/app/services/storage/storage.service'
 import { EnvironmentContext, EnvironmentService } from 'src/app/services/environment/environment.service'
+import { bytewords } from 'src/app/utils/bytewords'
 
 @Component({
   selector: 'airgap-tab-settings',
@@ -102,6 +103,19 @@ export class TabSettingsPage implements OnInit {
 
   public goToBip39Wordlist(): void {
     this.navigationService.route('/wordlist').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
+  public goToBytewordWordlist(): void {
+    this.navigationService
+      .routeWithState('/wordlist', {
+        wordlist: bytewords.map((word, index) => ({
+          word,
+          index,
+          hex: index.toString(16).padStart(2, '0'),
+          binary: index.toString(2).padStart(8, '0')
+        }))
+      })
+      .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public async goToIsolatedModules() {

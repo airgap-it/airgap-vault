@@ -70,6 +70,10 @@
     <ion-icon name="list" slot="start"></ion-icon>
     {{ 'tab-settings.bip39_wordlist_label' | translate }}
   </ion-item>
+  <ion-item lines="True" (click)="goToBytewordWordlist()" detail="true">
+    <ion-icon name="list" slot="start"></ion-icon>
+    {{ 'tab-settings.byteword_wordlist_label' | translate }}
+  </ion-item>
   <ion-item lines="True" (click)="goToErrorHistory()" detail="true">
     <ion-icon name="bug-outline" slot="start"></ion-icon>
     {{ 'tab-settings.error-history_label' | translate }}
