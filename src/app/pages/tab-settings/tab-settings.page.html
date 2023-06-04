@@ -4,75 +4,74 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-list>
-    <ion-list-header>
-      <ion-label>{{ 'tab-settings.information_label' | translate }}</ion-label>
-    </ion-list-header>
+<ion-content *ngIf="context$ | async as context">
+  <ion-list-header>
+    <ion-label>{{ 'tab-settings.settings_label' | translate }}</ion-label>
+  </ion-list-header>
+  <ion-item (click)="goToQrSettings()" detail="true">
+    <ion-icon name="qr-code-outline" slot="start"></ion-icon>
+    {{ 'tab-settings.qr-advanced-settings_label' | translate }}
+  </ion-item>
 
-    <ion-item lines="none" detail="true" (click)="goToAbout()">
-      <ion-icon slot="start" name="information-circle-outline"></ion-icon>
-      <ion-label>{{ 'tab-settings.about' | translate }}</ion-label>
-    </ion-item>
-    <!--
-      TODO: Enable once history is in components lib
-      <ion-item lines="none" detail="true" (click)="goToInteractionHistory()">
-        <ion-icon slot="start" color="dark" src="assets/icons/md-info.svg"></ion-icon>
-        <ion-label>Interaction History</ion-label>
-      </ion-item>
-    -->
-  </ion-list>
-  <ion-list>
-    <ion-list-header>
-      <ion-label>{{ 'tab-settings.secrets_label' | translate }}</ion-label>
-    </ion-list-header>
-    <ng-container *ngFor="let secret of secrets | async">
-      <airgap-secret-item [secret]="secret" (click)="goToEditSecret(secret)" class="ion-padding"></airgap-secret-item>
-    </ng-container>
-    <ion-row class="ion-padding ion-justify-content-end">
-      <ion-button color="secondary" (click)="goToNewSecret()" shape="round">
-        <ion-icon slot="start" name="add"></ion-icon>
-        <ion-label>{{ 'tab-settings.add-settings_label' | translate }}</ion-label>
-      </ion-button>
-    </ion-row>
-  </ion-list>
+  <ion-item *ngIf="context !== 'knox'" lines="True" (click)="goToVaultInteraction()" detail="true">
+    <ion-icon name="wallet-outline" slot="start"></ion-icon>
+    {{ 'tab-settings.vault-interaction_label' | translate }}
+  </ion-item>
 
-  <ion-list class="ion-no-border" lines="none">
-    <ion-list-header class="ion-no-margin" lines="none">
-      <ion-label>{{ 'tab-settings.interaction-options_label' | translate }}</ion-label>
-    </ion-list-header>
-    <ion-item (click)="pasteClipboard()">
-      <ion-icon name="return-up-forward-outline" slot="start"></ion-icon>
-      {{ 'tab-settings.paste-from-clipboard_label' | translate }}
-    </ion-item>
+  <ion-item (click)="goToLanguagesSettings()" detail="true">
+    <ion-icon name="language-outline" slot="start"></ion-icon>
+    {{ 'tab-settings.preferred-language_label' | translate }}
+  </ion-item>
 
-    <ion-item (click)="goToQrSettings()">
-      <ion-icon name="qr-code-outline" slot="start"></ion-icon>
-      {{ 'tab-settings.qr-advanced-settings_label' | translate }}
-    </ion-item>
+  <ion-item lines="True" (click)="goToAddressBookSettings()" detail="true">
+    <ion-icon name="id-card-outline" slot="start"></ion-icon>
+    {{ 'tab-settings.address_book_settings_label' | translate }}
+  </ion-item>
 
-    <ion-item (click)="goToInteractionSettings()">
-      <ion-icon src="assets/icons/md-swap_horiz.svg" slot="start"></ion-icon>
-      {{ 'tab-settings.interaction-settings_label' | translate }}
-    </ion-item>
+  <ion-item lines="True" (click)="goToAdvancedModeType()" detail="true">
+    <ion-icon name="build-outline" slot="start"></ion-icon>
+    {{ 'tab-settings.advanced-mode-type_label' | translate }}
+  </ion-item>
 
-    <ion-list-header class="ion-no-margin" lines="none">
-      <ion-label>{{ 'tab-settings.advanced-settings_label' | translate }}</ion-label>
-    </ion-list-header>
+  <ion-item lines="True" (click)="goToIsolatedModules()" detail="true">
+    <ion-icon name="cube-outline" slot="start"></ion-icon>
+    {{ 'danger-zone.isolated-modules_label' | translate }}
+  </ion-item>
 
-    <ion-item (click)="goToBip39Wordlist()">
-      <ion-icon name="list" slot="start"></ion-icon>
-      {{ 'tab-settings.bip39_wordlist_label' | translate }}
-    </ion-item>
+  <ion-list-header>
+    <ion-label>{{ 'tab-settings.actions_label' | translate }}</ion-label>
+  </ion-list-header>
+  <ion-item (click)="pasteClipboard()">
+    <ion-icon name="return-up-forward-outline" slot="start"></ion-icon>
+    {{ 'tab-settings.paste-from-clipboard_label' | translate }}
+  </ion-item>
+  <ion-item (click)="resetVault()">
+    <ion-icon name="warning" slot="start"></ion-icon>
+    {{ 'danger-zone.wipe_label' | translate }}
+  </ion-item>
 
-    <ion-item (click)="goToErrorHistory()">
-      <ion-icon name="bug-outline" slot="start"></ion-icon>
-      {{ 'tab-settings.error-history_label' | translate }}
-    </ion-item>
+  <ion-list-header>
+    <ion-label>{{ 'tab-settings.information_label' | translate }}</ion-label>
+  </ion-list-header>
 
-    <ion-item (click)="goToDangerZone()">
-      <ion-icon name="warning" slot="start"></ion-icon>
-      {{ 'tab-settings.danger-zone_label' | translate }}
-    </ion-item>
-  </ion-list>
+  <ion-item lines="True" (click)="goToAbout()" detail="true">
+    <ion-icon slot="start" name="information-circle-outline"></ion-icon>
+    <ion-label>{{ 'tab-settings.about' | translate }}</ion-label>
+  </ion-item>
+  <ion-item lines="True" (click)="goToOnboarding()" detail="true">
+    <ion-icon name="book-outline" slot="start"></ion-icon>
+    {{ 'tab-settings.welcome-onboarding_label' | translate }}
+  </ion-item>
+  <ion-item lines="True" (click)="goToAddressBook()" detail="true">
+    <ion-icon name="person-add-outline" slot="start"></ion-icon>
+    {{ 'tab-settings.address_book_label' | translate }}
+  </ion-item>
+  <ion-item lines="True" (click)="goToBip39Wordlist()" detail="true">
+    <ion-icon name="list" slot="start"></ion-icon>
+    {{ 'tab-settings.bip39_wordlist_label' | translate }}
+  </ion-item>
+  <ion-item lines="True" (click)="goToErrorHistory()" detail="true">
+    <ion-icon name="bug-outline" slot="start"></ion-icon>
+    {{ 'tab-settings.error-history_label' | translate }}
+  </ion-item>
 </ion-content>

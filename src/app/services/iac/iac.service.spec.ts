@@ -3,15 +3,17 @@ import { TestBed } from '@angular/core/testing'
 import { IACService } from './iac.service'
 
 import { UnitHelper } from '../../../../test-config/unit-test-helper'
-import { STATUS_BAR_PLUGIN, SPLASH_SCREEN_PLUGIN, APP_PLUGIN, CLIPBOARD_PLUGIN } from '@airgap/angular-core'
+import { STATUS_BAR_PLUGIN, SPLASH_SCREEN_PLUGIN, APP_PLUGIN, CLIPBOARD_PLUGIN, ISOLATED_MODULES_PLUGIN, WebIsolatedModules, FILESYSTEM_PLUGIN, ZIP_PLUGIN } from '@airgap/angular-core'
 import { ModalController, NavController, NavParams, Platform } from '@ionic/angular'
 import {
   ClipboardMock,
   DeviceProviderMock,
+  FilesystemMock,
   ModalControllerMock,
   NavControllerMock,
   NavParamsMock,
-  PlatformMock
+  PlatformMock,
+  ZipMock
 } from 'test-config/ionic-mocks'
 import { StatusBarMock, SplashScreenMock, createAppSpy } from 'test-config/plugins-mocks'
 import { StorageMock } from 'test-config/storage-mock'
@@ -43,7 +45,10 @@ describe('IACService', () => {
           { provide: STATUS_BAR_PLUGIN, useClass: StatusBarMock },
           { provide: SPLASH_SCREEN_PLUGIN, useClass: SplashScreenMock },
           { provide: CLIPBOARD_PLUGIN, useClass: ClipboardMock },
-          { provide: Platform, useClass: PlatformMock }
+          { provide: Platform, useClass: PlatformMock },
+          { provide: ISOLATED_MODULES_PLUGIN, useValue: new WebIsolatedModules() },
+          { provide: FILESYSTEM_PLUGIN, useClass: FilesystemMock },
+          { provide: ZIP_PLUGIN, useClass: ZipMock }
         ]
       })
     )

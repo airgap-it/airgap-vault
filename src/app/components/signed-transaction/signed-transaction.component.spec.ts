@@ -3,11 +3,12 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
 import { UnitHelper } from '../../../../test-config/unit-test-helper'
 import { SignedTransactionComponent } from './signed-transaction.component'
 import { MainProtocolSymbols } from '@airgap/coinlib-core/utils/ProtocolSymbols'
-import { IACMessageType, Serializer } from '@airgap/coinlib-core'
-import { Message } from '@airgap/coinlib-core/serializer/message'
+import { IACMessageType, Message, Serializer } from '@airgap/serializer'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
 import { SecureStorageService } from 'src/app/services/secure-storage/secure-storage.service'
 import { SecureStorageServiceMock } from 'src/app/services/secure-storage/secure-storage.mock'
+import { FILESYSTEM_PLUGIN, ISOLATED_MODULES_PLUGIN, WebIsolatedModules, ZIP_PLUGIN } from '@airgap/angular-core'
+import { FilesystemMock, ZipMock } from 'test-config/ionic-mocks'
 
 describe('SignedTransactionComponent', () => {
   let signedTransactionFixture: ComponentFixture<SignedTransactionComponent>
@@ -19,7 +20,13 @@ describe('SignedTransactionComponent', () => {
     TestBed.configureTestingModule(
       unitHelper.testBed({
         declarations: [],
-        providers: [{ provide: SecureStorageService, useClass: SecureStorageServiceMock }, SecretsService]
+        providers: [
+          { provide: SecureStorageService, useClass: SecureStorageServiceMock },
+          { provide: ISOLATED_MODULES_PLUGIN, useValue: new WebIsolatedModules() },
+          { provide: FILESYSTEM_PLUGIN, useClass: FilesystemMock },
+          { provide: ZIP_PLUGIN, useClass: ZipMock },
+          SecretsService
+        ]
       })
     )
       .compileComponents()
@@ -38,7 +45,7 @@ describe('SignedTransactionComponent', () => {
   it(
     'should load the from-to component if a valid tx is given',
     waitForAsync(async () => {
-      const serializer: Serializer = new Serializer()
+      const serializer: Serializer = Serializer.getInstance()
       const serializedTxs = await serializer.serialize([
         new Message(IACMessageType.TransactionSignResponse, MainProtocolSymbols.ETH, {
           accountIdentifier: 'test',

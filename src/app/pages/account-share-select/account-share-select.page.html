@@ -1,7 +1,7 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/tab-accounts"></ion-back-button>
+      <ion-back-button defaultHref="/tabs/tab-secrets"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ 'wallet-share-select.title' | translate }}</ion-title>
   </ion-toolbar>
@@ -22,10 +22,12 @@
         ></ion-checkbox>
       </ion-item>
       <ion-list lines="none" *ngIf="(isChecked$ | async)[secret.id]">
-        <airgap-account-item
-          *ngFor="let wallet of (secret.wallets | walletFilter: { status: AirGapWalletStatus.ACTIVE })"
-          [wallet]="wallet"
-        ></airgap-account-item>
+        <span class="airgap-account-item-migration">
+          <airgap-account-item
+            *ngFor="let wallet of (secret.wallets | walletFilter: { status: AirGapWalletStatus.ACTIVE } | async) || []"
+            [wallet]="wallet"
+          ></airgap-account-item>
+        </span>
       </ion-list>
     </ng-container>
   </ion-list>

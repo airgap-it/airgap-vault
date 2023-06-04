@@ -1,11 +1,13 @@
 // tslint:disable: max-classes-per-file
-import { AppInfoPlugin } from '@airgap/angular-core'
+import { AppInfoPlugin, IsolatedModulesPlugin, ZipPlugin } from '@airgap/angular-core'
 import { AppPlugin } from '@capacitor/app'
 import { ClipboardPlugin } from '@capacitor/clipboard'
+import { FilesystemPlugin } from '@capacitor/filesystem'
 import { SplashScreenPlugin } from '@capacitor/splash-screen'
 import { StatusBarPlugin } from '@capacitor/status-bar'
+import { FilePickerPlugin } from '@capawesome/capacitor-file-picker'
 
-import { SaplingNativePlugin, SecurityUtilsPlugin } from '../src/app/capacitor-plugins/definitions'
+import { EnvironmentPlugin, SaplingNativePlugin, SecurityUtilsPlugin } from '../src/app/capacitor-plugins/definitions'
 
 import { newSpy } from './unit-test-helper'
 
@@ -54,6 +56,26 @@ export function createSplashScreenSpy(): SplashScreenPlugin {
 
 export function createStatusBarSpy(): StatusBarPlugin {
   return jasmine.createSpyObj('StatusBarPlugin', ['setStyle', 'setBackgroundColor'])
+}
+
+export function createFilesystemSpy(): FilesystemPlugin {
+  return jasmine.createSpyObj('FilesystemPlugin', ['stat', 'mkdir', 'rmdir', 'readdir', 'readFile', 'copy'])
+}
+
+export function createZipSpy(): ZipPlugin {
+  return jasmine.createSpyObj('ZipPlugin', ['unzip'])
+}
+
+export function createIsolatedModulesSpy(): IsolatedModulesPlugin {
+  return jasmine.createSpyObj('IsolatedModulesPlugin', ['loadModules', 'callMethod'])
+}
+
+export function createEnvironmentSpy(): EnvironmentPlugin {
+  return jasmine.createSpyObj('EnvironmentPlugin', ['addListener'])
+}
+
+export function createFilePickerSpy(): FilePickerPlugin {
+  return jasmine.createSpyObj('FilePickerPlugin', ['pickFiles'])
 }
 
 export class AppInfoPluginMock {

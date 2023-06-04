@@ -1,0 +1,117 @@
+.button--rounded ion-button {
+  --padding-end: 0;
+  --padding-start: 0;
+  width: 40px;
+  height: 40px;
+}
+
+ion-content {
+  --padding-bottom: var(--ion-padding, 64px);
+}
+
+.content-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.center-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 540px;
+}
+
+h2 {
+  font-size: 1.125rem;
+  line-height: 1.5rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.states-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 70%;
+  gap: 4px;
+  margin-bottom: 3rem;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 49%;
+    left: 2%;
+    border: 1px dashed rgba(255, 255, 255, 0.591);
+    width: 94%;
+    z-index: -1;
+  }
+
+  .state {
+    height: 100%;
+    font-size: large;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.8);
+    width: 30px;
+    height: 30px;
+    padding: 0px;
+  }
+
+  ion-button {
+    --padding-start: 0px;
+    --padding-end: 0px;
+  }
+
+  .selected {
+    margin-right: auto;
+  }
+}
+
+.tags-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  width: 100%;
+
+  .tag {
+    --padding-bottom: 0px;
+    --padding-top: 0px;
+    --padding-start: 18px;
+    --padding-end: 18px;
+
+    .number {
+      font-size: 0.75rem;
+      line-height: 1rem;
+      color: rgb(192, 192, 192);
+      width: 100%;
+      text-align: start;
+      margin-right: 4px;
+    }
+
+    .text {
+      font-size: 0.75rem;
+      line-height: 1rem;
+      text-transform: lowercase;
+      font-weight: 800;
+    }
+  }
+}
+
+.buttons-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  position: fixed;
+  width: 100%;
+  bottom: 0px;
+  padding-bottom: 12px;
+  background-color: rgba(0, 0, 0, 0.4);
+
+  ion-button {
+    --padding-top: 24px;
+    --padding-bottom: 24px;
+    --padding-start: 48px;
+    --padding-end: 48px;
+  }
+}

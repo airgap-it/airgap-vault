@@ -1,8 +1,11 @@
-import { DeeplinkService } from '@airgap/angular-core'
+import { DeeplinkService, QRType } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
-import { AirGapWallet, UnsignedTransaction, MessageSignResponse, IACMessageDefinitionObjectV3 } from '@airgap/coinlib-core'
+import { AirGapWallet, UnsignedTransaction } from '@airgap/coinlib-core'
+import { IACMessageDefinitionObjectV3, MessageSignResponse } from '@airgap/serializer'
 
+import { CompanionApp } from '../../pages/account-address/account-address.page'
 import { assertNever } from '../../utils/utils'
+
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { NavigationService } from '../navigation/navigation.service'
 import { InteractionType, VaultStorageKey, VaultStorageService } from '../storage/storage.service'
@@ -26,23 +29,42 @@ export interface IInteractionOptions {
   wallets?: AirGapWallet[]
   transactions?: UnsignedTransaction[]
   messageSignResponse?: MessageSignResponse
+  companionApp?: CompanionApp
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class InteractionService {
+  interactionType: InteractionType
+
   constructor(
     private readonly navigationService: NavigationService,
     private readonly deepLinkService: DeeplinkService,
     private readonly storageService: VaultStorageService
-  ) {}
+  ) {
+    this.storageService.get(VaultStorageKey.INTERACTION_TYPE).then((type) => (this.interactionType = type))
+  }
+
+  resetInteractionType() {
+    this.changeInteractionType(InteractionType.ALWAYS_ASK)
+  }
+
+  changeInteractionType(newType: InteractionType) {
+    this.interactionType = newType
+    this.storageService.set(VaultStorageKey.INTERACTION_TYPE, this.interactionType).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
+  }
+
+  async getInteractionType() {
+    this.interactionType = await this.storageService.get(VaultStorageKey.INTERACTION_TYPE)
+    return this.interactionType
+  }
 
   public async startInteraction(interactionOptions: IInteractionOptions): Promise<void> {
-    const interactionType = await this.storageService.get(VaultStorageKey.INTERACTION_TYPE)
+    await this.getInteractionType()
 
     if (interactionOptions.communicationType) {
-      if (interactionType === InteractionType.UNDETERMINED) {
+      if (this.interactionType === InteractionType.UNDETERMINED) {
         this.goToInteractionSelectionSettingsPage(interactionOptions)
       }
       if (interactionOptions.communicationType === InteractionCommunicationType.DEEPLINK) {
@@ -50,8 +72,14 @@ export class InteractionService {
       } else if (interactionOptions.communicationType === InteractionCommunicationType.QR) {
         this.navigateToPageByOperationType(interactionOptions)
       }
+    } else if (
+      interactionOptions.operationType === InteractionOperationType.WALLET_SYNC &&
+      interactionOptions.companionApp &&
+      ![QRType.V2, QRType.V3].includes(interactionOptions.companionApp?.qrType)
+    ) {
+      this.navigateToPageByOperationType(interactionOptions)
     } else {
-      switch (interactionType) {
+      switch (this.interactionType) {
         case InteractionType.UNDETERMINED:
           this.goToInteractionSelectionPage(interactionOptions)
           break
@@ -84,7 +112,10 @@ export class InteractionService {
   private navigateToPageByOperationType(interactionOptions: IInteractionOptions): void {
     if (interactionOptions.operationType === InteractionOperationType.WALLET_SYNC) {
       this.navigationService
-        .routeWithState('/account-share', { interactionUrl: interactionOptions.iacMessage })
+        .routeWithState('/account-share', {
+          interactionUrl: interactionOptions.iacMessage,
+          companionApp: interactionOptions.companionApp
+        })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } else if (interactionOptions.operationType === InteractionOperationType.TRANSACTION_BROADCAST) {
       this.navigationService
@@ -113,7 +144,7 @@ export class InteractionService {
     this.deepLinkService
       .sameDeviceDeeplink(iacMessage)
       .then(() => {
-        this.navigationService.routeToAccountsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+        this.navigationService.routeToSecretsTab().catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       })
       .catch(handleErrorLocal(ErrorCategory.DEEPLINK_SERVICE))
   }

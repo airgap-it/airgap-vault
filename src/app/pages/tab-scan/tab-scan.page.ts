@@ -79,6 +79,7 @@ export class TabScanPage extends ScanBasePage {
             //   .route('/')
             //   .then(() => {
             this.resetScannerPage()
+            this.stopScan()
             // })
             // .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
           }

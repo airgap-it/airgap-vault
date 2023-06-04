@@ -1,13 +1,14 @@
 import { Component } from '@angular/core'
 import { Platform } from '@ionic/angular'
-
+import { Observable } from 'rxjs'
+import { map } from 'rxjs/operators'
+import { LifehashService } from 'src/app/services/lifehash/lifehash.service'
+import { AdvancedModeType, VaultStorageKey, VaultStorageService } from 'src/app/services/storage/storage.service'
 import { MnemonicSecret } from '../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
-
-// import { TranslateService } from '@ngx-translate/core'
-// import { ClipboardService } from '@airgap/angular-core'
+import { UiEventService } from '@airgap/angular-core'
 
 @Component({
   selector: 'airgap-secret-add',
@@ -21,19 +22,28 @@ export class SecretAddPage {
 
   public secret: MnemonicSecret
 
+  public lifehashData: string | undefined
+
+  public isAdvancedMode$: Observable<boolean> = this.storageService
+    .subscribe(VaultStorageKey.ADVANCED_MODE_TYPE)
+    .pipe(map((res) => res === AdvancedModeType.ADVANCED))
+
   constructor(
-    // private readonly alertCtrl: AlertController,
-    // private readonly translateService: TranslateService,
-    // private readonly clipboardService: ClipboardService,
     private readonly secretsService: SecretsService,
     private readonly navigationService: NavigationService,
-    private readonly platform: Platform
+    private readonly platform: Platform,
+    private readonly lifehashService: LifehashService,
+    private readonly storageService: VaultStorageService,
+    private readonly uiEventService: UiEventService
   ) {
     if (this.navigationService.getState()) {
       this.isGenerating = this.navigationService.getState().isGenerating
       this.secret = this.navigationService.getState().secret
-
       this.isAndroid = this.platform.is('android')
+
+      this.lifehashService.generateLifehash(this.secret.fingerprint).then((data) => {
+        this.lifehashData = data
+      })
     }
   }
 
@@ -43,46 +53,40 @@ export class SecretAddPage {
     } catch (error) {
       handleErrorLocal(ErrorCategory.SECURE_STORAGE)(error)
 
-      // TODO: Show error
+      if (error.message !== 'Already added secret' /* a workaround to avoid prompting 2 alerts */) {
+        await this.showErrorAlert()
+      } else {
+        this.navigationService.routeToSecretsTab()
+      }
       return
     }
 
-    await this.dismiss()
-    if (this.isGenerating) {
-      this.navigationService.route('/account-add').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-    }
-  }
-
-  public async dismiss(): Promise<boolean> {
-    try {
-      return this.navigationService.routeToAccountsTab()
-    } catch (error) {
-      return false
-    }
+    this.navigationService.routeWithState('/account-add', { secret: this.secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public async togglePasscode(): Promise<void> {
     this.secret.isParanoia = !this.secret.isParanoia
   }
 
-  // private async showRecoveryKeyAlert(recoveryKey: string): Promise<void> {
-  //   const alert: HTMLIonAlertElement = await this.alertCtrl.create({
-  //     header: this.translateService.instant('secret-edit.secret-recovery-key.alert.title'),
-  //     subHeader: this.translateService.instant('secret-edit.secret-recovery-key.description'),
-  //     message: recoveryKey,
-  //     buttons: [
-  //       {
-  //         text: this.translateService.instant('secret-edit.secret-recovery-key.alert.copy'),
-  //         handler: () => {
-  //           this.clipboardService.copy(recoveryKey)
-  //         }
-  //       },
-  //       {
-  //         text: this.translateService.instant('secret-edit.secret-recovery-key.alert.done'),
-  //         handler: () => {}
-  //       }
-  //     ]
-  //   })
-  //   alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
-  // }
+  private async showErrorAlert() {
+    const alert = await this.uiEventService.getTranslatedAlert({
+      header: 'secret-edit.error_alert.title',
+      message: 'secret-edit.error_alert.message',
+      backdropDismiss: true,
+      buttons: [
+        {
+          text: 'secret-edit.error_alert.abort-button_label',
+          handler: () => {
+            this.navigationService.routeToSecretsTab()
+          }
+        },
+        {
+          text: 'secret-edit.error_alert.retry-button_label',
+          role: 'cancel'
+        }
+      ]
+    })
+
+    await alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
+  }
 }

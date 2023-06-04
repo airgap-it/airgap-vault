@@ -1,0 +1,22 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/secret-setup"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'contact-book.title_settings' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list no-border lines="none">
+    <ion-item>
+      {{ 'contact-book.label_enable_address_book' | translate }}
+      <ion-toggle [checked]="bookEnabled" (ionChange)="toggleAddressBook($event)" slot="end"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      {{ 'contact-book.label_enable_suggestions' | translate }}
+      <ion-toggle [checked]="suggestionsEnabled" (ionChange)="toggleEnableSuggestions($event)" slot="end"></ion-toggle>
+    </ion-item>
+    <button class="delete-button" expand="block" (click)="onClickDelete()">{{ 'contact-book.button_delete_entries' | translate }}</button>
+  </ion-list>
+</ion-content>

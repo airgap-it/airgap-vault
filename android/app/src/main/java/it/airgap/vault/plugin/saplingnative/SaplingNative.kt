@@ -38,7 +38,7 @@ class SaplingNative : Plugin() {
 
     @PluginMethod
     fun dropProvingContext(call: PluginCall) {
-        with(call) {
+        call.executeCatching {
             assertReceived(Param.CONTEXT)
             sapling.dropProvingContext(context)
             resolve()
@@ -47,7 +47,7 @@ class SaplingNative : Plugin() {
 
     @PluginMethod
     fun prepareSpendDescription(call: PluginCall) {
-        with(call) {
+        call.executeCatching {
             assertReceived(
                     Param.CONTEXT,
                     Param.SPENDING_KEY,
@@ -78,7 +78,7 @@ class SaplingNative : Plugin() {
 
     @PluginMethod
     fun preparePartialOutputDescription(call: PluginCall) {
-        with(call) {
+        call.executeCatching {
             assertReceived(
                     Param.CONTEXT,
                     Param.ADDRESS,
@@ -103,7 +103,7 @@ class SaplingNative : Plugin() {
 
     @PluginMethod
     fun createBindingSignature(call: PluginCall) {
-        with(call) {
+        call.executeCatching {
             assertReceived(Param.CONTEXT, Param.BALANCE, Param.SIGHASH)
 
             tryResolveWithDataCatchReject {

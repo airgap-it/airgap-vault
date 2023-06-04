@@ -8,13 +8,14 @@ import * as fromRoot from '../../app.reducers'
 import { MnemonicSecret } from '../../models/secret'
 
 import * as actions from './migration.actions'
-import { Alert, Bip39PassphraseAlert, MigrationWallet, MigrationWalletGroup, ParanoiaInfoAlert, UnknownErrorAlert } from './migration.types'
+import { Alert, Bip39PassphraseAlert, MigrationMnemonicSecret, MigrationWallet, MigrationWalletGroup, ParanoiaInfoAlert, UnknownErrorAlert } from './migration.types'
 import { getWalletGroupMigrationStatus, getWalletMigrationStatus } from './migration.utils'
 
 export interface FeatureState {
-  // TODO: move secrets to a global state
-  targetSecrets: UIResource<MnemonicSecret[]>
+  targetSecrets: UIResource<MigrationMnemonicSecret[]>
   targetWalletKeys: string[]
+
+  identifierToNameMap: { [identifier: string]: string }
 
   handledSecretIds: string[]
   handledWalletKeys: string[]
@@ -38,6 +39,8 @@ export const initialState: FeatureState = {
   },
   targetWalletKeys: [],
 
+  identifierToNameMap: {},
+
   handledSecretIds: [],
   handledWalletKeys: [],
 
@@ -56,13 +59,15 @@ export const reducer = createReducer(
       value: state.targetSecrets.value
     }
   })),
-  on(actions.navigationDataLoaded, (state, { secrets, targetWalletKeys }) => ({
+  on(actions.navigationDataLoaded, (state, { secrets, targetWalletKeys, identifierToNameMap }) => ({
     ...state,
     targetSecrets: {
       status: UIResourceStatus.SUCCESS,
       value: secrets
     },
     targetWalletKeys,
+
+    identifierToNameMap,
 
     handledSecretIds: [],
     handledWalletKeys: [],
@@ -86,7 +91,7 @@ export const reducer = createReducer(
     currentlyHandledSecretId: id
   })),
   on(actions.secretSkipped, (state, { id }) => {
-    const secret: MnemonicSecret | undefined = state.targetSecrets.value?.find((secret: MnemonicSecret) => secret.id === id)
+    const secret: MnemonicSecret | undefined = state.targetSecrets.value?.find((secret: MigrationMnemonicSecret) => secret.wrapped.id === id)?.wrapped
 
     return {
       ...state,
@@ -116,7 +121,7 @@ export const reducer = createReducer(
     currentlyHandledWalletKey: undefined
   })),
   on(actions.paranoiaDetected, (state, { secretId }) => {
-    const secret: MnemonicSecret | undefined = state.targetSecrets.value?.find((secret: MnemonicSecret) => secret.id === secretId)
+    const secret: MnemonicSecret | undefined = state.targetSecrets.value?.find((secret: MigrationMnemonicSecret) => secret.wrapped.id === secretId)?.wrapped
 
     return {
       ...state,
@@ -136,11 +141,9 @@ export const reducer = createReducer(
   on(actions.invalidBip39Passphrase, (state, { protocolIdentifier, publicKey }) => {
     let wallet: AirGapWallet | undefined
     for (const secret of state.targetSecrets.value ?? []) {
-      for (const _wallet of secret.wallets) {
-        if (_wallet.protocol.identifier === protocolIdentifier && _wallet.publicKey === publicKey) {
-          wallet = _wallet
-          break
-        }
+      wallet = (secret.walletsGrouped[protocolIdentifier] ?? {})[publicKey]
+      if (wallet !== undefined) {
+        break
       }
     }
 
@@ -152,7 +155,7 @@ export const reducer = createReducer(
               id: generateGUID(),
               value: {
                 type: 'bip39Passphrase' as Bip39PassphraseAlert['type'],
-                protocolName: wallet.protocol.name,
+                protocolName: state.identifierToNameMap[protocolIdentifier] ?? protocolIdentifier,
                 address: wallet.receivingPublicAddress
               },
               status: UIActionStatus.PENDING
@@ -190,7 +193,10 @@ export const selectFeatureState = createFeatureSelector<State, FeatureState>('mi
 
 export const selectTargetSecrets = createSelector(
   selectFeatureState,
-  (state: FeatureState): UIResource<MnemonicSecret[]> => state.targetSecrets
+  (state: FeatureState): UIResource<MnemonicSecret[]> => ({
+    status: state.targetSecrets.status,
+    value: state.targetSecrets.value?.map((secret: MigrationMnemonicSecret) => secret.wrapped)
+  })
 )
 export const selectTargetWalletKeys = createSelector(selectFeatureState, (state: FeatureState): string[] => state.targetWalletKeys)
 export const selectHandledSecretIds = createSelector(selectFeatureState, (state: FeatureState): string[] => state.handledSecretIds)

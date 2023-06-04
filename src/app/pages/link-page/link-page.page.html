@@ -1,0 +1,22 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab-settings"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ title }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-row class="ion-justify-content-center ion-padding-bottom">
+    <ion-col>
+      <p>{{ description }}</p>
+      <p>{{ link }}</p>
+      <p [innerHTML]="'link-page.scan-qr' | translate: { urlDescription: urlDescription }"></p>
+      <airgap-qr *ngIf="link" [qrdata]="link"></airgap-qr>
+    </ion-col>
+  </ion-row>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-button color="primary" (click)="open()" shape="round">{{ 'link-page.copy_label' | translate }}</ion-button>
+  </ion-fab>
+</ion-content>

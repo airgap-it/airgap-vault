@@ -1,7 +1,7 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/tab-accounts"></ion-back-button>
+      <ion-back-button defaultHref="/tabs/tab-secrets"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ 'wallet-address.title' | translate }}</ion-title>
 
@@ -13,16 +13,16 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content *ngIf="wallet" class="ion-padding">
   <ion-row class="ion-padding">
     <ion-col>
       <ion-avatar>
         <airgap-identicon [address]="wallet.receivingPublicAddress"></airgap-identicon>
       </ion-avatar>
-      <airgap-currency-symbol [symbol]="wallet.protocol.symbol" [protocolIdentifier]="wallet.protocol.identifier"></airgap-currency-symbol>
+      <airgap-currency-symbol [symbol]="protocolSymbol" [protocolIdentifier]="protocolIdentifier"></airgap-currency-symbol>
     </ion-col>
     <ion-col>
-      <h2 class="ion-no-margin">{{ wallet.protocol.name }} {{ wallet.protocol.symbol }}</h2>
+      <h2 class="ion-no-margin">{{ protocolName }} {{ protocolSymbol }}</h2>
       <p>
         {{ 'wallet-address.address_label' | translate }}
         <br />
@@ -33,15 +33,48 @@
         <br />
         <span class="selectable typography--mono">{{ wallet.derivationPath }}</span>
       </p>
+      <p *ngIf="isAppAdvancedMode$ | async">
+        <ion-chip color="light" *ngIf="wallet.isExtendedPublicKey">HD Wallet</ion-chip>
+        <ion-chip color="light" *ngIf="secret.fingerprint !== wallet.masterFingerprint">BIP39 passphrase</ion-chip>
+      </p>
     </ion-col>
   </ion-row>
 
-  <ion-row class="ion-justify-content-center ion-padding-bottom">
-    <airgap-qr [qrdata]="wallet.receivingPublicAddress" [level]="'L'" [size]="300"></airgap-qr>
+  <p class="ion-padding-horizontal ion-padding-bottom">You can sync this account with:</p>
+
+  <ion-row *ngFor="let option of syncOptions" class="ion-padding-bottom">
+    <ion-col size="12">
+      <ion-button expand="block" color="light" (click)="share(option)" shape="round">
+        <img src="assets/logos/{{option.icon}}" style="width: 24px; height: 24px;" />
+        &nbsp; {{option.name}}
+      </ion-button>
+    </ion-col>
   </ion-row>
 
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-button color="light" (click)="share()" shape="round">{{ 'wallet-address.sync_label' | translate }}</ion-button>
-    <ion-button color="primary" (click)="done()" shape="round">{{ 'wallet-address.done_label' | translate }}</ion-button>
-  </ion-fab>
+  <ng-container *ngIf="showMetaMaskMigrationOnboarding">
+    <ion-row>
+      <ion-col>
+        To use AirGap Vault with MetaMask or Rabby wallet, please migrate this account. To do so, simply remove and re-add this Ethereum
+        account. For help, visit our docs.
+      </ion-col>
+    </ion-row>
+  </ng-container>
+
+  <ion-modal #modal trigger="open-modal" [presentingElement]="presentingElement">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Address QR</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="modal.dismiss()">Close</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-row class="ion-justify-content-center ion-padding-bottom">
+          <airgap-qr [qrdata]="wallet.receivingPublicAddress" [level]="'L'" [size]="300"></airgap-qr>
+        </ion-row>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

@@ -3,12 +3,12 @@
 
 /** Ionic CSS Variables **/
 :root {
-  --ion-color-primary: #f7296e;
-  --ion-color-primary-rgb: 247, 41, 110;
+  --ion-color-primary: #8874fc;
+  --ion-color-primary-rgb: 127, 108, 237;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #d92461;
-  --ion-color-primary-tint: #f83e7d;
+  --ion-color-primary-shade: #6658ed;
+  --ion-color-primary-tint: #9b9bff;
 
   --ion-color-secondary: #311b58;
   --ion-color-secondary-rgb: 49, 27, 88;
@@ -87,13 +87,27 @@ airgap-secret-add,
 airgap-secret-edit,
 airgap-warning-modal,
 airgap-migration,
+airgap-onboarding-welcome,
+airgap-distribution-onboarding,
 airgap-introduction,
+airgap-installation-type,
+airgap-onboarding-advanced-mode,
 airgap-social-recovery-import,
 airgap-interaction-selection,
 airgap-interaction-selection-settings,
+airgap-languages-selection-settings,
 airgap-deserialized-detail,
 airgap-transaction-signed,
+airgap-contact-book-contacts-detail,
+airgap-contact-book-onboarding,
+airgap-isolated-modules-onboarding-page,
 airgap-secret-generate-onboarding,
+airgap-social-recovery-generate-intro,
+airgap-social-recovery-generate-setup,
+airgap-social-recovery-generate-rules,
+airgap-social-recovery-generate-share-show,
+airgap-social-recovery-generate-share-validate,
+airgap-social-recovery-generate-finish,
 airgap-social-recovery-setup,
 airgap-secret-generate,
 airgap-secret-generate-dice,
@@ -107,6 +121,7 @@ airgap-current-secret,
 airgap-bip85-generate,
 airgap-bip85-show,
 airgap-local-authentication-onboarding,
+airgap-link-page,
 airgap-deserialized-detail,
 airgap-address-explorer {
   --ion-background-color: var(--ion-color-secondary);
@@ -129,7 +144,11 @@ airgap-address-explorer {
   }
 }
 
-airgap-tab-accounts {
+airgap-accounts-list {
+  ion-toolbar {
+    --background: var(--ion-color-secondary);
+    --color: var(--ion-color-secondary-contrast);
+  }
   ion-item {
     --detail-icon-color: var(--ion-color-dark);
   }

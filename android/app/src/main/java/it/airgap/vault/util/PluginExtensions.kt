@@ -57,9 +57,22 @@ fun PluginCall.tryResolveWithDataCatchReject(block: () -> List<Pair<String, Any>
     }
 }
 
+inline fun PluginCall.executeCatching(block: PluginCall.() -> Unit) {
+    try {
+        block()
+    } catch (e: Throwable) {
+        e.printStackTrace()
+        reject(e.message)
+    }
+}
+
 fun PluginCall.assertReceived(vararg params: String, acceptEmpty: Boolean = false) {
-    val hasAll = params.map { data.isNull(it) }.all { !it }
-    val hasEmpty = !acceptEmpty && params.mapNotNull { getString(it)?.isBlank() }.any { it }
+    assertReceivedIn(data, *params, acceptEmpty = acceptEmpty)
+}
+
+fun PluginCall.assertReceivedIn(jsObject: JSObject, vararg params: String, acceptEmpty: Boolean = false) {
+    val hasAll = params.map { jsObject.isNull(it) }.all { !it }
+    val hasEmpty = !acceptEmpty && params.mapNotNull {jsObject.getString(it)?.isBlank() }.any { it }
 
     if (!hasAll || hasEmpty) {
         reject("$methodName requires: ${params.joinToString()}")

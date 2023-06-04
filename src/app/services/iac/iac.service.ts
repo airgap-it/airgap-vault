@@ -14,11 +14,7 @@ import {
 import {
   AirGapWallet,
   AirGapWalletStatus,
-  IACMessageDefinitionObjectV3,
-  IACMessageType,
   MainProtocolSymbols,
-  MessageSignRequest,
-  RawBitcoinSegwitTransaction,
   UnsignedTransaction
 } from '@airgap/coinlib-core'
 import { Inject, Injectable } from '@angular/core'
@@ -31,7 +27,9 @@ import { SecretsService } from '../secrets/secrets.service'
 import * as bitcoinJS from 'bitcoinjs-lib'
 import { ModalController } from '@ionic/angular'
 import { SelectAccountPage } from 'src/app/pages/select-account/select-account.page'
-import { RawTypedEthereumTransaction } from '@airgap/coinlib-core/serializer/types'
+import { RawTypedEthereumTransaction } from '@airgap/ethereum/v0/types/transaction-ethereum'
+import { IACMessageType, IACMessageDefinitionObjectV3, MessageSignRequest } from '@airgap/serializer'
+import { BitcoinSegwitTransactionSignRequest } from '@airgap/bitcoin'
 
 @Injectable({
   providedIn: 'root'
@@ -153,7 +151,7 @@ export class IACService extends BaseIACService {
     const unsignedTransaction: UnsignedTransaction = signTransactionRequest.payload as UnsignedTransaction
 
     // Select wallet by public key and protocol identifier
-    let correctWallet = this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(
+    let correctWallet = await this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(
       unsignedTransaction.publicKey,
       signTransactionRequest.protocol
     )
@@ -163,13 +161,13 @@ export class IACService extends BaseIACService {
 
     // BTC: First we try to find a wallet by matching the masterFingerprint
     if (!correctWallet && signTransactionRequest.protocol === MainProtocolSymbols.BTC_SEGWIT) {
-      const transaction: RawBitcoinSegwitTransaction = unsignedTransaction.transaction
+      const transaction: BitcoinSegwitTransactionSignRequest['transaction'] = unsignedTransaction.transaction
       const decodedPSBT = bitcoinJS.Psbt.fromHex(transaction.psbt)
       for (const input of decodedPSBT.data.inputs) {
         for (const derivation of input.bip32Derivation) {
           const masterFingerprint = derivation.masterFingerprint.toString('hex')
 
-          correctWallet = this.secretsService.findWalletByFingerprintDerivationPathAndProtocolIdentifier(
+          correctWallet = await this.secretsService.findWalletByFingerprintDerivationPathAndProtocolIdentifier(
             masterFingerprint,
             signTransactionRequest.protocol,
             derivation.path,
@@ -213,7 +211,7 @@ export class IACService extends BaseIACService {
     }
 
     // ETH: MetaMask requests don't contain the public key information, we need to do the matching based on the sourceFingerprint
-    if (!correctWallet && signTransactionRequest.protocol === MainProtocolSymbols.ETH) {
+    if (!correctWallet && (signTransactionRequest.protocol === MainProtocolSymbols.ETH || signTransactionRequest.protocol === MainProtocolSymbols.OPTIMISM)) {
       const transaction: RawTypedEthereumTransaction = unsignedTransaction.transaction
 
       const fingerprint = transaction.masterFingerprint ?? metadata.sourceFingerprint
@@ -238,8 +236,11 @@ export class IACService extends BaseIACService {
       correctWallet = await this.findBaseWallet(unsignedTransaction.publicKey, signTransactionRequest)
     }
 
+    const secret = this.secretsService.findByPublicKey(correctWallet.publicKey)
+
     return {
       wallet: correctWallet,
+      secret,
       signTransactionRequest
     }
   }
@@ -254,7 +255,7 @@ export class IACService extends BaseIACService {
   ) {
     const messageSignRequest: MessageSignRequest = messageDefinitionObject.payload as MessageSignRequest
 
-    let correctWallet = this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(
+    let correctWallet = await this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(
       messageSignRequest.publicKey,
       messageDefinitionObject.protocol
     )
@@ -276,8 +277,11 @@ export class IACService extends BaseIACService {
       correctWallet = await this.findBaseWallet(messageSignRequest.publicKey, messageDefinitionObject)
     }
 
+    const secret = this.secretsService.findByPublicKey(correctWallet.publicKey)
+
     return {
       wallet: correctWallet,
+      secret,
       signTransactionRequest: {
         ...messageDefinitionObject,
         payload: {
@@ -297,7 +301,7 @@ export class IACService extends BaseIACService {
     // and fee for all tokens we support.
     let correctWallet: AirGapWallet | undefined
 
-    const baseWallet: AirGapWallet | undefined = this.secretsService.findBaseWalletByPublicKeyAndProtocolIdentifier(
+    const baseWallet: AirGapWallet | undefined = await this.secretsService.findBaseWalletByPublicKeyAndProtocolIdentifier(
       publicKey,
       messageDefinitionObject.protocol
     )
@@ -333,7 +337,7 @@ export class IACService extends BaseIACService {
   ): Promise<AirGapWallet | undefined> {
     let correctWallet: AirGapWallet | undefined
 
-    correctWallet = this.secretsService.findWalletByXPubFingerprintDerivationPathAndProtocolIdentifier(
+    correctWallet = await this.secretsService.findWalletByXPubFingerprintDerivationPathAndProtocolIdentifier(
       fingerprint,
       protocol,
       derivationPath

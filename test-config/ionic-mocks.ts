@@ -189,3 +189,13 @@ export class DeeplinkMock {
     })
   )
 }
+
+export class FilesystemMock {
+  public readFile: jasmine.Spy = newSpy('readFile', Promise.resolve({ data: 'text-from-filesystem' }))
+  public writeFile: jasmine.Spy = newSpy('writeFile', Promise.resolve())
+  public readdir: jasmine.Spy = newSpy('readdir', Promise.resolve({ files: [] }))
+}
+
+export class ZipMock {
+  public unzip: jasmine.Spy = newSpy('unzip', Promise.resolve())
+}

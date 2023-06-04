@@ -1,0 +1,54 @@
+.suggestion-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 2px solid #80808094;
+  border-radius: 6px;
+  padding: 4px 8px;
+
+  .suggestion-image-wrapper {
+    height: 40px;
+    width: 40px;
+
+    .suggestion-image {
+      width: 100%;
+      height: 100%;
+      border-radius: 100%;
+    }
+  }
+
+  .suggestion-name-wrapper {
+    flex: 1;
+
+    .suggestion-address {
+      line-break: anywhere;
+      margin: 0px;
+      font-weight: 500;
+      color: grey;
+    }
+  }
+
+  .suggestion-icon-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    .suggestion-date {
+      margin: 0px;
+    }
+  }
+
+  .suggestion-actions {
+    display: flex;
+    .suggestion-button {
+      font-size: 12px;
+    }
+
+    ion-icon {
+      font-size: 26px;
+      margin-top: auto;
+      margin-bottom: auto;
+      margin-left: 8px;
+    }
+  }
+}
