@@ -125,6 +125,18 @@ const routes: Routes = [
     loadChildren: () => import('./pages/social-recovery-import/social-recovery-import.module').then((m) => m.SocialRecoveryImportPageModule)
   },
   {
+    path: 'social-recovery-import-share-name',
+    loadChildren: () =>
+      import('./pages/social-recovery-import-share-name/social-recovery-import-share-name.module').then(
+        (m) => m.SocialRecoveryImportShareNamePageModule
+      )
+  },
+  {
+    path: 'social-recovery-import-help',
+    loadChildren: () =>
+      import('./pages/social-recovery-import-help/social-recovery-import-help.module').then((m) => m.SocialRecoveryImportHelpPageModule)
+  },
+  {
     path: 'social-recovery-setup',
     loadChildren: () => import('./pages/social-recovery-setup/social-recovery-setup.module').then((m) => m.SocialRecoverySetupPageModule)
   },
@@ -232,7 +244,8 @@ const routes: Routes = [
   },
   {
     path: 'isolated-modules-details/:intention',
-    loadChildren: () => import('./pages/isolated-modules-details/isolated-modules-details.module').then((m) => m.IsolatedModulesDetailsPageModule)
+    loadChildren: () =>
+      import('./pages/isolated-modules-details/isolated-modules-details.module').then((m) => m.IsolatedModulesDetailsPageModule)
   }
 ]
 

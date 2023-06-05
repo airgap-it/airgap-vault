@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="secondary">
+      <ion-back-button [defaultHref]="defaulBacktHref"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="primary">
+      <ion-button (click)="help()">
+        <ion-icon slot="icon-only" name="help-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Social Recovery Import</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="content-wrapper">
+    <div class="center-wrapper">
+      <div class="states-wrapper">
+        <ion-button
+          class="state"
+          [class.selected]="(i === currentShare && currentShare < shares) || (currentShare === shares && i === currentShare - 1)"
+          shape="round"
+          *ngFor="let item of [].constructor(shares); let i = index"
+          [color]="i === currentShare ? 'primary' : 'tertiary'"
+        >
+          {{i}}
+        </ion-button>
+      </div>
+    </div>
+  </div>
+  <p class="font--weight__med">Give your first share a name</p>
+  <p>This will help you remember which share you've entered already</p>
+
+  <ion-item>
+    <form [formGroup]="socialRecoveryForm">
+      <ion-input
+        type="text"
+        fill="solid"
+        label="Name"
+        label-placement="floating"
+        helper-text="Name of your share"
+        formControlName="shareName"
+      ></ion-input>
+    </form>
+  </ion-item>
+</ion-content>
