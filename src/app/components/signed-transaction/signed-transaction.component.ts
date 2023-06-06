@@ -66,14 +66,12 @@ export class SignedTransactionComponent {
             this.signedTxs.map(async (signedTx) => {
               const payload: SignedTransaction = signedTx.payload as SignedTransaction
               if (await this.checkIfSaplingTransaction(payload, signedTx.protocol)) {
-                console.log('sapling')
                 const saplingProtocol = await this.getSaplingProtocol()
                 return saplingProtocol.getTransactionDetailsFromSigned(payload, {
                   knownViewingKeys: await this.secretsService.getKnownViewingKeys(),
                   transactionOwner: signedTx.protocol
                 })
               } else {
-                console.log('no sapling')
                 return protocol.getTransactionDetailsFromSigned(payload)
               }
             })
