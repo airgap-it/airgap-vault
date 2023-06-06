@@ -68,7 +68,8 @@ export class SignedTransactionComponent {
               if (await this.checkIfSaplingTransaction(payload, signedTx.protocol)) {
                 const saplingProtocol = await this.getSaplingProtocol()
                 return saplingProtocol.getTransactionDetailsFromSigned(payload, {
-                  knownViewingKeys: await this.secretsService.getKnownViewingKeys()
+                  knownViewingKeys: await this.secretsService.getKnownViewingKeys(),
+                  transactionOwner: signedTx.protocol
                 })
               } else {
                 return protocol.getTransactionDetailsFromSigned(payload)
@@ -147,7 +148,7 @@ export class SignedTransactionComponent {
     if (protocolIdentifier === MainProtocolSymbols.XTZ) {
       try {
         const saplingAdapter: ICoinProtocolAdapter<TezosSaplingProtocol> = await this.getSaplingProtocol()
-        const txDetails: IAirGapTransaction[] = await saplingAdapter.getTransactionDetailsFromSigned(transaction)
+        const txDetails: IAirGapTransaction[] = await saplingAdapter.getTransactionDetailsFromSigned(transaction, { transactionOwner: protocolIdentifier })
         const recipients: string[] = txDetails
           .map((details) => details.to)
           .reduce((flatten: string[], next: string[]) => flatten.concat(next), [])
