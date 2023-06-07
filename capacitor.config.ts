@@ -1,15 +1,18 @@
 import { CapacitorConfig } from '@capacitor/cli'
 
 const config: CapacitorConfig = {
-  appId: "it.airgap.vault",
-  appName: "AirGap Vault",
+  appId: 'it.airgap.vault',
+  appName: 'AirGap Vault',
   bundledWebRuntime: false,
-  webDir: "www",
+  webDir: 'www',
   plugins: {
     SplashScreen: {
       launchAutoHide: false,
-      androidSplashResourceName: "screen"
+      androidSplashResourceName: 'screen'
     }
+  },
+  server: {
+    androidScheme: 'http'
   }
 }
 

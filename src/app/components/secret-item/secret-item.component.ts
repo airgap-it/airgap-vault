@@ -1,4 +1,4 @@
-import { AirGapWallet, AirGapWalletStatus } from '@airgap/coinlib-core'
+import { AirGapWallet, AirGapWalletStatus, ProtocolSymbols } from '@airgap/coinlib-core'
 import { Component, Input, OnInit } from '@angular/core'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
@@ -19,7 +19,7 @@ export class SecretItemComponent implements OnInit {
   @Input()
   public secret: MnemonicSecret
 
-  public activeWallets: string[]
+  public activeWallets: { symbol: string, protocolIdentifier: ProtocolSymbols }[]
   public hasMoreWallets: number = 0
 
   public lifehashData: string = ''
@@ -57,7 +57,12 @@ export class SecretItemComponent implements OnInit {
       .map(([_, wallet]: [string, AirGapWallet]) => wallet)
       
     this.activeWallets = await Promise.all(sortedActiveWallets.map(async (wallet: AirGapWallet) => {
-      return wallet.protocol.getSymbol()
+      const [symbol, protocolIdentifier] = await Promise.all([
+        wallet.protocol.getSymbol(),
+        wallet.protocol.getIdentifier()
+      ])
+
+      return { symbol, protocolIdentifier }
     }))
 
 
