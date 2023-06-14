@@ -33,11 +33,14 @@
 		88F9F15423D06A00008351D0 /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88F9F15323D06A00008351D0 /* CameraPreview.swift */; };
 		88F9F15623D06A76008351D0 /* CameraPreview.m in Sources */ = {isa = PBXBuildFile; fileRef = 88F9F15523D06A76008351D0 /* CameraPreview.m */; };
 		A084ECDBA7D38E1E42DFC39D /* Pods_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF277DCFFFF123FFC6DF26C7 /* Pods_App.framework */; };
+		A3226AAC29F12FA10006ACCA /* Environment.m in Sources */ = {isa = PBXBuildFile; fileRef = A3226AAB29F12FA10006ACCA /* Environment.m */; };
+		A3226AAE29F1305F0006ACCA /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3226AAD29F1305F0006ACCA /* Environment.swift */; };
 		A33BA9E528D9C4EF00BD8015 /* JS.swift in Sources */ = {isa = PBXBuildFile; fileRef = A33BA9E428D9C4EF00BD8015 /* JS.swift */; };
 		A33BA9E728D9C52D00BD8015 /* JSValue+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A33BA9E628D9C52D00BD8015 /* JSValue+Additions.swift */; };
 		A33BA9E928D9E23E00BD8015 /* WK+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A33BA9E828D9E23E00BD8015 /* WK+Additions.swift */; };
 		A351B44A2979338800BE0DC9 /* Zip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A351B4492979338800BE0DC9 /* Zip.swift */; };
 		A351B44E297965EF00BE0DC9 /* Zip.m in Sources */ = {isa = PBXBuildFile; fileRef = A351B44D297965EF00BE0DC9 /* Zip.m */; };
+		A35472FD29ED9C7C00AFD5A7 /* Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = A35472FC29ED9C7C00AFD5A7 /* Hex.swift */; };
 		A357ED09299BD8EA00EDCA39 /* Filesystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A357ED08299BD8EA00EDCA39 /* Filesystem.swift */; };
 		A3C53AA1299247640059E997 /* JSEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3C53AA0299247640059E997 /* JSEnvironment.swift */; };
 		A3C53AA3299259FC0059E997 /* WebViewEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3C53AA2299259FC0059E997 /* WebViewEnvironment.swift */; };
@@ -77,11 +80,14 @@
 		88F9F15123D069E9008351D0 /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 		88F9F15323D06A00008351D0 /* CameraPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
 		88F9F15523D06A76008351D0 /* CameraPreview.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CameraPreview.m; sourceTree = "<group>"; };
+		A3226AAB29F12FA10006ACCA /* Environment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Environment.m; sourceTree = "<group>"; };
+		A3226AAD29F1305F0006ACCA /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		A33BA9E428D9C4EF00BD8015 /* JS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JS.swift; sourceTree = "<group>"; };
 		A33BA9E628D9C52D00BD8015 /* JSValue+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JSValue+Additions.swift"; sourceTree = "<group>"; };
 		A33BA9E828D9E23E00BD8015 /* WK+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WK+Additions.swift"; sourceTree = "<group>"; };
 		A351B4492979338800BE0DC9 /* Zip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Zip.swift; sourceTree = "<group>"; };
 		A351B44D297965EF00BE0DC9 /* Zip.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Zip.m; sourceTree = "<group>"; };
+		A35472FC29ED9C7C00AFD5A7 /* Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hex.swift; sourceTree = "<group>"; };
 		A357ED08299BD8EA00EDCA39 /* Filesystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filesystem.swift; sourceTree = "<group>"; };
 		A3C53AA0299247640059E997 /* JSEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSEnvironment.swift; sourceTree = "<group>"; };
 		A3C53AA2299259FC0059E997 /* WebViewEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewEnvironment.swift; sourceTree = "<group>"; };
@@ -140,6 +146,7 @@
 		504EC3061FED79650016851F /* App */ = {
 			isa = PBXGroup;
 			children = (
+				A3226AAA29F12F7B0006ACCA /* Environment */,
 				A351B4482979337600BE0DC9 /* Zip */,
 				A36CA3BE28CA2AAE00635173 /* IsolatedModules */,
 				8885568F2721A9EC009A831D /* public */,
@@ -197,8 +204,9 @@
 			isa = PBXGroup;
 			children = (
 				88AE2EEB23D5CB1C00428560 /* Extensions */,
-				A33BA9E428D9C4EF00BD8015 /* JS.swift */,
 				A357ED08299BD8EA00EDCA39 /* Filesystem.swift */,
+				A35472FC29ED9C7C00AFD5A7 /* Hex.swift */,
+				A33BA9E428D9C4EF00BD8015 /* JS.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -231,6 +239,15 @@
 				88F9F15523D06A76008351D0 /* CameraPreview.m */,
 			);
 			path = Camera;
+			sourceTree = "<group>";
+		};
+		A3226AAA29F12F7B0006ACCA /* Environment */ = {
+			isa = PBXGroup;
+			children = (
+				A3226AAB29F12FA10006ACCA /* Environment.m */,
+				A3226AAD29F1305F0006ACCA /* Environment.swift */,
+			);
+			path = Environment;
 			sourceTree = "<group>";
 		};
 		A351B4482979337600BE0DC9 /* Zip */ = {
@@ -400,6 +417,7 @@
 				A351B44E297965EF00BE0DC9 /* Zip.m in Sources */,
 				A3CF6E4F28CA2FD900A9A883 /* IsolatedModules.m in Sources */,
 				A33BA9E728D9C52D00BD8015 /* JSValue+Additions.swift in Sources */,
+				A3226AAC29F12FA10006ACCA /* Environment.m in Sources */,
 				A3CF6E4D28CA2FA100A9A883 /* IsolatedModules.swift in Sources */,
 				A3E4DE8F299157C2009F3C8D /* JSModule.swift in Sources */,
 				885F55E825EE224200D85A88 /* SaplingNative.m in Sources */,
@@ -425,6 +443,8 @@
 				88F9F15223D069E9008351D0 /* CameraController.swift in Sources */,
 				A3CE61BC2993D827009216A2 /* FileExplorer.swift in Sources */,
 				88AE2EF723D5DC7400428560 /* SecureScreen.swift in Sources */,
+				A3226AAE29F1305F0006ACCA /* Environment.swift in Sources */,
+				A35472FD29ED9C7C00AFD5A7 /* Hex.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

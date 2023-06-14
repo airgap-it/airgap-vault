@@ -17,6 +17,8 @@ export class AboutPage {
   public versionName: string = 'VERSION_NUMBER'
   public versionCode: string | number = 'VERSION_CODE'
 
+  private baseUrlDescription: string = 'visit the ULR:'
+
   constructor(
     @Inject(APP_INFO_PLUGIN) private readonly appInfo: AppInfoPlugin,
     private readonly platform: Platform,
@@ -46,7 +48,8 @@ export class AboutPage {
     this.openLinkPage(
       'GitHub',
       'https://github.com/airgap-it/airgap-vault',
-      `AirGap Vault is fully open source. Visit the GitHub repository to view the source code.`
+      `AirGap Vault is fully open source. Visit the GitHub repository to view the source code.`,
+      this.baseUrlDescription
     )
   }
 
@@ -54,7 +57,8 @@ export class AboutPage {
     this.openLinkPage(
       'Twitter',
       'https://twitter.com/AirGap_it',
-      `Follow our Twitter account to stay up to date with the latest developments.`
+      `Follow our Twitter account to stay up to date with the latest developments.`,
+      this.baseUrlDescription
     )
   }
 
@@ -62,7 +66,8 @@ export class AboutPage {
     this.openLinkPage(
       'Telegram',
       'https://t.me/AirGap',
-      `Join our telegram channel to ask questions and hear about the latest developments.`
+      `Join our telegram channel to ask questions and hear about the latest developments.`,
+      this.baseUrlDescription
     )
   }
 
@@ -70,7 +75,8 @@ export class AboutPage {
     this.openLinkPage(
       'Discord',
       'https://discord.gg/gnWqCQsteh',
-      `Join our discord server to ask questions and hear about the latest developments.`
+      `Join our discord server to ask questions and hear about the latest developments.`,
+      this.baseUrlDescription
     )
   }
 
@@ -78,7 +84,8 @@ export class AboutPage {
     this.openLinkPage(
       'Feedback',
       'hi@airgap.it',
-      `We're always happy to get feedback if you have suggestions or are experiencing bugs. Please write us an email.`
+      `We're always happy to get feedback if you have suggestions or are experiencing bugs. Please write us an email.`,
+      'write us an email:'
     )
   }
 
@@ -86,16 +93,18 @@ export class AboutPage {
     this.openLinkPage(
       'Documentation',
       'https://support.airgap.it',
-      `Our docs offer a comprehensive overview of the features and functionality of our app.`
+      `Our docs offer a comprehensive overview of the features and functionality of our app.`,
+      this.baseUrlDescription
     )
   }
 
-  private openLinkPage(title: string, link: string, description?: string) {
+  private openLinkPage(title: string, link: string, description?: string, urlDescription?: string) {
     this.navigationService
       .routeWithState('/link-page', {
         title,
         link,
-        description
+        description,
+        urlDescription
       })
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }

@@ -1,0 +1,29 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab-settings"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>{{ 'isolated-modules-list-page.title' | translate }}</ion-title>
+
+    <ion-buttons slot="primary">
+      <ion-button (click)="addModule()">
+        <ion-icon slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ng-container *ngrxLet="facade.modules$ as modules">
+    <ion-toolbar *ngIf="modules.value.length > 0" color="secondary">
+      <ion-searchbar placeholder="{{ 'isolated-modules-list-page.items.search_placeholder' | translate }}" (ionInput)="filterModules($event)"></ion-searchbar>
+    </ion-toolbar>
+  </ng-container>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <airgap-isolated-modules-list 
+    [modules]="facade.modules$ | ngrxPush" 
+    [filter]="facade.filter$ | ngrxPush" 
+    (onModuleSelected)="onModuleSelected($event)"
+  ></airgap-isolated-modules-list>
+</ion-content>

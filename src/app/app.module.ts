@@ -19,9 +19,10 @@ import {
   IsolatedModules,
   ISOLATED_MODULES_PLUGIN,
   Zip,
-  ZIP_PLUGIN
+  ZIP_PLUGIN,
+  BaseModulesService
 } from '@airgap/angular-core'
-import { AirGapAngularNgRxModule, currencySymbolNgRxFacade } from '@airgap/angular-ngrx'
+import { AirGapAngularNgRxModule, currencySymbolNgRxFacade, isolatedModulesDetailsNgRxFacade, isolatedModulesListNgRxFacade, isolatedModulesListPageNgRxFacade } from '@airgap/angular-ngrx'
 import { PercentPipe } from '@angular/common'
 import { HttpClient, HttpClientModule } from '@angular/common/http'
 import { ErrorHandler, NgModule } from '@angular/core'
@@ -44,8 +45,8 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
 import * as fromRoot from './app.reducers'
-import { CameraPreview, SaplingNative, SecurityUtils } from './capacitor-plugins/definitions'
-import { CAMERA_PREVIEW_PLUGIN, FILE_PICKER_PLUGIN, SAPLING_PLUGIN, SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
+import { CameraPreview, Environment, SaplingNative, SecurityUtils } from './capacitor-plugins/definitions'
+import { CAMERA_PREVIEW_PLUGIN, ENVIRONMENT_PLUGIN, FILE_PICKER_PLUGIN, SAPLING_PLUGIN, SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
 import { appConfig } from './config/app-config'
 import { DistributionOnboardingPageModule } from './pages/distribution-onboarding/distribution-onboarding.module'
 import { IntroductionPageModule } from './pages/introduction/introduction.module'
@@ -72,6 +73,8 @@ import { Filesystem } from '@capacitor/filesystem'
 import { InstallationTypePageModule } from './pages/Installation-type/installation-type.module'
 import { OnboardingAdvancedModePageModule } from './pages/onboarding-advanced-mode/onboarding-advanced-mode.module'
 import { OnboardingWelcomePageModule } from './pages/onboarding-welcome/onboarding-welcome.module'
+import { IsolatedModulesOnboardingPageModule } from './pages/isolated-modules-onboarding/isolated-modules-onboarding.module'
+import { VaultModulesService } from './services/modules/modules.service'
 
 export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
   return new AirGapTranslateLoader(http, { prefix: './assets/i18n/', suffix: '.json' })
@@ -110,11 +113,15 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
     InstallationTypePageModule,
     OnboardingAdvancedModePageModule,
     OnboardingWelcomePageModule,
+    IsolatedModulesOnboardingPageModule,
     DistributionOnboardingPageModule,
     LocalAuthenticationOnboardingPageModule,
     AirGapAngularCoreModule.forRoot({
       factories: {
-        currencySymbolFacade: currencySymbolNgRxFacade
+        currencySymbolFacade: currencySymbolNgRxFacade,
+        isolatedModulesDetailsFacade: isolatedModulesDetailsNgRxFacade,
+        isolatedModulesListFacade: isolatedModulesListNgRxFacade,
+        isolatedModulesListPageFacade: isolatedModulesListPageNgRxFacade
       }
     }),
     AirGapAngularNgRxModule
@@ -134,7 +141,9 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
     { provide: ZIP_PLUGIN, useValue: Zip },
     { provide: FILE_PICKER_PLUGIN, useValue: FilePicker },
     { provide: ISOLATED_MODULES_PLUGIN, useValue: IsolatedModules },
+    { provide: ENVIRONMENT_PLUGIN, useValue: Environment },
     { provide: ErrorHandler, useClass: ErrorHandlerService },
+    { provide: BaseModulesService, useClass: VaultModulesService },
     Diagnostic,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     DeviceMotion,

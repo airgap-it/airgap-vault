@@ -1,8 +1,10 @@
 import { AirGapAngularCoreModule } from '@airgap/angular-core'
+import { AirGapAngularNgRxModule } from '@airgap/angular-ngrx'
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
-import { FormsModule } from '@angular/forms'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { IonicModule } from '@ionic/angular'
+import { ReactiveComponentModule } from '@ngrx/component'
 import { TranslateModule } from '@ngx-translate/core'
 import { QRCodeModule } from 'angularx-qrcode'
 
@@ -23,6 +25,7 @@ import { TransactionWarningComponent } from './transaction-warning/transaction-w
 import { TransactionComponent } from './transaction/transaction.component'
 import { VerifyKeyAltComponent } from './verify-key-alt/verify-key-alt.component'
 import { VerifyKeyComponent } from './verify-key/verify-key.component'
+import { InteractionSelectionComponent } from './interaction-selection/interaction-selection.component'
 
 @NgModule({
   declarations: [
@@ -40,9 +43,21 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     MessageSignResponseComponent,
     GridInputComponent,
     SecretOptionItemComponent,
-    KeyboardPopoverComponent
+    KeyboardPopoverComponent,
+    InteractionSelectionComponent
   ],
-  imports: [IonicModule, PipesModule, CommonModule, FormsModule, TranslateModule, QRCodeModule, AirGapAngularCoreModule],
+  imports: [
+    IonicModule,
+    PipesModule,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ReactiveComponentModule,
+    TranslateModule,
+    QRCodeModule,
+    AirGapAngularCoreModule,
+    AirGapAngularNgRxModule
+  ],
   exports: [
     EntropyProgressComponent,
     ProgressFooterComponent,
@@ -58,7 +73,8 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
     MessageSignResponseComponent,
     GridInputComponent,
     SecretOptionItemComponent,
-    KeyboardPopoverComponent
+    KeyboardPopoverComponent,
+    InteractionSelectionComponent
   ],
   entryComponents: []
 })

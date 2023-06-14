@@ -58,3 +58,15 @@ export interface SecurityUtilsPlugin {
 }
 
 export const SecurityUtils: SecurityUtilsPlugin = registerPlugin('SecurityUtils')
+
+export interface EnvContextChangedEvent {
+  context: 'empty' | 'knox'
+}
+
+export type EnvContextChangedListener = (event: EnvContextChangedEvent) => void
+
+export interface EnvironmentPlugin {
+  addListener(event: 'envContextChanged', listenerFunc: EnvContextChangedListener): Promise<PluginListenerHandle> & PluginListenerHandle
+}
+
+export const Environment: EnvironmentPlugin = registerPlugin('Environment')

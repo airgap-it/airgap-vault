@@ -12,6 +12,7 @@ export class LinkPagePage {
   title: string
   link: string
   description: string
+  urlDescription: string
 
   constructor(
     private readonly navigationService: NavigationService,
@@ -26,6 +27,7 @@ export class LinkPagePage {
     this.title = state.title
     this.link = state.link
     this.description = state.description
+    this.urlDescription = state.urlDescription
   }
 
   async open() {

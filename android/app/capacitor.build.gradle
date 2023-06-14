@@ -2,8 +2,8 @@
 
 android {
   compileOptions {
-      sourceCompatibility JavaVersion.VERSION_1_8
-      targetCompatibility JavaVersion.VERSION_1_8
+      sourceCompatibility JavaVersion.VERSION_17
+      targetCompatibility JavaVersion.VERSION_17
   }
 }
 
@@ -16,8 +16,8 @@ dependencies {
     implementation project(':capacitor-splash-screen')
     implementation project(':capacitor-status-bar')
     implementation project(':capawesome-capacitor-file-picker')
-    implementation "com.android.support:support-v4:26.+"
-    implementation "com.android.support:appcompat-v7:26.+"
+    implementation "androidx.legacy:legacy-support-v4:1.0.0"
+    implementation "androidx.appcompat:appcompat:1.6.1"
 }
 apply from: "../../node_modules/cordova-plugin-qrscanner-11/src/android/qrscanner.gradle"
 

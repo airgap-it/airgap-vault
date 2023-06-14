@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
 import { ModalController } from '@ionic/angular'
 import { ComponentRef, ModalOptions } from '@ionic/core'
+import { first } from 'rxjs/operators'
 import { InstallationTypePage } from 'src/app/pages/Installation-type/installation-type.page'
 import { OnboardingWelcomePage } from 'src/app/pages/onboarding-welcome/onboarding-welcome.page'
 
@@ -8,9 +9,11 @@ import { DistributionOnboardingPage } from '../../pages/distribution-onboarding/
 import { IntroductionPage } from '../../pages/introduction/introduction.page'
 import { Warning, WarningModalPage } from '../../pages/warning-modal/warning-modal.page'
 import { DeviceService } from '../device/device.service'
+import { EnvironmentService } from '../environment/environment.service'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { SecureStorageService } from '../secure-storage/secure-storage.service'
-import { InstallationType, VaultStorageKey, VaultStorageService } from '../storage/storage.service'
+import { InstallationType, InteractionType, VaultStorageKey, VaultStorageService } from '../storage/storage.service'
+import { InteractionSelectionSettingsPage } from 'src/app/pages/interaction-selection-settings/interaction-selection-settings.page'
 
 export interface Check {
   name: string
@@ -29,7 +32,8 @@ export class StartupChecksService {
     private readonly secureStorageService: SecureStorageService,
     private readonly deviceService: DeviceService,
     private readonly modalController: ModalController,
-    private readonly storageService: VaultStorageService
+    private readonly storageService: VaultStorageService,
+    private readonly environmentService: EnvironmentService
   ) {
     this.checks = [
       {
@@ -66,13 +70,52 @@ export class StartupChecksService {
         check: (): Promise<boolean> =>
           this.storageService.get(VaultStorageKey.INSTALLATION_TYPE).then((type) => type !== InstallationType.UNDETERMINED),
         failureConsequence: async (): Promise<void> => {
-          await this.presentModal(InstallationTypePage, {}).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
+          const context = await this.environmentService.getContextObservable().pipe(first()).toPromise()
+          if (context === 'knox') {
+            await this.storageService.set(VaultStorageKey.INSTALLATION_TYPE, InstallationType.OFFLINE)
+            await this.storageService.set(VaultStorageKey.INTERACTION_TYPE, InteractionType.QR_CODE)
+          } else {
+            await this.presentModal(InstallationTypePage, {}).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
+          }
+        }
+      },
+      {
+        name: 'interactionType',
+        successOutcome: true,
+        check: async (): Promise<boolean> => {
+          // case1: online --> show interaction type page
+          // case2: offline --> don't show interaction type page, set interaction type to be offline
+
+          return await Promise.all([
+            this.storageService.get(VaultStorageKey.INTERACTION_TYPE),
+            this.storageService.get(VaultStorageKey.INSTALLATION_TYPE)
+          ]).then(([interactionType, installationType]) => {
+            if (interactionType === InteractionType.UNDETERMINED) {
+              if (installationType === InstallationType.OFFLINE) {
+                // case2
+                this.storageService.set(VaultStorageKey.INTERACTION_TYPE, InteractionType.QR_CODE)
+                return true
+              } else {
+                // case1
+                return false
+              }
+            } else {
+              return true
+            }
+          })
+        },
+        failureConsequence: async (): Promise<void> => {
+          await this.presentModal(InteractionSelectionSettingsPage, {}).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
         }
       },
       {
         name: 'introductionAcceptedCheck',
         successOutcome: true,
-        check: (): Promise<boolean> => this.storageService.get(VaultStorageKey.INTRODUCTION_INITIAL),
+        check: async (): Promise<boolean> => {
+          const res = this.storageService.get(VaultStorageKey.INTRODUCTION_INITIAL)
+          console.log('checked?', await res)
+          return res
+        },
         failureConsequence: async (): Promise<void> => {
           await this.presentModal(IntroductionPage, {}).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
         }

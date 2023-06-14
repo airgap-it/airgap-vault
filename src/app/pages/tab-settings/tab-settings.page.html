@@ -4,7 +4,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content *ngIf="context$ | async as context">
   <ion-list-header>
     <ion-label>{{ 'tab-settings.settings_label' | translate }}</ion-label>
   </ion-list-header>
@@ -13,13 +13,9 @@
     {{ 'tab-settings.qr-advanced-settings_label' | translate }}
   </ion-item>
 
-  <ion-item (click)="goToInteractionSettings()" detail="true">
-    <ion-icon src="assets/icons/md-swap_horiz.svg" slot="start"></ion-icon>
-    {{ 'tab-settings.interaction-settings_label' | translate }}
-  </ion-item>
-  <ion-item lines="True" (click)="goToInstallationType()" detail="true">
-    <ion-icon name="extension-puzzle-outline" slot="start"></ion-icon>
-    {{ 'tab-settings.installation-type_label' | translate }}
+  <ion-item *ngIf="context !== 'knox'" lines="True" (click)="goToVaultInteraction()" detail="true">
+    <ion-icon name="wallet-outline" slot="start"></ion-icon>
+    {{ 'tab-settings.vault-interaction_label' | translate }}
   </ion-item>
 
   <ion-item (click)="goToLanguagesSettings()" detail="true">
@@ -27,41 +23,20 @@
     {{ 'tab-settings.preferred-language_label' | translate }}
   </ion-item>
 
+  <ion-item lines="True" (click)="goToAddressBookSettings()" detail="true">
+    <ion-icon name="id-card-outline" slot="start"></ion-icon>
+    {{ 'tab-settings.address_book_settings_label' | translate }}
+  </ion-item>
+
   <ion-item lines="True" (click)="goToAdvancedModeType()" detail="true">
     <ion-icon name="build-outline" slot="start"></ion-icon>
     {{ 'tab-settings.advanced-mode-type_label' | translate }}
   </ion-item>
 
-  <!-- TODO START Tim: figure out structure -->
-  <ion-item lines="none" (click)="goToAddressBook()" detail="true">
-    <ion-icon name="book-outline" slot="start"></ion-icon>
-    {{ 'tab-settings.address_book_label' | translate }}
-  </ion-item>
-
-  <ion-list-header>
-    <ion-label style="padding-left: 56px;">
-      {{ 'tab-settings.address_book_settings_label' | translate }}
-    </ion-label>
-  </ion-list-header>
-
-  <ion-item>
-    <ion-icon name="" slot="start"></ion-icon>
-    {{ 'contact-book.label_enable_address_book' | translate }}
-    <ion-toggle [checked]="bookEnabled" (ionChange)="toggleAddressBook($event)" slot="end"></ion-toggle>
-  </ion-item>
-  <ion-item>
-    <ion-icon name="" slot="start"></ion-icon>
-    {{ 'contact-book.label_enable_suggestions' | translate }}
-    <ion-toggle [checked]="suggestionsEnabled" (ionChange)="toggleEnableSuggestions($event)" slot="end"></ion-toggle>
-  </ion-item>
-
-  <ion-item (click)="onClickDelete()" detail="true">
-    <ion-icon name="" slot="start"></ion-icon>
-    <ion-icon name="warning" slot="start"></ion-icon>
-    {{ 'contact-book.button_delete_entries' | translate }}
-  </ion-item>
-
-  <!-- TODO END -->
+  <!-- <ion-item lines="True" (click)="goToIsolatedModules()" detail="true">
+    <ion-icon name="cube-outline" slot="start"></ion-icon>
+    {{ 'danger-zone.isolated-modules_label' | translate }}
+  </ion-item> -->
 
   <ion-list-header>
     <ion-label>{{ 'tab-settings.actions_label' | translate }}</ion-label>
@@ -86,6 +61,10 @@
   <ion-item lines="True" (click)="goToOnboarding()" detail="true">
     <ion-icon name="book-outline" slot="start"></ion-icon>
     {{ 'tab-settings.welcome-onboarding_label' | translate }}
+  </ion-item>
+  <ion-item lines="True" (click)="goToAddressBook()" detail="true">
+    <ion-icon name="person-add-outline" slot="start"></ion-icon>
+    {{ 'tab-settings.address_book_label' | translate }}
   </ion-item>
   <ion-item lines="True" (click)="goToBip39Wordlist()" detail="true">
     <ion-icon name="list" slot="start"></ion-icon>
