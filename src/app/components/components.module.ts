@@ -27,6 +27,7 @@ import { VerifyKeyAltComponent } from './verify-key-alt/verify-key-alt.component
 import { VerifyKeyComponent } from './verify-key/verify-key.component'
 import { InteractionSelectionComponent } from './interaction-selection/interaction-selection.component'
 import { MnemonicKeyboardComponent } from './mnemonic-keyboard/mnemonic-keyboard.component'
+import { ProgressIndicatorComponent } from './progress-indicator/progress-indicator.component'
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { MnemonicKeyboardComponent } from './mnemonic-keyboard/mnemonic-keyboard
     SecretOptionItemComponent,
     KeyboardPopoverComponent,
     InteractionSelectionComponent,
-    MnemonicKeyboardComponent
+    MnemonicKeyboardComponent,
+    ProgressIndicatorComponent
   ],
   imports: [
     IonicModule,
@@ -77,7 +79,8 @@ import { MnemonicKeyboardComponent } from './mnemonic-keyboard/mnemonic-keyboard
     SecretOptionItemComponent,
     KeyboardPopoverComponent,
     InteractionSelectionComponent,
-    MnemonicKeyboardComponent
+    MnemonicKeyboardComponent,
+    ProgressIndicatorComponent
   ],
   entryComponents: []
 })

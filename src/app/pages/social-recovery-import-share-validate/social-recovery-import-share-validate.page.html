@@ -14,6 +14,13 @@
 
 <ion-content class="ion-padding">
   <!-- TODO Tim: similar to secret-import -->
+  <div class="content-wrapper">
+    <div class="center-wrapper">
+      <div class="states-wrapper">
+        <airgap-progress-indicator [currentShare]="currentShare" [totalShares]="shares"></airgap-progress-indicator>
+      </div>
+    </div>
+  </div>
   <h2 class="ion-padding-horizontal">Enter the terms of {{shareName}}</h2>
 
   <label class="ion-padding-horizontal">Use the suggested terms or the keyboard</label>
