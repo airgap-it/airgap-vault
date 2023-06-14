@@ -8,7 +8,7 @@ import { NavigationService } from 'src/app/services/navigation/navigation.servic
   styleUrls: ['./social-recovery-import-setup.page.scss']
 })
 export class SocialRecoveryImportSetupPage implements OnInit {
-  public numberOfShares: number = -1
+  public numberOfShares: number = 0
 
   constructor(private readonly navigationService: NavigationService) {}
 
@@ -21,7 +21,7 @@ export class SocialRecoveryImportSetupPage implements OnInit {
   //TODO Tim: next state, implement new page for recovery (social-recovery-import-share-name)
   nextState() {
     this.navigationService
-      .routeWithState('/social-recovery-import-share-name', { shares: this.numberOfShares })
+      .routeWithState('/social-recovery-import-share-name', { numberOfShares: this.numberOfShares })
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }

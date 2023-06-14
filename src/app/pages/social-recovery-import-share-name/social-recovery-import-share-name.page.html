@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar color="secondary">
-    <ion-buttons slot="secondary">
+    <ion-buttons slot="start">
       <ion-back-button [defaultHref]="defaulBacktHref"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="primary">
@@ -18,12 +18,12 @@
       <div class="states-wrapper">
         <ion-button
           class="state"
-          [class.selected]="(i === currentShare && currentShare < shares) || (currentShare === shares && i === currentShare - 1)"
+          [class.selected]="(i === currentShare && currentShare < numberOfShares) || (currentShare === numberOfShares && i === currentShare - 1)"
           shape="round"
-          *ngFor="let item of [].constructor(shares); let i = index"
+          *ngFor="let item of [].constructor(numberOfShares); let i = index"
           [color]="i === currentShare ? 'primary' : 'tertiary'"
         >
-          {{i}}
+          {{i + 1}}
         </ion-button>
       </div>
     </div>
@@ -43,4 +43,8 @@
       ></ion-input>
     </form>
   </ion-item>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-button (click)="nextState()" color="primary" shape="round" [disabled]="!shareName || shareName.length === 0">Confirm</ion-button>
+  </ion-fab>
 </ion-content>

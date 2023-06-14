@@ -11,8 +11,8 @@ import { SocialRecoveryImportHelpPage } from '../social-recovery-import-help/soc
   styleUrls: ['./social-recovery-import-share-name.page.scss']
 })
 export class SocialRecoveryImportShareNamePage implements OnInit {
-  public currentShare: number = 1
-  public shares: number = 5
+  public currentShare: number = 0
+  public numberOfShares: number = 0
 
   shareName: string = ''
 
@@ -25,6 +25,9 @@ export class SocialRecoveryImportShareNamePage implements OnInit {
     private readonly modalController: ModalController,
     private navigationService: NavigationService
   ) {
+    const state = this.navigationService.getState()
+    this.numberOfShares = state.numberOfShares
+
     this.socialRecoveryForm = this.formBuilder.group({
       shareName: ''
     })
@@ -51,7 +54,7 @@ export class SocialRecoveryImportShareNamePage implements OnInit {
     this.navigationService
       .routeWithState('/social-recovery-import-share-validate', {
         currentShare: this.currentShare,
-        shares: this.shares,
+        shares: this.numberOfShares,
         shareName: this.shareName
       })
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
