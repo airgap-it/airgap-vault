@@ -137,6 +137,16 @@ const routes: Routes = [
       import('./pages/social-recovery-import-help/social-recovery-import-help.module').then((m) => m.SocialRecoveryImportHelpPageModule)
   },
   {
+    path: 'social-recovery-import-intro',
+    loadChildren: () =>
+      import('./pages/social-recovery-import-intro/social-recovery-import-intro.module').then((m) => m.SocialRecoveryImportIntroPageModule)
+  },
+  {
+    path: 'social-recovery-import-setup',
+    loadChildren: () =>
+      import('./pages/social-recovery-import-setup/social-recovery-import-setup.module').then((m) => m.SocialRecoveryImportSetupPageModule)
+  },
+  {
     path: 'social-recovery-setup',
     loadChildren: () => import('./pages/social-recovery-setup/social-recovery-setup.module').then((m) => m.SocialRecoverySetupPageModule)
   },

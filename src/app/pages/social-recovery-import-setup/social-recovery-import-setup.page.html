@@ -1,0 +1,32 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar transparent>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/social-recovery-import-intro"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Social Recovery Import</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="content-wrapper">
+    <ion-icon name="extension-puzzle-outline"></ion-icon>
+    <h3>Select the number of shares you want to recover your secret from</h3>
+
+    <div class="row-center">
+      <ion-button
+        class="row-button"
+        shape="round"
+        color="tertiary"
+        *ngFor="let i of [2, 3, 4, 5, 6]"
+        (click)="setNumberOfShares(i)"
+        [color]="i === numberOfShares ? 'primary' : 'tertiary'"
+      >
+        {{ i }}
+      </ion-button>
+    </div>
+  </div>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-button color="primary" shape="round" [disabled]="numberOfShares < 2">Confirm</ion-button>
+  </ion-fab>
+</ion-content>
