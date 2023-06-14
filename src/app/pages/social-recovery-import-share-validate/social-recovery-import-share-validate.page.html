@@ -13,32 +13,74 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <!-- TODO Tim -->
+  <!-- TODO Tim: similar to secret-import -->
+  <h2>Enter the terms of {{shareName}}</h2>
+  <p>Use the suggested terms or the keyboard</p>
 
-  <div class="content-wrapper">
-    <div class="center-wrapper">
-      <div class="states-wrapper">
+  <label class="ion-padding-horizontal">Select the correct word for this position.</label>
+
+  <ion-row class="secret--container-45 ion-align-items-center" #secretContainer>
+    <ion-col>
+      <ion-row class="secret--container__inner ion-justify-content-center">
+        <ng-container *ngFor="let word of secretWords; index as i">
+          <ion-button
+            style="min-width: 60px"
+            shape="round"
+            size="small"
+            [class.btn-current]="i === selectedWordIndex"
+            class="typography--mono"
+            [color]="i === selectedWordIndex ? 'transparent' : 'tertiary'"
+            (click)="selectWord(i)"
+          >
+            <ion-text color="medium"><span class="text--medium">{{i + 1}}</span></ion-text>
+            {{ maskWords ? '***' : word }}
+          </ion-button>
+        </ng-container>
         <ion-button
-          class="state"
-          [class.selected]="(i === currentShare && currentShare < shares - 1) || (currentShare === shares -1 && i === currentShare - 1)"
+          *ngIf="secretWords.length < 24"
+          style="min-width: 60px"
           shape="round"
-          *ngFor="let item of [].constructor(shares); let i = index"
-          [color]="i === currentShare ? 'primary' : 'tertiary'"
-        >
-          {{i}}
-        </ion-button>
-      </div>
-      <h2>Enter the terms of {{shareName}}</h2>
-      <!-- <div class="tags-wrapper">
-        <ion-button class="tag" shape="round" color="tertiary" *ngFor="let tag of currentShares; let i = index">
-          <p class="number">{{i + 1}}</p>
-          <p class="text">{{tag}}</p>
-        </ion-button>
-      </div> -->
-    </div>
-    <!-- <div class="buttons-wrapper">
-      <ion-button color="light" fill="clear" (click)="prev()">{{ 'social-recovery-setup.back_label' | translate }}</ion-button>
-      <ion-button color="light" fill="clear" fill="clear" (click)="next()">{{ 'social-recovery-setup.next_label' | translate }}</ion-button>
-    </div> -->
+          size="small"
+          [class.btn-blank]="selectedWordIndex !== -1"
+          [class.btn-current]="selectedWordIndex === -1"
+          class="typography--mono"
+          [color]="'transparent'"
+          (click)="selectWord(-1)"
+        ></ion-button>
+      </ion-row>
+    </ion-col>
+  </ion-row>
+
+  <hr />
+
+  <div *ngIf="lastWordOptions.length > 0" class="ion-padding ion-align-items-center">
+    To generate a valid 24 word mnemonic, one of the following words must be your last word.
+    <br />
+    <ion-button
+      *ngFor="let word of lastWordOptions"
+      shape="round"
+      size="small"
+      [color]="'tertiary'"
+      class="typography--mono lowercase"
+      (click)="wordLastSelected(word)"
+    >
+      {{word}}
+    </ion-button>
   </div>
+
+  <hr *ngIf="lastWordOptions.length > 0" />
+
+  <div class="ion-padding-horizontal">
+    <!-- <airgap-mnemonic-keyboard
+      [setWord]="setWordEmitter"
+      [enabled]="keyboardEnabled && lastWordOptions.length <= 0"
+      (wordSelected)="wordSelected($event)"
+    ></airgap-mnemonic-keyboard> -->
+  </div>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-button color="primary" shape="round" [disabled]="!(secretWordsValid | async)">
+      {{ 'secret-edit.confirm_label' | translate }}
+    </ion-button>
+  </ion-fab>
 </ion-content>
