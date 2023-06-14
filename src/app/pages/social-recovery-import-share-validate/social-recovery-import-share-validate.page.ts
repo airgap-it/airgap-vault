@@ -20,6 +20,7 @@ type SingleWord = string
 export class SocialRecoveryImportShareValidatePage implements OnInit {
   public currentShare: number = 1
   public shares: number = 5
+  private sharesMap
 
   public secretWords: string[] = []
   public secretWordsValid: Observable<boolean>
@@ -49,6 +50,11 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
     private readonly deviceService: DeviceService,
     private readonly alertController: AlertController
   ) {
+    const state = this.navigationService.getState()
+    this.currentShare = state.currentShare
+    this.shares = state.shares
+    this.sharesMap = state.sharesMap ?? new Map()
+
     this.secretWordsValid = this.setWordEmitter.pipe(
       map(() => {
         const isShorterThanMaxLength = this.selectedWordIndex === -1 && this.secretWords.length < this.maxWords
@@ -184,17 +190,20 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
   }
 
   nextState() {
+    console.log('this.shares ', this.shares, 'currentshare', this.currentShare)
     let nextStateRoute = 'soccial-recovery-import-share-name'
 
     if (this.currentShare === this.shares) {
       nextStateRoute = 'social-recovery-import-share-finish'
     }
+    this.sharesMap.set(this.currentShare, { name: this.shareName, shares: this.shares })
 
     this.navigationService
       .routeWithState(nextStateRoute, {
         currentShare: this.currentShare + 1,
         shares: this.shares,
-        shareName: this.shareName
+        shareName: this.shareName,
+        sharesMap: this.sharesMap
       })
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
