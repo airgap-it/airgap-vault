@@ -1,0 +1,30 @@
+<!-- TODO Tim: translate -->
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Social Recovery Help</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding" [fullscreen]="true">
+  <ion-list>
+    <h1>How Social Recovery Works</h1>
+
+    <h3>Number of Shares</h3>
+    <p>
+      Select the number of shares that you wish to recover your secret from. This can be anywhere between 2 to 6. Make sure that this
+      corresponds to the same number of shares that was initially selected when creating the shares
+    </p>
+
+    <h3>Entering a Share</h3>
+    <p>
+      Next, you'll be asked to enter the terms for each share. To do so, you can use the terms that are suggested or use our mnemonic secure
+      keyboard. A share can consist of either 24, 36 or 48 terms. Make sure that you put the terms in the right order too
+    </p>
+    <h3>Enter All Shares</h3>
+    <p>After one share has been entered successfully, you’ll be asked to enter the next one until all shares have been entered</p>
+  </ion-list>
+</ion-content>

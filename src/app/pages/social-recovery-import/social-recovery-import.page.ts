@@ -7,6 +7,8 @@ import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/er
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { MnemonicValidator } from '../../validators/mnemonic.validator'
 
+// TODO Tim: remove
+
 @Component({
   selector: 'airgap-social-recovery-import',
   templateUrl: './social-recovery-import.page.html',
