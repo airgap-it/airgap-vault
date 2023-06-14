@@ -70,3 +70,54 @@ h2 {
 }
 
 
+ion-textarea {
+  font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
+  font-weight: 600;
+  text-transform: lowercase;
+  height: 24vh;
+}
+
+.secret--container-45 {
+  height: calc(45% - 36px);
+  min-height: 50px;
+  overflow-y: scroll;
+}
+
+.secret--container-55 {
+  height: calc(55% - 36px);
+}
+
+hr {
+  border: 2px dashed var(--ion-color-primary);
+  border-style: none none dashed;
+  margin: 8px 0;
+}
+
+.word-placeholder {
+  min-width: 48px;
+}
+
+.size__xs {
+  font-size: 11px;
+}
+
+.typography--mono {
+  text-transform: lowercase;
+}
+
+.btn-current {
+  border: 2px dashed var(--ion-color-primary);
+  border-radius: 25px;
+}
+
+.btn-blank {
+  border: 2px dashed var(--ion-color-tertiary);
+  border-radius: 25px;
+}
+.text--medium {
+  margin-right: 0.25rem;
+}
+
+ion-content {
+  --padding-bottom: var(--ion-padding, 64px);
+}

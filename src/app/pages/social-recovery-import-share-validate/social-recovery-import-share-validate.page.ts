@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
-import { ModalController } from '@ionic/angular'
+import { AlertController, ModalController } from '@ionic/angular'
 import { handleErrorLocal, ErrorCategory } from 'src/app/services/error-handler/error-handler.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
@@ -7,6 +7,8 @@ import * as bip39 from 'bip39'
 import { Observable, Subject } from 'rxjs'
 import { BIPSigner } from 'src/app/models/BIP39Signer'
 import { DeviceService } from 'src/app/services/device/device.service'
+import { map } from 'rxjs/operators'
+import { MnemonicSecret } from 'src/app/models/secret'
 
 type SingleWord = string
 
@@ -34,6 +36,8 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
 
   public keyboardEnabled: boolean = true
 
+  private maxWords: number = 24
+
   shareName: string = ''
 
   @ViewChild('secretContainer', { read: ElementRef })
@@ -42,8 +46,18 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
   constructor(
     private readonly modalController: ModalController,
     private navigationService: NavigationService,
-    private readonly deviceService: DeviceService
-  ) {}
+    private readonly deviceService: DeviceService,
+    private readonly alertController: AlertController
+  ) {
+    this.secretWordsValid = this.setWordEmitter.pipe(
+      map(() => {
+        const isShorterThanMaxLength = this.selectedWordIndex === -1 && this.secretWords.length < this.maxWords
+        const isEditingWord = this.selectedWordIndex !== -1
+        this.keyboardEnabled = isShorterThanMaxLength || isEditingWord
+        return this.isValid()
+      })
+    )
+  }
 
   ngOnInit() {}
 
@@ -115,46 +129,46 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
     return BIPSigner.validateMnemonic(this.secretWords.join(' '))
   }
 
-  // public goToSecretSetupPage(): void {
-  //   const signer: BIPSigner = new BIPSigner()
-  //   const secret: MnemonicSecret = new MnemonicSecret(signer.mnemonicToEntropy(BIPSigner.prepareMnemonic(this.secretWords.join(' '))))
-  //   this.navigationService.routeWithState('secret-add', { secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-  // }
+  public goToSecretSetupPage(): void {
+    const signer: BIPSigner = new BIPSigner()
+    const secret: MnemonicSecret = new MnemonicSecret(signer.mnemonicToEntropy(BIPSigner.prepareMnemonic(this.secretWords.join(' '))))
+    this.navigationService.routeWithState('secret-add', { secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
 
-  // public async paste(text: string | undefined) {
-  //   if (BIPSigner.validateMnemonic(text)) {
-  //     this.secretWords = text.split(' ')
-  //     this.selectedWordIndex = -1
-  //     this.selectedWord = ''
-  //     this.setWordEmitter.next(this.selectedWord ?? '')
-  //   } else {
-  //     const alert = await this.alertController.create({
-  //       header: 'Invalid Mnemonic',
-  //       message: 'The text in your clipboard is not a valid mnemonic.',
-  //       backdropDismiss: false,
-  //       buttons: [
-  //         {
-  //           text: 'Ok'
-  //         }
-  //       ]
-  //     })
-  //     alert.present()
-  //   }
-  // }
+  public async paste(text: string | undefined) {
+    if (BIPSigner.validateMnemonic(text)) {
+      this.secretWords = text.split(' ')
+      this.selectedWordIndex = -1
+      this.selectedWord = ''
+      this.setWordEmitter.next(this.selectedWord ?? '')
+    } else {
+      const alert = await this.alertController.create({
+        header: 'Invalid Mnemonic',
+        message: 'The text in your clipboard is not a valid mnemonic.',
+        backdropDismiss: false,
+        buttons: [
+          {
+            text: 'Ok'
+          }
+        ]
+      })
+      alert.present()
+    }
+  }
 
-  // public async addNewWord() {
-  //   if (this.secretWords.length >= 24) {
-  //     return console.error('(addNewWord): secret word list too long')
-  //   }
+  public async addNewWord() {
+    if (this.secretWords.length >= 24) {
+      return console.error('(addNewWord): secret word list too long')
+    }
 
-  //   this.secretWords.splice(this.selectedWordIndex + 1, 0, '')
-  //   this.selectedWordIndex++
-  //   this.setWordEmitter.next('')
-  // }
+    this.secretWords.splice(this.selectedWordIndex + 1, 0, '')
+    this.selectedWordIndex++
+    this.setWordEmitter.next('')
+  }
 
-  // public async mask(enabled: boolean) {
-  //   this.maskWords = enabled
-  // }
+  public async mask(enabled: boolean) {
+    this.maskWords = enabled
+  }
 
   public getLastWord() {
     const options = []
@@ -185,3 +199,18 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }
+
+//TODO TIM:
+// should have the following from the previous page:
+// - name of share
+// - number of total shares to import
+// - index of current share that is being imported
+// - dictionary with sharename, imported share key
+// should provide the following for the next page:
+// - dictionary with sharenames, imported sharekeys
+// - number of total shares to import
+// -- if number of total shares > current share index:
+// --- increase index +1
+// --- go to social-recovery-import-share-name page
+// -- else:
+// --- go to social-recovery-import-share-finish

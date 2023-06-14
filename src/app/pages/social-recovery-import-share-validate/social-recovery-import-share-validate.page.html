@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar color="secondary">
-    <ion-buttons slot="secondary">
+    <ion-buttons slot="start">
       <ion-back-button defaultHref="/social-recovery-import-share-name"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="primary">
@@ -14,11 +14,9 @@
 
 <ion-content class="ion-padding">
   <!-- TODO Tim: similar to secret-import -->
-  <h2>Enter the terms of {{shareName}}</h2>
-  <p>Use the suggested terms or the keyboard</p>
+  <h2 class="ion-padding-horizontal">Enter the terms of {{shareName}}</h2>
 
-  <label class="ion-padding-horizontal">Select the correct word for this position.</label>
-
+  <label class="ion-padding-horizontal">Use the suggested terms or the keyboard</label>
   <ion-row class="secret--container-45 ion-align-items-center" #secretContainer>
     <ion-col>
       <ion-row class="secret--container__inner ion-justify-content-center">
@@ -71,11 +69,14 @@
   <hr *ngIf="lastWordOptions.length > 0" />
 
   <div class="ion-padding-horizontal">
-    <!-- <airgap-mnemonic-keyboard
+    <airgap-mnemonic-keyboard
       [setWord]="setWordEmitter"
       [enabled]="keyboardEnabled && lastWordOptions.length <= 0"
       (wordSelected)="wordSelected($event)"
-    ></airgap-mnemonic-keyboard> -->
+      (pasted)="paste($event)"
+      (addNewWord)="addNewWord()"
+      (maskInput)="mask($event)"
+    ></airgap-mnemonic-keyboard>
   </div>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
