@@ -11,7 +11,7 @@ import { TranslateModule } from '@ngx-translate/core'
 
 import { AirGapAngularCoreModule, isolatedModulesListPageFacade,  ISOLATED_MODULES_LIST_PAGE_FACADE } from '@airgap/angular-core'
 import { ComponentsModule } from '../../components/components.module'
-import { ReactiveComponentModule } from '@ngrx/component'
+import { LetDirective, PushPipe } from '@ngrx/component'
 
 @NgModule({
   imports: [
@@ -20,7 +20,8 @@ import { ReactiveComponentModule } from '@ngrx/component'
     IonicModule, 
     IsolatedModulesListPageRoutingModule,
     TranslateModule,
-    ReactiveComponentModule,
+    LetDirective,
+    PushPipe,
     ComponentsModule,
     AirGapAngularCoreModule
   ],

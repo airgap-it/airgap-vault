@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { IonicModule } from '@ionic/angular'
-import { ReactiveComponentModule } from '@ngrx/component'
 import { TranslateModule } from '@ngx-translate/core'
 import { QRCodeModule } from 'angularx-qrcode'
 
@@ -52,7 +51,6 @@ import { InteractionSelectionComponent } from './interaction-selection/interacti
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        ReactiveComponentModule,
         TranslateModule,
         QRCodeModule,
         AirGapAngularCoreModule,
