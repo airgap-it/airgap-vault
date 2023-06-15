@@ -9,6 +9,7 @@ import { BIPSigner } from 'src/app/models/BIP39Signer'
 import { DeviceService } from 'src/app/services/device/device.service'
 import { map } from 'rxjs/operators'
 import { MnemonicSecret } from 'src/app/models/secret'
+import { SocialRecoveryImportShareService } from 'src/app/social-recovery-import-share/social-recovery-import-share.service'
 
 type SingleWord = string
 
@@ -18,9 +19,9 @@ type SingleWord = string
   styleUrls: ['./social-recovery-import-share-validate.page.scss']
 })
 export class SocialRecoveryImportShareValidatePage implements OnInit {
-  public currentShare: number = 1
-  public shares: number = 5
-  private sharesMap
+  public currentShareNumber: number = 1
+  public numberOfShares: number = 5
+  private sharesMap: Map<number, { shareName: string; share: string[] }>
 
   public secretWords: string[] = []
   public secretWordsValid: Observable<boolean>
@@ -48,13 +49,15 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
     private readonly modalController: ModalController,
     private navigationService: NavigationService,
     private readonly deviceService: DeviceService,
-    private readonly alertController: AlertController
+    private readonly alertController: AlertController,
+    private readonly socialRecoveryImportShareService: SocialRecoveryImportShareService
   ) {
     const state = this.navigationService.getState()
-    this.currentShare = state.currentShare
-    this.shares = state.shares
-    this.sharesMap = state.sharesMap ?? new Map()
-
+    this.currentShareNumber = state.currentShareNumber
+    this.numberOfShares = state.numberOfShares
+    this.shareName = state.shareName
+    this.sharesMap = this.socialRecoveryImportShareService.getMap()
+    console.log('this sharesmap', this.sharesMap)
     this.secretWordsValid = this.setWordEmitter.pipe(
       map(() => {
         const isShorterThanMaxLength = this.selectedWordIndex === -1 && this.secretWords.length < this.maxWords
@@ -187,23 +190,32 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
       }
     }
     this.lastWordOptions = options
+    console.log('secretWords', this.secretWords)
   }
 
   nextState() {
-    console.log('this.shares ', this.shares, 'currentshare', this.currentShare)
-    let nextStateRoute = 'soccial-recovery-import-share-name'
+    // TODO Tim: two cases,
+    // if currentShareNumber == numberOfShares:
+    //     check if valid combination
+    //     create secret from imports
+    //     pass created secret along with route to social-recovery-share-finish
+    // else:
+    //     increase currentShareNumber + 1
+    //     route to social-recovery-import-share-name
 
-    if (this.currentShare === this.shares) {
+    console.log('this.shares ', this.numberOfShares, 'currentshare', this.currentShareNumber)
+    let nextStateRoute = 'social-recovery-import-share-name'
+
+    if (this.currentShareNumber === this.numberOfShares) {
       nextStateRoute = 'social-recovery-import-share-finish'
     }
-    this.sharesMap.set(this.currentShare, { name: this.shareName, shares: this.shares })
+    this.socialRecoveryImportShareService.setMap(this.currentShareNumber, this.shareName, this.secretWords)
 
     this.navigationService
       .routeWithState(nextStateRoute, {
-        currentShare: this.currentShare + 1,
-        shares: this.shares,
-        shareName: this.shareName,
-        sharesMap: this.sharesMap
+        currentShareNumber: this.currentShareNumber + 1,
+        numberOfShares: this.numberOfShares,
+        shareName: this.shareName
       })
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }

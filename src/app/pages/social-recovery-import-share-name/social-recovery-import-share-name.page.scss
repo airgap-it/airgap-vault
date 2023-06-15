@@ -29,16 +29,6 @@ ion-content {
   gap: 4px;
   margin-bottom: 3rem;
 
-  &::after {
-    content: '';
-    position: absolute;
-    top: 49%;
-    left: 2%;
-    border: 1px dashed rgba(255, 255, 255, 0.591);
-    width: 94%;
-    z-index: -1;
-  }
-
   .state {
     height: 100%;
     font-size: large;
