@@ -28,54 +28,53 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
 import { InteractionSelectionComponent } from './interaction-selection/interaction-selection.component'
 
 @NgModule({
-  declarations: [
-    EntropyProgressComponent,
-    ProgressFooterComponent,
-    SecretItemComponent,
-    SignedTransactionComponent,
-    TransactionComponent,
-    TransactionWarningComponent,
-    TouchEntropyComponent,
-    TraceInputDirective,
-    VerifyKeyComponent,
-    VerifyKeyAltComponent,
-    MessageSignRequestComponent,
-    MessageSignResponseComponent,
-    GridInputComponent,
-    SecretOptionItemComponent,
-    KeyboardPopoverComponent,
-    InteractionSelectionComponent
-  ],
-  imports: [
-    IonicModule,
-    PipesModule,
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    ReactiveComponentModule,
-    TranslateModule,
-    QRCodeModule,
-    AirGapAngularCoreModule,
-    AirGapAngularNgRxModule
-  ],
-  exports: [
-    EntropyProgressComponent,
-    ProgressFooterComponent,
-    SecretItemComponent,
-    SignedTransactionComponent,
-    TransactionComponent,
-    TransactionWarningComponent,
-    TouchEntropyComponent,
-    TraceInputDirective,
-    VerifyKeyComponent,
-    VerifyKeyAltComponent,
-    MessageSignRequestComponent,
-    MessageSignResponseComponent,
-    GridInputComponent,
-    SecretOptionItemComponent,
-    KeyboardPopoverComponent,
-    InteractionSelectionComponent
-  ],
-  entryComponents: []
+    declarations: [
+        EntropyProgressComponent,
+        ProgressFooterComponent,
+        SecretItemComponent,
+        SignedTransactionComponent,
+        TransactionComponent,
+        TransactionWarningComponent,
+        TouchEntropyComponent,
+        TraceInputDirective,
+        VerifyKeyComponent,
+        VerifyKeyAltComponent,
+        MessageSignRequestComponent,
+        MessageSignResponseComponent,
+        GridInputComponent,
+        SecretOptionItemComponent,
+        KeyboardPopoverComponent,
+        InteractionSelectionComponent
+    ],
+    imports: [
+        IonicModule,
+        PipesModule,
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        ReactiveComponentModule,
+        TranslateModule,
+        QRCodeModule,
+        AirGapAngularCoreModule,
+        AirGapAngularNgRxModule
+    ],
+    exports: [
+        EntropyProgressComponent,
+        ProgressFooterComponent,
+        SecretItemComponent,
+        SignedTransactionComponent,
+        TransactionComponent,
+        TransactionWarningComponent,
+        TouchEntropyComponent,
+        TraceInputDirective,
+        VerifyKeyComponent,
+        VerifyKeyAltComponent,
+        MessageSignRequestComponent,
+        MessageSignResponseComponent,
+        GridInputComponent,
+        SecretOptionItemComponent,
+        KeyboardPopoverComponent,
+        InteractionSelectionComponent
+    ]
 })
 export class ComponentsModule {}
