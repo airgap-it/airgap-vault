@@ -132,6 +132,13 @@ const routes: Routes = [
       )
   },
   {
+    path: 'social-recovery-import-share-validate',
+    loadChildren: () =>
+      import('./pages/social-recovery-import-share-validate/social-recovery-import-share-validate.module').then(
+        (m) => m.SocialRecoveryImportShareValidatePageModule
+      )
+  },
+  {
     path: 'social-recovery-import-help',
     loadChildren: () =>
       import('./pages/social-recovery-import-help/social-recovery-import-help.module').then((m) => m.SocialRecoveryImportHelpPageModule)
