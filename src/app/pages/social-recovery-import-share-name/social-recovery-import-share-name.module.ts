@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule, Routes } from '@angular/router'
 import { IonicModule } from '@ionic/angular'
 import { TranslateModule } from '@ngx-translate/core'
+import { ComponentsModule } from '../../components/components.module'
 
 import { SocialRecoveryImportShareNamePage } from './social-recovery-import-share-name.page'
 
@@ -15,7 +16,7 @@ const routes: Routes = [
 ]
 
 @NgModule({
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule],
+  imports: [CommonModule, ComponentsModule, FormsModule, ReactiveFormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule],
   declarations: [SocialRecoveryImportShareNamePage]
 })
 export class SocialRecoveryImportShareNamePageModule {}

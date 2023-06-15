@@ -16,15 +16,7 @@
   <div class="content-wrapper">
     <div class="center-wrapper">
       <div class="states-wrapper">
-        <ion-button
-          class="state"
-          [class.selected]="(i === currentShare && currentShare < numberOfShares) || (currentShare === numberOfShares && i === currentShare - 1)"
-          shape="round"
-          *ngFor="let item of [].constructor(numberOfShares); let i = index"
-          [color]="i === currentShare ? 'primary' : 'tertiary'"
-        >
-          {{i + 1}}
-        </ion-button>
+        <airgap-progress-indicator [currentShare]="currentShareNumber" [totalShares]="numberOfShares"></airgap-progress-indicator>
       </div>
     </div>
   </div>
