@@ -10,6 +10,7 @@ import { DeviceService } from 'src/app/services/device/device.service'
 import { map } from 'rxjs/operators'
 import { MnemonicSecret } from '../../models/secret'
 import { SocialRecoveryImportShareService } from 'src/app/social-recovery-import-share/social-recovery-import-share.service'
+import { SocialRecoveryImportHelpPage } from '../social-recovery-import-help/social-recovery-import-help.page'
 
 type SingleWord = string
 
@@ -75,14 +76,12 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
   ngOnInit() {}
 
   async help() {
-    this.modalController
-    // TODO Tim: uncomment once merged
-    // const modal: HTMLIonModalElement = await this.modalController.create({
-    //   component: SocialRecoveryImportHelpPage,
-    //   backdropDismiss: false
-    // })
+    const modal: HTMLIonModalElement = await this.modalController.create({
+      component: SocialRecoveryImportHelpPage,
+      backdropDismiss: false
+    })
 
-    // modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+    modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 
   selectWord(index: number) {
