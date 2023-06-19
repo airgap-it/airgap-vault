@@ -8,7 +8,7 @@ import { Observable, Subject } from 'rxjs'
 import { BIPSigner } from 'src/app/models/BIP39Signer'
 import { DeviceService } from 'src/app/services/device/device.service'
 import { map } from 'rxjs/operators'
-import { MnemonicSecret } from 'src/app/models/secret'
+import { MnemonicSecret } from '../../models/secret'
 import { SocialRecoveryImportShareService } from 'src/app/social-recovery-import-share/social-recovery-import-share.service'
 
 type SingleWord = string
@@ -52,12 +52,6 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
     private readonly alertController: AlertController,
     private readonly socialRecoveryImportShareService: SocialRecoveryImportShareService
   ) {
-    const state = this.navigationService.getState()
-    this.currentShareNumber = state.currentShareNumber
-    this.numberOfShares = state.numberOfShares
-    this.shareName = state.shareName
-    this.sharesMap = this.socialRecoveryImportShareService.getMap()
-    console.log('this sharesmap', this.sharesMap)
     this.secretWordsValid = this.setWordEmitter.pipe(
       map(() => {
         const isShorterThanMaxLength = this.selectedWordIndex === -1 && this.secretWords.length < this.maxWords
@@ -66,6 +60,16 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
         return this.isValid()
       })
     )
+  }
+
+  ionViewWillEnter() {
+    const state = this.navigationService?.getState()
+
+    this.currentShareNumber = state.currentShareNumber
+    this.numberOfShares = state.numberOfShares
+    this.shareName = state.shareName
+    this.sharesMap = this.socialRecoveryImportShareService.getMap()
+    console.log('this sharesmap', this.sharesMap)
   }
 
   ngOnInit() {}
@@ -190,34 +194,46 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
       }
     }
     this.lastWordOptions = options
-    console.log('secretWords', this.secretWords)
   }
 
   nextState() {
-    // TODO Tim: two cases,
-    // if currentShareNumber == numberOfShares:
-    //     check if valid combination
-    //     create secret from imports
-    //     pass created secret along with route to social-recovery-share-finish
-    // else:
-    //     increase currentShareNumber + 1
-    //     route to social-recovery-import-share-name
+    // TODO Tim
 
-    console.log('this.shares ', this.numberOfShares, 'currentshare', this.currentShareNumber)
-    let nextStateRoute = 'social-recovery-import-share-name'
-
-    if (this.currentShareNumber === this.numberOfShares) {
-      nextStateRoute = 'social-recovery-import-share-finish'
-    }
     this.socialRecoveryImportShareService.setMap(this.currentShareNumber, this.shareName, this.secretWords)
 
-    this.navigationService
-      .routeWithState(nextStateRoute, {
-        currentShareNumber: this.currentShareNumber + 1,
-        numberOfShares: this.numberOfShares,
-        shareName: this.shareName
-      })
-      .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.sharesMap = this.socialRecoveryImportShareService.getMap()
+    let shares = Array()
+    this.sharesMap.forEach((entry) => {
+      shares.push(entry.share)
+    })
+
+    if (this.currentShareNumber + 1 === this.numberOfShares) {
+      let secretString: string
+      try {
+        const sharesWithArraysToStrings = shares.map((subArray) => subArray.join(' '))
+        secretString = MnemonicSecret.recoverSecretFromShares(sharesWithArraysToStrings)
+      } catch (error) {
+        console.error('secret string wrong', error)
+      }
+
+      console.log()
+      if (secretString) {
+        this.navigationService
+          .routeWithState('secret-add', { secret: new MnemonicSecret(secretString, 'Recovery by Social Recovery') })
+          .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+      } else {
+        //TODO Tim: implement error behavior
+        console.error('moving to error page')
+      }
+    } else {
+      this.navigationService
+        .routeWithState('social-recovery-import-share-name', {
+          currentShareNumber: this.currentShareNumber + 1,
+          numberOfShares: this.numberOfShares,
+          shareName: this.shareName
+        })
+        .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    }
   }
 }
 
