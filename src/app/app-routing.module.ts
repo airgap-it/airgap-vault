@@ -144,6 +144,13 @@ const routes: Routes = [
       import('./pages/social-recovery-import-help/social-recovery-import-help.module').then((m) => m.SocialRecoveryImportHelpPageModule)
   },
   {
+    path: 'social-recovery-import-errors',
+    loadChildren: () =>
+      import('./pages/social-recovery-import-errors/social-recovery-import-errors.module').then(
+        (m) => m.SocialRecoveryImportErrorsPageModule
+      )
+  },
+  {
     path: 'social-recovery-import-intro',
     loadChildren: () =>
       import('./pages/social-recovery-import-intro/social-recovery-import-intro.module').then((m) => m.SocialRecoveryImportIntroPageModule)
