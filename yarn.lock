@@ -12,17 +12,17 @@
     "@airgap/serializer" "*"
     "@stablelib/ed25519" "^1.0.3"
 
-"@airgap/angular-core@0.0.39-beta.4":
-  version "0.0.39-beta.4"
-  resolved "https://registry.yarnpkg.com/@airgap/angular-core/-/angular-core-0.0.39-beta.4.tgz#b22b24d2ba0cd87b25885af7dfd3ab1c54ff63d9"
-  integrity sha512-XHWKJkctEoaF117MNiNow9NhjX8W05Ed/ZUUNIAxEzv+ZAOWkGAXcbnZn/PrK61fdVCokoTF6tSbM7LlQ4ojDg==
+"@airgap/angular-core@0.0.39-beta.5":
+  version "0.0.39-beta.5"
+  resolved "https://registry.yarnpkg.com/@airgap/angular-core/-/angular-core-0.0.39-beta.5.tgz#590eafe478168b5b623e02a05af13531aa1a1ea9"
+  integrity sha512-xC2jjJRm26rzYJqpZ3hzQiHiPZyk1V3UnIuzPIzfMkJ+gmyqKyCGXID60jWraJjLIj1PihDJHp7EG7equbDiMA==
   dependencies:
     tslib "^2.3.0"
 
-"@airgap/angular-ngrx@0.0.39-beta.4":
-  version "0.0.39-beta.4"
-  resolved "https://registry.yarnpkg.com/@airgap/angular-ngrx/-/angular-ngrx-0.0.39-beta.4.tgz#2bc178e1bdda64db05dce5550bad7f28a1e3c663"
-  integrity sha512-QiNceXzKgO7X/hv7JBK3ewuuamRnzq2zDfEb2j3OeUplAEeLLfBzEqV/1d6lXROtRXBKFqQ7y7Bzv1GS59vOAA==
+"@airgap/angular-ngrx@0.0.39-beta.5":
+  version "0.0.39-beta.5"
+  resolved "https://registry.yarnpkg.com/@airgap/angular-ngrx/-/angular-ngrx-0.0.39-beta.5.tgz#21f5b209e0e18262d49661abfc04c20b364c7819"
+  integrity sha512-q/0QMWGSybMMfjLDNABtXp6mopxY6pSHhKNl2mXQkSE7BS4zegft8zFIamxNDaf7VqdoKT7wwz7o/+ewB1WOeA==
   dependencies:
     tslib "^2.3.0"
 
@@ -3213,7 +3213,7 @@
   optionalDependencies:
     "@zxing/text-encoding" "^0.9.0"
 
-"@zxing/library@0.20.0":
+"@zxing/library@^0.20.0":
   version "0.20.0"
   resolved "https://registry.yarnpkg.com/@zxing/library/-/library-0.20.0.tgz#11bc411b87693015389555c589da61532879be7b"
   integrity sha512-6Ev6rcqVjMakZFIDvbUf0dtpPGeZMTfyxYg4HkVWioWeN7cRcnUWT3bU6sdohc82O1nPXcjq6WiGfXX2Pnit6A==
@@ -3222,7 +3222,7 @@
   optionalDependencies:
     "@zxing/text-encoding" "~0.9.0"
 
-"@zxing/ngx-scanner@16.0.1":
+"@zxing/ngx-scanner@^16.0.0":
   version "16.0.1"
   resolved "https://registry.yarnpkg.com/@zxing/ngx-scanner/-/ngx-scanner-16.0.1.tgz#58a1b214d9cfe04fcb1cc9a9b1b48d6f01de288e"
   integrity sha512-oLbmNWkgOyn6N7IfCoT9aO+kmzaI57jkDKbfj5U4nXx9hiUK7I6mgB6mh44yeEtrwDtqgzjuqIysYuJOQuKWLQ==
@@ -3370,10 +3370,10 @@ angular2-uuid@^1.1.1:
   resolved "https://registry.yarnpkg.com/angular2-uuid/-/angular2-uuid-1.1.1.tgz#72f03cd532b7f40032eb1ecfb9f8457384be956e"
   integrity sha512-6AXPyii9q8KBFGagybLNVmdGJLPcVZAhmv3odNGSJIA18LuJ3xOe6uN9GvjlQsGfdmYeuxlsGnFEUu7gPhkc+g==
 
-angularx-qrcode@^15.0.0:
-  version "15.0.1"
-  resolved "https://registry.yarnpkg.com/angularx-qrcode/-/angularx-qrcode-15.0.1.tgz#349b558715c99d933cb62b264ff1bd7b269b334d"
-  integrity sha512-CirpL2rhhYX/QZ1OSaJ/fusABjDlwl1oYBqaLRqmyie0xTbscWqTBW0DEoht2yCNGN8Wt+JmZwTLxYG6tLuWeQ==
+angularx-qrcode@^16.0.0:
+  version "16.0.0"
+  resolved "https://registry.yarnpkg.com/angularx-qrcode/-/angularx-qrcode-16.0.0.tgz#c637924b8d8f9cc344216caa80adf3810ccd5e5b"
+  integrity sha512-j6IndIU3m4zfqSPKraJPFgigdHa+pM3kapRPBnKSwgKNSpljPQu3XNiRUCmQmfGfnh39ShDVca/k091WTjngAA==
   dependencies:
     "@types/qrcode" "1.5.0"
     qrcode "1.5.1"
