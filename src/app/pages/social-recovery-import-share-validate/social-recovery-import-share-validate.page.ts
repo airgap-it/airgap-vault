@@ -39,7 +39,7 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
 
   public keyboardEnabled: boolean = true
 
-  private maxWords: number = 24
+  maxWords: number = 48
 
   shareName: string = ''
 
@@ -57,8 +57,11 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
       map(() => {
         const isShorterThanMaxLength = this.selectedWordIndex === -1 && this.secretWords.length < this.maxWords
         const isEditingWord = this.selectedWordIndex !== -1
+
         this.keyboardEnabled = isShorterThanMaxLength || isEditingWord
-        return this.isValid()
+        const [firstHalf, secondHalf]: [string, string] = this.splitString(this.secretWords.join(' '))
+        const validBool = BIPSigner.validateMnemonic(firstHalf) && BIPSigner.validateMnemonic(secondHalf)
+        return validBool
       })
     )
   }
@@ -92,10 +95,10 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
   }
 
   wordLastSelected(word: string | undefined) {
-    if (this.secretWords.length !== 23) {
-      return console.error('(wordLastSelected): secret word list is not 23 words long')
+    if (this.secretWords.length !== this.maxWords - 1) {
+      return console.error('(wordLastSelected): secret word list is not', this.maxWords - 1, ' words long')
     }
-    this.selectedWordIndex = 23
+    this.selectedWordIndex = this.maxWords - 1
     this.wordSelected(word)
   }
 
@@ -137,10 +140,6 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
     this.deviceService.disableScreenshotProtection()
   }
 
-  public isValid(): boolean {
-    return BIPSigner.validateMnemonic(this.secretWords.join(' '))
-  }
-
   public goToSecretSetupPage(): void {
     const signer: BIPSigner = new BIPSigner()
     const secret: MnemonicSecret = new MnemonicSecret(signer.mnemonicToEntropy(BIPSigner.prepareMnemonic(this.secretWords.join(' '))))
@@ -148,7 +147,10 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
   }
 
   public async paste(text: string | undefined) {
-    if (BIPSigner.validateMnemonic(text)) {
+    const [firstHalf, secondHalf]: [string, string] = this.splitString(text)
+    const validBool = BIPSigner.validateMnemonic(firstHalf) && BIPSigner.validateMnemonic(secondHalf)
+
+    if (validBool) {
       this.secretWords = text.split(' ')
       this.selectedWordIndex = -1
       this.selectedWord = ''
@@ -168,8 +170,21 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
     }
   }
 
+  private splitString(words: string): [string, string] {
+    const wordArray = words.split(' ')
+
+    if (wordArray.length !== this.maxWords) {
+      throw new Error(`Share string must contain exactly ${this.maxWords} words.`)
+    }
+
+    const firstHalf = wordArray.slice(0, 24).join(' ')
+    const secondHalf = wordArray.slice(24).join(' ')
+
+    return [firstHalf, secondHalf]
+  }
+
   public async addNewWord() {
-    if (this.secretWords.length >= 24) {
+    if (this.secretWords.length >= this.maxWords) {
       return console.error('(addNewWord): secret word list too long')
     }
 
@@ -184,7 +199,7 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
 
   public getLastWord() {
     const options = []
-    if (this.secretWords.length === 23) {
+    if (this.secretWords.length === this.maxWords - 1) {
       // The last word is 3 bits entropy and 8 bits checksum of the entropy. But because there are only 2048 words, it's fast to just try all combinations and the code is a lot easier, so we do that.
       for (const word of bip39.wordlists.EN) {
         if (bip39.validateMnemonic([...this.secretWords, word].join(' '))) {
@@ -195,9 +210,7 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
     this.lastWordOptions = options
   }
 
-  nextState() {
-    // TODO Tim
-
+  async nextState() {
     this.socialRecoveryImportShareService.setMap(this.currentShareNumber, this.shareName, this.secretWords)
 
     this.sharesMap = this.socialRecoveryImportShareService.getMap()
@@ -211,18 +224,33 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
       try {
         const sharesWithArraysToStrings = shares.map((subArray) => subArray.join(' '))
         secretString = MnemonicSecret.recoverSecretFromShares(sharesWithArraysToStrings)
-      } catch (error) {
-        console.error('secret string wrong', error)
-      }
 
-      console.log()
-      if (secretString) {
         this.navigationService
           .routeWithState('secret-add', { secret: new MnemonicSecret(secretString, 'Recovery by Social Recovery') })
           .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-      } else {
-        //TODO Tim: implement error behavior
-        console.error('moving to error page')
+      } catch (error) {
+        const returnedError = new Error(error)
+        if (returnedError.message.includes('Invalid mnemonic') || returnedError.message.includes('Checksum error')) {
+          const modal: HTMLIonModalElement = await this.modalController.create({
+            component: SocialRecoveryImportHelpPage,
+            componentProps: { errorTitle: returnedError.name, errorText: returnedError.message },
+            backdropDismiss: false
+          })
+
+          modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+        } else {
+          const alert = await this.alertController.create({
+            header: returnedError.name,
+            message: returnedError.message,
+            backdropDismiss: false,
+            buttons: [
+              {
+                text: 'Ok'
+              }
+            ]
+          })
+          alert.present()
+        }
       }
     } else {
       this.navigationService
@@ -235,18 +263,3 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
     }
   }
 }
-
-//TODO TIM:
-// should have the following from the previous page:
-// - name of share
-// - number of total shares to import
-// - index of current share that is being imported
-// - dictionary with sharename, imported share key
-// should provide the following for the next page:
-// - dictionary with sharenames, imported sharekeys
-// - number of total shares to import
-// -- if number of total shares > current share index:
-// --- increase index +1
-// --- go to social-recovery-import-share-name page
-// -- else:
-// --- go to social-recovery-import-share-finish

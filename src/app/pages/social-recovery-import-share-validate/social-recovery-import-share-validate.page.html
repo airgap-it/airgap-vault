@@ -42,7 +42,7 @@
           </ion-button>
         </ng-container>
         <ion-button
-          *ngIf="secretWords.length < 24"
+          *ngIf="secretWords.length < maxWords"
           style="min-width: 60px"
           shape="round"
           size="small"
@@ -59,7 +59,7 @@
   <hr />
 
   <div *ngIf="lastWordOptions.length > 0" class="ion-padding ion-align-items-center">
-    To generate a valid 24 word mnemonic, one of the following words must be your last word.
+    One of the following words must be your last word.
     <br />
     <ion-button
       *ngFor="let word of lastWordOptions"
