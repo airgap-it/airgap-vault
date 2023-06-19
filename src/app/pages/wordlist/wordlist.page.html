@@ -20,7 +20,7 @@
     <p *ngIf="filteredWordlist.length === 0" class="ion-padding">
       No exact match was found. Maybe you have a typo in your word? Check the similar words below.
     </p>
-    <cdk-virtual-scroll-viewport *ngIf="filteredWordlist.length > 0" approxItemHeight="320px">
+    <cdk-virtual-scroll-viewport *ngIf="filteredWordlist.length > 0" itemSize="50" minBufferPx="1000" maxBufferPx="1000">
       <ion-list>
         <ion-item *cdkVirtualFor="let item of filteredWordlist">
           <ion-label>
@@ -38,7 +38,7 @@
         </ion-item>
       </ion-list>
     </cdk-virtual-scroll-viewport>
-    <cdk-virtual-scroll-viewport *ngIf="filteredWordlist.length < 20" approxItemHeight="320px">
+    <cdk-virtual-scroll-viewport *ngIf="filteredWordlist.length < 20" itemSize="50" minBufferPx="1000" maxBufferPx="1000">
       <ion-list>
         <ion-list-header>Similar Words</ion-list-header>
         <ion-item *cdkVirtualFor="let item of similarWords">
