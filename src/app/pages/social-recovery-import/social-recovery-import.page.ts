@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
 
 import { MnemonicSecret } from '../../models/secret'
 import { DeviceService } from '../../services/device/device.service'
@@ -16,12 +16,12 @@ export class SocialRecoveryImportPage {
   public numberOfShares: number
   public shares: string[]
 
-  public socialRecoveryForm: FormGroup
+  public socialRecoveryForm: UntypedFormGroup
 
   constructor(
     private readonly deviceService: DeviceService,
     private readonly navigationService: NavigationService,
-    public formBuilder: FormBuilder
+    public formBuilder: UntypedFormBuilder
   ) {
     this.setNumberOfShares(2)
   }

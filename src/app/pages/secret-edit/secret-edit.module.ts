@@ -16,8 +16,7 @@ const routes: Routes = [
 ]
 
 @NgModule({
-  entryComponents: [SecretEditPopoverComponent],
-  imports: [CommonModule, FormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule, ComponentsModule],
-  declarations: [SecretEditPage, SecretEditPopoverComponent]
+    imports: [CommonModule, FormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule, ComponentsModule],
+    declarations: [SecretEditPage, SecretEditPopoverComponent]
 })
 export class SecretEditPageModule {}
