@@ -139,11 +139,8 @@ jobs:
           path: ./*
           key: prebuild-${{ runner.os }}-${{ github.sha }}
 
-      - name: 🔧 Disable pure getters
-        run: yarn run disable-pure-getters
-
-      - name: 🔧 Configure mangle
-        run: yarn run configure-mangle
+      - name: 🔧 Prepare prod build
+        run: yarn run prepare-prod-build
 
       - name: 🔧 Apply diagnostic modules
         run: yarn run apply-diagnostic-modules
