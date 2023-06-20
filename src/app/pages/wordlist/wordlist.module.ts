@@ -1,3 +1,4 @@
+import { ScrollingModule } from '@angular/cdk/scrolling'
 import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { FormsModule } from '@angular/forms'
@@ -10,7 +11,7 @@ import { WordlistPage } from './wordlist.page'
 import { TranslateModule } from '@ngx-translate/core'
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, WordlistPageRoutingModule, TranslateModule],
+  imports: [CommonModule, FormsModule, IonicModule, WordlistPageRoutingModule, TranslateModule, ScrollingModule],
   declarations: [WordlistPage]
 })
 export class WordlistPageModule {}
