@@ -20,6 +20,7 @@ import { StatusBarPlugin, Style } from '@capacitor/status-bar'
 import { ModalController, Platform } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 import { first } from 'rxjs/operators'
+import { register } from 'swiper/element/bundle'
 
 import { SecurityUtilsPlugin } from './capacitor-plugins/definitions'
 import { SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
@@ -42,6 +43,9 @@ const defer = (fn: () => void) => {
   // fn()
   setTimeout(fn, 200)
 }
+
+// Swiper
+register()
 
 @Component({
   selector: 'airgap-root',

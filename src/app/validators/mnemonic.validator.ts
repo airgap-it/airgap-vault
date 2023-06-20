@@ -1,4 +1,4 @@
-import { FormControl } from '@angular/forms'
+import { UntypedFormControl } from '@angular/forms'
 import * as bip39 from 'bip39'
 
 import { BIPSigner } from '../models/BIP39Signer'
@@ -19,7 +19,7 @@ export class MnemonicValidator {
     })
   }
 
-  public static isValidShare(control: FormControl): { [key: string]: boolean } | null {
+  public static isValidShare(control: UntypedFormControl): { [key: string]: boolean } | null {
     try {
       MnemonicValidator.checkMnemonic(control.value, bip39.wordlists.EN as any) // TODO: Fix typing (check what it actually is)
     } catch (e) {
@@ -31,7 +31,7 @@ export class MnemonicValidator {
     return null
   }
 
-  public static isValid(control: FormControl): { [key: string]: boolean } | null {
+  public static isValid(control: UntypedFormControl): { [key: string]: boolean } | null {
     if (control.value && BIPSigner.validateMnemonic(control.value)) {
       return null
     }

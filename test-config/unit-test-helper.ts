@@ -5,7 +5,8 @@ import { TestModuleMetadata } from '@angular/core/testing'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterTestingModule } from '@angular/router/testing'
 import { AlertController, IonicModule, NavController, Platform, ToastController } from '@ionic/angular'
-import { IonicStorageModule, Storage } from '@ionic/storage'
+import { Drivers, Storage } from '@ionic/storage'
+import { IonicStorageModule } from '@ionic/storage-angular'
 import { StoreModule } from '@ngrx/store'
 import { TranslateFakeLoader, TranslateLoader, TranslateModule } from '@ngx-translate/core'
 
@@ -58,7 +59,7 @@ export class UnitHelper {
       ComponentsModule,
       IonicStorageModule.forRoot({
         name: '__test_airgap_storage',
-        driverOrder: ['localstorage']
+        driverOrder: [Drivers.LocalStorage]
       }),
       TranslateModule.forRoot({
         loader: { provide: TranslateLoader, useClass: TranslateFakeLoader }

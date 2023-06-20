@@ -20,19 +20,18 @@ const routes: Routes = [
 ]
 
 @NgModule({
-  entryComponents: [IsolatedModulesDetailsPopoverComponent],
-  imports: [
-    CommonModule, 
-    FormsModule, 
-    IonicModule,
-    RouterModule.forChild(routes),
-    TranslateModule,
-    ComponentsModule,
-    AirGapAngularCoreModule
-  ],
-  declarations: [
-    IsolatedModulesDetailsPage,
-    IsolatedModulesDetailsPopoverComponent
-  ]
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        RouterModule.forChild(routes),
+        TranslateModule,
+        ComponentsModule,
+        AirGapAngularCoreModule
+    ],
+    declarations: [
+        IsolatedModulesDetailsPage,
+        IsolatedModulesDetailsPopoverComponent
+    ]
 })
 export class IsolatedModulesDetailsPageModule {}

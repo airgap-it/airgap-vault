@@ -5,20 +5,20 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-slides pager="true" [options]="slideOpts">
-    <ion-slide>
+  <swiper-container [pagination]="true" [modules]="swiperModules" [initialSlide]="0">
+    <swiper-slide>
       <img src="assets/img/onboarding-peace-of-mind.svg" />
 
       <h1>Get peace of mind</h1>
       <p>AirGap Vault keeps your keys safe and allows you to interact with wallets seamlessly and securely.</p>
-    </ion-slide>
-    <ion-slide>
+    </swiper-slide>
+    <swiper-slide>
       <img src="assets/img/onboarding-watch-only.svg" />
 
       <h1>Choose your companion wallet</h1>
       <p>Connect your Vault with various wallets to enable more possibilities.</p>
-    </ion-slide>
-    <ion-slide>
+    </swiper-slide>
+    <swiper-slide>
       <img src="assets/img/onboarding-offline.svg" />
 
       <h1>Go Offline to reach highest security</h1>
@@ -26,24 +26,24 @@
         Take your private key offline, to create a real air-gap between Vault and Wallet. This is the strongest protection layer against
         hackers.
       </p>
-    </ion-slide>
-    <ion-slide>
+    </swiper-slide>
+    <swiper-slide>
       <img src="assets/img/onboarding-backup-seed-phrase.svg" />
 
       <h1>Always Backup Your Seed Phrase</h1>
       <p>Recover all your accounts in case something happens to your device.</p>
-    </ion-slide>
-    <ion-slide>
+    </swiper-slide>
+    <swiper-slide>
       <img src="assets/img/onboarding-advanced.svg" />
 
       <h1>Unlock powerful features</h1>
       <p>Gain access to additional features by turning on the Advanced Mode in the settings.</p>
-    </ion-slide>
-    <ion-slide>
+    </swiper-slide>
+    <swiper-slide>
       <img src="assets/img/onboarding-terms.svg" />
       <h1>Let's set up AirGap Vault!</h1>
 
       <ion-button (click)="readDisclaimer()">Read Disclaimer</ion-button>
-    </ion-slide>
-  </ion-slides>
+    </swiper-slide>
+  </swiper-container>
 </ion-content>

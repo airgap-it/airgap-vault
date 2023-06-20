@@ -13,8 +13,7 @@ import { PipesModule } from 'src/app/pipes/pipes.module'
 import { TabSecretPopoverComponent } from './tab-secret-popover/tab-secret-popover.component'
 
 @NgModule({
-  entryComponents: [TabSecretPopoverComponent],
-  imports: [CommonModule, ComponentsModule, FormsModule, IonicModule, TabSecretsPageRoutingModule, TranslateModule, PipesModule],
-  declarations: [TabSecretsPage, TabSecretPopoverComponent]
+    imports: [CommonModule, ComponentsModule, FormsModule, IonicModule, TabSecretsPageRoutingModule, TranslateModule, PipesModule],
+    declarations: [TabSecretsPage, TabSecretPopoverComponent]
 })
 export class TabSecretsPageModule {}
