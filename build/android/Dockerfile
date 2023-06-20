@@ -30,7 +30,6 @@ COPY . /app
 ARG BUILD_NR
 RUN sed -i -e "s/versionCode 1/versionCode $BUILD_NR/g" /app/android/app/build.gradle
 
-# disable pure getters due to https://github.com/angular/angular-cli/issues/11439
 # configure mangle (keep_fnames) for bitcoinjs https://github.com/bitcoinjs/bitcoinjs-lib/issues/959
 # remove unused cordova-diagnostic-plugin features
 # jetify dependencies
@@ -43,7 +42,7 @@ RUN sed -i -e "s/versionCode 1/versionCode $BUILD_NR/g" /app/android/app/build.g
 # this has nothing to do with debug!!!:
 # copy release-apk
 # sign using debug key
-RUN yarn configure-mangle \
+RUN yarn prepare-prod-build \
     && yarn apply-diagnostic-modules \
     && yarn jetifier \
     && yarn ionic build --prod \
