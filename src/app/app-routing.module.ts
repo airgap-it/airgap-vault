@@ -50,6 +50,7 @@ const routes: Routes = [
   },
   { path: 'secret-edit', loadChildren: () => import('./pages/secret-edit/secret-edit.module').then((m) => m.SecretEditPageModule) },
   { path: 'about', loadChildren: () => import('./pages/about/about.module').then((m) => m.AboutPageModule) },
+  { path: 'shop', loadChildren: () => import('./pages/shop/shop.module').then((m) => m.ShopPageModule) },
   {
     path: 'interaction-selection',
     loadChildren: () => import('./pages/interaction-selection/interaction-selection.module').then((m) => m.InteractionSelectionPageModule)
@@ -232,7 +233,8 @@ const routes: Routes = [
   },
   {
     path: 'isolated-modules-details/:intention',
-    loadChildren: () => import('./pages/isolated-modules-details/isolated-modules-details.module').then((m) => m.IsolatedModulesDetailsPageModule)
+    loadChildren: () =>
+      import('./pages/isolated-modules-details/isolated-modules-details.module').then((m) => m.IsolatedModulesDetailsPageModule)
   }
 ]
 
