@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { ModalController } from '@ionic/angular'
 import { handleErrorLocal, ErrorCategory } from 'src/app/services/error-handler/error-handler.service'
+import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 @Component({
   selector: 'airgap-social-recovery-import-errors',
@@ -10,11 +11,14 @@ import { handleErrorLocal, ErrorCategory } from 'src/app/services/error-handler/
 export class SocialRecoveryImportErrorsPage implements OnInit {
   errorTitle = 'Error'
   errorText = ''
-  constructor(private readonly modalController: ModalController) {}
+  constructor(private readonly modalController: ModalController, private navigationService: NavigationService) {}
 
   ngOnInit() {}
 
   public close() {
-    this.modalController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+    this.modalController
+      .dismiss()
+      .then(() => this.navigationService.route('/social-recovery-import-setup'))
+      .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 }
