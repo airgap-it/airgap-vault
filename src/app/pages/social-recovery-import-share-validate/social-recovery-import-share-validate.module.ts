@@ -6,17 +6,17 @@ import { IonicModule } from '@ionic/angular'
 import { TranslateModule } from '@ngx-translate/core'
 import { ComponentsModule } from '../../components/components.module'
 
-import { SocialRecoveryImportShareNamePage } from './social-recovery-import-share-name.page'
+import { SocialRecoveryImportShareValidatePage } from './social-recovery-import-share-validate.page'
 
 const routes: Routes = [
   {
     path: '',
-    component: SocialRecoveryImportShareNamePage
+    component: SocialRecoveryImportShareValidatePage
   }
 ]
 
 @NgModule({
   imports: [CommonModule, ComponentsModule, FormsModule, ReactiveFormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule],
-  declarations: [SocialRecoveryImportShareNamePage]
+  declarations: [SocialRecoveryImportShareValidatePage]
 })
-export class SocialRecoveryImportShareNamePageModule {}
+export class SocialRecoveryImportShareValidatePageModule {}

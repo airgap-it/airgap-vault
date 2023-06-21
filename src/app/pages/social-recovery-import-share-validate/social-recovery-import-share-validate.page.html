@@ -1,14 +1,29 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar transparent>
+<ion-header>
+  <ion-toolbar color="secondary">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/secret-setup"></ion-back-button>
+      <ion-back-button defaultHref="/social-recovery-import-share-name"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ 'secret-import.title' | translate }}</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button (click)="help()">
+        <ion-icon slot="icon-only" name="help-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Social Recovery Import</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-no-padding">
-  <label class="ion-padding-horizontal">Select the correct word for this position.</label>
+<ion-content class="ion-padding">
+  <!-- TODO Tim: similar to secret-import -->
+  <div class="content-wrapper">
+    <div class="center-wrapper">
+      <div class="states-wrapper">
+        <airgap-progress-indicator [currentShare]="currentShareNumber" [totalShares]="numberOfShares"></airgap-progress-indicator>
+      </div>
+    </div>
+  </div>
+  <h4 class="font--weight__med">Enter the terms of {{shareName}}</h4>
+  <p>Use the suggested terms or the keyboard</p>
+
   <ion-row class="secret--container-45 ion-align-items-center" #secretContainer>
     <ion-col>
       <ion-row class="secret--container__inner ion-justify-content-center">
@@ -27,7 +42,7 @@
           </ion-button>
         </ng-container>
         <ion-button
-          *ngIf="secretWords.length < 24"
+          *ngIf="secretWords.length < maxWords"
           style="min-width: 60px"
           shape="round"
           size="small"
@@ -44,7 +59,7 @@
   <hr />
 
   <div *ngIf="lastWordOptions.length > 0" class="ion-padding ion-align-items-center">
-    To generate a valid 24 word mnemonic, one of the following words must be your last word.
+    One of the following words must be your last word.
     <br />
     <ion-button
       *ngFor="let word of lastWordOptions"
@@ -72,7 +87,7 @@
   </div>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-button color="primary" shape="round" (click)="goToSecretSetupPage()" [disabled]="!(secretWordsValid | async)">
+    <ion-button (click)="nextState()" color="primary" shape="round" [disabled]="!(secretWordsValid | async)">
       {{ 'secret-edit.confirm_label' | translate }}
     </ion-button>
   </ion-fab>

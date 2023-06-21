@@ -5,18 +5,17 @@ import { RouterModule, Routes } from '@angular/router'
 import { IonicModule } from '@ionic/angular'
 import { TranslateModule } from '@ngx-translate/core'
 
-import { SecretImportPage } from './secret-import.page'
-import { ComponentsModule } from '../../components/components.module'
+import { SocialRecoveryImportErrorsPage } from './social-recovery-import-errors.page'
 
 const routes: Routes = [
   {
     path: '',
-    component: SecretImportPage
+    component: SocialRecoveryImportErrorsPage
   }
 ]
 
 @NgModule({
-  imports: [CommonModule, FormsModule, ComponentsModule, ReactiveFormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule],
-  declarations: [SecretImportPage]
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule],
+  declarations: [SocialRecoveryImportErrorsPage]
 })
-export class SecretImportPageModule {}
+export class SocialRecoveryImportErrorsPageModule {}
