@@ -17,8 +17,8 @@ export class StorageMock {
     ]
   }
 
-  public create(): Promise<void> {
-    return Promise.resolve()
+  public create(): Promise<StorageMock> {
+    return Promise.resolve(this)
   }
 
   public defineDriver(): Promise<void> {

@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { IonicModule } from '@ionic/angular'
-import { ReactiveComponentModule } from '@ngrx/component'
 import { TranslateModule } from '@ngx-translate/core'
 import { QRCodeModule } from 'angularx-qrcode'
 
@@ -56,7 +55,6 @@ import { ProgressIndicatorComponent } from './progress-indicator/progress-indica
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    ReactiveComponentModule,
     TranslateModule,
     QRCodeModule,
     AirGapAngularCoreModule,
@@ -81,7 +79,6 @@ import { ProgressIndicatorComponent } from './progress-indicator/progress-indica
     InteractionSelectionComponent,
     MnemonicKeyboardComponent,
     ProgressIndicatorComponent
-  ],
-  entryComponents: []
+  ]
 })
 export class ComponentsModule {}

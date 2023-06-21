@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { ModalController } from '@ionic/angular'
+import { IonicSlides, ModalController } from '@ionic/angular'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { VaultStorageKey, VaultStorageService } from '../../services/storage/storage.service'
@@ -11,9 +11,7 @@ import { Warning, WarningModalPage } from '../warning-modal/warning-modal.page'
   styleUrls: ['./onboarding-welcome.page.scss']
 })
 export class OnboardingWelcomePage {
-  slideOpts = {
-    initialSlide: 0
-  }
+  public readonly swiperModules = [IonicSlides]
 
   disclaimerAccepted: boolean = false
 

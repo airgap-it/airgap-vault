@@ -109,7 +109,7 @@ build_ios:
     - export DEVELOPER_DIR=$XCODE_PATH
     - nvm use 16.19.1
     - yarn install --frozen-lockfile
-    - yarn configure-mangle
+    - yarn prepare-prod-build
     - yarn apply-diagnostic-modules # manually remove unused cordova-diagnostic-plugin modules
     - yarn ionic info
     - yarn ionic build --prod

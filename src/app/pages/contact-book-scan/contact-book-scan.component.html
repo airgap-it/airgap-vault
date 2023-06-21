@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content forceOverscroll="false" [class.transparent]="hasCameraPermission">
+<ion-content forceOverscroll="false" [class.transparent]="hasCameraPermission | async">
   <ion-grid fixed="true" class="ion-no-padding">
     <ion-text color="secondary">
       <p class="ion-padding ion-no-margin">
@@ -15,7 +15,7 @@
       </p>
     </ion-text>
 
-    <ion-row [hidden]="!hasCameraPermission" class="row--height__100 ion-justify-content-center ion-align-items-center">
+    <ion-row *ngIf="hasCameraPermission | async" class="row--height__100 ion-justify-content-center ion-align-items-center">
       <ion-col class="guides--container content--align__center-center">
         <img class="guides--container__img" src="./assets/img/qr_code_guides.svg" />
       </ion-col>
@@ -31,7 +31,7 @@
 
     <ion-row
       class="row--height__100 ion-justify-content-center ion-align-items-center"
-      [hidden]="hasCameraPermission"
+      *ngIf="(hasCameraPermission | async) === false"
       (click)="requestPermission()"
     >
       <ion-col class="ion-text-center">
