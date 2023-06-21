@@ -8,8 +8,8 @@ import { handleErrorLocal, ErrorCategory } from 'src/app/services/error-handler/
   styleUrls: ['./social-recovery-import-errors.page.scss']
 })
 export class SocialRecoveryImportErrorsPage implements OnInit {
-  errorTitle = 'ErrorTitle'
-  errorText = 'ErrorText'
+  errorTitle = 'Error'
+  errorText = ''
   constructor(private readonly modalController: ModalController) {}
 
   ngOnInit() {}
