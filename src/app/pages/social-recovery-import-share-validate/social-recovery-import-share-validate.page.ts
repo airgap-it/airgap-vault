@@ -11,6 +11,7 @@ import { map } from 'rxjs/operators'
 import { MnemonicSecret } from '../../models/secret'
 import { SocialRecoveryImportShareService } from 'src/app/social-recovery-import-share/social-recovery-import-share.service'
 import { SocialRecoveryImportHelpPage } from '../social-recovery-import-help/social-recovery-import-help.page'
+import { SocialRecoveryImportErrorsPage } from '../social-recovery-import-errors/social-recovery-import-errors.page'
 
 type SingleWord = string
 
@@ -226,13 +227,13 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
         secretString = MnemonicSecret.recoverSecretFromShares(sharesWithArraysToStrings)
 
         this.navigationService
-          .routeWithState('secret-add', { secret: new MnemonicSecret(secretString, 'Recovery by Social Recovery') })
+          .routeWithState('/social-recovery-import-success', { secret: new MnemonicSecret(secretString, 'Recovery by Social Recovery') })
           .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       } catch (error) {
         const returnedError = new Error(error)
         if (returnedError.message.includes('Invalid mnemonic') || returnedError.message.includes('Checksum error')) {
           const modal: HTMLIonModalElement = await this.modalController.create({
-            component: SocialRecoveryImportHelpPage,
+            component: SocialRecoveryImportErrorsPage,
             componentProps: { errorTitle: returnedError.name, errorText: returnedError.message },
             backdropDismiss: false
           })
