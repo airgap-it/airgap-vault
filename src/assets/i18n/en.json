@@ -18,6 +18,18 @@
     "version": "Version:",
     "code": "Code:"
   },
+  "shop": {
+    "label": "AirGap Shop",
+    "page-description_label": "Explore the AirGap Shop",
+    "page-description_description": "Add an additional layer of security with solutions from the AirGap Shop and pay with Crypto",
+    "QR-code_label": "To visit, scan the QR-Code or go to the following website:",
+    "AirGap-Knox_label": "AirGap Knox",
+    "AirGap-Knox_description": "With AirGap Knox, you can disable all sorts of connectivity on your smartphone at a system level and create an absolutely secure environment for the AirGap Vault",
+    "AirGap-Recovery-Plate_label": "AirGap Recovery Plate",
+    "AirGap-Recovery-Plate_description": "Engrave your seed phrase on stainless steel to protect it from fire or damage",
+    "promo-description": "Get 10% off your first purchase when using the promo code: <i>VaultUser23</i>",
+    "copy_label": "Copy Link"
+  },
   "distribution-onboarding": {
     "ask-permission": {
       "heading": "AirGap is <span class=\"style__strong color__primary\"> not persistent</span>, secrets generated will not be stored and need to be <span class=\"style__strong color__primary\">imported again</span> after a restart",

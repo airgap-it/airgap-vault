@@ -4,15 +4,15 @@
       <ion-back-button defaultHref="/tabs/tab-settings"></ion-back-button>
     </ion-buttons>
 
-    <ion-title>AirGap Shop</ion-title>
+    <ion-title>{{"shop.label" | translate}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <h1>Explore the AirGap Shop</h1>
-  <h6>Add an additional layer of security with solutions from the AirGap Shop and pay with Crypto</h6>
+  <h1 [innerHTML]="'shop.page-description_label' | translate"></h1>
+  <h6 [innerHTML]="'shop.page-description_description' | translate"></h6>
 
-  <p>To visit, scan the QR-Code or go to the following website:</p>
+  <p [innerHTML]="'shop.QR-code_label' | translate"></p>
 
   <ion-row class="ion-justify-content-center ion-padding-top ion-padding-bottom">
     <figure style="margin: auto; display: block">
@@ -21,17 +21,11 @@
     </figure>
   </ion-row>
 
-  <h3>AirGap Knox</h3>
-  <p>
-    With AirGap Knox, you can disable all sorts of connectivity on your smartphone at a system level and create an absolutely secure
-    environment for the AirGap Vault
-  </p>
-  <h3>AirGap Recovery Plate</h3>
-  <p>Engrave your seed phrase on stainless steel to protect it from fire or damage</p>
-  <h6>
-    Get 10% off your first purchase when using the promo code:
-    <i>VaultUser23</i>
-  </h6>
+  <h3 [innerHTML]="'shop.AirGap-Knox_label' | translate"></h3>
+  <p [innerHTML]="'shop.AirGap-Knox_description' | translate"></p>
+  <h3 [innerHTML]="'shop.AirGap-Recovery-Plate_label' | translate"></h3>
+  <p [innerHTML]="'shop.AirGap-Recovery-Plate_description' | translate"></p>
+  <h6 [innerHTML]="'shop.promo-description' | translate"></h6>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-button color="primary" (click)="open()" shape="round">Copy Link</ion-button>
