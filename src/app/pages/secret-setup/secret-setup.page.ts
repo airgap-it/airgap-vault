@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { ModalController } from '@ionic/angular'
 import { Observable } from 'rxjs'
 import { first } from 'rxjs/operators'
-import { EnvironmentContext, EnvironmentService } from 'src/app/services/environment/environment.service'
+import { VaultEnvironmentContext, VaultEnvironmentService } from 'src/app/services/environment/vault-environment.service'
 
 import { MnemonicSecret } from '../../models/secret'
 import { DeviceService } from '../../services/device/device.service'
@@ -20,7 +20,7 @@ import { OnboardingWelcomePage } from '../onboarding-welcome/onboarding-welcome.
 })
 export class SecretSetupPage implements OnInit {
   public canGoBack: boolean = false
-  public readonly context$: Observable<EnvironmentContext>
+  public readonly context$: Observable<VaultEnvironmentContext>
 
   public isAdvancedMode: boolean = false
 
@@ -30,7 +30,7 @@ export class SecretSetupPage implements OnInit {
     private readonly modalController: ModalController,
     private readonly deviceService: DeviceService,
     private readonly storageService: VaultStorageService,
-    private readonly environmentService: EnvironmentService
+    private readonly environmentService: VaultEnvironmentService
   ) {
     this.context$ = this.environmentService.getContextObservable()
   }

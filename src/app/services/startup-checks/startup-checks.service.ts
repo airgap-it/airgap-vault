@@ -9,7 +9,7 @@ import { DistributionOnboardingPage } from '../../pages/distribution-onboarding/
 import { IntroductionPage } from '../../pages/introduction/introduction.page'
 import { Warning, WarningModalPage } from '../../pages/warning-modal/warning-modal.page'
 import { DeviceService } from '../device/device.service'
-import { EnvironmentService } from '../environment/environment.service'
+import { VaultEnvironmentService } from '../environment/vault-environment.service'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { SecureStorageService } from '../secure-storage/secure-storage.service'
 import { InstallationType, InteractionType, VaultStorageKey, VaultStorageService } from '../storage/storage.service'
@@ -33,7 +33,7 @@ export class StartupChecksService {
     private readonly deviceService: DeviceService,
     private readonly modalController: ModalController,
     private readonly storageService: VaultStorageService,
-    private readonly environmentService: EnvironmentService
+    private readonly environmentService: VaultEnvironmentService
   ) {
     this.checks = [
       {
