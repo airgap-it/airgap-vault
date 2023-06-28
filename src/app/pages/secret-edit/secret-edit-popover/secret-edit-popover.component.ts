@@ -7,6 +7,8 @@ import { MnemonicSecret } from '../../../models/secret'
 import { ErrorCategory, handleErrorLocal } from '../../../services/error-handler/error-handler.service'
 import { SecretsService } from '../../../services/secrets/secrets.service'
 
+//TODO Tim: refactor for accounts-list
+
 @Component({
   selector: 'airgap-secret-edit-popover',
   templateUrl: './secret-edit-popover.component.html',

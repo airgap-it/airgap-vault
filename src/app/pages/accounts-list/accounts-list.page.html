@@ -8,6 +8,10 @@
     <ion-title>{{ 'tab-wallets.title' | translate }}</ion-title>
 
     <ion-buttons slot="primary">
+      <ion-button (click)="presentEditPopover($event)">
+        <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
+      </ion-button>
+      <!-- TODO Tim: remove -->
       <ion-button (click)="toggleDeleteView()">
         <ion-icon slot="icon-only" name="trash"></ion-icon>
       </ion-button>

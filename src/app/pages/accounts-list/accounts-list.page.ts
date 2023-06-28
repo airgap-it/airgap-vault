@@ -49,15 +49,16 @@ export class AccountsListPage {
   }
 
   private async loadWallets() {
-    const comparableWallets: [string, AirGapWallet][] = await Promise.all([...this.secret?.wallets].map(async (wallet: AirGapWallet) => {
-      return [await wallet.protocol.getName(), wallet] as [string, AirGapWallet]
-    }))
+    const comparableWallets: [string, AirGapWallet][] = await Promise.all(
+      [...this.secret?.wallets].map(async (wallet: AirGapWallet) => {
+        return [await wallet.protocol.getName(), wallet] as [string, AirGapWallet]
+      })
+    )
     const sortedWallets: AirGapWallet[] = comparableWallets
       .sort((a: [string, AirGapWallet], b: [string, AirGapWallet]) => a[0].localeCompare(b[0]))
       .map(([_, wallet]: [string, AirGapWallet]) => wallet)
 
     this.wallets$.next(sortedWallets)
-
   }
 
   public goToReceiveAddress(wallet: AirGapWallet): void {
@@ -86,6 +87,10 @@ export class AccountsListPage {
         action: SecretEditAction.SET_RECOVERY_KEY
       })
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
+  public async presentEditPopover(event: Event): Promise<void> {
+    event
   }
 
   public delete(wallet: AirGapWallet): void {
