@@ -6,12 +6,11 @@ import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/er
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
 
-import { SecretEditPopoverComponent } from './secret-edit-popover/secret-edit-popover.component'
 import { TranslateService } from '@ngx-translate/core'
 import { ClipboardService } from '@airgap/angular-core'
 import { AdvancedModeType, VaultStorageKey, VaultStorageService } from 'src/app/services/storage/storage.service'
 import { Observable } from 'rxjs'
-import { map } from 'rxjs/operators'
+import { first, map } from 'rxjs/operators'
 import { LifehashService } from 'src/app/services/lifehash/lifehash.service'
 import { Router } from '@angular/router'
 
@@ -31,6 +30,8 @@ export class SecretEditPage {
 
   public secret: MnemonicSecret
 
+  private readonly onDelete: Function
+
   public lifehashData: string = ''
 
   public isAppAdvancedMode$: Observable<boolean> = this.storageService
@@ -38,7 +39,6 @@ export class SecretEditPage {
     .pipe(map((res) => res === AdvancedModeType.ADVANCED))
 
   constructor(
-    private readonly popoverCtrl: PopoverController,
     private readonly toastCtrl: ToastController,
     private readonly alertCtrl: AlertController,
     private readonly translateService: TranslateService,
@@ -48,7 +48,8 @@ export class SecretEditPage {
     private readonly storageService: VaultStorageService,
     private readonly lifehashService: LifehashService,
     private readonly platform: Platform,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly popoverController: PopoverController
   ) {
     if (this.navigationService.getState()) {
       this.secret = this.navigationService.getState().secret
@@ -66,29 +67,6 @@ export class SecretEditPage {
 
   public async ngOnInit() {
     this.lifehashData = await this.lifehashService.generateLifehash(this.secret.fingerprint)
-  }
-
-  public async confirm(): Promise<void> {
-    try {
-      await this.secretsService.addOrUpdateSecret(this.secret)
-    } catch (error) {
-      handleErrorLocal(ErrorCategory.SECURE_STORAGE)(error)
-
-      // TODO: Show error
-      return
-    }
-
-    await this.dismiss()
-
-    this.navigationService.route('').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-  }
-
-  public async dismiss(): Promise<boolean> {
-    try {
-      return this.navigationService.routeToSecretsTab()
-    } catch (error) {
-      return false
-    }
   }
 
   public goToSocialRecoverySetup(): void {
@@ -152,20 +130,47 @@ export class SecretEditPage {
     alert.present()
   }
 
-  public async presentEditPopover(event: Event): Promise<void> {
-    const popover: HTMLIonPopoverElement = await this.popoverCtrl.create({
-      component: SecretEditPopoverComponent,
-      componentProps: {
-        secret: this.secret,
-        onDelete: (): void => {
-          this.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
-        }
-      },
-      event,
-      translucent: true
-    })
+  public delete(): void {
+    this.translateService
+      .get([
+        'secret-edit-delete-popover.title',
+        'secret-edit-delete-popover.text',
+        'secret-edit-delete-popover.cancel_label',
+        'secret-edit-delete-popover.delete_label'
+      ])
+      .pipe(first())
+      .subscribe(async (values: string[]) => {
+        const title: string = values['secret-edit-delete-popover.title']
+        const message: string = values['secret-edit-delete-popover.text']
+        const cancelButton: string = values['secret-edit-delete-popover.cancel_label']
+        const deleteButton: string = values['secret-edit-delete-popover.delete_label']
 
-    popover.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+        const alert: HTMLIonAlertElement = await this.alertCtrl.create({
+          header: title,
+          message,
+          buttons: [
+            {
+              text: cancelButton,
+              role: 'cancel',
+              handler: (): void => {
+                this.popoverController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+              }
+            },
+            {
+              text: deleteButton,
+              handler: (): void => {
+                this.secretsService.remove(this.secret).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
+                this.popoverController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+
+                if (this.onDelete) {
+                  this.onDelete()
+                }
+              }
+            }
+          ]
+        })
+        alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
+      })
   }
 
   private perform(action: SecretEditAction | undefined): void {
@@ -211,5 +216,25 @@ export class SecretEditPage {
       ]
     })
     alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
+  }
+
+  async onChangeName(event: any) {
+    this.secret.label = event.target.value
+
+    try {
+      await this.secretsService.addOrUpdateSecret(this.secret)
+    } catch (error) {
+      handleErrorLocal(ErrorCategory.SECURE_STORAGE)(error)
+
+      return
+    }
+  }
+
+  public navigateToRecoverySettings() {
+    try {
+      this.perform(SecretEditAction.SET_RECOVERY_KEY)
+    } catch (error) {
+      this.showToast(error)
+    }
   }
 }
