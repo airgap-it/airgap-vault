@@ -429,9 +429,9 @@
     "note_text": "<span class=\"style__strong\">Note: </span> This settings does NOT alter the connection of your device"
   },
   "tab-secrets": {
-    "title": "Secret",
+    "title": "Secrets",
     "add-secret_label": "Add Secret",
-    "search_placeholder": "Search Secret",
+    "search_placeholder": "Search Secrets",
     "tab-secret-popover":{
       "title":"Secret Management",
       "add-secret_label": "Add Secret",
