@@ -1,7 +1,7 @@
 import { AirGapWallet, AirGapWalletStatus } from '@airgap/coinlib-core'
 import { Component } from '@angular/core'
 import { Router } from '@angular/router'
-import { AlertController, Platform } from '@ionic/angular'
+import { AlertController, Platform, PopoverController } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 import { BehaviorSubject } from 'rxjs'
 import { first } from 'rxjs/operators'
@@ -12,6 +12,7 @@ import { ModeStrategy } from 'src/app/services/mode/strategy/ModeStrategy'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
 import { SecretEditAction } from '../secret-edit/secret-edit.page'
+import { AccountsListEditPopoverComponent } from './accounts-list-edit-popover/accounts-list-edit-popover.component'
 
 @Component({
   selector: 'airgap-accounts-list',
@@ -33,7 +34,8 @@ export class AccountsListPage {
     private readonly alertCtrl: AlertController,
     private readonly translateService: TranslateService,
     private readonly secretsService: SecretsService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly popoverCtrl: PopoverController
   ) {
     this.isAndroid = this.platform.is('android')
   }
@@ -76,8 +78,8 @@ export class AccountsListPage {
     this.navigationService.routeWithState('/account-add', { secret: this.secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  public goToEditSecret(secret: MnemonicSecret): void {
-    this.navigationService.routeWithState('/secret-edit', { secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  public goToEditSecret(): void {
+    this.navigationService.routeWithState('/secret-edit', { secret: this.secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public navigateToRecoverySettings() {
@@ -90,7 +92,31 @@ export class AccountsListPage {
   }
 
   public async presentEditPopover(event: Event): Promise<void> {
-    event
+    const popover: HTMLIonPopoverElement = await this.popoverCtrl.create({
+      component: AccountsListEditPopoverComponent,
+      componentProps: {
+        onClickSyncWallets: (): void => {
+          this.syncWallets()
+          popover.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+        },
+        onClickToggleDeleteView: (): void => {
+          this.toggleDeleteView()
+          popover.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+        },
+        onClickAddWallet: (): void => {
+          this.addWallet()
+          popover.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+        },
+        onClickEditSecret: (): void => {
+          this.goToEditSecret()
+          popover.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+        }
+      },
+      event,
+      translucent: true
+    })
+
+    popover.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 
   public delete(wallet: AirGapWallet): void {

@@ -1,0 +1,21 @@
+<ion-list lines="none" class="ion-no-padding ion-no-margin">
+  <ion-list-header>
+    <ion-label>Settings</ion-label>
+  </ion-list-header>
+  <ion-item button detail="false" (click)="addWalletHandler()">
+    <ion-icon slot="start" name="add"></ion-icon>
+    Add account
+  </ion-item>
+  <ion-item button detail="false" (click)="editSecretHandler()">
+    <ion-icon slot="start" name="settings-outline"></ion-icon>
+    Edit secret
+  </ion-item>
+  <ion-item button detail="false" (click)="syncWalletsHandler()">
+    <ion-icon slot="start" name="sync-outline"></ion-icon>
+    {{ 'tab-secrets.tab-secret-popover.sync-all_label' | translate }}
+  </ion-item>
+  <ion-item button detail="false" (click)="deleteViewHandler()">
+    <ion-icon slot="start" name="trash-outline"></ion-icon>
+    Delete
+  </ion-item>
+</ion-list>

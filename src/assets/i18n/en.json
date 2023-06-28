@@ -440,7 +440,7 @@
     }
   },
   "tab-wallets": {
-    "title": "Accounts",
+    "title": "Accounts of ",
     "search_placeholder": "Search Currency",
     "empty-state_text": "Create a new account by selecting a currency and sync it to AirGap Wallet.",
     "add-wallet_label": "Add Account",
