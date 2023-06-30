@@ -1,6 +1,6 @@
 <ion-content class="ion-padding">
-  <ion-slides>
-    <ion-slide>
+  <swiper-container #slides [modules]="swiperModules">
+    <swiper-slide>
       <ion-row class="ion-padding-vertical ion-text-left">
         <h1 [innerHTML]="'distribution-onboarding.ask-permission.heading' | translate"></h1>
 
@@ -14,8 +14,8 @@
           </ion-row>
         </ion-toolbar>
       </ion-footer>
-    </ion-slide>
-    <ion-slide>
+    </swiper-slide>
+    <swiper-slide>
       <ion-row class="ion-padding-vertical ion-text-left">
         <h1 [innerHTML]="'distribution-onboarding.no-vm.heading' | translate"></h1>
 
@@ -31,6 +31,6 @@
           </ion-row>
         </ion-toolbar>
       </ion-footer>
-    </ion-slide>
-  </ion-slides>
+    </swiper-slide>
+  </swiper-container>
 </ion-content>

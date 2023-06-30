@@ -2,6 +2,7 @@ import { BaseStorage } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
 import { Storage } from '@ionic/storage'
 import { Observable, ReplaySubject } from 'rxjs'
+import CordovaSQLiteDriver from 'localforage-cordovasqlitedriver'
 
 export enum LanguagesType {
   EN = 'en',
@@ -98,27 +99,30 @@ export class VaultStorageService extends BaseStorage<VaultStorageKey, VaultStora
   private observables: Record<string, ReplaySubject<any>> = {}
 
   constructor(storage: Storage) {
-    super(storage, defaultValues)
+    super(storage, defaultValues, [CordovaSQLiteDriver])
   }
 
-  set<K extends VaultStorageKey>(key: K, value: VaultStorageKeyReturnType[K]): Promise<void> {
+  public async set<K extends VaultStorageKey>(key: K, value: VaultStorageKeyReturnType[K]): Promise<void> {
     if (this.observables[key]) {
       this.observables[key].next(value)
     }
     return super.set(key, value)
   }
 
-  wipe() {
-    return this.storage.clear()
+  public async wipe() {
+    const storage = await this.getStorage()
+    return storage.clear()
   }
 
-  subscribe<K extends VaultStorageKey>(key: K): Observable<VaultStorageKeyReturnType[K]> {
+  public subscribe<K extends VaultStorageKey>(key: K): Observable<VaultStorageKeyReturnType[K]> {
     if (!this.observables[key]) {
       this.observables[key] = new ReplaySubject(1)
 
-      this.storage.get(key).then((value) => {
-        this.observables[key].next(value ?? defaultValues[key])
-      })
+      this.getStorage()
+        .then((storage) => storage.get(key))
+        .then((value) => {
+          this.observables[key].next(value ?? defaultValues[key])
+        })
     }
 
     return this.observables[key].asObservable()
