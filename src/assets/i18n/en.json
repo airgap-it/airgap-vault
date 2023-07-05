@@ -188,7 +188,7 @@
     "intro-state-2-text3": "So don't worry, your grandma won't be able to restore your secret with the share that you stored at her place.",
     "intro-state-3-title1": "How Social Recovery Works",
     "intro-state-3-title2": "Choose Number of Shares",
-    "intro-state-3-text1": "Begin by specifying how many social shares you'd like to create. You'll alsso need to define how many shares are needed to recover your secret.",
+    "intro-state-3-text1": "Begin by specifying how many social shares you'd like to create. You'll also need to define how many shares are needed to recover your secret.",
     "intro-state-3-title3": "Store and Verify Each Share",
     "intro-state-3-text2": "We will create different social shares for you. Make a note of for each of them. In a next step, you'll be asked to verify each share to make sure that you've copied them correctly.",
     "intro-state-3-title4": "Not the Same as Your Passphrase",
@@ -269,7 +269,7 @@
     "text": "Match the order of your recovery phrase by selecting the correct words."
   },
   "interaction-selection-settings": {
-    "header": "Setup", 
+    "header": "Setup",
     "title": "Wallet Interaction",
     "heading": "How would you like to interact with AirGap Wallet?",
     "selector": {
