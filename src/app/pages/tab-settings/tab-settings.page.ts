@@ -8,7 +8,6 @@ import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
 import { ClipboardService, IACMessageTransport, SerializerService } from '@airgap/angular-core'
 import { IACService } from 'src/app/services/iac/iac.service'
-import { OnboardingAdvancedModePage } from '../onboarding-advanced-mode/onboarding-advanced-mode.page'
 import { OnboardingWelcomePage } from '../onboarding-welcome/onboarding-welcome.page'
 import { ContactsService } from 'src/app/services/contacts/contacts.service'
 import { TranslateService } from '@ngx-translate/core'
@@ -91,13 +90,7 @@ export class TabSettingsPage implements OnInit {
   }
 
   public async goToAdvancedModeType(): Promise<void> {
-    const modal: HTMLIonModalElement = await this.modalController.create({
-      component: OnboardingAdvancedModePage,
-      componentProps: { isSettingsModal: true },
-      backdropDismiss: false
-    })
-
-    modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+    this.navigationService.route('/advanced-mode').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public goToBip39Wordlist(): void {
