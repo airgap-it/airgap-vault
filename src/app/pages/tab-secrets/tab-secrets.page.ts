@@ -53,6 +53,9 @@ export class TabSecretsPage {
         onClickSyncWallets: (): void => {
           this.syncWallets()
           popover.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+        },
+        onClickNewSecret: (): void => {
+          popover.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
         }
       },
       event,
