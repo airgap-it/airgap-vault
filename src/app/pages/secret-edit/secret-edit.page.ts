@@ -68,29 +68,30 @@ export class SecretEditPage {
   public async ngOnInit() {
     this.lifehashData = await this.lifehashService.generateLifehash(this.secret.fingerprint)
   }
+  // TODO Tim: remove
 
-  public async confirm(): Promise<void> {
-    try {
-      await this.secretsService.addOrUpdateSecret(this.secret)
-    } catch (error) {
-      handleErrorLocal(ErrorCategory.SECURE_STORAGE)(error)
+  // public async confirm(): Promise<void> {
+  //   try {
+  //     await this.secretsService.addOrUpdateSecret(this.secret)
+  //   } catch (error) {
+  //     handleErrorLocal(ErrorCategory.SECURE_STORAGE)(error)
 
-      // TODO: Show error
-      return
-    }
+  //     // TODO: Show error
+  //     return
+  //   }
 
-    await this.dismiss()
+  //   await this.dismiss()
 
-    this.navigationService.route('').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-  }
+  //   this.navigationService.route('').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  // }
 
-  public async dismiss(): Promise<boolean> {
-    try {
-      return this.navigationService.routeToSecretsTab()
-    } catch (error) {
-      return false
-    }
-  }
+  // public async dismiss(): Promise<boolean> {
+  //   try {
+  //     return this.navigationService.routeToSecretsTab()
+  //   } catch (error) {
+  //     return false
+  //   }
+  // }
 
   public goToSocialRecoverySetup(): void {
     this.navigationService
@@ -256,5 +257,18 @@ export class SecretEditPage {
       ]
     })
     alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
+  }
+
+  async onChangeName(event: any) {
+    this.secret.label = event.target.value
+
+    try {
+      await this.secretsService.addOrUpdateSecret(this.secret)
+    } catch (error) {
+      handleErrorLocal(ErrorCategory.SECURE_STORAGE)(error)
+
+      // TODO: Show error
+      return
+    }
   }
 }
