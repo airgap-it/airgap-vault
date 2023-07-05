@@ -18,6 +18,11 @@
     "version": "Version:",
     "code": "Code:"
   },
+  "advanced-mode": {
+    "label": "Advanced Mode",
+    "note_text": "<span class=\"style__strong\">Note: </span> Advanced mode grants you access to more features such as <u>BIP39 Passphrases</u> and <u>Lifehash Identicons</u>"
+
+  },
   "distribution-onboarding": {
     "ask-permission": {
       "heading": "AirGap is <span class=\"style__strong color__primary\"> not persistent</span>, secrets generated will not be stored and need to be <span class=\"style__strong color__primary\">imported again</span> after a restart",
