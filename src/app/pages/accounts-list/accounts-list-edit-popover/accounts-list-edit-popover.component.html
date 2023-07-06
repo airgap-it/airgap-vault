@@ -1,22 +1,21 @@
-<!-- TODO Tim: translate -->
 <ion-list lines="none" class="ion-no-padding ion-no-margin">
   <ion-list-header>
-    <ion-label>Settings</ion-label>
+    <ion-label>{{ 'accounts-list-edit-popover.title' | translate }}</ion-label>
   </ion-list-header>
   <ion-item button detail="false" (click)="addWalletHandler()">
     <ion-icon slot="start" name="add"></ion-icon>
-    Add account
+    {{ 'accounts-list-edit-popover.add-account_label' | translate }}
   </ion-item>
   <ion-item button detail="false" (click)="editSecretHandler()">
     <ion-icon slot="start" name="settings-outline"></ion-icon>
-    Secret Management
+    {{ 'accounts-list-edit-popover.secret-management_label' | translate }}
   </ion-item>
   <ion-item button detail="false" (click)="syncWalletsHandler()">
     <ion-icon slot="start" name="sync-outline"></ion-icon>
-    {{ 'tab-secrets.tab-secret-popover.sync-all_label' | translate }}
+    {{ 'accounts-list-edit-popover.sync-all_label' | translate }}
   </ion-item>
   <ion-item button detail="false" (click)="deleteViewHandler()">
     <ion-icon slot="start" name="trash-outline"></ion-icon>
-    Delete
+    {{ 'accounts-list-edit-popover.delete_label' | translate }}
   </ion-item>
 </ion-list>

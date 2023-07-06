@@ -9,7 +9,7 @@
 
     <ng-container *ngIf="deleteView; else threeDotMenu">
       <ion-buttons slot="primary">
-        <ion-button (click)="toggleDeleteView()">Cancel</ion-button>
+        <ion-button (click)="toggleDeleteView()">{{ 'tab-wallets.cancel_label' | translate }}</ion-button>
       </ion-buttons>
     </ng-container>
 

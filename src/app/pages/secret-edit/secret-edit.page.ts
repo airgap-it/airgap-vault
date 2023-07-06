@@ -68,30 +68,6 @@ export class SecretEditPage {
   public async ngOnInit() {
     this.lifehashData = await this.lifehashService.generateLifehash(this.secret.fingerprint)
   }
-  // TODO Tim: remove
-
-  // public async confirm(): Promise<void> {
-  //   try {
-  //     await this.secretsService.addOrUpdateSecret(this.secret)
-  //   } catch (error) {
-  //     handleErrorLocal(ErrorCategory.SECURE_STORAGE)(error)
-
-  //     // TODO: Show error
-  //     return
-  //   }
-
-  //   await this.dismiss()
-
-  //   this.navigationService.route('').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-  // }
-
-  // public async dismiss(): Promise<boolean> {
-  //   try {
-  //     return this.navigationService.routeToSecretsTab()
-  //   } catch (error) {
-  //     return false
-  //   }
-  // }
 
   public goToSocialRecoverySetup(): void {
     this.navigationService
@@ -153,23 +129,6 @@ export class SecretEditPage {
     })
     alert.present()
   }
-
-  //TODO Tim: remove
-  // public async presentEditPopover(event: Event): Promise<void> {
-  //   const popover: HTMLIonPopoverElement = await this.popoverCtrl.create({
-  //     component: SecretEditPopoverComponent,
-  //     componentProps: {
-  //       secret: this.secret,
-  //       onDelete: (): void => {
-  //         this.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
-  //       }
-  //     },
-  //     event,
-  //     translucent: true
-  //   })
-
-  //   popover.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
-  // }
 
   public delete(): void {
     this.translateService
@@ -267,7 +226,6 @@ export class SecretEditPage {
     } catch (error) {
       handleErrorLocal(ErrorCategory.SECURE_STORAGE)(error)
 
-      // TODO: Show error
       return
     }
   }
