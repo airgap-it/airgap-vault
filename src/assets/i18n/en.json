@@ -114,7 +114,8 @@
   },
   "secret-edit": {
     "title": " Your Secret",
-    "text": "Give your secret a name.",
+    "name_label": "Name",
+    "text": "Give your secret a name",
     "fingerprint": "Fingerprint",
     "secret_input_label": "Label of your secret",
     "advanced": "Advanced Options",
