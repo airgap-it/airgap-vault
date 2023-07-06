@@ -271,4 +271,12 @@ export class SecretEditPage {
       return
     }
   }
+
+  public navigateToRecoverySettings() {
+    try {
+      this.perform(SecretEditAction.SET_RECOVERY_KEY)
+    } catch (error) {
+      this.showToast(error)
+    }
+  }
 }

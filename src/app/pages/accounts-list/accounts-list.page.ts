@@ -11,7 +11,6 @@ import { ModeService } from 'src/app/services/mode/mode.service'
 import { ModeStrategy } from 'src/app/services/mode/strategy/ModeStrategy'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
-import { SecretEditAction } from '../secret-edit/secret-edit.page'
 import { AccountsListEditPopoverComponent } from './accounts-list-edit-popover/accounts-list-edit-popover.component'
 
 @Component({
@@ -80,15 +79,6 @@ export class AccountsListPage {
 
   public goToEditSecret(): void {
     this.navigationService.routeWithState('/secret-edit', { secret: this.secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-  }
-
-  public navigateToRecoverySettings() {
-    this.navigationService
-      .routeWithState('/secret-edit', {
-        secret: this.secret,
-        action: SecretEditAction.SET_RECOVERY_KEY
-      })
-      .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public async presentEditPopover(event: Event): Promise<void> {

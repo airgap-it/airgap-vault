@@ -24,21 +24,6 @@
 </ion-header>
 
 <ion-content *ngIf="wallets$" class="ion-padding-horizontal">
-  <ion-item
-    *ngIf="isAndroid && secret && !secret.hasRecoveryKey"
-    lines="none"
-    detail="true"
-    class="ion-margin-vertical"
-    color="warning"
-    (click)="navigateToRecoverySettings()"
-  >
-    <ion-icon name="exit" slot="start" color="dark"></ion-icon>
-    <ion-label color="dark" class="ion-text-wrap">
-      <h3><strong>{{ 'tab-wallets.generate-recovery-key.title' | translate }}</strong></h3>
-      <p>{{ 'tab-wallets.generate-recovery-key.description' | translate }}</p>
-    </ion-label>
-  </ion-item>
-
   <ng-container *ngIf="wallets$ && (wallets$ | async | walletFilter: { status: AirGapWalletStatus.ACTIVE } | async) as wallets">
     <ion-list>
       <ng-container *ngFor="let wallet of wallets">
