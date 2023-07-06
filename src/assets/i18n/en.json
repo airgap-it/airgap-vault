@@ -63,8 +63,6 @@
     "online-desc": "By design, AirGap Vault never connects with any online service. Your secrets never leave AirGap Vault and are therefore safe from online threats. To check your balance and create transactions, use a companion app like AirGap Wallet",
     "offline-desc": "By design, AirGap Vault never connects with any online service. To check your balance and create transactions, use a companion app like AirGap Wallet",
     "offline-companion_text": "Install the companion app on a device with internet access, and rest assured that only public information is shared between the two apps. Your secrets never leave the AirGap Vault, keeping them safe from online threats",
-
-
     "highest": {
       "label": "Highest Security",
       "text": "With the AirGap <b>two device approach</b> secure key handling becomes more accessible."
@@ -345,26 +343,22 @@
     "label_transactions": "Transactions",
     "label_creation_date": "Creation date",
     "label_delete_entry": "Delete address entry",
-
     "title_settings": "Address Book Settings",
     "label_enable_suggestions": "Enable suggestions",
     "label_enable_address_book": "Enable address book",
     "button_delete_entries": "Reset entries",
-
     "title_address_book": "Address Book",
     "label_welcome_personal_address_book": "Welcome to your personal address book",
     "label_this_allows_to": "This allows you to",
     "label_indentify_addresses_you_interact": "Identify addresses you interact with",
     "label_store_manage_entries": "Store and manage address entries",
     "label_look_transactions_histories": "Look at relevant transactions histories and much more!",
-
     "label_add_address_entries": "Add Address Entries",
     "label_several_ways": "There's several ways how to add new entries to your address book:",
     "label_scan_qr": "Scan the address QR code",
     "label_manual_entry": "Manual entry",
     "label_recommended_by_us": "Recommended by us",
     "label_while_signing": "While signing transactions",
-
     "label_recommendations": "Recommendations",
     "label_recommendation_on_who": "We'll make recommendations on who to add based on addresses you interact with frequently",
     "label_suggestions": "Suggestions",
@@ -432,11 +426,10 @@
     "title": "Secret",
     "add-secret_label": "Add Secret",
     "search_placeholder": "Search Secret",
-    "tab-secret-popover":{
-      "title":"Secret Management",
+    "tab-secret-popover": {
+      "title": "Secret Management",
       "add-secret_label": "Add Secret",
       "sync-all_label": "Sync all accounts with AirGap Wallet"
-
     }
   },
   "tab-wallets": {
