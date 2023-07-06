@@ -4,6 +4,20 @@
   </ion-toolbar>
 </ion-header>
 
+<ion-card *ngIf="showShopBanner" color="dark">
+  <ion-toolbar color="dark">
+    <ion-title>AirGap Knox</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissShopBanner()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-card-content>Here's a small text description for the card content. Nothing more, nothing less.</ion-card-content>
+</ion-card>
+
 <ion-content *ngIf="context$ | async as context">
   <ion-list-header>
     <ion-label>{{ 'tab-settings.settings_label' | translate }}</ion-label>

@@ -12,7 +12,7 @@ import { OnboardingWelcomePage } from '../onboarding-welcome/onboarding-welcome.
 import { ContactsService } from 'src/app/services/contacts/contacts.service'
 import { TranslateService } from '@ngx-translate/core'
 import { SecureStorageService } from 'src/app/services/secure-storage/secure-storage.service'
-import { VaultStorageService } from 'src/app/services/storage/storage.service'
+import { VaultStorageKey, VaultStorageService } from 'src/app/services/storage/storage.service'
 import { EnvironmentContext, EnvironmentService } from 'src/app/services/environment/environment.service'
 
 @Component({
@@ -23,6 +23,7 @@ import { EnvironmentContext, EnvironmentService } from 'src/app/services/environ
 export class TabSettingsPage implements OnInit {
   public readonly secrets$: Observable<MnemonicSecret[]>
   public readonly context$: Observable<EnvironmentContext>
+  showShopBanner: boolean
 
   constructor(
     public readonly serializerService: SerializerService,
@@ -42,7 +43,15 @@ export class TabSettingsPage implements OnInit {
     this.context$ = this.environmentService.getContextObservable()
   }
 
-  ngOnInit() {}
+  async ngOnInit() {
+    this.showShopBanner = await this.isShopBannerEnabled()
+  }
+
+  async dismissShopBanner() {
+    this.setShopBannerEnabled(false).then(async () => {
+      this.showShopBanner = await this.isShopBannerEnabled()
+    })
+  }
 
   public goToAbout(): void {
     this.navigationService.route('/about').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
@@ -159,5 +168,13 @@ export class TabSettingsPage implements OnInit {
       ]
     })
     alert.present()
+  }
+
+  private async isShopBannerEnabled(): Promise<boolean> {
+    return !(await this.storageService.get(VaultStorageKey.SHOP_BANNER_DISABLED))
+  }
+
+  private async setShopBannerEnabled(value: boolean) {
+    await this.storageService.set(VaultStorageKey.SHOP_BANNER_DISABLED, !value)
   }
 }
