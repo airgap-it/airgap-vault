@@ -195,7 +195,6 @@ export class IACService extends BaseIACService {
           modal
             .onDidDismiss()
             .then((result) => {
-              console.log('modal closed', result)
               correctWallet = result.data
               resolve(undefined)
             })

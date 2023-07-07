@@ -59,7 +59,7 @@ export class SocialRecoveryImportPage {
         .routeWithState('secret-add', { secret: new MnemonicSecret(secretString, 'Recovery by Social Recovery') })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } catch (error) {
-      console.log('oops')
+      console.error(error)
     }
   }
 

@@ -62,7 +62,6 @@ export class SocialRecoveryImportShareNamePage implements OnInit {
 
   nextState() {
     this.socialRecoveryForm.reset()
-    console.log('this currentsharenumber name page', this.currentShareNumber)
 
     this.navigationService
       .routeWithState('/social-recovery-import-share-validate', {

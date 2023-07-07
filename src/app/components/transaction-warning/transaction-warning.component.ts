@@ -50,9 +50,4 @@ export class TransactionWarningComponent {
   public warnings: (AirGapTransactionWarning & { color: string })[] | undefined
 
   constructor() {}
-
-  // doAction(warning: AirGapTransactionWarning) {
-  //   // TODO: Use link page
-  //   console.log(warning)
-  // }
 }

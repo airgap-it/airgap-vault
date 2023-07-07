@@ -74,7 +74,6 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
     this.numberOfShares = state.numberOfShares
     this.shareName = state.shareName
     this.sharesMap = this.socialRecoveryImportShareService.getMap()
-    console.log('this sharesmap', this.sharesMap)
   }
 
   ngOnInit() {}
