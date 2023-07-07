@@ -62,9 +62,6 @@ export class DeviceService {
 
     modal
       .present()
-      .then(() => {
-        console.log('check modal presented')
-      })
       .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 
