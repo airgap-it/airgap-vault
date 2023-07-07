@@ -1,0 +1,45 @@
+<!-- TODO Tim: translate -->
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Error</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="content-wrapper">
+    <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
+      <path
+        d="M448 256c0-106-86-192-192-192S64 150 64 256s86 192 192 192 192-86 192-192z"
+        fill="none"
+        stroke="currentColor"
+        stroke-miterlimit="10"
+        stroke-width="32"
+      />
+      <path
+        d="M250.26 166.05L256 288l5.73-121.95a5.74 5.74 0 00-5.79-6h0a5.74 5.74 0 00-5.68 6z"
+        fill="none"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="32"
+      />
+      <path d="M256 367.91a20 20 0 1120-20 20 20 0 01-20 20z" />
+    </svg>
+    <h1>{{ errorTitle }}</h1>
+    <p>{{ errorText }}</p>
+    <p>Unfortunately, there was an error while attempting to recover your secret using your social shares.</p>
+    <p>
+      Please ensure that you have entered the correct number and combination of related social shares when attempting to recover your secret
+      again
+    </p>
+  </div>
+
+  <div class="button-wrapper">
+    <ion-button color="primary" shape="round" (click)="close()">Go Back</ion-button>
+  </div>
+</ion-content>

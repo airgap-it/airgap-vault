@@ -65,13 +65,11 @@ type ErrorCallback = (error: Error & { originalError?: Error }) => void
 
 const handleErrorLocal: (category: ErrorCategory) => ErrorCallback = (category?: ErrorCategory): ErrorCallback => {
   return (error: Error & { originalError?: Error }): void => {
-    console.log('saving error locally, category', category, error)
     errorLogger.addLog(category, error)
   }
 }
 
 const handleErrorIgnore: ErrorCallback = (error: { originalError?: Error }): void => {
-  console.log('ignoring error')
   console.error(error.originalError || error)
 }
 

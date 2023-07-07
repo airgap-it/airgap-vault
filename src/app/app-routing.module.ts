@@ -126,6 +126,49 @@ const routes: Routes = [
     loadChildren: () => import('./pages/social-recovery-import/social-recovery-import.module').then((m) => m.SocialRecoveryImportPageModule)
   },
   {
+    path: 'social-recovery-import-share-name',
+    loadChildren: () =>
+      import('./pages/social-recovery-import-share-name/social-recovery-import-share-name.module').then(
+        (m) => m.SocialRecoveryImportShareNamePageModule
+      )
+  },
+  {
+    path: 'social-recovery-import-share-validate',
+    loadChildren: () =>
+      import('./pages/social-recovery-import-share-validate/social-recovery-import-share-validate.module').then(
+        (m) => m.SocialRecoveryImportShareValidatePageModule
+      )
+  },
+  {
+    path: 'social-recovery-import-success',
+    loadChildren: () =>
+      import('./pages/social-recovery-import-success/social-recovery-import-success.module').then(
+        (m) => m.SocialRecoveryImportSuccessPageModule
+      )
+  },
+  {
+    path: 'social-recovery-import-help',
+    loadChildren: () =>
+      import('./pages/social-recovery-import-help/social-recovery-import-help.module').then((m) => m.SocialRecoveryImportHelpPageModule)
+  },
+  {
+    path: 'social-recovery-import-errors',
+    loadChildren: () =>
+      import('./pages/social-recovery-import-errors/social-recovery-import-errors.module').then(
+        (m) => m.SocialRecoveryImportErrorsPageModule
+      )
+  },
+  {
+    path: 'social-recovery-import-intro',
+    loadChildren: () =>
+      import('./pages/social-recovery-import-intro/social-recovery-import-intro.module').then((m) => m.SocialRecoveryImportIntroPageModule)
+  },
+  {
+    path: 'social-recovery-import-setup',
+    loadChildren: () =>
+      import('./pages/social-recovery-import-setup/social-recovery-import-setup.module').then((m) => m.SocialRecoveryImportSetupPageModule)
+  },
+  {
     path: 'social-recovery-setup',
     loadChildren: () => import('./pages/social-recovery-setup/social-recovery-setup.module').then((m) => m.SocialRecoverySetupPageModule)
   },

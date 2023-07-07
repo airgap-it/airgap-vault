@@ -1,4 +1,15 @@
-import { APP_PLUGIN, CLIPBOARD_PLUGIN, FILESYSTEM_PLUGIN, IsolatedModulesPlugin, ISOLATED_MODULES_PLUGIN, ProtocolService, SPLASH_SCREEN_PLUGIN, STATUS_BAR_PLUGIN, ZipPlugin, ZIP_PLUGIN } from '@airgap/angular-core'
+import {
+  APP_PLUGIN,
+  CLIPBOARD_PLUGIN,
+  FILESYSTEM_PLUGIN,
+  IsolatedModulesPlugin,
+  ISOLATED_MODULES_PLUGIN,
+  ProtocolService,
+  SPLASH_SCREEN_PLUGIN,
+  STATUS_BAR_PLUGIN,
+  ZipPlugin,
+  ZIP_PLUGIN
+} from '@airgap/angular-core'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { AppPlugin } from '@capacitor/app'
@@ -32,6 +43,7 @@ import { SecretsService } from './services/secrets/secrets.service'
 import { SecureStorageServiceMock } from './services/secure-storage/secure-storage.mock'
 import { SecureStorageService } from './services/secure-storage/secure-storage.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
+import { SocialRecoveryImportShareService } from './social-recovery-import-share/social-recovery-import-share.service'
 
 describe('AppComponent', () => {
   let appSpy: AppPlugin
@@ -86,7 +98,8 @@ describe('AppComponent', () => {
           TranslateService,
           ProtocolService,
           SecretsService,
-          NavigationService
+          NavigationService,
+          SocialRecoveryImportShareService
         ]
       })
     )

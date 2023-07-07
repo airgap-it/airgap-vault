@@ -120,7 +120,6 @@ export class AppComponent implements AfterViewInit {
     this.app.addListener('appUrlOpen', async (data: URLOpenListenerEvent) => {
       await this.isInitialized.promise
       if (data.url === DEEPLINK_VAULT_PREFIX || data.url.startsWith(DEEPLINK_VAULT_ADD_ACCOUNT)) {
-        console.log('Successfully matched route', data.url)
         this.secretsService
           .getSecretsObservable()
           .pipe(first())
@@ -185,7 +184,7 @@ export class AppComponent implements AfterViewInit {
       | undefined = await this.saplingNativeService.createExternalMethodProvider()
 
     const shieldedTezAdapter: ICoinProtocolAdapter<TezosShieldedTezProtocol> = await createV0TezosShieldedTezProtocol({ externalProvider: externalMethodProvider })
-    
+
     this.protocolService.init({
       activeProtocols: protocols.activeProtocols,
       passiveProtocols: protocols.passiveProtocols,
