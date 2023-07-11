@@ -158,13 +158,14 @@ export class SecretEditPage {
             },
             {
               text: deleteButton,
-              handler: (): void => {
+              handler: async (): Promise<void> => {
                 this.secretsService.remove(this.secret).catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
                 this.popoverController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
 
                 if (this.onDelete) {
                   this.onDelete()
                 }
+                await this.navigationService.routeToSecretsTab()
               }
             }
           ]
