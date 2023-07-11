@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab-settings"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title [innerHTML]="'advanced-mode.label' | translate"></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-subtitle [innerHTML]="'advanced-mode.label' | translate"></ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-item lines="none">
+          <ion-icon name="build-outline" slot="start"></ion-icon>
+          {{'advanced-mode.label' | translate }}
+          <ion-toggle [checked]="advancedModeEnabled" (ionChange)="toggleEnableAdvancedMode($event)" slot="end"></ion-toggle>
+        </ion-item>
+
+        <ion-item lines="none">
+          <p [innerHTML]="'advanced-mode.note_text' | translate"></p>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+</ion-content>

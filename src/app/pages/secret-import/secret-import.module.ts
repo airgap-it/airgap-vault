@@ -4,9 +4,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule, Routes } from '@angular/router'
 import { IonicModule } from '@ionic/angular'
 import { TranslateModule } from '@ngx-translate/core'
-import { MnemonicKeyboardComponent } from 'src/app/components/mnemonic-keyboard/mnemonic-keyboard.component'
 
 import { SecretImportPage } from './secret-import.page'
+import { ComponentsModule } from '../../components/components.module'
 
 const routes: Routes = [
   {
@@ -16,7 +16,7 @@ const routes: Routes = [
 ]
 
 @NgModule({
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule],
-  declarations: [SecretImportPage, MnemonicKeyboardComponent]
+  imports: [CommonModule, FormsModule, ComponentsModule, ReactiveFormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule],
+  declarations: [SecretImportPage]
 })
 export class SecretImportPageModule {}

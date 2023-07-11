@@ -9,17 +9,7 @@
 <ion-content class="ion-padding">
   <div class="content-wrapper">
     <div class="center-wrapper">
-      <div class="states-wrapper">
-        <ion-button
-          class="state"
-          [class.selected]="(i === currentShare && currentShare < shares.length - 1) || (currentShare === shares.length -1 && i === currentShare - 1)"
-          shape="round"
-          *ngFor="let share of shares; let i = index"
-          [color]="i === currentShare ? 'primary' : 'tertiary'"
-        >
-          {{i}}
-        </ion-button>
-      </div>
+      <airgap-progress-indicator [currentShare]="currentShare" [totalShares]="shares.length"></airgap-progress-indicator>
       <h2>{{ 'social-recovery-generate.share-show-heading' | translate }}</h2>
       <div class="tags-wrapper">
         <ion-button class="tag" shape="round" color="tertiary" *ngFor="let tag of currentShares; let i = index">

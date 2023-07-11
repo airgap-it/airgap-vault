@@ -51,7 +51,7 @@ export class SignedTransactionComponent {
       try {
         this.signedTxs = await this.serializerService.deserialize(this.syncProtocolString)
       } catch (err) {
-        console.log('ERROR', err)
+        console.error(err)
         this.fallbackActivated = true
         this.rawTxData = this.syncProtocolString
       }
