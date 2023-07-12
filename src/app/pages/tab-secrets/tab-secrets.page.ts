@@ -50,11 +50,11 @@ export class TabSecretsPage {
     const popover = await this.popoverCtrl.create({
       component: TabSecretPopoverComponent,
       componentProps: {
-        onClickNewSecret: (): void => {
-          popover.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
-        },
         onClickSyncWallets: (): void => {
           this.syncWallets()
+          popover.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+        },
+        onClickNewSecret: (): void => {
           popover.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
         }
       },
@@ -68,5 +68,9 @@ export class TabSecretsPage {
   public async syncWallets(): Promise<void> {
     const strategy: ModeStrategy = await this.modeService.strategy()
     await strategy.syncAll()
+  }
+
+  addSecret() {
+    this.navigationService.route('/secret-setup').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }
