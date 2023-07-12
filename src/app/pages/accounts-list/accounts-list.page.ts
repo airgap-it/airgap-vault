@@ -146,14 +146,9 @@ export class AccountsListPage {
   }
 
   public onWalletSelected(wallet: AirGapWallet): void {
-    if (this.selectedWallets?.includes(wallet)) {
-      const index = this.selectedWallets.indexOf(wallet)
-      if (index > -1) {
-        this.selectedWallets = this.selectedWallets.splice(index, 1)
-      }
-    } else {
-      this.selectedWallets.push(wallet)
-    }
+    if (this.selectedWallets?.includes(wallet)) return;
+
+    this.selectedWallets.push(wallet)
   }
 
   public async removeWallets(): Promise<void> {
