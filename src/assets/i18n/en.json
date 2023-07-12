@@ -117,7 +117,8 @@
   },
   "secret-edit": {
     "title": " Your Secret",
-    "text": "Give your secret a name.",
+    "name_label": "Name",
+    "text": "Give your secret a name",
     "fingerprint": "Fingerprint",
     "secret_input_label": "Label of your secret",
     "advanced": "Advanced Options",
@@ -428,21 +429,23 @@
     "note_text": "<span class=\"style__strong\">Note: </span> This settings does NOT alter the connection of your device"
   },
   "tab-secrets": {
-    "title": "Secret",
+    "title": "Secrets",
     "add-secret_label": "Add Secret",
-    "search_placeholder": "Search Secret",
-    "tab-secret-popover": {
+    "search_placeholder": "Search Secrets",
+    "tab-secret-popover":{
       "title": "Secret Management",
       "add-secret_label": "Add Secret",
-      "sync-all_label": "Sync all accounts with AirGap Wallet"
+      "sync-all_label": "Sync All Accounts With AirGap Wallet"
+
     }
   },
   "tab-wallets": {
-    "title": "Accounts",
+    "title": "Accounts of ",
     "search_placeholder": "Search Currency",
     "empty-state_text": "Create a new account by selecting a currency and sync it to AirGap Wallet.",
     "add-wallet_label": "Add Account",
     "delete-accounts_label": "Remove Accounts",
+    "cancel_label": "Cancel",
     "generate-recovery-key": {
       "title": "Secret Recovery Key Backup",
       "description": "To always ensure a recovery of your stored secret, a backup of the secret recovery key is needed."
@@ -829,5 +832,12 @@
         }
       }
     }
+  },
+  "accounts-list-edit-popover": {
+    "title": "Settings",
+    "add-account_label": "Add Account",
+    "secret-management_label": "Secret Management",
+    "sync-all_label": "Sync All Accounts With AirGap Wallet",
+    "delete_label": "Delete Accounts"
   }
 }
