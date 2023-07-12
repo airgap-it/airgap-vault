@@ -5,32 +5,25 @@
         <ion-icon name="arrow-back"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>{{ 'tab-wallets.title' | translate }}</ion-title>
+    <ion-title *ngIf="secret">{{ 'tab-wallets.title' | translate }} {{ secret.label }}</ion-title>
 
-    <ion-buttons slot="primary">
-      <ion-button (click)="toggleDeleteView()">
-        <ion-icon slot="icon-only" name="trash"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+    <ng-container *ngIf="deleteView; else threeDotMenu">
+      <ion-buttons slot="primary">
+        <ion-button (click)="toggleDeleteView()">{{ 'tab-wallets.cancel_label' | translate }}</ion-button>
+      </ion-buttons>
+    </ng-container>
+
+    <ng-template #threeDotMenu>
+      <ion-buttons slot="primary">
+        <ion-button (click)="presentEditPopover($event)">
+          <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ng-template>
   </ion-toolbar>
 </ion-header>
 
 <ion-content *ngIf="wallets$" class="ion-padding-horizontal">
-  <ion-item
-    *ngIf="isAndroid && secret && !secret.hasRecoveryKey"
-    lines="none"
-    detail="true"
-    class="ion-margin-vertical"
-    color="warning"
-    (click)="navigateToRecoverySettings()"
-  >
-    <ion-icon name="exit" slot="start" color="dark"></ion-icon>
-    <ion-label color="dark" class="ion-text-wrap">
-      <h3><strong>{{ 'tab-wallets.generate-recovery-key.title' | translate }}</strong></h3>
-      <p>{{ 'tab-wallets.generate-recovery-key.description' | translate }}</p>
-    </ion-label>
-  </ion-item>
-
   <ng-container *ngIf="wallets$ && (wallets$ | async | walletFilter: { status: AirGapWalletStatus.ACTIVE } | async) as wallets">
     <ion-list>
       <ng-container *ngFor="let wallet of wallets">
@@ -70,26 +63,12 @@
     </ng-container>
   </ng-container>
 
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ng-container *ngIf="deleteView">
+  <ng-container *ngIf="deleteView">
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
       <ion-button color="secondary" shape="round" (click)="removeWallets(); $event.stopPropagation()">
         <ion-icon slot="start" name="trash"></ion-icon>
         {{ 'tab-wallets.delete-accounts_label' | translate }}
       </ion-button>
-    </ng-container>
-
-    <ng-container *ngIf="!deleteView">
-      <ion-fab-button color="secondary">
-        <ion-icon name="chevron-up-outline"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-list side="top">
-        <ion-fab-button color="secondary" (click)="syncWallets()">
-          <ion-icon name="sync-outline"></ion-icon>
-        </ion-fab-button>
-        <ion-fab-button color="secondary" (click)="addWallet()">
-          <ion-icon name="add"></ion-icon>
-        </ion-fab-button>
-      </ion-fab-list>
-    </ng-container>
-  </ion-fab>
+    </ion-fab>
+  </ng-container>
 </ion-content>
