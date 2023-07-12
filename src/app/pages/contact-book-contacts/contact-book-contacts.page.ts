@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { PopoverController } from '@ionic/angular'
 import { AddType, ContactInfo, ContactsService } from 'src/app/services/contacts/contacts.service'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 import { ContactBookContactsPopoverComponent, SortType } from './contact-book-contacts-popover/contact-book-contacts-popover.component'
+import { Subscription } from 'rxjs'
 
 enum SortDirection {
   ASCENDING = 'ASCENDING',
@@ -15,7 +16,7 @@ enum SortDirection {
   templateUrl: './contact-book-contacts.page.html',
   styleUrls: ['./contact-book-contacts.page.scss']
 })
-export class ContactBookContactsPage implements OnInit {
+export class ContactBookContactsPage implements OnInit, OnDestroy {
   public addEnum: typeof AddType = AddType
   public sortEnum: typeof SortType = SortType
 
@@ -24,6 +25,7 @@ export class ContactBookContactsPage implements OnInit {
 
   public contacts: ContactInfo[] = []
   public suggestions: string[] = []
+  private subscription: Subscription = this.contactsService.getContactsInfo$().subscribe((contactIfo) => (this.contacts = contactIfo))
 
   constructor(
     private readonly popoverCtrl: PopoverController,
@@ -32,9 +34,12 @@ export class ContactBookContactsPage implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.contacts = await this.contactsService.getContactsInfo()
     const suggestionsEnabled = await this.contactsService.isSuggestionsEnabled()
     this.suggestions = suggestionsEnabled ? await this.contactsService.getSuggestions() : []
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe()
   }
 
   public async onClickBack() {

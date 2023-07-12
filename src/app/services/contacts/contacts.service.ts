@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core'
 import { VaultStorageKey, VaultStorageService } from '../storage/storage.service'
+import { Observable } from 'rxjs'
 
 export enum AddType {
   QR = 'QR',
@@ -58,6 +59,10 @@ export class ContactsService {
   async getContactsInfo(): Promise<ContactInfo[]> {
     const storedContacts: ContactType[] = (await this.storageService.get(VaultStorageKey.AIRGAP_CONTACTS_LIST)) as ContactType[]
     return storedContacts
+  }
+
+  getContactsInfo$(): Observable<ContactInfo[]> {
+    return this.storageService.subscribe(VaultStorageKey.AIRGAP_CONTACTS_LIST) as Observable<ContactInfo[]>
   }
 
   async createContact(name: string, address: string, addedFrom: AddType): Promise<void> {
