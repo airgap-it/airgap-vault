@@ -121,6 +121,10 @@ export class ContactsService {
     return !(await this.storageService.get(VaultStorageKey.ADDRESS_BOOK_DISABLED))
   }
 
+  isBookDisabled$(): Observable<boolean> {
+    return this.storageService.subscribe(VaultStorageKey.ADDRESS_BOOK_DISABLED)
+  }
+
   async setBookEnable(value: boolean) {
     await this.storageService.set(VaultStorageKey.ADDRESS_BOOK_DISABLED, !value)
   }

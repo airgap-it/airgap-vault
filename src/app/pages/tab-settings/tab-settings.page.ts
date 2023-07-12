@@ -21,8 +21,9 @@ import { EnvironmentContext, EnvironmentService } from 'src/app/services/environ
   styleUrls: ['./tab-settings.page.scss']
 })
 export class TabSettingsPage implements OnInit {
-  public readonly secrets$: Observable<MnemonicSecret[]>
-  public readonly context$: Observable<EnvironmentContext>
+  public readonly secrets$: Observable<MnemonicSecret[]> = this.secretsService.getSecretsObservable()
+  public readonly context$: Observable<EnvironmentContext> = this.environmentService.getContextObservable()
+  public readonly bookEnabled$: Observable<boolean> = this.contactsService.isBookDisabled$()
 
   constructor(
     public readonly serializerService: SerializerService,
@@ -37,10 +38,7 @@ export class TabSettingsPage implements OnInit {
     private readonly secureStorage: SecureStorageService,
     public readonly storageService: VaultStorageService,
     private readonly environmentService: EnvironmentService
-  ) {
-    this.secrets$ = this.secretsService.getSecretsObservable()
-    this.context$ = this.environmentService.getContextObservable()
-  }
+  ) {}
 
   ngOnInit() {}
 
