@@ -4,6 +4,7 @@ import { AddType, ContactInfo, ContactsService } from 'src/app/services/contacts
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 import { ContactBookContactsPopoverComponent, SortType } from './contact-book-contacts-popover/contact-book-contacts-popover.component'
+import { of } from 'rxjs'
 
 export type ContactBookFilterType = 'addedFrom' | 'date' | 'address' | 'name'
 
@@ -24,7 +25,6 @@ export class ContactBookContactsPage implements OnInit {
   public sortType: SortType = SortType.NAME
   public sortDirection: SortDirection = SortDirection.DESCENDING
 
-  public contacts: ContactInfo[] = []
   public contacts$ = this.contactsService.getContactsInfo$()
   public suggestions: string[] = []
   constructor(
@@ -38,9 +38,6 @@ export class ContactBookContactsPage implements OnInit {
     this.suggestions = suggestionsEnabled ? await this.contactsService.getSuggestions() : []
   }
 
-  setContacts(contacts: ContactInfo[]) {
-    return (this.contacts = contacts)
-  }
   public async onClickBack() {
     this.navigationService.route('/tabs/tab-settings').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
@@ -52,7 +49,8 @@ export class ContactBookContactsPage implements OnInit {
     const result = storedContacts.filter(
       (contact) => contact.name.toLowerCase().includes(value) || contact.address.toLowerCase().includes(value)
     )
-    this.contacts = result
+
+    this.contacts$ = of(result)
   }
 
   public onClickNew(_: any) {
