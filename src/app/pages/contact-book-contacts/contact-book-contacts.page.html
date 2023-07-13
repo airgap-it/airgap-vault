@@ -21,7 +21,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content *ngIf="setContacts(contacts$ | async)" class="ion-padding">
   <ng-container [ngSwitch]="sortType">
     <ng-container *ngSwitchCase="sortEnum.ADDED_BY">
       <div class="contacts-wrapper" *ngFor="let addedType of getAddedTypesFromContacts()">

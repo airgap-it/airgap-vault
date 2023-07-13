@@ -1,10 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { PopoverController } from '@ionic/angular'
 import { AddType, ContactInfo, ContactsService } from 'src/app/services/contacts/contacts.service'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 import { ContactBookContactsPopoverComponent, SortType } from './contact-book-contacts-popover/contact-book-contacts-popover.component'
-import { Subscription } from 'rxjs'
 
 enum SortDirection {
   ASCENDING = 'ASCENDING',
@@ -16,7 +15,7 @@ enum SortDirection {
   templateUrl: './contact-book-contacts.page.html',
   styleUrls: ['./contact-book-contacts.page.scss']
 })
-export class ContactBookContactsPage implements OnInit, OnDestroy {
+export class ContactBookContactsPage implements OnInit {
   public addEnum: typeof AddType = AddType
   public sortEnum: typeof SortType = SortType
 
@@ -24,8 +23,9 @@ export class ContactBookContactsPage implements OnInit, OnDestroy {
   public sortDirection: SortDirection = SortDirection.DESCENDING
 
   public contacts: ContactInfo[] = []
+  public contacts$ = this.contactsService.getContactsInfo$()
   public suggestions: string[] = []
-  private subscription: Subscription = this.contactsService.getContactsInfo$().subscribe((contactIfo) => (this.contacts = contactIfo))
+  // private subscription: Subscription = this.contactsService.getContactsInfo$().subscribe((contactIfo) => (this.contacts = contactIfo))
 
   constructor(
     private readonly popoverCtrl: PopoverController,
@@ -38,10 +38,13 @@ export class ContactBookContactsPage implements OnInit, OnDestroy {
     this.suggestions = suggestionsEnabled ? await this.contactsService.getSuggestions() : []
   }
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe()
-  }
+  // ngOnDestroy(): void {
+  //   this.subscription.unsubscribe()
+  // }
 
+  setContacts(contacts: ContactInfo[]) {
+    return (this.contacts = contacts)
+  }
   public async onClickBack() {
     this.navigationService.route('/tabs/tab-settings').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
