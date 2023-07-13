@@ -155,7 +155,7 @@ export class AccountsListPage {
     } else if (!checked && index !== -1) {
       // otherwise when the checkbox is unchecked, remove it
       this.selectedWallets.splice(index, 1)
-    } else return;
+    }
   }
 
   public async removeWallets(): Promise<void> {
