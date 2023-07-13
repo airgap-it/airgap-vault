@@ -145,14 +145,16 @@ export class AccountsListPage {
       })
   }
 
-  public onWalletSelected(wallet: AirGapWallet): void {
-    if (this.selectedWallets?.includes(wallet)) {
-      const index = this.selectedWallets.indexOf(wallet)
-      if (index > -1) {
-        this.selectedWallets = this.selectedWallets.splice(index, 1)
-      }
-    } else {
+  public onWalletSelected(event: CustomEvent & { detail: { checked: boolean } }, wallet: AirGapWallet): void {
+    const index = this.selectedWallets.indexOf(wallet)
+    const { checked } = event.detail
+
+    if (checked && index === -1) {
+      // if the selected wallet is missing from the array, add it
       this.selectedWallets.push(wallet)
+    } else if (!checked && index !== -1) {
+      // otherwise when the checkbox is unchecked, remove it
+      this.selectedWallets.splice(index, 1)
     }
   }
 
