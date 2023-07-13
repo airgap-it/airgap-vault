@@ -24,7 +24,10 @@
 <ion-content class="ion-padding">
   <ng-container *ngIf="contacts$ | async as contacts">
     <div class="contacts-wrapper" *ngFor="let key of getHeading(contacts)">
-      <h3 class="contacts-letter">{{key | uppercase}}</h3>
+      <h3 *ngIf="sortType === sortEnum.NAME; else default" class="contacts-letter">{{key | uppercase}}</h3>
+      <ng-template #default>
+        <h3 class="contacts-letter">{{key}}</h3>
+      </ng-template>
       <div *ngFor="let contact of getContacts(contacts, key)">
         <airgap-contact-book-contacts-item
           [name]="contact.name"

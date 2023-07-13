@@ -5,6 +5,8 @@ import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 import { ContactBookContactsPopoverComponent, SortType } from './contact-book-contacts-popover/contact-book-contacts-popover.component'
 
+export type ContactBookFilterType = 'addedFrom' | 'date' | 'address' | 'name'
+
 enum SortDirection {
   ASCENDING = 'ASCENDING',
   DESCENDING = 'DESCENDING'
@@ -98,25 +100,30 @@ export class ContactBookContactsPage implements OnInit {
     this.suggestions = await this.contactsService.getSuggestions()
   }
 
-  private getKey(): string {
+  private getKey(): ContactBookFilterType {
     switch (this.sortType) {
       case SortType.ADDED_BY:
         return 'addedFrom'
       case SortType.DATE_CREATION:
         return 'date'
+      case SortType.ADDRESS:
+        return 'address'
       default:
         return 'name'
     }
   }
 
-  getHeading(contacts: ContactInfo[]) {
+  public getHeading(contacts: ContactInfo[]) {
     const key = this.getKey()
-    return Array.from(new Set(contacts.map(contact => String(contact[key]).charAt(0)))).sort()
+    return key === 'name'
+      ? Array.from(new Set(contacts.map((contact) => String(contact[key]).charAt(0)))).sort()
+      : Array.from(new Set(contacts.map((contact) => String(contact[key])))).sort()
   }
 
-  getContacts(contacts: ContactInfo[], key: string) {
+  public getContacts(contacts: ContactInfo[], key: string) {
     const _key = this.getKey()
-    return contacts.filter(contact => String(contact[_key]).charAt(0) === key)
+    return _key === 'name'
+      ? contacts.filter((contact) => String(contact[_key]).charAt(0) === key)
+      : contacts.filter((contact) => String(contact[_key]) === key)
   }
-
 }
