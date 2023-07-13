@@ -30,7 +30,7 @@
         <ion-item-sliding>
           <ng-container *ngIf="deleteView">
             <ion-item>
-              <ion-checkbox slot="start" (click)="onWalletSelected(wallet)"></ion-checkbox>
+              <ion-checkbox slot="start" (ionChange)="onWalletSelected($event, wallet)"></ion-checkbox>
               <airgap-account-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></airgap-account-item>
             </ion-item>
           </ng-container>
