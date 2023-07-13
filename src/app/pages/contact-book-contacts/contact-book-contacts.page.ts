@@ -25,8 +25,7 @@ export class ContactBookContactsPage implements OnInit {
   public contacts: ContactInfo[] = []
   public contacts$ = this.contactsService.getContactsInfo$()
   public suggestions: string[] = []
-  // private subscription: Subscription = this.contactsService.getContactsInfo$().subscribe((contactIfo) => (this.contacts = contactIfo))
-
+  
   constructor(
     private readonly popoverCtrl: PopoverController,
     private readonly navigationService: NavigationService,
@@ -37,10 +36,6 @@ export class ContactBookContactsPage implements OnInit {
     const suggestionsEnabled = await this.contactsService.isSuggestionsEnabled()
     this.suggestions = suggestionsEnabled ? await this.contactsService.getSuggestions() : []
   }
-
-  // ngOnDestroy(): void {
-  //   this.subscription.unsubscribe()
-  // }
 
   setContacts(contacts: ContactInfo[]) {
     return (this.contacts = contacts)
