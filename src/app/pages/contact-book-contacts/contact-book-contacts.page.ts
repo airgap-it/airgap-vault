@@ -25,7 +25,6 @@ export class ContactBookContactsPage implements OnInit {
   public contacts: ContactInfo[] = []
   public contacts$ = this.contactsService.getContactsInfo$()
   public suggestions: string[] = []
-  
   constructor(
     private readonly popoverCtrl: PopoverController,
     private readonly navigationService: NavigationService,
@@ -99,71 +98,25 @@ export class ContactBookContactsPage implements OnInit {
     this.suggestions = await this.contactsService.getSuggestions()
   }
 
-  public getLettersFromNames(): string[] {
-    const letters: string[] = []
-    for (let i = 0; i < this.contacts.length; i++) {
-      const name = this.contacts[i].name
-      const letter = name.charAt(0).toUpperCase()
-      if (!letters.includes(letter)) letters.push(letter)
+  private getKey(): string {
+    switch (this.sortType) {
+      case SortType.ADDED_BY:
+        return 'addedFrom'
+      case SortType.DATE_CREATION:
+        return 'date'
+      default:
+        return 'name'
     }
-    return letters.sort()
   }
 
-  public getContactsFromLetter(letter: string): ContactInfo[] {
-    const contacts: ContactInfo[] = []
-    for (let i = 0; i < this.contacts.length; i++) {
-      const name = this.contacts[i].name
-      const _letter = name.charAt(0).toUpperCase()
-      if (_letter === letter) contacts.push(this.contacts[i])
-    }
-    return contacts
+  getHeading(contacts: ContactInfo[]) {
+    const key = this.getKey()
+    return Array.from(new Set(contacts.map(contact => String(contact[key]).charAt(0)))).sort()
   }
 
-  public getAddressesFromContacts(): string[] {
-    const addresses: string[] = []
-    for (let i = 0; i < this.contacts.length; i++) {
-      if (!addresses.includes(this.contacts[i].address)) addresses.push(this.contacts[i].address)
-    }
-    return addresses.sort()
+  getContacts(contacts: ContactInfo[], key: string) {
+    const _key = this.getKey()
+    return contacts.filter(contact => String(contact[_key]).charAt(0) === key)
   }
 
-  public getContactsFromAddress(address: string): ContactInfo[] {
-    const contacts: ContactInfo[] = []
-    for (let i = 0; i < this.contacts.length; i++) {
-      if (address === this.contacts[i].address) contacts.push(this.contacts[i])
-    }
-    return contacts
-  }
-
-  public getDatesFromContacts(): string[] {
-    const dates: string[] = []
-    for (let i = 0; i < this.contacts.length; i++) {
-      if (!dates.includes(this.contacts[i].date)) dates.push(this.contacts[i].date)
-    }
-    return dates.sort()
-  }
-
-  public getContactsFromDate(date: string): ContactInfo[] {
-    const contacts: ContactInfo[] = []
-    for (let i = 0; i < this.contacts.length; i++) {
-      if (date === this.contacts[i].date) contacts.push(this.contacts[i])
-    }
-    return contacts
-  }
-
-  public getAddedTypesFromContacts(): AddType[] {
-    const addTypes: AddType[] = []
-    for (let i = 0; i < this.contacts.length; i++) {
-      if (!addTypes.includes(this.contacts[i].addedFrom)) addTypes.push(this.contacts[i].addedFrom)
-    }
-    return addTypes.sort()
-  }
-
-  public getContactsFromAddedType(addedType: AddType): ContactInfo[] {
-    const contacts: ContactInfo[] = []
-    for (let i = 0; i < this.contacts.length; i++) {
-      if (addedType === this.contacts[i].addedFrom) contacts.push(this.contacts[i])
-    }
-    return contacts
-  }
 }
