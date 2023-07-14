@@ -1,24 +1,26 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
+import { IonicModule } from '@ionic/angular'
 
-import { AddAddressComponent } from './add-address.component';
+import { AddAddressComponent } from './add-address.component'
+import { provideMockStore } from '@ngrx/store/testing'
 
 describe('AddAddressComponent', () => {
-  let component: AddAddressComponent;
-  let fixture: ComponentFixture<AddAddressComponent>;
+  let component: AddAddressComponent
+  let fixture: ComponentFixture<AddAddressComponent>
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddAddressComponent ],
-      imports: [IonicModule.forRoot()]
-    }).compileComponents();
+      declarations: [AddAddressComponent],
+      imports: [IonicModule.forRoot()],
+      providers: [provideMockStore({})]
+    }).compileComponents()
 
-    fixture = TestBed.createComponent(AddAddressComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+    fixture = TestBed.createComponent(AddAddressComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  }))
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})
