@@ -5,6 +5,7 @@ import { AddAddressComponent } from './add-address.component'
 import { provideMockStore } from '@ngrx/store/testing'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 import { ContactsService } from 'src/app/services/contacts/contacts.service'
+import { firstValueFrom, of } from 'rxjs'
 
 describe('AddAddressComponent', () => {
   let component: AddAddressComponent
@@ -36,5 +37,14 @@ describe('AddAddressComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy()
+  })
+
+  it('should run ngOnInit', () => {
+    component.airGapTxs = [{ amount: '0' , fee: '1', from: ['mock_address'], to: [], isInbound: true, network: null, protocolIdentifier: null}]
+    contactsSpy.isBookEnabled.and.returnValue(firstValueFrom(of(true)))
+    contactsSpy.isAddressInContacts.and.returnValue(true)
+    
+    expect(component).toBeTruthy()
+    expect(contactsSpy).toHaveBeenCalled()
   })
 })
