@@ -51,18 +51,18 @@ export class AddAddressComponent implements OnInit {
     }
   }
 
-  async onClickDontAddContact(address: string) {
+  public async onClickDontAddContact(address: string) {
     this.filterOutAddress(address)
   }
 
-  async onClickAddContact(address: string) {
+  public async onClickAddContact(address: string) {
     this.filterOutAddress(address) // don't show the addres, because I'm adding it to the contact book
     this.navigationService
       .routeWithState('/contact-book-contacts-detail', { isNew: true, address, addType: AddType.SIGNING })
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  async onClickDisableContact() {
+  public async onClickDisableContact() {
     await this.contactsService.setBookEnable(false)
     this.addressesNotOnContactBook = []
   }
