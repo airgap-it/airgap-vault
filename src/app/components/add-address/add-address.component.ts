@@ -43,7 +43,7 @@ export class AddAddressComponent implements OnInit {
     this.airGapTxs.forEach((tx) => this.storeAddress(tx))
   }
 
-  async onClickDontAddContact(address: string) {
+  private async filterOutAddress(address: string) {
     await this.contactsService.addSuggestion(address)
     const index = this.addressesNotOnContactBook.findIndex((address) => address === address)
     if (index >= 0) {
@@ -51,7 +51,12 @@ export class AddAddressComponent implements OnInit {
     }
   }
 
+  async onClickDontAddContact(address: string) {
+    this.filterOutAddress(address)
+  }
+
   async onClickAddContact(address: string) {
+    this.filterOutAddress(address) // don't show the addres, because I'm adding it to the contact book
     this.navigationService
       .routeWithState('/contact-book-contacts-detail', { isNew: true, address, addType: AddType.SIGNING })
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
