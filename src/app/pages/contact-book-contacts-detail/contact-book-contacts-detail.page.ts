@@ -69,9 +69,7 @@ export class ContactBookContactsDetailPage {
       await this.contactsService.createContact(this.contact.name, this.contact.address, this.contact.addedFrom)
       if (this.contact.addedFrom === AddType.RECOMMENDED) this.contactsService.deleteSuggestion(this.contact.address)
       if (this.contact.addedFrom === AddType.SIGNING)
-        this.navigationService
-          .routeWithState('/transaction-signed', { entao: true })
-          .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+        this.navigationService.route('/interaction-selection').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       else this.navigationService.route('/contact-book-contacts').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } else if (this.state === 'edit') {
       await this.contactsService.updateContact(this.contact.id, this.contact.name, this.contact.address)
