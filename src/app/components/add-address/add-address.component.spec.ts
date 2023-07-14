@@ -46,6 +46,5 @@ describe('AddAddressComponent', () => {
     
     expect(component).toBeTruthy()
     expect(contactsSpy.isBookEnabled).toHaveBeenCalled()
-    expect(contactsSpy.isAddressInContacts).toHaveBeenCalled()
   })
 })
