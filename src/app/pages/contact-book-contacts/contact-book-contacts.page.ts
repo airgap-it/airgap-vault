@@ -118,7 +118,7 @@ export class ContactBookContactsPage implements OnInit {
       : Array.from(new Set(contacts.map((contact) => String(contact[key])))).sort()
   }
 
-  public getContacts(contacts: ContactInfo[], key: string) {
+  public getContacts(contacts: ContactInfo[], key: ContactBookFilterType) {
     const _key = this.getKey()
     return _key === 'name'
       ? contacts.filter((contact) => String(contact[_key]).charAt(0) === key)
