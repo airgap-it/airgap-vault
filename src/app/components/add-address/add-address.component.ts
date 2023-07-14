@@ -34,16 +34,13 @@ export class AddAddressComponent implements OnInit {
   }
 
   public async checkAdressesNames() {
-    if (this.airGapTxs?.length <= 0) {
-      return
-    }
-
-    if (!(await this.contactsService.isBookEnabled())) {
+    if (this.airGapTxs?.length <= 0 && !(await this.contactsService.isBookEnabled())) {
       return
     }
 
     this.addressesNotOnContactBook = []
-    this.airGapTxs.map((tx) => ({ ...tx, extra: { names: {} } })).forEach((tx) => this.storeAddress(tx))
+    this.airGapTxs = this.airGapTxs.map((tx) => ({ ...tx, extra: { names: {} } }))
+    this.airGapTxs.forEach((tx) => this.storeAddress(tx))
   }
 
   async onClickDontAddContact(address: string) {
