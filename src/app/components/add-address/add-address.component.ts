@@ -11,7 +11,7 @@ import { NavigationService } from 'src/app/services/navigation/navigation.servic
 })
 export class AddAddressComponent implements OnInit {
   public addressesNotOnContactBook: string[] = []
-  @Input() private airGapTxs: IAirGapTransaction[] = []
+  @Input() public airGapTxs: IAirGapTransaction[] = []
 
   constructor(private readonly navigationService: NavigationService, private readonly contactsService: ContactsService) {}
 
