@@ -29,6 +29,7 @@ export class ContactBookContactsDetailPage {
         this.contact.addedFrom = AddType.SIGNING
       } else if (state.addType && state.addType === AddType.QR && state.address && state.address.length > 0) {
         this.contact.address = state.address
+        this.contact.name = state.name
         this.contact.addedFrom = AddType.QR
       } else {
         this.contact.addedFrom = AddType.MANUAL
@@ -101,6 +102,6 @@ export class ContactBookContactsDetailPage {
   }
 
   onClickQRCode() {
-    this.navigationService.route('/contact-book-scan')
+    this.navigationService.routeWithState('/contact-book-scan', { name: this.contact.name })
   }
 }
