@@ -30,5 +30,5 @@
     </ion-col>
   </ion-row>
 
-  <airgap-add-address [airGapTxs]="(transactionsDetails$ | async).value"></airgap-add-address>
+  <airgap-add-address *ngIf="areSuggestionsEnabled" [airGapTxs]="(transactionsDetails$ | async).value"></airgap-add-address>
 </ion-content>
