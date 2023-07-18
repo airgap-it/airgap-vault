@@ -44,11 +44,12 @@ export class ContactBookScanPage extends ScanBasePage {
 
   public async checkScan(data: string): Promise<boolean | void> {
     if (data.length > 0) {
+      const name  = await this.navigationService.getState().name ?? ''
       this.ngZone.run(async () => {
         this.resetScannerPage()
         this.stopScan()
         await this.navigationService
-          .routeWithState('/contact-book-contacts-detail', { isNew: true, address: data, addType: AddType.QR })
+          .routeWithState('/contact-book-contacts-detail', { isNew: true, address: data, addType: AddType.QR, name })
           .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       })
     }
