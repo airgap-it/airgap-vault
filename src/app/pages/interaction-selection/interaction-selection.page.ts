@@ -4,6 +4,9 @@ import { InteractionType, VaultStorageKey, VaultStorageService } from 'src/app/s
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { IInteractionOptions, InteractionCommunicationType, InteractionService } from '../../services/interaction/interaction.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
+import { Store } from '@ngrx/store'
+import { selectTransactionsDetails } from '../deserialized-detail/deserialized-detail.reducer'
+import * as fromDeserializedDetail from '../deserialized-detail/deserialized-detail.reducer'
 
 @Component({
   selector: 'airgap-interaction-selection',
@@ -12,11 +15,13 @@ import { NavigationService } from '../../services/navigation/navigation.service'
 })
 export class InteractionSelectionPage {
   private interactionOptions: IInteractionOptions
+  transactionsDetails$ = this.store.select(selectTransactionsDetails)
 
   constructor(
     private readonly navigationService: NavigationService,
     private readonly storageService: VaultStorageService,
-    private readonly interactionService: InteractionService
+    private readonly interactionService: InteractionService,
+    private store: Store<fromDeserializedDetail.State>
   ) {}
 
   public ionViewDidEnter(): void {
