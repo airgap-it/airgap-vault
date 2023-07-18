@@ -62,7 +62,7 @@
     <ion-icon name="book-outline" slot="start"></ion-icon>
     {{ 'tab-settings.welcome-onboarding_label' | translate }}
   </ion-item>
-  <ion-item lines="True" (click)="goToAddressBook()" detail="true">
+  <ion-item *ngIf="!(bookEnabled$ | async)" lines="True" (click)="goToAddressBook()" detail="true">
     <ion-icon name="person-add-outline" slot="start"></ion-icon>
     {{ 'tab-settings.address_book_label' | translate }}
   </ion-item>
