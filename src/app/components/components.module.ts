@@ -27,6 +27,7 @@ import { VerifyKeyComponent } from './verify-key/verify-key.component'
 import { InteractionSelectionComponent } from './interaction-selection/interaction-selection.component'
 import { MnemonicKeyboardComponent } from './mnemonic-keyboard/mnemonic-keyboard.component'
 import { ProgressIndicatorComponent } from './progress-indicator/progress-indicator.component'
+import { AddAddressComponent } from './add-address/add-address.component'
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { ProgressIndicatorComponent } from './progress-indicator/progress-indica
     KeyboardPopoverComponent,
     InteractionSelectionComponent,
     MnemonicKeyboardComponent,
-    ProgressIndicatorComponent
+    ProgressIndicatorComponent,
+    AddAddressComponent
   ],
   imports: [
     IonicModule,
@@ -78,7 +80,8 @@ import { ProgressIndicatorComponent } from './progress-indicator/progress-indica
     KeyboardPopoverComponent,
     InteractionSelectionComponent,
     MnemonicKeyboardComponent,
-    ProgressIndicatorComponent
+    ProgressIndicatorComponent,
+    AddAddressComponent
   ]
 })
 export class ComponentsModule {}

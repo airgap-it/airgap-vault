@@ -1,0 +1,15 @@
+<ng-container *ngFor="let address of addressesNotOnContactBook">
+  <div class="suggestion-wrapper">
+    <p>This address is not in your address book:</p>
+    <div class="divider">
+      <airgap-identicon class="image" [address]="address"></airgap-identicon>
+      <span>{{ address }}</span>
+    </div>
+    <p>Do you want to add it?</p>
+    <div class="divider-buttons">
+      <ion-button class="button" color="tertiary" (click)="onClickDontAddContact(address)">No</ion-button>
+      <ion-button class="button" color="tertiary" (click)="onClickAddContact(address)">Yes</ion-button>
+    </div>
+    <ion-button class="button" color="primary" (click)="onClickDisableContact()">No, disable address book feature</ion-button>
+  </div>
+</ng-container>
