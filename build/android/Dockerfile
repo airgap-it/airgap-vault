@@ -6,18 +6,18 @@ RUN apt-get update -y && apt-get install -y \
     pkg-config  \
     libjpeg-dev \
     libcairo2-dev \
-    openjdk-11-jdk-headless
+    openjdk-17-jdk-headless
 
-ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 
 # create app directory
 RUN mkdir /app
 WORKDIR /app
 
-RUN yarn cache clean --force && yarn global add n && n 16.13.1
+RUN yarn cache clean --force && yarn global add n && n 16.19.1
 
 # Install app dependencies, using wildcard if package-lock exists and copy capacitor configs and ionic configs
-COPY package.json yarn.lock apply-diagnostic-modules.js fix-qrscanner-gradle.js capacitor.config.ts ionic.config.json copy-builtin-modules.js /app/
+COPY package.json yarn.lock apply-diagnostic-modules.js patch-dependency-versions.js fix-qrscanner-gradle.js capacitor.config.ts ionic.config.json copy-builtin-modules.js /app/
 
 # install dependencies
 # run ionic android build
@@ -30,7 +30,6 @@ COPY . /app
 ARG BUILD_NR
 RUN sed -i -e "s/versionCode 1/versionCode $BUILD_NR/g" /app/android/app/build.gradle
 
-# disable pure getters due to https://github.com/angular/angular-cli/issues/11439
 # configure mangle (keep_fnames) for bitcoinjs https://github.com/bitcoinjs/bitcoinjs-lib/issues/959
 # remove unused cordova-diagnostic-plugin features
 # jetify dependencies
@@ -43,7 +42,7 @@ RUN sed -i -e "s/versionCode 1/versionCode $BUILD_NR/g" /app/android/app/build.g
 # this has nothing to do with debug!!!:
 # copy release-apk
 # sign using debug key
-RUN yarn configure-mangle \
+RUN yarn prepare-prod-build \
     && yarn apply-diagnostic-modules \
     && yarn jetifier \
     && yarn ionic build --prod \

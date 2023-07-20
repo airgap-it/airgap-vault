@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core'
-import { IonSlides, ModalController } from '@ionic/angular'
+import { Component, ElementRef, ViewChild } from '@angular/core'
+import { IonicSlides, ModalController } from '@ionic/angular'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { VaultStorageKey, VaultStorageService } from '../../services/storage/storage.service'
@@ -10,13 +10,15 @@ import { VaultStorageKey, VaultStorageService } from '../../services/storage/sto
   styleUrls: ['./distribution-onboarding.page.scss']
 })
 export class DistributionOnboardingPage {
-  @ViewChild(IonSlides, { static: true })
-  public slides: IonSlides
+  public readonly swiperModules = [IonicSlides]
+  
+  @ViewChild('slides', { static: true })
+  public slidesRef: ElementRef | undefined
 
   constructor(private readonly modalController: ModalController, private readonly storageService: VaultStorageService) {}
 
   public async next() {
-    this.slides.slideNext()
+    await this.slidesRef?.nativeElement.swiper.slideNext()
   }
 
   public async accept() {

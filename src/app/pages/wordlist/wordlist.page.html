@@ -20,9 +20,9 @@
     <p *ngIf="filteredWordlist.length === 0" class="ion-padding">
       No exact match was found. Maybe you have a typo in your word? Check the similar words below.
     </p>
-    <ion-list *ngIf="filteredWordlist.length > 0">
-      <ion-virtual-scroll [items]="filteredWordlist" approxItemHeight="320px">
-        <ion-item *virtualItem="let item">
+    <cdk-virtual-scroll-viewport *ngIf="filteredWordlist.length > 0" itemSize="50" minBufferPx="1000" maxBufferPx="1000">
+      <ion-list>
+        <ion-item *cdkVirtualFor="let item of filteredWordlist">
           <ion-label>
             <h2>
               <strong>
@@ -36,12 +36,12 @@
             <p>Binary: {{item.binary}}</p>
           </ion-text>
         </ion-item>
-      </ion-virtual-scroll>
-    </ion-list>
-    <ion-list *ngIf="filteredWordlist.length < 20">
-      <ion-list-header>Similar Words</ion-list-header>
-      <ion-virtual-scroll [items]="similarWords" approxItemHeight="320px">
-        <ion-item *virtualItem="let item">
+      </ion-list>
+    </cdk-virtual-scroll-viewport>
+    <cdk-virtual-scroll-viewport *ngIf="filteredWordlist.length < 20" itemSize="50" minBufferPx="1000" maxBufferPx="1000">
+      <ion-list>
+        <ion-list-header>Similar Words</ion-list-header>
+        <ion-item *cdkVirtualFor="let item of similarWords">
           <ion-label>
             <h2>
               <strong>
@@ -55,7 +55,7 @@
             <p>Binary: {{item.binary}}</p>
           </ion-text>
         </ion-item>
-      </ion-virtual-scroll>
-    </ion-list>
+      </ion-list>
+    </cdk-virtual-scroll-viewport>
   </ng-container>
 </ion-content>

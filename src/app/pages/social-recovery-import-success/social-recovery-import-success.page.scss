@@ -1,0 +1,126 @@
+.button--rounded ion-button {
+  --padding-end: 0;
+  --padding-start: 0;
+  width: 40px;
+  height: 40px;
+}
+
+ion-content {
+  --padding-bottom: var(--ion-padding, 64px);
+}
+
+h1 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  margin-bottom: 2rem;
+}
+
+p {
+  text-align: center;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  margin-block-start: 0px;
+  margin-block-end: 0px;
+  margin-bottom: 0.8rem;
+  max-width: 300px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+h2 {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  margin-bottom: 0.825rem;
+}
+
+h3 {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0px;
+}
+
+svg {
+  fill: white;
+  height: 78px;
+}
+
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: 10px;
+  left: 0;
+  width: 100%;
+}
+
+.triple-svgs {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 200px;
+  height: 160px;
+
+  .svg-1 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+
+  .svg-3 {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
+}
+
+.state3-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  h1 {
+    font-weight: bolder;
+    font-size: 1.75rem;
+    line-height: 2.25rem;
+  }
+
+  .divider {
+    flex: 1;
+  }
+
+  .warning-container {
+    border: 1px dashed white;
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+
+    .warning-title-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+
+      svg {
+        height: 24px;
+      }
+
+      h2 {
+        font-size: 1rem;
+        line-height: 1.5rem;
+        margin: 0px;
+        font-weight: bold;
+      }
+    }
+  }
+}

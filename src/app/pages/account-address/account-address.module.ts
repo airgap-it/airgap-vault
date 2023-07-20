@@ -19,16 +19,15 @@ const routes: Routes = [
 ]
 
 @NgModule({
-  entryComponents: [AccountEditPopoverComponent],
-  imports: [
-    CommonModule,
-    ComponentsModule,
-    FormsModule,
-    IonicModule,
-    RouterModule.forChild(routes),
-    TranslateModule,
-    AirGapAngularCoreModule
-  ],
-  declarations: [AccountAddressPage, AccountEditPopoverComponent]
+    imports: [
+        CommonModule,
+        ComponentsModule,
+        FormsModule,
+        IonicModule,
+        RouterModule.forChild(routes),
+        TranslateModule,
+        AirGapAngularCoreModule
+    ],
+    declarations: [AccountAddressPage, AccountEditPopoverComponent]
 })
 export class AccountAddressPageModule {}

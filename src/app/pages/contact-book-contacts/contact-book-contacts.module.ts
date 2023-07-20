@@ -19,13 +19,12 @@ const routes: Routes = [
 ]
 
 @NgModule({
-  entryComponents: [ContactBookContactsPopoverComponent, ContactBookContactsItemComponent, ContactBookContactsSuggestionComponent],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule, ComponentsModule],
-  declarations: [
-    ContactBookContactsPage,
-    ContactBookContactsPopoverComponent,
-    ContactBookContactsItemComponent,
-    ContactBookContactsSuggestionComponent
-  ]
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule, ComponentsModule],
+    declarations: [
+        ContactBookContactsPage,
+        ContactBookContactsPopoverComponent,
+        ContactBookContactsItemComponent,
+        ContactBookContactsSuggestionComponent
+    ]
 })
 export class ContactBookContactsPageModule {}

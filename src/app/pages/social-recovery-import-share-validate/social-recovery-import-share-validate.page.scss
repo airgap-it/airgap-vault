@@ -1,0 +1,114 @@
+.button--rounded ion-button {
+  --padding-end: 0;
+  --padding-start: 0;
+  width: 40px;
+  height: 40px;
+}
+
+ion-content {
+  --padding-bottom: var(--ion-padding, 64px);
+}
+
+.content-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.center-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 540px;
+}
+
+h2 {
+  font-size: 1.125rem;
+  line-height: 1.5rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.states-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 70%;
+  gap: 4px;
+
+
+
+  .state {
+    height: 100%;
+    font-size: large;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.8);
+    width: 30px;
+    height: 30px;
+    padding: 0px;
+  }
+
+  ion-button {
+    --padding-start: 0px;
+    --padding-end: 0px;
+  }
+
+  .selected {
+    margin-right: auto;
+  }
+}
+
+
+ion-textarea {
+  font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
+  font-weight: 600;
+  text-transform: lowercase;
+  height: 24vh;
+}
+
+.secret--container-45 {
+  height: calc(45% - 36px);
+  min-height: 50px;
+  overflow-y: scroll;
+}
+
+.secret--container-55 {
+  height: calc(55% - 36px);
+}
+
+hr {
+  border: 2px dashed var(--ion-color-primary);
+  border-style: none none dashed;
+  margin: 8px 0;
+}
+
+.word-placeholder {
+  min-width: 48px;
+}
+
+.size__xs {
+  font-size: 11px;
+}
+
+.typography--mono {
+  text-transform: lowercase;
+}
+
+.btn-current {
+  border: 2px dashed var(--ion-color-primary);
+  border-radius: 25px;
+}
+
+.btn-blank {
+  border: 2px dashed var(--ion-color-tertiary);
+  border-radius: 25px;
+}
+.text--medium {
+  margin-right: 0.25rem;
+}
+
+ion-content {
+  --padding-bottom: var(--ion-padding, 64px);
+}

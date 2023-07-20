@@ -1,11 +1,13 @@
 import { Component } from '@angular/core'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
 
 import { MnemonicSecret } from '../../models/secret'
 import { DeviceService } from '../../services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { MnemonicValidator } from '../../validators/mnemonic.validator'
+
+// TODO Tim: remove
 
 @Component({
   selector: 'airgap-social-recovery-import',
@@ -16,12 +18,12 @@ export class SocialRecoveryImportPage {
   public numberOfShares: number
   public shares: string[]
 
-  public socialRecoveryForm: FormGroup
+  public socialRecoveryForm: UntypedFormGroup
 
   constructor(
     private readonly deviceService: DeviceService,
     private readonly navigationService: NavigationService,
-    public formBuilder: FormBuilder
+    public formBuilder: UntypedFormBuilder
   ) {
     this.setNumberOfShares(2)
   }
@@ -57,7 +59,7 @@ export class SocialRecoveryImportPage {
         .routeWithState('secret-add', { secret: new MnemonicSecret(secretString, 'Recovery by Social Recovery') })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } catch (error) {
-      console.log('oops')
+      console.error(error)
     }
   }
 

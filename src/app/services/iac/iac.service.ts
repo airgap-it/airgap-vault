@@ -195,7 +195,6 @@ export class IACService extends BaseIACService {
           modal
             .onDidDismiss()
             .then((result) => {
-              console.log('modal closed', result)
               correctWallet = result.data
               resolve(undefined)
             })
@@ -211,7 +210,7 @@ export class IACService extends BaseIACService {
     }
 
     // ETH: MetaMask requests don't contain the public key information, we need to do the matching based on the sourceFingerprint
-    if (!correctWallet && signTransactionRequest.protocol === MainProtocolSymbols.ETH) {
+    if (!correctWallet && (signTransactionRequest.protocol === MainProtocolSymbols.ETH || signTransactionRequest.protocol === MainProtocolSymbols.OPTIMISM)) {
       const transaction: RawTypedEthereumTransaction = unsignedTransaction.transaction
 
       const fingerprint = transaction.masterFingerprint ?? metadata.sourceFingerprint

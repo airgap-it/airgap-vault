@@ -9,6 +9,7 @@ import { EthereumModule } from '@airgap/ethereum'
 import { GroestlcoinModule } from '@airgap/groestlcoin'
 import { ICPModule } from '@airgap/icp'
 import { MoonbeamModule } from '@airgap/moonbeam'
+import { OptimismModule } from '@airgap/optimism'
 import { PolkadotModule } from '@airgap/polkadot'
 import { TezosModule, TezosSaplingExternalMethodProvider, TezosShieldedTezProtocol } from '@airgap/tezos'
 import { HttpClient } from '@angular/common/http'
@@ -19,6 +20,7 @@ import { StatusBarPlugin, Style } from '@capacitor/status-bar'
 import { ModalController, Platform } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 import { first } from 'rxjs/operators'
+import { register } from 'swiper/element/bundle'
 
 import { SecurityUtilsPlugin } from './capacitor-plugins/definitions'
 import { SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
@@ -41,6 +43,9 @@ const defer = (fn: () => void) => {
   // fn()
   setTimeout(fn, 200)
 }
+
+// Swiper
+register()
 
 @Component({
   selector: 'airgap-root',
@@ -114,7 +119,6 @@ export class AppComponent implements AfterViewInit {
     this.app.addListener('appUrlOpen', async (data: URLOpenListenerEvent) => {
       await this.isInitialized.promise
       if (data.url === DEEPLINK_VAULT_PREFIX || data.url.startsWith(DEEPLINK_VAULT_ADD_ACCOUNT)) {
-        console.log('Successfully matched route', data.url)
         this.secretsService
           .getSecretsObservable()
           .pipe(first())
@@ -169,7 +173,8 @@ export class AppComponent implements AfterViewInit {
       new MoonbeamModule(),
       new AstarModule(),
       new ICPModule(),
-      new CoreumModule()
+      new CoreumModule(),
+      new OptimismModule()
     ])
     const protocols = await this.moduleService.loadProtocols('offline', [MainProtocolSymbols.XTZ_SHIELDED])
 
@@ -178,7 +183,7 @@ export class AppComponent implements AfterViewInit {
       | undefined = await this.saplingNativeService.createExternalMethodProvider()
 
     const shieldedTezAdapter: ICoinProtocolAdapter<TezosShieldedTezProtocol> = await createV0TezosShieldedTezProtocol({ externalProvider: externalMethodProvider })
-    
+
     this.protocolService.init({
       activeProtocols: protocols.activeProtocols,
       passiveProtocols: protocols.passiveProtocols,

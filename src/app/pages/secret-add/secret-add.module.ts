@@ -15,8 +15,7 @@ const routes: Routes = [
 ]
 
 @NgModule({
-  entryComponents: [],
-  imports: [CommonModule, FormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule, ComponentsModule],
-  declarations: [SecretAddPage]
+    imports: [CommonModule, FormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule, ComponentsModule],
+    declarations: [SecretAddPage]
 })
 export class SecretAddPageModule {}

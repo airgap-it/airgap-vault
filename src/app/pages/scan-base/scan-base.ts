@@ -2,6 +2,7 @@ import { PermissionsService, PermissionStatus, PermissionTypes, QrScannerService
 import { Inject } from '@angular/core'
 import { Platform } from '@ionic/angular'
 import { ZXingScannerComponent } from '@zxing/ngx-scanner'
+import { Observable, ReplaySubject } from 'rxjs'
 import { SecurityUtilsPlugin } from 'src/app/capacitor-plugins/definitions'
 import { SECURITY_UTILS_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
 
@@ -12,7 +13,8 @@ export class ScanBasePage {
 
   public hasCameras: boolean = false
 
-  public hasCameraPermission: boolean = false
+  private readonly _hasCameraPermission: ReplaySubject<boolean> = new ReplaySubject()
+  public readonly hasCameraPermission: Observable<boolean> = this._hasCameraPermission.asObservable()
 
   public readonly isMobile: boolean
   public readonly isElectron: boolean
@@ -50,14 +52,16 @@ export class ScanBasePage {
     const permission: PermissionStatus = await this.permissionsProvider.hasCameraPermission()
 
     if (permission === PermissionStatus.GRANTED) {
-      this.hasCameraPermission = true
+      this._hasCameraPermission.next(true)
       this.startScan()
+    } else {
+      this._hasCameraPermission.next(false)
     }
   }
 
   public ionViewDidEnter(): void {
     if (this.isBrowser) {
-      this.hasCameraPermission = true
+      this._hasCameraPermission.next(true)
       this.startScanBrowser()
     }
   }

@@ -1,0 +1,38 @@
+.states-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 70%;
+  gap: 4px;
+  margin-bottom: 3rem;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 49%;
+    left: 2%;
+    border: 1px dashed rgba(255, 255, 255, 0.591);
+    width: 94%;
+    z-index: -1;
+  }
+
+  .state {
+    height: 100%;
+    font-size: large;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.8);
+    width: 30px;
+    height: 30px;
+    padding: 0px;
+  }
+
+  ion-button,
+  ion-button[disabled] {
+    --padding-start: 0px;
+    --padding-end: 0px;
+  }
+
+  .selected {
+    margin-right: auto;
+  }
+}

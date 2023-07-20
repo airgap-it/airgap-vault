@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { IonicModule } from '@ionic/angular'
-import { ReactiveComponentModule } from '@ngrx/component'
 import { TranslateModule } from '@ngx-translate/core'
 import { QRCodeModule } from 'angularx-qrcode'
 
@@ -26,6 +25,9 @@ import { TransactionComponent } from './transaction/transaction.component'
 import { VerifyKeyAltComponent } from './verify-key-alt/verify-key-alt.component'
 import { VerifyKeyComponent } from './verify-key/verify-key.component'
 import { InteractionSelectionComponent } from './interaction-selection/interaction-selection.component'
+import { MnemonicKeyboardComponent } from './mnemonic-keyboard/mnemonic-keyboard.component'
+import { ProgressIndicatorComponent } from './progress-indicator/progress-indicator.component'
+import { AddAddressComponent } from './add-address/add-address.component'
 
 @NgModule({
   declarations: [
@@ -44,7 +46,10 @@ import { InteractionSelectionComponent } from './interaction-selection/interacti
     GridInputComponent,
     SecretOptionItemComponent,
     KeyboardPopoverComponent,
-    InteractionSelectionComponent
+    InteractionSelectionComponent,
+    MnemonicKeyboardComponent,
+    ProgressIndicatorComponent,
+    AddAddressComponent
   ],
   imports: [
     IonicModule,
@@ -52,7 +57,6 @@ import { InteractionSelectionComponent } from './interaction-selection/interacti
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    ReactiveComponentModule,
     TranslateModule,
     QRCodeModule,
     AirGapAngularCoreModule,
@@ -74,8 +78,10 @@ import { InteractionSelectionComponent } from './interaction-selection/interacti
     GridInputComponent,
     SecretOptionItemComponent,
     KeyboardPopoverComponent,
-    InteractionSelectionComponent
-  ],
-  entryComponents: []
+    InteractionSelectionComponent,
+    MnemonicKeyboardComponent,
+    ProgressIndicatorComponent,
+    AddAddressComponent
+  ]
 })
 export class ComponentsModule {}
