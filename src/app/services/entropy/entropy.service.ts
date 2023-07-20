@@ -85,7 +85,6 @@ export class EntropyService {
 
       // stop entropy sources
       for (let i = 0; i < this.entropyGenerators.length; i++) {
-        console.log('stopping entropy source...')
         promises.push(this.entropyGenerators[i].stop())
       }
 

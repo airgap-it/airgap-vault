@@ -34,8 +34,6 @@ export class CoinFlipService {
 
     const entropy = toHexString(new Uint8Array(entropyBytes))
 
-    console.log('entropy', entropy)
-
     return entropy
   }
 }

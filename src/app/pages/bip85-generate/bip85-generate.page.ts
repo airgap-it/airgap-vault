@@ -28,7 +28,6 @@ export class Bip85GeneratePage {
   ) {
     if (this.navigationService.getState()) {
       this.secret = this.navigationService.getState().secret
-      console.log(this.secret)
     }
   }
 

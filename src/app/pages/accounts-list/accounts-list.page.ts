@@ -1,7 +1,7 @@
 import { AirGapWallet, AirGapWalletStatus } from '@airgap/coinlib-core'
 import { Component } from '@angular/core'
 import { Router } from '@angular/router'
-import { AlertController, Platform } from '@ionic/angular'
+import { AlertController, Platform, PopoverController } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 import { BehaviorSubject } from 'rxjs'
 import { first } from 'rxjs/operators'
@@ -11,7 +11,7 @@ import { ModeService } from 'src/app/services/mode/mode.service'
 import { ModeStrategy } from 'src/app/services/mode/strategy/ModeStrategy'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
-import { SecretEditAction } from '../secret-edit/secret-edit.page'
+import { AccountsListEditPopoverComponent } from './accounts-list-edit-popover/accounts-list-edit-popover.component'
 
 @Component({
   selector: 'airgap-accounts-list',
@@ -33,7 +33,8 @@ export class AccountsListPage {
     private readonly alertCtrl: AlertController,
     private readonly translateService: TranslateService,
     private readonly secretsService: SecretsService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly popoverCtrl: PopoverController
   ) {
     this.isAndroid = this.platform.is('android')
   }
@@ -49,15 +50,16 @@ export class AccountsListPage {
   }
 
   private async loadWallets() {
-    const comparableWallets: [string, AirGapWallet][] = await Promise.all([...this.secret?.wallets].map(async (wallet: AirGapWallet) => {
-      return [await wallet.protocol.getName(), wallet] as [string, AirGapWallet]
-    }))
+    const comparableWallets: [string, AirGapWallet][] = await Promise.all(
+      [...this.secret?.wallets].map(async (wallet: AirGapWallet) => {
+        return [await wallet.protocol.getName(), wallet] as [string, AirGapWallet]
+      })
+    )
     const sortedWallets: AirGapWallet[] = comparableWallets
       .sort((a: [string, AirGapWallet], b: [string, AirGapWallet]) => a[0].localeCompare(b[0]))
       .map(([_, wallet]: [string, AirGapWallet]) => wallet)
 
     this.wallets$.next(sortedWallets)
-
   }
 
   public goToReceiveAddress(wallet: AirGapWallet): void {
@@ -75,17 +77,36 @@ export class AccountsListPage {
     this.navigationService.routeWithState('/account-add', { secret: this.secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  public goToEditSecret(secret: MnemonicSecret): void {
-    this.navigationService.routeWithState('/secret-edit', { secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  public goToEditSecret(): void {
+    this.navigationService.routeWithState('/secret-edit', { secret: this.secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  public navigateToRecoverySettings() {
-    this.navigationService
-      .routeWithState('/secret-edit', {
-        secret: this.secret,
-        action: SecretEditAction.SET_RECOVERY_KEY
-      })
-      .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  public async presentEditPopover(event: Event): Promise<void> {
+    const popover: HTMLIonPopoverElement = await this.popoverCtrl.create({
+      component: AccountsListEditPopoverComponent,
+      componentProps: {
+        onClickSyncWallets: (): void => {
+          this.syncWallets()
+          popover.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+        },
+        onClickToggleDeleteView: (): void => {
+          this.toggleDeleteView()
+          popover.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+        },
+        onClickAddWallet: (): void => {
+          this.addWallet()
+          popover.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+        },
+        onClickEditSecret: (): void => {
+          this.goToEditSecret()
+          popover.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+        }
+      },
+      event,
+      translucent: true
+    })
+
+    popover.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 
   public delete(wallet: AirGapWallet): void {
@@ -124,14 +145,16 @@ export class AccountsListPage {
       })
   }
 
-  public onWalletSelected(wallet: AirGapWallet): void {
-    if (this.selectedWallets?.includes(wallet)) {
-      const index = this.selectedWallets.indexOf(wallet)
-      if (index > -1) {
-        this.selectedWallets = this.selectedWallets.splice(index, 1)
-      }
-    } else {
+  public onWalletSelected(event: CustomEvent & { detail: { checked: boolean } }, wallet: AirGapWallet): void {
+    const index = this.selectedWallets.indexOf(wallet)
+    const { checked } = event.detail
+
+    if (checked && index === -1) {
+      // if the selected wallet is missing from the array, add it
       this.selectedWallets.push(wallet)
+    } else if (!checked && index !== -1) {
+      // otherwise when the checkbox is unchecked, remove it
+      this.selectedWallets.splice(index, 1)
     }
   }
 

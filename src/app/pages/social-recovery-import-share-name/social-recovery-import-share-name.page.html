@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="defaulBacktHref"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="primary">
+      <ion-button (click)="help()">
+        <ion-icon slot="icon-only" name="help-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Social Recovery Import</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="content-wrapper">
+    <div class="center-wrapper">
+      <div class="states-wrapper">
+        <airgap-progress-indicator [currentShare]="currentShareNumber" [totalShares]="numberOfShares"></airgap-progress-indicator>
+      </div>
+    </div>
+  </div>
+  <h4 class="font--weight__med">Give your share a name</h4>
+  <p>This will help you remember which share you've entered already</p>
+
+  <ion-item>
+    <form [formGroup]="socialRecoveryForm">
+      <ion-input type="text" fill="none" label="Enter a name..." label-placement="floating" formControlName="shareName"></ion-input>
+    </form>
+  </ion-item>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-button (click)="nextState()" color="primary" shape="round" [disabled]="!shareName || shareName.length === 0">Confirm</ion-button>
+  </ion-fab>
+</ion-content>

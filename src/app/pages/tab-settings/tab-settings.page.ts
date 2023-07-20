@@ -8,7 +8,6 @@ import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
 import { ClipboardService, IACMessageTransport, SerializerService } from '@airgap/angular-core'
 import { IACService } from 'src/app/services/iac/iac.service'
-import { OnboardingAdvancedModePage } from '../onboarding-advanced-mode/onboarding-advanced-mode.page'
 import { OnboardingWelcomePage } from '../onboarding-welcome/onboarding-welcome.page'
 import { ContactsService } from 'src/app/services/contacts/contacts.service'
 import { TranslateService } from '@ngx-translate/core'
@@ -22,8 +21,9 @@ import { EnvironmentContext, EnvironmentService } from 'src/app/services/environ
   styleUrls: ['./tab-settings.page.scss']
 })
 export class TabSettingsPage implements OnInit {
-  public readonly secrets$: Observable<MnemonicSecret[]>
-  public readonly context$: Observable<EnvironmentContext>
+  public readonly secrets$: Observable<MnemonicSecret[]> = this.secretsService.getSecretsObservable()
+  public readonly context$: Observable<EnvironmentContext> = this.environmentService.getContextObservable()
+  public readonly bookEnabled$: Observable<boolean> = this.contactsService.isBookDisabled$()
 
   constructor(
     public readonly serializerService: SerializerService,
@@ -38,10 +38,7 @@ export class TabSettingsPage implements OnInit {
     private readonly secureStorage: SecureStorageService,
     public readonly storageService: VaultStorageService,
     private readonly environmentService: EnvironmentService
-  ) {
-    this.secrets$ = this.secretsService.getSecretsObservable()
-    this.context$ = this.environmentService.getContextObservable()
-  }
+  ) {}
 
   ngOnInit() {}
 
@@ -93,13 +90,7 @@ export class TabSettingsPage implements OnInit {
   }
 
   public async goToAdvancedModeType(): Promise<void> {
-    const modal: HTMLIonModalElement = await this.modalController.create({
-      component: OnboardingAdvancedModePage,
-      componentProps: { isSettingsModal: true },
-      backdropDismiss: false
-    })
-
-    modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+    this.navigationService.route('/advanced-mode').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public goToBip39Wordlist(): void {
