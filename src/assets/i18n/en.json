@@ -21,7 +21,6 @@
   "advanced-mode": {
     "label": "Advanced Mode",
     "note_text": "<span class=\"style__strong\">Note: </span> Advanced mode grants you access to more features such as <u>BIP39 Passphrases</u> and <u>Lifehash Identicons</u>"
-
   },
   "distribution-onboarding": {
     "ask-permission": {
@@ -194,7 +193,7 @@
     "intro-state-3-title2": "Choose Number of Shares",
     "intro-state-3-text1": "Begin by specifying how many social shares you'd like to create. You'll also need to define how many shares are needed to recover your secret.",
     "intro-state-3-title3": "Store and Verify Each Share",
-    "intro-state-3-text2": "We will create different social shares for you. Make a note of for each of them. In a next step, you'll be asked to verify each share to make sure that you've copied them correctly.",
+    "intro-state-3-text2": "The vault will generate different social shares for you. Make a note of for each of them. In a next step, you'll be asked to verify each share to make sure that you've copied them correctly.",
     "intro-state-3-title4": "Not the Same as Your Passphrase",
     "intro-state-3-text3": "Although they might look the same, social shares are not the same as your passphrase.",
     "setup-state-1-text1": "Select the number of social shares you wish to create",
@@ -432,11 +431,10 @@
     "title": "Secrets",
     "add-secret_label": "Add Secret",
     "search_placeholder": "Search Secrets",
-    "tab-secret-popover":{
+    "tab-secret-popover": {
       "title": "Secret Management",
       "add-secret_label": "Add Secret",
       "sync-all_label": "Sync All Accounts With AirGap Wallet"
-
     }
   },
   "tab-wallets": {
