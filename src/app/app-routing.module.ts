@@ -52,6 +52,11 @@ const routes: Routes = [
   { path: 'about', loadChildren: () => import('./pages/about/about.module').then((m) => m.AboutPageModule) },
   { path: 'advanced-mode', loadChildren: () => import('./pages/advanced-mode/advanced-mode.module').then((m) => m.AdvancedModePageModule) },
   {
+    path: 'security-level-self-check',
+    loadChildren: () =>
+      import('./pages/security-level-self-check/security-level-self-check.module').then((m) => m.SecurityLevelSelfCheckPageModule)
+  },
+  {
     path: 'interaction-selection',
     loadChildren: () => import('./pages/interaction-selection/interaction-selection.module').then((m) => m.InteractionSelectionPageModule)
   },

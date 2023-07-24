@@ -45,6 +45,9 @@ export class TabSettingsPage implements OnInit {
   public goToAbout(): void {
     this.navigationService.route('/about').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
+  public goToSecurityLevelSelfCheck(): void {
+    this.navigationService.route('/security-level-self-check').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
 
   public goToInteractionHistory(): void {
     this.navigationService.route('/interaction-history').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
