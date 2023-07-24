@@ -53,6 +53,11 @@ const routes: Routes = [
   { path: 'shop', loadChildren: () => import('./pages/shop/shop.module').then((m) => m.ShopPageModule) },
   { path: 'advanced-mode', loadChildren: () => import('./pages/advanced-mode/advanced-mode.module').then((m) => m.AdvancedModePageModule) },
   {
+    path: 'security-level-self-check',
+    loadChildren: () =>
+      import('./pages/security-level-self-check/security-level-self-check.module').then((m) => m.SecurityLevelSelfCheckPageModule)
+  },
+  {
     path: 'interaction-selection',
     loadChildren: () => import('./pages/interaction-selection/interaction-selection.module').then((m) => m.InteractionSelectionPageModule)
   },

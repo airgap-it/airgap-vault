@@ -30,6 +30,10 @@
     "promo-description": "Get 10% off your first purchase when using the promo code: <i>VaultUser23</i>",
     "copy_label": "Copy Link"
   },
+  "security-level-self-check": {
+    "heading": "Security Level Self-Check",
+    "description": "Determine your level of security by checking your personal setup. By having all boxes checked you can be assured you have leveraged the full security potential of the AirGap Vault"
+  },
   "advanced-mode": {
     "label": "Advanced Mode",
     "note_text": "<span class=\"style__strong\">Note: </span> Advanced mode grants you access to more features such as <u>BIP39 Passphrases</u> and <u>Lifehash Identicons</u>"
@@ -432,7 +436,8 @@
     "address_book_settings_label": "Address Book Settings",
     "settings_label": "Settings",
     "actions_label": "Actions",
-    "vault-interaction_label": "Vault Interaction"
+    "vault-interaction_label": "Vault Interaction",
+    "security-level-self-check_label": "Security Level Self-Check"
   },
   "vault-interaction-settings": {
     "heading": "Vault Interaction",

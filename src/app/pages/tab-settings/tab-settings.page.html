@@ -70,6 +70,10 @@
     <ion-icon name="person-add-outline" slot="start"></ion-icon>
     {{ 'tab-settings.address_book_label' | translate }}
   </ion-item>
+  <ion-item lines="True" (click)="goToSecurityLevelSelfCheck()" detail="true">
+    <ion-icon name="shield-half-outline" slot="start"></ion-icon>
+    <ion-label>{{ 'tab-settings.security-level-self-check_label' | translate }}</ion-label>
+  </ion-item>
   <ion-item lines="True" (click)="goToBip39Wordlist()" detail="true">
     <ion-icon name="list" slot="start"></ion-icon>
     {{ 'tab-settings.bip39_wordlist_label' | translate }}
