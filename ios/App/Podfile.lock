@@ -1,22 +1,22 @@
 PODS:
-  - Capacitor (5.1.1):
+  - Capacitor (5.2.2):
     - CapacitorCordova
-  - CapacitorApp (5.0.5):
+  - CapacitorApp (5.0.6):
     - Capacitor
-  - CapacitorAppLauncher (5.0.5):
+  - CapacitorAppLauncher (5.0.6):
     - Capacitor
-  - CapacitorClipboard (5.0.5):
+  - CapacitorClipboard (5.0.6):
     - Capacitor
-  - CapacitorCordova (5.1.1)
-  - CapacitorFilesystem (5.0.5):
+  - CapacitorCordova (5.2.2)
+  - CapacitorFilesystem (5.1.1):
     - Capacitor
-  - CapacitorSplashScreen (5.0.5):
+  - CapacitorSplashScreen (5.0.6):
     - Capacitor
-  - CapacitorStatusBar (5.0.5):
+  - CapacitorStatusBar (5.0.6):
     - Capacitor
   - CapawesomeCapacitorFilePicker (0.5.10):
     - Capacitor
-  - CordovaPlugins (5.1.1):
+  - CordovaPlugins (5.2.2):
     - CapacitorCordova
   - ZIPFoundation (0.9.16)
 
@@ -60,16 +60,16 @@ EXTERNAL SOURCES:
     :path: "../capacitor-cordova-ios-plugins"
 
 SPEC CHECKSUMS:
-  Capacitor: 55956e1199b63efcd7f2dedffa5c6b9129c45aae
-  CapacitorApp: 9d91a5a400e4ad8cafe66a02cc9d8073c864d7bb
-  CapacitorAppLauncher: ebef46a16fff27f5504ce9e59ed02905f9a3babc
-  CapacitorClipboard: 17f9418206e9de5673fac29c815f11c8d618e81c
-  CapacitorCordova: b31a46ad379c93a5c04e0598a6164e8cb90c2bb2
-  CapacitorFilesystem: 335bccfc8ebe381c4e9a7328ef1c4dae9035a6fe
-  CapacitorSplashScreen: e563abf6d590bfe0269515ccc9d8bc03c41f32e9
-  CapacitorStatusBar: 540867ac3c63875b65bebd888f695de50a13a9a2
+  Capacitor: 070b18988e0f566728ae9a5eb3a7a974595f1626
+  CapacitorApp: 024e1b1bea5f883d79f6330d309bc441c88ad04a
+  CapacitorAppLauncher: 5a9f06c13c6b4f5d65b550a07128ef04f3a216b3
+  CapacitorClipboard: 77edf49827ea21da2a9c05c690a4a6a4d07199c4
+  CapacitorCordova: 3773395d5331add072300ff6041ca2cf7b93cb0b
+  CapacitorFilesystem: 38e85e56818420bed3f0aa1b77128f503a960821
+  CapacitorSplashScreen: 5fa2ab5e46cf5cc530cf16a51c80c7a986579ccd
+  CapacitorStatusBar: 565c0a1ebd79bb40d797606a8992b4a105885309
   CapawesomeCapacitorFilePicker: 3c6c193300649c9c7ce49426e17582edbf7ed601
-  CordovaPlugins: 34217977919993fb2d0bf4c0528e4ce2664baa96
+  CordovaPlugins: c037ff3bbbdb27be88127c56e56f5c5f2702adc7
   ZIPFoundation: d170fa8e270b2a32bef9dcdcabff5b8f1a5deced
 
 PODFILE CHECKSUM: 51db8af4d6f01d50e8e2a9025e652f730fdb53af
