@@ -57,18 +57,14 @@ export class TabScanPage extends ScanBasePage {
 
     if (sizeBefore === this.parts.size) {
       // We scanned a string we already have in our cache, ignoring it and starting scan again.
-      console.log(`[SCAN:checkScan]: Already scanned string skipping ${data}`)
       this.startScan()
 
       return undefined
     }
 
-    console.log(`[SCAN:checkScan]: Trying to decode string ${data}`)
-
     this.ngZone.run(() => {
       this.iacService
         .handleRequest(data, IACMessageTransport.QR_SCANNER, (progress: number) => {
-          console.log('scan result', progress)
           this.isMultiQr = true
           this.percentageScanned = progress ?? 0
           this.startScan()

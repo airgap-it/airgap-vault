@@ -1,0 +1,52 @@
+.suggestion-wrapper {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--ion-color-primary);
+    padding: 12px;
+    border-radius: 12px;
+    margin: 1rem;
+  
+    p {
+      margin-top: 0px;
+      color: var(--ion-color-primary);
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+  
+    span {
+      color: white;
+    }
+  
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+  
+      span {
+        flex: 1;
+        line-break: anywhere;
+        font-size: 14px;
+        font-weight: 600;
+      }
+  
+      .image {
+        width: 50px;
+        height: 50px;
+      }
+    }
+  
+    .divider-buttons {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+  
+    ion-button {
+      flex: 1;
+      font-size: 14px;
+      --padding-bottom: 12px;
+      --padding-top: 12px;
+    }
+  }
+  

@@ -68,7 +68,7 @@ export class SecretSetupPage implements OnInit {
   }
 
   public goToSocialRecoveryImport(): void {
-    this.navigationService.route('/social-recovery-import').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.navigationService.route('/social-recovery-import-intro').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public goToDiceRollPage(): void {

@@ -1,23 +1,35 @@
-import { Component } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { InteractionType, VaultStorageKey, VaultStorageService } from 'src/app/services/storage/storage.service'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { IInteractionOptions, InteractionCommunicationType, InteractionService } from '../../services/interaction/interaction.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
+import { Store } from '@ngrx/store'
+import { selectTransactionsDetails } from '../deserialized-detail/deserialized-detail.reducer'
+import * as fromDeserializedDetail from '../deserialized-detail/deserialized-detail.reducer'
+import { ContactsService } from 'src/app/services/contacts/contacts.service'
 
 @Component({
   selector: 'airgap-interaction-selection',
   templateUrl: './interaction-selection.page.html',
   styleUrls: ['./interaction-selection.page.scss']
 })
-export class InteractionSelectionPage {
+export class InteractionSelectionPage implements OnInit {
   private interactionOptions: IInteractionOptions
+  transactionsDetails$ = this.store.select(selectTransactionsDetails)
+  areSuggestionsEnabled: boolean = true
 
   constructor(
     private readonly navigationService: NavigationService,
     private readonly storageService: VaultStorageService,
-    private readonly interactionService: InteractionService
+    private readonly interactionService: InteractionService,
+    private readonly contactService: ContactsService,
+    private store: Store<fromDeserializedDetail.State>
   ) {}
+
+  async ngOnInit() {
+    this.areSuggestionsEnabled = await this.contactService.isSuggestionsEnabled()
+  }
 
   public ionViewDidEnter(): void {
     this.interactionOptions = this.navigationService.getState().interactionOptions

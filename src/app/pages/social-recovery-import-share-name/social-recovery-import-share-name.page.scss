@@ -1,0 +1,50 @@
+.button--rounded ion-button {
+  --padding-end: 0;
+  --padding-start: 0;
+  width: 40px;
+  height: 40px;
+}
+
+ion-content {
+  --padding-bottom: var(--ion-padding, 64px);
+}
+.content-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.center-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 540px;
+}
+.states-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 70%;
+  gap: 4px;
+  margin-bottom: 3rem;
+
+  .state {
+    height: 100%;
+    font-size: large;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.8);
+    width: 30px;
+    height: 30px;
+    padding: 0px;
+  }
+
+  ion-button {
+    --padding-start: 0px;
+    --padding-end: 0px;
+  }
+
+  .selected {
+    margin-right: auto;
+  }
+}

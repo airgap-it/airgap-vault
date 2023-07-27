@@ -21,8 +21,9 @@ import { VaultEnvironmentContext, VaultEnvironmentService } from 'src/app/servic
   styleUrls: ['./tab-settings.page.scss']
 })
 export class TabSettingsPage implements OnInit {
-  public readonly secrets$: Observable<MnemonicSecret[]>
-  public readonly context$: Observable<VaultEnvironmentContext>
+  public readonly secrets$: Observable<MnemonicSecret[]> = this.secretsService.getSecretsObservable()
+  public readonly context$: Observable<VaultEnvironmentContext> = this.environmentService.getContextObservable()
+  public readonly bookEnabled$: Observable<boolean> = this.contactsService.isBookDisabled$()
 
   constructor(
     public readonly serializerService: SerializerService,
@@ -37,15 +38,20 @@ export class TabSettingsPage implements OnInit {
     private readonly secureStorage: SecureStorageService,
     public readonly storageService: VaultStorageService,
     private readonly environmentService: VaultEnvironmentService
-  ) {
-    this.secrets$ = this.secretsService.getSecretsObservable()
-    this.context$ = this.environmentService.getContextObservable()
-  }
+  ) {}
 
   ngOnInit() {}
 
   public goToAbout(): void {
     this.navigationService.route('/about').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
+  public goToShop(): void {
+    this.navigationService.route('/shop').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
+  public goToSecurityLevelSelfCheck(): void {
+    this.navigationService.route('/security-level-self-check').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public goToInteractionHistory(): void {

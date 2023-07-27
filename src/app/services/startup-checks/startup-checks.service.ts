@@ -113,7 +113,6 @@ export class StartupChecksService {
         successOutcome: true,
         check: async (): Promise<boolean> => {
           const res = this.storageService.get(VaultStorageKey.INTRODUCTION_INITIAL)
-          console.log('checked?', await res)
           return res
         },
         failureConsequence: async (): Promise<void> => {
@@ -146,9 +145,6 @@ export class StartupChecksService {
 
       modal
         .present()
-        .then(() => {
-          console.log('check modal presented')
-        })
         .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
 
       modal
