@@ -29,19 +29,15 @@ class WebViewEnvironment: NSObject, JSEnvironment, WKNavigationDelegate {
         
         let resultID = await jsAsyncResult.createID()
         let script = """
-            function postMessage(message) {
-                window.webkit.messageHandlers.\(jsAsyncResult.id).postMessage({ ...message, id: "\(resultID)" });
-            };
-        
             execute(
                 \(try module.namespace ?? (try JSUndefined.value.toJSONString())),
                 '\(module.identifier)',
                 \(try action.toJSONString()),
                 function (result) {
-                    postMessage({ result: JSON.parse(JSON.stringify(result)) });
+                    postMessage("\(resultID)", { result: JSON.parse(JSON.stringify(result)) });
                 },
                 function (error) {
-                    postMessage({ error })
+                    postMessage("\(resultID)", { error })
                 }
             );
         """
@@ -129,6 +125,12 @@ class WebViewEnvironment: NSObject, JSEnvironment, WKNavigationDelegate {
                             
                             try await webView.evaluateJavaScriptAsync(string)
                         }
+                        
+                        try await webView.evaluateJavaScriptAsync("""
+                            function postMessage(id, message) {
+                                window.webkit.messageHandlers.\(jsAsyncResult.id).postMessage({ ...message, id });
+                            };
+                        """)
                         
                         if let runRef = runRef {
                             await add(
