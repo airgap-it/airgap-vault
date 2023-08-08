@@ -39,7 +39,7 @@ export class AddAddressComponent implements OnInit {
     }
 
     this.addressesNotOnContactBook = []
-    this.airGapTxs = this.airGapTxs.map((tx) => ({ ...tx, extra: { names: {} } }))
+    this.airGapTxs = this.airGapTxs?.map((tx) => ({ ...tx, extra: { names: {} } })) ?? []
     this.airGapTxs.forEach((tx) => this.storeAddress(tx))
   }
 
