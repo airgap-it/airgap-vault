@@ -7,6 +7,8 @@ import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/er
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { MnemonicValidator } from '../../validators/mnemonic.validator'
 
+// TODO Tim: remove
+
 @Component({
   selector: 'airgap-social-recovery-import',
   templateUrl: './social-recovery-import.page.html',
@@ -57,7 +59,7 @@ export class SocialRecoveryImportPage {
         .routeWithState('secret-add', { secret: new MnemonicSecret(secretString, 'Recovery by Social Recovery') })
         .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
     } catch (error) {
-      console.log('oops')
+      console.error(error)
     }
   }
 

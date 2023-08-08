@@ -25,54 +25,63 @@ import { TransactionComponent } from './transaction/transaction.component'
 import { VerifyKeyAltComponent } from './verify-key-alt/verify-key-alt.component'
 import { VerifyKeyComponent } from './verify-key/verify-key.component'
 import { InteractionSelectionComponent } from './interaction-selection/interaction-selection.component'
+import { MnemonicKeyboardComponent } from './mnemonic-keyboard/mnemonic-keyboard.component'
+import { ProgressIndicatorComponent } from './progress-indicator/progress-indicator.component'
+import { AddAddressComponent } from './add-address/add-address.component'
 
 @NgModule({
-    declarations: [
-        EntropyProgressComponent,
-        ProgressFooterComponent,
-        SecretItemComponent,
-        SignedTransactionComponent,
-        TransactionComponent,
-        TransactionWarningComponent,
-        TouchEntropyComponent,
-        TraceInputDirective,
-        VerifyKeyComponent,
-        VerifyKeyAltComponent,
-        MessageSignRequestComponent,
-        MessageSignResponseComponent,
-        GridInputComponent,
-        SecretOptionItemComponent,
-        KeyboardPopoverComponent,
-        InteractionSelectionComponent
-    ],
-    imports: [
-        IonicModule,
-        PipesModule,
-        CommonModule,
-        FormsModule,
-        ReactiveFormsModule,
-        TranslateModule,
-        QRCodeModule,
-        AirGapAngularCoreModule,
-        AirGapAngularNgRxModule
-    ],
-    exports: [
-        EntropyProgressComponent,
-        ProgressFooterComponent,
-        SecretItemComponent,
-        SignedTransactionComponent,
-        TransactionComponent,
-        TransactionWarningComponent,
-        TouchEntropyComponent,
-        TraceInputDirective,
-        VerifyKeyComponent,
-        VerifyKeyAltComponent,
-        MessageSignRequestComponent,
-        MessageSignResponseComponent,
-        GridInputComponent,
-        SecretOptionItemComponent,
-        KeyboardPopoverComponent,
-        InteractionSelectionComponent
-    ]
+  declarations: [
+    EntropyProgressComponent,
+    ProgressFooterComponent,
+    SecretItemComponent,
+    SignedTransactionComponent,
+    TransactionComponent,
+    TransactionWarningComponent,
+    TouchEntropyComponent,
+    TraceInputDirective,
+    VerifyKeyComponent,
+    VerifyKeyAltComponent,
+    MessageSignRequestComponent,
+    MessageSignResponseComponent,
+    GridInputComponent,
+    SecretOptionItemComponent,
+    KeyboardPopoverComponent,
+    InteractionSelectionComponent,
+    MnemonicKeyboardComponent,
+    ProgressIndicatorComponent,
+    AddAddressComponent
+  ],
+  imports: [
+    IonicModule,
+    PipesModule,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    TranslateModule,
+    QRCodeModule,
+    AirGapAngularCoreModule,
+    AirGapAngularNgRxModule
+  ],
+  exports: [
+    EntropyProgressComponent,
+    ProgressFooterComponent,
+    SecretItemComponent,
+    SignedTransactionComponent,
+    TransactionComponent,
+    TransactionWarningComponent,
+    TouchEntropyComponent,
+    TraceInputDirective,
+    VerifyKeyComponent,
+    VerifyKeyAltComponent,
+    MessageSignRequestComponent,
+    MessageSignResponseComponent,
+    GridInputComponent,
+    SecretOptionItemComponent,
+    KeyboardPopoverComponent,
+    InteractionSelectionComponent,
+    MnemonicKeyboardComponent,
+    ProgressIndicatorComponent,
+    AddAddressComponent
+  ]
 })
 export class ComponentsModule {}

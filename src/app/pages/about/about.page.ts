@@ -133,7 +133,6 @@ export class AboutPage {
 
   private async handleHappy() {
     const installationType = await this.storage.get(VaultStorageKey.INSTALLATION_TYPE)
-    console.log('installationType', installationType)
 
     if (installationType === InstallationType.OFFLINE) {
       const alert: HTMLIonAlertElement = await this.alertController.create({

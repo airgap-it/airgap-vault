@@ -1,11 +1,10 @@
-import { Component, ViewChild } from '@angular/core'
+import { Component } from '@angular/core'
 import { AirGapWallet } from '@airgap/coinlib-core'
 import { MessageSignResponse } from '@airgap/serializer'
 import { TranslateService } from '@ngx-translate/core'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
-import { SignedTransactionComponent } from 'src/app/components/signed-transaction/signed-transaction.component'
 
 enum TransactionQRType {
   SignedAirGap = 0,
@@ -18,9 +17,6 @@ enum TransactionQRType {
   styleUrls: ['./transaction-signed.page.scss']
 })
 export class TransactionSignedPage {
-  @ViewChild(SignedTransactionComponent)
-  private transactionComponent: SignedTransactionComponent
-
   public signedTxs: string[]
   public interactionUrl: string
 
@@ -52,7 +48,6 @@ export class TransactionSignedPage {
     const temp = this.interactionUrl
     this.interactionUrl = null
     this.interactionUrl = temp
-    this.transactionComponent?.checkAdressesNames()
   }
 
   public done(): void {

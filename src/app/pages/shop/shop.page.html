@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab-settings"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>{{"shop.label" | translate}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h1 [innerHTML]="'shop.page-description_label' | translate"></h1>
+  <h6 [innerHTML]="'shop.page-description_description' | translate"></h6>
+
+  <p [innerHTML]="'shop.QR-code_label' | translate"></p>
+
+  <ion-row class="ion-justify-content-center ion-padding-top ion-padding-bottom">
+    <figure style="margin: auto; display: block">
+      <img width="30%" src="./assets/img/shop.png" alt="QR-Code with link to https://shop.airgap.it/?ref=Link-Vault" />
+      <figcaption><i>https://shop.airgap.it/?ref=Link-Vault</i></figcaption>
+    </figure>
+  </ion-row>
+
+  <h3 [innerHTML]="'shop.AirGap-Knox_label' | translate"></h3>
+  <p [innerHTML]="'shop.AirGap-Knox_description' | translate"></p>
+  <h3 [innerHTML]="'shop.AirGap-Recovery-Plate_label' | translate"></h3>
+  <p [innerHTML]="'shop.AirGap-Recovery-Plate_description' | translate"></p>
+  <h6 [innerHTML]="'shop.promo-description' | translate"></h6>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-button color="primary" (click)="open()" shape="round">Copy Link</ion-button>
+  </ion-fab>
+</ion-content>
