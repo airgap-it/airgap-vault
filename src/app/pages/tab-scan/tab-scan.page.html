@@ -19,32 +19,30 @@
 
     <ion-progress-bar *ngIf="isMultiQr" style="height: 8px" color="light" [value]="percentageScanned"></ion-progress-bar>
 
-    <ng-container *ngIf="hasCameraPermission | async; let cameraPermission">
-      <ion-row *ngIf="cameraPermission" class="row--height__100 ion-justify-content-center ion-align-items-center">
-        <ion-col class="guides--container content--align__center-center">
-          <img class="guides--container__img" src="./assets/img/qr_code_guides.svg" />
-        </ion-col>
-        <zxing-scanner
-          #scanner
-          [formats]="['QR_CODE']"
-          [timeBetweenScans]="0"
-          [delayBetweenScanSuccess]="0"
-          *ngIf="isBrowser || isElectron"
-          (scanSuccess)="checkScan($event)"
-        ></zxing-scanner>
-      </ion-row>
+    <ion-row *ngIf="hasCameraPermission | async" class="row--height__100 ion-justify-content-center ion-align-items-center">
+      <ion-col class="guides--container content--align__center-center">
+        <img class="guides--container__img" src="./assets/img/qr_code_guides.svg" />
+      </ion-col>
+      <zxing-scanner
+        #scanner
+        [formats]="['QR_CODE']"
+        [timeBetweenScans]="0"
+        [delayBetweenScanSuccess]="0"
+        *ngIf="isBrowser || isElectron"
+        (scanSuccess)="checkScan($event)"
+      ></zxing-scanner>
+    </ion-row>
 
-      <ion-row
-        *ngIf="!cameraPermission"
-        class="row--height__100 ion-justify-content-center ion-align-items-center"
-        (click)="requestPermission()"
-      >
-        <ion-col class="ion-text-center">
-          <img src="../assets/img/permission_onboarding_camera.svg" />
-          <h3 class="ion-padding-horizontal" [innerHTML]="'tab-scan.empty-state_heading' | translate"></h3>
-          <ion-button shape="round" color="primary">{{ 'tab-scan.grant-permission_label' | translate }}</ion-button>
-        </ion-col>
-      </ion-row>
-    </ng-container>
+    <ion-row
+      *ngIf="(hasCameraPermission | async) === false"
+      class="row--height__100 ion-justify-content-center ion-align-items-center"
+      (click)="requestPermission()"
+    >
+      <ion-col class="ion-text-center">
+        <img src="../assets/img/permission_onboarding_camera.svg" />
+        <h3 class="ion-padding-horizontal" [innerHTML]="'tab-scan.empty-state_heading' | translate"></h3>
+        <ion-button shape="round" color="primary">{{ 'tab-scan.grant-permission_label' | translate }}</ion-button>
+      </ion-col>
+    </ion-row>
   </ion-grid>
 </ion-content>
