@@ -18,22 +18,18 @@ import { SecureStorageServiceMock } from '../secure-storage/secure-storage.mock'
 import { SecureStorageService } from '../secure-storage/secure-storage.service'
 
 import { StartupChecksService } from './startup-checks.service'
-import { StatusBarMock, SplashScreenMock, createEnvironmentSpy } from 'test-config/plugins-mocks'
+import { StatusBarMock, SplashScreenMock } from 'test-config/plugins-mocks'
 import { InstallationType, InteractionType } from '../storage/storage.service'
-import { EnvironmentPlugin } from 'src/app/capacitor-plugins/definitions'
-import { ENVIRONMENT_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
 
 describe('StartupCheck Service', () => {
   let startupChecksService: StartupChecksService
   let storageProvider: Storage
   let secureStorage: SecureStorageServiceMock
   let deviceProvider: DeviceProviderMock
-  let environmentSpy: EnvironmentPlugin
 
   let unitHelper: UnitHelper
   beforeEach(() => {
     unitHelper = new UnitHelper()
-    environmentSpy = createEnvironmentSpy()
 
     TestBed.configureTestingModule(
       unitHelper.testBed({
@@ -48,7 +44,6 @@ describe('StartupCheck Service', () => {
           { provide: NavParams, useClass: NavParamsMock },
           { provide: STATUS_BAR_PLUGIN, useClass: StatusBarMock },
           { provide: SPLASH_SCREEN_PLUGIN, useClass: SplashScreenMock },
-          { provide: ENVIRONMENT_PLUGIN, useValue: environmentSpy },
           { provide: Platform, useClass: PlatformMock }
         ]
       })
