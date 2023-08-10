@@ -16,11 +16,12 @@ import {
   STATUS_BAR_PLUGIN,
   FILESYSTEM_PLUGIN,
   UiEventService,
-  IsolatedModules,
   ISOLATED_MODULES_PLUGIN,
   Zip,
   ZIP_PLUGIN,
-  BaseModulesService
+  BaseModulesService,
+  BaseEnvironmentService,
+  isolatedModules
 } from '@airgap/angular-core'
 import {
   AirGapAngularNgRxModule,
@@ -89,6 +90,7 @@ import { OnboardingAdvancedModePageModule } from './pages/onboarding-advanced-mo
 import { OnboardingWelcomePageModule } from './pages/onboarding-welcome/onboarding-welcome.module'
 import { IsolatedModulesOnboardingPageModule } from './pages/isolated-modules-onboarding/isolated-modules-onboarding.module'
 import { VaultModulesService } from './services/modules/modules.service'
+import { VaultEnvironmentService } from './services/environment/vault-environment.service'
 import { SocialRecoveryImportShareService } from './social-recovery-import-share/social-recovery-import-share.service'
 
 export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
@@ -154,10 +156,11 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
     { provide: APP_CONFIG, useValue: appConfig },
     { provide: ZIP_PLUGIN, useValue: Zip },
     { provide: FILE_PICKER_PLUGIN, useValue: FilePicker },
-    { provide: ISOLATED_MODULES_PLUGIN, useValue: IsolatedModules },
+    { provide: ISOLATED_MODULES_PLUGIN, useFactory: isolatedModules, deps: [Platform] },
     { provide: ENVIRONMENT_PLUGIN, useValue: Environment },
     { provide: ErrorHandler, useClass: ErrorHandlerService },
     { provide: BaseModulesService, useClass: VaultModulesService },
+    { provide: BaseEnvironmentService, useClass: VaultEnvironmentService },
     Diagnostic,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     DeviceMotion,
