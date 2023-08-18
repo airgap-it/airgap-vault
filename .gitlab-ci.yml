@@ -12,7 +12,6 @@ stages:
   - test
   # - qa
   - native_build
-  - native_test
   - publish
 
 build_ionic:
@@ -52,29 +51,12 @@ build_android:
     - docker run --name $LOCAL_ANDROID $GOOGLE_TAG_ANDROID_CURRENT echo "container ran."
     - docker cp $LOCAL_ANDROID:/app/android-release-unsigned.apk airgap-vault-release-unsigned-$CI_PIPELINE_ID.apk
     - docker cp $LOCAL_ANDROID:/app/android-debug-aligned.apk airgap-vault-debug-$CI_PIPELINE_ID.apk
-    - docker cp $LOCAL_ANDROID:/app/android-appium-aligned.apk airgap-vault-appium-$CI_PIPELINE_ID.apk
   after_script:
     - docker rm -f $LOCAL_ANDROID || true
   artifacts:
     paths:
       - airgap-vault-release-unsigned-$CI_PIPELINE_ID.apk
       - airgap-vault-debug-$CI_PIPELINE_ID.apk
-      - airgap-vault-appium-$CI_PIPELINE_ID.apk
-
-test_android:
-  stage: native_test
-  when: manual
-  tags:
-    - android-ui
-  before_script:
-    - echo "$APPIUM_CONFIG_JSON" > ./uitest/config.json
-  script:
-    - docker cp airgap-vault-appium-$CI_PIPELINE_ID.apk appium:/home/airgap-signed.apk
-    - docker create --network="host" -w /usr/src/uitest --name maven-runner-$CI_PIPELINE_ID maven:3.3-jdk-8 mvn test
-    - docker cp uitest maven-runner-$CI_PIPELINE_ID:/usr/src/
-    - docker start -a maven-runner-$CI_PIPELINE_ID
-  after_script:
-    - docker rm -f maven-runner-$CI_PIPELINE_ID || true
 
 # qa:
 #   stage: qa
@@ -124,6 +106,7 @@ build_ios:
 publish_ios:
   stage: publish
   when: manual
+  needs: build_ios
   before_script:
     - echo "$IOS_EXPORT_OPTIONS" > exportOptions.plist
   script:
