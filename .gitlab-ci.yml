@@ -106,7 +106,8 @@ build_ios:
 publish_ios:
   stage: publish
   when: manual
-  needs: build_ios
+  needs:
+    - build_ios
   before_script:
     - echo "$IOS_EXPORT_OPTIONS" > exportOptions.plist
   script:
