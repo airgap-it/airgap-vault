@@ -13,7 +13,7 @@ import { ContactsService } from 'src/app/services/contacts/contacts.service'
 import { TranslateService } from '@ngx-translate/core'
 import { SecureStorageService } from 'src/app/services/secure-storage/secure-storage.service'
 import { VaultStorageService } from 'src/app/services/storage/storage.service'
-import { EnvironmentContext, EnvironmentService } from 'src/app/services/environment/environment.service'
+import { VaultEnvironmentContext, VaultEnvironmentService } from 'src/app/services/environment/vault-environment.service'
 
 @Component({
   selector: 'airgap-tab-settings',
@@ -22,7 +22,7 @@ import { EnvironmentContext, EnvironmentService } from 'src/app/services/environ
 })
 export class TabSettingsPage implements OnInit {
   public readonly secrets$: Observable<MnemonicSecret[]> = this.secretsService.getSecretsObservable()
-  public readonly context$: Observable<EnvironmentContext> = this.environmentService.getContextObservable()
+  public readonly context$: Observable<VaultEnvironmentContext> = this.environmentService.getContextObservable()
   public readonly bookEnabled$: Observable<boolean> = this.contactsService.isBookDisabled$()
 
   constructor(
@@ -37,7 +37,7 @@ export class TabSettingsPage implements OnInit {
     private readonly alertCtrl: AlertController,
     private readonly secureStorage: SecureStorageService,
     public readonly storageService: VaultStorageService,
-    private readonly environmentService: EnvironmentService
+    private readonly environmentService: VaultEnvironmentService
   ) {}
 
   ngOnInit() {}

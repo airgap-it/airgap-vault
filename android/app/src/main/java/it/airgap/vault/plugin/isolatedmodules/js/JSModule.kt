@@ -4,7 +4,7 @@ import com.getcapacitor.JSArray
 import com.getcapacitor.JSObject
 import it.airgap.vault.plugin.isolatedmodules.js.environment.JSEnvironment
 import it.airgap.vault.util.assign
-import it.airgap.vault.util.toJson
+import it.airgap.vault.util.toJS
 import java.util.*
 
 sealed interface JSModule {
@@ -74,7 +74,7 @@ sealed interface JSModuleAction {
         override fun toJson(): String = JSObject("""
                 {
                     "type": "$TYPE",
-                    "protocolType": ${protocolType?.toString().toJson()},
+                    "protocolType": ${protocolType?.toString().toJS()},
                     "ignoreProtocols": ${ignoreProtocols ?: "[]"}
                 }
             """.trimIndent()).toString()
@@ -125,7 +125,7 @@ sealed interface JSModuleAction {
             JSCallMethodTarget.OnlineProtocol, JSObject("""
             {
                 protocolIdentifier: "$protocolIdentifier",
-                networkId: ${networkId.toJson()}
+                networkId: ${networkId.toJS()}
             }
         """.trimIndent())
         )
@@ -139,7 +139,7 @@ sealed interface JSModuleAction {
             JSCallMethodTarget.BlockExplorer, JSObject("""
             {
                 protocolIdentifier: "$protocolIdentifier",
-                networkId: ${networkId.toJson()}
+                networkId: ${networkId.toJS()}
             }
         """.trimIndent())
         )

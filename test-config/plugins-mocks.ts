@@ -106,3 +106,7 @@ export class StatusBarMock {
 export class SplashScreenMock {
   public hide: jasmine.Spy = newSpy('hide', Promise.resolve())
 }
+
+export class EnvironmentPluginMock {
+  public addListener: jasmine.Spy = newSpy('addListener', {})
+}
