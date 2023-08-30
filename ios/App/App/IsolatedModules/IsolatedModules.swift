@@ -143,6 +143,31 @@ public class IsolatedModules: CAPPlugin {
         }
     }
     
+    @objc func readAssetModule(_ call: CAPPluginCall) {
+        call.assertReceived(forMethod: "readAssetModule", requiredParams: Param.IDENTIFIER)
+        
+        do {
+            guard let identifier = call.identifier else {
+                throw Error.invalidData
+            }
+            
+            Task {
+                do {
+                    let module = try fileExplorer.loadAssetModule(identifier)
+                    let manifest = try fileExplorer.readModuleManifest(.asset(module))
+                    
+                    call.resolve([
+                        "manifest": try JSONSerialization.jsonObject(with: manifest)
+                    ])
+                } catch {
+                    call.reject("Error: \(error)")
+                }
+            }
+        } catch {
+            call.reject("Error: \(error)")
+        }
+    }
+    
     @objc func loadAllModules(_ call: CAPPluginCall) {
         Task {
             do {
