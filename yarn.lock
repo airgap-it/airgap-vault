@@ -17,17 +17,17 @@
     "@airgap/serializer" "^0.13.20"
     "@stablelib/ed25519" "^1.0.3"
 
-"@airgap/angular-core@0.0.42-beta.1":
-  version "0.0.42-beta.1"
-  resolved "https://registry.yarnpkg.com/@airgap/angular-core/-/angular-core-0.0.42-beta.1.tgz#a05a0950207a3e553d57957a95ce54470164152b"
-  integrity sha512-qiq16ACZa5zhRywpWdDSqLsYdzHImL2I7ZcTk+dXzjzsatGm+iBoGJ5S7qai+Y0lfpclXmp8p4DW17aG9iSxIg==
+"@airgap/angular-core@0.0.42-beta.2":
+  version "0.0.42-beta.2"
+  resolved "https://registry.yarnpkg.com/@airgap/angular-core/-/angular-core-0.0.42-beta.2.tgz#a7f994257da2fbe4537724144f9acf46ccfebe00"
+  integrity sha512-di0yalK1sXJ/gjxrfjcynnrOqNrQht4Y+TABUngUHYt6DRLECsPIv8BuAOZcT/QB1KhYsfWOe4ZSAyXQObMWug==
   dependencies:
     tslib "^2.3.0"
 
-"@airgap/angular-ngrx@0.0.42-beta.1":
-  version "0.0.42-beta.1"
-  resolved "https://registry.yarnpkg.com/@airgap/angular-ngrx/-/angular-ngrx-0.0.42-beta.1.tgz#b56d768a5d74a45bcfdc5c677ccb0931cbb68cc5"
-  integrity sha512-dZwUHIqOkuIWw1Z2pM0in7gLau5QynGAAkm/LNDZwjmt0ksoa/2GFaiRycOTQ4Bv4WmiVefYfyy8ZAdYP+uutw==
+"@airgap/angular-ngrx@0.0.42-beta.2":
+  version "0.0.42-beta.2"
+  resolved "https://registry.yarnpkg.com/@airgap/angular-ngrx/-/angular-ngrx-0.0.42-beta.2.tgz#256a74c9920b99ab634220179b2ce9b45f440eb1"
+  integrity sha512-Asm42hB3B4ER/TTir/Qb+GRtVUsDgKVw0VL0NkH/cse0ZaEpZmwcnahgSCOq3ycvGRa6bO8bNnyULnoqh/WF1g==
   dependencies:
     tslib "^2.3.0"
 
