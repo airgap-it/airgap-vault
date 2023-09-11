@@ -8,7 +8,7 @@ PODS:
   - CapacitorClipboard (5.0.6):
     - Capacitor
   - CapacitorCordova (5.2.2)
-  - CapacitorFilesystem (5.1.1):
+  - CapacitorFilesystem (5.1.2):
     - Capacitor
   - CapacitorSplashScreen (5.0.6):
     - Capacitor
@@ -65,7 +65,7 @@ SPEC CHECKSUMS:
   CapacitorAppLauncher: 5a9f06c13c6b4f5d65b550a07128ef04f3a216b3
   CapacitorClipboard: 77edf49827ea21da2a9c05c690a4a6a4d07199c4
   CapacitorCordova: 3773395d5331add072300ff6041ca2cf7b93cb0b
-  CapacitorFilesystem: 38e85e56818420bed3f0aa1b77128f503a960821
+  CapacitorFilesystem: 5efb77d5dc1c8c05bce5e19f0e7bfdf72363fb43
   CapacitorSplashScreen: 5fa2ab5e46cf5cc530cf16a51c80c7a986579ccd
   CapacitorStatusBar: 565c0a1ebd79bb40d797606a8992b4a105885309
   CapawesomeCapacitorFilePicker: 3c6c193300649c9c7ce49426e17582edbf7ed601
