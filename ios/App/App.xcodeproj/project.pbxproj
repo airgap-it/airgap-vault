@@ -42,6 +42,7 @@
 		A351B44E297965EF00BE0DC9 /* Zip.m in Sources */ = {isa = PBXBuildFile; fileRef = A351B44D297965EF00BE0DC9 /* Zip.m */; };
 		A35472FD29ED9C7C00AFD5A7 /* Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = A35472FC29ED9C7C00AFD5A7 /* Hex.swift */; };
 		A357ED09299BD8EA00EDCA39 /* Filesystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A357ED08299BD8EA00EDCA39 /* Filesystem.swift */; };
+		A3BD9A0D2AA5E7EE00666155 /* Dictionary+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BD9A0C2AA5E7EE00666155 /* Dictionary+Additions.swift */; };
 		A3C53AA1299247640059E997 /* JSEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3C53AA0299247640059E997 /* JSEnvironment.swift */; };
 		A3C53AA3299259FC0059E997 /* WebViewEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3C53AA2299259FC0059E997 /* WebViewEnvironment.swift */; };
 		A3C53AA52992711E0059E997 /* Sequence+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3C53AA42992711E0059E997 /* Sequence+Additions.swift */; };
@@ -89,6 +90,7 @@
 		A351B44D297965EF00BE0DC9 /* Zip.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Zip.m; sourceTree = "<group>"; };
 		A35472FC29ED9C7C00AFD5A7 /* Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hex.swift; sourceTree = "<group>"; };
 		A357ED08299BD8EA00EDCA39 /* Filesystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filesystem.swift; sourceTree = "<group>"; };
+		A3BD9A0C2AA5E7EE00666155 /* Dictionary+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+Additions.swift"; sourceTree = "<group>"; };
 		A3C53AA0299247640059E997 /* JSEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSEnvironment.swift; sourceTree = "<group>"; };
 		A3C53AA2299259FC0059E997 /* WebViewEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewEnvironment.swift; sourceTree = "<group>"; };
 		A3C53AA42992711E0059E997 /* Sequence+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+Additions.swift"; sourceTree = "<group>"; };
@@ -218,6 +220,7 @@
 				A33BA9E628D9C52D00BD8015 /* JSValue+Additions.swift */,
 				A33BA9E828D9E23E00BD8015 /* WK+Additions.swift */,
 				A3C53AA42992711E0059E997 /* Sequence+Additions.swift */,
+				A3BD9A0C2AA5E7EE00666155 /* Dictionary+Additions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -419,6 +422,7 @@
 				A33BA9E728D9C52D00BD8015 /* JSValue+Additions.swift in Sources */,
 				A3226AAC29F12FA10006ACCA /* Environment.m in Sources */,
 				A3CF6E4D28CA2FA100A9A883 /* IsolatedModules.swift in Sources */,
+				A3BD9A0D2AA5E7EE00666155 /* Dictionary+Additions.swift in Sources */,
 				A3E4DE8F299157C2009F3C8D /* JSModule.swift in Sources */,
 				885F55E825EE224200D85A88 /* SaplingNative.m in Sources */,
 				49690A7E25C2BF80004A3586 /* VaultError.swift in Sources */,

@@ -46,6 +46,13 @@ ion-label {
   image-rendering: pixelated;
 }
 
+airgap-currency-symbol {
+  img {
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+  }
+}
+
 swiper-container {
   --swiper-pagination-bullet-inactive-color: var(--ion-color-step-200, #cccccc);
   --swiper-pagination-color: var(--ion-color-primary, #3880ff);
