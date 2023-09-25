@@ -31,14 +31,20 @@ struct FileExplorer {
         try loadModules(using: assetsExplorer, creatingModuleWith: JSModule.Asset.getInit())
     }
     
+    func loadInstalledModules() throws -> [JSModule.Installed] {
+        try loadModules(using: documentExplorer, creatingModuleWith: JSModule.Installed.getInit(using: documentExplorer))
+    }
+    
+    func loadAssetModule(_ identifier: String) throws -> JSModule.Asset {
+        let manifest = try assetsExplorer.readModuleManifest(identifier)
+        
+        return try loadModule(identifier, fromManifest: manifest, creatingModuleWith: JSModule.Asset.getInit())
+    }
+    
     func loadInstalledModule(_ identifier: String) throws -> JSModule.Installed {
         let manifest = try documentExplorer.readModuleManifest(identifier)
         
         return try loadModule(identifier, fromManifest: manifest, creatingModuleWith: JSModule.Installed.getInit(using: documentExplorer))
-    }
-    
-    func loadInstalledModules() throws -> [JSModule.Installed] {
-        try loadModules(using: documentExplorer, creatingModuleWith: JSModule.Installed.getInit(using: documentExplorer))
     }
     
     func loadPreviewModule(atPath path: String, locatedIn directory: Directory) throws -> JSModule.Preview {

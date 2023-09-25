@@ -142,6 +142,30 @@ class IsolatedModules : Plugin() {
     }
 
     @PluginMethod
+    fun readAssetModule(call: PluginCall) {
+        call.executeCatching {
+            assertReceived(Param.IDENTIFIER)
+
+            activity.lifecycleScope.launch {
+                executeCatching {
+                    val module = fileExplorer.loadAssetModule(identifier)
+                    val manifest = fileExplorer.readModuleManifest(module)
+
+                    resolve(
+                        JSObject(
+                            """
+                                {
+                                    "manifest": ${JSObject(manifest.decodeToString())}
+                                }
+                            """.trimIndent()
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    @PluginMethod
     fun loadAllModules(call: PluginCall) {
         activity.lifecycleScope.launch {
             call.executeCatching {
