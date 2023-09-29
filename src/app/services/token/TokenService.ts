@@ -1,7 +1,8 @@
 import { createV0EthereumERC20Token, ICoinSubProtocolAdapter } from '@airgap/angular-core'
 import { Injectable } from '@angular/core'
 import { IAirGapTransaction, SignedTransaction, UnsignedTransaction } from '@airgap/coinlib-core'
-import { ERC20Token, ERC20TokenMetadata, erc20Tokens } from '@airgap/ethereum'
+import { ERC20Token, erc20Tokens } from '@airgap/ethereum'
+import { ERC20TokenMetadata } from '@airgap/evm'
 
 @Injectable({
   providedIn: 'root'

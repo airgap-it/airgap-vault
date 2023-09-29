@@ -11,6 +11,7 @@ import { ICPModule } from '@airgap/icp'
 import { MoonbeamModule } from '@airgap/moonbeam'
 import { OptimismModule } from '@airgap/optimism'
 import { PolkadotModule } from '@airgap/polkadot'
+import { EtherlinkModule } from '@airgap/etherlink'
 import { TezosModule, TezosSaplingExternalMethodProvider, TezosShieldedTezProtocol } from '@airgap/tezos'
 import { HttpClient } from '@angular/common/http'
 import { AfterViewInit, Component, Inject, NgZone } from '@angular/core'
@@ -174,7 +175,8 @@ export class AppComponent implements AfterViewInit {
       new AstarModule(),
       new ICPModule(),
       new CoreumModule(),
-      new OptimismModule()
+      new OptimismModule(),
+      new EtherlinkModule()
     ])
     const protocols = await this.moduleService.loadProtocols('offline', [MainProtocolSymbols.XTZ_SHIELDED])
 
