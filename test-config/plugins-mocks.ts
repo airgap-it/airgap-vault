@@ -7,7 +7,7 @@ import { SplashScreenPlugin } from '@capacitor/splash-screen'
 import { StatusBarPlugin } from '@capacitor/status-bar'
 import { FilePickerPlugin } from '@capawesome/capacitor-file-picker'
 
-import { EnvironmentPlugin, SaplingNativePlugin, SecurityUtilsPlugin } from '../src/app/capacitor-plugins/definitions'
+import { SaplingNativePlugin, SecurityUtilsPlugin } from '../src/app/capacitor-plugins/definitions'
 
 import { newSpy } from './unit-test-helper'
 
@@ -68,10 +68,6 @@ export function createZipSpy(): ZipPlugin {
 
 export function createIsolatedModulesSpy(): IsolatedModulesPlugin {
   return jasmine.createSpyObj('IsolatedModulesPlugin', ['loadModules', 'callMethod'])
-}
-
-export function createEnvironmentSpy(): EnvironmentPlugin {
-  return jasmine.createSpyObj('EnvironmentPlugin', ['addListener'])
 }
 
 export function createFilePickerSpy(): FilePickerPlugin {

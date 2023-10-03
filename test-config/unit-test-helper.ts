@@ -10,7 +10,6 @@ import { IonicStorageModule } from '@ionic/storage-angular'
 import { StoreModule } from '@ngrx/store'
 import { TranslateFakeLoader, TranslateLoader, TranslateModule } from '@ngx-translate/core'
 
-import { ENVIRONMENT_PLUGIN } from '../src/app/capacitor-plugins/injection-tokens'
 import { ComponentsModule } from '../src/app/components/components.module'
 import { appConfig } from '../src/app/config/app-config'
 import { PipesModule } from '../src/app/pipes/pipes.module'
