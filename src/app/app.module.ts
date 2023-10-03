@@ -91,7 +91,6 @@ import { IsolatedModulesOnboardingPageModule } from './pages/isolated-modules-on
 import { VaultModulesService } from './services/modules/modules.service'
 import { VaultEnvironmentService } from './services/environment/vault-environment.service'
 import { SocialRecoveryImportShareService } from './social-recovery-import-share/social-recovery-import-share.service'
-import { AppErrorHandler } from './app.error-handler'
 
 export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
   return new AirGapTranslateLoader(http, { prefix: './assets/i18n/', suffix: '.json' })
@@ -160,7 +159,6 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
     { provide: ErrorHandler, useClass: ErrorHandlerService },
     { provide: BaseModulesService, useClass: VaultModulesService },
     { provide: BaseEnvironmentService, useClass: VaultEnvironmentService },
-    { provide: ErrorHandler, useClass: AppErrorHandler },
     Diagnostic,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     DeviceMotion,
