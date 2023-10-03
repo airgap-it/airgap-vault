@@ -6,6 +6,10 @@ import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.getcapacitor.Plugin
+import com.getcapacitor.PluginCall
+import com.getcapacitor.PluginMethod
+import com.getcapacitor.annotation.CapacitorPlugin
 import java.io.PrintWriter
 import java.io.StringWriter
 
@@ -40,5 +44,20 @@ class ErrorActivity : AppCompatActivity() {
     private fun Throwable.printStackTrace(writer: StringWriter) {
         printStackTrace(PrintWriter(writer))
         cause?.printStackTrace(writer)
+    }
+}
+
+@CapacitorPlugin
+class ErrorPlugin : Plugin() {
+
+    @PluginMethod
+    fun show(call: PluginCall) {
+        val error = call.getObject("error")
+
+        val intent = Intent(activity, ErrorActivity::class.java).apply {
+            putExtra("exception", RuntimeException(error?.toString() ?: "<empty JS error>"))
+        }
+
+        activity.startActivity(intent)
     }
 }

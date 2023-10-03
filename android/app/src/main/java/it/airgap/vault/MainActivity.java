@@ -24,6 +24,8 @@ public class MainActivity extends BridgeActivity {
 
     registerPlugin(IsolatedModules.class);
 
+    registerPlugin(ErrorPlugin.class);
+
     super.onCreate(savedInstanceState);
   }
 }
