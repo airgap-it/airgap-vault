@@ -24,7 +24,7 @@ class JavaScriptEngineEnvironment(
     private val context: Context,
     private val fileExplorer: FileExplorer,
 ) : JSEnvironment {
-    private val sandbox: Deferred<JavaScriptSandbox> = JavaScriptSandbox.createConnectedInstanceAsync(context).asDeferred()
+    private val sandbox: Deferred<JavaScriptSandbox> by lazy { JavaScriptSandbox.createConnectedInstanceAsync(context).asDeferred() }
 
     private val isolatedMutex: Mutex = Mutex()
     private val isolates: MutableMap<String, JavaScriptIsolateRegistry> = mutableMapOf()

@@ -42,7 +42,7 @@ class WebViewEnvironment: NSObject, JSEnvironment, WKNavigationDelegate {
             );
         """
         
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        try await webView.evaluateJavaScriptAsync(script)
         guard let result = try await jsAsyncResult.awaitResultWithID(resultID) as? [String: Any] else {
             throw Error.invalidResult
         }
@@ -72,7 +72,7 @@ class WebViewEnvironment: NSObject, JSEnvironment, WKNavigationDelegate {
     
     private actor WebViewManager {
         private(set) var webViews: [String: [String: WKWebViewExtended]] = [:]
-        @MainActor private var activeTasks: [String: Task<WKWebViewExtended, Swift.Error>] = [:]
+        @MainActor private var activeTasks: [String: [String: Task<WKWebViewExtended, Swift.Error>]] = [:]
         
         func add(
             runRef: String,
@@ -81,11 +81,7 @@ class WebViewEnvironment: NSObject, JSEnvironment, WKNavigationDelegate {
             userContentController: WKUserContentController,
             jsAsyncResult: JSAsyncResult
         ) {
-            if webViews[runRef] == nil {
-                webViews[runRef] = .init()
-            }
-            
-            webViews[runRef]![module.identifier] = (webView, userContentController, jsAsyncResult)
+            webViews[runRef, setDefault: .init()][module.identifier] = (webView, userContentController, jsAsyncResult)
         }
         
         @MainActor
@@ -94,7 +90,7 @@ class WebViewEnvironment: NSObject, JSEnvironment, WKNavigationDelegate {
             and module: JSModule,
             using env: WebViewEnvironment
         ) async throws -> WKWebViewExtended {
-            if let runRef = runRef, let activeTask = activeTasks[runRef] {
+            if let runRef = runRef, let activeTask = activeTasks[runRef]?[module.identifier] {
                 return try await activeTask.value
             }
             
@@ -153,7 +149,7 @@ class WebViewEnvironment: NSObject, JSEnvironment, WKNavigationDelegate {
             }
             
             if let runRef = runRef {
-                activeTasks[runRef] = task
+                activeTasks[runRef, setDefault: .init()][module.identifier] = task
             }
             
             return try await task.value
@@ -173,10 +169,16 @@ class WebViewEnvironment: NSObject, JSEnvironment, WKNavigationDelegate {
         
         func remove(at runRef: String) {
             webViews.removeValue(forKey: runRef)
+            Task { @MainActor in
+                activeTasks.removeValue(forKey: runRef)
+            }
         }
         
         func removeAll() {
             webViews.removeAll()
+            Task { @MainActor in
+                activeTasks.removeAll()
+            }
         }
         
         @MainActor
@@ -197,4 +199,11 @@ class WebViewEnvironment: NSObject, JSEnvironment, WKNavigationDelegate {
     }
     
     private typealias WKWebViewExtended = (WKWebView, WKUserContentController, JSAsyncResult)
+}
+
+
+// MARK: Extensions
+
+private extension Dictionary where Value == String {
+    
 }

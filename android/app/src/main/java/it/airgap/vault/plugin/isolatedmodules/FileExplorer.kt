@@ -54,6 +54,12 @@ class FileExplorer private constructor(
 
     fun loadInstalledModules(): List<JSModule.Installed> = loadModules(filesExplorer, JSModule.Installed.constructor)
 
+    fun loadAssetModule(identifier: String): JSModule.Asset {
+        val manifest = JSObject(assetsExplorer.readModuleManifest(identifier).decodeToString())
+
+        return loadModule(identifier, manifest, JSModule.Asset.constructor)
+    }
+
     fun loadInstalledModule(identifier: String): JSModule.Installed {
         val manifest = JSObject(filesExplorer.readModuleManifest(identifier).decodeToString())
 

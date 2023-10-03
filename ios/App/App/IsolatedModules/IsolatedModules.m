@@ -14,6 +14,7 @@ CAP_PLUGIN(IsolatedModules, "IsolatedModules",
            CAP_PLUGIN_METHOD(registerDynamicModule, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(readDynamicModule, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(removeDynamicModules, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(readAssetModule, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(loadAllModules, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(callMethod, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(batchCallMethod, CAPPluginReturnPromise);

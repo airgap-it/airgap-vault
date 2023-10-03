@@ -10,6 +10,7 @@ import { IonicStorageModule } from '@ionic/storage-angular'
 import { StoreModule } from '@ngrx/store'
 import { TranslateFakeLoader, TranslateLoader, TranslateModule } from '@ngx-translate/core'
 
+import { ENVIRONMENT_PLUGIN } from '../src/app/capacitor-plugins/injection-tokens'
 import { ComponentsModule } from '../src/app/components/components.module'
 import { appConfig } from '../src/app/config/app-config'
 import { PipesModule } from '../src/app/pipes/pipes.module'
@@ -27,7 +28,7 @@ import {
   ToastControllerMock,
   ZipMock
 } from './ionic-mocks'
-import { AppInfoPluginMock, AppLauncherMock, SaplingPluginMock, SplashScreenMock, StatusBarMock } from './plugins-mocks'
+import { AppInfoPluginMock, AppLauncherMock, EnvironmentPluginMock, SaplingPluginMock, SplashScreenMock, StatusBarMock } from './plugins-mocks'
 import { StorageMock } from './storage-mock'
 
 export class UnitHelper {
@@ -45,7 +46,8 @@ export class UnitHelper {
     modalController: new ModalControllerMock(),
     clipboard: new ClipboardMock(),
     filesystem: new FilesystemMock(),
-    zip: new ZipMock()
+    zip: new ZipMock(),
+    environment: new EnvironmentPluginMock()
   }
 
   public testBed(testBed: TestModuleMetadata, useIonicOnlyTestBed: boolean = false): TestModuleMetadata {

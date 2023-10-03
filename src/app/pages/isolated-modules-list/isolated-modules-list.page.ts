@@ -72,7 +72,8 @@ export class IsolatedModulesListPage implements OnInit, ViewWillEnter, ViewWillL
   }
 
   public async onModuleSelected(metadata: IsolatedModuleMetadata): Promise<void> {
-    this.navigationService.routeWithState(`/isolated-modules-details/${IsolatedModulesDetailsMode.VIEW_INSTALLED}`, { metadata, mode: IsolatedModulesDetailsMode.VIEW_INSTALLED }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    const mode = metadata.type === 'asset' ? IsolatedModulesDetailsMode.VIEW_ASSET : IsolatedModulesDetailsMode.VIEW_INSTALLED
+    this.navigationService.routeWithState(`/isolated-modules-details/${mode}`, { metadata, mode }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   private async goToOnboardingPage(): Promise<void> {
