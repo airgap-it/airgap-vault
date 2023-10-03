@@ -34,7 +34,7 @@
                 <data android:scheme="@string/custom_url_scheme" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".ErrorActivity" android:screenOrientation="portrait" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
