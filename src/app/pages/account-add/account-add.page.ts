@@ -165,28 +165,22 @@ export class AccountAddPage {
               const incrementedNumber = newDigit + 1
               newDerivationPath = wallet.value.derivationPath.replace(regex2, `${match[1]}${incrementedNumber}${match[3]}`)
 
-              console.log(newDerivationPath, 'newDerivationPath')
-
               lastDigit = newDigit
             }
           }
         } else {
           match = wallet.value.derivationPath.match(regex)
-          console.log(match, 'match')
           const newDigit = parseInt(match[0], 10)
 
           if (newDigit > lastDigit) {
             const incrementedNumber = newDigit + 1
             newDerivationPath = wallet.value.derivationPath.replace(regex, incrementedNumber.toString())
 
-            console.log(newDerivationPath, 'newDerivationPath')
-
             lastDigit = newDigit
           }
         }
       })
 
-      console.log(newDerivationPath, 'path')
       return newDerivationPath
     } else {
       return protocolWrapper.isChecked && protocolWrapper.customDerivationPath
