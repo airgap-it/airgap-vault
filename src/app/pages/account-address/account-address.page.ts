@@ -171,7 +171,9 @@ export class AccountAddressPage {
           return this.walletShareUrl
         },
         onDelete: (): void => {
-          this.navigationService.back()
+          this.navigationService
+            .routeWithState('/accounts-list', { secret: this.secret }, { replaceUrl: true })
+            .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
         }
       },
       event,
