@@ -183,9 +183,15 @@ export class AccountAddPage {
 
       return newDerivationPath
     } else {
-      return protocolWrapper.isChecked && protocolWrapper.customDerivationPath
-        ? protocolWrapper.customDerivationPath
-        : await protocolWrapper.protocol.getStandardDerivationPath()
+      console.log('else...1')
+      let derivationPath =
+        protocolWrapper.isChecked && protocolWrapper.customDerivationPath
+          ? protocolWrapper.customDerivationPath
+          : await protocolWrapper.protocol.getStandardDerivationPath()
+
+      console.log(derivationPath)
+
+      return derivationPath
     }
   }
 
@@ -246,7 +252,7 @@ export class AccountAddPage {
               return {
                 protocolIdentifier: await protocol.getIdentifier(),
                 isHDWallet: protocolWrapper.isChecked ? protocolWrapper.isHDWallet : await protocol.getSupportsHD(),
-                customDerivationPath: derivationPath,
+                customDerivationPath: await this.getDerivationPath(protocolWrapper),
                 bip39Passphrase: protocolWrapper.isChecked ? this.bip39Passphrase : '',
                 isActive: protocolWrapper.isChecked
               }
@@ -254,15 +260,16 @@ export class AccountAddPage {
           )
         )
         .then(() => {
-          if (selectedProtocol.length === 1) {
+          if (selectedProtocol.length == 1) {
             let newWallet = this.secret.wallets.filter(
               (wallet) => wallet.derivationPath === derivationPath && wallet.status === AirGapWalletStatus.ACTIVE
             )
-
             this.navigationService
               .routeWithState('/account-address', { wallet: newWallet[newWallet.length - 1], secret: this.secret })
               .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
           } else {
+            console.log('else...2')
+
             this.navigationService
               .routeWithState('/accounts-list', { secret: this.secret }, { replaceUrl: true })
               .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
