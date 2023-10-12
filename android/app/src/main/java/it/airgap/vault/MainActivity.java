@@ -14,8 +14,6 @@ import it.airgap.vault.plugin.zip.Zip;
 public class MainActivity extends BridgeActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
-    Thread.setDefaultUncaughtExceptionHandler(new ErrorHandler(this));
-
     registerPlugin(CameraPreview.class);
     registerPlugin(AppInfo.class);
     registerPlugin(SecurityUtils.class);
@@ -23,8 +21,6 @@ public class MainActivity extends BridgeActivity {
     registerPlugin(Zip.class);
 
     registerPlugin(IsolatedModules.class);
-
-    registerPlugin(ErrorPlugin.class);
 
     super.onCreate(savedInstanceState);
   }

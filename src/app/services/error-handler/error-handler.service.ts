@@ -1,5 +1,4 @@
 import { ErrorHandler, Injectable } from '@angular/core'
-import { registerPlugin } from '@capacitor/core'
 
 export enum ErrorCategory {
   CORDOVA_PLUGIN = 'cordova_plugin',
@@ -78,17 +77,8 @@ export { handleErrorIgnore, handleErrorLocal }
 
 @Injectable()
 export class ErrorHandlerService extends ErrorHandler {
-  private readonly errorPlugin: any = registerPlugin('ErrorPlugin')
-
   public handleError(error: Error): void {
     super.handleError(error)
     handleErrorLocal(ErrorCategory.OTHER)(error)
-    this.errorPlugin.show({ 
-      error: error instanceof Error
-        ? { name: error.name, message: error.message, stack: error.stack }
-        : typeof error === 'object'
-        ? error
-        : { error }
-    })
   }
 }
