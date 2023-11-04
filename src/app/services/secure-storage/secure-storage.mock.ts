@@ -28,7 +28,6 @@ export class SecureStorageServiceMock {
   }
 
   public get(alias: string, _isParanoia: boolean): Promise<SecureStorage> {
-    console.log('SecureStorageServiceMock - creating new storage', alias)
     const secureStorage: SecureStorage = {
       init() {
         console.warn('SecureStorageServiceMock - init')

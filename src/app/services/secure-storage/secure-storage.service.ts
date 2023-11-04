@@ -32,7 +32,6 @@ export class SecureStorageService {
 
   public async get(alias: string, isParanoia: boolean): Promise<SecureStorage> {
     const securityUtils = this.securityUtils
-
     await securityUtils.initStorage({
       alias,
       isParanoia
