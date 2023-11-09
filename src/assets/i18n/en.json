@@ -671,7 +671,7 @@
   },
   "bip85-show": {
     "title": "Show BIP85 Details",
-    "text": "Write down all the words on a piece of paper. You will have to verify the mnemonic on the next page.",
+    "text": "Please write down the mnemonic length and index, this information will be necessary for restoring this child wallet.",
     "mnemonic-length": "Mnemonic Length",
     "index": "Index",
     "fingerprint": "Fingerprint",
