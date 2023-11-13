@@ -85,17 +85,7 @@ export class SecretShowPage {
 
           const alert: HTMLIonAlertElement = await this.alertController.create({
             header: title,
-            message: [
-              heading,
-              '<br/>',
-              text,
-              '<br/>',
-              waitLabelP1,
-              '<strong>',
-              SHOW_SECRET_MIN_TIME_IN_SECONDS.toString(),
-              waitLabelP2,
-              '</strong>'
-            ].join(''),
+            message: `${heading} <br/> ${text} <br/> ${waitLabelP1} <strong>${SHOW_SECRET_MIN_TIME_IN_SECONDS.toString()}${waitLabelP2}</strong>`,
             buttons: ['Okay']
           })
           alert.present().catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
