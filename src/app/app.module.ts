@@ -110,7 +110,7 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
       }
     }),
     EffectsModule.forRoot(),
-    IonicModule.forRoot(),
+    IonicModule.forRoot({ innerHTMLTemplatesEnabled: true }),
     AppRoutingModule,
     HttpClientModule,
     TranslateModule.forRoot({
