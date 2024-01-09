@@ -114,7 +114,8 @@
       "text": "Create a secure secret by using additional entropy from the camera and microphone."
     },
     "import": {
-      "label": "Import Recovery Phrase"
+      "label": "Import Recovery Phrase",
+      "text": "BIP 39 passphrase is supported"
     },
     "social-recovery": {
       "label": "Import Social Recovery"
@@ -252,7 +253,8 @@
     "text": "You can import an existing secret to AirGap. Fill in the words from your secret.",
     "placeholder": "wife pulp island ...",
     "warning": "Please double-check the spelling of your secret.",
-    "import_label": "Import"
+    "import_label": "Import",
+    "passphrase": "Enable the 25th-word passphrase in settings > ADVANCE MODE for added security. Scroll down, toggle the advanced mode button & include the passphrase while adding a coin to activate it. This passphrase will be required for every transaction if enabled."
   },
   "secret-rules": {
     "title": "Read carefully",
