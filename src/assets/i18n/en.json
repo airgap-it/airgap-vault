@@ -352,6 +352,9 @@
     "title": "Social Recovery",
     "text": "Tap each word to match the correct order:"
   },
+  "isolated-module" : {
+    "text": "Can't find your favourite coin? Create an Isolated Module to integrate it"
+  },
   "contact-book": {
     "label_add": "Add",
     "label_edit": "Edit",
