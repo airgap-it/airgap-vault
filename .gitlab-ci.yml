@@ -89,7 +89,7 @@ build_ios:
     - echo "$IOS_BUILD_JSON" > build.json
   script:
     - export DEVELOPER_DIR=$XCODE_PATH
-    - nvm use 16.19.1
+    - nvm use 20
     - yarn install --frozen-lockfile
     - yarn prepare-prod-build
     - yarn apply-diagnostic-modules # manually remove unused cordova-diagnostic-plugin modules
