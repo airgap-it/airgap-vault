@@ -173,10 +173,6 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
   private splitString(words: string): [string, string] {
     const wordArray = words.split(' ')
 
-    if (wordArray.length !== this.maxWords) {
-      throw new Error(`Share string must contain exactly ${this.maxWords} words.`)
-    }
-
     const firstHalf = wordArray.slice(0, 24).join(' ')
     const secondHalf = wordArray.slice(24).join(' ')
 
