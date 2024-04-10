@@ -7,8 +7,9 @@ import CordovaSQLiteDriver from 'localforage-cordovasqlitedriver'
 export enum LanguagesType {
   EN = 'en',
   DE = 'de',
-  // ES = 'es',
+  ES = 'es',
   PT_BR = 'pt_BR',
+  RU = 'ru',
   ZH_CN = 'zh_CN'
 }
 
