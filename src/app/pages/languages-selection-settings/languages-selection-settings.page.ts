@@ -43,7 +43,6 @@ export class LanguagesSelectionSettingsPage implements OnInit {
   }
 
   public async changeLanguage(language: LanguagesType): Promise<void> {
-    console.log(language)
     await this.translateService.use(language).toPromise()
     this.selectedType = language
   }
