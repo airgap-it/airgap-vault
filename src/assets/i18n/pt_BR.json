@@ -49,6 +49,12 @@
     "title": "Bem vindo ao Airgap"
   },
   "installation-type": {
+    "offline_label": "offline",
+    "offline_text": "Este é um dispositivo dedicado offline. Nunca será conectado à internet",
+    "online_label": "online",
+    "online_text": "Este dispositivo está conectado à internet",
+    "setup_label": "Qual é o seu tipo de instalação?",
+    "setup_text": "Para configurar corretamente o Vault, nos diga como você pretende configurar a conectividade do seu dispositivo. Isso nos ajudará a determinar a interação ideal com outras carteiras",
     "title": "Tipo de instação"
   },
   "introduction": {
@@ -74,16 +80,24 @@
       "medium_text": "Comunicação segura através da troca de aplicativos."
     },
     "wallet_install_label": "Instalar o AirGap Wallet",
+    "header": "Interação com o seu dispositivo {{installationType}}",
+    "offline-companion_text": "Instale o aplicativo complementar em um dispositivo com acesso à internet e certifique-se de que apenas informações públicas sejam transmitidas entre os dois aplicativos. Seus segredos nunca deixam o Vault do AirGap, protegendo-os contra ameaças online.",
+    "offline-desc": "Por design, o AirGap Vault nunca se conecta a nenhum serviço online. Para verificar seu saldo e realizar transações, use o aplicativo complementar, como o AirGap Wallet.",
+    "online-desc": "Por design, o AirGap Vault nunca se conecta a nenhum serviço online. Seus segredos nunca deixam o AirGap Vault e, portanto, estão protegidos contra ameaças online. Para verificar seu saldo e realizar transações, use o aplicativo complementar, como o AirGap Wallet.",
+    "skip_label": "Pular",
     "continue_label": "Vamos"
   },
   "secret-setup": {
     "heading": "Vamos configurar o AirGap!",
+    "advanced": "Geração Avançada de Entropia",
+    "advanced_warning": "Permite usar rolagens de dados ou lançamentos de moedas como métodos alternativos de geração de entropia. Use-os apenas se estiver familiarizado e ciente dos riscos envolvidos. Use apenas um <span class=\"style__strong\">dado real</span> ou uma moeda.",
     "generate": {
       "label": "Gerar",
       "text": "Crie um novo segredo com nosso processo seguro para garantir que seus fundos estejam realmente seguros."
     },
     "import": {
-      "label": "Importar"
+      "label": "Importar Frase de Recuperação",
+      "text": "A senha BIP 39 é suportada"
     },
     "social-recovery": {
       "label": "Social Recovery"
@@ -118,6 +132,13 @@
     "secret-recovery": {
       "heading": "Recuperação Secreta",
       "text": "Você pode configurar seus mecanismos de recuperação secretos após a configuração inicial."
+    },
+    "name_label": "Nome",
+    "error_alert": {
+        "abort-button_label": "Abortar",
+        "message": "Algo deu errado!",
+        "retry-button_label": "Tentar Novamente",
+        "title": "Erro"
     },
     "social-recovery": {
       "label": "Recuperação Social",
@@ -212,7 +233,8 @@
     "text": "Você pode importar um segredo existente para o AirGap. Preencha as palavras do seu segredo.",
     "placeholder": "wife pulp island ...",
     "warning": "Verifique novamente a ortografia do seu segredo.",
-    "import_label": "Import"
+    "import_label": "Import",
+    "passphrase": "Para usar a função de senha BIP-39, é necessário ativar o Modo Avançado nas configurações. Se ativado, a senha é necessária para cada transação."
   },
   "secret-rules": {
     "title": "Leia cuidadosamente",
@@ -227,7 +249,8 @@
       "item-5_text": "Não tire uma captura de tela ou foto e não imprima seu segredo",
       "item-6_text": "Não envie seu segredo para a nuvem, não faça backups online."
     },
-    "understood_label": "Entendi"
+    "understood_label": "Entendi",
+    "confirm": "Por favor, tenga en cuenta y marque las casillas:"
   },
   "secret-show": {
     "title": "Esta é a sua frase de recuperação",
@@ -248,6 +271,8 @@
   },
   "interaction-selection-settings": {
     "title": "Interação da Wallet",
+    "connectivity_text": "Como este dispositivo possui conexão, você pode configurar as opções de interação com outras carteiras de acordo com suas necessidades. Para ativar a função de troca de aplicativos, instale o aplicativo de carteira AirGap.",
+    "header": "Configuração",
     "heading": "Como você gostaria de interagir com a AirGap Wallet?",
     "selector": {
       "always": "Sempre pergunte",
@@ -265,6 +290,7 @@
       "en": "Inglês",
       "de": "Alemão",
       "es": "Espanhol",
+      "ru": "Ruso",
       "pt_BR": "Português (Brasil)",
       "zh_CN": "Chinês (China)"
     },
@@ -315,6 +341,10 @@
     "grant-permission_label": "Conceder permissão"
   },
   "tab-settings": {
+    "actions_label": "Ações",
+    "address_book_label": "Agenda de Endereços",
+    "address_book_settings_label": "Configurações da Agenda de Endereços",
+    "advanced-features_label": "Recursos Avançados",
     "about": "Sobre",
     "title": "Configurações",
     "information_label": "Informação",
@@ -339,12 +369,21 @@
     "welcome-onboarding_label": "Bem-vindo",
     "disclaimer_label": "Isenção de responsabilidade",
     "installation-type_label": "Tipo de instalação",
-    "advanced-mode-type_label": "Modo avançado"
+    "advanced-mode-type_label": "Modo avançado",
+    "security-level-self-check_label": "Verificação do Nível de Segurança",
+    "settings_label": "Configurações",
+    "vault-interaction_label": "Interação com o Vault",
+    "shop": "Loja AirGap"
   },
   "tab-secrets": {
     "title": "Segredos",
     "add-secret_label": "Adicionar Segredo",
-    "search_placeholder": "Pesquisar Segredo"
+    "search_placeholder": "Pesquisar Segredo",
+    "tab-secret-popover": {
+      "add-secret_label": "Adicionar Segredo",
+      "sync-all_label": "Sincronizar Todas as Contas com a Carteira AirGap",
+      "title": "Gerenciamento de Segredos"
+    }
   },
   "tab-wallets": {
     "title": "Contas",
@@ -352,6 +391,7 @@
     "empty-state_text": "Crie uma nova conta selecionando uma moeda e sincronize-a com a AirGap Wallet.",
     "add-wallet_label": "Adicionar Conta",
     "delete-accounts_label": "Remover contas",
+    "cancel_label": "Cancelar",
     "generate-recovery-key": {
       "title": "Backup da chave de recuperação secreta",
       "description": "Para garantir sempre a recuperação de seu segredo armazenado, é necessário um backup da chave de recuperação secreta."
@@ -631,6 +671,7 @@
   },
   "danger-zone": {
     "label": "Zona de perigo",
+    "isolated-modules_label": "Módulos Aislados",
     "description": "As ações nesta página destinam-se apenas a usuários avançados. Esteja ciente das consequências se você usar um dos seguintes recursos.",
     "wipe_label": "Redefinir AirGap Vault",
     "wipe": {
@@ -677,5 +718,111 @@
   "wordlist": {
     "title": "Lista de palavras",
     "search_placeholder": "Procurar..."
+  },
+  "accounts-list-edit-popover": {
+    "add-account_label": "Adicionar Conta",
+    "delete_label": "Excluir Contas",
+    "secret-management_label": "Gerenciamento de Segredos",
+    "sync-all_label": "Sincronizar Todas as Contas com a Carteira AirGap",
+    "title": "Configurações"
+  },
+  "advanced-mode": {
+      "label": "Modo Avançado",
+      "note_text": "<span class=\"style__strong\">Nota: </span> O Modo Avançado concede acesso a mais recursos, como <u>Senhas BIP39</u> e <u>Lifehash Identicons</u>"
+  },
+  "contact-book": {
+      "button_delete_entries": "Redefinir Entradas",
+      "label_add": "Adicionar",
+      "label_add_address_entries": "Adicionar Entradas de Endereço",
+      "label_added_by": "adicionado por",
+      "label_address": "Endereço",
+      "label_cancel": "Cancelar",
+      "label_close": "Fechar",
+      "label_creation_date": "Data de Criação",
+      "label_delete_entry": "Excluir Entrada de Endereço",
+      "label_edit": "Editar",
+      "label_enable_address_book": "Ativar Agenda de Endereços",
+      "label_enable_suggestions": "Ativar Sugestões",
+      "label_finish": "Concluir",
+      "label_indentify_addresses_you_interact": "Identificar endereços com os quais você interage",
+      "label_look_transactions_histories": "Ver históricos de transações relevantes e muito mais!",
+      "label_manual_entry": "Entrada Manual",
+      "label_name": "Nome",
+      "label_note_disable": "Nota: Você pode desativar esta opção posteriormente nas configurações",
+      "label_recommendation_on_who": "Faremos recomendações sobre quem adicionar com base nos endereços com os quais você interage com frequência",
+      "label_recommendations": "Recomendações",
+      "label_recommended_by_us": "Recomendado por nós",
+      "label_scan_qr": "Escanear o código QR do endereço",
+      "label_search_contacts": "Buscar contatos",
+      "label_several_ways": "Existem várias maneiras de adicionar novas entradas à sua agenda de endereços:",
+      "label_sort_by": "Ordenar por",
+      "label_store_manage_entries": "Armazenar e gerenciar entradas de endereço",
+      "label_suggestions": "Sugestões",
+      "label_this_allows_to": "Isso permite que você",
+      "label_transactions": "Transações",
+      "label_welcome_personal_address_book": "Bem-vindo à sua agenda de endereços pessoal",
+      "label_while_signing": "Ao assinar transações",
+      "title_address_book": "Agenda de Endereços",
+      "title_settings": "Configurações da Agenda de Endereços"
+  },
+  "contact-book-scan": {
+      "empty-state_heading": "Para escanear códigos QR, o AirGap Vault precisa da permissão da <span class=\"style__strong color__primary\">câmera</span>.",
+      "grant-permission_label": "Conceder Permissão",
+      "text": "Escanear um código QR de um endereço para adicioná-lo aos seus contatos",
+      "title": "Scanner de Código QR da Agenda de Endereços"
+  },
+  "contacts-delete-popover": {
+      "cancel_label": "Cancelar",
+      "delete_label": "Ok",
+      "text": "Esta ação excluirá todas as suas entradas salvas. Você deseja continuar?",
+      "title": "Redefinir Entradas"
+  },
+  "isolated-module": {
+      "text": "Não consegue encontrar sua moeda favorita? Crie um Módulo Isolado para integrá-la"
+  },
+  "isolated-modules-list-page": {
+      "alert": {
+          "add": {
+              "failed": {
+                  "header": "Falha ao Adicionar Módulo",
+                  "message": "Algo deu errado! Por favor, tente novamente.",
+                  "ok_label": "Ok"
+              }
+          }
+      },
+      "items": {
+          "search_placeholder": "Buscar módulos isolados"
+      },
+      "title": "Módulos Isolados"
+  },
+  "keyboard": {
+      "add": "Adicionar Palavra",
+      "delete": "Excluir Palavra",
+      "mask": "Mascarar Texto",
+      "paste": "Colar",
+      "shuffle": "Embaralhar Teclas",
+      "word_list": "Mostrar Lista de Palavras"
+  },
+  "security-level-self-check": {
+      "description": "Determine seu nível de segurança verificando sua configuração pessoal. Ao marcar todas as caixas, você pode ter certeza de que aproveitou todo o potencial de segurança do AirGap Vault",
+      "heading": "Autoverificação de Nível de Segurança"
+  },
+  "shop": {
+      "AirGap-Knox_description": "Com o AirGap Knox, você pode desativar todos os tipos de conectividade no seu smartphone em nível de sistema e criar um ambiente absolutamente seguro para o AirGap Vault",
+      "AirGap-Knox_label": "AirGap Knox",
+      "AirGap-Recovery-Plate_description": "Grave sua frase de recuperação em aço inoxidável para protegê-la do fogo ou danos",
+      "AirGap-Recovery-Plate_label": "AirGap Recovery Plate",
+      "copy_label": "Copiar Link",
+      "label": "Loja AirGap",
+      "page-description_description": "Adicione uma camada adicional de segurança com soluções da Loja AirGap e pague com Cripto",
+      "page-description_label": "Explore a Loja AirGap",
+      "promo-description": "Ganhe 10% de desconto em sua primeira compra ao usar o código promocional: <i>VaultUser23</i>",
+      "QR-code_label": "Para visitar, escaneie o código QR ou vá para o seguinte site:"
+  },
+  "vault-interaction-settings": {
+      "device-connected_text": "O dispositivo está conectado à internet",
+      "heading": "Interação com o Vault",
+      "note_text": "<span class=\"style__strong\">Nota: </span> Estas configurações NÃO alteram a conexão do seu dispositivo",
+      "title": "Interação com o Vault"
   }
 }
