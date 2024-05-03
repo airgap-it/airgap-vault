@@ -308,9 +308,10 @@
     "selector": {
       "device": "Your Device Language",
       "en": "English",
-      "de": "German",
-      "es": "Spanish",
+      "de": "German (AI translated)",
+      "es": "Spanish (AI translated)",
       "ru": "Russian",
+      "fr":"French (AI translated)",
       "pt_BR": "Portuguese (Brazil)",
       "zh_CN": "Chinese (China)"
     },
