@@ -18,6 +18,26 @@
     "version": "Version:",
     "code": "Code:"
   },
+  "shop": {
+    "label": "AirGap Shop",
+    "page-description_label": "Entdecken Sie den AirGap Shop",
+    "page-description_description": "Fügen Sie mit Lösungen aus dem AirGap Shop eine zusätzliche Sicherheitsebene hinzu und bezahlen Sie mit Crypto",
+    "QR-code_label": "Um uns zu besuchen, scannen Sie den QR-Code oder gehen Sie auf die folgende Website:",
+    "AirGap-Knox_label": "AirGap Knox",
+    "AirGap-Knox_description": "Mit AirGap Knox können Sie alle Arten der Konnektivität auf Ihrem Smartphone auf Systemebene deaktivieren und eine absolut sichere Umgebung für den AirGap Vault erstellen",
+    "AirGap-Recovery-Plate_label": "AirGap-Wiederherstellungsplatte",
+    "AirGap-Recovery-Plate_description": "Gravieren Sie Ihren Seed-Satz auf Edelstahl, um ihn vor Feuer oder Beschädigung zu schützen",
+    "promo-description": "Erhalten Sie 10 % Rabatt auf Ihren ersten Einkauf, wenn Sie den Promo-Code verwenden: <i>VaultUser23</i>",
+    "copy_label": "Link kopieren"
+  },
+  "security-level-self-check": {
+    "heading": "Sicherheitsstufe Selbstprüfung",
+    "description": "Bestimmen Sie Ihr Sicherheitsniveau, indem Sie Ihr persönliches Setup überprüfen. Wenn Sie alle Kästchen angekreuzt haben, können Sie sicher sein, dass Sie das volle Sicherheitspotenzial des AirGap Vault ausgenutzt haben."
+  },
+  "advanced-mode": {
+    "label": "Fortgeschrittener Modus",
+    "note_text": "<span class=\"style__strong\">Hinweis: </span> Der erweiterte Modus gewährt Ihnen Zugriff auf weitere Funktionen wie <u>BIP39-Passphrasen</u> und <u>Lifehash-Identicons</u>"
+  },
   "distribution-onboarding": {
     "ask-permission": {
       "heading": "AirGap ist <span class=\"style__strong color__primary\"> nicht persistent</span>, Geheimschlüssel werden nicht abgespeichert und müssen nach einem Neustart <span class=\"style__strong color__primary\">wieder importiert</span> werden",
@@ -84,7 +104,8 @@
       "medium_text": "Sichere Kommunikation mit App-Wechsel."
     },
     "wallet_install_label": "AirGap Wallet installieren",
-    "continue_label": "Loslegen"
+    "continue_label": "Loslegen",
+    "skip_label": "Überspringen"
   },
   "secret-setup": {
     "heading": "AirGap Einrichten!",
@@ -93,7 +114,8 @@
       "text": "Gehen Sie auf Nummer sicher für Ihre Geldmittel, indem Sie einen Geheimschlüssel mit unserem sicheren Prozess erstellen."
     },
     "import": {
-      "label": "Importieren"
+      "label": "Importieren",
+      "text": "BIP 39-Passphrase wird unterstützt"
     },
     "social-recovery": {
       "label": "Soziale Wiederherstellung"
@@ -105,10 +127,13 @@
     "coin-flip": {
       "label": "Generate with Coin Flips",
       "text": "Use a coin to generate a secure and verifiable recovery phrase."
-    }
+    },
+    "advanced": "Erweiterte Entropiegenerierung",
+    "advanced_warning": "Ermöglicht Ihnen, Würfelwürfe oder Münzwürfe als alternative Methoden zur Entropieerzeugung zu verwenden. Verwenden Sie diese nur, wenn Sie damit vertraut sind und die damit verbundenen Risiken kennen. Verwenden Sie nur einen <span class=\"style__strong\">echten</span> Würfel oder eine Münze"
   },
   "secret-edit": {
     "title": " Ihren Geheimschlüssel",
+    "name_label": "Name",
     "text": "Geheimschlüssel benennen und Sicherheistgrad auswählen.",
     "fingerprint": "Fingerprint",
     "secret_input_label": "Geheimschlüsselname",
@@ -165,7 +190,45 @@
       "copied": "Recovery key copied",
       "reset-error": "Could not set the recovery key"
     },
-    "confirm_label": "Bestätigen"
+    "confirm_label": "Bestätigen",
+    "error_alert": {
+      "title": "Fehler",
+      "message": "Etwas ist schief gelaufen!",
+      "abort-button_label": "Abbrechen",
+      "retry-button_label": "Wiederholen"
+    }
+  },
+  "social-recovery-generate": {
+    "intro-state-1-title": "Soziale Erholung",
+    "intro-state-1-text1": "Mit Social Recovery können Sie geheime Freigaben erstellen und diese an soziale Kontakte verteilen, denen Sie vertrauen.",
+    "intro-state-1-text2": "Sie können ein verlorenes Geheimnis wiederherstellen, wenn Sie über eine festgelegte Anzahl dieser Geheimnisanteile verfügen.",
+    "intro-state-2-title": "Verteilen Sie Ihre Anteile",
+    "intro-state-2-text1": "Die Idee besteht darin, unterschiedliche Freigaben zu haben, die für sich genommen nutzlos sind, Ihnen zusammen jedoch die Wiederherstellung Ihres Geheimnisses ermöglichen.",
+    "intro-state-2-text2": "Sie können diese Freigaben an verschiedene Standorte oder Personen verteilen, denen Sie vertrauen.",
+    "intro-state-2-text3": "Machen Sie sich also keine Sorgen, Ihre Oma kann Ihr Geheimnis mit dem bei ihr gespeicherten Share nicht wiederherstellen.",
+    "intro-state-3-title1": "Wie soziale Erholung funktioniert",
+    "intro-state-3-title2": "Wählen Sie die Anzahl der Anteile",
+    "intro-state-3-text1": "Geben Sie zunächst an, wie viele Social Shares Sie erstellen möchten. Sie müssen auch definieren, wie viele Shares erforderlich sind, um Ihr Geheimnis wiederherzustellen.",
+    "intro-state-3-title3": "Speichern und überprüfen Sie jede Freigabe",
+    "intro-state-3-text2": "Der Tresor generiert verschiedene Social Shares für Sie. Notieren Sie sich die einzelnen Shares. Im nächsten Schritt werden Sie aufgefordert, jeden Share zu überprüfen, um sicherzustellen, dass Sie ihn korrekt kopiert haben.",
+    "intro-state-3-title4": "Nicht dasselbe wie Ihre Passphrase",
+    "intro-state-3-text3": "Obwohl sie gleich aussehen, sind Social Shares nicht dasselbe wie Ihre Passphrase.",
+    "setup-state-1-text1": "Wählen Sie die Anzahl der Social Shares aus, die Sie erstellen möchten",
+    "setup-state-2-text1": "Erstellen von {{numberOfShares}} Anteilen",
+    "setup-state-2-text2": "Wählen Sie die Anzahl der Social Shares aus, die zur Wiederherstellung Ihres Geheimnisses erforderlich sind",
+    "rules-heading": "Beachten Sie diese Regel",
+    "rules-text1": "Schreiben Sie diese Worte auf ein Stück Papier oder eine Metallplatte",
+    "rules-text2": "Die Wörter müssen in der richtigen Reihenfolge stehen",
+    "rules-text3": "Überprüfen Sie die Rechtschreibung jedes Wortes",
+    "rules-text4": "Bewahren Sie das aufgeschriebene Geheimnis an einem sicheren Ort auf",
+    "rules-text5": "Machen Sie keinen Screenshot oder ein Foto und kopieren Sie Ihr Geheimnis nicht",
+    "rules-text6": "Laden Sie Ihr Geheimnis nicht in die Cloud hoch",
+    "share-show-heading": "Schreibe alle Wörter auf ein Blatt Papier und beachte dabei die Regeln. Wir empfehlen, die Begriffe aufzuzählen.",
+    "finish-title": "Generation der sozialen Erholung erfolgreich!",
+    "finish-header": "Sie haben erfolgreich Social-Recovery-Shares für Ihr Geheimnis erstellt.",
+    "finish-warning-title": "Erinnern",
+    "finish-warning-paragraph": "Sie haben {{ numberOfShares }} Freigaben erstellt, von denen Sie zum Wiederherstellen mindestens {{ sharesRequired }} benötigen.",
+    "finish-button": "Beenden"
   },
   "secret-service": {
     "alert": {
@@ -190,13 +253,15 @@
     "text": "Ein bestehender Geheimschlüssel kann in AirGap importiert werden. Tragen Sie die Worte von Ihrem Wiederherstellungs-Satz ein.",
     "placeholder": "wife pulp island ...",
     "warning": "Bitte überprüfen Sie die Schreibweise des Wiederherstellungs-Satzes.",
-    "import_label": "Importieren"
+    "import_label": "Importieren",
+    "passphrase": "Um die BIP-39-Passphrase-Funktion zu verwenden, muss in den Einstellungen der ERWEITERTE MODUS aktiviert sein. Wenn aktiviert, ist die Passphrase für jede Transaktion erforderlich."
   },
   "secret-rules": {
     "title": "Aufmerksam durchlesen",
     "heading": "Befolgen Sie diese Regeln.",
     "text": "Wir haben Ihren Geheimschlüssel generiert, er besteht aus eine Wortabfolge.",
     "description": "Stellen Sie sicher, dass Sie die nachfolgenden Regeln verstanden haben und einhalten werden. Diese ermöglichen einen sicheren Zugriff auf Ihre Konten.",
+    "confirm": "Bitte beachten Sie und aktivieren Sie die Kontrollkästchen:",
     "rules-list": {
       "item-1_text": "Notieren Sie die Wortabfolge auf einem Stück Papier oder gravieren Sie sie auf eine Metal Recovery Plate.",
       "item-2_text": "Halten Sie die Wortabfolge strikt ein.",
@@ -224,7 +289,6 @@
     "title": "Verifizierung Wiederherstellungs-Satz",
     "text": "Ordnen Sie die Wörter in die richtige Reihenfolge, indem Sie jeweils das betreffende Wort anwählen."
   },
-
   "interaction-selection-settings": {
     "header": "Setup",
     "title": "Wallet-Interaktion",
@@ -242,9 +306,12 @@
     "title": "Language Selection",
     "heading": "Please choose your preferred language",
     "selector": {
+      "device": "Die Sprache Ihres Geräts",
       "en": "English",
-      "de": "German",
-      "es": "Spanish",
+      "de": "German (KI übersetzt)",
+      "es": "Spanish (KI übersetzt)",
+      "ru": "Russisch",
+      "fr":"französisch (KI übersetzt)",
       "pt_BR": "Portuguese (Brazil)",
       "zh_CN": "Chinese (China)"
     },
@@ -287,11 +354,55 @@
     "title": "Soziale Wiederherstellung",
     "text": "Ordnen Sie die Wörter in die richtige Reihenfolge, indem Sie jeweils das betreffende Wort anwählen."
   },
-  "contacts-delete-popover": { 
-    "title": "Einträge zurücksetzen", 
-    "text": "Diese Aktion wird alle Ihre gespeicherten Einträge löschen. Möchten Sie fortfahren?", 
-    "cancel_label": "Abbrechen", 
-    "delete_label": "Ok" 
+  "isolated-module" : {
+    "text": "Sie können Ihre Lieblingsmünze nicht finden? Erstellen Sie ein isoliertes Modul, um sie zu integrieren"
+  },
+  "contact-book": {
+    "label_add": "Hinzufügen",
+    "label_edit": "Bearbeiten",
+    "label_cancel": "Stornieren",
+    "label_finish": "Beenden",
+    "label_close": "Schließen",
+    "label_sort_by": "Sortiere nach",
+    "label_search_contacts": "Kontakte durchsuchen",
+    "label_added_by": "hinzugefügt von",
+    "label_name": "Name",
+    "label_address": "Adresse",
+    "label_transactions": "Transaktionen",
+    "label_creation_date": "Erstellungsdatum",
+    "label_delete_entry": "Adresseintrag löschen",
+    "title_settings": "Adressbucheinstellungen",
+    "label_enable_suggestions": "Vorschläge aktivieren",
+    "label_enable_address_book": "Adressbuch aktivieren",
+    "button_delete_entries": "Einträge zurücksetzen",
+    "title_address_book": "Adressbuch",
+    "label_welcome_personal_address_book": "Willkommen in Ihrem persönlichen Adressbuch",
+    "label_this_allows_to": "Damit können Sie",
+    "label_indentify_addresses_you_interact": "Identifizieren Sie Adressen, mit denen Sie interagieren",
+    "label_store_manage_entries": "Adresseinträge speichern und verwalten",
+    "label_look_transactions_histories": "Sehen Sie sich relevante Transaktionsverläufe und vieles mehr an!",
+    "label_add_address_entries": "Adresseinträge hinzufügen",
+    "label_several_ways": "Es gibt mehrere Möglichkeiten, wie Sie Ihrem Adressbuch neue Einträge hinzufügen können:",
+    "label_scan_qr": "Scannen Sie den Adress-QR-Code",
+    "label_manual_entry": "Manueller Eintrag",
+    "label_recommended_by_us": "Von uns empfohlen",
+    "label_while_signing": "Beim Signieren von Transaktionen",
+    "label_recommendations": "Empfehlungen",
+    "label_recommendation_on_who": "Wir geben Ihnen Empfehlungen, wen Sie hinzufügen sollten, basierend auf den Adressen, mit denen Sie häufig interagieren.",
+    "label_suggestions": "Vorschläge",
+    "label_note_disable": "Hinweis: Sie können diese Option später in den Einstellungen deaktivieren"
+  },
+  "contacts-delete-popover": {
+    "title": "Einträge zurücksetzen",
+    "text": "Diese Aktion wird alle Ihre gespeicherten Einträge löschen. Möchten Sie fortfahren?",
+    "cancel_label": "Abbrechen",
+    "delete_label": "Ok"
+  },
+  "contact-book-scan": {
+    "title": "Kontakt Buch QR Code Scanner",
+    "text": "Scannen Sie einen QR-Code einer Adresse, um sie zu Ihren Kontakten hinzuzufügen",
+    "empty-state_heading": "Zum Scannen von QR-Codes benötigt AirGap Vault die <span class=\"style__strong color__primary\">Kameraberechtigung</span>.",
+    "grant-permission_label": "Erteilen der Berechtigung"
   },
   "tab-scan": {
     "title": "QR Code Scanner",
@@ -302,6 +413,7 @@
   },
   "tab-settings": {
     "about": "Über AirGap Vault",
+    "shop": "AirGap Shop",
     "title": "Geheimschlüssel",
     "information_label": "Information",
     "faq_label": "FAQ",
@@ -326,22 +438,26 @@
     "disclaimer_label": "Disclaimer",
     "installation-type_label": "Installation Type",
     "advanced-mode-type_label": "Advanced Mode",
-    "vault-interaction_label": "Vault Interaktion"
+    "advanced-features_label": "Erweiterte Funktionen",
+    "address_book_label": "Adressbuch",
+    "address_book_settings_label": "Adressbucheinstellungen",
+    "settings_label": "Einstellungen",
+    "actions_label": "Aktionen",
+    "vault-interaction_label": "Vault Interaktion",
+    "security-level-self-check_label": "Sicherheitsstufe Selbstprüfung"
   },
-
   "vault-interaction-settings": {
     "heading": "Vault-Interaktion",
     "title": "Vault-Interaktion",
     "device-connected_text": "Gerät ist mit dem Internet verbunden",
     "note_text": "<span class=\"style__strong\">Hinweis:</span> Diese Einstellung ändert NICHT die Verbindungseinstellungen Ihres Geräts."
   },
-
   "tab-secrets": {
     "title": "Secrets",
     "add-secret_label": "Secret hinzufügen",
     "search_placeholder": "Secrets durchsuchen",
-    "tab-secret-popover":{
-      "title":"Secret Verwaltung",
+    "tab-secret-popover": {
+      "title": "Secret Verwaltung",
       "add-secret_label": "Secret hinzufügen",
       "sync-all_label": "Alle Accounts mit AirGap Wallet synchronisieren"
     }
@@ -352,6 +468,7 @@
     "empty-state_text": "Wählen Sie eine Währung aus, um ein neues Konto zu erstellen und mit AirGap Wallet zu synchronisieren.",
     "add-wallet_label": "Konto hinzufügen",
     "delete-accounts_label": "Remove Accounts",
+    "cancel_label": "Stornieren",
     "generate-recovery-key": {
       "title": "Secret Recovery Key Backup",
       "description": "To always ensure a recovery of your stored secret, a backup of the secret recovery key is needed."
@@ -647,7 +764,8 @@
         "message": "An error occured while trying to wipe the app. If this error persists, please uninstall and remove the app from your device.",
         "ok": "Ok"
       }
-    }
+    },
+    "isolated-modules_label": "Isolierte Module"
   },
   "secret-generate-dice-roll": {
     "title": "Dice Rolls",
@@ -677,5 +795,72 @@
   "wordlist": {
     "title": "Wordlist",
     "search_placeholder": "Search..."
+  },
+  "keyboard": {
+    "paste": "Paste",
+    "add": "Wort hinzufügen",
+    "delete": "Wort löschen",
+    "shuffle": "Shuffle-Tasten",
+    "mask": "Maskentext",
+    "word_list": "Wortliste anzeigen"
+  },
+  "isolated-modules": {
+    "loader_message": "Wird geladen..."
+  },
+  "isolated-modules-list-page": {
+    "title": "Isolierte Module",
+    "items": {
+      "search_placeholder": "Suche nach isolierten Modulen"
+    },
+    "alert": {
+      "add": {
+        "failed": {
+          "header": "Hinzufügen des Moduls fehlgeschlagen",
+          "message": "Etwas ist schief gelaufen. Bitte versuche es erneut.",
+          "ok_label": "OK"
+        }
+      }
+    }
+  },
+  "isolated-modules-details-page": {
+    "button": {
+      "install_label": "Installieren",
+      "update_label": "Aktualisieren"
+    },
+    "popover": {
+      "remove_label": "Entfernen"
+    },
+    "alert": {
+      "remove": {
+        "header": "Modul entfernen",
+        "message": "Möchten Sie dieses Modul wirklich entfernen?",
+        "cancel_label": "Stornieren",
+        "proceed_label": "Entfernen"
+      },
+      "update": {
+        "generic": {
+          "header": "Modulaktualisierung fehlgeschlagen",
+          "message": "Etwas ist schiefgelaufen! Das Modul konnte nicht aktualisiert werden.",
+          "ok_label": "OK"
+        },
+        "load-failed": {
+          "header": "Modulaktualisierung fehlgeschlagen",
+          "message": "Es ist ein Fehler aufgetreten! Das neue Modul konnte nicht geladen werden.",
+          "ok_label": "OK"
+        },
+        "different-public-key": {
+          "header": "Modulaktualisierung fehlgeschlagen",
+          "message": "Sie können dieses Modul mit dem ausgewählten Paket nicht aktualisieren, da die Autoren (öffentliche Schlüssel) unterschiedlich sind.",
+          "ok_label": "OK"
+        }
+      }
+    }
+  },
+  "accounts-list-edit-popover": {
+    "title": "Einstellungen",
+    "add-account_label": "Konto hinzufügen",
+    "secret-management_label": "Geheimverwaltung",
+    "sync-all_label": "Alle Konten mit AirGap Wallet synchronisieren",
+    "delete_label": "Konten löschen"
   }
 }
