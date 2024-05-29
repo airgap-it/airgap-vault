@@ -23,9 +23,6 @@ RUN apt-get update && apt-get install -y wget --no-install-recommends \
   && apt-get purge --auto-remove -y curl \
   && rm -rf /src/*.deb
 
-# Install Yarn
-RUN npm install -g yarn
-
 # create app directory
 RUN mkdir /app
 WORKDIR /app
