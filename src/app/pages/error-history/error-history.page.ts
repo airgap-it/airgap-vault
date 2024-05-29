@@ -26,11 +26,9 @@ export class ErrorHistoryPage implements OnInit {
 
   async updateList() {
     const logger = new LocalErrorLogger()
-    this.errorHistory = await (
-      await logger.getErrorHistory()
-    ).map((error) => ({
+    this.errorHistory = await (await logger.getErrorHistory()).map((error) => ({
       date: error[4],
-      title: error[2].split('\n')[0],
+      title: error[2] ? error[2].split('\n')[0] : '',
       detail: error[2],
       expanded: false
     }))
