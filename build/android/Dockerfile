@@ -1,4 +1,4 @@
-FROM beevelop/ionic:v2023.10.1
+FROM beevelop/ionic:v2021.06.1
 
 RUN apt-get update -y && apt-get install -y \
     bzip2 \
