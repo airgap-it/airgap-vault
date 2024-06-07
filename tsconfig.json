@@ -27,6 +27,7 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
     "paths": {
       "@angular/*": [
         "./node_modules/@angular/*"
