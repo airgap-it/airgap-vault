@@ -57,6 +57,7 @@
     "@airgap/tezos": "0.13.27"
   },
   "dependencies": {
+    "@airgap-community/iso-rootstock": "1.0.0",
     "@airgap/acurast": "0.13.27",
     "@airgap/aeternity": "0.13.27",
     "@airgap/angular-core": "0.0.45",
@@ -79,7 +80,6 @@
     "@airgap/serializer": "0.13.27",
     "@airgap/substrate": "0.13.27",
     "@airgap/tezos": "0.13.27",
-    "@airgap-community/iso-rootstock": "1.0.0",
     "@angular/cdk": "^14.2.7",
     "@angular/common": "16.1.1",
     "@angular/core": "16.1.1",
