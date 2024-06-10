@@ -96,11 +96,11 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "buildTarget": "app:build"
+            "browserTarget": "app:build"
           },
           "configurations": {
             "production": {
-              "buildTarget": "app:build:production"
+              "browserTarget": "app:build:production"
             },
             "ci": {
             }
@@ -109,7 +109,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "app:build"
+            "browserTarget": "app:build"
           }
         },
         "test": {
@@ -155,12 +155,12 @@
         "ionic-cordova-serve": {
           "builder": "@ionic/angular-toolkit:cordova-serve",
           "options": {
-            "cordovaBuildTarget": "app:ionic-cordova-build",
+            "cordovabrowserTarget": "app:ionic-cordova-build",
             "devServerTarget": "app:serve"
           },
           "configurations": {
             "production": {
-              "cordovaBuildTarget": "app:ionic-cordova-build:production",
+              "cordovabrowserTarget": "app:ionic-cordova-build:production",
               "devServerTarget": "app:serve:production"
             }
           }
