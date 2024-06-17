@@ -1,5 +1,13 @@
 import { AeternityModule } from '@airgap/aeternity'
-import { APP_PLUGIN, createV0TezosShieldedTezProtocol, IACMessageTransport, ICoinProtocolAdapter, ProtocolService, SPLASH_SCREEN_PLUGIN, STATUS_BAR_PLUGIN } from '@airgap/angular-core'
+import {
+  APP_PLUGIN,
+  createV0TezosShieldedTezProtocol,
+  IACMessageTransport,
+  ICoinProtocolAdapter,
+  ProtocolService,
+  SPLASH_SCREEN_PLUGIN,
+  STATUS_BAR_PLUGIN
+} from '@airgap/angular-core'
 import { AstarModule } from '@airgap/astar'
 import { BitcoinModule } from '@airgap/bitcoin'
 import { MainProtocolSymbols } from '@airgap/coinlib-core'
@@ -12,6 +20,7 @@ import { MoonbeamModule } from '@airgap/moonbeam'
 import { OptimismModule } from '@airgap/optimism'
 import { PolkadotModule } from '@airgap/polkadot'
 import { TezosModule, TezosSaplingExternalMethodProvider, TezosShieldedTezProtocol } from '@airgap/tezos'
+import { AcurastModule } from '@airgap/acurast'
 import { HttpClient } from '@angular/common/http'
 import { AfterViewInit, Component, Inject, NgZone } from '@angular/core'
 import { AppPlugin, URLOpenListenerEvent } from '@capacitor/app'
@@ -174,15 +183,17 @@ export class AppComponent implements AfterViewInit {
       new AstarModule(),
       new ICPModule(),
       new CoreumModule(),
-      new OptimismModule()
+      new OptimismModule(),
+      new AcurastModule()
     ])
     const protocols = await this.moduleService.loadProtocols('offline', [MainProtocolSymbols.XTZ_SHIELDED])
 
-    const externalMethodProvider:
-      | TezosSaplingExternalMethodProvider
-      | undefined = await this.saplingNativeService.createExternalMethodProvider()
+    const externalMethodProvider: TezosSaplingExternalMethodProvider | undefined =
+      await this.saplingNativeService.createExternalMethodProvider()
 
-    const shieldedTezAdapter: ICoinProtocolAdapter<TezosShieldedTezProtocol> = await createV0TezosShieldedTezProtocol({ externalProvider: externalMethodProvider })
+    const shieldedTezAdapter: ICoinProtocolAdapter<TezosShieldedTezProtocol> = await createV0TezosShieldedTezProtocol({
+      externalProvider: externalMethodProvider
+    })
 
     this.protocolService.init({
       activeProtocols: protocols.activeProtocols,

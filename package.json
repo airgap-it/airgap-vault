@@ -37,6 +37,7 @@
   },
   "resolutions": {
     "@airgap/aeternity": "0.13.27",
+    "@airgap/acurast": "0.13.27",
     "@airgap/astar": "0.13.27",
     "@airgap/bitcoin": "0.13.27",
     "@airgap/coinlib-core": "0.13.27",
@@ -57,8 +58,9 @@
   },
   "dependencies": {
     "@airgap/aeternity": "0.13.27",
-    "@airgap/angular-core": "0.0.43",
-    "@airgap/angular-ngrx": "0.0.43",
+    "@airgap/acurast": "0.13.27",
+    "@airgap/angular-core": "0.0.45",
+    "@airgap/angular-ngrx": "0.0.45",
     "@airgap/astar": "0.13.27",
     "@airgap/bitcoin": "0.13.27",
     "@airgap/coinlib-core": "0.13.27",

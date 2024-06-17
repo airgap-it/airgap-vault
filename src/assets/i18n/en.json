@@ -114,7 +114,8 @@
       "text": "Create a secure secret by using additional entropy from the camera and microphone."
     },
     "import": {
-      "label": "Import Recovery Phrase"
+      "label": "Import Recovery Phrase",
+      "text": "BIP 39 passphrase is supported"
     },
     "social-recovery": {
       "label": "Import Social Recovery"
@@ -252,7 +253,8 @@
     "text": "You can import an existing secret to AirGap. Fill in the words from your secret.",
     "placeholder": "wife pulp island ...",
     "warning": "Please double-check the spelling of your secret.",
-    "import_label": "Import"
+    "import_label": "Import",
+    "passphrase": "To use the BIP-39 Passphrase feature, ADVANCE MODE must be activated in the settings. If enabled the Passphrase is required for each transaction."
   },
   "secret-rules": {
     "title": "Read carefully",
@@ -308,6 +310,7 @@
       "en": "English",
       "de": "German",
       "es": "Spanish",
+      "ru": "Russian",
       "pt_BR": "Portuguese (Brazil)",
       "zh_CN": "Chinese (China)"
     },
@@ -349,6 +352,9 @@
   "social-recovery-validate-share": {
     "title": "Social Recovery",
     "text": "Tap each word to match the correct order:"
+  },
+  "isolated-module" : {
+    "text": "Can't find your favourite coin? Create an Isolated Module to integrate it"
   },
   "contact-book": {
     "label_add": "Add",
