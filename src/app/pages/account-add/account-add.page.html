@@ -74,6 +74,19 @@
     </ng-container>
   </ion-list>
 
+  <ion-card class="ion-padding" color="primary" (click)="goToIsolatedModule()">
+    <ion-row>
+      <ion-col>
+        <ion-icon style="zoom: 4" src="assets/icons/shapes.svg"></ion-icon>
+      </ion-col>
+      <ion-col size="9">
+        <ion-label class="ion-text-wrap">
+          <h2 style="color: black">{{ 'isolated-module.text' | translate }}</h2>
+        </ion-label>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-button [disabled]="!formValid" color="primary" shape="round" (click)="addWallet()">
       {{ 'wallet-select-coins.create_label' | translate }}

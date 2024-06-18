@@ -10,6 +10,7 @@ export enum LanguagesType {
   ES = 'es',
   PT_BR = 'pt_BR',
   RU = 'ru',
+  FR = 'fr',
   ZH_CN = 'zh_CN'
 }
 

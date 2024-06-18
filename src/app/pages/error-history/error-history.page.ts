@@ -30,7 +30,7 @@ export class ErrorHistoryPage implements OnInit {
       await logger.getErrorHistory()
     ).map((error) => ({
       date: error[4],
-      title: error[2].split('\n')[0],
+      title: error[2] ? error[2].split('\n')[0] : '',
       detail: error[2],
       expanded: false
     }))

@@ -68,23 +68,25 @@ export class AccountAddPage {
     this.protocolService.getActiveProtocols().then(async (protocols: ICoinProtocol[]) => {
       const navigationIdentifier: ProtocolSymbols | undefined = state.protocol
 
-      this.protocolList = await Promise.all(protocols.map(async (protocol) => {
-        const [symbol, identifier, name, supportsHD] = await Promise.all([
-          protocol.getSymbol(),
-          protocol.getIdentifier(),
-          protocol.getName(),
-          protocol.getSupportsHD()
-        ])
-        const isChecked = navigationIdentifier === identifier
+      this.protocolList = await Promise.all(
+        protocols.map(async (protocol) => {
+          const [symbol, identifier, name, supportsHD] = await Promise.all([
+            protocol.getSymbol(),
+            protocol.getIdentifier(),
+            protocol.getName(),
+            protocol.getSupportsHD()
+          ])
+          const isChecked = navigationIdentifier === identifier
 
-        return {
-          protocol,
-          isHDWallet: supportsHD,
-          customDerivationPath: undefined,
-          isChecked: isChecked,
-          details: { symbol, identifier, name }
-        }
-      }))
+          return {
+            protocol,
+            isHDWallet: supportsHD,
+            customDerivationPath: undefined,
+            isChecked: isChecked,
+            details: { symbol, identifier, name }
+          }
+        })
+      )
       this.onProtocolSelected()
     })
   }
@@ -122,7 +124,7 @@ export class AccountAddPage {
     if (selectedProtocols.length === 1) {
       const selectedProtocol = selectedProtocols[0]
       const standardDerivationPath = await selectedProtocol.protocol.getStandardDerivationPath()
-      if (await selectedProtocol.protocol.getSupportsHD() && selectedProtocol.isHDWallet) {
+      if ((await selectedProtocol.protocol.getSupportsHD()) && selectedProtocol.isHDWallet) {
         selectedProtocol.customDerivationPath = standardDerivationPath
       } else {
         selectedProtocol.customDerivationPath = `${standardDerivationPath}/0/0`
@@ -161,19 +163,21 @@ export class AccountAddPage {
       this.secretsService
         .addWallets(
           this.secret,
-          await Promise.all(this.protocolList.map(async (protocolWrapper: ProtocolWrapper) => {
-            const protocol = protocolWrapper.protocol
-            return {
-              protocolIdentifier: await protocol.getIdentifier(),
-              isHDWallet: protocolWrapper.isChecked ? protocolWrapper.isHDWallet : await protocol.getSupportsHD(),
-              customDerivationPath:
-                protocolWrapper.isChecked && protocolWrapper.customDerivationPath
-                  ? protocolWrapper.customDerivationPath
-                  : await protocol.getStandardDerivationPath(),
-              bip39Passphrase: protocolWrapper.isChecked ? this.bip39Passphrase : '',
-              isActive: protocolWrapper.isChecked
-            }
-          }))
+          await Promise.all(
+            this.protocolList.map(async (protocolWrapper: ProtocolWrapper) => {
+              const protocol = protocolWrapper.protocol
+              return {
+                protocolIdentifier: await protocol.getIdentifier(),
+                isHDWallet: protocolWrapper.isChecked ? protocolWrapper.isHDWallet : await protocol.getSupportsHD(),
+                customDerivationPath:
+                  protocolWrapper.isChecked && protocolWrapper.customDerivationPath
+                    ? protocolWrapper.customDerivationPath
+                    : await protocol.getStandardDerivationPath(),
+                bip39Passphrase: protocolWrapper.isChecked ? this.bip39Passphrase : '',
+                isActive: protocolWrapper.isChecked
+              }
+            })
+          )
         )
         .then(() => {
           this.navigationService
@@ -217,5 +221,9 @@ export class AccountAddPage {
     } else {
       addAccount()
     }
+  }
+
+  public goToIsolatedModule(): void {
+    this.navigationService.route('/isolated-modules-list').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 }
