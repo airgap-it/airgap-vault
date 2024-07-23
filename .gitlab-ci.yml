@@ -93,9 +93,9 @@ build_ios:
     - nvm use 18
     - npm install --legacy-peer-deps
     - npm run apply-diagnostic-modules # manually remove unused cordova-diagnostic-plugin modules
-    - npm run ionic info
-    - npm run ionic build --prod
-    - npm run cap sync ios
+    - npx ionic info
+    - npx ionic  build --prod
+    - npx cap sync ios
     - xcodebuild -workspace ios/App/App.xcworkspace -scheme "App" -destination generic/platform=iOS -configuration Release archive -archivePath ios/airgap-vault-$VERSION-$CI_PIPELINE_ID.xcarchive MARKETING_VERSION=$VERSION CURRENT_PROJECT_VERSION=$CI_PIPELINE_ID -allowProvisioningUpdates
   artifacts:
     paths:
