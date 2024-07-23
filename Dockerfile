@@ -31,6 +31,7 @@ WORKDIR /app
 COPY install-build-deps.js /app
 COPY install-test-deps.js /app
 COPY package.json /app
+COPY package-lock.json /app
 COPY yarn.lock /app
 COPY apply-diagnostic-modules.js /app
 COPY patch-dependency-versions.js /app
