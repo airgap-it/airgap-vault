@@ -14,14 +14,14 @@ ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 RUN mkdir /app
 WORKDIR /app
 
-RUN yarn cache clean --force && yarn global add n && n 20
+RUN npm cache clean -f && npm i -g n && n 20
 
 # Install app dependencies, using wildcard if package-lock exists and copy capacitor configs and ionic configs
-COPY package.json yarn.lock apply-diagnostic-modules.js patch-dependency-versions.js fix-qrscanner-gradle.js capacitor.config.ts ionic.config.json copy-builtin-modules.js /app/
+COPY package.json package-lock.json yarn.lock apply-diagnostic-modules.js patch-dependency-versions.js fix-qrscanner-gradle.js capacitor.config.ts ionic.config.json copy-builtin-modules.js /app/
 
 # install dependencies
 # run ionic android build
-RUN yarn install --frozen-lockfile && mkdir www && ionic info
+RUN npm install --legacy-peer-deps && mkdir www && ionic info
 
 # Bundle app source
 COPY . /app
@@ -42,11 +42,11 @@ RUN sed -i -e "s/versionCode 1/versionCode $BUILD_NR/g" /app/android/app/build.g
 # this has nothing to do with debug!!!:
 # copy release-apk
 # sign using debug key
-RUN yarn prepare-prod-build \
-    && yarn apply-diagnostic-modules \
-    && yarn jetifier \
-    && yarn ionic build --prod \
-    && yarn cap sync android \
+RUN npm run prepare-prod-build \
+    && npm run apply-diagnostic-modules \
+    && npm run jetifier \
+    && npx ionic build --prod \
+    && npx cap sync android \
     && echo y | sdkmanager --sdk_root=${ANDROID_SDK_ROOT} --update \
     && /app/android/gradlew --project-dir /app/android clean \
     && /app/android/gradlew --project-dir /app/android build \
