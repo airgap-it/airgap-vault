@@ -44,7 +44,7 @@ RUN sed -i -e "s/versionCode 1/versionCode $BUILD_NR/g" /app/android/app/build.g
 # sign using debug key
 RUN npm run prepare-prod-build \
     && npm run apply-diagnostic-modules \
-    && npm run jetifier \
+    && npx jetifier \
     && npx ionic build --prod \
     && npx cap sync android \
     && echo y | sdkmanager --sdk_root=${ANDROID_SDK_ROOT} --update \
