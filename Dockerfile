@@ -48,9 +48,6 @@ RUN npm install node-static -g
 # Bundle app source
 COPY . /app
 
-# browserify coin-lib
-RUN npm run browserify-coinlib
-
 # set to production
 RUN export NODE_ENV=production
 
