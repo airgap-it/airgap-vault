@@ -132,7 +132,6 @@
 		504EC2FB1FED79650016851F = {
 			isa = PBXGroup;
 			children = (
-				77FC92442C4FABC500C7ACEC /* ViewController.swift */,
 				504EC3061FED79650016851F /* App */,
 				504EC3051FED79650016851F /* Products */,
 				7F8756D8B27F46E3366F6CEA /* Pods */,
@@ -163,6 +162,7 @@
 				50379B222058CBB4000EE86E /* capacitor.config.json */,
 				88F9F14523D059AE008351D0 /* App-Bridging-Header.h */,
 				504EC3071FED79650016851F /* AppDelegate.swift */,
+				77FC92442C4FABC500C7ACEC /* ViewController.swift */,
 				504EC30B1FED79650016851F /* Main.storyboard */,
 				504EC30E1FED79650016851F /* Assets.xcassets */,
 				504EC3101FED79650016851F /* LaunchScreen.storyboard */,
@@ -670,8 +670,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airgap-it/airgap-sapling";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.0.7;
+				kind = exactVersion;
+				version = 0.0.7;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

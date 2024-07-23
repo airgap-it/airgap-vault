@@ -18,8 +18,8 @@ class ViewController: CAPBridgeViewController {
     
     override open func capacitorDidLoad() {
             bridge?.registerPluginInstance(AppInfo())
-            bridge?.registerPluginInstance(Camera())
-            bridge?.registerPluginInstance(Enviroment())
+            bridge?.registerPluginInstance(CameraPreview())
+            bridge?.registerPluginInstance(Environment())
             bridge?.registerPluginInstance(Zip())
             bridge?.registerPluginInstance(IsolatedModules())
             bridge?.registerPluginInstance(SaplingNative())
