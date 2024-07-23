@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -16,6 +16,7 @@
 		504EC30D1FED79650016851F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC30B1FED79650016851F /* Main.storyboard */; };
 		504EC30F1FED79650016851F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 504EC30E1FED79650016851F /* Assets.xcassets */; };
 		504EC3121FED79650016851F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC3101FED79650016851F /* LaunchScreen.storyboard */; };
+		77FC92452C4FABC500C7ACEC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77FC92442C4FABC500C7ACEC /* ViewController.swift */; };
 		885F55E825EE224200D85A88 /* SaplingNative.m in Sources */ = {isa = PBXBuildFile; fileRef = 885F55E725EE224200D85A88 /* SaplingNative.m */; };
 		885F55EB25EE226300D85A88 /* SaplingNative.swift in Sources */ = {isa = PBXBuildFile; fileRef = 885F55EA25EE226300D85A88 /* SaplingNative.swift */; };
 		888556902721A9EC009A831D /* public in Resources */ = {isa = PBXBuildFile; fileRef = 8885568F2721A9EC009A831D /* public */; };
@@ -64,6 +65,7 @@
 		504EC30E1FED79650016851F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		504EC3111FED79650016851F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		504EC3131FED79650016851F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		77FC92442C4FABC500C7ACEC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		885F55E725EE224200D85A88 /* SaplingNative.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SaplingNative.m; sourceTree = "<group>"; };
 		885F55EA25EE226300D85A88 /* SaplingNative.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaplingNative.swift; sourceTree = "<group>"; };
 		8885568F2721A9EC009A831D /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 		504EC2FB1FED79650016851F = {
 			isa = PBXGroup;
 			children = (
+				77FC92442C4FABC500C7ACEC /* ViewController.swift */,
 				504EC3061FED79650016851F /* App */,
 				504EC3051FED79650016851F /* Products */,
 				7F8756D8B27F46E3366F6CEA /* Pods */,
@@ -431,6 +434,7 @@
 				88F9F15623D06A76008351D0 /* CameraPreview.m in Sources */,
 				A33BA9E528D9C4EF00BD8015 /* JS.swift in Sources */,
 				88AE2EF523D5DC5100428560 /* LocalAuthentication.swift in Sources */,
+				77FC92452C4FABC500C7ACEC /* ViewController.swift in Sources */,
 				A357ED09299BD8EA00EDCA39 /* Filesystem.swift in Sources */,
 				A3CE61BE2993DF43009216A2 /* ModuleManifest.swift in Sources */,
 				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
