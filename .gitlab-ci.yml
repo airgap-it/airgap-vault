@@ -24,8 +24,8 @@ build_ionic:
 unit:
   stage: test
   script:
-    - docker run --name unit-$CI_COMMIT_SHA $GOOGLE_TAG yarn test-ci
-    - docker run --name lint-$CI_COMMIT_SHA $GOOGLE_TAG yarn lint-ci
+    - docker run --name unit-$CI_COMMIT_SHA $GOOGLE_TAG npm run test-ci
+    - docker run --name lint-$CI_COMMIT_SHA $GOOGLE_TAG npm run lint-ci
     - docker cp unit-$CI_COMMIT_SHA:/app/src/coverage/report-lcov/lcov.info lcov.info
     - docker cp lint-$CI_COMMIT_SHA:/app/lintReport.json lintReport.json
   after_script:
@@ -61,7 +61,7 @@ build_android:
 # qa:
 #   stage: qa
 #   script:
-#     - docker create --name qa-$CI_PIPELINE_ID $GOOGLE_TAG yarn sonar-scanner -- -X
+#     - docker create --name qa-$CI_PIPELINE_ID $GOOGLE_TAG npm run sonar-scanner -- -X
 #       -Dsonar.typescript.lcov.reportPaths=lcov.info
 #       -Dsonar.typescript.tslint.reportPaths=lintReport.json
 #       -Dsonar.test.inclusions=**/*.spec.ts
@@ -89,13 +89,13 @@ build_ios:
     - echo "$IOS_BUILD_JSON" > build.json
   script:
     - export DEVELOPER_DIR=$XCODE_PATH
-    - nvm use 20
-    - yarn install --frozen-lockfile
-    - yarn prepare-prod-build
-    - yarn apply-diagnostic-modules # manually remove unused cordova-diagnostic-plugin modules
-    - yarn ionic info
-    - yarn ionic build --prod
-    - yarn cap sync ios
+    - nvm install 18
+    - nvm use 18
+    - npm install --legacy-peer-deps
+    - npm run apply-diagnostic-modules # manually remove unused cordova-diagnostic-plugin modules
+    - npm run ionic info
+    - npm run ionic build --prod
+    - npm run cap sync ios
     - xcodebuild -workspace ios/App/App.xcworkspace -scheme "App" -destination generic/platform=iOS -configuration Release archive -archivePath ios/airgap-vault-$VERSION-$CI_PIPELINE_ID.xcarchive MARKETING_VERSION=$VERSION CURRENT_PROJECT_VERSION=$CI_PIPELINE_ID -allowProvisioningUpdates
   artifacts:
     paths:
