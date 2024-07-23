@@ -37,7 +37,7 @@ COPY patch-dependency-versions.js /app
 COPY fix-qrscanner-gradle.js /app
 COPY copy-builtin-modules.js /app
 
-RUN bom run install-test-dependencies
+RUN npm run install-test-dependencies
 
 # install dependencies
 RUN npm install --legacy-peer-deps
