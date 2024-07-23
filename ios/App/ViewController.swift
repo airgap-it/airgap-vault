@@ -16,6 +16,16 @@ class ViewController: CAPBridgeViewController {
         // Do any additional setup after loading the view.
     }
     
+    override open func capacitorDidLoad() {
+            bridge?.registerPluginInstance(AppInfo())
+            bridge?.registerPluginInstance(Camera())
+            bridge?.registerPluginInstance(Enviroment())
+            bridge?.registerPluginInstance(Zip())
+            bridge?.registerPluginInstance(IsolatedModules())
+            bridge?.registerPluginInstance(SaplingNative())
+            bridge?.registerPluginInstance(SecurityUtils())
+        }
+    
 
     /*
     // MARK: - Navigation
