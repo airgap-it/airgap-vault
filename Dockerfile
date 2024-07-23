@@ -7,8 +7,8 @@ RUN apt-get install -yq git
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 40976EAF437D05B5
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32
 RUN echo "deb http://us-west-2.ec2.archive.ubuntu.com/ubuntu/ trusty multiverse \
-deb http://us-west-2.ec2.archive.ubuntu.com/ubuntu/ trusty-updates multiverse \
-deb http://us-west-2.ec2.archive.ubuntu.com/ubuntu/ trusty-backports main restricted universe multiverse" | tee /etc/apt/sources.list.d/multiverse.list
+  deb http://us-west-2.ec2.archive.ubuntu.com/ubuntu/ trusty-updates multiverse \
+  deb http://us-west-2.ec2.archive.ubuntu.com/ubuntu/ trusty-backports main restricted universe multiverse" | tee /etc/apt/sources.list.d/multiverse.list
 
 # Install latest chrome dev package and fonts to support major charsets (Chinese, Japanese, Arabic, Hebrew, Thai and a few others)
 # Note: this installs the necessary libs to make the bundled version of Chromium that Puppeteer
@@ -37,21 +37,24 @@ COPY patch-dependency-versions.js /app
 COPY fix-qrscanner-gradle.js /app
 COPY copy-builtin-modules.js /app
 
-RUN yarn install-test-dependencies
+RUN bom run install-test-dependencies
 
 # install dependencies
-RUN yarn install
+RUN npm install --legacy-peer-deps
 
 # install static webserver
-RUN yarn global add node-static
+RUN npm install node-static -g
 
 # Bundle app source
 COPY . /app
+
+# browserify coin-lib
+RUN npm run browserify-coinlib
 
 # set to production
 RUN export NODE_ENV=production
 
 # build
-RUN yarn build:prod
+RUN npm run build:prod
 
 CMD ["static", "-p", "8100", "-a", "0.0.0.0", "www"]
