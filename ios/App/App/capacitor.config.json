@@ -11,5 +11,15 @@
 	},
 	"server": {
 		"androidScheme": "http"
-	}
+	},
+	"packageClassList": [
+		"AppPlugin",
+		"AppLauncherPlugin",
+		"ClipboardPlugin",
+		"FilesystemPlugin",
+		"SplashScreenPlugin",
+		"StatusBarPlugin",
+		"FilePickerPlugin",
+		"CDVPlugin"
+	]
 }
