@@ -29,17 +29,17 @@
     "@airgap/serializer" "^0.13.30"
     "@stablelib/ed25519" "^1.0.3"
 
-"@airgap/angular-core@0.0.47-beta.0":
-  "integrity" "sha512-0WtED4rD2tbxq8P3H1Gjs596T0F85IcWHPj0AAvCdmamln3YloouDTF9Dg3adERLzNZ8nDKwamfqnq+LlvoVWg=="
-  "resolved" "https://registry.npmjs.org/@airgap/angular-core/-/angular-core-0.0.47-beta.0.tgz"
-  "version" "0.0.47-beta.0"
+"@airgap/angular-core@0.0.47-beta.1":
+  "integrity" "sha512-rlchITM3E3TbV7NzXxxmXPk+RdYbu0rL6VfeHo/grX8C1/mL9pMJxJK3ZK4Wjksn0mJMajbq/5lCdwuFjJ3qjg=="
+  "resolved" "https://registry.npmjs.org/@airgap/angular-core/-/angular-core-0.0.47-beta.1.tgz"
+  "version" "0.0.47-beta.1"
   dependencies:
     "tslib" "^2.3.0"
 
-"@airgap/angular-ngrx@0.0.47-beta.0":
-  "integrity" "sha512-8txeBlOIKSvvCaidEDdb4lU1OuyKJezSFjmqlDBOwcqPn6h9zY+yodhXwXO+Gps9rXbHKDspmnCdsO6OS7qbLg=="
-  "resolved" "https://registry.npmjs.org/@airgap/angular-ngrx/-/angular-ngrx-0.0.47-beta.0.tgz"
-  "version" "0.0.47-beta.0"
+"@airgap/angular-ngrx@0.0.47-beta.1":
+  "integrity" "sha512-AfaZzhwttPJuP7cNPXp4gvmWWnzVQlP3netfz7jbZp7Yls3m2hz6gfXqWgeG9HH6rf3y06DM4W5g2ibN5W3e8g=="
+  "resolved" "https://registry.npmjs.org/@airgap/angular-ngrx/-/angular-ngrx-0.0.47-beta.1.tgz"
+  "version" "0.0.47-beta.1"
   dependencies:
     "tslib" "^2.3.0"
 
