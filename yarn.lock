@@ -1626,6 +1626,11 @@
   "resolved" "https://registry.npmjs.org/@download/blockies/-/blockies-1.0.3.tgz"
   "version" "1.0.3"
 
+"@esbuild/linux-x64@0.17.19":
+  "integrity" "sha512-68ngA9lg2H6zkZcyp22tsVt38mlhWde8l3eJLWkyLrp4HwMUr3c1s/M2t7+kHIhvMjglIBrFpncX1SzMckomGw=="
+  "resolved" "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.17.19.tgz"
+  "version" "0.17.19"
+
 "@ethereumjs/common@^2.6.0", "@ethereumjs/common@^2.6.4", "@ethereumjs/common@2.6.5":
   "integrity" "sha512-lRyVQOeCDaIVtgfbowla32pzeDv2Obr8oR8Put5RdUBNRGr1VGPGQNGP6elWIpgK3YdpzqTOh4GyUGOureVeeA=="
   "resolved" "https://registry.npmjs.org/@ethereumjs/common/-/common-2.6.5.tgz"
@@ -1831,7 +1836,17 @@
     "fs-extra" "^9.0.0"
     "tslib" "^2.0.1"
 
-"@ionic/utils-fs@^3.1.7", "@ionic/utils-fs@3.1.7":
+"@ionic/utils-fs@^3.1.7":
+  "integrity" "sha512-2EknRvMVfhnyhL1VhFkSLa5gOcycK91VnjfrTB0kbqkTFCOXyXgVLI5whzq7SLrgD9t1aqos3lMMQyVzaQ5gVA=="
+  "resolved" "https://registry.npmjs.org/@ionic/utils-fs/-/utils-fs-3.1.7.tgz"
+  "version" "3.1.7"
+  dependencies:
+    "@types/fs-extra" "^8.0.0"
+    "debug" "^4.0.0"
+    "fs-extra" "^9.0.0"
+    "tslib" "^2.0.1"
+
+"@ionic/utils-fs@3.1.7":
   "integrity" "sha512-2EknRvMVfhnyhL1VhFkSLa5gOcycK91VnjfrTB0kbqkTFCOXyXgVLI5whzq7SLrgD9t1aqos3lMMQyVzaQ5gVA=="
   "resolved" "https://registry.npmjs.org/@ionic/utils-fs/-/utils-fs-3.1.7.tgz"
   "version" "3.1.7"
@@ -1948,7 +1963,22 @@
     "untildify" "^4.0.0"
     "wrap-ansi" "^7.0.0"
 
-"@ionic/utils-terminal@^2.3.4", "@ionic/utils-terminal@2.3.4":
+"@ionic/utils-terminal@^2.3.4":
+  "integrity" "sha512-cEiMFl3jklE0sW60r8JHH3ijFTwh/jkdEKWbylSyExQwZ8pPuwoXz7gpkWoJRLuoRHHSvg+wzNYyPJazIHfoJA=="
+  "resolved" "https://registry.npmjs.org/@ionic/utils-terminal/-/utils-terminal-2.3.4.tgz"
+  "version" "2.3.4"
+  dependencies:
+    "@types/slice-ansi" "^4.0.0"
+    "debug" "^4.0.0"
+    "signal-exit" "^3.0.3"
+    "slice-ansi" "^4.0.0"
+    "string-width" "^4.1.0"
+    "strip-ansi" "^6.0.0"
+    "tslib" "^2.0.1"
+    "untildify" "^4.0.0"
+    "wrap-ansi" "^7.0.0"
+
+"@ionic/utils-terminal@2.3.4":
   "integrity" "sha512-cEiMFl3jklE0sW60r8JHH3ijFTwh/jkdEKWbylSyExQwZ8pPuwoXz7gpkWoJRLuoRHHSvg+wzNYyPJazIHfoJA=="
   "resolved" "https://registry.npmjs.org/@ionic/utils-terminal/-/utils-terminal-2.3.4.tgz"
   "version" "2.3.4"
@@ -9640,7 +9670,7 @@
   "resolved" "https://registry.npmjs.org/tslib/-/tslib-2.6.1.tgz"
   "version" "2.6.1"
 
-"tslib@^2.0.1", "tslib@^2.4.0":
+"tslib@^2.0.1", "tslib@^2.6.2":
   "integrity" "sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ=="
   "resolved" "https://registry.npmjs.org/tslib/-/tslib-2.6.3.tgz"
   "version" "2.6.3"
@@ -9655,7 +9685,7 @@
   "resolved" "https://registry.npmjs.org/tslib/-/tslib-2.6.1.tgz"
   "version" "2.6.1"
 
-"tslib@^2.6.2":
+"tslib@^2.4.0":
   "integrity" "sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ=="
   "resolved" "https://registry.npmjs.org/tslib/-/tslib-2.6.3.tgz"
   "version" "2.6.3"
