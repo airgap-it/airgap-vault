@@ -19,8 +19,8 @@ import { ICPModule } from '@airgap/icp'
 import { MoonbeamModule } from '@airgap/moonbeam'
 import { OptimismModule } from '@airgap/optimism'
 import { PolkadotModule } from '@airgap/polkadot'
-import { AcurastModule } from '@airgap/acurast'
 import { TezosModule, TezosSaplingExternalMethodProvider, TezosShieldedTezProtocol } from '@airgap/tezos'
+import { AcurastModule } from '@airgap/acurast'
 import { HttpClient } from '@angular/common/http'
 import { AfterViewInit, Component, Inject, NgZone } from '@angular/core'
 import { AppPlugin, URLOpenListenerEvent } from '@capacitor/app'
@@ -172,7 +172,6 @@ export class AppComponent implements AfterViewInit {
 
   private async initializeProtocols(): Promise<void> {
     this.moduleService.init([
-      new AcurastModule(),
       new BitcoinModule(),
       new EthereumModule(),
       new TezosModule(),
@@ -184,7 +183,8 @@ export class AppComponent implements AfterViewInit {
       new AstarModule(),
       new ICPModule(),
       new CoreumModule(),
-      new OptimismModule()
+      new OptimismModule(),
+      new AcurastModule()
     ])
     const protocols = await this.moduleService.loadProtocols('offline', [MainProtocolSymbols.XTZ_SHIELDED])
 
