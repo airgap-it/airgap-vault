@@ -11,12 +11,7 @@ import {
   UiEventElementsService,
   UiEventService
 } from '@airgap/angular-core'
-import {
-  AirGapWallet,
-  AirGapWalletStatus,
-  MainProtocolSymbols,
-  UnsignedTransaction
-} from '@airgap/coinlib-core'
+import { AirGapWallet, AirGapWalletStatus, MainProtocolSymbols, UnsignedTransaction } from '@airgap/coinlib-core'
 import { Inject, Injectable } from '@angular/core'
 
 import { SignTransactionInfo } from '../../models/sign-transaction-info'
@@ -210,7 +205,10 @@ export class IACService extends BaseIACService {
     }
 
     // ETH: MetaMask requests don't contain the public key information, we need to do the matching based on the sourceFingerprint
-    if (!correctWallet && (signTransactionRequest.protocol === MainProtocolSymbols.ETH || signTransactionRequest.protocol === MainProtocolSymbols.OPTIMISM)) {
+    if (
+      !correctWallet &&
+      (signTransactionRequest.protocol === MainProtocolSymbols.ETH || signTransactionRequest.protocol === MainProtocolSymbols.OPTIMISM)
+    ) {
       const transaction: RawTypedEthereumTransaction = unsignedTransaction.transaction
 
       const fingerprint = transaction.masterFingerprint ?? metadata.sourceFingerprint
