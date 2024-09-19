@@ -706,7 +706,7 @@
     "psbt": {
       "title": "Select Account",
       "heading": "Please select an account to sign this PSBT with",
-      "placeholder": "Search by identifier"
+      "placeholder": "Search by label"
     }
   },
   "unsigned-transaction": {

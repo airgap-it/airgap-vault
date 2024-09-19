@@ -18,7 +18,6 @@ export class SelectAccountPage {
   public placeholder: string
 
   public wallets: AirGapWallet[]
-  public labels: string[]
   public symbolFilter: MainProtocolSymbols | undefined
 
   constructor(
@@ -39,6 +38,7 @@ export class SelectAccountPage {
         secrets.map((secret) =>
           Promise.all(
             secret.wallets.map(async (wallet: AirGapWallet) => {
+              wallet.label = secret.label
               return wallet.status === AirGapWalletStatus.ACTIVE &&
                 (!this.symbolFilter || (await wallet.protocol.getIdentifier()) === this.symbolFilter)
                 ? wallet
@@ -49,10 +49,6 @@ export class SelectAccountPage {
       )
 
       this.wallets = flattened(wallets).filter((wallet: AirGapWallet | undefined) => wallet !== undefined)
-      this.labels = secrets.map((secret) => {
-        console.log(secret.label)
-        return secret.label
-      })
     })
   }
 
