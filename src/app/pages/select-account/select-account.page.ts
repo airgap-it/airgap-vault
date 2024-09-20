@@ -34,13 +34,19 @@ export class SelectAccountPage {
     this.placeholder = this.translateService.instant(`select-account.${type}.placeholder`)
 
     this.secretsService.getSecretsObservable().subscribe(async (secrets: MnemonicSecret[]) => {
-      const wallets: (AirGapWallet | undefined)[][] = await Promise.all(secrets.map((secret) => Promise.all(
-        secret.wallets.map(async (wallet: AirGapWallet) => {
-          return wallet.status === AirGapWalletStatus.ACTIVE && (!this.symbolFilter || (await wallet.protocol.getIdentifier() === this.symbolFilter))
-            ? wallet
-            : undefined
-          })
-      )))
+      const wallets: (AirGapWallet | undefined)[][] = await Promise.all(
+        secrets.map((secret) =>
+          Promise.all(
+            secret.wallets.map(async (wallet: AirGapWallet) => {
+              wallet.label = secret.label
+              return wallet.status === AirGapWalletStatus.ACTIVE &&
+                (!this.symbolFilter || (await wallet.protocol.getIdentifier()) === this.symbolFilter)
+                ? wallet
+                : undefined
+            })
+          )
+        )
+      )
 
       this.wallets = flattened(wallets).filter((wallet: AirGapWallet | undefined) => wallet !== undefined)
     })
@@ -48,7 +54,7 @@ export class SelectAccountPage {
 
   public async setWallet(wallet: AirGapWallet) {
     this.modalController
-      .dismiss(this.navParams.get('type') === 'message-signing' ? (await wallet.protocol.getIdentifier()) : wallet) // TODO: change to always return wallet, but it will require a change wherever the "message-signing" is used
+      .dismiss(this.navParams.get('type') === 'message-signing' ? await wallet.protocol.getIdentifier() : wallet) // TODO: change to always return wallet, but it will require a change wherever the "message-signing" is used
       .catch((err) => console.error(err))
   }
 

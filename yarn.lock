@@ -7,69 +7,69 @@
   resolved "https://registry.npmjs.org/@airgap-community/iso-rootstock/-/iso-rootstock-1.0.0.tgz"
   integrity sha512-jFgw0rLjkqzfu2eimJmmHjW+Ms9c+BcPQqjy8kL/vu0/t6ZH/wSe+bym20KV/GeG42EjuajlBd9lcQ7+FBfoTA==
 
-"@airgap/acurast@0.13.32":
-  version "0.13.32"
-  resolved "https://registry.npmjs.org/@airgap/acurast/-/acurast-0.13.32.tgz"
-  integrity sha512-OWpiNRAnsdOQ6P8B5GU+DQPON2zrGUa/p/NowB67n4uhtRumIM5ZnjLt7/QXRZO7naZdzet5B+NolwkKPAuccw==
+"@airgap/acurast@0.13.33":
+  version "0.13.33"
+  resolved "https://registry.npmjs.org/@airgap/acurast/-/acurast-0.13.33.tgz"
+  integrity sha512-XZl63J5F7iQBTJNsqDSvfHnB9Ki6BWQBbiB3l5mwJz0dsp/0SBDtMWbsQAMnsRirKUDU56hqOMuHRc7vYGO1EQ==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.32"
-    "@airgap/module-kit" "^0.13.32"
-    "@airgap/serializer" "^0.13.32"
-    "@airgap/substrate" "^0.13.32"
+    "@airgap/coinlib-core" "^0.13.33"
+    "@airgap/module-kit" "^0.13.33"
+    "@airgap/serializer" "^0.13.33"
+    "@airgap/substrate" "^0.13.33"
     "@polkadot/util" "2.0.1"
     "@polkadot/wasm-crypto" "0.20.1"
 
-"@airgap/aeternity@0.13.32":
-  version "0.13.32"
-  resolved "https://registry.npmjs.org/@airgap/aeternity/-/aeternity-0.13.32.tgz"
-  integrity sha512-J+Xbkb39l6UBMS/oEMF5AxfwLXhyeLfxW8Y+8NT9nVvKy57LUpVGkHvsJr+I7XGMEB9eZRTeUreUTYzNSRlN1w==
+"@airgap/aeternity@0.13.33":
+  version "0.13.33"
+  resolved "https://registry.npmjs.org/@airgap/aeternity/-/aeternity-0.13.33.tgz"
+  integrity sha512-f1Bq3gDGiBEyo+nCfybWb5viIH5eG0NILvGHLAgK29VHs4ryQ1184OnYrhMUsj6+eguhnxixiWy3J4GNdLhbrw==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.32"
-    "@airgap/module-kit" "^0.13.32"
-    "@airgap/serializer" "^0.13.32"
+    "@airgap/coinlib-core" "^0.13.33"
+    "@airgap/module-kit" "^0.13.33"
+    "@airgap/serializer" "^0.13.33"
     "@stablelib/ed25519" "^1.0.3"
 
-"@airgap/angular-core@0.0.48":
-  version "0.0.48"
-  resolved "https://registry.npmjs.org/@airgap/angular-core/-/angular-core-0.0.48.tgz"
-  integrity sha512-j3rK8AeW3ieQl+7Y/6n9ymHcLIUIxqAxtCRA7Xacgviq2jhehacU5rh3ZyP2Up8P64NsYieZirz6hbnmKistLA==
+"@airgap/angular-core@0.0.49":
+  version "0.0.49"
+  resolved "https://registry.npmjs.org/@airgap/angular-core/-/angular-core-0.0.49.tgz"
+  integrity sha512-eW6HnwwfmiFVuv6jElyZWLim9yCPjvgERDFzNiRYX5Qh7xCqYgErNvHn1Zi+cE+TfHtA88yyxh78Y3ljvCCRBA==
   dependencies:
     tslib "^2.3.0"
 
-"@airgap/angular-ngrx@0.0.48":
-  version "0.0.48"
-  resolved "https://registry.npmjs.org/@airgap/angular-ngrx/-/angular-ngrx-0.0.48.tgz"
-  integrity sha512-DassvxjYbWN3rPkkYIQhMXxzpiroCyIiOesoBcCgBL5xI2EQIv3jrlONTLNC5ReddP42U1y0/5W+mDo6PVHJDg==
+"@airgap/angular-ngrx@0.0.49":
+  version "0.0.49"
+  resolved "https://registry.npmjs.org/@airgap/angular-ngrx/-/angular-ngrx-0.0.49.tgz"
+  integrity sha512-bX1TFtZNwdV8uV16sbV29bRtf40XGqL8XF1tjM+dc61bg2JycdDuxYoq6GRkn/zkoAlFH/LM70Lu6mj2hqtTcw==
   dependencies:
     tslib "^2.3.0"
 
-"@airgap/astar@0.13.32":
-  version "0.13.32"
-  resolved "https://registry.npmjs.org/@airgap/astar/-/astar-0.13.32.tgz"
-  integrity sha512-YLBALVfol0VlbDS5GHsTQ8VpJMMRT/oHoUqSiYlS39/yUXvrpJWM2PwBRZ5NPxdl6QUinJheg8iiGflakQZWww==
+"@airgap/astar@0.13.33":
+  version "0.13.33"
+  resolved "https://registry.npmjs.org/@airgap/astar/-/astar-0.13.33.tgz"
+  integrity sha512-qiJc3Q+TmABXehwxO3X7TdBRUId9AgfSDT7Dgxp5IYcBo3uq+99bVflCffWISH9u7UQFt4l21/4nbfj9cyOC5A==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.32"
-    "@airgap/module-kit" "^0.13.32"
-    "@airgap/serializer" "^0.13.32"
-    "@airgap/substrate" "^0.13.32"
+    "@airgap/coinlib-core" "^0.13.33"
+    "@airgap/module-kit" "^0.13.33"
+    "@airgap/serializer" "^0.13.33"
+    "@airgap/substrate" "^0.13.33"
     "@polkadot/util" "2.0.1"
     "@polkadot/wasm-crypto" "0.20.1"
 
-"@airgap/bitcoin@^0.13.32", "@airgap/bitcoin@0.13.32":
-  version "0.13.32"
-  resolved "https://registry.npmjs.org/@airgap/bitcoin/-/bitcoin-0.13.32.tgz"
-  integrity sha512-qTXDR7bAPIYXvh7jDihix0blriULCBSokpb1mKbQEiweXV6O9CdOUFPgS6gpiH4pKdrAyXcTYkusS4KjlGngJw==
+"@airgap/bitcoin@^0.13.33", "@airgap/bitcoin@0.13.33":
+  version "0.13.33"
+  resolved "https://registry.npmjs.org/@airgap/bitcoin/-/bitcoin-0.13.33.tgz"
+  integrity sha512-mRv1wCiibqiy7HTUFMCUVvfOOfjK/8kdyTn6UN52dUhxxqkg2vpFKo95XmZ7/NqTDjwow4L+KAb5c14iq0V+hg==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.32"
-    "@airgap/crypto" "^0.13.32"
-    "@airgap/module-kit" "^0.13.32"
-    "@airgap/serializer" "^0.13.32"
+    "@airgap/coinlib-core" "^0.13.33"
+    "@airgap/crypto" "^0.13.33"
+    "@airgap/module-kit" "^0.13.33"
+    "@airgap/serializer" "^0.13.33"
     bitcoinjs-lib "5.2.0"
 
-"@airgap/coinlib-core@^0.13.32", "@airgap/coinlib-core@0.13.32":
-  version "0.13.32"
-  resolved "https://registry.npmjs.org/@airgap/coinlib-core/-/coinlib-core-0.13.32.tgz"
-  integrity sha512-XyVpqQYFHUdMKlSVrXSmITcSBahxy8stwS9AqTpL9WOWXbALFXdYLRm+j5GSiJK7I+MXV3fEjOvlO0fQBXv2tA==
+"@airgap/coinlib-core@^0.13.33", "@airgap/coinlib-core@0.13.33":
+  version "0.13.33"
+  resolved "https://registry.npmjs.org/@airgap/coinlib-core/-/coinlib-core-0.13.33.tgz"
+  integrity sha512-hWCI4EQyJgahry8eC+zZuNzoWD4+w+wVkcieEYuZ2TZH2hLLmECeyH1PgU3SRqWYykhm+edfa3n+AWJ9kifVWA==
   dependencies:
     "@stablelib/blake2b" "^1.0.1"
     "@stablelib/bytes" "^1.0.1"
@@ -79,81 +79,81 @@
     long "^5.2.0"
     protobufjs "^6.11.2"
 
-"@airgap/coreum@0.13.32":
-  version "0.13.32"
-  resolved "https://registry.npmjs.org/@airgap/coreum/-/coreum-0.13.32.tgz"
-  integrity sha512-yQ5Udr8lEkM8KfVAgSag1BWQsqH/nc47dwnYMYt3+bKkHBcrDzOoNZD6Chp7A+YJhAqvWpBbj2TI+71HELmCAw==
+"@airgap/coreum@0.13.33":
+  version "0.13.33"
+  resolved "https://registry.npmjs.org/@airgap/coreum/-/coreum-0.13.33.tgz"
+  integrity sha512-oeJxyDaMq5O7qQvcVvSHsYI4a0q2rYJnK2Ur7rjotOiQ+EUCy4km1RZ63Xtgq6f8MNnEcnkLDFGLhNv62PytDg==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.32"
-    "@airgap/cosmos-core" "^0.13.32"
-    "@airgap/crypto" "^0.13.32"
-    "@airgap/module-kit" "^0.13.32"
-    "@airgap/serializer" "^0.13.32"
+    "@airgap/coinlib-core" "^0.13.33"
+    "@airgap/cosmos-core" "^0.13.33"
+    "@airgap/crypto" "^0.13.33"
+    "@airgap/module-kit" "^0.13.33"
+    "@airgap/serializer" "^0.13.33"
 
-"@airgap/cosmos-core@^0.13.32", "@airgap/cosmos-core@0.13.32":
-  version "0.13.32"
-  resolved "https://registry.npmjs.org/@airgap/cosmos-core/-/cosmos-core-0.13.32.tgz"
-  integrity sha512-7LCAIDg2EWU09sT36bh+2PsF9AjxVZSMo2lhWOITzjXcNP5VSyy6DI08vwE7ieOR0VGZy3ThUpW8adqHRDstTw==
+"@airgap/cosmos-core@^0.13.33", "@airgap/cosmos-core@0.13.33":
+  version "0.13.33"
+  resolved "https://registry.npmjs.org/@airgap/cosmos-core/-/cosmos-core-0.13.33.tgz"
+  integrity sha512-LDoMVzROUSzpLZPeS+A6MwD1jyCkFa/62wffG92Ul2cK3aWLNlzeTo5b/7KjODLJBGYRzcpki/oClp11w9m5sw==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.32"
-    "@airgap/crypto" "^0.13.32"
-    "@airgap/module-kit" "^0.13.32"
-    "@airgap/serializer" "^0.13.32"
+    "@airgap/coinlib-core" "^0.13.33"
+    "@airgap/crypto" "^0.13.33"
+    "@airgap/module-kit" "^0.13.33"
+    "@airgap/serializer" "^0.13.33"
 
-"@airgap/cosmos@0.13.32":
-  version "0.13.32"
-  resolved "https://registry.npmjs.org/@airgap/cosmos/-/cosmos-0.13.32.tgz"
-  integrity sha512-rlm6qOMrAq6Smhr+CGvxSJC73FuGDTs+1QTRn2EDSqXDNaNbzgp639Xva7pC3ANOeL7pLIsplTPeKvHiRS9gng==
+"@airgap/cosmos@0.13.33":
+  version "0.13.33"
+  resolved "https://registry.npmjs.org/@airgap/cosmos/-/cosmos-0.13.33.tgz"
+  integrity sha512-/rrRvqKZXYeS4nLbeji6NhtNQAlbMjWpmCp5Lbh+238ojsmsm+7LzzNIreNX7CP+OcYJ/JM0+ol/0sMrXU/f4w==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.32"
-    "@airgap/cosmos-core" "^0.13.32"
-    "@airgap/crypto" "^0.13.32"
-    "@airgap/module-kit" "^0.13.32"
-    "@airgap/serializer" "^0.13.32"
+    "@airgap/coinlib-core" "^0.13.33"
+    "@airgap/cosmos-core" "^0.13.33"
+    "@airgap/crypto" "^0.13.33"
+    "@airgap/module-kit" "^0.13.33"
+    "@airgap/serializer" "^0.13.33"
 
-"@airgap/crypto@^0.13.32", "@airgap/crypto@0.13.32":
-  version "0.13.32"
-  resolved "https://registry.npmjs.org/@airgap/crypto/-/crypto-0.13.32.tgz"
-  integrity sha512-zOp0zs/N7iks8lPgmNStqlYoF1WGV29BkA6YWW5Y/mFyqdroserU6FsDZcmTBUiv3CLATHVe/mZNN4anUuklpA==
+"@airgap/crypto@^0.13.33", "@airgap/crypto@0.13.33":
+  version "0.13.33"
+  resolved "https://registry.npmjs.org/@airgap/crypto/-/crypto-0.13.33.tgz"
+  integrity sha512-ntP/AySYmOkg7KHOvPjdnTyG22LVzgn/X3og1rAAUr+2kQhLoEHfMXOAOdZjyli7c5n5AUCIuKbRb/xEw1KeXg==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.32"
-    "@airgap/module-kit" "^0.13.32"
+    "@airgap/coinlib-core" "^0.13.33"
+    "@airgap/module-kit" "^0.13.33"
     "@airgap/sapling-wasm" "^0.0.9"
     "@polkadot/wasm-crypto" "0.20.1"
     "@stablelib/hmac" "^1.0.1"
 
-"@airgap/ethereum@^0.13.32", "@airgap/ethereum@0.13.32":
-  version "0.13.32"
-  resolved "https://registry.npmjs.org/@airgap/ethereum/-/ethereum-0.13.32.tgz"
-  integrity sha512-7u0drCUB+X4Edtx0U4/hnwCT8HUw5cy7/JRZk1unmhhnlVtNee4AN8s5Xskq/8PkWaibqumveGg1p8lZs4upow==
+"@airgap/ethereum@^0.13.33", "@airgap/ethereum@0.13.33":
+  version "0.13.33"
+  resolved "https://registry.npmjs.org/@airgap/ethereum/-/ethereum-0.13.33.tgz"
+  integrity sha512-lOHwLWzClcjOiXuky4ytHOTGlFg9FzTQFvSpKR71qhd3uFCyK+n+5GPNoiYwQKZ53MQLl1S0lHozwQDdvx6Rnw==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.32"
-    "@airgap/crypto" "^0.13.32"
-    "@airgap/module-kit" "^0.13.32"
-    "@airgap/serializer" "^0.13.32"
+    "@airgap/coinlib-core" "^0.13.33"
+    "@airgap/crypto" "^0.13.33"
+    "@airgap/module-kit" "^0.13.33"
+    "@airgap/serializer" "^0.13.33"
     "@ethereumjs/common" "2.6.5"
     "@ethereumjs/tx" "3.4.0"
     "@metamask/eth-sig-util" "4.0.0"
 
-"@airgap/groestlcoin@0.13.32":
-  version "0.13.32"
-  resolved "https://registry.npmjs.org/@airgap/groestlcoin/-/groestlcoin-0.13.32.tgz"
-  integrity sha512-Z8lNRqfQjzB546diJIm+95vRJkuCGH112Xb5Z1GQEVSFaJ4O9YVAHucguqkSj61VhIJPPGseXRsa2gLHFCedDg==
+"@airgap/groestlcoin@0.13.33":
+  version "0.13.33"
+  resolved "https://registry.npmjs.org/@airgap/groestlcoin/-/groestlcoin-0.13.33.tgz"
+  integrity sha512-g3Ngt0LzwwxWN07SNrhoku/Y30nQVzRultg4s9K3eIitICdQGIwcDXjY5udnjLfKcTVxLKmQEPVVw8PdzelT9g==
   dependencies:
-    "@airgap/bitcoin" "^0.13.32"
-    "@airgap/coinlib-core" "^0.13.32"
-    "@airgap/module-kit" "^0.13.32"
-    "@airgap/serializer" "^0.13.32"
+    "@airgap/bitcoin" "^0.13.33"
+    "@airgap/coinlib-core" "^0.13.33"
+    "@airgap/module-kit" "^0.13.33"
+    "@airgap/serializer" "^0.13.33"
 
-"@airgap/icp@0.13.32":
-  version "0.13.32"
-  resolved "https://registry.npmjs.org/@airgap/icp/-/icp-0.13.32.tgz"
-  integrity sha512-GPTZpA/DTYLW6F354lgmMV/jnizpyjSMyWL0H+B2Hw2Xus6n5JiJcdqhkWcJBaY2amQCgm/IIx+krnuaAGmOAA==
+"@airgap/icp@0.13.33":
+  version "0.13.33"
+  resolved "https://registry.npmjs.org/@airgap/icp/-/icp-0.13.33.tgz"
+  integrity sha512-FVWMyajzTo0I2dsrN7yXPK0P9A+/uPi/kDjc/RM9Blc49koCi20FS7JjLUMZwoHy++u2eVWDgaFzNnKZk0Zd7A==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.32"
-    "@airgap/crypto" "^0.13.32"
-    "@airgap/module-kit" "^0.13.32"
-    "@airgap/serializer" "^0.13.32"
+    "@airgap/coinlib-core" "^0.13.33"
+    "@airgap/crypto" "^0.13.33"
+    "@airgap/module-kit" "^0.13.33"
+    "@airgap/serializer" "^0.13.33"
     "@dfinity/agent" "^0.15.4"
     "@dfinity/identity-secp256k1" "^0.15.4"
     "@dfinity/nns" "^0.14.0"
@@ -167,44 +167,44 @@
     secp256k1 "^5.0.0"
     simple-cbor "^0.4.1"
 
-"@airgap/module-kit@^0.13.32", "@airgap/module-kit@0.13.32":
-  version "0.13.32"
-  resolved "https://registry.npmjs.org/@airgap/module-kit/-/module-kit-0.13.32.tgz"
-  integrity sha512-XoMGP0QO/VIY0doMZpo3kMKte1x0y7J3VmGqzbJN0MWsufB9J59+iNeYnqCaDaf0jZpHn11N9pTV4IQBpzNStg==
+"@airgap/module-kit@^0.13.33", "@airgap/module-kit@0.13.33":
+  version "0.13.33"
+  resolved "https://registry.npmjs.org/@airgap/module-kit/-/module-kit-0.13.33.tgz"
+  integrity sha512-cC2w50FgBKTD3iJrA9+P2YpOkMybsB1wFdLRUnPllqPlkpJPQXGXwAAg1ayLtx3SDcXROFjtZLRIysuzDC0/Tg==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.32"
-    "@airgap/serializer" "^0.13.32"
+    "@airgap/coinlib-core" "^0.13.33"
+    "@airgap/serializer" "^0.13.33"
 
-"@airgap/moonbeam@0.13.32":
-  version "0.13.32"
-  resolved "https://registry.npmjs.org/@airgap/moonbeam/-/moonbeam-0.13.32.tgz"
-  integrity sha512-qK24pe6WbXnZVzSmdUXFFwo8oz3rZj+/JqtRrHsWd6RnDgGd4J3Hbv6xT0K+HUtiXkW8Mf8UE/JS98HDjitAvg==
+"@airgap/moonbeam@0.13.33":
+  version "0.13.33"
+  resolved "https://registry.npmjs.org/@airgap/moonbeam/-/moonbeam-0.13.33.tgz"
+  integrity sha512-gdADGk/peBCZb+Drrn/9nj1qwYZKaNLNljGqfCa8XgdmRKgajLUp6Q6vs6vWhZB+Ao/AyDEhs7CX63Po43lu8g==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.32"
-    "@airgap/module-kit" "^0.13.32"
-    "@airgap/serializer" "^0.13.32"
-    "@airgap/substrate" "^0.13.32"
+    "@airgap/coinlib-core" "^0.13.33"
+    "@airgap/module-kit" "^0.13.33"
+    "@airgap/serializer" "^0.13.33"
+    "@airgap/substrate" "^0.13.33"
 
-"@airgap/optimism@0.13.32":
-  version "0.13.32"
-  resolved "https://registry.npmjs.org/@airgap/optimism/-/optimism-0.13.32.tgz"
-  integrity sha512-pwm+daXmmx4jxJdLHTMXwGsQL+4FEZx3ULJ0Ch+AXucw/RlygD26FFIujHPN1+BlJzX4bv2HEWpqomwEcfZ5fw==
+"@airgap/optimism@0.13.33":
+  version "0.13.33"
+  resolved "https://registry.npmjs.org/@airgap/optimism/-/optimism-0.13.33.tgz"
+  integrity sha512-s9VbTpO5TFKuGj7U9P5RAcwxjqZIkOGGNWbTeq2JRqDJpcEv9VTtEb1jk9anWxHOvagR++cp+EfpW96IilZFyQ==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.32"
-    "@airgap/crypto" "^0.13.32"
-    "@airgap/ethereum" "^0.13.32"
-    "@airgap/module-kit" "^0.13.32"
-    "@airgap/serializer" "^0.13.32"
+    "@airgap/coinlib-core" "^0.13.33"
+    "@airgap/crypto" "^0.13.33"
+    "@airgap/ethereum" "^0.13.33"
+    "@airgap/module-kit" "^0.13.33"
+    "@airgap/serializer" "^0.13.33"
     "@ethereumjs/tx" "3.4.0"
 
-"@airgap/polkadot@0.13.32":
-  version "0.13.32"
-  resolved "https://registry.npmjs.org/@airgap/polkadot/-/polkadot-0.13.32.tgz"
-  integrity sha512-K8Trd5pErHtQsoTqPWGg7P4EQOxw68r4cdmIiHRkc/bmFmlbJErHA3CvTygd1D1PgB8wbYdFXTpvN87ZSSdp6A==
+"@airgap/polkadot@0.13.33":
+  version "0.13.33"
+  resolved "https://registry.npmjs.org/@airgap/polkadot/-/polkadot-0.13.33.tgz"
+  integrity sha512-XS+pDOKEtbZK4b8SM0su+eHm9tSW7QWX2A5V25sZirCx/k7SHCxHoB7JXZ4Sv4eEvXwpeiEaGe67M5IgrPIb+g==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.32"
-    "@airgap/module-kit" "^0.13.32"
-    "@airgap/substrate" "^0.13.32"
+    "@airgap/coinlib-core" "^0.13.33"
+    "@airgap/module-kit" "^0.13.33"
+    "@airgap/substrate" "^0.13.33"
 
 "@airgap/sapling-wasm@^0.0.9":
   version "0.0.9"
@@ -216,35 +216,35 @@
   resolved "https://registry.npmjs.org/@airgap/sapling-wasm/-/sapling-wasm-0.0.7.tgz"
   integrity sha512-IMODbGPTBYKuO5ztiHX9C1PTlhqZvmVWv7m7zj5+VMcbBxrk4+jBAf7FYTH5l+IUsNMaHBOuh8Qq3A1b/pm7jQ==
 
-"@airgap/serializer@^0.13.32", "@airgap/serializer@0.13.32":
-  version "0.13.32"
-  resolved "https://registry.npmjs.org/@airgap/serializer/-/serializer-0.13.32.tgz"
-  integrity sha512-lDimVe7CwH+vAi5NZM0o7QeWDZ9g9zy+qYFZdaodw3+tTLu7dzq8oVQNNBPeu/55ltD3heXUsRzzcadKQmeiXg==
+"@airgap/serializer@^0.13.33", "@airgap/serializer@0.13.33":
+  version "0.13.33"
+  resolved "https://registry.npmjs.org/@airgap/serializer/-/serializer-0.13.33.tgz"
+  integrity sha512-R/zsThH9csPh4cV8/CsY9R2R7VZ6h6SwyDXN1mrMOFROpEC2oNOVj7iEYJDd9xL9xBD9Idf8iSa3KSE3TsKAwQ==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.32"
+    "@airgap/coinlib-core" "^0.13.33"
 
-"@airgap/substrate@^0.13.32", "@airgap/substrate@0.13.32":
-  version "0.13.32"
-  resolved "https://registry.npmjs.org/@airgap/substrate/-/substrate-0.13.32.tgz"
-  integrity sha512-Bn6xsVLetUTwX6G6VHQHKX6flTiK2Tndaw9TBsL43Y4QVojO4z1ujBVQ/nf4ukbN1SKGRDEvJXYPDVmco5rd9g==
+"@airgap/substrate@^0.13.33", "@airgap/substrate@0.13.33":
+  version "0.13.33"
+  resolved "https://registry.npmjs.org/@airgap/substrate/-/substrate-0.13.33.tgz"
+  integrity sha512-kVUElPxlz1LzqMHEc7O1W1X03vmf7GEDDswnIo8I/DN8S2Mnlrh19t4ki/r24/a7B+ki96+hTdK1l3juczmrhw==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.32"
-    "@airgap/crypto" "^0.13.32"
-    "@airgap/module-kit" "^0.13.32"
-    "@airgap/serializer" "^0.13.32"
+    "@airgap/coinlib-core" "^0.13.33"
+    "@airgap/crypto" "^0.13.33"
+    "@airgap/module-kit" "^0.13.33"
+    "@airgap/serializer" "^0.13.33"
     "@polkadot/util" "2.0.1"
     "@polkadot/wasm-crypto" "0.20.1"
 
-"@airgap/tezos@0.13.32":
-  version "0.13.32"
-  resolved "https://registry.npmjs.org/@airgap/tezos/-/tezos-0.13.32.tgz"
-  integrity sha512-iZaA8bh9JaFPZVz1xBIB3CdjSL2QSlDJiOX84mD4N2ChElnzVN3AyaSuvHM9KqUbXrAIfNIvgkeCiLGucWAyQQ==
+"@airgap/tezos@0.13.33":
+  version "0.13.33"
+  resolved "https://registry.npmjs.org/@airgap/tezos/-/tezos-0.13.33.tgz"
+  integrity sha512-xrKPmK/dO/L/6fM6Wrmhj84UeZ65r0AXh6MtywTkcvGvW/AYx3bFGE3TWrdDlIWYZmYxfvZRXaHBSEaZtJcgGw==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.32"
-    "@airgap/crypto" "^0.13.32"
-    "@airgap/module-kit" "^0.13.32"
+    "@airgap/coinlib-core" "^0.13.33"
+    "@airgap/crypto" "^0.13.33"
+    "@airgap/module-kit" "^0.13.33"
     "@airgap/sapling-wasm" "0.0.7"
-    "@airgap/serializer" "^0.13.32"
+    "@airgap/serializer" "^0.13.33"
     "@stablelib/blake2b" "^1.0.1"
     "@stablelib/ed25519" "^1.0.3"
     "@stablelib/nacl" "^1.0.4"
@@ -1625,6 +1625,11 @@
   version "1.0.3"
   resolved "https://registry.npmjs.org/@download/blockies/-/blockies-1.0.3.tgz"
   integrity sha512-iGDh2M6pFuXg9kyW+U//963LKylSLFpLG5hZvUppCjhkiDwsYquQPyamxCQlLASYySS3gGKAki2eWG9qIHKCew==
+
+"@esbuild/darwin-arm64@0.17.19":
+  version "0.17.19"
+  resolved "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-0.17.19.tgz"
+  integrity sha512-80wEoCfF/hFKM6WE1FyBHc9SfUblloAWx6FJkFWTWiCoht9Mc0ARGEM47e67W9rI09YoUxJL68WHfDRYEAvOhg==
 
 "@ethereumjs/common@^2.6.0", "@ethereumjs/common@^2.6.4", "@ethereumjs/common@2.6.5":
   version "2.6.5"
