@@ -44,7 +44,9 @@ export class SecretItemComponent implements OnInit {
 
     this.getWalletsFromSecret()
 
-    this.lifehashData = await this.lifehashService.generateLifehash(this.secret.fingerprint)
+    const bytes = new Uint8Array(this.secret.fingerprint.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)))
+
+    this.lifehashData = await this.lifehashService.generateLifehash(bytes)
   }
 
   public async getWalletsFromSecret() {
