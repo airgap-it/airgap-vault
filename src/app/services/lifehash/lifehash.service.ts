@@ -7,7 +7,7 @@ import { LifeHash, LifeHashVersion } from 'lifehash'
 export class LifehashService {
   constructor() {}
 
-  public async generateLifehash(str: string) {
+  public async generateLifehash(str: string | Uint8Array) {
     const image = LifeHash.makeFrom(str, LifeHashVersion.version2, 1, true)
     return image.toDataUrl()
   }
