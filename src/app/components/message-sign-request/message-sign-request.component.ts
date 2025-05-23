@@ -35,6 +35,7 @@ export class MessageSignRequestComponent {
   @Input()
   set messages(messages: { data: string; blake2bHash?: string }[]) {
     this._messages = messages.map((message) => {
+      console.log(message)
       const data = this.hexToReadable(message.data)
       return { ...message, data }
     })
