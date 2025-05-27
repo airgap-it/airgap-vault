@@ -475,27 +475,29 @@ export class DeserializedDetailEffects {
   }
 
   private async generateTransactionIACMessages(transactions: DeserializedSignedTransaction[]): Promise<IACMessageDefinitionObjectV3[]> {
-    const signResponses: IACMessageDefinitionObjectV3[] = await Promise.all(transactions.map(
-      async (transaction: DeserializedSignedTransaction): Promise<IACMessageDefinitionObjectV3> => ({
-        id: transaction.id,
-        protocol: transaction.originalProtocolIdentifier ?? await transaction.wallet.protocol.getIdentifier(),
-        type: IACMessageType.TransactionSignResponse,
-        payload: {
-          accountIdentifier: transaction.data.accountIdentifier,
-          transaction: transaction.data.transaction,
-          from: flattenAirGapTxAddresses(transaction.details, 'from'),
-          to: flattenAirGapTxAddresses(transaction.details, 'to'),
-          amount: sumAirGapTxValues(transaction.details, 'amount'),
-          fee: sumAirGapTxValues(transaction.details, 'fee')
-        } as any
-        // Before splitting coinlib and introducing v1 protocols, payload was a union of all known messages, protocol specific transactions included.
-        // The common interface defined for the transactions specifies only the `accountIdentifier` and `transaction` fields, the rest seen in the above structure
-        // comes from the signed Bitcoin transaction. The changes introduced for v1 protocols simplified the type of `payload` by removing the protocol specific
-        // messages from the union, basing the type only on the common interface. Because of that, the above no longer compiles unless forced to, therefore `as any`
-        // had to be applied.
-        // !!! This should be adressed and improved during the v0 -> v1 migration !!!
-      })
-    ))
+    const signResponses: IACMessageDefinitionObjectV3[] = await Promise.all(
+      transactions.map(
+        async (transaction: DeserializedSignedTransaction): Promise<IACMessageDefinitionObjectV3> => ({
+          id: transaction.id,
+          protocol: transaction.originalProtocolIdentifier ?? (await transaction.wallet.protocol.getIdentifier()),
+          type: IACMessageType.TransactionSignResponse,
+          payload: {
+            accountIdentifier: transaction.data.accountIdentifier,
+            transaction: transaction.data.transaction,
+            from: flattenAirGapTxAddresses(transaction.details, 'from'),
+            to: flattenAirGapTxAddresses(transaction.details, 'to'),
+            amount: sumAirGapTxValues(transaction.details, 'amount'),
+            fee: sumAirGapTxValues(transaction.details, 'fee')
+          } as any
+          // Before splitting coinlib and introducing v1 protocols, payload was a union of all known messages, protocol specific transactions included.
+          // The common interface defined for the transactions specifies only the `accountIdentifier` and `transaction` fields, the rest seen in the above structure
+          // comes from the signed Bitcoin transaction. The changes introduced for v1 protocols simplified the type of `payload` by removing the protocol specific
+          // messages from the union, basing the type only on the common interface. Because of that, the above no longer compiles unless forced to, therefore `as any`
+          // had to be applied.
+          // !!! This should be adressed and improved during the v0 -> v1 migration !!!
+        })
+      )
+    )
     return signResponses
   }
 
@@ -535,14 +537,16 @@ export class DeserializedDetailEffects {
     if (protocolIdentifier === MainProtocolSymbols.XTZ) {
       try {
         const saplingAdapter: ICoinProtocolAdapter<TezosSaplingProtocol> = await this.getSaplingProtocol()
-        const txDetails: IAirGapTransaction[] = await saplingAdapter.getTransactionDetails(transaction, { transactionOwner: protocolIdentifier })
+        const txDetails: IAirGapTransaction[] = await saplingAdapter.getTransactionDetails(transaction, {
+          transactionOwner: protocolIdentifier
+        })
         const recipients: string[] = txDetails
           .map((details) => details.to)
           .reduce((flatten: string[], next: string[]) => flatten.concat(next), [])
 
         // TODO: find better way to check if `transaction` is a Sapling transaction
         return recipients.some((recipient: string) => recipient.startsWith('zet') || recipient.toLocaleLowerCase() === 'shielded pool')
-      } catch(error) {
+      } catch (error) {
         console.error(error)
         return false
       }

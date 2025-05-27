@@ -8,7 +8,6 @@
 </ion-header>
 
 <ion-content class="deserialized-content ion-padding">
-
   <ng-container *ngIf="signingWallet !== undefined">
     <p [innerHTML]="'deserialized-detail.signing_account' | translate: { secretLabel: secretLabel}"></p>
     <airgap-account-item [wallet]="signingWallet"></airgap-account-item>

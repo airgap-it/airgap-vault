@@ -1,4 +1,11 @@
-import { assertNever, UIAction, UIActionStatus, UiEventService, UIResource, UIResourceStatus } from '@airgap/angular-core'
+import {
+  assertNever,
+  UIAction,
+  UIActionStatus,
+  UiEventService,
+  UIResource,
+  UIResourceStatus
+} from '@airgap/angular-core'
 import { AirGapWallet, IAirGapTransaction, ProtocolSymbols } from '@airgap/coinlib-core'
 import { Component, OnDestroy } from '@angular/core'
 import { ModalController } from '@ionic/angular'
@@ -130,13 +137,11 @@ export class DeserializedDetailPage implements OnDestroy {
 
       return this.modalElement
         .onWillDismiss()
-        .then(
-          (data: OverlayEventDetail<unknown>): Promise<void> => {
-            this.store.dispatch(actions.modalDismissed({ id: modal.id }))
+        .then((data: OverlayEventDetail<unknown>): Promise<void> => {
+          this.store.dispatch(actions.modalDismissed({ id: modal.id }))
 
-            return onDismissAction(data)
-          }
-        )
+          return onDismissAction(data)
+        })
         .catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
     } else {
       this.modalElement = undefined
