@@ -1,11 +1,4 @@
-import {
-  assertNever,
-  UIAction,
-  UIActionStatus,
-  UiEventService,
-  UIResource,
-  UIResourceStatus
-} from '@airgap/angular-core'
+import { assertNever, UIAction, UIActionStatus, UiEventService, UIResource, UIResourceStatus } from '@airgap/angular-core'
 import { AirGapWallet, IAirGapTransaction, ProtocolSymbols } from '@airgap/coinlib-core'
 import { Component, OnDestroy } from '@angular/core'
 import { ModalController } from '@ionic/angular'

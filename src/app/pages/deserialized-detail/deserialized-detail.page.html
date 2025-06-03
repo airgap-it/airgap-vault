@@ -15,7 +15,7 @@
 
   <ng-container *ngIf="(mode$ | async) === Mode.SIGN_TRANSACTION">
     <ng-container *ngIf="(transactionsDetails$ | async).status === UIResourceStatus.SUCCESS">
-      <airgap-transaction [airGapTxs]="(transactionsDetails$ | async).value"></airgap-transaction>
+      <airgap-transaction [airGapTxs]="(transactionsDetails$ | async).value" [rawdata]="(rawData$ | async).value"></airgap-transaction>
     </ng-container>
 
     <ion-grid
