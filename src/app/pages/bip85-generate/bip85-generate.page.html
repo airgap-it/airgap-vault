@@ -20,21 +20,35 @@
       </ion-select>
     </ion-item>
 
-    <ion-item lines="none">
-      <ion-label>{{ 'bip85-generate.index' | translate }}</ion-label>
-      <ion-select [(ngModel)]="index">
-        <ion-select-option value="0">0</ion-select-option>
-        <ion-select-option value="1">1</ion-select-option>
-        <ion-select-option value="2">2</ion-select-option>
-        <ion-select-option value="3">3</ion-select-option>
-        <ion-select-option value="4">4</ion-select-option>
-        <ion-select-option value="5">5</ion-select-option>
-        <ion-select-option value="6">6</ion-select-option>
-        <ion-select-option value="7">7</ion-select-option>
-        <ion-select-option value="8">8</ion-select-option>
-        <ion-select-option value="9">9</ion-select-option>
-      </ion-select>
+    <ion-item *ngIf="(isAppAdvancedMode$ | async); else indexSelect" lines="none">
+      <ion-label>{{ 'bip85-generate.bip85-input-app-advance-mode' | translate }}</ion-label>
+      <ion-input
+        class="input_index"
+        slot="end"
+        type="number"
+        (ionBlur)="onIndexBlur($event)"
+        [(ngModel)]="index"
+        inputmode="numeric"
+        placeholder="0 - 2147483647"
+      ></ion-input>
     </ion-item>
+    <ng-template #indexSelect>
+      <ion-item lines="none" #indexSelect>
+        <ion-label>{{ 'bip85-generate.index' | translate }}</ion-label>
+        <ion-select [(ngModel)]="index">
+          <ion-select-option value="0">0</ion-select-option>
+          <ion-select-option value="1">1</ion-select-option>
+          <ion-select-option value="2">2</ion-select-option>
+          <ion-select-option value="3">3</ion-select-option>
+          <ion-select-option value="4">4</ion-select-option>
+          <ion-select-option value="5">5</ion-select-option>
+          <ion-select-option value="6">6</ion-select-option>
+          <ion-select-option value="7">7</ion-select-option>
+          <ion-select-option value="8">8</ion-select-option>
+          <ion-select-option value="9">9</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ng-template>
   </ion-list>
   <ion-list>
     <ion-item lines="none">

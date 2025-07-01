@@ -666,6 +666,7 @@
       "text": "BIP85 vous permet de dériver en toute sécurité un nouveau mnémonique à partir de votre mnémonique principal. Tant que vous avez accès à votre mnémonique principal, vous pourrez toujours régénérer vos mnémoniques enfants.",
       "mnemonic-length": "Longueur mnémonique",
       "index": "Indice",
+      "bip85-input-app-advance-mode":"Indice (0-2147483647)",
       "generate": "Générer",
       "advanced_label": "Mode avancé",
       "bip39-passphrase": "Phrase secrète BIP-39",
