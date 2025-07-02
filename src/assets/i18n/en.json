@@ -670,6 +670,7 @@
     "advanced_label": "Advanced Mode",
     "bip39-passphrase": "BIP-39 Passphrase",
     "bip39-passphrase-reveal": "Reveal Passphrase",
+    "bip85-input-app-advance-mode":"Index (0-2147483647)",
     "alert": {
       "header": "BIP-39 Passphrase",
       "message": "You set a BIP39 Passphrase. You will need to enter this passphrase again when you try to derive the same child key!",
