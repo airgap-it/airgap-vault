@@ -7,7 +7,7 @@ const rootdir = './'
 const assetsdir = path.join(rootdir, 'src/assets')
 const airgapModules = [
   // { path: path.join(rootdir, 'node_modules/@airgap/aeternity') },
-  // { 
+  // {
   //   path: path.join(rootdir, 'node_modules/@airgap/astar'),
   //   jsenv: {
   //     android: 'webview'
@@ -15,47 +15,45 @@ const airgapModules = [
   // },
   // { path: path.join(rootdir, 'node_modules/@airgap/bitcoin') },
   // { path: path.join(rootdir, 'node_modules/@airgap/cosmos') },
-  // { 
+  // {
   //   path: path.join(rootdir, 'node_modules/@airgap/ethereum'),
   //   jsenv: {
   //     android: 'webview'
   //   }
   // },
   // { path: path.join(rootdir, 'node_modules/@airgap/groestlcoin') },
-  // { 
+  // {
   //   path: path.join(rootdir, 'node_modules/@airgap/icp'),
   //   jsenv: {
   //     android: 'webview'
   //   }
   // },
-  // { 
+  // {
   //   path: path.join(rootdir, 'node_modules/@airgap/moonbeam'),
   //   jsenv: {
   //     android: 'webview'
   //   }
   // },
-  // { 
+  // {
   //   path: path.join(rootdir, 'node_modules/@airgap/optimism'),
   //   jsenv: {
   //     android: 'webview'
   //   }
   // },
-  // { 
+  // {
   //   path: path.join(rootdir, 'node_modules/@airgap/polkadot'),
   //   jsenv: {
   //     android: 'webview'
   //   }
   // },
-  // { 
+  // {
   //   path: path.join(rootdir, 'node_modules/@airgap/tezos'),
   //   jsenv: {
   //     android: 'webview'
   //   }
   // }
 ]
-const communityModules = [
-  { path: path.join(rootdir, 'node_modules/@airgap-community/iso-rootstock') }
-]
+const communityModules = [{ path: path.join(rootdir, 'node_modules/@airgap-community/iso-rootstock') }]
 
 function createAirGapModule(module) {
   const packageJson = require(`./${path.join(module.path, 'package.json')}`)
@@ -69,19 +67,16 @@ function createAirGapModule(module) {
     .bundle()
     .pipe(fs.createWriteStream(path.join(outputDir, outputFile)))
 
-
   const manifest = {
     name: packageJson.name,
     version: packageJson.version,
     author: packageJson.author,
-    publicKey: "" /* TODO */,
-    description: "",
+    publicKey: '' /* TODO */,
+    description: '',
     src: {
       namespace
     },
-    include: [
-      outputFile
-    ],
+    include: [outputFile],
     jsenv: module.jsenv
   }
 
@@ -111,7 +106,10 @@ function copyCommunityModule(module) {
 
     const symbolPath = value.slice(7)
     const symbolExtension = symbolPath.split('.').slice(-1)
-    fs.copyFileSync(path.join(module.path, symbolPath), path.join(rootdir, 'node_modules/@airgap/angular-core/src/assets/symbols', `${key}.${symbolExtension}`))
+    fs.copyFileSync(
+      path.join(module.path, symbolPath),
+      path.join(rootdir, 'node_modules/@airgap/angular-core/src/assets/symbols', `${key}.${symbolExtension}`)
+    )
   })
 }
 
