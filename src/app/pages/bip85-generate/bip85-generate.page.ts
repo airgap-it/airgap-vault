@@ -4,6 +4,9 @@ import { TranslateService } from '@ngx-translate/core'
 import { MnemonicSecret } from 'src/app/models/secret'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
+import { AdvancedModeType, VaultStorageKey, VaultStorageService } from '../../services/storage/storage.service'
+import { Observable } from 'rxjs'
+import { map } from 'rxjs/operators'
 
 @Component({
   selector: 'airgap-bip85-generate',
@@ -20,11 +23,15 @@ export class Bip85GeneratePage {
   public isAdvancedMode: boolean = false
   public revealBip39Passphrase: boolean = false
   public bip39Passphrase: string = ''
+  public isAppAdvancedMode$: Observable<boolean> = this.storageService
+    .subscribe(VaultStorageKey.ADVANCED_MODE_TYPE)
+    .pipe(map((res) => res === AdvancedModeType.ADVANCED))
 
   constructor(
     private readonly navigationService: NavigationService,
     private readonly alertController: AlertController,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    private readonly storageService: VaultStorageService
   ) {
     if (this.navigationService.getState()) {
       this.secret = this.navigationService.getState().secret
@@ -65,6 +72,22 @@ export class Bip85GeneratePage {
     } else {
       this.navigateToNextPage()
     }
+  }
+
+  public onIndexBlur(_event: any): void {
+    let value = Number(this.index)
+    if (isNaN(value)) {
+      this.index = '0'
+      return
+    }
+
+    if (value > 2147483647) {
+      value = 2147483647
+    } else if (value < 0) {
+      value = 0
+    }
+
+    this.index = value.toString()
   }
 
   private async navigateToNextPage() {

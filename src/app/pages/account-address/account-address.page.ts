@@ -67,10 +67,18 @@ const rabby = {
   qrType: QRType.METAMASK
 }
 
+export const superherowallet = {
+  icon: 'superhero-wallet.png',
+  name: 'Superhero Wallet',
+  qrType: QRType.V3,
+  urlScheme: 'superhero'
+}
+
 export interface CompanionApp {
   icon: string
   name: string
   qrType: QRType
+  urlScheme?: string
 }
 
 @Component({
@@ -148,6 +156,9 @@ export class AccountAddressPage {
           } else {
             this.showMetaMaskMigrationOnboarding = true
           }
+          break
+        case MainProtocolSymbols.AE:
+          this.syncOptions = [airgapwallet, superherowallet]
           break
 
         default:

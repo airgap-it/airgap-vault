@@ -666,6 +666,7 @@
     "text": "BIP85 允许您安全地从主助记词中派生出新助记词。只要您有权访问主助记词，您就始终能够重新生成子助记词。",
     "mnemonic-length": "助记符长度",
     "index": "指数",
+    "bip85-input-app-advance-mode":"指数 (0-2147483647)",
     "generate": "生成",
     "advanced_label": "高级模式",
     "bip39-passphrase": "BIP-39 密码",
