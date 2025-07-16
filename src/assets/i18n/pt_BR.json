@@ -666,6 +666,7 @@
     "text": "O BIP85 permite derivar com segurança um novo mnemônico do seu mnemônico principal. Contanto que você tenha acesso ao seu mnemônico principal, você sempre poderá gerar novamente os mnemônicos de seu filho.",
     "mnemonic-length": "Comprimento mnemônico",
     "index": "Índice",
+    "bip85-input-app-advance-mode":"Indice (0-2147483647)",
     "generate": "Gerar",
     "advanced_label": "Modo avançado",
     "bip39-passphrase": "BIP-39 Passphrase",

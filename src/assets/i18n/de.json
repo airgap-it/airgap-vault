@@ -666,6 +666,7 @@
     "text": "BIP85 allows you to securely derive a new mnemonic out of your main mnemonic. As long as you have access to your main mnemonic, you will always be able to re-generate your child mnemonics.",
     "mnemonic-length": "Mnemonic Length",
     "index": "Index",
+    "bip85-input-app-advance-mode":"Index (0-2147483647)",
     "generate": "Generate",
     "advanced_label": "Advanced Mode",
     "bip39-passphrase": "BIP-39 Passphrase",

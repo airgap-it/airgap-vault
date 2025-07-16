@@ -15,6 +15,9 @@ export class TransactionComponent implements OnInit {
   @Input()
   public airGapTxs: IAirGapTransaction[] | undefined
 
+  @Input()
+  public rawdata: string | undefined
+
   public protocolIdentifier$: Observable<ProtocolSymbols | undefined>
   public airGapTxs$: Observable<IAirGapTransaction[]>
   public aggregatedDetails$: Observable<AggregatedDetails | undefined>

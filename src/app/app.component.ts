@@ -21,6 +21,7 @@ import { OptimismModule } from '@airgap/optimism'
 import { PolkadotModule } from '@airgap/polkadot'
 import { TezosModule, TezosSaplingExternalMethodProvider, TezosShieldedTezProtocol } from '@airgap/tezos'
 import { AcurastModule } from '@airgap/acurast'
+import { StellarModule } from '@airgap/stellar'
 import { HttpClient } from '@angular/common/http'
 import { AfterViewInit, Component, Inject, NgZone } from '@angular/core'
 import { AppPlugin, URLOpenListenerEvent } from '@capacitor/app'
@@ -184,7 +185,8 @@ export class AppComponent implements AfterViewInit {
       new ICPModule(),
       new CoreumModule(),
       new OptimismModule(),
-      new AcurastModule()
+      new AcurastModule(),
+      new StellarModule()
     ])
     const protocols = await this.moduleService.loadProtocols('offline', [MainProtocolSymbols.XTZ_SHIELDED])
 

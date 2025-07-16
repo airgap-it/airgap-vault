@@ -1,3 +1,11 @@
 ion-content {
   --padding-bottom: var(--ion-padding, 64px);
 }
+
+.input_index {
+  background-color: white;
+  color: black;
+  max-width: 120px;
+  text-align: right;
+  border-radius: 5px;
+}

@@ -29,6 +29,7 @@ export class SignedTransactionComponent {
         totalFees: BigNumber
       }
     | undefined
+  public interactionData: string
 
   constructor(
     private readonly protocolService: ProtocolService,
@@ -65,6 +66,9 @@ export class SignedTransactionComponent {
                   transactionOwner: signedTx.protocol
                 })
               } else {
+                if (signedTx.protocol === MainProtocolSymbols.STELLAR) {
+                  this.interactionData = payload.transaction
+                }
                 return protocol.getTransactionDetailsFromSigned(payload)
               }
             })
