@@ -1,4 +1,6 @@
-import { BIP32Interface, fromBase58, fromSeed } from 'bip32'
+import { BIP32Factory, BIP32Interface } from 'bip32'
+import * as ecc from '@bitcoinerlab/secp256k1'
+
 import { validateMnemonic, entropyToMnemonic, mnemonicToSeedSync } from 'bip39'
 import { BIP85Child } from './BIP85Child'
 
@@ -116,7 +118,7 @@ export class BIP85 {
 
   derive(path: string, bytesLength: number = 64): string {
     const childNode: BIP32Interface = this.node.derivePath(path)
-    const childPrivateKey: Buffer = childNode.privateKey! // Child derived from root key always has private key
+    const childPrivateKey = Buffer.from(childNode.privateKey!) // Child derived from root key always has private key
 
     const hash: Buffer = hmacSHA512(Buffer.from(BIP85_KEY), childPrivateKey)
     const truncatedHash: Buffer = hash.slice(0, bytesLength)
@@ -127,7 +129,9 @@ export class BIP85 {
   }
 
   static fromBase58(bip32seed: string): BIP85 {
-    const node: BIP32Interface = fromBase58(bip32seed)
+    const bip32 = BIP32Factory(ecc)
+
+    const node: BIP32Interface = bip32.fromBase58(bip32seed)
     if (node.depth !== 0) {
       throw new Error('Expected master, got child')
     }
@@ -136,7 +140,9 @@ export class BIP85 {
   }
 
   static fromSeed(bip32seed: Buffer): BIP85 {
-    const node: BIP32Interface = fromSeed(bip32seed)
+    const bip32 = BIP32Factory(ecc)
+
+    const node: BIP32Interface = bip32.fromSeed(new Uint8Array(bip32seed))
     if (node.depth !== 0) {
       throw new Error('Expected master, got child')
     }

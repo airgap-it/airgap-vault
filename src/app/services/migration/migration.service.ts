@@ -1,6 +1,7 @@
 import { AirGapWallet, AirGapWalletStatus } from '@airgap/coinlib-core'
 import { Injectable } from '@angular/core'
-import { BIP32Interface, fromSeed } from 'bip32'
+import { BIP32Factory, BIP32Interface } from 'bip32'
+import * as ecc from '@bitcoinerlab/secp256k1'
 import { entropyToMnemonic, mnemonicToSeed } from 'bip39'
 
 import { MnemonicSecret } from '../../models/secret'
@@ -13,6 +14,7 @@ import { SecretsService } from '../secrets/secrets.service'
   providedIn: 'root'
 })
 export class MigrationService {
+  private readonly bip32 = BIP32Factory(ecc)
   constructor(private readonly secretsService: SecretsService, private readonly navigationService: NavigationService) {}
 
   public async runSecretsMigration(secrets: MnemonicSecret[]): Promise<void> {
@@ -74,21 +76,23 @@ export class MigrationService {
       return [secrets, true]
     }
 
-    const migratedSecrets: (MnemonicSecret | undefined)[] = await Promise.all(secrets.map(async (secret: MnemonicSecret) => {
-      if (!secret.fingerprint) {
-        return undefined
-      }
+    const migratedSecrets: (MnemonicSecret | undefined)[] = await Promise.all(
+      secrets.map(async (secret: MnemonicSecret) => {
+        if (!secret.fingerprint) {
+          return undefined
+        }
 
-      const [migratedWallets]: [AirGapWallet[], boolean] = this.filterMigratedWallets(secret.wallets)
-      if (migratedWallets.length === 0) {
-        return undefined
-      }
+        const [migratedWallets]: [AirGapWallet[], boolean] = this.filterMigratedWallets(secret.wallets)
+        if (migratedWallets.length === 0) {
+          return undefined
+        }
 
-      const newSecret: MnemonicSecret = MnemonicSecret.init(secret)
-      newSecret.wallets = migratedWallets
+        const newSecret: MnemonicSecret = MnemonicSecret.init(secret)
+        newSecret.wallets = migratedWallets
 
-      return newSecret
-    }))
+        return newSecret
+      })
+    )
 
     // create a new array of migrated secrets with filtered wallets
     return [migratedSecrets.filter((secret: MnemonicSecret | undefined) => secret !== undefined), false]
@@ -112,8 +116,8 @@ export class MigrationService {
       }
 
       const seed: Buffer = await mnemonicToSeed(mnemonic)
-      const bip32Node: BIP32Interface = fromSeed(seed)
-      const fingerprint: string = bip32Node.fingerprint.toString('hex')
+      const bip32Node: BIP32Interface = this.bip32.fromSeed(new Uint8Array(seed))
+      const fingerprint: string = Buffer.from(bip32Node.fingerprint).toString('hex')
 
       secret.fingerprint = fingerprint
     }
@@ -165,8 +169,8 @@ export class MigrationService {
     }
 
     const seed: Buffer = await mnemonicToSeed(mnemonic, resolvedOptions.bip39Passphrase)
-    const bip32Node: BIP32Interface = fromSeed(seed)
-    const fingerprint: string = bip32Node.fingerprint.toString('hex')
+    const bip32Node: BIP32Interface = this.bip32.fromSeed(new Uint8Array(seed))
+    const fingerprint: string = Buffer.from(bip32Node.fingerprint).toString('hex')
 
     wallet.masterFingerprint = fingerprint
     wallet.status = AirGapWalletStatus.ACTIVE

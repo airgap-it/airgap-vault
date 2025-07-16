@@ -1,9 +1,12 @@
 import { encode } from 'wif'
-import { fromPrivateKey } from 'bip32'
+import { BIP32Factory } from 'bip32'
+import * as ecc from '@bitcoinerlab/secp256k1'
 import { entropyToMnemonic } from 'bip39'
 import { BIP85_APPLICATIONS } from './BIP85'
 
 export class BIP85Child {
+  private readonly bip32 = BIP32Factory(ecc)
+
   constructor(private readonly entropy: string, private readonly type: BIP85_APPLICATIONS) {}
 
   toEntropy(): string {
@@ -40,6 +43,6 @@ export class BIP85Child {
     const chainCode = Buffer.from(this.entropy.slice(0, 64), 'hex')
     const privateKey = Buffer.from(this.entropy.slice(64, 128), 'hex')
 
-    return fromPrivateKey(privateKey, chainCode).toBase58()
+    return this.bip32.fromPrivateKey(new Uint8Array(privateKey), new Uint8Array(chainCode)).toBase58()
   }
 }

@@ -146,6 +146,7 @@ export class AccountAddressPage {
 
       switch (protocolIdentifier) {
         case MainProtocolSymbols.BTC_SEGWIT:
+        case MainProtocolSymbols.BTC_TAPROOT:
           this.syncOptions = [airgapwallet, bluewallet, sparrowwallet, specterwallet, nunchukwallet]
           break
         case MainProtocolSymbols.ETH:

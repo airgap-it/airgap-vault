@@ -9,7 +9,8 @@ import {
 } from '@airgap/coinlib-core'
 import { Injectable } from '@angular/core'
 import { AlertController, LoadingController } from '@ionic/angular'
-import * as bip32 from 'bip32'
+import { BIP32Factory, BIP32Interface } from 'bip32'
+import * as ecc from '@bitcoinerlab/secp256k1'
 import * as bip39 from 'bip39'
 import { Observable, ReplaySubject } from 'rxjs'
 
@@ -18,7 +19,6 @@ import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.
 import { NavigationService } from '../navigation/navigation.service'
 import { SecureStorage, SecureStorageService } from '../secure-storage/secure-storage.service'
 import { VaultStorageKey, VaultStorageService } from '../storage/storage.service'
-import * as bitcoinJS from 'bitcoinjs-lib'
 
 import * as bs58check from 'bs58check'
 import { TranslateService } from '@ngx-translate/core'
@@ -61,6 +61,7 @@ export class SecretsService {
   private readonly ready: Promise<void>
   private readonly secretsList: MnemonicSecret[] = []
   private activeSecret: MnemonicSecret
+  private bip32 = BIP32Factory(ecc)
 
   private readonly activeSecret$: ReplaySubject<MnemonicSecret> = new ReplaySubject(1)
   private readonly secrets$: ReplaySubject<MnemonicSecret[]> = new ReplaySubject(1)
@@ -274,15 +275,20 @@ export class SecretsService {
     return this.addOrUpdateSecret(secret)
   }
 
-  public async findWalletByPublicKeyAndProtocolIdentifier(pubKey: string, protocolIdentifier: ProtocolSymbols): Promise<AirGapWallet | undefined> {
+  public async findWalletByPublicKeyAndProtocolIdentifier(
+    pubKey: string,
+    protocolIdentifier: ProtocolSymbols
+  ): Promise<AirGapWallet | undefined> {
     const secret: MnemonicSecret | undefined = this.findByPublicKey(pubKey)
     if (!secret) {
       return undefined
     }
 
-    const filtered: (AirGapWallet | undefined)[] = await Promise.all(secret.wallets.map(async (wallet: AirGapWallet) => {
-      return wallet.publicKey === pubKey && (await wallet.protocol.getIdentifier()) === protocolIdentifier ? wallet : undefined
-    }))
+    const filtered: (AirGapWallet | undefined)[] = await Promise.all(
+      secret.wallets.map(async (wallet: AirGapWallet) => {
+        return wallet.publicKey === pubKey && (await wallet.protocol.getIdentifier()) === protocolIdentifier ? wallet : undefined
+      })
+    )
 
     return filtered.find((wallet: AirGapWallet | undefined) => wallet !== undefined)
   }
@@ -298,24 +304,26 @@ export class SecretsService {
       return undefined
     }
 
-    const filtered: (AirGapWallet | undefined)[] = await Promise.all(secret.wallets.map(async (wallet: AirGapWallet) => {
-      const match = wallet.masterFingerprint === fingerprint && (await wallet.protocol.getIdentifier()) === protocolIdentifier
-      if (match) {
-        if (!derivationPath.startsWith(wallet.derivationPath)) {
-          return undefined
+    const filtered: (AirGapWallet | undefined)[] = await Promise.all(
+      secret.wallets.map(async (wallet: AirGapWallet) => {
+        const match = wallet.masterFingerprint === fingerprint && (await wallet.protocol.getIdentifier()) === protocolIdentifier
+        if (match) {
+          if (!derivationPath.startsWith(wallet.derivationPath)) {
+            return undefined
+          }
+
+          // This uses the same logic to find child key as "sign" method in the BitcoinSegwitProtocol
+          const bip32PK = this.bip32.fromBase58(new ExtendedPublicKey(wallet.publicKey).toXpub())
+          const cutoffFrom = derivationPath.lastIndexOf("'") || derivationPath.lastIndexOf('h')
+          const childPath = derivationPath.substr(cutoffFrom + 2)
+          const walletPublicKey = bip32PK.derivePath(childPath).publicKey
+
+          return publicKey.equals(walletPublicKey) ? wallet : undefined
         }
 
-        // This uses the same logic to find child key as "sign" method in the BitcoinSegwitProtocol
-        const bip32PK = bitcoinJS.bip32.fromBase58(new ExtendedPublicKey(wallet.publicKey).toXpub())
-        const cutoffFrom = derivationPath.lastIndexOf("'") || derivationPath.lastIndexOf('h')
-        const childPath = derivationPath.substr(cutoffFrom + 2)
-        const walletPublicKey = bip32PK.derivePath(childPath).publicKey
-
-        return publicKey.equals(walletPublicKey) ? wallet : undefined
-      }
-
-      return undefined
-    }))
+        return undefined
+      })
+    )
 
     return filtered.find((wallet: AirGapWallet | undefined) => wallet !== undefined)
   }
@@ -337,33 +345,39 @@ export class SecretsService {
       this.secretsList
         .reduce((pv, cv) => pv.concat(cv.wallets), [] as AirGapWallet[])
         .map(async (wallet: AirGapWallet) => {
-          const match = wallet.isExtendedPublicKey && // Only extended public keys are relevant
-          (await wallet.protocol.getIdentifier()) === protocolIdentifier &&
-          `m/${derivationPath}`.startsWith(wallet.derivationPath) 
-          
+          const match =
+            wallet.isExtendedPublicKey && // Only extended public keys are relevant
+            (await wallet.protocol.getIdentifier()) === protocolIdentifier &&
+            `m/${derivationPath}`.startsWith(wallet.derivationPath)
+
           return match ? wallet : undefined
         })
     )
     const allWallets: AirGapWallet[] = filtered.filter((wallet: AirGapWallet | undefined) => wallet !== undefined)
 
     const foundWallet: AirGapWallet | undefined = allWallets.find((wallet: AirGapWallet) => {
-      const bip32PK = bitcoinJS.bip32.fromBase58(new ExtendedPublicKey(wallet.publicKey).toXpub())
+      const bip32PK = this.bip32.fromBase58(new ExtendedPublicKey(wallet.publicKey).toXpub())
 
-      return bip32PK.fingerprint.toString('hex') === sourceFingerprint
+      return Buffer.from(bip32PK.fingerprint).toString('hex') === sourceFingerprint
     })
 
     return foundWallet
   }
 
-  public async findBaseWalletByPublicKeyAndProtocolIdentifier(pubKey: string, protocolIdentifier: ProtocolSymbols): Promise<AirGapWallet | undefined> {
+  public async findBaseWalletByPublicKeyAndProtocolIdentifier(
+    pubKey: string,
+    protocolIdentifier: ProtocolSymbols
+  ): Promise<AirGapWallet | undefined> {
     const secret: MnemonicSecret | undefined = this.findByPublicKey(pubKey)
     if (!secret) {
       return undefined
     }
 
-    const filtered: (AirGapWallet | undefined)[] = await Promise.all(secret.wallets.map(async (wallet: AirGapWallet) => {
-      return wallet.publicKey === pubKey && protocolIdentifier.startsWith(await wallet.protocol.getIdentifier()) ? wallet : undefined
-    }))
+    const filtered: (AirGapWallet | undefined)[] = await Promise.all(
+      secret.wallets.map(async (wallet: AirGapWallet) => {
+        return wallet.publicKey === pubKey && protocolIdentifier.startsWith(await wallet.protocol.getIdentifier()) ? wallet : undefined
+      })
+    )
 
     return filtered.find((wallet: AirGapWallet | undefined) => wallet !== undefined)
   }
@@ -394,31 +408,36 @@ export class SecretsService {
 
     // necessary due to double serialization bug we had
     const storedSecrets: MnemonicSecret[] = typeof rawSecretsPayload === 'string' ? JSON.parse(rawSecretsPayload) : rawSecretsPayload
-    const secrets = await Promise.all(this.secretsList.map(async (secret) => {
-      const storedSecret = storedSecrets.find((storedSecret) => storedSecret.id === secret.getIdentifier())
-      if (storedSecret === undefined) {
-        return secret
-      }
-      const wallets: SerializedAirGapWallet[] = await Promise.all(secret.wallets.slice(0).map((wallet: AirGapWallet) => wallet.toJSON()))
-      for (let i = 0; i < storedSecret.wallets.length; ++i) {
-        const serializedWallet = storedSecret.wallets[i] as unknown as SerializedAirGapWallet
-
-        const filtered: (AirGapWallet | SerializedAirGapWallet | undefined)[] = await Promise.all(secret.wallets.map(async (wallet) => {
-          const match = isAirGapWallet(wallet) &&
-            (await wallet.protocol.getIdentifier()) === serializedWallet.protocolIdentifier &&
-            wallet.publicKey === serializedWallet.publicKey
-          
-            return match ? wallet : undefined
-        }))
-        const found = filtered.find((wallet) => wallet !== undefined)
-        if (found === undefined) {
-          wallets.push(serializedWallet)
+    const secrets = await Promise.all(
+      this.secretsList.map(async (secret) => {
+        const storedSecret = storedSecrets.find((storedSecret) => storedSecret.id === secret.getIdentifier())
+        if (storedSecret === undefined) {
+          return secret
         }
-      }
-      const result = MnemonicSecret.init(secret)
-      result.wallets = wallets as unknown as AirGapWallet[]
-      return result
-    }))
+        const wallets: SerializedAirGapWallet[] = await Promise.all(secret.wallets.slice(0).map((wallet: AirGapWallet) => wallet.toJSON()))
+        for (let i = 0; i < storedSecret.wallets.length; ++i) {
+          const serializedWallet = storedSecret.wallets[i] as unknown as SerializedAirGapWallet
+
+          const filtered: (AirGapWallet | SerializedAirGapWallet | undefined)[] = await Promise.all(
+            secret.wallets.map(async (wallet) => {
+              const match =
+                isAirGapWallet(wallet) &&
+                (await wallet.protocol.getIdentifier()) === serializedWallet.protocolIdentifier &&
+                wallet.publicKey === serializedWallet.publicKey
+
+              return match ? wallet : undefined
+            })
+          )
+          const found = filtered.find((wallet) => wallet !== undefined)
+          if (found === undefined) {
+            wallets.push(serializedWallet)
+          }
+        }
+        const result = MnemonicSecret.init(secret)
+        result.wallets = wallets as unknown as AirGapWallet[]
+        return result
+      })
+    )
 
     return this.storageService.set(VaultStorageKey.AIRGAP_SECRET_LIST, secrets)
   }
@@ -498,13 +517,12 @@ export class SecretsService {
     const mnemonic: string = bip39.entropyToMnemonic(entropy)
     const seed: Buffer = await bip39.mnemonicToSeed(mnemonic, config.bip39Passphrase)
 
-    const bip32Node: bip32.BIP32Interface = bip32.fromSeed(seed)
+    const bip32Node: BIP32Interface = this.bip32.fromSeed(new Uint8Array(seed))
 
-    const publicKey: string =
-      config.isHDWallet
-        ? await protocol.getExtendedPublicKeyFromMnemonic(mnemonic, config.customDerivationPath, config.bip39Passphrase)
-        : await protocol.getPublicKeyFromMnemonic(mnemonic, config.customDerivationPath, config.bip39Passphrase)
-    const fingerprint: string = bip32Node.fingerprint.toString('hex')
+    const publicKey: string = config.isHDWallet
+      ? await protocol.getExtendedPublicKeyFromMnemonic(mnemonic, config.customDerivationPath, config.bip39Passphrase)
+      : await protocol.getPublicKeyFromMnemonic(mnemonic, config.customDerivationPath, config.bip39Passphrase)
+    const fingerprint: string = Buffer.from(bip32Node.fingerprint).toString('hex')
 
     const wallet: AirGapWallet = new AirGapWallet(
       protocol,
@@ -522,10 +540,12 @@ export class SecretsService {
   }
 
   public async getKnownViewingKeys(): Promise<string[]> {
-    const filtered: (string | undefined)[] = await Promise.all(this.getWallets().map(async (wallet: AirGapWallet) => {
-      return (await wallet.protocol.getIdentifier()) === MainProtocolSymbols.XTZ_SHIELDED ? wallet.publicKey : undefined
-    }))
-    
+    const filtered: (string | undefined)[] = await Promise.all(
+      this.getWallets().map(async (wallet: AirGapWallet) => {
+        return (await wallet.protocol.getIdentifier()) === MainProtocolSymbols.XTZ_SHIELDED ? wallet.publicKey : undefined
+      })
+    )
+
     return filtered.filter((publicKey: string | undefined) => publicKey !== undefined)
   }
 
