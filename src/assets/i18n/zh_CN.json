@@ -57,7 +57,7 @@
   "secret-generate-onboarding": {
     "heading": "AirGap 将要求您提供<span class=\"style__strong color__primary\">摄像头</span>和<span class=\"style__strong color__primary\">麦克风</span>权限，以允许生成安全的秘密。",
     "text": "这两种权限都用于为您生成更安全的秘密。",
-    "grant-permission_label": "授予权限"
+    "grant-permission_label": "继续"
   },
   "current-secret": {
     "label": "启用秘密："
@@ -402,14 +402,14 @@
     "title": "通讯录二维码扫描器",
     "text": "扫描地址的二维码将其添加到您的联系人",
     "empty-state_heading": "为了扫描二维码，AirGap Vault 需要<span class=\"style__strong color__primary\">相机权限</span>。",
-    "grant-permission_label": "授予权限"
+    "grant-permission_label": "继续"
   },
   "tab-scan": {
     "title": "二维码扫描仪",
     "text": "从 AirGap 钱包扫描二维码",
     "multi-qr_text": "此交易包含多个二维码。请将相机对准不断变化的二维码，等待所有二维码被扫描。",
     "empty-state_heading": "为了扫描二维码，AirGap Vault 需要<span class=\"style__strong color__primary\">相机权限</span>。",
-    "grant-permission_label": "授予权限"
+    "grant-permission_label": "继续"
   },
   "tab-settings": {
     "about": "关于",
