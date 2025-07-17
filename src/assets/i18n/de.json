@@ -57,7 +57,7 @@
   "secret-generate-onboarding": {
     "heading": "AirGap wird Sie nach der Berechtigung für die <span class=\"style__strong color__primary\">Kamera</span> und dem <span class=\"style__strong color__primary\">Mikrofon</span> fragen.",
     "text": "Beide Berechtigungen werden für die zusätzliche Sicherheit bei der Geheimschlüsselgenerierung benötigt.",
-    "grant-permission_label": "Berechtigung erteilen"
+    "grant-permission_label": "fortfahren"
   },
   "current-secret": {
     "label": "Aktives Konto:"
@@ -402,14 +402,14 @@
     "title": "Kontakt Buch QR Code Scanner",
     "text": "Scannen Sie einen QR-Code einer Adresse, um sie zu Ihren Kontakten hinzuzufügen",
     "empty-state_heading": "Zum Scannen von QR-Codes benötigt AirGap Vault die <span class=\"style__strong color__primary\">Kameraberechtigung</span>.",
-    "grant-permission_label": "Erteilen der Berechtigung"
+    "grant-permission_label": "fortfahren"
   },
   "tab-scan": {
     "title": "QR Code Scanner",
     "text": "QR Code von AirGap Wallet einlesen.",
     "multi-qr_text": "Diese Transaktion besteht aus mehreren QR Codes. Halten Sie Ihre Kamera auf den wechselnden QR Codes und warten Sie, bis alle Codes gescannt sind.",
     "empty-state_heading": "Um QR Codes einlesen zu können, benötigt AirGap Vault die <span class=\"style__strong color__primary\">Kamera Berechtigung</span>.",
-    "grant-permission_label": "Berechtigung erteilen"
+    "grant-permission_label": "fortfahren"
   },
   "tab-settings": {
     "about": "Über AirGap Vault",

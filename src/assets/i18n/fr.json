@@ -57,7 +57,7 @@
     "secret-generate-onboarding": {
       "heading": "AirGap va vous demander une <span class=\"style__strong color__primary\">une caméra</span> et un <span class=\"style__strong color__primary\">un microphone</span> autorisations, pour permettre une génération de secret sécurisée.",
       "text": "Les deux autorisations sont utilisées afin de générer un secret plus sécurisé pour vous.",
-      "grant-permission_label": "Donner la permission"
+      "grant-permission_label": "continuer"
     },
     "current-secret": {
       "label": "Secret actif :"
@@ -402,14 +402,14 @@
       "title": "Scanner de code QR du carnet de contacts",
       "text": "Scannez le code QR d'une adresse pour l'ajouter à vos contacts",
       "empty-state_heading": "Pour scanner les codes QR, AirGap Vault a besoin de l'<span class=\"style__strong color__primary\">autorisation de la caméra</span>.",
-      "grant-permission_label": "Donner la permission"
+      "grant-permission_label": "continuer"
     },
     "tab-scan": {
       "title": "Scanner de codes QR",
       "text": "Scannez un code QR depuis AirGap Wallet",
       "multi-qr_text": "Cette transaction se compose de plusieurs codes QR. Gardez votre appareil photo sur les QR changeants et attendez que tous les codes soient scannés.",
       "empty-state_heading": "Pour scanner les codes QR, AirGap Vault a besoin de l'<span class=\"style__strong color__primary\">autorisation de la caméra</span>.",
-      "grant-permission_label": "Donner la permission"
+      "grant-permission_label": "continuer"
     },
     "tab-settings": {
       "about": "À propos",
