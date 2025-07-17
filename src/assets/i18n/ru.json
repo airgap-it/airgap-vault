@@ -57,7 +57,7 @@
   "secret-generate-onboarding": {
     "heading": "AirGap запросит у вас разрешения на использование <span class=\"style__strong color__primary\">камеры</span> и <span class=\"style__strong color__primary\">микрофона</span>, чтобы обеспечить безопасную генерацию секретных фраз.",
     "text": "Оба разрешения используются для того, чтобы создать для вас более надёжную секретную фразу.",
-    "grant-permission_label": "Дать разрешение"
+    "grant-permission_label": "продолжать"
   },
   "current-secret": {
     "label": "Активная секретная фраза:"
@@ -402,14 +402,14 @@
     "title": "Сканер QR-кодов адресной книги",
     "text": "Отсканируйте QR-код адреса, чтобы добавить его в ваши контакты",
     "empty-state_heading": "Чтобы сканировать QR-коды, AirGap Vault нужно разрешение <span class=\"style__strong color__primary\">камеры</span>.",
-    "grant-permission_label": "Предоставить разрешение"
+    "grant-permission_label": "продолжать"
   },
   "tab-scan": {
     "title": "Сканирование QR-кодов",
     "text": "Сканирование QR-кода из кошелька AirGap",
     "multi-qr_text": "Эта транзакция состоит из нескольких QR-кодов. Держите камеру на меняющихся QR-кодах и дождитесь, пока все коды будут отсканированы.",
     "empty-state_heading": "Для сканирования QR-кодов хранилища AirGap необходимо разрешение камеры.",
-    "grant-permission_label": "Разрешение"
+    "grant-permission_label": "продолжать"
   },
   "tab-settings": {
     "about": "Про нас",
