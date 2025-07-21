@@ -318,7 +318,12 @@ export class SecretsService {
           const childPath = derivationPath.substr(cutoffFrom + 2)
           const walletPublicKey = bip32PK.derivePath(childPath).publicKey
 
-          return publicKey.equals(walletPublicKey) ? wallet : undefined
+          if (protocolIdentifier === MainProtocolSymbols.BTC_TAPROOT) {
+            // For Taproot, we need to compare the public key as a hex string
+            return publicKey.toString('hex') === Buffer.from(walletPublicKey.slice(1)).toString('hex') ? wallet : undefined
+          }
+
+          return publicKey.toString('hex') === Buffer.from(walletPublicKey).toString('hex') ? wallet : undefined
         }
 
         return undefined
