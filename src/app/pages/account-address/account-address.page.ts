@@ -37,12 +37,6 @@ const sparrowwallet = {
   qrType: QRType.BC_UR
 }
 
-const sparrowwalletTaproot = {
-  icon: 'sparrowwallet.png',
-  name: 'Sparrow Wallet',
-  qrType: QRType.OUTPUT_DESCRIPTOR
-}
-
 const specterwallet = {
   icon: 'specterwallet.png',
   name: 'Specter Wallet',
@@ -155,7 +149,7 @@ export class AccountAddressPage {
           this.syncOptions = [airgapwallet, bluewallet, sparrowwallet, specterwallet, nunchukwallet]
           break
         case MainProtocolSymbols.BTC_TAPROOT:
-          this.syncOptions = [airgapwallet, sparrowwalletTaproot]
+          this.syncOptions = [airgapwallet, sparrowwallet]
           break
         case MainProtocolSymbols.ETH:
         case MainProtocolSymbols.OPTIMISM:
