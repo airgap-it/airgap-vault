@@ -155,11 +155,19 @@ export class IACService extends BaseIACService {
     // This can happen if we work with third party wallets that have a different format that doesn't include the public key.
 
     // BTC: First we try to find a wallet by matching the masterFingerprint
-    if (!correctWallet && signTransactionRequest.protocol === MainProtocolSymbols.BTC_SEGWIT) {
+    if (
+      !correctWallet &&
+      (signTransactionRequest.protocol === MainProtocolSymbols.BTC_SEGWIT ||
+        signTransactionRequest.protocol === MainProtocolSymbols.BTC_TAPROOT)
+    ) {
       const transaction: BitcoinSegwitTransactionSignRequest['transaction'] = unsignedTransaction.transaction
       const decodedPSBT = bitcoinJS.Psbt.fromHex(transaction.psbt)
+      const isTaproot = decodedPSBT.data.inputs.some((input) => input.tapBip32Derivation)
+
       for (const input of decodedPSBT.data.inputs) {
-        for (const derivation of input.bip32Derivation) {
+        const path = isTaproot ? input.tapBip32Derivation : input.bip32Derivation
+
+        for (const derivation of path) {
           const masterFingerprint = derivation.masterFingerprint.toString('hex')
 
           correctWallet = await this.secretsService.findWalletByFingerprintDerivationPathAndProtocolIdentifier(
@@ -184,7 +192,7 @@ export class IACService extends BaseIACService {
           // Start account selection
           const modal = await this.modalController.create({
             component: SelectAccountPage,
-            componentProps: { type: 'psbt', symbolFilter: MainProtocolSymbols.BTC_SEGWIT }
+            componentProps: { type: 'psbt', symbolFilter: signTransactionRequest.protocol }
           })
 
           modal
