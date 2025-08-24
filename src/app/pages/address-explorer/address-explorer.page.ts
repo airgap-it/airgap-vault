@@ -1,7 +1,8 @@
 import { AirGapMarketWallet, MainProtocolSymbols } from '@airgap/coinlib-core'
 import { Component, OnInit } from '@angular/core'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
-import * as bip32 from 'bip32'
+import { BIP32Factory } from 'bip32'
+import * as ecc from '@bitcoinerlab/secp256k1'
 import * as bs58check from 'bs58check'
 
 // https://github.com/satoshilabs/slips/blob/master/slip-0132.md
@@ -41,6 +42,8 @@ interface AddressInfo {
   styleUrls: ['./address-explorer.page.scss']
 })
 export class AddressExplorerPage implements OnInit {
+  private readonly bip32 = BIP32Factory(ecc)
+
   public wallet: AirGapMarketWallet
   // public fingerprint: string = ''
   public selectedTab: string = 'external'
@@ -56,7 +59,7 @@ export class AddressExplorerPage implements OnInit {
   async ngOnInit() {
     if (this.wallet) {
       // this.fingerprint = this.wallet.masterFingerprint
-      this.xpub = bip32.fromBase58(new ExtendedPublicKey(this.wallet.publicKey).toXpub()).toBase58()
+      this.xpub = this.bip32.fromBase58(new ExtendedPublicKey(this.wallet.publicKey).toXpub()).toBase58()
       this.clearAddresses()
 
       if ((await this.wallet.protocol.getIdentifier()) === MainProtocolSymbols.ETH) {
