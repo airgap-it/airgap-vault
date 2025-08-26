@@ -158,6 +158,7 @@ export class IACService extends BaseIACService {
     if (
       !correctWallet &&
       (signTransactionRequest.protocol === MainProtocolSymbols.BTC_SEGWIT ||
+        signTransactionRequest.protocol === MainProtocolSymbols.BTC ||
         signTransactionRequest.protocol === MainProtocolSymbols.BTC_TAPROOT)
     ) {
       const transaction: BitcoinSegwitTransactionSignRequest['transaction'] = unsignedTransaction.transaction
