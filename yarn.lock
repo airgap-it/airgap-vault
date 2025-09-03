@@ -1590,6 +1590,11 @@
   resolved "https://registry.npmjs.org/@capacitor/status-bar/-/status-bar-6.0.0.tgz"
   integrity sha512-Wo0ILugYlmENegKDgTzVCPjbvP8h1ObgHslLdgeVG643ViMS/diausHIq8e104WIKCXtKIELmQeYVp9mX7932g==
 
+"@capawesome/capacitor-android-edge-to-edge-support@^7.2.3":
+  version "7.2.3"
+  resolved "https://registry.npmjs.org/@capawesome/capacitor-android-edge-to-edge-support/-/capacitor-android-edge-to-edge-support-7.2.3.tgz"
+  integrity sha512-WtwXeU5Clg13t3SO6JvtIfJlpO+E48tHC+vNmC519zcS6GV9URl705UOvwOOvEyh6GFxAi2dHi8lj8iqIOYCdA==
+
 "@capawesome/capacitor-file-picker@^0.5.8":
   version "0.5.10"
   resolved "https://registry.npmjs.org/@capawesome/capacitor-file-picker/-/capacitor-file-picker-0.5.10.tgz"

@@ -46,6 +46,7 @@ import { SecretsService } from './services/secrets/secrets.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
 import { LanguagesType, VaultStorageKey, VaultStorageService } from './services/storage/storage.service'
 import { Router } from '@angular/router'
+import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support'
 
 declare let window: Window & { airGapHasStarted: boolean }
 
@@ -100,6 +101,10 @@ export class AppComponent implements AfterViewInit {
       this.splashScreen.hide()
 
       await this.securityUtils.toggleAutomaticAuthentication({ automatic: true })
+    }
+
+    if (this.platform.is('android')) {
+      await EdgeToEdge.setBackgroundColor({ color: '#311B58' })
     }
 
     this.initChecks()
