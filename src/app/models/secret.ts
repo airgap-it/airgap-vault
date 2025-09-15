@@ -1,7 +1,7 @@
 import { AirGapWallet } from '@airgap/coinlib-core'
 import { UUID } from 'angular2-uuid'
-import { fromSeed } from 'bip32'
-
+import { BIP32Factory } from 'bip32'
+import * as ecc from '@bitcoinerlab/secp256k1'
 import { toBoolean } from '../utils/utils'
 
 import { BIPSigner } from './BIP39Signer'
@@ -64,6 +64,8 @@ export class MnemonicSecret extends Secret {
 
   public wallets: AirGapWallet[]
 
+  private readonly bip32 = BIP32Factory(ecc)
+
   private readonly twofactor: string
 
   constructor(seed: string | null, label: string = '', isParanoia: boolean = false, hasRecoveryKey: boolean = false) {
@@ -114,7 +116,7 @@ export class MnemonicSecret extends Secret {
     const mnemonic: string = this.getMnemonicFromEntropy(entropy)
     const seed: Buffer = signer.mnemonicToSeedSync(mnemonic)
 
-    return fromSeed(seed).fingerprint.toString('hex')
+    return Buffer.from(this.bip32.fromSeed(new Uint8Array(seed)).fingerprint).toString('hex')
   }
 
   private isMnemonic(data: string): boolean {

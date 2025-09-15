@@ -1,5 +1,6 @@
 import { Component } from '@angular/core'
-import { BIP32Interface, fromSeed } from 'bip32'
+import { BIP32Factory, BIP32Interface } from 'bip32'
+import * as ecc from '@bitcoinerlab/secp256k1'
 import { mnemonicToSeed } from 'bip39'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
@@ -22,6 +23,7 @@ export class Bip85ShowPage {
   private secret: MnemonicSecret
   public mnemonicLength: 12 | 18 | 24
   public index: number
+  private readonly bip32 = BIP32Factory(ecc)
 
   public childMnemonic: string | undefined
   public childFingerprint: string | undefined
@@ -99,8 +101,8 @@ export class Bip85ShowPage {
       this.childMnemonic = childEntropy.toMnemonic()
 
       const seed: Buffer = await mnemonicToSeed(this.childMnemonic)
-      const bip32Node: BIP32Interface = fromSeed(seed)
-      this.childFingerprint = bip32Node.fingerprint.toString('hex')
+      const bip32Node: BIP32Interface = this.bip32.fromSeed(new Uint8Array(seed))
+      this.childFingerprint = Buffer.from(bip32Node.fingerprint).toString('hex')
 
       this.lifehashData = await this.lifehashService.generateLifehash(this.childFingerprint)
     } catch (error) {
