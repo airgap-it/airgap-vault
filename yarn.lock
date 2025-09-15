@@ -7,71 +7,71 @@
   resolved "https://registry.npmjs.org/@airgap-community/iso-rootstock/-/iso-rootstock-1.0.0.tgz"
   integrity sha512-jFgw0rLjkqzfu2eimJmmHjW+Ms9c+BcPQqjy8kL/vu0/t6ZH/wSe+bym20KV/GeG42EjuajlBd9lcQ7+FBfoTA==
 
-"@airgap/acurast@0.13.43-beta.0":
-  version "0.13.43-beta.0"
-  resolved "https://registry.npmjs.org/@airgap/acurast/-/acurast-0.13.43-beta.0.tgz"
-  integrity sha512-CRbzkOZQhC00yvxkRZOyFqWD49VHWYFBbT8ON8VL60ExNNyZKDGapkk+BPkfz5NtX6pAMuo46EoXl+XPw+jq5w==
+"@airgap/acurast@0.13.43-beta.1":
+  version "0.13.43-beta.1"
+  resolved "https://registry.npmjs.org/@airgap/acurast/-/acurast-0.13.43-beta.1.tgz"
+  integrity sha512-9IWQqTmWE7/8uQPA8Zax8xhcaFFKnKTyd000uARU6AcScQqtFgFWRVIKLmPC/u7vYh4FiwyeDojclgLoWh3c0Q==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.43-beta.0"
-    "@airgap/module-kit" "^0.13.43-beta.0"
-    "@airgap/serializer" "^0.13.43-beta.0"
-    "@airgap/substrate" "^0.13.43-beta.0"
+    "@airgap/coinlib-core" "^0.13.43-beta.1"
+    "@airgap/module-kit" "^0.13.43-beta.1"
+    "@airgap/serializer" "^0.13.43-beta.1"
+    "@airgap/substrate" "^0.13.43-beta.1"
     "@polkadot/util" "2.0.1"
     "@polkadot/wasm-crypto" "0.20.1"
 
-"@airgap/aeternity@0.13.43-beta.0":
-  version "0.13.43-beta.0"
-  resolved "https://registry.npmjs.org/@airgap/aeternity/-/aeternity-0.13.43-beta.0.tgz"
-  integrity sha512-m2mDAtIvvPRItONDPa7ZZue8HclE4ZrZboFtZgTLRQWQ0GBzkoVapV8dgsiWkXQmnHyNVGfY0y1VF+xIFbUWFQ==
+"@airgap/aeternity@0.13.43-beta.1":
+  version "0.13.43-beta.1"
+  resolved "https://registry.npmjs.org/@airgap/aeternity/-/aeternity-0.13.43-beta.1.tgz"
+  integrity sha512-LAmGYRngKFZy26hNszMyKYJYC/sthPLb/qYGyEFRWeHK5uos/VCUYDtyKSTk/NUO/Q61zyPvSvq4hWa7aKh9+w==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.43-beta.0"
-    "@airgap/module-kit" "^0.13.43-beta.0"
-    "@airgap/serializer" "^0.13.43-beta.0"
+    "@airgap/coinlib-core" "^0.13.43-beta.1"
+    "@airgap/module-kit" "^0.13.43-beta.1"
+    "@airgap/serializer" "^0.13.43-beta.1"
     "@stablelib/ed25519" "^1.0.3"
 
-"@airgap/angular-core@0.0.59-beta.0":
-  version "0.0.59-beta.0"
-  resolved "https://registry.npmjs.org/@airgap/angular-core/-/angular-core-0.0.59-beta.0.tgz"
-  integrity sha512-NsIwUbTYXh2auKc3CTGOM3SJVko19O7Tt+Tddo83arwSR8NSrSykvbwmqfpuPGQrECf4FDWa1gYaQrfrG8JaWA==
+"@airgap/angular-core@0.0.59-beta.1":
+  version "0.0.59-beta.1"
+  resolved "https://registry.npmjs.org/@airgap/angular-core/-/angular-core-0.0.59-beta.1.tgz"
+  integrity sha512-00gSky7iTRVFJPHnC9r8tYVoNCM6vL7vQW5XNdNHhQq3ncpdU2gdxikHebL8shOFguiWw1jQZJbbi6pw+6QRyA==
   dependencies:
     tslib "^2.3.0"
 
-"@airgap/angular-ngrx@0.0.59-beta.0":
-  version "0.0.59-beta.0"
-  resolved "https://registry.npmjs.org/@airgap/angular-ngrx/-/angular-ngrx-0.0.59-beta.0.tgz"
-  integrity sha512-DfmTjIqofaeZbGHTgZGFjbc8M6ZGbX9m7iug8RwaH+CK6uHsTfE1r+G9V+7J5C5vqkOZDvtvwzSc50mIepN6xA==
+"@airgap/angular-ngrx@0.0.59-beta.1":
+  version "0.0.59-beta.1"
+  resolved "https://registry.npmjs.org/@airgap/angular-ngrx/-/angular-ngrx-0.0.59-beta.1.tgz"
+  integrity sha512-/RQQuEN9vtUl+4dgxXnpuh8kQEPBHEQiJZq92bFZAjR9j0q5eLw+LhapKCouWNSwpLe6E1AZl4dteuL32EAE4w==
   dependencies:
     tslib "^2.3.0"
 
-"@airgap/astar@0.13.43-beta.0":
-  version "0.13.43-beta.0"
-  resolved "https://registry.npmjs.org/@airgap/astar/-/astar-0.13.43-beta.0.tgz"
-  integrity sha512-ITd8DKK/C6Y0So8nzChBJBMu+G9hcEY8JMZCgwobzlxJ6VLNobd0wTrDk40HYTUPGqXqkKzLyEVYbEHBcc+94Q==
+"@airgap/astar@0.13.43-beta.1":
+  version "0.13.43-beta.1"
+  resolved "https://registry.npmjs.org/@airgap/astar/-/astar-0.13.43-beta.1.tgz"
+  integrity sha512-XBcKwUAYXCH+rgX1MPAMuCRPDiNLso7sMjsDZJfsciiA8vxUwwp02n99ZvLWI3xpZX5WdwLb7IsdHU7cCCvBaQ==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.43-beta.0"
-    "@airgap/module-kit" "^0.13.43-beta.0"
-    "@airgap/serializer" "^0.13.43-beta.0"
-    "@airgap/substrate" "^0.13.43-beta.0"
+    "@airgap/coinlib-core" "^0.13.43-beta.1"
+    "@airgap/module-kit" "^0.13.43-beta.1"
+    "@airgap/serializer" "^0.13.43-beta.1"
+    "@airgap/substrate" "^0.13.43-beta.1"
     "@polkadot/util" "2.0.1"
     "@polkadot/wasm-crypto" "0.20.1"
 
-"@airgap/bitcoin@^0.13.43-beta.0", "@airgap/bitcoin@0.13.43-beta.0":
-  version "0.13.43-beta.0"
-  resolved "https://registry.npmjs.org/@airgap/bitcoin/-/bitcoin-0.13.43-beta.0.tgz"
-  integrity sha512-Yk+o2a5DPnw9FJ2Xc+Mri6kXwtgsboD5R8ioyzZNxnI/Fru5zU1SXWJcxg3LUkujjxGIEeo/rgOupsmXsOnY4g==
+"@airgap/bitcoin@^0.13.43-beta.1", "@airgap/bitcoin@0.13.43-beta.1":
+  version "0.13.43-beta.1"
+  resolved "https://registry.npmjs.org/@airgap/bitcoin/-/bitcoin-0.13.43-beta.1.tgz"
+  integrity sha512-4eBS7ORZ6iH4YnTx42hPSZmIOqR1J99G1YxoX8NeU184CVvhGcB4jkIaOPOXkCYcsXBFlh73UJTYBEWvtEs7sw==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.43-beta.0"
-    "@airgap/crypto" "^0.13.43-beta.0"
-    "@airgap/module-kit" "^0.13.43-beta.0"
-    "@airgap/serializer" "^0.13.43-beta.0"
+    "@airgap/coinlib-core" "^0.13.43-beta.1"
+    "@airgap/crypto" "^0.13.43-beta.1"
+    "@airgap/module-kit" "^0.13.43-beta.1"
+    "@airgap/serializer" "^0.13.43-beta.1"
     "@bitcoinerlab/secp256k1" "1.2.0"
     bip32 "5.0.0-rc.0"
     bitcoinjs-lib "6.1.7"
 
-"@airgap/coinlib-core@^0.13.43-beta.0", "@airgap/coinlib-core@0.13.43-beta.0":
-  version "0.13.43-beta.0"
-  resolved "https://registry.npmjs.org/@airgap/coinlib-core/-/coinlib-core-0.13.43-beta.0.tgz"
-  integrity sha512-qyifsmcEVjiETPBooBp6IU6LqpQjYGumuCwa3ZycBkDxj2ALzi/4bMSdlFCcnis+IuyufQ9PhA18YmzzHCIB4Q==
+"@airgap/coinlib-core@^0.13.43-beta.1", "@airgap/coinlib-core@0.13.43-beta.1":
+  version "0.13.43-beta.1"
+  resolved "https://registry.npmjs.org/@airgap/coinlib-core/-/coinlib-core-0.13.43-beta.1.tgz"
+  integrity sha512-C2K7fVBXilLwktRwtqKFUe0Ewjr7mNLdDoTSP4CH5bafk/tAKu8NaGPwGEC77z9KRFSjn3pObIlpRoDch/6mkw==
   dependencies:
     "@stablelib/blake2b" "^1.0.1"
     "@stablelib/bytes" "^1.0.1"
@@ -81,81 +81,81 @@
     long "^5.2.0"
     protobufjs "^6.11.2"
 
-"@airgap/coreum@0.13.43-beta.0":
-  version "0.13.43-beta.0"
-  resolved "https://registry.npmjs.org/@airgap/coreum/-/coreum-0.13.43-beta.0.tgz"
-  integrity sha512-Azb5gj75rl3E5YOkoP89gtxjhxcYH7Qa1e/VkZFNkS9+PRrQsjOjkUux1xsI+uet6HWt4uIO34LdQohbxsXtkw==
+"@airgap/coreum@0.13.43-beta.1":
+  version "0.13.43-beta.1"
+  resolved "https://registry.npmjs.org/@airgap/coreum/-/coreum-0.13.43-beta.1.tgz"
+  integrity sha512-egR5rOWS24M7DllBTNWTX4KA7Mt6j3jZsJ6F7enz5RQAoGlGUySa4cqmr+kVTaW4r/+A6GX6jgmUUYboJHrnzw==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.43-beta.0"
-    "@airgap/cosmos-core" "^0.13.43-beta.0"
-    "@airgap/crypto" "^0.13.43-beta.0"
-    "@airgap/module-kit" "^0.13.43-beta.0"
-    "@airgap/serializer" "^0.13.43-beta.0"
+    "@airgap/coinlib-core" "^0.13.43-beta.1"
+    "@airgap/cosmos-core" "^0.13.43-beta.1"
+    "@airgap/crypto" "^0.13.43-beta.1"
+    "@airgap/module-kit" "^0.13.43-beta.1"
+    "@airgap/serializer" "^0.13.43-beta.1"
 
-"@airgap/cosmos-core@^0.13.43-beta.0", "@airgap/cosmos-core@0.13.43-beta.0":
-  version "0.13.43-beta.0"
-  resolved "https://registry.npmjs.org/@airgap/cosmos-core/-/cosmos-core-0.13.43-beta.0.tgz"
-  integrity sha512-pDfmHQ8Yxj9f6+h5/NL4tKiFvQl0t3MdW4gnqt/wtYoXxwfJmimne4EgyfYONjCC10nktggCuKbAmNrPoPolMQ==
+"@airgap/cosmos-core@^0.13.43-beta.1", "@airgap/cosmos-core@0.13.43-beta.1":
+  version "0.13.43-beta.1"
+  resolved "https://registry.npmjs.org/@airgap/cosmos-core/-/cosmos-core-0.13.43-beta.1.tgz"
+  integrity sha512-iI//ssUgoQUBHjnUDbuinltgw365jZGdqzGUbcE/EuB9w21PB0L4C7BWe8np3tvRo7zQSJmTgXs9m07roAUbsg==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.43-beta.0"
-    "@airgap/crypto" "^0.13.43-beta.0"
-    "@airgap/module-kit" "^0.13.43-beta.0"
-    "@airgap/serializer" "^0.13.43-beta.0"
+    "@airgap/coinlib-core" "^0.13.43-beta.1"
+    "@airgap/crypto" "^0.13.43-beta.1"
+    "@airgap/module-kit" "^0.13.43-beta.1"
+    "@airgap/serializer" "^0.13.43-beta.1"
 
-"@airgap/cosmos@0.13.43-beta.0":
-  version "0.13.43-beta.0"
-  resolved "https://registry.npmjs.org/@airgap/cosmos/-/cosmos-0.13.43-beta.0.tgz"
-  integrity sha512-PBDITYjulD2BqVBUqxtN9T69PBTRaDX074Jn0lXd6N1+m396E06QQMa9lPjHvo73a8+vobpdAHc7hjrx0YB+cA==
+"@airgap/cosmos@0.13.43-beta.1":
+  version "0.13.43-beta.1"
+  resolved "https://registry.npmjs.org/@airgap/cosmos/-/cosmos-0.13.43-beta.1.tgz"
+  integrity sha512-ylRu+RuIeAUKnw3tyX86LLh+c9BoKg5UuMvuWK878F1t9XTI5ulHGP/C/050SFTxdp0GI2TN66Kuwz1SbW+xwQ==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.43-beta.0"
-    "@airgap/cosmos-core" "^0.13.43-beta.0"
-    "@airgap/crypto" "^0.13.43-beta.0"
-    "@airgap/module-kit" "^0.13.43-beta.0"
-    "@airgap/serializer" "^0.13.43-beta.0"
+    "@airgap/coinlib-core" "^0.13.43-beta.1"
+    "@airgap/cosmos-core" "^0.13.43-beta.1"
+    "@airgap/crypto" "^0.13.43-beta.1"
+    "@airgap/module-kit" "^0.13.43-beta.1"
+    "@airgap/serializer" "^0.13.43-beta.1"
 
-"@airgap/crypto@^0.13.43-beta.0", "@airgap/crypto@0.13.43-beta.0":
-  version "0.13.43-beta.0"
-  resolved "https://registry.npmjs.org/@airgap/crypto/-/crypto-0.13.43-beta.0.tgz"
-  integrity sha512-iyOv1zAYGtud3vRyMDvkAHBkMUbqYw48spcuNCGVGh5wAhvdNbBVxIMnxZXlKlETp9NiOI7JMzauUu14VBjcbA==
+"@airgap/crypto@^0.13.43-beta.1", "@airgap/crypto@0.13.43-beta.1":
+  version "0.13.43-beta.1"
+  resolved "https://registry.npmjs.org/@airgap/crypto/-/crypto-0.13.43-beta.1.tgz"
+  integrity sha512-mP87RWGj4PUkOZ3xWucaCWGPaCYBRpnQi9JTntdd3MwW05KhdbT5fBiP8vJpKuez1ztUJ245twYgw6sFoQM95g==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.43-beta.0"
-    "@airgap/module-kit" "^0.13.43-beta.0"
+    "@airgap/coinlib-core" "^0.13.43-beta.1"
+    "@airgap/module-kit" "^0.13.43-beta.1"
     "@airgap/sapling-wasm" "^0.0.9"
     "@polkadot/wasm-crypto" "0.20.1"
     "@stablelib/hmac" "^1.0.1"
 
-"@airgap/ethereum@^0.13.43-beta.0", "@airgap/ethereum@0.13.43-beta.0":
-  version "0.13.43-beta.0"
-  resolved "https://registry.npmjs.org/@airgap/ethereum/-/ethereum-0.13.43-beta.0.tgz"
-  integrity sha512-Jid0Uezkb6ShKEvc38dkHetz3glyHKSdmQvftYwoeS5VamcTF5lJu8+Qmaodu8McdDCmTkcVTC6FaN92pmslNQ==
+"@airgap/ethereum@^0.13.43-beta.1", "@airgap/ethereum@0.13.43-beta.1":
+  version "0.13.43-beta.1"
+  resolved "https://registry.npmjs.org/@airgap/ethereum/-/ethereum-0.13.43-beta.1.tgz"
+  integrity sha512-XS3EqLyTAFuEHkqKS/7DOCdiXshXBbnOQxvlke+ZSWi/GR5KWqXFIw5t5d0yTXotVSQSxgsDwHb9xBGKebVzNQ==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.43-beta.0"
-    "@airgap/crypto" "^0.13.43-beta.0"
-    "@airgap/module-kit" "^0.13.43-beta.0"
-    "@airgap/serializer" "^0.13.43-beta.0"
+    "@airgap/coinlib-core" "^0.13.43-beta.1"
+    "@airgap/crypto" "^0.13.43-beta.1"
+    "@airgap/module-kit" "^0.13.43-beta.1"
+    "@airgap/serializer" "^0.13.43-beta.1"
     "@ethereumjs/common" "2.6.5"
     "@ethereumjs/tx" "3.4.0"
     "@metamask/eth-sig-util" "4.0.0"
 
-"@airgap/groestlcoin@0.13.43-beta.0":
-  version "0.13.43-beta.0"
-  resolved "https://registry.npmjs.org/@airgap/groestlcoin/-/groestlcoin-0.13.43-beta.0.tgz"
-  integrity sha512-ZpRxIVoMpc9SlOhfjdmCU8B4CgMkBdo09E7BRgq67frV4B38tjMXUKh6jkr+WObD5wvwhbdrLe7ANHsgrvbbYQ==
+"@airgap/groestlcoin@0.13.43-beta.1":
+  version "0.13.43-beta.1"
+  resolved "https://registry.npmjs.org/@airgap/groestlcoin/-/groestlcoin-0.13.43-beta.1.tgz"
+  integrity sha512-UDYiYmoO/AF41vH9j2dY3gWOEeJDf74bvkPN3LEbpAwcOVHYm1H2ZnHI1bY8xzOuFd9K0TNw47k7SJTN8aXcMw==
   dependencies:
-    "@airgap/bitcoin" "^0.13.43-beta.0"
-    "@airgap/coinlib-core" "^0.13.43-beta.0"
-    "@airgap/module-kit" "^0.13.43-beta.0"
-    "@airgap/serializer" "^0.13.43-beta.0"
+    "@airgap/bitcoin" "^0.13.43-beta.1"
+    "@airgap/coinlib-core" "^0.13.43-beta.1"
+    "@airgap/module-kit" "^0.13.43-beta.1"
+    "@airgap/serializer" "^0.13.43-beta.1"
 
-"@airgap/icp@0.13.43-beta.0":
-  version "0.13.43-beta.0"
-  resolved "https://registry.npmjs.org/@airgap/icp/-/icp-0.13.43-beta.0.tgz"
-  integrity sha512-zJBp6ZnttOdzYaRZ0/psJZIz1F9pHd/EaPOr6jkPbJUEqgV2nxJmiCYsh5LU1Q49/vJA4CfGbWFJj5kijsLF8g==
+"@airgap/icp@0.13.43-beta.1":
+  version "0.13.43-beta.1"
+  resolved "https://registry.npmjs.org/@airgap/icp/-/icp-0.13.43-beta.1.tgz"
+  integrity sha512-Om08NLWzpZQ5g46oLVFZ10yF/erBteaiGOp5sYZTmsbNl9R7Nny55Ol3gVewwphlRzjbmUsZXmeKTASfhxpQ6A==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.43-beta.0"
-    "@airgap/crypto" "^0.13.43-beta.0"
-    "@airgap/module-kit" "^0.13.43-beta.0"
-    "@airgap/serializer" "^0.13.43-beta.0"
+    "@airgap/coinlib-core" "^0.13.43-beta.1"
+    "@airgap/crypto" "^0.13.43-beta.1"
+    "@airgap/module-kit" "^0.13.43-beta.1"
+    "@airgap/serializer" "^0.13.43-beta.1"
     "@dfinity/agent" "^0.15.4"
     "@dfinity/identity-secp256k1" "^0.15.4"
     "@dfinity/nns" "^0.14.0"
@@ -169,44 +169,44 @@
     secp256k1 "^5.0.0"
     simple-cbor "^0.4.1"
 
-"@airgap/module-kit@^0.13.43-beta.0", "@airgap/module-kit@0.13.43-beta.0":
-  version "0.13.43-beta.0"
-  resolved "https://registry.npmjs.org/@airgap/module-kit/-/module-kit-0.13.43-beta.0.tgz"
-  integrity sha512-uw+OiHrEC8nZJPH5JoOs0p0NJY099R5t7UubKTnEH9lFVBbgpxaN5aLhB3nUTvMUd7wyj3rbRAideLCHBAIqfA==
+"@airgap/module-kit@^0.13.43-beta.1", "@airgap/module-kit@0.13.43-beta.1":
+  version "0.13.43-beta.1"
+  resolved "https://registry.npmjs.org/@airgap/module-kit/-/module-kit-0.13.43-beta.1.tgz"
+  integrity sha512-pqlbdyoSeeqwEqIscQRhkm45irrUHkc3F/2OLqidwXJeD0Fw/bDINqVxoHFs+sl/kQHcHiO+fDs+o2q6OGd3QA==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.43-beta.0"
-    "@airgap/serializer" "^0.13.43-beta.0"
+    "@airgap/coinlib-core" "^0.13.43-beta.1"
+    "@airgap/serializer" "^0.13.43-beta.1"
 
-"@airgap/moonbeam@0.13.43-beta.0":
-  version "0.13.43-beta.0"
-  resolved "https://registry.npmjs.org/@airgap/moonbeam/-/moonbeam-0.13.43-beta.0.tgz"
-  integrity sha512-EPXITo3QG45XVPGVFr6VV/yVSzErK99zoYBFhw8Qu1jVpaptANkf6xkUq+pUgo83pYFbSJHlgYoVXQ6EU0j90Q==
+"@airgap/moonbeam@0.13.43-beta.1":
+  version "0.13.43-beta.1"
+  resolved "https://registry.npmjs.org/@airgap/moonbeam/-/moonbeam-0.13.43-beta.1.tgz"
+  integrity sha512-9f0No6oZTEHEGby5VONZugFjYXyp5S9L9qficS3dJh2ud3+/unpN2+ChsOKaVts2vwpJZvHmyLQMuWHdL2oz4w==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.43-beta.0"
-    "@airgap/module-kit" "^0.13.43-beta.0"
-    "@airgap/serializer" "^0.13.43-beta.0"
-    "@airgap/substrate" "^0.13.43-beta.0"
+    "@airgap/coinlib-core" "^0.13.43-beta.1"
+    "@airgap/module-kit" "^0.13.43-beta.1"
+    "@airgap/serializer" "^0.13.43-beta.1"
+    "@airgap/substrate" "^0.13.43-beta.1"
 
-"@airgap/optimism@0.13.43-beta.0":
-  version "0.13.43-beta.0"
-  resolved "https://registry.npmjs.org/@airgap/optimism/-/optimism-0.13.43-beta.0.tgz"
-  integrity sha512-IeApDmJSKBDmSJvMkpy/Qxa18fhNAbsdy4l0sjTDGrlkie08H6DcujWLTeX1LEWXvJ4jSiykf8w8DkvlgijMqQ==
+"@airgap/optimism@0.13.43-beta.1":
+  version "0.13.43-beta.1"
+  resolved "https://registry.npmjs.org/@airgap/optimism/-/optimism-0.13.43-beta.1.tgz"
+  integrity sha512-Xnr/9OWVVKeQv2Kpa8j+ytn3CYI6l+dGoGzm96dLacFZAkRsEhFiqYjV5BS+Hi9rh2sJ6OAOdIlwdlc+FFMyRg==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.43-beta.0"
-    "@airgap/crypto" "^0.13.43-beta.0"
-    "@airgap/ethereum" "^0.13.43-beta.0"
-    "@airgap/module-kit" "^0.13.43-beta.0"
-    "@airgap/serializer" "^0.13.43-beta.0"
+    "@airgap/coinlib-core" "^0.13.43-beta.1"
+    "@airgap/crypto" "^0.13.43-beta.1"
+    "@airgap/ethereum" "^0.13.43-beta.1"
+    "@airgap/module-kit" "^0.13.43-beta.1"
+    "@airgap/serializer" "^0.13.43-beta.1"
     "@ethereumjs/tx" "3.4.0"
 
-"@airgap/polkadot@0.13.43-beta.0":
-  version "0.13.43-beta.0"
-  resolved "https://registry.npmjs.org/@airgap/polkadot/-/polkadot-0.13.43-beta.0.tgz"
-  integrity sha512-2HecONNdugrFJ1t5TmbrQXDT+iqhIVg2ZtCRmWl+4HY3YndFRNw8L4aJA4TVmGVz2pehZVRiw2/gxwsaJJ2mrw==
+"@airgap/polkadot@0.13.43-beta.1":
+  version "0.13.43-beta.1"
+  resolved "https://registry.npmjs.org/@airgap/polkadot/-/polkadot-0.13.43-beta.1.tgz"
+  integrity sha512-53eJpCOW8FD+vrsaiExnGMmHbOuQjSR7iNg1gMByT1abxdaWyy5COFRnlnmpg4MExIwos3VXP2G0OX84Ceb3+g==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.43-beta.0"
-    "@airgap/module-kit" "^0.13.43-beta.0"
-    "@airgap/substrate" "^0.13.43-beta.0"
+    "@airgap/coinlib-core" "^0.13.43-beta.1"
+    "@airgap/module-kit" "^0.13.43-beta.1"
+    "@airgap/substrate" "^0.13.43-beta.1"
 
 "@airgap/sapling-wasm@^0.0.9":
   version "0.0.9"
@@ -218,45 +218,45 @@
   resolved "https://registry.npmjs.org/@airgap/sapling-wasm/-/sapling-wasm-0.0.7.tgz"
   integrity sha512-IMODbGPTBYKuO5ztiHX9C1PTlhqZvmVWv7m7zj5+VMcbBxrk4+jBAf7FYTH5l+IUsNMaHBOuh8Qq3A1b/pm7jQ==
 
-"@airgap/serializer@^0.13.43-beta.0", "@airgap/serializer@0.13.43-beta.0":
-  version "0.13.43-beta.0"
-  resolved "https://registry.npmjs.org/@airgap/serializer/-/serializer-0.13.43-beta.0.tgz"
-  integrity sha512-DUlnlIZdJjLUOwDKU2XFJPNtM+AfN2QZQjD9k3LnYlzM0eIAVPWGavHCA+yYQQL4ZNQKgmrEX5tj7kKUJMB+fQ==
+"@airgap/serializer@^0.13.43-beta.1", "@airgap/serializer@0.13.43-beta.1":
+  version "0.13.43-beta.1"
+  resolved "https://registry.npmjs.org/@airgap/serializer/-/serializer-0.13.43-beta.1.tgz"
+  integrity sha512-E0+IKjw3ZDnf9ZHrwsMbjrAi4csT5bh/lka+/uTRKa8dNBm5rwdT1rMo3knaqiWLYwTRps6EraQxJtcDVSrCkg==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.43-beta.0"
+    "@airgap/coinlib-core" "^0.13.43-beta.1"
 
-"@airgap/stellar@0.13.43-beta.0":
-  version "0.13.43-beta.0"
-  resolved "https://registry.npmjs.org/@airgap/stellar/-/stellar-0.13.43-beta.0.tgz"
-  integrity sha512-f9Tn/ukBk+Ylps76PJVE/GO7R9eawGuQAgPKxNWkAXxTFg22dRbzG5lzego5jTSQUM/ddty9cBjOJnUB0LXs4g==
+"@airgap/stellar@0.13.43-beta.1":
+  version "0.13.43-beta.1"
+  resolved "https://registry.npmjs.org/@airgap/stellar/-/stellar-0.13.43-beta.1.tgz"
+  integrity sha512-qO3i1Sw6f16BjZcnyb8H+4I+J/ufKhWx5myrWgJnokPKxzMGI4oiqXgsbpbs6woXcHkaOhX5DC+AmsJKEd0HcQ==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.43-beta.0"
-    "@airgap/module-kit" "^0.13.43-beta.0"
-    "@airgap/serializer" "^0.13.43-beta.0"
+    "@airgap/coinlib-core" "^0.13.43-beta.1"
+    "@airgap/module-kit" "^0.13.43-beta.1"
+    "@airgap/serializer" "^0.13.43-beta.1"
     "@stellar/stellar-sdk" "^13.3.0"
 
-"@airgap/substrate@^0.13.43-beta.0", "@airgap/substrate@0.13.43-beta.0":
-  version "0.13.43-beta.0"
-  resolved "https://registry.npmjs.org/@airgap/substrate/-/substrate-0.13.43-beta.0.tgz"
-  integrity sha512-FfDvzjr2t5hLJ7REbbldwa6vRR7fYQH1EteyVFZzDPsy6ipKxSlq89q/5d1nk17FG02o10Szz/X+pWPTjdtorw==
+"@airgap/substrate@^0.13.43-beta.1", "@airgap/substrate@0.13.43-beta.1":
+  version "0.13.43-beta.1"
+  resolved "https://registry.npmjs.org/@airgap/substrate/-/substrate-0.13.43-beta.1.tgz"
+  integrity sha512-W0JV7mHxod3zzZnrW/iallSI1UZWMm52uzxveesVO57AS4va/DhaqlTe38RxMdwz3UDK/EgYZAycGadwwY5EkA==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.43-beta.0"
-    "@airgap/crypto" "^0.13.43-beta.0"
-    "@airgap/module-kit" "^0.13.43-beta.0"
-    "@airgap/serializer" "^0.13.43-beta.0"
+    "@airgap/coinlib-core" "^0.13.43-beta.1"
+    "@airgap/crypto" "^0.13.43-beta.1"
+    "@airgap/module-kit" "^0.13.43-beta.1"
+    "@airgap/serializer" "^0.13.43-beta.1"
     "@polkadot/util" "2.0.1"
     "@polkadot/wasm-crypto" "0.20.1"
 
-"@airgap/tezos@0.13.43-beta.0":
-  version "0.13.43-beta.0"
-  resolved "https://registry.npmjs.org/@airgap/tezos/-/tezos-0.13.43-beta.0.tgz"
-  integrity sha512-iYZ6/B9BMBkUN9KuGKXil7GZtcSfNdUech/mudXGX1iU3RQ5bnlJmgep41xApEvIWNgBFwpQHP/9EZXiuCe64w==
+"@airgap/tezos@0.13.43-beta.1":
+  version "0.13.43-beta.1"
+  resolved "https://registry.npmjs.org/@airgap/tezos/-/tezos-0.13.43-beta.1.tgz"
+  integrity sha512-BuhJhTGuR2tzI1EjC9Rzhx8IUhnMhLumh7h4sBcRiTRU+AiAoQqd8SUAYR8OACrhOuSSFqGBR+YU5og65HoTnw==
   dependencies:
-    "@airgap/coinlib-core" "^0.13.43-beta.0"
-    "@airgap/crypto" "^0.13.43-beta.0"
-    "@airgap/module-kit" "^0.13.43-beta.0"
+    "@airgap/coinlib-core" "^0.13.43-beta.1"
+    "@airgap/crypto" "^0.13.43-beta.1"
+    "@airgap/module-kit" "^0.13.43-beta.1"
     "@airgap/sapling-wasm" "0.0.7"
-    "@airgap/serializer" "^0.13.43-beta.0"
+    "@airgap/serializer" "^0.13.43-beta.1"
     "@stablelib/blake2b" "^1.0.1"
     "@stablelib/ed25519" "^1.0.3"
     "@stablelib/nacl" "^1.0.4"
@@ -1855,17 +1855,7 @@
     fs-extra "^9.0.0"
     tslib "^2.0.1"
 
-"@ionic/utils-fs@^3.1.7":
-  version "3.1.7"
-  resolved "https://registry.npmjs.org/@ionic/utils-fs/-/utils-fs-3.1.7.tgz"
-  integrity sha512-2EknRvMVfhnyhL1VhFkSLa5gOcycK91VnjfrTB0kbqkTFCOXyXgVLI5whzq7SLrgD9t1aqos3lMMQyVzaQ5gVA==
-  dependencies:
-    "@types/fs-extra" "^8.0.0"
-    debug "^4.0.0"
-    fs-extra "^9.0.0"
-    tslib "^2.0.1"
-
-"@ionic/utils-fs@3.1.7":
+"@ionic/utils-fs@^3.1.7", "@ionic/utils-fs@3.1.7":
   version "3.1.7"
   resolved "https://registry.npmjs.org/@ionic/utils-fs/-/utils-fs-3.1.7.tgz"
   integrity sha512-2EknRvMVfhnyhL1VhFkSLa5gOcycK91VnjfrTB0kbqkTFCOXyXgVLI5whzq7SLrgD9t1aqos3lMMQyVzaQ5gVA==
@@ -1982,22 +1972,7 @@
     untildify "^4.0.0"
     wrap-ansi "^7.0.0"
 
-"@ionic/utils-terminal@^2.3.4":
-  version "2.3.4"
-  resolved "https://registry.npmjs.org/@ionic/utils-terminal/-/utils-terminal-2.3.4.tgz"
-  integrity sha512-cEiMFl3jklE0sW60r8JHH3ijFTwh/jkdEKWbylSyExQwZ8pPuwoXz7gpkWoJRLuoRHHSvg+wzNYyPJazIHfoJA==
-  dependencies:
-    "@types/slice-ansi" "^4.0.0"
-    debug "^4.0.0"
-    signal-exit "^3.0.3"
-    slice-ansi "^4.0.0"
-    string-width "^4.1.0"
-    strip-ansi "^6.0.0"
-    tslib "^2.0.1"
-    untildify "^4.0.0"
-    wrap-ansi "^7.0.0"
-
-"@ionic/utils-terminal@2.3.4":
+"@ionic/utils-terminal@^2.3.4", "@ionic/utils-terminal@2.3.4":
   version "2.3.4"
   resolved "https://registry.npmjs.org/@ionic/utils-terminal/-/utils-terminal-2.3.4.tgz"
   integrity sha512-cEiMFl3jklE0sW60r8JHH3ijFTwh/jkdEKWbylSyExQwZ8pPuwoXz7gpkWoJRLuoRHHSvg+wzNYyPJazIHfoJA==
@@ -3118,12 +3093,7 @@ acorn-walk@^7.0.0:
   resolved "https://registry.npmjs.org/acorn-walk/-/acorn-walk-7.2.0.tgz"
   integrity sha512-OPdCF6GsMIP+Az+aWfAAOEt2/+iVDKE7oy6lJ098aoe59oAmK76qV6Gw60SbZ8jHuG2wH058GF4pLFbYamYrVA==
 
-acorn-walk@^8.1.1:
-  version "8.2.0"
-  resolved "https://registry.npmjs.org/acorn-walk/-/acorn-walk-8.2.0.tgz"
-  integrity sha512-k+iyHEuPgSw6SbuDpGQM+06HQUa04DZ3o+F6CSzXMvvI5KMvnaEqXe+YVe555R9nn6GPt404fos4wcgpw12SDA==
-
-acorn-walk@^8.2.0:
+acorn-walk@^8.1.1, acorn-walk@^8.2.0:
   version "8.2.0"
   resolved "https://registry.npmjs.org/acorn-walk/-/acorn-walk-8.2.0.tgz"
   integrity sha512-k+iyHEuPgSw6SbuDpGQM+06HQUa04DZ3o+F6CSzXMvvI5KMvnaEqXe+YVe555R9nn6GPt404fos4wcgpw12SDA==
@@ -3133,22 +3103,7 @@ acorn@^7.0.0:
   resolved "https://registry.npmjs.org/acorn/-/acorn-7.4.1.tgz"
   integrity sha512-nQyp0o1/mNdbTO1PO6kHkwSrmgZ0MT/jCCpNiwbUjGoRN4dlBhqJtoQuCnEOKzgTVwg0ZWiCoQy6SxMebQVh8A==
 
-acorn@^8.4.1:
-  version "8.10.0"
-  resolved "https://registry.npmjs.org/acorn/-/acorn-8.10.0.tgz"
-  integrity sha512-F0SAmZ8iUtS//m8DmCTA0jlh6TDKkHQyK6xc6V4KDTyZKA9dnvX9/3sRTVQrWm79glUAZbnmmNcdYwUIHWVybw==
-
-acorn@^8.7.0:
-  version "8.10.0"
-  resolved "https://registry.npmjs.org/acorn/-/acorn-8.10.0.tgz"
-  integrity sha512-F0SAmZ8iUtS//m8DmCTA0jlh6TDKkHQyK6xc6V4KDTyZKA9dnvX9/3sRTVQrWm79glUAZbnmmNcdYwUIHWVybw==
-
-acorn@^8.7.1:
-  version "8.10.0"
-  resolved "https://registry.npmjs.org/acorn/-/acorn-8.10.0.tgz"
-  integrity sha512-F0SAmZ8iUtS//m8DmCTA0jlh6TDKkHQyK6xc6V4KDTyZKA9dnvX9/3sRTVQrWm79glUAZbnmmNcdYwUIHWVybw==
-
-acorn@^8.8.2:
+acorn@^8.4.1, acorn@^8.7.0, acorn@^8.7.1, acorn@^8.8.2:
   version "8.10.0"
   resolved "https://registry.npmjs.org/acorn/-/acorn-8.10.0.tgz"
   integrity sha512-F0SAmZ8iUtS//m8DmCTA0jlh6TDKkHQyK6xc6V4KDTyZKA9dnvX9/3sRTVQrWm79glUAZbnmmNcdYwUIHWVybw==
@@ -3277,14 +3232,7 @@ ansi-styles@^3.2.1:
   dependencies:
     color-convert "^1.9.0"
 
-ansi-styles@^4.0.0:
-  version "4.3.0"
-  resolved "https://registry.npmjs.org/ansi-styles/-/ansi-styles-4.3.0.tgz"
-  integrity sha512-zbB9rCJAT1rbjiVDb2hqKFHNYLxgtk8NURxZ3IZwD3F6NtxbXZQCnnSi1Lkx+IDohdPlFp222wVALIheZJQSEg==
-  dependencies:
-    color-convert "^2.0.1"
-
-ansi-styles@^4.1.0:
+ansi-styles@^4.0.0, ansi-styles@^4.1.0:
   version "4.3.0"
   resolved "https://registry.npmjs.org/ansi-styles/-/ansi-styles-4.3.0.tgz"
   integrity sha512-zbB9rCJAT1rbjiVDb2hqKFHNYLxgtk8NURxZ3IZwD3F6NtxbXZQCnnSi1Lkx+IDohdPlFp222wVALIheZJQSEg==
@@ -3648,27 +3596,27 @@ blakejs@^1.1.0, blakejs@^1.2.1:
   resolved "https://registry.npmjs.org/blakejs/-/blakejs-1.2.1.tgz"
   integrity sha512-QXUSXI3QVc/gJME0dBpXrag1kbzOqCjCX8/b54ntNyW6sjtoqxqRk3LTmXzaJoh71zMsDCjM+47jS7XiwN/+fQ==
 
-bn.js@^4.0.0:
+bn.js@^4.0.0, bn.js@^4.1.0, bn.js@^4.11.0, bn.js@^4.11.8, bn.js@^4.11.9:
   version "4.12.0"
   resolved "https://registry.npmjs.org/bn.js/-/bn.js-4.12.0.tgz"
   integrity sha512-c98Bf3tPniI+scsdk237ku1Dc3ujXQTSgyiPUDEOe7tRkhrqridvh8klBv0HCEso1OLOYcHuCv/cS6DNxKH+ZA==
 
-bn.js@^4.1.0:
-  version "4.12.0"
-  resolved "https://registry.npmjs.org/bn.js/-/bn.js-4.12.0.tgz"
-  integrity sha512-c98Bf3tPniI+scsdk237ku1Dc3ujXQTSgyiPUDEOe7tRkhrqridvh8klBv0HCEso1OLOYcHuCv/cS6DNxKH+ZA==
+bn.js@^5.0.0:
+  version "5.2.1"
+  resolved "https://registry.npmjs.org/bn.js/-/bn.js-5.2.1.tgz"
+  integrity sha512-eXRvHzWyYPBuB4NBy0cmYQjGitUrtqwbvlzP3G6VFnNRbsZQIxQ10PbKKHt8gZ/HW/D/747aDl+QkDqg3KQLMQ==
 
-bn.js@^4.11.0, bn.js@^4.11.8:
-  version "4.12.0"
-  resolved "https://registry.npmjs.org/bn.js/-/bn.js-4.12.0.tgz"
-  integrity sha512-c98Bf3tPniI+scsdk237ku1Dc3ujXQTSgyiPUDEOe7tRkhrqridvh8klBv0HCEso1OLOYcHuCv/cS6DNxKH+ZA==
+bn.js@^5.1.1:
+  version "5.2.1"
+  resolved "https://registry.npmjs.org/bn.js/-/bn.js-5.2.1.tgz"
+  integrity sha512-eXRvHzWyYPBuB4NBy0cmYQjGitUrtqwbvlzP3G6VFnNRbsZQIxQ10PbKKHt8gZ/HW/D/747aDl+QkDqg3KQLMQ==
 
-bn.js@^4.11.9:
-  version "4.12.0"
-  resolved "https://registry.npmjs.org/bn.js/-/bn.js-4.12.0.tgz"
-  integrity sha512-c98Bf3tPniI+scsdk237ku1Dc3ujXQTSgyiPUDEOe7tRkhrqridvh8klBv0HCEso1OLOYcHuCv/cS6DNxKH+ZA==
+bn.js@^5.1.2:
+  version "5.2.1"
+  resolved "https://registry.npmjs.org/bn.js/-/bn.js-5.2.1.tgz"
+  integrity sha512-eXRvHzWyYPBuB4NBy0cmYQjGitUrtqwbvlzP3G6VFnNRbsZQIxQ10PbKKHt8gZ/HW/D/747aDl+QkDqg3KQLMQ==
 
-bn.js@^5.0.0, bn.js@^5.1.1, bn.js@^5.1.2, bn.js@^5.2.0:
+bn.js@^5.2.0:
   version "5.2.1"
   resolved "https://registry.npmjs.org/bn.js/-/bn.js-5.2.1.tgz"
   integrity sha512-eXRvHzWyYPBuB4NBy0cmYQjGitUrtqwbvlzP3G6VFnNRbsZQIxQ10PbKKHt8gZ/HW/D/747aDl+QkDqg3KQLMQ==
@@ -3999,23 +3947,7 @@ buffer-xor@^1.0.3:
   resolved "https://registry.npmjs.org/buffer-xor/-/buffer-xor-1.0.3.tgz"
   integrity sha512-571s0T7nZWK6vB67HI5dyUF7wXiNcfaPPPTl6zYCNApANjIvYJTg7hlud/+cJpdAhS7dVzqMLmfhfHR3rAcOjQ==
 
-buffer@^5.1.0:
-  version "5.7.1"
-  resolved "https://registry.npmjs.org/buffer/-/buffer-5.7.1.tgz"
-  integrity sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==
-  dependencies:
-    base64-js "^1.3.1"
-    ieee754 "^1.1.13"
-
-buffer@^5.2.1:
-  version "5.7.1"
-  resolved "https://registry.npmjs.org/buffer/-/buffer-5.7.1.tgz"
-  integrity sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==
-  dependencies:
-    base64-js "^1.3.1"
-    ieee754 "^1.1.13"
-
-buffer@^5.5.0:
+buffer@^5.1.0, buffer@^5.2.1, buffer@^5.5.0:
   version "5.7.1"
   resolved "https://registry.npmjs.org/buffer/-/buffer-5.7.1.tgz"
   integrity sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==
@@ -4130,7 +4062,7 @@ cbor-sync@^1.0.4:
   resolved "https://registry.npmjs.org/cbor-sync/-/cbor-sync-1.0.4.tgz"
   integrity sha512-GWlXN4wiz0vdWWXBU71Dvc1q3aBo0HytqwAZnXF1wOwjqNnDWA1vZ1gDMFLlqohak31VQzmhiYfiCX5QSSfagA==
 
-chalk@^2.4.2, chalk@2.4.2:
+chalk@^2.4.2:
   version "2.4.2"
   resolved "https://registry.npmjs.org/chalk/-/chalk-2.4.2.tgz"
   integrity sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==
@@ -4147,7 +4079,7 @@ chalk@^3.0.0:
     ansi-styles "^4.1.0"
     supports-color "^7.1.0"
 
-chalk@^4.0.0:
+chalk@^4.0.0, chalk@^4.1.0, chalk@^4.1.1:
   version "4.1.2"
   resolved "https://registry.npmjs.org/chalk/-/chalk-4.1.2.tgz"
   integrity sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==
@@ -4155,21 +4087,14 @@ chalk@^4.0.0:
     ansi-styles "^4.1.0"
     supports-color "^7.1.0"
 
-chalk@^4.1.0:
-  version "4.1.2"
-  resolved "https://registry.npmjs.org/chalk/-/chalk-4.1.2.tgz"
-  integrity sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==
+chalk@2.4.2:
+  version "2.4.2"
+  resolved "https://registry.npmjs.org/chalk/-/chalk-2.4.2.tgz"
+  integrity sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==
   dependencies:
-    ansi-styles "^4.1.0"
-    supports-color "^7.1.0"
-
-chalk@^4.1.1:
-  version "4.1.2"
-  resolved "https://registry.npmjs.org/chalk/-/chalk-4.1.2.tgz"
-  integrity sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==
-  dependencies:
-    ansi-styles "^4.1.0"
-    supports-color "^7.1.0"
+    ansi-styles "^3.2.1"
+    escape-string-regexp "^1.0.5"
+    supports-color "^5.3.0"
 
 chardet@^0.7.0:
   version "0.7.0"
@@ -4319,17 +4244,7 @@ combined-stream@^1.0.8:
   dependencies:
     delayed-stream "~1.0.0"
 
-commander@^2.15.0:
-  version "2.20.3"
-  resolved "https://registry.npmjs.org/commander/-/commander-2.20.3.tgz"
-  integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
-
-commander@^2.20.0:
-  version "2.20.3"
-  resolved "https://registry.npmjs.org/commander/-/commander-2.20.3.tgz"
-  integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
-
-commander@^2.8.1:
+commander@^2.15.0, commander@^2.20.0, commander@^2.8.1:
   version "2.20.3"
   resolved "https://registry.npmjs.org/commander/-/commander-2.20.3.tgz"
   integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
@@ -6176,16 +6091,7 @@ http-parser-js@>=0.5.1:
   resolved "https://registry.npmjs.org/http-parser-js/-/http-parser-js-0.5.8.tgz"
   integrity sha512-SGeBX54F94Wgu5RH3X5jsDtf4eHyRogWX1XGT3b4HuW3tQPM4AaBzoUji/4AAJNXCEOWZ5O0DgZmJw1947gD5Q==
 
-http-proxy-agent@^4.0.0:
-  version "4.0.1"
-  resolved "https://registry.npmjs.org/http-proxy-agent/-/http-proxy-agent-4.0.1.tgz"
-  integrity sha512-k0zdNgqWTGA6aeIRVpvfVob4fL52dTfaehylg0Y4UvSySvOq/Y+BOyPrgpUrA7HylqvU8vIZGsRuXmspskV0Tg==
-  dependencies:
-    "@tootallnate/once" "1"
-    agent-base "6"
-    debug "4"
-
-http-proxy-agent@^4.0.1:
+http-proxy-agent@^4.0.0, http-proxy-agent@^4.0.1:
   version "4.0.1"
   resolved "https://registry.npmjs.org/http-proxy-agent/-/http-proxy-agent-4.0.1.tgz"
   integrity sha512-k0zdNgqWTGA6aeIRVpvfVob4fL52dTfaehylg0Y4UvSySvOq/Y+BOyPrgpUrA7HylqvU8vIZGsRuXmspskV0Tg==
@@ -7148,17 +7054,7 @@ lru-cache@^6.0.0:
   dependencies:
     yallist "^4.0.0"
 
-lru-cache@^7.4.4:
-  version "7.18.3"
-  resolved "https://registry.npmjs.org/lru-cache/-/lru-cache-7.18.3.tgz"
-  integrity sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==
-
-lru-cache@^7.5.1:
-  version "7.18.3"
-  resolved "https://registry.npmjs.org/lru-cache/-/lru-cache-7.18.3.tgz"
-  integrity sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==
-
-lru-cache@^7.7.1:
+lru-cache@^7.4.4, lru-cache@^7.5.1, lru-cache@^7.7.1:
   version "7.18.3"
   resolved "https://registry.npmjs.org/lru-cache/-/lru-cache-7.18.3.tgz"
   integrity sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==
@@ -7351,7 +7247,14 @@ minimalistic-crypto-utils@^1.0.1:
   resolved "https://registry.npmjs.org/minimalistic-crypto-utils/-/minimalistic-crypto-utils-1.0.1.tgz"
   integrity sha512-JIYlbt6g8i5jKfJ3xz7rF0LXmv2TkDxBLUkiBeZ7bAx4GnnNMr8xFpGnOxn6GhTEHx3SjRrZEoU+j04prX1ktg==
 
-minimatch@^3.0.4, minimatch@^3.1.1:
+minimatch@^3.0.4:
+  version "3.1.2"
+  resolved "https://registry.npmjs.org/minimatch/-/minimatch-3.1.2.tgz"
+  integrity sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==
+  dependencies:
+    brace-expansion "^1.1.7"
+
+minimatch@^3.1.1:
   version "3.1.2"
   resolved "https://registry.npmjs.org/minimatch/-/minimatch-3.1.2.tgz"
   integrity sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==
@@ -7365,14 +7268,7 @@ minimatch@^8.0.2:
   dependencies:
     brace-expansion "^2.0.1"
 
-minimatch@^9.0.0:
-  version "9.0.3"
-  resolved "https://registry.npmjs.org/minimatch/-/minimatch-9.0.3.tgz"
-  integrity sha512-RHiac9mvaRw0x3AYRgDC1CxAP7HTcNrrECeA8YYJeWnpo+2Q5CegtZjaotWTWxDG3UeGA1coE05iH1mPjT/2mg==
-  dependencies:
-    brace-expansion "^2.0.1"
-
-minimatch@^9.0.1:
+minimatch@^9.0.0, minimatch@^9.0.1:
   version "9.0.3"
   resolved "https://registry.npmjs.org/minimatch/-/minimatch-9.0.3.tgz"
   integrity sha512-RHiac9mvaRw0x3AYRgDC1CxAP7HTcNrrECeA8YYJeWnpo+2Q5CegtZjaotWTWxDG3UeGA1coE05iH1mPjT/2mg==
@@ -8173,12 +8069,7 @@ picomatch@^2.0.4, picomatch@^2.2.1, picomatch@^2.3.1, picomatch@2.3.1:
   resolved "https://registry.npmjs.org/picomatch/-/picomatch-2.3.1.tgz"
   integrity sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==
 
-pify@^2.0.0:
-  version "2.3.0"
-  resolved "https://registry.npmjs.org/pify/-/pify-2.3.0.tgz"
-  integrity sha512-udgsAY+fTnvv7kI7aaxbqwWNb0AHiB0qBO89PZKPkoTmGOgdbrHDKD+0B2X4uTfJ/FT1R09r9gTsjUjNJotuog==
-
-pify@^2.3.0:
+pify@^2.0.0, pify@^2.3.0:
   version "2.3.0"
   resolved "https://registry.npmjs.org/pify/-/pify-2.3.0.tgz"
   integrity sha512-udgsAY+fTnvv7kI7aaxbqwWNb0AHiB0qBO89PZKPkoTmGOgdbrHDKD+0B2X4uTfJ/FT1R09r9gTsjUjNJotuog==
@@ -8786,14 +8677,7 @@ reusify@^1.0.4:
   resolved "https://registry.npmjs.org/reusify/-/reusify-1.0.4.tgz"
   integrity sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==
 
-rimraf@^3.0.0:
-  version "3.0.2"
-  resolved "https://registry.npmjs.org/rimraf/-/rimraf-3.0.2.tgz"
-  integrity sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==
-  dependencies:
-    glob "^7.1.3"
-
-rimraf@^3.0.2:
+rimraf@^3.0.0, rimraf@^3.0.2:
   version "3.0.2"
   resolved "https://registry.npmjs.org/rimraf/-/rimraf-3.0.2.tgz"
   integrity sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==
@@ -8952,25 +8836,7 @@ sdp@^1.5.0:
   resolved "https://registry.npmjs.org/sdp/-/sdp-1.5.4.tgz"
   integrity sha512-9x0+fpJHW2bbqtIktmL+H9m+BswgurPVPhWrur4cCZPDWDSsdGYvRBaKhDXlnNCD1b/Xi8cOTG2u703CTQuwgg==
 
-secp256k1@^4.0.0:
-  version "4.0.3"
-  resolved "https://registry.npmjs.org/secp256k1/-/secp256k1-4.0.3.tgz"
-  integrity sha512-NLZVf+ROMxwtEj3Xa562qgv2BK5e2WNmXPiOdVIPLgs6lyTzMvBq0aWTYMI5XCP9jZMVKOcqZLw/Wc4vDkuxhA==
-  dependencies:
-    elliptic "^6.5.4"
-    node-addon-api "^2.0.0"
-    node-gyp-build "^4.2.0"
-
-secp256k1@^4.0.1:
-  version "4.0.3"
-  resolved "https://registry.npmjs.org/secp256k1/-/secp256k1-4.0.3.tgz"
-  integrity sha512-NLZVf+ROMxwtEj3Xa562qgv2BK5e2WNmXPiOdVIPLgs6lyTzMvBq0aWTYMI5XCP9jZMVKOcqZLw/Wc4vDkuxhA==
-  dependencies:
-    elliptic "^6.5.4"
-    node-addon-api "^2.0.0"
-    node-gyp-build "^4.2.0"
-
-secp256k1@^4.0.3:
+secp256k1@^4.0.0, secp256k1@^4.0.1, secp256k1@^4.0.3:
   version "4.0.3"
   resolved "https://registry.npmjs.org/secp256k1/-/secp256k1-4.0.3.tgz"
   integrity sha512-NLZVf+ROMxwtEj3Xa562qgv2BK5e2WNmXPiOdVIPLgs6lyTzMvBq0aWTYMI5XCP9jZMVKOcqZLw/Wc4vDkuxhA==
@@ -9229,7 +9095,7 @@ sockjs@^0.3.24:
     uuid "^8.3.2"
     websocket-driver "^0.7.4"
 
-socks-proxy-agent@^5.0.0:
+socks-proxy-agent@^5.0.0, socks-proxy-agent@5:
   version "5.0.1"
   resolved "https://registry.npmjs.org/socks-proxy-agent/-/socks-proxy-agent-5.0.1.tgz"
   integrity sha512-vZdmnjb9a2Tz6WEQVIurybSwElwPxMZaIc7PzqbJTrezcKNznv6giT7J7tZDZ1BojVaa1jvO/UiUdhDVB0ACoQ==
@@ -9246,15 +9112,6 @@ socks-proxy-agent@^7.0.0:
     agent-base "^6.0.2"
     debug "^4.3.3"
     socks "^2.6.2"
-
-socks-proxy-agent@5:
-  version "5.0.1"
-  resolved "https://registry.npmjs.org/socks-proxy-agent/-/socks-proxy-agent-5.0.1.tgz"
-  integrity sha512-vZdmnjb9a2Tz6WEQVIurybSwElwPxMZaIc7PzqbJTrezcKNznv6giT7J7tZDZ1BojVaa1jvO/UiUdhDVB0ACoQ==
-  dependencies:
-    agent-base "^6.0.2"
-    debug "4"
-    socks "^2.3.3"
 
 socks@^2.3.3, socks@^2.6.2:
   version "2.7.1"
@@ -9322,7 +9179,7 @@ source-map-support@^0.5.5, source-map-support@~0.5.20, source-map-support@0.5.21
     buffer-from "^1.0.0"
     source-map "^0.6.0"
 
-source-map@^0.6.0:
+source-map@^0.6.0, source-map@~0.6.0, source-map@~0.6.1, source-map@0.6.1:
   version "0.6.1"
   resolved "https://registry.npmjs.org/source-map/-/source-map-0.6.1.tgz"
   integrity sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==
@@ -9331,21 +9188,6 @@ source-map@~0.5.3:
   version "0.5.7"
   resolved "https://registry.npmjs.org/source-map/-/source-map-0.5.7.tgz"
   integrity sha512-LbrmJOMUSdEVxIKvdcJzQC+nQhe8FUZQTXQy6+I75skNgn3OoQ0DZA8YnFa7gp8tqtL3KPf1kmo0R5DoApeSGQ==
-
-source-map@~0.6.0:
-  version "0.6.1"
-  resolved "https://registry.npmjs.org/source-map/-/source-map-0.6.1.tgz"
-  integrity sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==
-
-source-map@~0.6.1:
-  version "0.6.1"
-  resolved "https://registry.npmjs.org/source-map/-/source-map-0.6.1.tgz"
-  integrity sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==
-
-source-map@0.6.1:
-  version "0.6.1"
-  resolved "https://registry.npmjs.org/source-map/-/source-map-0.6.1.tgz"
-  integrity sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==
 
 source-map@0.7.4:
   version "0.7.4"
@@ -9845,7 +9687,7 @@ tslib@^2.0.0:
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.6.1.tgz"
   integrity sha512-t0hLfiEKfMUoqhG+U1oid7Pva4bbDPHYfJNiB7BiIjRkj1pyC++4N3huJfqY6aRH6VTB0rvtzQwjM4K6qpfOig==
 
-tslib@^2.0.1, tslib@^2.6.2:
+tslib@^2.0.1, tslib@^2.4.0:
   version "2.6.3"
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.6.3.tgz"
   integrity sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ==
@@ -9860,7 +9702,7 @@ tslib@^2.3.0:
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.6.1.tgz"
   integrity sha512-t0hLfiEKfMUoqhG+U1oid7Pva4bbDPHYfJNiB7BiIjRkj1pyC++4N3huJfqY6aRH6VTB0rvtzQwjM4K6qpfOig==
 
-tslib@^2.4.0:
+tslib@^2.6.2:
   version "2.6.3"
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.6.3.tgz"
   integrity sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ==
@@ -10358,7 +10200,14 @@ which-typed-array@^1.1.11, which-typed-array@^1.1.2:
     gopd "^1.0.1"
     has-tostringtag "^1.0.0"
 
-which@^2.0.1, which@^2.0.2:
+which@^2.0.1:
+  version "2.0.2"
+  resolved "https://registry.npmjs.org/which/-/which-2.0.2.tgz"
+  integrity sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==
+  dependencies:
+    isexe "^2.0.0"
+
+which@^2.0.2:
   version "2.0.2"
   resolved "https://registry.npmjs.org/which/-/which-2.0.2.tgz"
   integrity sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==
