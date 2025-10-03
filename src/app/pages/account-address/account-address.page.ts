@@ -74,6 +74,25 @@ export const superherowallet = {
   urlScheme: 'superhero'
 }
 
+// Polkadot wallets supporting UOS
+const polkadotjs = {
+  icon: 'polkadot-js.svg',
+  name: 'Polkadot.js',
+  qrType: QRType.UOS
+}
+
+const talisman = {
+  icon: 'talisman.svg',
+  name: 'Talisman',
+  qrType: QRType.UOS
+}
+
+const nova = {
+  icon: 'nova-wallet.svg',
+  name: 'Nova Wallet',
+  qrType: QRType.UOS
+}
+
 export interface CompanionApp {
   icon: string
   name: string
@@ -163,6 +182,10 @@ export class AccountAddressPage {
           break
         case MainProtocolSymbols.AE:
           this.syncOptions = [airgapwallet, superherowallet]
+          break
+        case MainProtocolSymbols.POLKADOT:
+        case MainProtocolSymbols.KUSAMA:
+          this.syncOptions = [airgapwallet, polkadotjs, talisman, nova]
           break
 
         default:

@@ -11,6 +11,8 @@ import {
   UiEventElementsService,
   UiEventService
 } from '@airgap/angular-core'
+import { BCURTypesHandler } from '@airgap/angular-core'
+import { UOSHandler } from '@airgap/angular-core'
 import { AirGapWallet, AirGapWalletStatus, MainProtocolSymbols, UnsignedTransaction } from '@airgap/coinlib-core'
 import { Inject, Injectable } from '@angular/core'
 
@@ -42,7 +44,13 @@ export class IACService extends BaseIACService {
     private readonly modalController: ModalController,
     @Inject(APP_CONFIG) appConfig: AppConfig
   ) {
-    super(uiEventElementsService, clipboard, secretsService.isReady(), [], deeplinkService, appConfig)
+    // TODO: I think this should not be necessary. It should be handled by the common-components package.
+    // The handlers are implemented in @airgap/angular-core but need proper exports
+    const customHandlers = [
+      new BCURTypesHandler(),
+      new UOSHandler() // For Polkadot UOS standard support
+    ]
+    super(uiEventElementsService, clipboard, secretsService.isReady(), customHandlers, deeplinkService, appConfig)
 
     this.serializerMessageHandlers[IACMessageType.TransactionSignRequest] = this.handleUnsignedTransactions.bind(this)
     this.serializerMessageHandlers[IACMessageType.MessageSignRequest] = this.handleMessageSignRequest.bind(this)

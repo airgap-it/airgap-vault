@@ -1,5 +1,5 @@
 import { flattened } from '@airgap/angular-core'
-import { AirGapWallet, AirGapWalletStatus } from '@airgap/coinlib-core'
+import { AirGapWallet, AirGapWalletStatus, MainProtocolSymbols } from '@airgap/coinlib-core'
 import { IACMessageDefinitionObjectV3, generateId, IACMessageType, AccountShareResponse } from '@airgap/serializer'
 
 import { Injectable } from '@angular/core'
@@ -18,8 +18,13 @@ export class ShareUrlService {
   public async generateShareWalletURL(wallet: AirGapWallet): Promise<IACMessageDefinitionObjectV3[]> {
     const secret: MnemonicSecret | undefined = this.secretsService.findByPublicKey(wallet.publicKey)
 
+    // TODO: There is a big chance this is wrong.
+    const protocolId = await wallet.protocol.getIdentifier()
+    const isSubstrateProtocol = protocolId === MainProtocolSymbols.POLKADOT || protocolId === MainProtocolSymbols.KUSAMA
+
+    // For Substrate protocols, we should use the actual SS58 address instead of the hex public key
     const accountShareResponse: AccountShareResponse = {
-      publicKey: wallet.publicKey,
+      publicKey: isSubstrateProtocol ? wallet.receivingPublicAddress : wallet.publicKey,
       isExtendedPublicKey: wallet.isExtendedPublicKey,
       derivationPath: wallet.derivationPath,
       masterFingerprint: wallet.masterFingerprint,
