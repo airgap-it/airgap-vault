@@ -30,6 +30,7 @@
         [delayBetweenScanSuccess]="0"
         *ngIf="isBrowser || isElectron"
         (scanSuccess)="checkScan($event)"
+        (scanComplete)="scanComplete($event)"
       ></zxing-scanner>
     </ion-row>
 

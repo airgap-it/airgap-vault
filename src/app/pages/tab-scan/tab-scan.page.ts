@@ -10,6 +10,8 @@ import { IACService } from 'src/app/services/iac/iac.service'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { ScanBasePage } from '../scan-base/scan-base'
+import { Result } from '@zxing/library'
+// import { u8aToHex } from '@polkadot/util'
 
 @Component({
   selector: 'airgap-tab-scan',
@@ -26,6 +28,8 @@ export class TabScanPage extends ScanBasePage {
   private parts: Set<string> = new Set()
 
   public isMultiQr: boolean = false
+
+  private rawData: Uint8Array = undefined
 
   constructor(
     platform: Platform,
@@ -51,7 +55,15 @@ export class TabScanPage extends ScanBasePage {
     this.iacService.resetHandlers()
   }
 
+  public scanComplete(ref: Result) {
+    if (ref) {
+      this.rawData = ref.getRawBytes()
+    }
+  }
+
   public async checkScan(data: string): Promise<boolean | void> {
+    await new Promise((resolve) => setTimeout(resolve, 0))
+
     const sizeBefore: number = this.parts.size
     this.parts.add(data)
 
@@ -60,6 +72,26 @@ export class TabScanPage extends ScanBasePage {
       this.startScan()
 
       return undefined
+    }
+
+    const storedData = data
+
+    if (/[^\x20-\x7E]/.test(data) && this.rawData) {
+      const hexString = [...this.rawData].map((b) => b.toString(16).padStart(2, '0')).join('')
+
+      const targetIndex = hexString.indexOf('53')
+
+      const cutStartIndex = Math.max(0, targetIndex - 10)
+
+      if (targetIndex !== -1) {
+        const result = hexString.substring(cutStartIndex)
+        data = result
+      } else {
+        data = storedData
+        console.log("'53' not found in the string")
+      }
+
+      console.log('data', data)
     }
 
     this.ngZone.run(() => {

@@ -12,7 +12,6 @@ import {
   UiEventService
 } from '@airgap/angular-core'
 import { BCURTypesHandler } from '@airgap/angular-core'
-import { UOSHandler } from '@airgap/angular-core'
 import { AirGapWallet, AirGapWalletStatus, MainProtocolSymbols, UnsignedTransaction } from '@airgap/coinlib-core'
 import { Inject, Injectable } from '@angular/core'
 
@@ -25,7 +24,7 @@ import * as bitcoinJS from 'bitcoinjs-lib'
 import { ModalController } from '@ionic/angular'
 import { SelectAccountPage } from 'src/app/pages/select-account/select-account.page'
 import { RawTypedEthereumTransaction } from '@airgap/ethereum/v0/types/transaction-ethereum'
-import { IACMessageType, IACMessageDefinitionObjectV3, MessageSignRequest } from '@airgap/serializer'
+import { IACMessageType, IACMessageDefinitionObjectV3, MessageSignRequest, TransactionSignRequest } from '@airgap/serializer'
 import { BitcoinSegwitTransactionSignRequest } from '@airgap/bitcoin'
 
 @Injectable({
@@ -46,10 +45,7 @@ export class IACService extends BaseIACService {
   ) {
     // TODO: I think this should not be necessary. It should be handled by the common-components package.
     // The handlers are implemented in @airgap/angular-core but need proper exports
-    const customHandlers = [
-      new BCURTypesHandler(),
-      new UOSHandler() // For Polkadot UOS standard support
-    ]
+    const customHandlers = [new BCURTypesHandler()]
     super(uiEventElementsService, clipboard, secretsService.isReady(), customHandlers, deeplinkService, appConfig)
 
     this.serializerMessageHandlers[IACMessageType.TransactionSignRequest] = this.handleUnsignedTransactions.bind(this)
@@ -240,6 +236,14 @@ export class IACService extends BaseIACService {
       if (correctWallet && !unsignedTransaction.publicKey) {
         unsignedTransaction.publicKey = correctWallet.publicKey // MetaMask txs don't include a public key, so we need to set it
       }
+    }
+
+    if (!correctWallet && signTransactionRequest.protocol === MainProtocolSymbols.POLKADOT) {
+      const payload = signTransactionRequest.payload as TransactionSignRequest
+
+      const publicKey = payload.publicKey
+
+      correctWallet = await this.secretsService.findWalletByPublicKeyAndProtocolIdentifier(publicKey, MainProtocolSymbols.POLKADOT)
     }
 
     if (correctWallet) {
