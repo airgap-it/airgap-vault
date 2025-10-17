@@ -16,6 +16,7 @@ dependencies {
     implementation project(':capacitor-splash-screen')
     implementation project(':capacitor-status-bar')
     implementation project(':capawesome-capacitor-file-picker')
+    implementation project(':capawesome-capacitor-android-edge-to-edge-support')
     implementation "androidx.legacy:legacy-support-v4:1.0.0"
     implementation "androidx.appcompat:appcompat:1.6.1"
 }
