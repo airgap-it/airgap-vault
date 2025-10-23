@@ -10,6 +10,7 @@ import { IACService } from 'src/app/services/iac/iac.service'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { ScanBasePage } from '../scan-base/scan-base'
+import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support'
 
 @Component({
   selector: 'airgap-tab-scan',
@@ -38,10 +39,20 @@ export class TabScanPage extends ScanBasePage {
     super(platform, scanner, permissionsProvider, securityUtils)
   }
 
+  async ionViewWillLeave() {
+    if (this.platform.is('android')) {
+      await EdgeToEdge.enable()
+    }
+    this.stopScan()
+  }
+
   public async ionViewWillEnter(): Promise<void> {
     await super.ionViewWillEnter()
     this.resetScannerPage()
     this.iacService.resetHandlers()
+    if (this.platform.is('android')) {
+      await EdgeToEdge.disable()
+    }
   }
 
   private resetScannerPage(): void {
