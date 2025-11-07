@@ -6,9 +6,9 @@ RUN apt-get update -y && apt-get install -y \
     pkg-config  \
     libjpeg-dev \
     libcairo2-dev \
-    openjdk-17-jdk-headless
+    openjdk-21-jdk-headless
 
-ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
 
 # create app directory
 RUN mkdir /app
