@@ -66,7 +66,11 @@ export class SecretEditPage {
   }
 
   public async ngOnInit() {
-    this.lifehashData = await this.lifehashService.generateLifehash(this.secret.fingerprint)
+    const bytes = this.secret.fingerprint
+      ? new Uint8Array(this.secret.fingerprint.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)))
+      : new Uint8Array()
+
+    this.lifehashData = await this.lifehashService.generateLifehash(bytes)
   }
 
   public goToSocialRecoverySetup(): void {

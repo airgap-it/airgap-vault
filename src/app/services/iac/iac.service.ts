@@ -20,7 +20,7 @@ import { InteractionOperationType, InteractionService } from '../interaction/int
 import { NavigationService } from '../navigation/navigation.service'
 import { SecretsService } from '../secrets/secrets.service'
 import * as bitcoinJS from 'bitcoinjs-lib'
-import { ModalController } from '@ionic/angular'
+import { ModalController, Platform } from '@ionic/angular'
 import { SelectAccountPage } from 'src/app/pages/select-account/select-account.page'
 import { RawTypedEthereumTransaction } from '@airgap/ethereum/v0/types/transaction-ethereum'
 import { IACMessageType, IACMessageDefinitionObjectV3, MessageSignRequest } from '@airgap/serializer'
@@ -40,9 +40,10 @@ export class IACService extends BaseIACService {
     private readonly secretsService: SecretsService,
     private readonly interactionService: InteractionService,
     private readonly modalController: ModalController,
-    @Inject(APP_CONFIG) appConfig: AppConfig
+    @Inject(APP_CONFIG) appConfig: AppConfig,
+    protected readonly platform: Platform
   ) {
-    super(uiEventElementsService, clipboard, secretsService.isReady(), [], deeplinkService, appConfig)
+    super(uiEventElementsService, clipboard, secretsService.isReady(), [], deeplinkService, appConfig, platform)
 
     this.serializerMessageHandlers[IACMessageType.TransactionSignRequest] = this.handleUnsignedTransactions.bind(this)
     this.serializerMessageHandlers[IACMessageType.MessageSignRequest] = this.handleMessageSignRequest.bind(this)
@@ -158,6 +159,7 @@ export class IACService extends BaseIACService {
     if (
       !correctWallet &&
       (signTransactionRequest.protocol === MainProtocolSymbols.BTC_SEGWIT ||
+        signTransactionRequest.protocol === MainProtocolSymbols.BTC ||
         signTransactionRequest.protocol === MainProtocolSymbols.BTC_TAPROOT)
     ) {
       const transaction: BitcoinSegwitTransactionSignRequest['transaction'] = unsignedTransaction.transaction
