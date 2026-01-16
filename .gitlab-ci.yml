@@ -89,6 +89,7 @@ build_ios:
     - echo "$IOS_BUILD_JSON" > build.json
   script:
     - export DEVELOPER_DIR=$XCODE_PATH
+    - nvm install 22
     - nvm use 22
     - npm i -g yarn
     - yarn install --frozen-lockfile
