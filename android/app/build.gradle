@@ -95,4 +95,10 @@ apply from: 'capacitor.build.gradle'
 configurations.all {
     exclude group: 'com.google.firebase', module: ''
     exclude group: 'com.google.android.gms', module: ''
+
+    // Force consistent versions to avoid duplicate resource errors
+    resolutionStrategy {
+        force "com.google.android.material:material:$androidxMaterialVersion"
+        force "androidx.appcompat:appcompat:$androidxAppCompatVersion"
+    }
 }

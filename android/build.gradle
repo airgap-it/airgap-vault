@@ -33,6 +33,15 @@ allprojects {
             }
         }
     }
+
+    // Force consistent dependency versions across all modules to avoid duplicate resource errors
+    configurations.all {
+        resolutionStrategy {
+            force "com.google.android.material:material:${rootProject.ext.androidxMaterialVersion}"
+            force "androidx.appcompat:appcompat:${rootProject.ext.androidxAppCompatVersion}"
+            force "androidx.core:core:${rootProject.ext.androidxCoreVersion}"
+        }
+    }
 }
 
 task clean(type: Delete) {
