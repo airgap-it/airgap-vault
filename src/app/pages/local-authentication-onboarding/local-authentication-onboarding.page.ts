@@ -5,9 +5,10 @@ import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/er
 import { VaultStorageKey, VaultStorageService } from '../../services/storage/storage.service'
 
 @Component({
-  selector: 'airgap-local-authentication-onboarding',
-  templateUrl: './local-authentication-onboarding.page.html',
-  styleUrls: ['./local-authentication-onboarding.page.scss']
+    selector: 'airgap-local-authentication-onboarding',
+    templateUrl: './local-authentication-onboarding.page.html',
+    styleUrls: ['./local-authentication-onboarding.page.scss'],
+    standalone: false
 })
 export class LocalAuthenticationOnboardingPage {
   constructor(public modalController: ModalController, private readonly storageService: VaultStorageService) {}

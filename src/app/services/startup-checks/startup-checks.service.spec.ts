@@ -25,7 +25,7 @@ describe('StartupCheck Service', () => {
   let startupChecksService: StartupChecksService
   let storageProvider: Storage
   let secureStorage: SecureStorageServiceMock
-  let deviceProvider: DeviceProviderMock
+  let deviceProvider: DeviceProviderMock & { isRooted: boolean; isElectron: boolean }
 
   let unitHelper: UnitHelper
   beforeEach(() => {
@@ -53,10 +53,10 @@ describe('StartupCheck Service', () => {
   })
 
   beforeEach(async () => {
-    startupChecksService = TestBed.get(StartupChecksService)
-    storageProvider = TestBed.get(Storage)
-    deviceProvider = TestBed.get(DeviceService)
-    secureStorage = TestBed.get(SecureStorageService)
+    startupChecksService = TestBed.inject(StartupChecksService)
+    storageProvider = TestBed.inject(Storage)
+    deviceProvider = TestBed.inject(DeviceService) as unknown as DeviceProviderMock & { isRooted: boolean; isElectron: boolean }
+    secureStorage = TestBed.inject(SecureStorageService) as unknown as SecureStorageServiceMock
 
     secureStorage.isSecure = 1
     deviceProvider.isRooted = false

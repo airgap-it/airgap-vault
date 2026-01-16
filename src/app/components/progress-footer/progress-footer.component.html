@@ -8,7 +8,9 @@
     </ion-col>
     <ion-col size="6" class="ion-no-padding">
       <ion-row class="full--height ion-justify-content-center ion-align-items-center">
-        <ion-icon name="md-radio-button-on" [color]="progress === n ? 'tertiary' : 'light'" *ngFor="let n of progressArray"></ion-icon>
+        @for (n of progressArray; track n) {
+          <ion-icon name="md-radio-button-on" [color]="progress === n ? 'tertiary' : 'light'"></ion-icon>
+        }
       </ion-row>
     </ion-col>
     <ion-col size="3" class="ion-no-padding">

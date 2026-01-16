@@ -4,9 +4,10 @@ import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 @Component({
-  selector: 'airgap-social-recovery-generate-rules',
-  templateUrl: './social-recovery-generate-rules.page.html',
-  styleUrls: ['./social-recovery-generate-rules.page.scss']
+    selector: 'airgap-social-recovery-generate-rules',
+    templateUrl: './social-recovery-generate-rules.page.html',
+    styleUrls: ['./social-recovery-generate-rules.page.scss'],
+    standalone: false
 })
 export class SocialRecoveryGenerateRulesPage {
   public state: 0 | 1 | 2 | 3 | 4 | 5 = 0
@@ -20,8 +21,8 @@ export class SocialRecoveryGenerateRulesPage {
     this.required = this.navigationService.getState().required
   }
 
-  changeState(i: 0 | 1 | 2 | 3 | 4 | 5) {
-    this.state = i
+  changeState(i: number) {
+    this.state = i as 0 | 1 | 2 | 3 | 4 | 5
   }
 
   prevState() {

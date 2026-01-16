@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core'
 
 @Component({
-  selector: 'airgap-security-level-self-check',
-  templateUrl: './security-level-self-check.page.html',
-  styleUrls: ['./security-level-self-check.page.scss']
+    selector: 'airgap-security-level-self-check',
+    templateUrl: './security-level-self-check.page.html',
+    styleUrls: ['./security-level-self-check.page.scss'],
+    standalone: false
 })
 export class SecurityLevelSelfCheckPage implements OnInit {
   checkPhrases: string[] = [

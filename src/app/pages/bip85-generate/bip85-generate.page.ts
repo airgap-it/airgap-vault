@@ -9,9 +9,10 @@ import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 
 @Component({
-  selector: 'airgap-bip85-generate',
-  templateUrl: './bip85-generate.page.html',
-  styleUrls: ['./bip85-generate.page.scss']
+    selector: 'airgap-bip85-generate',
+    templateUrl: './bip85-generate.page.html',
+    styleUrls: ['./bip85-generate.page.scss'],
+    standalone: false
 })
 export class Bip85GeneratePage {
   public secret: MnemonicSecret

@@ -12,10 +12,12 @@
       <airgap-progress-indicator [currentShare]="currentShare" [totalShares]="shares.length"></airgap-progress-indicator>
       <h2>{{ 'social-recovery-generate.share-show-heading' | translate }}</h2>
       <div class="tags-wrapper">
-        <ion-button class="tag" shape="round" color="tertiary" *ngFor="let tag of currentShares; let i = index">
-          <p class="number">{{i + 1}}</p>
-          <p class="text">{{tag}}</p>
-        </ion-button>
+        @for (tag of currentShares; track tag; let i = $index) {
+          <ion-button class="tag" shape="round" color="tertiary">
+            <p class="number">{{i + 1}}</p>
+            <p class="text">{{tag}}</p>
+          </ion-button>
+        }
       </div>
     </div>
     <div class="buttons-wrapper">

@@ -4,9 +4,10 @@ import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 @Component({
-  selector: 'airgap-contact-book-contacts-detail',
-  templateUrl: './contact-book-contacts-detail.page.html',
-  styleUrls: ['./contact-book-contacts-detail.page.scss']
+    selector: 'airgap-contact-book-contacts-detail',
+    templateUrl: './contact-book-contacts-detail.page.html',
+    styleUrls: ['./contact-book-contacts-detail.page.scss'],
+    standalone: false
 })
 export class ContactBookContactsDetailPage {
   public addEnum: typeof AddType = AddType

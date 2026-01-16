@@ -7,9 +7,10 @@ import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/er
 import { NavigationService } from '../../services/navigation/navigation.service'
 
 @Component({
-  selector: 'airgap-secret-validate',
-  templateUrl: './secret-validate.page.html',
-  styleUrls: ['./secret-validate.page.scss']
+    selector: 'airgap-secret-validate',
+    templateUrl: './secret-validate.page.html',
+    styleUrls: ['./secret-validate.page.scss'],
+    standalone: false
 })
 export class SecretValidatePage {
   @ViewChild('verify', { static: true })

@@ -6,10 +6,11 @@ import { ContactsService } from 'src/app/services/contacts/contacts.service'
 import { AggregatedDetails, TransactionStore } from './transaction.store'
 
 @Component({
-  selector: 'airgap-transaction',
-  templateUrl: './transaction.component.html',
-  styleUrls: ['./transaction.component.scss'],
-  providers: [TransactionStore]
+    selector: 'airgap-transaction',
+    templateUrl: './transaction.component.html',
+    styleUrls: ['./transaction.component.scss'],
+    providers: [TransactionStore],
+    standalone: false
 })
 export class TransactionComponent implements OnInit {
   @Input()

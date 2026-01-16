@@ -10,27 +10,32 @@
 <ion-content class="ion-padding">
   <h3 class="ion-padding-bottom" [innerHTML]="'wallet-share-select.heading' | translate"></h3>
 
-  <ion-list lines="none" *ngIf="(secrets$ | async).status === UIResourceStatus.SUCCESS">
-    <ng-container *ngFor="let secret of (secrets$ | async).value">
-      <ion-item detail="false" class="ion-no-padding">
-        <ion-label class="white">{{ secret.label }}</ion-label>
-        <ion-checkbox
-          slot="end"
-          color="primary"
-          [checked]="(isChecked$ | async)[secret.id]"
-          (ionChange)="toggleSecret(secret)"
-        ></ion-checkbox>
-      </ion-item>
-      <ion-list lines="none" *ngIf="(isChecked$ | async)[secret.id]">
-        <span class="airgap-account-item-migration">
-          <airgap-account-item
-            *ngFor="let wallet of (secret.wallets | walletFilter: { status: AirGapWalletStatus.ACTIVE } | async) || []"
-            [wallet]="wallet"
-          ></airgap-account-item>
-        </span>
-      </ion-list>
-    </ng-container>
-  </ion-list>
+  @if ((secrets$ | async).status === UIResourceStatus.SUCCESS) {
+    <ion-list lines="none">
+      @for (secret of (secrets$ | async).value; track secret) {
+        <ion-item detail="false" class="ion-no-padding">
+          <ion-label class="white">{{ secret.label }}</ion-label>
+          <ion-checkbox
+            slot="end"
+            color="primary"
+            [checked]="(isChecked$ | async)[secret.id]"
+            (ionChange)="toggleSecret(secret)"
+          ></ion-checkbox>
+        </ion-item>
+        @if ((isChecked$ | async)[secret.id]) {
+          <ion-list lines="none">
+            <span class="airgap-account-item-migration">
+              @for (wallet of (secret.wallets | walletFilter: { status: AirGapWalletStatus.ACTIVE } | async) || []; track wallet) {
+                <airgap-account-item
+                  [wallet]="wallet"
+                ></airgap-account-item>
+              }
+            </span>
+          </ion-list>
+        }
+      }
+    </ion-list>
+  }
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-button [disabled]="!(syncEnabled$ | async)" color="primary" shape="round" (click)="sync()">

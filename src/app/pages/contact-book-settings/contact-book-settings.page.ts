@@ -6,9 +6,10 @@ import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 @Component({
-  selector: 'airgap-contact-book-settings',
-  templateUrl: './contact-book-settings.page.html',
-  styleUrls: ['./contact-book-settings.page.scss']
+    selector: 'airgap-contact-book-settings',
+    templateUrl: './contact-book-settings.page.html',
+    styleUrls: ['./contact-book-settings.page.scss'],
+    standalone: false
 })
 export class ContactBookSettingsPage implements OnInit {
   public bookEnabled: boolean = true

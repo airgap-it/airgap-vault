@@ -1,9 +1,10 @@
 import { Component } from '@angular/core'
 
 @Component({
-  selector: 'airgap-accounts-list-edit-popover',
-  templateUrl: './accounts-list-edit-popover.component.html',
-  styleUrls: ['./accounts-list-edit-popover.component.scss']
+    selector: 'airgap-accounts-list-edit-popover',
+    templateUrl: './accounts-list-edit-popover.component.html',
+    styleUrls: ['./accounts-list-edit-popover.component.scss'],
+    standalone: false
 })
 export class AccountsListEditPopoverComponent {
   private readonly onClickSyncWallets: Function

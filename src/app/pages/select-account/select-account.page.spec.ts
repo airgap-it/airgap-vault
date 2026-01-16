@@ -1,4 +1,4 @@
-// import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+// import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 // import { IonicModule } from '@ionic/angular';
 
 // import { SelectAccountPage } from './select-account.page';
@@ -7,7 +7,7 @@
 //   let component: SelectAccountPage;
 //   let fixture: ComponentFixture<SelectAccountPage>;
 
-//   beforeEach(async(() => {
+//   beforeEach(waitForAsync(() => {
 //     TestBed.configureTestingModule({
 //       declarations: [ SelectAccountPage ],
 //       imports: [IonicModule.forRoot()]

@@ -1,6 +1,6 @@
 /*
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
-import { async, ComponentFixture, TestBed } from '@angular/core/testing'
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { ProgressFooterComponent } from './progress-footer.component'
 
@@ -8,7 +8,7 @@ describe('ProgressFooterComponent', () => {
   let component: ProgressFooterComponent
   let fixture: ComponentFixture<ProgressFooterComponent>
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ProgressFooterComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]

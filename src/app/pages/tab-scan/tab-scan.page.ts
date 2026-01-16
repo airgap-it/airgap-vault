@@ -13,10 +13,11 @@ import { ScanBasePage } from '../scan-base/scan-base'
 import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support'
 
 @Component({
-  selector: 'airgap-tab-scan',
-  templateUrl: './tab-scan.page.html',
-  styleUrls: ['./tab-scan.page.scss'],
-  providers: [PercentPipe]
+    selector: 'airgap-tab-scan',
+    templateUrl: './tab-scan.page.html',
+    styleUrls: ['./tab-scan.page.scss'],
+    providers: [PercentPipe],
+    standalone: false
 })
 export class TabScanPage extends ScanBasePage {
   @ViewChild('scanner')

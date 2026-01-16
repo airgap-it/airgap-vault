@@ -1,4 +1,4 @@
-// import { async, ComponentFixture, TestBed } from '@angular/core/testing'
+// import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing'
 // import { IonicModule } from '@ionic/angular'
 
 // import { MessageSignResponseComponent } from './message-sign-response.component'
@@ -7,7 +7,7 @@
 //   let component: MessageSignResponseComponent
 //   let fixture: ComponentFixture<MessageSignResponseComponent>
 
-//   beforeEach(async(() => {
+//   beforeEach(waitForAsync(() => {
 //     TestBed.configureTestingModule({
 //       declarations: [MessageSignResponseComponent],
 //       imports: [IonicModule.forRoot()]

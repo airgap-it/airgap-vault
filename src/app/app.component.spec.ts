@@ -18,7 +18,7 @@ import { FilesystemPlugin } from '@capacitor/filesystem'
 import { SplashScreenPlugin } from '@capacitor/splash-screen'
 import { StatusBarPlugin } from '@capacitor/status-bar'
 import { FilePickerPlugin } from '@capawesome/capacitor-file-picker'
-import { Platform } from '@ionic/angular'
+import { ModalController, Platform } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 import {
   createAppSpy,
@@ -32,6 +32,7 @@ import {
   createStatusBarSpy,
   createZipSpy
 } from 'test-config/plugins-mocks'
+import { ModalControllerMock } from 'test-config/ionic-mocks'
 
 import { UnitHelper } from './../../test-config/unit-test-helper'
 import { AppComponent } from './app.component'
@@ -93,6 +94,7 @@ describe('AppComponent', () => {
           { provide: ISOLATED_MODULES_PLUGIN, useValue: isolatedModulesSpy },
           { provide: FILE_PICKER_PLUGIN, useValue: filePickerSpy },
           { provide: Platform, useValue: platformSpy },
+          { provide: ModalController, useClass: ModalControllerMock },
           StartupChecksService,
           IACService,
           TranslateService,

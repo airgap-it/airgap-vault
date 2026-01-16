@@ -5,9 +5,10 @@ import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 @Component({
-  selector: 'airgap-add-address',
-  templateUrl: './add-address.component.html',
-  styleUrls: ['./add-address.component.scss']
+    selector: 'airgap-add-address',
+    templateUrl: './add-address.component.html',
+    styleUrls: ['./add-address.component.scss'],
+    standalone: false
 })
 export class AddAddressComponent implements OnInit {
   public addressesNotOnContactBook: string[] = []

@@ -3,9 +3,10 @@ import { InteractionService } from 'src/app/services/interaction/interaction.ser
 import { InstallationType, InteractionType, VaultStorageKey, VaultStorageService } from 'src/app/services/storage/storage.service'
 
 @Component({
-  selector: 'airgap-vault-interaction-settings',
-  templateUrl: './vault-interaction-settings.page.html',
-  styleUrls: ['./vault-interaction-settings.page.scss']
+    selector: 'airgap-vault-interaction-settings',
+    templateUrl: './vault-interaction-settings.page.html',
+    styleUrls: ['./vault-interaction-settings.page.scss'],
+    standalone: false
 })
 export class VaultInteractionSettingsPage implements OnInit {
   public connectionEnabled: boolean = false

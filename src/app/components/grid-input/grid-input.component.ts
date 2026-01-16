@@ -1,9 +1,10 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core'
 
 @Component({
-  selector: 'airgap-grid-input',
-  templateUrl: './grid-input.component.html',
-  styleUrls: ['./grid-input.component.scss']
+    selector: 'airgap-grid-input',
+    templateUrl: './grid-input.component.html',
+    styleUrls: ['./grid-input.component.scss'],
+    standalone: false
 })
 export class GridInputComponent implements OnInit {
   public grid: { position: number; value: string }[][]

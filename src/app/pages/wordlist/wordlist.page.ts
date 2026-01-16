@@ -32,9 +32,10 @@ interface Word {
 }
 
 @Component({
-  selector: 'airgap-wordlist',
-  templateUrl: './wordlist.page.html',
-  styleUrls: ['./wordlist.page.scss']
+    selector: 'airgap-wordlist',
+    templateUrl: './wordlist.page.html',
+    styleUrls: ['./wordlist.page.scss'],
+    standalone: false
 })
 export class WordlistPage implements OnInit {
   public wordlist: Word[]

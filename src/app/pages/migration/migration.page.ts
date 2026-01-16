@@ -14,9 +14,10 @@ import { Alert, MigrationWalletGroup } from './migration.types'
 import { shortenAddress } from './migration.utils'
 
 @Component({
-  selector: 'airgap-migration',
-  templateUrl: './migration.page.html',
-  styleUrls: ['./migration.page.scss']
+    selector: 'airgap-migration',
+    templateUrl: './migration.page.html',
+    styleUrls: ['./migration.page.scss'],
+    standalone: false
 })
 export class MigrationPage implements OnDestroy {
   public readonly walletGroups$: Observable<UIResource<MigrationWalletGroup[]>>

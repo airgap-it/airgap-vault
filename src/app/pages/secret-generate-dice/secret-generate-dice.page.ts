@@ -7,9 +7,10 @@ import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 @Component({
-  selector: 'airgap-secret-generate-dice',
-  templateUrl: './secret-generate-dice.page.html',
-  styleUrls: ['./secret-generate-dice.page.scss']
+    selector: 'airgap-secret-generate-dice',
+    templateUrl: './secret-generate-dice.page.html',
+    styleUrls: ['./secret-generate-dice.page.scss'],
+    standalone: false
 })
 export class SecretGenerateDicePage implements OnInit {
   @ViewChild(IonContent, { static: false }) content: IonContent

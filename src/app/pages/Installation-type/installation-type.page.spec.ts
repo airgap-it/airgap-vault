@@ -1,6 +1,6 @@
 /*
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
-import { async, ComponentFixture, TestBed } from '@angular/core/testing'
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { InstallationTypePage } from './installation-type.page'
 
@@ -8,7 +8,7 @@ describe('InstallationTypePage', () => {
   let component: InstallationTypePage
   let fixture: ComponentFixture<InstallationTypePage>
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [InstallationTypePage],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]

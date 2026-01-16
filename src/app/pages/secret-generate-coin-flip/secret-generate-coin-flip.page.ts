@@ -6,9 +6,10 @@ import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 @Component({
-  selector: 'airgap-secret-generate-coin-flip',
-  templateUrl: './secret-generate-coin-flip.page.html',
-  styleUrls: ['./secret-generate-coin-flip.page.scss']
+    selector: 'airgap-secret-generate-coin-flip',
+    templateUrl: './secret-generate-coin-flip.page.html',
+    styleUrls: ['./secret-generate-coin-flip.page.scss'],
+    standalone: false
 })
 export class SecretGenerateCoinFlipPage implements OnInit {
   @ViewChild(IonContent, { static: false }) content: IonContent

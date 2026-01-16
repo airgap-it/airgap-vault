@@ -1,6 +1,6 @@
 /*
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
-import { async, ComponentFixture, TestBed } from '@angular/core/testing'
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { SecretEditPopoverComponent } from './secret-edit-popover.component'
 
@@ -8,7 +8,7 @@ describe('SecretEditPopoverComponent', () => {
   let component: SecretEditPopoverComponent
   let fixture: ComponentFixture<SecretEditPopoverComponent>
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [SecretEditPopoverComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]

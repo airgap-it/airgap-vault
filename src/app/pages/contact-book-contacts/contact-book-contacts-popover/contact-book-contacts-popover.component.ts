@@ -9,9 +9,10 @@ export enum SortType {
 }
 
 @Component({
-  selector: 'airgap-contact-book-contacts-popover',
-  templateUrl: './contact-book-contacts-popover.component.html',
-  styleUrls: ['./contact-book-contacts-popover.component.scss']
+    selector: 'airgap-contact-book-contacts-popover',
+    templateUrl: './contact-book-contacts-popover.component.html',
+    styleUrls: ['./contact-book-contacts-popover.component.scss'],
+    standalone: false
 })
 export class ContactBookContactsPopoverComponent implements OnInit {
   private readonly onClickSort: Function

@@ -8,14 +8,16 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-segment *ngIf="showChange" (ionChange)="segmentChanged($event)" value="external">
-    <ion-segment-button value="external">
-      <ion-label>Receive</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="internal">
-      <ion-label>Change</ion-label>
-    </ion-segment-button>
-  </ion-segment>
+  @if (showChange) {
+    <ion-segment (ionChange)="segmentChanged($event)" value="external">
+      <ion-segment-button value="external">
+        <ion-label>Receive</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="internal">
+        <ion-label>Change</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  }
 
   <ion-row class="ion-align-items-center ion-padding-top">
     <ion-col size="12">
@@ -33,18 +35,21 @@
     </ion-col>
   </ion-row>
 
-  <ion-card *ngFor="let address of addresses" color="light">
-    <ion-card-header (click)="toggle(address)">
-      <ion-card-subtitle>{{address.derivationPath}}</ion-card-subtitle>
-      <h6>
-        <span class="address">{{address.address}}</span>
-      </h6>
-    </ion-card-header>
-
-    <ion-card-content *ngIf="address.isExpanded">
-      <airgap-qr [qrdata]="address.address" [level]="'L'" [size]="200"></airgap-qr>
-    </ion-card-content>
-  </ion-card>
+  @for (address of addresses; track address) {
+    <ion-card color="light">
+      <ion-card-header (click)="toggle(address)">
+        <ion-card-subtitle>{{address.derivationPath}}</ion-card-subtitle>
+        <h6>
+          <span class="address">{{address.address}}</span>
+        </h6>
+      </ion-card-header>
+      @if (address.isExpanded) {
+        <ion-card-content>
+          <airgap-qr [qrdata]="address.address" [level]="'L'" [size]="200"></airgap-qr>
+        </ion-card-content>
+      }
+    </ion-card>
+  }
 
   <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
     <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more addresses..."></ion-infinite-scroll-content>

@@ -6,9 +6,10 @@ import { InstallationType, VaultStorageKey, VaultStorageService } from '../../se
 import { OnboardingWelcomePage } from '../onboarding-welcome/onboarding-welcome.page'
 
 @Component({
-  selector: 'airgap-installation-type',
-  templateUrl: './installation-type.page.html',
-  styleUrls: ['./installation-type.page.scss']
+    selector: 'airgap-installation-type',
+    templateUrl: './installation-type.page.html',
+    styleUrls: ['./installation-type.page.scss'],
+    standalone: false
 })
 export class InstallationTypePage {
   public installationType: InstallationType = InstallationType.UNDETERMINED

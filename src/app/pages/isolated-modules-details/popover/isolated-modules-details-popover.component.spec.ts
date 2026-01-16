@@ -1,5 +1,5 @@
 // import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
-// import { async, ComponentFixture, TestBed } from '@angular/core/testing'
+// import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing'
 
 // import { IsolatedModulesDetailsPopoverComponent } from './isolated-modules-details-popover.component'
 
@@ -7,7 +7,7 @@
 //   let component: IsolatedModulesDetailsPopoverComponent
 //   let fixture: ComponentFixture<IsolatedModulesDetailsPopoverComponent>
 
-//   beforeEach(async(() => {
+//   beforeEach(waitForAsync(() => {
 //     TestBed.configureTestingModule({
 //       declarations: [IsolatedModulesDetailsPopoverComponent],
 //       schemas: [CUSTOM_ELEMENTS_SCHEMA]

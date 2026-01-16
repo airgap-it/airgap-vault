@@ -1,23 +1,25 @@
 PODS:
-  - Capacitor (6.1.1):
+  - Capacitor (8.0.1):
     - CapacitorCordova
-  - CapacitorApp (6.0.0):
+  - CapacitorApp (8.0.0):
     - Capacitor
-  - CapacitorAppLauncher (6.0.1):
+  - CapacitorAppLauncher (8.0.0):
     - Capacitor
-  - CapacitorClipboard (6.0.0):
+  - CapacitorClipboard (8.0.0):
     - Capacitor
-  - CapacitorCordova (6.1.1)
-  - CapacitorFilesystem (6.0.0):
+  - CapacitorCordova (8.0.1)
+  - CapacitorFilesystem (8.0.0):
     - Capacitor
-  - CapacitorSplashScreen (6.0.1):
+    - IONFilesystemLib (~> 1.0.1)
+  - CapacitorSplashScreen (8.0.0):
     - Capacitor
-  - CapacitorStatusBar (6.0.0):
+  - CapacitorStatusBar (8.0.0):
     - Capacitor
   - CapawesomeCapacitorFilePicker (0.5.10):
     - Capacitor
   - CordovaPlugins (6.1.1):
     - CapacitorCordova
+  - IONFilesystemLib (1.0.1)
   - ZIPFoundation (0.9.16)
 
 DEPENDENCIES:
@@ -35,6 +37,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - IONFilesystemLib
     - ZIPFoundation
 
 EXTERNAL SOURCES:
@@ -60,18 +63,19 @@ EXTERNAL SOURCES:
     :path: "../capacitor-cordova-ios-plugins"
 
 SPEC CHECKSUMS:
-  Capacitor: 8941aba4364ba9d1b22188569001f2ce45cc2b00
-  CapacitorApp: 9d53aec7101f7b030a950c5bdc4df8612576b279
-  CapacitorAppLauncher: ca97e232064f293cc23a0083f237af74a2976add
-  CapacitorClipboard: 80282f684154124b9019ebf401235b70b0cf4994
-  CapacitorCordova: 8f2cc8d8d3619c566e9418fe8772064a94266106
-  CapacitorFilesystem: 60e59ba274c234a979e7a3be2552feaadcee4263
-  CapacitorSplashScreen: 61645214e8f955ff2b80f16a6a3648960fe4c89f
-  CapacitorStatusBar: 2e4369f99166125435641b1908d05f561eaba6f6
-  CapawesomeCapacitorFilePicker: 3c6c193300649c9c7ce49426e17582edbf7ed601
-  CordovaPlugins: 4df6135298e8f8eaba9b41aa6c093f6692f2ce8b
+  Capacitor: ff35b0f66370b84aa238251b35b91886a3207c16
+  CapacitorApp: 3963a84197280757b84f126afd1520a85ae3b092
+  CapacitorAppLauncher: 7f2330aa2d8a72a4767ab05af9df4bf68166ebf0
+  CapacitorClipboard: 61832a3722adc61afed6e0191c8a0e11ba11674d
+  CapacitorCordova: 0d65b9bb74e995dcecb9463f34f1af2aba6f955c
+  CapacitorFilesystem: 2cb7c29536024668f333266a2177f8c10bbd9c98
+  CapacitorSplashScreen: 422880d7117605c30699eb4b21644b62db42e86c
+  CapacitorStatusBar: 312e2e67928dfe9514c4a8916a1fd610552f5f35
+  CapawesomeCapacitorFilePicker: 2674b1aa1915b69786783236abeff82c36f1a381
+  CordovaPlugins: 4fc317d85bce41b61f649759129e329d756e33ee
+  IONFilesystemLib: 89258b8e3e85465da93127d25d7ce37f977e8a6f
   ZIPFoundation: d170fa8e270b2a32bef9dcdcabff5b8f1a5deced
 
-PODFILE CHECKSUM: 51db8af4d6f01d50e8e2a9025e652f730fdb53af
+PODFILE CHECKSUM: 5130ce3e64ae83929a1c499c07fa91373f368453
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

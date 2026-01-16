@@ -4,9 +4,10 @@ import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/
 import { VaultStorageKey, VaultStorageService } from 'src/app/services/storage/storage.service'
 
 @Component({
-  selector: 'airgap-isolated-modules-onboarding-page',
-  templateUrl: './isolated-modules-onboarding.page.html',
-  styleUrls: ['./isolated-modules-onboarding.page.scss']
+    selector: 'airgap-isolated-modules-onboarding-page',
+    templateUrl: './isolated-modules-onboarding.page.html',
+    styleUrls: ['./isolated-modules-onboarding.page.scss'],
+    standalone: false
 })
 export class IsolatedModulesOnboardingPage {
   constructor(private readonly storageSerivce: VaultStorageService, private readonly modalController: ModalController) {

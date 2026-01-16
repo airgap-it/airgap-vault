@@ -16,9 +16,10 @@ export enum Warning {
 }
 
 @Component({
-  selector: 'airgap-warning-modal',
-  templateUrl: './warning-modal.page.html',
-  styleUrls: ['./warning-modal.page.scss']
+    selector: 'airgap-warning-modal',
+    templateUrl: './warning-modal.page.html',
+    styleUrls: ['./warning-modal.page.scss'],
+    standalone: false
 })
 export class WarningModalPage implements AfterContentInit {
   private readonly errorType: Warning

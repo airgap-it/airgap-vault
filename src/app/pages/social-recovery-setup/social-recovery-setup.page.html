@@ -13,28 +13,30 @@
   <p class="ion-padding-bottom">{{ 'social-recovery-setup.secret-shares.text' | translate }}</p>
   <p class="font--weight__med">{{ 'social-recovery-setup.shares-number_label' | translate }}</p>
   <ion-row class="ion-padding-bottom button--rounded">
-    <ion-button
-      shape="round"
-      color="tertiary"
-      *ngFor="let i of [2, 3, 4, 5, 6]"
-      (click)="setNumberOfShares(i)"
-      [color]="i === numberOfShares ? 'primary' : 'tertiary'"
-    >
-      {{ i }}
-    </ion-button>
+    @for (i of [2, 3, 4, 5, 6]; track i) {
+      <ion-button
+        shape="round"
+        color="tertiary"
+        (click)="setNumberOfShares(i)"
+        [color]="i === numberOfShares ? 'primary' : 'tertiary'"
+        >
+        {{ i }}
+      </ion-button>
+    }
   </ion-row>
   <p class="font--weight__med">{{ 'social-recovery-setup.shares-recovery_label' | translate }}</p>
   <ion-row class="button--rounded">
-    <ion-button
-      shape="round"
-      color="tertiary"
-      *ngFor="let i of [2, 3, 4, 5, 6]"
-      (click)="setNumberOfRequiredShares(i)"
-      [color]="i === numberOfRequiredShares ? 'primary' : 'tertiary'"
-      [disabled]="i > numberOfShares"
-    >
-      {{ i }}
-    </ion-button>
+    @for (i of [2, 3, 4, 5, 6]; track i) {
+      <ion-button
+        shape="round"
+        color="tertiary"
+        (click)="setNumberOfRequiredShares(i)"
+        [color]="i === numberOfRequiredShares ? 'primary' : 'tertiary'"
+        [disabled]="i > numberOfShares"
+        >
+        {{ i }}
+      </ion-button>
+    }
   </ion-row>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">

@@ -1,6 +1,6 @@
 /*
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
-import { async, ComponentFixture, TestBed } from '@angular/core/testing'
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { SecretShowPage } from './secret-show.page'
 
@@ -8,7 +8,7 @@ describe('SecretShowPage', () => {
   let component: SecretShowPage
   let fixture: ComponentFixture<SecretShowPage>
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [SecretShowPage],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]

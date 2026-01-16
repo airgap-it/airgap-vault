@@ -12,9 +12,10 @@ import { AddType } from 'src/app/services/contacts/contacts.service'
 import { handleErrorLocal, ErrorCategory } from 'src/app/services/error-handler/error-handler.service'
 
 @Component({
-  selector: 'airgap-contact-scan',
-  templateUrl: './contact-book-scan.component.html',
-  styleUrls: ['./contact-book-scan.component.scss']
+    selector: 'airgap-contact-scan',
+    templateUrl: './contact-book-scan.component.html',
+    styleUrls: ['./contact-book-scan.component.scss'],
+    standalone: false
 })
 export class ContactBookScanPage extends ScanBasePage {
   @ViewChild('scanner')

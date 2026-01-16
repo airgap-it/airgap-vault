@@ -11,22 +11,25 @@
   <h3 [innerHTML]="heading"></h3>
 
   <ion-row class="ion-justify-content-center ion-padding-top">
-    <airgap-iac-qr
-      *ngIf="interactionUrl && qrType === 0"
-      [level]="'L'"
-      [messageDefinitionObjects]="interactionUrl"
-      [size]="300"
-    ></airgap-iac-qr>
-    <airgap-qr *ngIf="signedTxs && qrType === 1" [level]="'L'" [qrdata]="signedTxs" [size]="300"></airgap-qr>
+    @if (interactionUrl && qrType === 0) {
+      <airgap-iac-qr
+        [level]="'L'"
+        [messageDefinitionObjects]="interactionUrl"
+        [size]="300"
+      ></airgap-iac-qr>
+    }
+    @if (signedTxs && qrType === 1) {
+      <airgap-qr [level]="'L'" [qrdata]="signedTxs" [size]="300"></airgap-qr>
+    }
   </ion-row>
 
-  <ng-container *ngIf="messageSignResponse">
+  @if (messageSignResponse) {
     <airgap-message-sign-response [messageSignResponse]="messageSignResponse"></airgap-message-sign-response>
-  </ng-container>
+  }
 
-  <ng-container *ngIf="signedTxs">
+  @if (signedTxs) {
     <airgap-signed-transaction [signedTxs]="interactionUrl"></airgap-signed-transaction>
-  </ng-container>
+  }
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-button color="primary" shape="round" (click)="done()">{{ 'transaction-signed.done_label' | translate }}</ion-button>

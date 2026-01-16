@@ -1,14 +1,18 @@
 <ion-header>
   <ion-toolbar color="secondary">
-    <ion-buttons *ngIf="!isModal" slot="start">
-      <ion-back-button defaultHref="/tabs/tab-settings"></ion-back-button>
-    </ion-buttons>
+    @if (!isModal) {
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/tabs/tab-settings"></ion-back-button>
+      </ion-buttons>
+    }
     <ion-title>{{ 'wordlist.title' | translate }}</ion-title>
-    <ion-buttons *ngIf="isModal" slot="end">
-      <ion-button (click)="close()">
-        <ion-icon name="close"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+    @if (isModal) {
+      <ion-buttons slot="end">
+        <ion-button (click)="close()">
+          <ion-icon name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    }
   </ion-toolbar>
   <ion-toolbar color="secondary">
     <ion-searchbar placeholder="{{ 'wordlist.search_placeholder' | translate }}" (ionInput)="filterItems($event)"></ion-searchbar>
@@ -17,45 +21,49 @@
 
 <ion-content>
   <ng-container>
-    <p *ngIf="filteredWordlist.length === 0" class="ion-padding">
-      No exact match was found. Maybe you have a typo in your word? Check the similar words below.
-    </p>
-    <cdk-virtual-scroll-viewport *ngIf="filteredWordlist.length > 0" itemSize="50" minBufferPx="1000" maxBufferPx="1000">
-      <ion-list>
-        <ion-item *cdkVirtualFor="let item of filteredWordlist">
-          <ion-label>
-            <h2>
-              <strong>
-                <ion-text color="medium"><span class="typography--mono">{{item.index + 1}}.</span></ion-text>
-                {{item.word}}
-              </strong>
-            </h2>
-          </ion-label>
-
-          <ion-text color="medium">
-            <p>Binary: {{item.binary}}</p>
-          </ion-text>
-        </ion-item>
-      </ion-list>
-    </cdk-virtual-scroll-viewport>
-    <cdk-virtual-scroll-viewport *ngIf="filteredWordlist.length < 20" itemSize="50" minBufferPx="1000" maxBufferPx="1000">
-      <ion-list>
-        <ion-list-header>Similar Words</ion-list-header>
-        <ion-item *cdkVirtualFor="let item of similarWords">
-          <ion-label>
-            <h2>
-              <strong>
-                <ion-text color="medium"><span class="typography--mono">{{item.index + 1}}.</span></ion-text>
-                {{item.word}}
-              </strong>
-            </h2>
-          </ion-label>
-
-          <ion-text color="medium">
-            <p>Binary: {{item.binary}}</p>
-          </ion-text>
-        </ion-item>
-      </ion-list>
-    </cdk-virtual-scroll-viewport>
+    @if (filteredWordlist.length === 0) {
+      <p class="ion-padding">
+        No exact match was found. Maybe you have a typo in your word? Check the similar words below.
+      </p>
+    }
+    @if (filteredWordlist.length > 0) {
+      <cdk-virtual-scroll-viewport itemSize="50" minBufferPx="1000" maxBufferPx="1000">
+        <ion-list>
+          <ion-item *cdkVirtualFor="let item of filteredWordlist">
+            <ion-label>
+              <h2>
+                <strong>
+                  <ion-text color="medium"><span class="typography--mono">{{item.index + 1}}.</span></ion-text>
+                  {{item.word}}
+                </strong>
+              </h2>
+            </ion-label>
+            <ion-text color="medium">
+              <p>Binary: {{item.binary}}</p>
+            </ion-text>
+          </ion-item>
+        </ion-list>
+      </cdk-virtual-scroll-viewport>
+    }
+    @if (filteredWordlist.length < 20) {
+      <cdk-virtual-scroll-viewport itemSize="50" minBufferPx="1000" maxBufferPx="1000">
+        <ion-list>
+          <ion-list-header>Similar Words</ion-list-header>
+          <ion-item *cdkVirtualFor="let item of similarWords">
+            <ion-label>
+              <h2>
+                <strong>
+                  <ion-text color="medium"><span class="typography--mono">{{item.index + 1}}.</span></ion-text>
+                  {{item.word}}
+                </strong>
+              </h2>
+            </ion-label>
+            <ion-text color="medium">
+              <p>Binary: {{item.binary}}</p>
+            </ion-text>
+          </ion-item>
+        </ion-list>
+      </cdk-virtual-scroll-viewport>
+    }
   </ng-container>
 </ion-content>

@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core'
 import { MnemonicSecret } from 'src/app/models/secret'
 
 @Pipe({
-  name: 'secretFilter'
+    name: 'secretFilter',
+    standalone: false
 })
 export class SecretFilterPipe implements PipeTransform {
   public transform(items: MnemonicSecret[], args: any): MnemonicSecret[] {

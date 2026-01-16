@@ -1,4 +1,4 @@
-// import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+// import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 // import { IonicModule } from '@ionic/angular';
 
 // import { Bip85GeneratePage } from './bip85-generate.page';
@@ -7,7 +7,7 @@
 //   let component: Bip85GeneratePage;
 //   let fixture: ComponentFixture<Bip85GeneratePage>;
 
-//   beforeEach(async(() => {
+//   beforeEach(waitForAsync(() => {
 //     TestBed.configureTestingModule({
 //       declarations: [ Bip85GeneratePage ],
 //       imports: [IonicModule.forRoot()]

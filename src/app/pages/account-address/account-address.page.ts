@@ -82,9 +82,10 @@ export interface CompanionApp {
 }
 
 @Component({
-  selector: 'airgap-account-address',
-  templateUrl: './account-address.page.html',
-  styleUrls: ['./account-address.page.scss']
+    selector: 'airgap-account-address',
+    templateUrl: './account-address.page.html',
+    styleUrls: ['./account-address.page.scss'],
+    standalone: false
 })
 export class AccountAddressPage {
   @ViewChild(IonModal) modal: IonModal

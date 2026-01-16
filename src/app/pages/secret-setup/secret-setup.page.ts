@@ -14,9 +14,10 @@ import { InstallationTypePage } from '../Installation-type/installation-type.pag
 import { OnboardingWelcomePage } from '../onboarding-welcome/onboarding-welcome.page'
 
 @Component({
-  selector: 'airgap-secret-setup',
-  templateUrl: './secret-setup.page.html',
-  styleUrls: ['./secret-setup.page.scss']
+    selector: 'airgap-secret-setup',
+    templateUrl: './secret-setup.page.html',
+    styleUrls: ['./secret-setup.page.scss'],
+    standalone: false
 })
 export class SecretSetupPage implements OnInit {
   public canGoBack: boolean = false

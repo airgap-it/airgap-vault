@@ -7,9 +7,10 @@ type SingleWord = string
 const ADDITIONAL_WORDS: number = 2
 
 @Component({
-  selector: 'airgap-verify-key',
-  templateUrl: './verify-key.component.html',
-  styleUrls: ['./verify-key.component.scss']
+    selector: 'airgap-verify-key',
+    templateUrl: './verify-key.component.html',
+    styleUrls: ['./verify-key.component.scss'],
+    standalone: false
 })
 export class VerifyKeyComponent implements OnInit {
   @Input()

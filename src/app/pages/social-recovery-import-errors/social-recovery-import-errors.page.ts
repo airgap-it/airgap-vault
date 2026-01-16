@@ -4,9 +4,10 @@ import { handleErrorLocal, ErrorCategory } from 'src/app/services/error-handler/
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 @Component({
-  selector: 'airgap-social-recovery-import-errors',
-  templateUrl: './social-recovery-import-errors.page.html',
-  styleUrls: ['./social-recovery-import-errors.page.scss']
+    selector: 'airgap-social-recovery-import-errors',
+    templateUrl: './social-recovery-import-errors.page.html',
+    styleUrls: ['./social-recovery-import-errors.page.scss'],
+    standalone: false
 })
 export class SocialRecoveryImportErrorsPage implements OnInit {
   errorTitle = 'Error'

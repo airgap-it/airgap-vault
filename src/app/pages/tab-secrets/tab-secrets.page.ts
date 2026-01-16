@@ -10,9 +10,10 @@ import { ModeService } from 'src/app/services/mode/mode.service'
 import { ModeStrategy } from 'src/app/services/mode/strategy/ModeStrategy'
 
 @Component({
-  selector: 'airgap-tab-secrets',
-  templateUrl: './tab-secrets.page.html',
-  styleUrls: ['./tab-secrets.page.scss']
+    selector: 'airgap-tab-secrets',
+    templateUrl: './tab-secrets.page.html',
+    styleUrls: ['./tab-secrets.page.scss'],
+    standalone: false
 })
 export class TabSecretsPage {
   public secrets: Observable<MnemonicSecret[]>

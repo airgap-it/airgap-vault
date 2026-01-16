@@ -1,4 +1,4 @@
-// import { async, ComponentFixture, TestBed } from '@angular/core/testing'
+// import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing'
 // import { IonicModule } from '@ionic/angular'
 
 // import { QrSettingsPage } from './qr-settings.page'
@@ -7,7 +7,7 @@
 //   let component: QrSettingsPage
 //   let fixture: ComponentFixture<QrSettingsPage>
 
-//   beforeEach(async(() => {
+//   beforeEach(waitForAsync(() => {
 //     TestBed.configureTestingModule({
 //       declarations: [QrSettingsPage],
 //       imports: [IonicModule.forRoot()]

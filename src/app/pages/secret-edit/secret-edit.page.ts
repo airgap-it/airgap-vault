@@ -19,9 +19,10 @@ export enum SecretEditAction {
 }
 
 @Component({
-  selector: 'airgap-secret-edit',
-  templateUrl: './secret-edit.page.html',
-  styleUrls: ['./secret-edit.page.scss']
+    selector: 'airgap-secret-edit',
+    templateUrl: './secret-edit.page.html',
+    styleUrls: ['./secret-edit.page.scss'],
+    standalone: false
 })
 export class SecretEditPage {
   public isGenerating: boolean = false

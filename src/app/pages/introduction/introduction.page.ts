@@ -7,9 +7,10 @@ import { InstallationType, VaultStorageKey, VaultStorageService } from '../../se
 declare let cordova: any
 
 @Component({
-  selector: 'airgap-introduction',
-  templateUrl: './introduction.page.html',
-  styleUrls: ['./introduction.page.scss']
+    selector: 'airgap-introduction',
+    templateUrl: './introduction.page.html',
+    styleUrls: ['./introduction.page.scss'],
+    standalone: false
 })
 export class IntroductionPage {
   public installationType: InstallationType = InstallationType.UNDETERMINED

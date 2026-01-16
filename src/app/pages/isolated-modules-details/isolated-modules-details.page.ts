@@ -8,9 +8,10 @@ import { IsolatedModulesDetailsMode } from './isolated-modules.details.types'
 import { IsolatedModulesDetailsPopoverComponent } from './popover/isolated-modules-details-popover.component'
 
 @Component({
-  selector: 'airgap-isolated-modules-details-page',
-  templateUrl: './isolated-modules-details.page.html',
-  styleUrls: ['./isolated-modules-details.page.scss']
+    selector: 'airgap-isolated-modules-details-page',
+    templateUrl: './isolated-modules-details.page.html',
+    styleUrls: ['./isolated-modules-details.page.scss'],
+    standalone: false
 })
 export class IsolatedModulesDetailsPage {
   public readonly IsolatedModulesDetailsMode: typeof IsolatedModulesDetailsMode = IsolatedModulesDetailsMode

@@ -9,6 +9,9 @@ const config: CapacitorConfig = {
     SplashScreen: {
       launchAutoHide: false,
       androidSplashResourceName: 'screen'
+    },
+    SystemBars: {
+      insetsHandling: 'disable'
     }
   },
   server: {

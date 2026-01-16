@@ -23,25 +23,30 @@
   </ion-item>
 
   <ion-item lines="none">
-    <p *ngIf="installationType === installationTypes.ONLINE; else offlineDesc">
-      {{ 'introduction.online-desc' | translate }}
-    </p>
-    <ng-template #offlineDesc>
+    @if (installationType === installationTypes.ONLINE) {
+      <p>
+        {{ 'introduction.online-desc' | translate }}
+      </p>
+    } @else {
       <p>
         {{ 'introduction.offline-desc' | translate }}
       </p>
-    </ng-template>
+    }
   </ion-item>
 
-  <ion-item style="margin-top: 1px;" lines="none" *ngIf="installationType === installationTypes.OFFLINE">
-    <p>
-      {{ 'introduction.offline-companion_text' | translate }}
-    </p>
-  </ion-item>
+  @if (installationType === installationTypes.OFFLINE) {
+    <ion-item style="margin-top: 1px;" lines="none">
+      <p>
+        {{ 'introduction.offline-companion_text' | translate }}
+      </p>
+    </ion-item>
+  }
 
-  <ion-button *ngIf="installationType === installationTypes.ONLINE" expand="block" shape="round" color="tertiary" (click)="downloadApp()">
-    {{ 'introduction.wallet_install_label' | translate }}
-  </ion-button>
+  @if (installationType === installationTypes.ONLINE) {
+    <ion-button expand="block" shape="round" color="tertiary" (click)="downloadApp()">
+      {{ 'introduction.wallet_install_label' | translate }}
+    </ion-button>
+  }
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-button shape="round" color="primary" (click)="accept()">{{ 'introduction.skip_label' | translate }}</ion-button>

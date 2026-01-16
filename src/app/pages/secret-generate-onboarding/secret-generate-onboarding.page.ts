@@ -5,9 +5,10 @@ import { NavigationService } from '../../services/navigation/navigation.service'
 import { VaultStorageKey, VaultStorageService } from '../../services/storage/storage.service'
 
 @Component({
-  selector: 'airgap-secret-generate-onboarding',
-  templateUrl: './secret-generate-onboarding.page.html',
-  styleUrls: ['./secret-generate-onboarding.page.scss']
+    selector: 'airgap-secret-generate-onboarding',
+    templateUrl: './secret-generate-onboarding.page.html',
+    styleUrls: ['./secret-generate-onboarding.page.scss'],
+    standalone: false
 })
 export class SecretGenerateOnboardingPage {
   constructor(private readonly navigationService: NavigationService, private readonly storageService: VaultStorageService) {}

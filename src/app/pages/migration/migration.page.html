@@ -10,54 +10,78 @@
 <ion-content class="ion-padding">
   <h3 class="ion-padding-bottom">{{ 'migration.heading' | translate }}</h3>
 
-  <ion-list lines="none" *ngIf="(walletGroups$ | async).status === UIResourceStatus.SUCCESS">
-    <ion-list-header class="ion-no-padding">
-      <ion-label color="light" [innerHtml]="'migration.list.header' | translate"></ion-label>
-    </ion-list-header>
-    <ng-container *ngFor="let group of (walletGroups$ | async).value">
-      <ion-item detail="false" class="ion-no-padding">
-        <ion-label color="light">{{ group.label }}</ion-label>
-        <ng-container *ngIf="(isRunning$ | async) || (isDone$ | async)">
-          <ion-spinner *ngIf="group.status === 'migrating'" name="lines" slot="end"></ion-spinner>
-          <ion-icon name="checkmark-done-outline" *ngIf="group.status === 'migrated'" slot="end"></ion-icon>
-          <ion-icon name="close-outline" *ngIf="group.status === 'skipped'" slot="end"></ion-icon>
-          <ion-icon name="alert-outline" *ngIf="group.status === 'partiallyMigrated'" slot="end"></ion-icon>
-          <ion-icon name="time-outline" *ngIf="group.status === 'waiting'" slot="end"></ion-icon>
-        </ng-container>
-      </ion-item>
-      <ion-list lines="none">
-        <ion-item *ngFor="let wallet of group.wallets">
-          <span class="airgap-account-item-migration">
-            <airgap-account-item [wallet]="wallet.data"></airgap-account-item>
-          </span>
-          <ng-container *ngIf="(isRunning$ | async) || (isDone$ | async)">
-            <ion-spinner *ngIf="wallet.status === 'migrating'" name="lines-small" slot="end"></ion-spinner>
-            <ion-icon name="checkmark-outline" size="small" *ngIf="wallet.status === 'migrated'" slot="end"></ion-icon>
-            <ion-icon name="close-outline" size="small" *ngIf="wallet.status === 'skipped'" slot="end"></ion-icon>
-            <ion-icon name="time-outline" size="small" *ngIf="wallet.status === 'waiting'" slot="end"></ion-icon>
-          </ng-container>
+  @if ((walletGroups$ | async).status === UIResourceStatus.SUCCESS) {
+    <ion-list lines="none">
+      <ion-list-header class="ion-no-padding">
+        <ion-label color="light" [innerHtml]="'migration.list.header' | translate"></ion-label>
+      </ion-list-header>
+      @for (group of (walletGroups$ | async).value; track group) {
+        <ion-item detail="false" class="ion-no-padding">
+          <ion-label color="light">{{ group.label }}</ion-label>
+          @if ((isRunning$ | async) || (isDone$ | async)) {
+            @if (group.status === 'migrating') {
+              <ion-spinner name="lines" slot="end"></ion-spinner>
+            }
+            @if (group.status === 'migrated') {
+              <ion-icon name="checkmark-done-outline" slot="end"></ion-icon>
+            }
+            @if (group.status === 'skipped') {
+              <ion-icon name="close-outline" slot="end"></ion-icon>
+            }
+            @if (group.status === 'partiallyMigrated') {
+              <ion-icon name="alert-outline" slot="end"></ion-icon>
+            }
+            @if (group.status === 'waiting') {
+              <ion-icon name="time-outline" slot="end"></ion-icon>
+            }
+          }
         </ion-item>
-      </ion-list>
-    </ng-container>
-  </ion-list>
+        <ion-list lines="none">
+          @for (wallet of group.wallets; track wallet) {
+            <ion-item>
+              <span class="airgap-account-item-migration">
+                <airgap-account-item [wallet]="wallet.data"></airgap-account-item>
+              </span>
+              @if ((isRunning$ | async) || (isDone$ | async)) {
+                @if (wallet.status === 'migrating') {
+                  <ion-spinner name="lines-small" slot="end"></ion-spinner>
+                }
+                @if (wallet.status === 'migrated') {
+                  <ion-icon name="checkmark-outline" size="small" slot="end"></ion-icon>
+                }
+                @if (wallet.status === 'skipped') {
+                  <ion-icon name="close-outline" size="small" slot="end"></ion-icon>
+                }
+                @if (wallet.status === 'waiting') {
+                  <ion-icon name="time-outline" size="small" slot="end"></ion-icon>
+                }
+              }
+            </ion-item>
+          }
+        </ion-list>
+      }
+    </ion-list>
+  }
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-button
-      *ngIf="(walletGroups$ | async).status === UIResourceStatus.SUCCESS && !(isDone$ | async)"
-      [disabled]="isRunning$ | async"
-      color="primary"
-      shape="round"
-      (click)="run()"
-    >
-      {{ 'migration.button-run_label' | translate }}
-    </ion-button>
-    <ion-button
-      *ngIf="(walletGroups$ | async).status !== UIResourceStatus.IDLE && (isDone$ | async)"
-      color="primary"
-      shape="round"
-      (click)="finish()"
-    >
-      {{ 'migration.button-done_label' | translate }}
-    </ion-button>
+    @if ((walletGroups$ | async).status === UIResourceStatus.SUCCESS && !(isDone$ | async)) {
+      <ion-button
+        [disabled]="isRunning$ | async"
+        color="primary"
+        shape="round"
+        (click)="run()"
+        >
+        {{ 'migration.button-run_label' | translate }}
+      </ion-button>
+    }
+    @if ((walletGroups$ | async).status !== UIResourceStatus.IDLE && (isDone$ | async)) {
+      <ion-button
+        color="primary"
+        shape="round"
+        (click)="finish()"
+        >
+        {{ 'migration.button-done_label' | translate }}
+      </ion-button>
+    }
   </ion-fab>
 </ion-content>

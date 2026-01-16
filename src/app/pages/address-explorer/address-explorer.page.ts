@@ -25,7 +25,7 @@ class ExtendedPublicKey {
   }
 
   private addPrefix(prefix: string) {
-    const data = Buffer.concat([Buffer.from(prefix, 'hex'), this.rawKey])
+    const data = Buffer.concat([Buffer.from(prefix, 'hex'), this.rawKey] as Uint8Array[])
     return bs58check.encode(data)
   }
 }
@@ -37,9 +37,10 @@ interface AddressInfo {
 }
 
 @Component({
-  selector: 'airgap-address-explorer',
-  templateUrl: './address-explorer.page.html',
-  styleUrls: ['./address-explorer.page.scss']
+    selector: 'airgap-address-explorer',
+    templateUrl: './address-explorer.page.html',
+    styleUrls: ['./address-explorer.page.scss'],
+    standalone: false
 })
 export class AddressExplorerPage implements OnInit {
   private readonly bip32 = BIP32Factory(ecc)

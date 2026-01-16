@@ -1,6 +1,6 @@
 /*
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
-import { async, ComponentFixture, TestBed } from '@angular/core/testing'
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { TabSettingsPage } from './tab-settings.page'
 
@@ -8,7 +8,7 @@ describe('TabSettingsPage', () => {
   let component: TabSettingsPage
   let fixture: ComponentFixture<TabSettingsPage>
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [TabSettingsPage],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]

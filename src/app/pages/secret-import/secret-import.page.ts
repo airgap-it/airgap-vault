@@ -14,9 +14,10 @@ import { map } from 'rxjs/operators'
 type SingleWord = string
 
 @Component({
-  selector: 'airgap-secret-import',
-  templateUrl: './secret-import.page.html',
-  styleUrls: ['./secret-import.page.scss']
+    selector: 'airgap-secret-import',
+    templateUrl: './secret-import.page.html',
+    styleUrls: ['./secret-import.page.scss'],
+    standalone: false
 })
 export class SecretImportPage {
   public secretWords: string[] = []

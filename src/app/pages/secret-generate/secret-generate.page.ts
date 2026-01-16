@@ -13,9 +13,10 @@ import { GyroscopeNativeService } from '../../services/gyroscope/gyroscope.nativ
 import { NavigationService } from '../../services/navigation/navigation.service'
 
 @Component({
-  selector: 'airgap-secret-generate',
-  templateUrl: './secret-generate.page.html',
-  styleUrls: ['./secret-generate.page.scss']
+    selector: 'airgap-secret-generate',
+    templateUrl: './secret-generate.page.html',
+    styleUrls: ['./secret-generate.page.scss'],
+    standalone: false
 })
 export class SecretGeneratePage implements OnInit {
   public isBrowser: boolean = false

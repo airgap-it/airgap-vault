@@ -28,9 +28,10 @@ interface ProtocolDetails {
 }
 
 @Component({
-  selector: 'airgap-account-add',
-  templateUrl: './account-add.page.html',
-  styleUrls: ['./account-add.page.scss']
+    selector: 'airgap-account-add',
+    templateUrl: './account-add.page.html',
+    styleUrls: ['./account-add.page.scss'],
+    standalone: false
 })
 export class AccountAddPage {
   public secret: MnemonicSecret

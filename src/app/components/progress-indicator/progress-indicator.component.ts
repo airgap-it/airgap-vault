@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core'
 
 @Component({
-  selector: 'airgap-progress-indicator',
-  templateUrl: './progress-indicator.component.html',
-  styleUrls: ['./progress-indicator.component.scss']
+    selector: 'airgap-progress-indicator',
+    templateUrl: './progress-indicator.component.html',
+    styleUrls: ['./progress-indicator.component.scss'],
+    standalone: false
 })
 export class ProgressIndicatorComponent implements OnInit {
   @Input()

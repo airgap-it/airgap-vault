@@ -20,19 +20,20 @@
       </ion-select>
     </ion-item>
 
-    <ion-item *ngIf="(isAppAdvancedMode$ | async); else indexSelect" lines="none">
-      <ion-label>{{ 'bip85-generate.bip85-input-app-advance-mode' | translate }}</ion-label>
-      <ion-input
-        class="input_index"
-        slot="end"
-        type="number"
-        (ionBlur)="onIndexBlur($event)"
-        [(ngModel)]="index"
-        inputmode="numeric"
-        placeholder="0 - 2147483647"
-      ></ion-input>
-    </ion-item>
-    <ng-template #indexSelect>
+    @if ((isAppAdvancedMode$ | async)) {
+      <ion-item lines="none">
+        <ion-label>{{ 'bip85-generate.bip85-input-app-advance-mode' | translate }}</ion-label>
+        <ion-input
+          class="input_index"
+          slot="end"
+          type="number"
+          (ionBlur)="onIndexBlur($event)"
+          [(ngModel)]="index"
+          inputmode="numeric"
+          placeholder="0 - 2147483647"
+        ></ion-input>
+      </ion-item>
+    } @else {
       <ion-item lines="none" #indexSelect>
         <ion-label>{{ 'bip85-generate.index' | translate }}</ion-label>
         <ion-select [(ngModel)]="index">
@@ -48,7 +49,7 @@
           <ion-select-option value="9">9</ion-select-option>
         </ion-select>
       </ion-item>
-    </ng-template>
+    }
   </ion-list>
   <ion-list>
     <ion-item lines="none">
@@ -56,7 +57,7 @@
       <ion-toggle color="primary" slot="end" [(ngModel)]="isAdvancedMode"></ion-toggle>
     </ion-item>
 
-    <ng-container *ngIf="isAdvancedMode">
+    @if (isAdvancedMode) {
       <ion-item lines="none">
         <ion-label position="stacked" color="primary">{{ 'bip85-generate.bip39-passphrase' | translate }}</ion-label>
         <ion-input
@@ -69,7 +70,7 @@
         {{ 'bip85-generate.bip39-passphrase-reveal' | translate }}
         <ion-checkbox [(ngModel)]="revealBip39Passphrase" slot="end"></ion-checkbox>
       </ion-item>
-    </ng-container>
+    }
   </ion-list>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">

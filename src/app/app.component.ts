@@ -59,8 +59,9 @@ const defer = (fn: () => void) => {
 register()
 
 @Component({
-  selector: 'airgap-root',
-  templateUrl: 'app.component.html'
+    selector: 'airgap-root',
+    templateUrl: 'app.component.html',
+    standalone: false
 })
 export class AppComponent implements AfterViewInit {
   // Sometimes the deeplink was registered before the root page was set

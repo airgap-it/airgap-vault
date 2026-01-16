@@ -13,27 +13,32 @@
   <p class="font--weight__med">{{ 'social-recovery-import.share-recovery.heading' | translate }}</p>
 
   <ion-row class="button--rounded">
-    <ion-button
-      shape="round"
-      *ngFor="let i of [2, 3, 4, 5, 6]"
-      color="secondary-light"
-      (click)="setNumberOfShares(i)"
-      [color]="i === numberOfShares ? 'primary' : 'tertiary'"
-    >
-      {{ i }}
-    </ion-button>
+    @for (i of [2, 3, 4, 5, 6]; track i) {
+      <ion-button
+        shape="round"
+        color="secondary-light"
+        (click)="setNumberOfShares(i)"
+        [color]="i === numberOfShares ? 'primary' : 'tertiary'"
+        >
+        {{ i }}
+      </ion-button>
+    }
   </ion-row>
 
-  <ion-list *ngIf="shares">
-    <form [formGroup]="socialRecoveryForm">
-      <ion-item *ngFor="let i of getNumberArray(numberOfShares)" class="ion-no-padding ion-margin-bottom">
-        <ion-label color="primary" position="stacked">
-          {{ 'social-recovery-import.share-recovery.label' | translate }} {{ i + 1 }}
-        </ion-label>
-        <ion-textarea [formControlName]="'share_' + i" placeholder="duck goose dinosaur ..." [(ngModel)]="shares[i]"></ion-textarea>
-      </ion-item>
-    </form>
-  </ion-list>
+  @if (shares) {
+    <ion-list>
+      <form [formGroup]="socialRecoveryForm">
+        @for (i of getNumberArray(numberOfShares); track i) {
+          <ion-item class="ion-no-padding ion-margin-bottom">
+            <ion-label color="primary" position="stacked">
+              {{ 'social-recovery-import.share-recovery.label' | translate }} {{ i + 1 }}
+            </ion-label>
+            <ion-textarea [formControlName]="'share_' + i" placeholder="duck goose dinosaur ..." [(ngModel)]="shares[i]"></ion-textarea>
+          </ion-item>
+        }
+      </form>
+    </ion-list>
+  }
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-button color="primary" shape="round" (click)="recover()" [disabled]="!socialRecoveryForm.valid">

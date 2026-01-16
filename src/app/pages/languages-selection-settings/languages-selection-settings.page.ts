@@ -5,9 +5,10 @@ import { LanguagesType, VaultStorageKey, VaultStorageService } from 'src/app/ser
 import { NavigationService } from '../../services/navigation/navigation.service'
 
 @Component({
-  selector: 'airgap-languages-selection-settings',
-  templateUrl: './languages-selection-settings.page.html',
-  styleUrls: ['./languages-selection-settings.page.scss']
+    selector: 'airgap-languages-selection-settings',
+    templateUrl: './languages-selection-settings.page.html',
+    styleUrls: ['./languages-selection-settings.page.scss'],
+    standalone: false
 })
 export class LanguagesSelectionSettingsPage implements OnInit {
   public languageType: typeof LanguagesType = LanguagesType

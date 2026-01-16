@@ -3,9 +3,10 @@ import { Component, OnInit } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
 
 @Component({
-  selector: 'airgap-shop',
-  templateUrl: './shop.page.html',
-  styleUrls: ['./shop.page.scss']
+    selector: 'airgap-shop',
+    templateUrl: './shop.page.html',
+    styleUrls: ['./shop.page.scss'],
+    standalone: false
 })
 export class ShopPage implements OnInit {
   private link: string = 'https://shop.airgap.it/?ref=Link-Vault'

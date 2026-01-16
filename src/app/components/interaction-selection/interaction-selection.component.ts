@@ -3,9 +3,10 @@ import { IInteractionOptions, InteractionCommunicationType, InteractionService }
 import { InteractionType, VaultStorageKey, VaultStorageService } from 'src/app/services/storage/storage.service'
 
 @Component({
-  selector: 'airgap-interaction-selection',
-  templateUrl: './interaction-selection.component.html',
-  styleUrls: ['./interaction-selection.component.scss']
+    selector: 'airgap-interaction-selection',
+    templateUrl: './interaction-selection.component.html',
+    styleUrls: ['./interaction-selection.component.scss'],
+    standalone: false
 })
 export class InteractionSelectionComponent implements OnInit {
   public interactionType: typeof InteractionType = InteractionType

@@ -6,14 +6,17 @@
 
     <ion-title>{{ metadata.manifest.name }}</ion-title>
 
-    <ion-buttons *ngIf="mode !== undefined" slot="primary">
-      <ion-button 
-        *ngIf="mode === IsolatedModulesDetailsMode.VIEW_INSTALLED" 
-        (click)="presentEditPopover($event)"
-      >
-        <ion-icon slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+    @if (mode !== undefined) {
+      <ion-buttons slot="primary">
+        @if (mode === IsolatedModulesDetailsMode.VIEW_INSTALLED) {
+          <ion-button
+            (click)="presentEditPopover($event)"
+            >
+            <ion-icon slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
+          </ion-button>
+        }
+      </ion-buttons>
+    }
   </ion-toolbar>
 </ion-header>
 
@@ -22,28 +25,31 @@
 
   <div class="ion-padding"></div>
 
-  <ion-fab 
-    *ngIf="mode !== undefined"
-    vertical="bottom" 
-    horizontal="end" 
-    slot="fixed"
-  >
-    <ion-button
-      *ngIf="mode === IsolatedModulesDetailsMode.INSTALL || mode === IsolatedModulesDetailsMode.UPDATE"
-      color="primary" 
-      shape="round"
-      [disabled]="!isVerified"
-      (click)="installModule()"
-    >
-      {{ 'isolated-modules-details-page.button.install_label' | translate }}
-    </ion-button>
-    <ion-button
-      *ngIf="mode === IsolatedModulesDetailsMode.VIEW_INSTALLED"
-      color="primary" 
-      shape="round" 
-      (click)="updateModule()"
-    >
-      {{ 'isolated-modules-details-page.button.update_label' | translate }}
-    </ion-button>  
-  </ion-fab>
+  @if (mode !== undefined) {
+    <ion-fab
+      vertical="bottom"
+      horizontal="end"
+      slot="fixed"
+      >
+      @if (mode === IsolatedModulesDetailsMode.INSTALL || mode === IsolatedModulesDetailsMode.UPDATE) {
+        <ion-button
+          color="primary"
+          shape="round"
+          [disabled]="!isVerified"
+          (click)="installModule()"
+          >
+          {{ 'isolated-modules-details-page.button.install_label' | translate }}
+        </ion-button>
+      }
+      @if (mode === IsolatedModulesDetailsMode.VIEW_INSTALLED) {
+        <ion-button
+          color="primary"
+          shape="round"
+          (click)="updateModule()"
+          >
+          {{ 'isolated-modules-details-page.button.update_label' | translate }}
+        </ion-button>
+      }
+    </ion-fab>
+  }
 </ion-content>

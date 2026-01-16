@@ -1,4 +1,4 @@
-// import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+// import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 // import { IonicModule } from '@ionic/angular';
 
 // import { SecretGenerateDicePage } from './secret-generate-dice.page';
@@ -7,7 +7,7 @@
 //   let component: SecretGenerateDicePage;
 //   let fixture: ComponentFixture<SecretGenerateDicePage>;
 
-//   beforeEach(async(() => {
+//   beforeEach(waitForAsync(() => {
 //     TestBed.configureTestingModule({
 //       declarations: [ SecretGenerateDicePage ],
 //       imports: [IonicModule.forRoot()]

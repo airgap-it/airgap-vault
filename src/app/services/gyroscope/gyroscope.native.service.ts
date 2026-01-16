@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { DeviceMotion, DeviceMotionAccelerationData } from '@ionic-native/device-motion/ngx'
+import { DeviceMotion, DeviceMotionAccelerationData } from '@awesome-cordova-plugins/device-motion/ngx'
 import { Platform } from '@ionic/angular'
 import { Observable, Subscription } from 'rxjs'
 

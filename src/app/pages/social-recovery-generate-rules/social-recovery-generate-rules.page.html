@@ -9,51 +9,66 @@
 <ion-content class="ion-padding">
   <div class="content-wrapper">
     <h2>{{ 'social-recovery-generate.rules-heading' | translate }}</h2>
-    <div class="title-wrapper" *ngIf="state == 0">
-      <h1>#1</h1>
-      <h3>{{ 'social-recovery-generate.rules-text1' | translate }}</h3>
-    </div>
+    @if (state == 0) {
+      <div class="title-wrapper">
+        <h1>#1</h1>
+        <h3>{{ 'social-recovery-generate.rules-text1' | translate }}</h3>
+      </div>
+    }
 
-    <div class="title-wrapper" *ngIf="state == 1">
-      <h1>#2</h1>
-      <h3>{{ 'social-recovery-generate.rules-text2' | translate }}</h3>
-    </div>
+    @if (state == 1) {
+      <div class="title-wrapper">
+        <h1>#2</h1>
+        <h3>{{ 'social-recovery-generate.rules-text2' | translate }}</h3>
+      </div>
+    }
 
-    <div class="title-wrapper" *ngIf="state == 2">
-      <h1>#3</h1>
-      <h3>{{ 'social-recovery-generate.rules-text3' | translate }}</h3>
-    </div>
+    @if (state == 2) {
+      <div class="title-wrapper">
+        <h1>#3</h1>
+        <h3>{{ 'social-recovery-generate.rules-text3' | translate }}</h3>
+      </div>
+    }
 
-    <div class="title-wrapper" *ngIf="state == 3">
-      <h1>#4</h1>
-      <h3>{{ 'social-recovery-generate.rules-text4' | translate }}</h3>
-    </div>
+    @if (state == 3) {
+      <div class="title-wrapper">
+        <h1>#4</h1>
+        <h3>{{ 'social-recovery-generate.rules-text4' | translate }}</h3>
+      </div>
+    }
 
-    <div class="title-wrapper" *ngIf="state == 4">
-      <h1>#5</h1>
-      <h3>{{ 'social-recovery-generate.rules-text5' | translate }}</h3>
-    </div>
+    @if (state == 4) {
+      <div class="title-wrapper">
+        <h1>#5</h1>
+        <h3>{{ 'social-recovery-generate.rules-text5' | translate }}</h3>
+      </div>
+    }
 
-    <div class="title-wrapper" *ngIf="state == 5">
-      <h1>#6</h1>
-      <h3>{{ 'social-recovery-generate.rules-text6' | translate }}</h3>
-    </div>
+    @if (state == 5) {
+      <div class="title-wrapper">
+        <h1>#6</h1>
+        <h3>{{ 'social-recovery-generate.rules-text6' | translate }}</h3>
+      </div>
+    }
 
     <div class="row-center">
-      <ion-button
-        class="row-button"
-        shape="round"
-        color="tertiary"
-        *ngFor="let i of [0, 1, 2, 3, 4, 5]"
-        (click)="changeState(i)"
-        [color]="i === state ? 'light' : 'medium'"
-      ></ion-button>
+      @for (i of [0, 1, 2, 3, 4, 5]; track i) {
+        <ion-button
+          class="row-button"
+          shape="round"
+          color="tertiary"
+          (click)="changeState(i)"
+          [color]="i === state ? 'light' : 'medium'"
+        ></ion-button>
+      }
     </div>
 
     <div class="buttons-wrapper">
-      <ion-button *ngIf="state > 0" color="light" fill="clear" (click)="prevState()">
-        {{ 'social-recovery-setup.back_label' | translate }}
-      </ion-button>
+      @if (state > 0) {
+        <ion-button color="light" fill="clear" (click)="prevState()">
+          {{ 'social-recovery-setup.back_label' | translate }}
+        </ion-button>
+      }
       <ion-button [color]="5 === state ? 'primary' : 'light'" fill="clear" (click)="nextState()">
         {{(state == 5 ? 'introduction.continue_label' : 'social-recovery-setup.next_label') | translate }}
       </ion-button>

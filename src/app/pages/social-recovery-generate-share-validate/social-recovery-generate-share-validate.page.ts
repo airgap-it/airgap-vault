@@ -7,9 +7,10 @@ import { NavigationService } from 'src/app/services/navigation/navigation.servic
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
 
 @Component({
-  selector: 'airgap-social-recovery-generate-share-validate',
-  templateUrl: './social-recovery-generate-share-validate.page.html',
-  styleUrls: ['./social-recovery-generate-share-validate.page.scss']
+    selector: 'airgap-social-recovery-generate-share-validate',
+    templateUrl: './social-recovery-generate-share-validate.page.html',
+    styleUrls: ['./social-recovery-generate-share-validate.page.scss'],
+    standalone: false
 })
 export class SocialRecoveryGenerateShareValidatePage {
   @ViewChild(IonContent) content: IonContent

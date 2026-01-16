@@ -2,9 +2,10 @@ import { Component } from '@angular/core'
 import { IonTabs } from '@ionic/angular'
 
 @Component({
-  selector: 'airgap-tabs',
-  templateUrl: 'tabs.page.html',
-  styleUrls: ['tabs.page.scss']
+    selector: 'airgap-tabs',
+    templateUrl: 'tabs.page.html',
+    styleUrls: ['tabs.page.scss'],
+    standalone: false
 })
 export class TabsPage {
   private activeTab?: HTMLElement

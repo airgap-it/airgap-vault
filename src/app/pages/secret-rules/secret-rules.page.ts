@@ -5,9 +5,10 @@ import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/er
 import { NavigationService } from '../../services/navigation/navigation.service'
 
 @Component({
-  selector: 'airgap-secret-rules',
-  templateUrl: './secret-rules.page.html',
-  styleUrls: ['./secret-rules.page.scss']
+    selector: 'airgap-secret-rules',
+    templateUrl: './secret-rules.page.html',
+    styleUrls: ['./secret-rules.page.scss'],
+    standalone: false
 })
 export class SecretRulesPage {
   private readonly secret: MnemonicSecret

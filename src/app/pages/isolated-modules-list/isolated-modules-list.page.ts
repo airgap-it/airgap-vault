@@ -9,9 +9,10 @@ import { IsolatedModulesDetailsMode } from '../isolated-modules-details/isolated
 import { IsolatedModulesOnboardingPage } from '../isolated-modules-onboarding/isolated-modules-onboarding.page'
 
 @Component({
-  selector: 'airgap-isolated-modules-list-page',
-  templateUrl: './isolated-modules-list.page.html',
-  styleUrls: ['./isolated-modules-list.page.scss']
+    selector: 'airgap-isolated-modules-list-page',
+    templateUrl: './isolated-modules-list.page.html',
+    styleUrls: ['./isolated-modules-list.page.scss'],
+    standalone: false
 })
 export class IsolatedModulesListPage implements OnInit, ViewWillEnter, ViewWillLeave {
   constructor(

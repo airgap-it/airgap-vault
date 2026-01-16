@@ -15,9 +15,10 @@ import * as fromAccountShareSelect from './account-share-select.reducers'
 import { Alert } from './account-share-select.types'
 
 @Component({
-  selector: 'airgap-account-share-select',
-  templateUrl: './account-share-select.page.html',
-  styleUrls: ['./account-share-select.page.scss']
+    selector: 'airgap-account-share-select',
+    templateUrl: './account-share-select.page.html',
+    styleUrls: ['./account-share-select.page.scss'],
+    standalone: false
 })
 export class AccountShareSelectPage implements OnDestroy {
   public readonly secrets$: Observable<UIResource<MnemonicSecret[]>>

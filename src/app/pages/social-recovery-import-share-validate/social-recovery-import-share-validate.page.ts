@@ -16,9 +16,10 @@ import { SocialRecoveryImportErrorsPage } from '../social-recovery-import-errors
 type SingleWord = string
 
 @Component({
-  selector: 'airgap-social-recovery-import-share-validate',
-  templateUrl: './social-recovery-import-share-validate.page.html',
-  styleUrls: ['./social-recovery-import-share-validate.page.scss']
+    selector: 'airgap-social-recovery-import-share-validate',
+    templateUrl: './social-recovery-import-share-validate.page.html',
+    styleUrls: ['./social-recovery-import-share-validate.page.scss'],
+    standalone: false
 })
 export class SocialRecoveryImportShareValidatePage implements OnInit {
   public currentShareNumber: number = 1

@@ -16,9 +16,10 @@ import { VaultStorageService } from 'src/app/services/storage/storage.service'
 import { VaultEnvironmentContext, VaultEnvironmentService } from 'src/app/services/environment/vault-environment.service'
 
 @Component({
-  selector: 'airgap-tab-settings',
-  templateUrl: './tab-settings.page.html',
-  styleUrls: ['./tab-settings.page.scss']
+    selector: 'airgap-tab-settings',
+    templateUrl: './tab-settings.page.html',
+    styleUrls: ['./tab-settings.page.scss'],
+    standalone: false
 })
 export class TabSettingsPage implements OnInit {
   public readonly secrets$: Observable<MnemonicSecret[]> = this.secretsService.getSecretsObservable()

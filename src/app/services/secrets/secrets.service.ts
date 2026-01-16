@@ -42,7 +42,7 @@ class ExtendedPublicKey {
   }
 
   private addPrefix(prefix: string) {
-    const data = Buffer.concat([Buffer.from(prefix, 'hex'), this.rawKey])
+    const data = Buffer.concat([Buffer.from(prefix, 'hex'), this.rawKey] as Uint8Array[])
     return bs58check.encode(data)
   }
 }

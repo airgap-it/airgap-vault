@@ -19,13 +19,14 @@
     <ion-icon name="trash" color="dark" slot="end"></ion-icon>
     {{ 'wallet-edit-delete-popover.account-removal_alert.delete_label' | translate }}
   </ion-item>
-  <ion-item
-    *ngIf="wallet && wallet.isExtendedPublicKey && protocolIdentifier && protocolIdentifier !== 'grs'"
-    button
-    detail="false"
-    (click)="openAddressExplorer()"
-  >
-    <ion-icon name="list" color="dark" slot="end"></ion-icon>
-    Address Explorer
-  </ion-item>
+  @if (wallet && wallet.isExtendedPublicKey && protocolIdentifier && protocolIdentifier !== 'grs') {
+    <ion-item
+      button
+      detail="false"
+      (click)="openAddressExplorer()"
+      >
+      <ion-icon name="list" color="dark" slot="end"></ion-icon>
+      Address Explorer
+    </ion-item>
+  }
 </ion-list>

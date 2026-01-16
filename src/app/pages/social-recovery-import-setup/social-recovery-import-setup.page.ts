@@ -3,9 +3,10 @@ import { handleErrorLocal, ErrorCategory } from 'src/app/services/error-handler/
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 @Component({
-  selector: 'airgap-social-recovery-import-setup',
-  templateUrl: './social-recovery-import-setup.page.html',
-  styleUrls: ['./social-recovery-import-setup.page.scss']
+    selector: 'airgap-social-recovery-import-setup',
+    templateUrl: './social-recovery-import-setup.page.html',
+    styleUrls: ['./social-recovery-import-setup.page.scss'],
+    standalone: false
 })
 export class SocialRecoveryImportSetupPage implements OnInit {
   public numberOfShares: number = 0

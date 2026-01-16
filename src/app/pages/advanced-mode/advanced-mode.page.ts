@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core'
 import { AdvancedModeType, VaultStorageService, VaultStorageKey } from 'src/app/services/storage/storage.service'
 
 @Component({
-  selector: 'airgap-advanced-mode',
-  templateUrl: './advanced-mode.page.html',
-  styleUrls: ['./advanced-mode.page.scss']
+    selector: 'airgap-advanced-mode',
+    templateUrl: './advanced-mode.page.html',
+    styleUrls: ['./advanced-mode.page.scss'],
+    standalone: false
 })
 export class AdvancedModePage implements OnInit {
   public advancedModeType: AdvancedModeType = AdvancedModeType.UNDETERMINED

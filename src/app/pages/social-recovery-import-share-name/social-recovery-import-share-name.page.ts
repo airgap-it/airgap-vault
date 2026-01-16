@@ -7,9 +7,10 @@ import { SocialRecoveryImportHelpPage } from '../social-recovery-import-help/soc
 // import { SocialRecoveryImportShareService } from 'src/app/social-recovery-import-share/social-recovery-import-share.service'
 
 @Component({
-  selector: 'airgap-social-recovery-import-share-name',
-  templateUrl: './social-recovery-import-share-name.page.html',
-  styleUrls: ['./social-recovery-import-share-name.page.scss']
+    selector: 'airgap-social-recovery-import-share-name',
+    templateUrl: './social-recovery-import-share-name.page.html',
+    styleUrls: ['./social-recovery-import-share-name.page.scss'],
+    standalone: false
 })
 export class SocialRecoveryImportShareNamePage implements OnInit {
   public currentShareNumber: number

@@ -11,9 +11,10 @@ interface ErrorObject {
 }
 
 @Component({
-  selector: 'airgap-error-history',
-  templateUrl: './error-history.page.html',
-  styleUrls: ['./error-history.page.scss']
+    selector: 'airgap-error-history',
+    templateUrl: './error-history.page.html',
+    styleUrls: ['./error-history.page.scss'],
+    standalone: false
 })
 export class ErrorHistoryPage implements OnInit {
   public errorHistory: ErrorObject[] = []

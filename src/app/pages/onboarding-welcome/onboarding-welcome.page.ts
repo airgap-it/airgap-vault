@@ -6,9 +6,10 @@ import { VaultStorageKey, VaultStorageService } from '../../services/storage/sto
 import { Warning, WarningModalPage } from '../warning-modal/warning-modal.page'
 
 @Component({
-  selector: 'airgap-onboarding-welcome',
-  templateUrl: './onboarding-welcome.page.html',
-  styleUrls: ['./onboarding-welcome.page.scss']
+    selector: 'airgap-onboarding-welcome',
+    templateUrl: './onboarding-welcome.page.html',
+    styleUrls: ['./onboarding-welcome.page.scss'],
+    standalone: false
 })
 export class OnboardingWelcomePage {
   public readonly swiperModules = [IonicSlides]

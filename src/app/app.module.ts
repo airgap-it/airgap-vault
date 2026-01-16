@@ -31,7 +31,7 @@ import {
   isolatedModulesListPageNgRxFacade
 } from '@airgap/angular-ngrx'
 import { PercentPipe } from '@angular/common'
-import { HttpClient, HttpClientModule } from '@angular/common/http'
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { ErrorHandler, NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { RouteReuseStrategy } from '@angular/router'
@@ -41,8 +41,8 @@ import { Clipboard } from '@capacitor/clipboard'
 import { SplashScreen } from '@capacitor/splash-screen'
 import { StatusBar } from '@capacitor/status-bar'
 import { FilePicker } from '@capawesome/capacitor-file-picker'
-import { DeviceMotion } from '@ionic-native/device-motion/ngx'
-import { Diagnostic } from '@ionic-native/diagnostic/ngx'
+import { DeviceMotion } from '@awesome-cordova-plugins/device-motion/ngx'
+import { Diagnostic } from '@awesome-cordova-plugins/diagnostic/ngx'
 import { IonicModule, IonicRouteStrategy, Platform } from '@ionic/angular'
 import { Drivers } from '@ionic/storage'
 import { IonicStorageModule } from '@ionic/storage-angular'
@@ -97,117 +97,111 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
   return new AirGapTranslateLoader(http, { prefix: './assets/i18n/', suffix: '.json' })
 }
 
-@NgModule({
-  declarations: [AppComponent],
-  imports: [
-    BrowserModule,
-    StoreModule.forRoot(fromRoot.reducers, {
-      metaReducers: fromRoot.metaReducers,
-      /* temporary fix for `ERROR TypeError: Cannot freeze array buffer views with elements` */
-      runtimeChecks: {
-        strictStateImmutability: false,
-        strictActionImmutability: false
-      }
-    }),
-    EffectsModule.forRoot(),
-    IonicModule.forRoot({ innerHTMLTemplatesEnabled: true }),
-    AppRoutingModule,
-    HttpClientModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: createTranslateLoader,
-        deps: [HttpClient]
-      }
-    }),
-    IonicStorageModule.forRoot({
-      name: '__airgap_storage',
-      driverOrder: [CordovaSQLiteDriver._driver, Drivers.LocalStorage]
-    }),
-    WarningModalPageModule,
-    IntroductionPageModule,
-    InstallationTypePageModule,
-    OnboardingAdvancedModePageModule,
-    OnboardingWelcomePageModule,
-    IsolatedModulesOnboardingPageModule,
-    DistributionOnboardingPageModule,
-    LocalAuthenticationOnboardingPageModule,
-    AirGapAngularCoreModule.forRoot({
-      factories: {
-        currencySymbolFacade: currencySymbolNgRxFacade,
-        isolatedModulesDetailsFacade: isolatedModulesDetailsNgRxFacade,
-        isolatedModulesListFacade: isolatedModulesListNgRxFacade,
-        isolatedModulesListPageFacade: isolatedModulesListPageNgRxFacade
-      }
-    }),
-    AirGapAngularNgRxModule
-  ],
-  providers: [
-    { provide: APP_PLUGIN, useValue: App },
-    { provide: APP_INFO_PLUGIN, useValue: AppInfo },
-    { provide: APP_LAUNCHER_PLUGIN, useValue: AppLauncher },
-    { provide: CAMERA_PREVIEW_PLUGIN, useValue: CameraPreview },
-    { provide: CLIPBOARD_PLUGIN, useValue: Clipboard },
-    { provide: FILESYSTEM_PLUGIN, useValue: Filesystem },
-    { provide: SAPLING_PLUGIN, useValue: SaplingNative },
-    { provide: SECURITY_UTILS_PLUGIN, useValue: SecurityUtils },
-    { provide: SPLASH_SCREEN_PLUGIN, useValue: SplashScreen },
-    { provide: STATUS_BAR_PLUGIN, useValue: StatusBar },
-    { provide: APP_CONFIG, useValue: appConfig },
-    { provide: ZIP_PLUGIN, useValue: Zip },
-    { provide: FILE_PICKER_PLUGIN, useValue: FilePicker },
-    { provide: ISOLATED_MODULES_PLUGIN, useFactory: isolatedModules, deps: [Platform] },
-    { provide: ENVIRONMENT_PLUGIN, useValue: Environment },
-    { provide: ErrorHandler, useClass: ErrorHandlerService },
-    { provide: BaseModulesService, useClass: VaultModulesService },
-    { provide: BaseEnvironmentService, useClass: VaultEnvironmentService },
-    Diagnostic,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    DeviceMotion,
-    AudioNativeService,
-    SecretsService,
-    SecureStorageService,
-    DeviceService,
-    CameraNativeService,
-    EntropyService,
-    GyroscopeNativeService,
-    QrScannerService,
-    StartupChecksService,
-    IACService,
-    ClipboardService,
-    PermissionsService,
-    ShareUrlService,
-    ErrorHandlerService,
-    InteractionService,
-    DeeplinkService,
-    SerializerService,
-    VaultStorageService,
-    UiEventService,
-    PercentPipe,
-    SecureStorageFactoryDepHolder,
-    CameraFactoryDepHolder,
-    SocialRecoveryImportShareService,
-    {
-      provide: SecureStorageService,
-      useFactory: SecureStorageFactory,
-      deps: [SecureStorageFactoryDepHolder]
-    },
-    {
-      provide: CameraNativeService,
-      useFactory: CameraFactory,
-      deps: [CameraFactoryDepHolder]
-    },
-    {
-      provide: AudioNativeService,
-      useFactory: AudioServiceFactory,
-      deps: [Platform, PermissionsService]
-    },
-    {
-      provide: GyroscopeNativeService,
-      useFactory: GyroscopeServiceFactory,
-      deps: [Platform, DeviceMotion]
-    }
-  ],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [AppComponent],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        StoreModule.forRoot(fromRoot.reducers, {
+            metaReducers: fromRoot.metaReducers,
+            /* temporary fix for `ERROR TypeError: Cannot freeze array buffer views with elements` */
+            runtimeChecks: {
+                strictStateImmutability: false,
+                strictActionImmutability: false
+            }
+        }),
+        EffectsModule.forRoot(),
+        IonicModule.forRoot({ innerHTMLTemplatesEnabled: true }),
+        AppRoutingModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: createTranslateLoader,
+                deps: [HttpClient]
+            }
+        }),
+        IonicStorageModule.forRoot({
+            name: '__airgap_storage',
+            driverOrder: [CordovaSQLiteDriver._driver, Drivers.LocalStorage]
+        }),
+        WarningModalPageModule,
+        IntroductionPageModule,
+        InstallationTypePageModule,
+        OnboardingAdvancedModePageModule,
+        OnboardingWelcomePageModule,
+        IsolatedModulesOnboardingPageModule,
+        DistributionOnboardingPageModule,
+        LocalAuthenticationOnboardingPageModule,
+        AirGapAngularCoreModule.forRoot({
+            factories: {
+                currencySymbolFacade: currencySymbolNgRxFacade,
+                isolatedModulesDetailsFacade: isolatedModulesDetailsNgRxFacade,
+                isolatedModulesListFacade: isolatedModulesListNgRxFacade,
+                isolatedModulesListPageFacade: isolatedModulesListPageNgRxFacade
+            }
+        }),
+        AirGapAngularNgRxModule], providers: [
+        { provide: APP_PLUGIN, useValue: App },
+        { provide: APP_INFO_PLUGIN, useValue: AppInfo },
+        { provide: APP_LAUNCHER_PLUGIN, useValue: AppLauncher },
+        { provide: CAMERA_PREVIEW_PLUGIN, useValue: CameraPreview },
+        { provide: CLIPBOARD_PLUGIN, useValue: Clipboard },
+        { provide: FILESYSTEM_PLUGIN, useValue: Filesystem },
+        { provide: SAPLING_PLUGIN, useValue: SaplingNative },
+        { provide: SECURITY_UTILS_PLUGIN, useValue: SecurityUtils },
+        { provide: SPLASH_SCREEN_PLUGIN, useValue: SplashScreen },
+        { provide: STATUS_BAR_PLUGIN, useValue: StatusBar },
+        { provide: APP_CONFIG, useValue: appConfig },
+        { provide: ZIP_PLUGIN, useValue: Zip },
+        { provide: FILE_PICKER_PLUGIN, useValue: FilePicker },
+        { provide: ISOLATED_MODULES_PLUGIN, useFactory: isolatedModules, deps: [Platform] },
+        { provide: ENVIRONMENT_PLUGIN, useValue: Environment },
+        { provide: ErrorHandler, useClass: ErrorHandlerService },
+        { provide: BaseModulesService, useClass: VaultModulesService },
+        { provide: BaseEnvironmentService, useClass: VaultEnvironmentService },
+        Diagnostic,
+        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+        DeviceMotion,
+        AudioNativeService,
+        SecretsService,
+        SecureStorageService,
+        DeviceService,
+        CameraNativeService,
+        EntropyService,
+        GyroscopeNativeService,
+        QrScannerService,
+        StartupChecksService,
+        IACService,
+        ClipboardService,
+        PermissionsService,
+        ShareUrlService,
+        ErrorHandlerService,
+        InteractionService,
+        DeeplinkService,
+        SerializerService,
+        VaultStorageService,
+        UiEventService,
+        PercentPipe,
+        SecureStorageFactoryDepHolder,
+        CameraFactoryDepHolder,
+        SocialRecoveryImportShareService,
+        {
+            provide: SecureStorageService,
+            useFactory: SecureStorageFactory,
+            deps: [SecureStorageFactoryDepHolder]
+        },
+        {
+            provide: CameraNativeService,
+            useFactory: CameraFactory,
+            deps: [CameraFactoryDepHolder]
+        },
+        {
+            provide: AudioNativeService,
+            useFactory: AudioServiceFactory,
+            deps: [Platform, PermissionsService]
+        },
+        {
+            provide: GyroscopeNativeService,
+            useFactory: GyroscopeServiceFactory,
+            deps: [Platform, DeviceMotion]
+        },
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule {}

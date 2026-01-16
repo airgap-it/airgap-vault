@@ -6,9 +6,10 @@ import { airgapwallet, CompanionApp } from '../account-address/account-address.p
 import { ErrorCategory, handleErrorLocal } from './../../services/error-handler/error-handler.service'
 
 @Component({
-  selector: 'airgap-account-share',
-  templateUrl: './account-share.page.html',
-  styleUrls: ['./account-share.page.scss']
+    selector: 'airgap-account-share',
+    templateUrl: './account-share.page.html',
+    styleUrls: ['./account-share.page.scss'],
+    standalone: false
 })
 export class AccountSharePage {
   public interactionUrl: IACMessageDefinitionObjectV3[] = []

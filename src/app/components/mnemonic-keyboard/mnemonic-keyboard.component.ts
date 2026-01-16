@@ -28,9 +28,10 @@ function shuffle(arr: string): string {
 const ALPHABET = 'qwertyuiopasdfghjklzxcvbnm'
 
 @Component({
-  selector: 'airgap-mnemonic-keyboard',
-  templateUrl: './mnemonic-keyboard.component.html',
-  styleUrls: ['./mnemonic-keyboard.component.scss']
+    selector: 'airgap-mnemonic-keyboard',
+    templateUrl: './mnemonic-keyboard.component.html',
+    styleUrls: ['./mnemonic-keyboard.component.scss'],
+    standalone: false
 })
 export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
   public text: string = ''

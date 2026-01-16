@@ -10,9 +10,10 @@ import * as fromDeserializedDetail from '../deserialized-detail/deserialized-det
 import { ContactsService } from 'src/app/services/contacts/contacts.service'
 
 @Component({
-  selector: 'airgap-interaction-selection',
-  templateUrl: './interaction-selection.page.html',
-  styleUrls: ['./interaction-selection.page.scss']
+    selector: 'airgap-interaction-selection',
+    templateUrl: './interaction-selection.page.html',
+    styleUrls: ['./interaction-selection.page.scss'],
+    standalone: false
 })
 export class InteractionSelectionPage implements OnInit {
   private interactionOptions: IInteractionOptions

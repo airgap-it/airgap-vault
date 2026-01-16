@@ -12,10 +12,12 @@
   <h3 [innerHTML]="'security-level-self-check.heading' | translate"></h3>
   {{'security-level-self-check.description' | translate}}
   <ion-list lines="none" class="ion-padding-vertical">
-    <ion-item detail="false" class="ion-no-padding" *ngFor="let phrase of checkPhrases">
-      <ion-checkbox slot="start"></ion-checkbox>
-      {{phrase}}
-    </ion-item>
+    @for (phrase of checkPhrases; track phrase) {
+      <ion-item detail="false" class="ion-no-padding">
+        <ion-checkbox slot="start"></ion-checkbox>
+        {{phrase}}
+      </ion-item>
+    }
   </ion-list>
   <ion-card></ion-card>
 </ion-content>

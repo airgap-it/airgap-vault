@@ -11,9 +11,10 @@ import { SecretsService } from '../../services/secrets/secrets.service'
 import { UiEventService } from '@airgap/angular-core'
 
 @Component({
-  selector: 'airgap-secret-add',
-  templateUrl: './secret-add.page.html',
-  styleUrls: ['./secret-add.page.scss']
+    selector: 'airgap-secret-add',
+    templateUrl: './secret-add.page.html',
+    styleUrls: ['./secret-add.page.scss'],
+    standalone: false
 })
 export class SecretAddPage {
   public isGenerating: boolean = false

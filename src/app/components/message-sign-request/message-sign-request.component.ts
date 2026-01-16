@@ -22,9 +22,10 @@ const fromHex = (str: string) => {
 }
 
 @Component({
-  selector: 'airgap-message-sign-request',
-  templateUrl: './message-sign-request.component.html',
-  styleUrls: ['./message-sign-request.component.scss']
+    selector: 'airgap-message-sign-request',
+    templateUrl: './message-sign-request.component.html',
+    styleUrls: ['./message-sign-request.component.scss'],
+    standalone: false
 })
 export class MessageSignRequestComponent {
   public _messages: {

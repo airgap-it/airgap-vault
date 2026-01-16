@@ -19,19 +19,26 @@
 
 <ion-content>
   <ion-list>
-    <ion-card *ngIf=" errorHistory.length === 0">
-      <ion-card-content>{{ 'error-history.empty_label' | translate }}</ion-card-content>
-    </ion-card>
-    <ion-card *ngFor="let error of errorHistory" (click)="error.expanded = !error.expanded">
-      <ion-item>
-        <ion-label>{{error.date | date: 'yyyy-MM-dd HH:mm'}}</ion-label>
-        <ion-button fill="outline" slot="end" color="secondary">Details</ion-button>
-      </ion-item>
-
-      <ion-card-content>
-        <ng-container *ngIf="!error.expanded">{{error.title}}</ng-container>
-        <pre *ngIf="error.expanded">{{error.detail}}</pre>
-      </ion-card-content>
-    </ion-card>
+    @if ( errorHistory.length === 0) {
+      <ion-card>
+        <ion-card-content>{{ 'error-history.empty_label' | translate }}</ion-card-content>
+      </ion-card>
+    }
+    @for (error of errorHistory; track error) {
+      <ion-card (click)="error.expanded = !error.expanded">
+        <ion-item>
+          <ion-label>{{error.date | date: 'yyyy-MM-dd HH:mm'}}</ion-label>
+          <ion-button fill="outline" slot="end" color="secondary">Details</ion-button>
+        </ion-item>
+        <ion-card-content>
+          @if (!error.expanded) {
+            {{error.title}}
+          }
+          @if (error.expanded) {
+            <pre>{{error.detail}}</pre>
+          }
+        </ion-card-content>
+      </ion-card>
+    }
   </ion-list>
 </ion-content>

@@ -1,6 +1,6 @@
 /*
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
-import { async, ComponentFixture, TestBed } from '@angular/core/testing'
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { AccountEditPopoverComponent } from './account-edit-popover.component'
 
@@ -8,7 +8,7 @@ describe('AccountEditPopoverComponent', () => {
   let component: AccountEditPopoverComponent
   let fixture: ComponentFixture<AccountEditPopoverComponent>
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [AccountEditPopoverComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]

@@ -7,9 +7,13 @@
 <ion-content>
   <ion-row class="ion-padding-horizontal" [innerHtml]="description"></ion-row>
 
-  <ion-row class="ion-justify-content-center" *ngIf="imageUrl"><img class="warning-img" [src]="imageUrl" /></ion-row>
+  @if (imageUrl) {
+    <ion-row class="ion-justify-content-center"><img class="warning-img" [src]="imageUrl" /></ion-row>
+  }
 
-  <ion-fab *ngIf="buttonText" vertical="bottom" horizontal="end" slot="fixed">
-    <ion-button default (click)="handler()" color="primary" shape="round" item-right>{{ buttonText }}</ion-button>
-  </ion-fab>
+  @if (buttonText) {
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-button default (click)="handler()" color="primary" shape="round" item-right>{{ buttonText }}</ion-button>
+    </ion-fab>
+  }
 </ion-content>

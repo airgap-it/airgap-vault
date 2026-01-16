@@ -15,9 +15,10 @@ import { SecureStorage, SecureStorageService } from 'src/app/services/secure-sto
 import { AdvancedModeType, VaultStorageKey, VaultStorageService } from 'src/app/services/storage/storage.service'
 
 @Component({
-  selector: 'airgap-bip85-show',
-  templateUrl: './bip85-show.page.html',
-  styleUrls: ['./bip85-show.page.scss']
+    selector: 'airgap-bip85-show',
+    templateUrl: './bip85-show.page.html',
+    styleUrls: ['./bip85-show.page.scss'],
+    standalone: false
 })
 export class Bip85ShowPage {
   private secret: MnemonicSecret

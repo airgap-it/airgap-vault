@@ -12,9 +12,10 @@ enum TransactionQRType {
 }
 
 @Component({
-  selector: 'airgap-transaction-signed',
-  templateUrl: './transaction-signed.page.html',
-  styleUrls: ['./transaction-signed.page.scss']
+    selector: 'airgap-transaction-signed',
+    templateUrl: './transaction-signed.page.html',
+    styleUrls: ['./transaction-signed.page.scss'],
+    standalone: false
 })
 export class TransactionSignedPage {
   public signedTxs: string[]

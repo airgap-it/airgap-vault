@@ -1,6 +1,6 @@
 /*
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
-import { async, ComponentFixture, TestBed } from '@angular/core/testing'
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { SocialRecoveryImportPage } from './social-recovery-import.page'
 
@@ -8,7 +8,7 @@ describe('SocialRecoveryImportPage', () => {
   let component: SocialRecoveryImportPage
   let fixture: ComponentFixture<SocialRecoveryImportPage>
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [SocialRecoveryImportPage],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]

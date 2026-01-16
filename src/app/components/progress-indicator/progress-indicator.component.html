@@ -1,13 +1,14 @@
 <div class="states-wrapper">
-  <ion-button
-    class="state"
+  @for (item of [].constructor(totalShares); track item; let i = $index) {
+    <ion-button
+      class="state"
     [class.selected]="
       (i === currentShare && currentShare < totalShares - 1) || (currentShare === totalShares - 1 && i === currentShare - 1)
     "
-    shape="round"
-    *ngFor="let item of [].constructor(totalShares); let i = index"
-    [color]="i === currentShare ? 'primary' : 'tertiary'"
-  >
-    {{ i + 1 }}
-  </ion-button>
+      shape="round"
+      [color]="i === currentShare ? 'primary' : 'tertiary'"
+      >
+      {{ i + 1 }}
+    </ion-button>
+  }
 </div>

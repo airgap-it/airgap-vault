@@ -5,9 +5,10 @@ import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/er
 import { AdvancedModeType, VaultStorageKey, VaultStorageService } from '../../services/storage/storage.service'
 
 @Component({
-  selector: 'airgap-onboarding-advanced-mode',
-  templateUrl: './onboarding-advanced-mode.page.html',
-  styleUrls: ['./onboarding-advanced-mode.page.scss']
+    selector: 'airgap-onboarding-advanced-mode',
+    templateUrl: './onboarding-advanced-mode.page.html',
+    styleUrls: ['./onboarding-advanced-mode.page.scss'],
+    standalone: false
 })
 export class OnboardingAdvancedModePage {
   public advancedModeType: AdvancedModeType = AdvancedModeType.UNDETERMINED

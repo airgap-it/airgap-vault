@@ -1,17 +1,21 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-title>{{ 'installation-type.title' | translate }}</ion-title>
-    <ion-buttons *ngIf="isSettingsModal" slot="end">
-      <ion-button (click)="close()" color="light">
-        <ion-icon name="close"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+    @if (isSettingsModal) {
+      <ion-buttons slot="end">
+        <ion-button (click)="close()" color="light">
+          <ion-icon name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    }
 
-    <ion-buttons slot="start" *ngIf="isOnboardingFlow">
-      <ion-button (click)="goToOnboardingWelcomePage()">
-        <ion-icon name="arrow-back"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+    @if (isOnboardingFlow) {
+      <ion-buttons slot="start">
+        <ion-button (click)="goToOnboardingWelcomePage()">
+          <ion-icon name="arrow-back"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    }
   </ion-toolbar>
 </ion-header>
 
@@ -26,7 +30,7 @@
   <ion-card
     [color]="installationType === installationTypes.ONLINE ? 'primary' : 'tertiary'"
     (click)="installationType = installationTypes.ONLINE"
-  >
+    >
     <!-- TODO: Add picture -->
 
     <ion-card-header>
@@ -41,7 +45,9 @@
           </ion-card-title>
         </ion-col>
         <ion-col size="1">
-          <ion-checkbox *ngIf="installationType === installationTypes.ONLINE" [checked]="true"></ion-checkbox>
+          @if (installationType === installationTypes.ONLINE) {
+            <ion-checkbox [checked]="true"></ion-checkbox>
+          }
         </ion-col>
       </ion-row>
     </ion-card-header>
@@ -55,7 +61,7 @@
   <ion-card
     [color]="installationType === installationTypes.OFFLINE ? 'primary' : 'tertiary'"
     (click)="installationType = installationTypes.OFFLINE"
-  >
+    >
     <!-- TODO: Add picture -->
 
     <ion-card-header>
@@ -65,12 +71,14 @@
             {{ 'installation-type.offline_label' | translate }}
 
             <ion-icon name="cloud-offline-outline"></ion-icon>
-            <!-- Maybe use this shield or another checkmark to indicate which card is selected. 
-          <ion-icon name="shield-checkmark-outline"></ion-icon>-->
+            <!-- Maybe use this shield or another checkmark to indicate which card is selected.
+            <ion-icon name="shield-checkmark-outline"></ion-icon>-->
           </ion-card-title>
         </ion-col>
         <ion-col size="1">
-          <ion-checkbox *ngIf="installationType === installationTypes.OFFLINE" [checked]="true"></ion-checkbox>
+          @if (installationType === installationTypes.OFFLINE) {
+            <ion-checkbox [checked]="true"></ion-checkbox>
+          }
         </ion-col>
       </ion-row>
     </ion-card-header>

@@ -1,5 +1,5 @@
 import { Platform } from '@ionic/angular'
-import { DeviceMotion } from '@ionic-native/device-motion/ngx'
+import { DeviceMotion } from '@awesome-cordova-plugins/device-motion/ngx'
 
 import { DummyEntropyService } from '../entropy/dummy.entropy.service'
 import { IEntropyGenerator } from '../entropy/IEntropyGenerator'

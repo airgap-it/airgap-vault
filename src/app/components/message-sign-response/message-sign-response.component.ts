@@ -2,9 +2,10 @@ import { MessageSignResponse } from '@airgap/serializer'
 import { Component, Input } from '@angular/core'
 
 @Component({
-  selector: 'airgap-message-sign-response',
-  templateUrl: './message-sign-response.component.html',
-  styleUrls: ['./message-sign-response.component.scss']
+    selector: 'airgap-message-sign-response',
+    templateUrl: './message-sign-response.component.html',
+    styleUrls: ['./message-sign-response.component.scss'],
+    standalone: false
 })
 export class MessageSignResponseComponent {
   @Input()

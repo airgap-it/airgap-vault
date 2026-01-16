@@ -5,7 +5,7 @@ import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { IonicModule } from '@ionic/angular'
 import { TranslateModule } from '@ngx-translate/core'
-import { QRCodeModule } from 'angularx-qrcode'
+import { QRCodeComponent } from 'angularx-qrcode'
 
 import { PipesModule } from '../pipes/pipes.module'
 
@@ -58,7 +58,7 @@ import { AddAddressComponent } from './add-address/add-address.component'
     FormsModule,
     ReactiveFormsModule,
     TranslateModule,
-    QRCodeModule,
+    QRCodeComponent,
     AirGapAngularCoreModule,
     AirGapAngularNgRxModule
   ],

@@ -8,9 +8,10 @@ import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
 
 @Component({
-  selector: 'airgap-social-recovery-setup',
-  templateUrl: './social-recovery-setup.page.html',
-  styleUrls: ['./social-recovery-setup.page.scss']
+    selector: 'airgap-social-recovery-setup',
+    templateUrl: './social-recovery-setup.page.html',
+    styleUrls: ['./social-recovery-setup.page.scss'],
+    standalone: false
 })
 export class SocialRecoverySetupPage {
   public numberOfShares: number = 3

@@ -57,7 +57,7 @@ describe('IACService', () => {
   })
 
   beforeEach(async () => {
-    service = TestBed.get(IACService)
+    service = TestBed.inject(IACService)
   })
 
   it('should be created', () => {

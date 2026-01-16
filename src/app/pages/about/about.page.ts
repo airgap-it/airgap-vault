@@ -7,9 +7,10 @@ import { NavigationService } from 'src/app/services/navigation/navigation.servic
 import { AlertController, Platform } from '@ionic/angular'
 
 @Component({
-  selector: 'airgap-about',
-  templateUrl: './about.page.html',
-  styleUrls: ['./about.page.scss']
+    selector: 'airgap-about',
+    templateUrl: './about.page.html',
+    styleUrls: ['./about.page.scss'],
+    standalone: false
 })
 export class AboutPage {
   public appName: string = 'APP_NAME'

@@ -12,12 +12,12 @@
 
   <ion-list lines="none" class="ion-padding-vertical" (ionChange)="changeLanguage($event.detail.value)">
     <ion-radio-group [(ngModel)]="selectedType">
-      <ng-container *ngFor="let language of languages">
+      @for (language of languages; track language) {
         <ion-item detail="false" class="ion-no-padding">
           <ion-label color="white">{{ 'language-selection-settings.selector.' + language | translate }}</ion-label>
           <ion-radio class="ion-no-margin" slot="end" [value]="language"></ion-radio>
         </ion-item>
-      </ng-container>
+      }
     </ion-radio-group>
   </ion-list>
   <ion-button color="tertiary" shape="round" (click)="defaultToDevice()">

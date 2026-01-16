@@ -1,6 +1,6 @@
 /*
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
-import { async, ComponentFixture, TestBed } from '@angular/core/testing'
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { InteractionSelectionPage } from './interaction-selection.page'
 
@@ -8,7 +8,7 @@ describe('InteractionSelectionPage', () => {
   let component: InteractionSelectionPage
   let fixture: ComponentFixture<InteractionSelectionPage>
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [InteractionSelectionPage],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]

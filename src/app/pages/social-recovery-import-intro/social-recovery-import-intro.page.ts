@@ -3,9 +3,10 @@ import { handleErrorLocal, ErrorCategory } from 'src/app/services/error-handler/
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 @Component({
-  selector: 'airgap-social-recovery-import-intro',
-  templateUrl: './social-recovery-import-intro.page.html',
-  styleUrls: ['./social-recovery-import-intro.page.scss']
+    selector: 'airgap-social-recovery-import-intro',
+    templateUrl: './social-recovery-import-intro.page.html',
+    styleUrls: ['./social-recovery-import-intro.page.scss'],
+    standalone: false
 })
 export class SocialRecoveryImportIntroPage implements OnInit {
   constructor(private readonly navigationService: NavigationService) {}

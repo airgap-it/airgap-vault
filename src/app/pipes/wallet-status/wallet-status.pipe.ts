@@ -2,7 +2,8 @@ import { AirGapWallet, AirGapWalletStatus } from '@airgap/coinlib-core'
 import { Pipe, PipeTransform } from '@angular/core'
 
 @Pipe({
-  name: 'walletStatus'
+    name: 'walletStatus',
+    standalone: false
 })
 export class WalletStatusPipe implements PipeTransform {
   public transform(items: AirGapWallet[], args: { status: AirGapWalletStatus }): any {

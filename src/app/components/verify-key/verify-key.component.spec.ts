@@ -26,187 +26,148 @@ describe('Component: VerifyKey', () => {
     fixture = TestBed.createComponent(VerifyKeyComponent)
     component = fixture.componentInstance
   })
-  it(
-    'should validate a regular mnemonic, and emit correct event',
-    waitForAsync(() => {
-      component.secret = correctMnemonic
+
+  function initComponent(secret: string, autoDetect: boolean = false): void {
+    component.secret = secret
+    component.ngOnInit()
+    if (autoDetect) {
+      fixture.autoDetectChanges(true)
+    } else {
       fixture.detectChanges()
-      const words = component.secret.split(' ')
+    }
+  }
 
-      // validate onComplete Event is True
-      component.onContinue.subscribe((event) => {
-        expect(event).toBeTruthy()
-      })
+  it('should validate a regular mnemonic, and emit correct event', waitForAsync(() => {
+    initComponent(correctMnemonic)
+    const words = component.secret.split(' ')
 
-      words.forEach((word: string) => {
-        expect(component.isFull()).toBeFalsy()
-        component.useWord(word)
-      })
-
-      expect(component.isFull()).toBeTruthy()
-      expect(component.isCorrect()).toBeTruthy()
+    // validate onComplete Event is True
+    component.onContinue.subscribe((event) => {
+      expect(event).toBeTruthy()
     })
-  )
 
-  it(
-    'should detect a wrong word in a mnemonic',
-    waitForAsync(() => {
-      component.secret = correctMnemonic
-      fixture.detectChanges()
-      const words = component.secret.split(' ')
-
-      // validate onComplete Event is False
-      component.onContinue.subscribe((event) => {
-        expect(event).toBeFalsy()
-      })
-
-      words.forEach((word: string, i: number) => {
-        expect(component.isFull()).toBeFalsy()
-        if (i === 5) {
-          component.useWord('wrongWord')
-        } else {
-          component.useWord(word)
-        }
-      })
-
-      expect(component.isFull()).toBeTruthy()
-      expect(component.isCorrect()).toBeFalsy()
-    })
-  )
-
-  it(
-    'should validate a mnemonic where the same word appears 2 times',
-    waitForAsync(() => {
-      component.secret = correctMnemonic
-      fixture.detectChanges()
-      component.ngOnInit()
-      const words = component.secret.split(' ')
-
-      words.forEach((word) => {
-        component.useWord(word)
-      })
-
-      expect(component.isCorrect()).toBeTruthy()
-    })
-  )
-
-  it(
-    'should not validate user input that is too short',
-    waitForAsync(() => {
-      component.secret = correctMnemonic
-      fixture.detectChanges()
-      component.ngOnInit()
-      const words: string[] = component.secret.split(' ')
-
-      words.forEach((word: string, i: number) => {
-        if (i === words.length - 1) {
-          return
-        }
-        component.useWord(word)
-      })
-
+    words.forEach((word: string) => {
       expect(component.isFull()).toBeFalsy()
-      expect(component.isCorrect()).toBeFalsy()
-      component.useWord(words[words.length - 1])
-      expect(component.isFull()).toBeTruthy()
-      expect(component.isCorrect()).toBeTruthy()
+      component.useWord(word)
     })
-  )
 
-  it(
-    'should give the correct empty spots',
-    waitForAsync(() => {
-      component.secret = correctMnemonic
-      fixture.detectChanges()
-      component.ngOnInit()
-      const words = component.secret.split(' ')
+    expect(component.isFull()).toBeTruthy()
+    expect(component.isCorrect()).toBeTruthy()
+  }))
 
-      // first empty spot is zero
-      expect(component.emptySpot(component.currentWords)).toEqual(0)
+  it('should detect a wrong word in a mnemonic', waitForAsync(() => {
+    initComponent(correctMnemonic)
+    const words = component.secret.split(' ')
 
-      component.useWord(words[0])
-
-      // next empty spot is one
-      expect(component.emptySpot(component.currentWords)).toEqual(1)
+    // validate onComplete Event is False
+    component.onContinue.subscribe((event) => {
+      expect(event).toBeFalsy()
     })
-  )
 
-  it(
-    'should let users select words to correct them',
-    waitForAsync(() => {
-      component.secret = correctMnemonic
-      fixture.detectChanges()
-      component.ngOnInit()
-      const words = component.secret.split(' ')
-
-      words.forEach((word: string) => {
+    words.forEach((word: string, i: number) => {
+      expect(component.isFull()).toBeFalsy()
+      if (i === 5) {
+        component.useWord('wrongWord')
+      } else {
         component.useWord(word)
-      })
-
-      // now select a word
-      component.selectWord(5)
-      expect(component.selectedWordIndex).toEqual(5)
-      expect(component.currentWords[5]).toEqual(words[5])
-    })
-  )
-
-  it(
-    'should give users 3 words to choose from',
-    waitForAsync(() => {
-      component.secret = correctMnemonic
-      component.ngOnInit()
-      fixture.detectChanges()
-
-      const wordSelector = fixture.nativeElement.querySelector('#wordSelector')
-
-      // check if there are three words
-      expect(wordSelector.children.length).toBe(3)
-
-      let foundWord: boolean = false
-      for (let i: number = 0; i < wordSelector.children.length; i++) {
-        if (wordSelector.children.item(i).textContent.trim() === correctMnemonic.split(' ')[0]) {
-          foundWord = true
-        }
       }
-
-      // check if one of the words is the correct one
-      expect(foundWord).toBeTruthy()
     })
-  )
 
-  it(
-    'should give users 3 words to choose from if selecting a specific one',
-    waitForAsync(() => {
-      component.secret = correctMnemonic
-      component.ngOnInit()
-      fixture.detectChanges()
+    expect(component.isFull()).toBeTruthy()
+    expect(component.isCorrect()).toBeFalsy()
+  }))
 
-      component.secret.split(' ').forEach((word: string, i: number) => {
-        if (i > 10) {
-          return
-        }
-        component.useWord(word)
-      })
+  it('should validate a mnemonic where the same word appears 2 times', waitForAsync(() => {
+    initComponent(correctMnemonic)
+    const words = component.secret.split(' ')
 
-      const selectedIndex: number = 5
-      component.selectWord(selectedIndex)
+    words.forEach((word) => {
+      component.useWord(word)
+    })
 
-      fixture.detectChanges()
+    expect(component.isCorrect()).toBeTruthy()
+  }))
 
-      const wordSelector = fixture.nativeElement.querySelector('#wordSelector')
+  it('should not validate user input that is too short', waitForAsync(() => {
+    initComponent(correctMnemonic)
+    const words: string[] = component.secret.split(' ')
 
-      // check if there are three words
-      expect(wordSelector.children.length).toBe(3)
-
-      let foundWord: boolean = false
-      for (let i: number = 0; i < wordSelector.children.length; i++) {
-        if (wordSelector.children.item(i).textContent.trim() === correctMnemonic.split(' ')[selectedIndex]) {
-          foundWord = true
-        }
+    words.forEach((word: string, i: number) => {
+      if (i === words.length - 1) {
+        return
       }
-
-      // check if one of the words is the correct one
-      expect(foundWord).toBeTruthy()
+      component.useWord(word)
     })
-  )
+
+    expect(component.isFull()).toBeFalsy()
+    expect(component.isCorrect()).toBeFalsy()
+    component.useWord(words[words.length - 1])
+    expect(component.isFull()).toBeTruthy()
+    expect(component.isCorrect()).toBeTruthy()
+  }))
+
+  it('should give the correct empty spots', waitForAsync(() => {
+    initComponent(correctMnemonic)
+    const words = component.secret.split(' ')
+
+    // first empty spot is zero
+    expect(component.emptySpot(component.currentWords)).toEqual(0)
+
+    component.useWord(words[0])
+
+    // next empty spot is one
+    expect(component.emptySpot(component.currentWords)).toEqual(1)
+  }))
+
+  it('should let users select words to correct them', waitForAsync(() => {
+    initComponent(correctMnemonic)
+    const words = component.secret.split(' ')
+
+    words.forEach((word: string) => {
+      component.useWord(word)
+    })
+
+    // now select a word
+    component.selectWord(5)
+    expect(component.selectedWordIndex).toEqual(5)
+    expect(component.currentWords[5]).toEqual(words[5])
+  }))
+
+  it('should give users 3 words to choose from', waitForAsync(() => {
+    initComponent(correctMnemonic)
+
+    const wordSelector = fixture.nativeElement.querySelector('#wordSelector')
+
+    // check if there are three words
+    expect(wordSelector.children.length).toBe(3)
+
+    let foundWord: boolean = false
+    for (let i: number = 0; i < wordSelector.children.length; i++) {
+      if (wordSelector.children.item(i).textContent.trim() === correctMnemonic.split(' ')[0]) {
+        foundWord = true
+      }
+    }
+
+    // check if one of the words is the correct one
+    expect(foundWord).toBeTruthy()
+  }))
+
+  it('should give users 3 words to choose from if selecting a specific one', waitForAsync(() => {
+    initComponent(correctMnemonic, true)
+
+    component.secret.split(' ').forEach((word: string, i: number) => {
+      if (i > 10) {
+        return
+      }
+      component.useWord(word)
+    })
+
+    const selectedIndex: number = 5
+    component.selectWord(selectedIndex)
+
+    // Verify via component state that the correct word is in promptedWords
+    const targetWord = correctMnemonic.split(' ')[selectedIndex]
+    expect(component.promptedWords.length).toBe(3)
+    expect(component.promptedWords).toContain(targetWord)
+  }))
 })

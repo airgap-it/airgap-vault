@@ -20,7 +20,9 @@
           {{ 'vault-interaction-settings.device-connected_text' | translate }}
           <ion-toggle [checked]="connectionEnabled" (ionChange)="toggleEnableConnection($event)" slot="end"></ion-toggle>
         </ion-item>
-        <airgap-interaction-selection *ngIf="connectionEnabled"></airgap-interaction-selection>
+        @if (connectionEnabled) {
+          <airgap-interaction-selection></airgap-interaction-selection>
+        }
 
         <ion-item lines="none">
           <p [innerHTML]="'vault-interaction-settings.note_text' | translate"></p>

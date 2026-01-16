@@ -4,9 +4,10 @@ import { TranslateService } from '@ngx-translate/core'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 @Component({
-  selector: 'airgap-link-page',
-  templateUrl: './link-page.page.html',
-  styleUrls: ['./link-page.page.scss']
+    selector: 'airgap-link-page',
+    templateUrl: './link-page.page.html',
+    styleUrls: ['./link-page.page.scss'],
+    standalone: false
 })
 export class LinkPagePage {
   title: string

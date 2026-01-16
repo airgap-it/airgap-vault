@@ -15,30 +15,34 @@
       </p>
     </ion-text>
 
-    <ion-row *ngIf="hasCameraPermission | async" class="row--height__100 ion-justify-content-center ion-align-items-center">
-      <ion-col class="guides--container content--align__center-center">
-        <img class="guides--container__img" src="./assets/img/qr_code_guides.svg" />
-      </ion-col>
-      <zxing-scanner
-        #scanner
-        [formats]="['QR_CODE']"
-        [timeBetweenScans]="0"
-        [delayBetweenScanSuccess]="0"
-        *ngIf="isBrowser || isElectron"
-        (scanSuccess)="checkScan($event)"
-      ></zxing-scanner>
-    </ion-row>
+    @if (hasCameraPermission | async) {
+      <ion-row class="row--height__100 ion-justify-content-center ion-align-items-center">
+        <ion-col class="guides--container content--align__center-center">
+          <img class="guides--container__img" src="./assets/img/qr_code_guides.svg" />
+        </ion-col>
+        @if (isBrowser || isElectron) {
+          <zxing-scanner
+            #scanner
+            [formats]="['QR_CODE']"
+            [timeBetweenScans]="0"
+            [delayBetweenScanSuccess]="0"
+            (scanSuccess)="checkScan($event)"
+          ></zxing-scanner>
+        }
+      </ion-row>
+    }
 
-    <ion-row
-      class="row--height__100 ion-justify-content-center ion-align-items-center"
-      *ngIf="(hasCameraPermission | async) === false"
-      (click)="requestPermission()"
-    >
-      <ion-col class="ion-text-center">
-        <img src="../assets/img/permission_onboarding_camera.svg" />
-        <h3 class="ion-padding-horizontal" [innerHTML]="'contact-book-scan.empty-state_heading' | translate"></h3>
-        <ion-button shape="round" color="primary">{{ 'contact-book-scan.grant-permission_label' | translate }}</ion-button>
-      </ion-col>
-    </ion-row>
+    @if ((hasCameraPermission | async) === false) {
+      <ion-row
+        class="row--height__100 ion-justify-content-center ion-align-items-center"
+        (click)="requestPermission()"
+        >
+        <ion-col class="ion-text-center">
+          <img src="../assets/img/permission_onboarding_camera.svg" />
+          <h3 class="ion-padding-horizontal" [innerHTML]="'contact-book-scan.empty-state_heading' | translate"></h3>
+          <ion-button shape="round" color="primary">{{ 'contact-book-scan.grant-permission_label' | translate }}</ion-button>
+        </ion-col>
+      </ion-row>
+    }
   </ion-grid>
 </ion-content>

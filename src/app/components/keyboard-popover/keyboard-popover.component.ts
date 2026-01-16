@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core'
 
 @Component({
-  selector: 'airgap-keyboard-popover',
-  templateUrl: './keyboard-popover.component.html',
-  styleUrls: ['./keyboard-popover.component.scss']
+    selector: 'airgap-keyboard-popover',
+    templateUrl: './keyboard-popover.component.html',
+    styleUrls: ['./keyboard-popover.component.scss'],
+    standalone: false
 })
 export class KeyboardPopoverComponent implements OnInit {
   private readonly onAdd: Function

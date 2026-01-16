@@ -1,9 +1,10 @@
 import { Component, Input, OnChanges } from '@angular/core'
 
 @Component({
-  selector: 'airgap-entropy-progress',
-  templateUrl: './entropy-progress.component.html',
-  styleUrls: ['./entropy-progress.component.scss']
+    selector: 'airgap-entropy-progress',
+    templateUrl: './entropy-progress.component.html',
+    styleUrls: ['./entropy-progress.component.scss'],
+    standalone: false
 })
 export class EntropyProgressComponent implements OnChanges {
   @Input()

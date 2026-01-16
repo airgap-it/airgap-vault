@@ -20,7 +20,7 @@ describe('VaultStorageService', () => {
   })
 
   it('should be created', () => {
-    const service: VaultStorageService = TestBed.get(VaultStorageService)
+    const service: VaultStorageService = TestBed.inject(VaultStorageService)
     expect(service).toBeTruthy()
   })
 })

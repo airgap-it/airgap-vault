@@ -6,13 +6,14 @@
 
 <ion-content>
   <p class="ion-padding-horizontal">{{ 'social-recovery-validate-share.text' | translate }}</p>
-  <airgap-verify-key
-    *ngIf="shares"
-    #verify
-    [secret]="shares[currentShare]"
-    (onComplete)="onComplete($event)"
-    (onContinue)="onContinue()"
-  ></airgap-verify-key>
+  @if (shares) {
+    <airgap-verify-key
+      #verify
+      [secret]="shares[currentShare]"
+      (onComplete)="onComplete($event)"
+      (onContinue)="onContinue()"
+    ></airgap-verify-key>
+  }
 </ion-content>
 
 <ion-footer class="ion-no-border" color="primary">

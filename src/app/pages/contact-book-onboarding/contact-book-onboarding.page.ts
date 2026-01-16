@@ -4,9 +4,10 @@ import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 @Component({
-  selector: 'airgap-contact-book-onboarding',
-  templateUrl: './contact-book-onboarding.page.html',
-  styleUrls: ['./contact-book-onboarding.page.scss']
+    selector: 'airgap-contact-book-onboarding',
+    templateUrl: './contact-book-onboarding.page.html',
+    styleUrls: ['./contact-book-onboarding.page.scss'],
+    standalone: false
 })
 export class ContactBookOnboardingPage implements OnInit {
   public suggestionsEnabled: boolean
@@ -20,8 +21,8 @@ export class ContactBookOnboardingPage implements OnInit {
     this.contactsService.isSuggestionsEnabled().then((value: boolean) => (this.suggestionsEnabled = value))
   }
 
-  changeState(state: 0 | 1 | 2) {
-    this.state = state
+  changeState(state: number) {
+    this.state = state as 0 | 1 | 2
   }
 
   async next() {

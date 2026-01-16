@@ -13,7 +13,9 @@
       <p>{{ description }}</p>
       <p>{{ link }}</p>
       <p [innerHTML]="'link-page.scan-qr' | translate: { urlDescription: urlDescription }"></p>
-      <airgap-qr *ngIf="link" [qrdata]="link"></airgap-qr>
+      @if (link) {
+        <airgap-qr [qrdata]="link"></airgap-qr>
+      }
     </ion-col>
   </ion-row>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">

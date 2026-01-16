@@ -18,9 +18,10 @@ import { Alert, Modal, Mode, Task, UnsignedMessage } from './deserialized.detail
 type ModalOnDismissAction = (modalData: OverlayEventDetail<unknown>) => Promise<void>
 
 @Component({
-  selector: 'airgap-deserialized-detail',
-  templateUrl: './deserialized-detail.page.html',
-  styleUrls: ['./deserialized-detail.page.scss']
+    selector: 'airgap-deserialized-detail',
+    templateUrl: './deserialized-detail.page.html',
+    styleUrls: ['./deserialized-detail.page.scss'],
+    standalone: false
 })
 export class DeserializedDetailPage implements OnDestroy {
   public signingWallet: AirGapWallet | undefined

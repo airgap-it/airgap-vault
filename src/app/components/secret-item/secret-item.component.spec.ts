@@ -1,6 +1,6 @@
 /*
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
-import { async, ComponentFixture, TestBed } from '@angular/core/testing'
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { SecretItemComponent } from './secret-item.component'
 
@@ -8,7 +8,7 @@ describe('SecretItemComponent', () => {
   let component: SecretItemComponent
   let fixture: ComponentFixture<SecretItemComponent>
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [SecretItemComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]

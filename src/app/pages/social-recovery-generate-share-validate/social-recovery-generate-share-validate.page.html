@@ -10,24 +10,26 @@
   <div class="content-wrapper">
     <div class="center-wrapper">
       <div class="states-wrapper">
-        <ion-button
-          class="state"
-          [class.selected]="(i === currentShare && currentShare < shares.length - 1) || (currentShare === shares.length -1 && i === currentShare - 1)"
-          shape="round"
-          *ngFor="let share of shares; let i = index"
-          [color]="i === currentShare ? 'primary' : 'tertiary'"
-        >
-          {{i}}
-        </ion-button>
+        @for (share of shares; track share; let i = $index) {
+          <ion-button
+            class="state"
+            [class.selected]="(i === currentShare && currentShare < shares.length - 1) || (currentShare === shares.length -1 && i === currentShare - 1)"
+            shape="round"
+            [color]="i === currentShare ? 'primary' : 'tertiary'"
+            >
+            {{i}}
+          </ion-button>
+        }
       </div>
       <h2>Tap each word to match the correct order</h2>
-      <airgap-verify-key-alt
-        *ngIf="shares"
-        #verify
-        [secret]="shares[currentShare]"
-        (onComplete)="onComplete($event)"
-        (onNext)="onNext()"
-      ></airgap-verify-key-alt>
+      @if (shares) {
+        <airgap-verify-key-alt
+          #verify
+          [secret]="shares[currentShare]"
+          (onComplete)="onComplete($event)"
+          (onNext)="onNext()"
+        ></airgap-verify-key-alt>
+      }
     </div>
 
     <div class="buttons-wrapper">

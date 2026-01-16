@@ -1,4 +1,4 @@
-<ng-container *ngFor="let address of addressesNotOnContactBook">
+@for (address of addressesNotOnContactBook; track address) {
   <div class="suggestion-wrapper">
     <p>This address is not in your address book:</p>
     <div class="divider">
@@ -12,4 +12,4 @@
     </div>
     <ion-button class="button" color="primary" (click)="onClickDisableContact()">No, disable address book feature</ion-button>
   </div>
-</ng-container>
+}

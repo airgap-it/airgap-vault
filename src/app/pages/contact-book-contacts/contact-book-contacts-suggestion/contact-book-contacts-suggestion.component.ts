@@ -10,9 +10,10 @@ export enum SortType {
 }
 
 @Component({
-  selector: 'airgap-contact-book-contacts-suggestion',
-  templateUrl: './contact-book-contacts-suggestion.component.html',
-  styleUrls: ['./contact-book-contacts-suggestion.component.scss']
+    selector: 'airgap-contact-book-contacts-suggestion',
+    templateUrl: './contact-book-contacts-suggestion.component.html',
+    styleUrls: ['./contact-book-contacts-suggestion.component.scss'],
+    standalone: false
 })
 export class ContactBookContactsSuggestionComponent {
   public addEnum: typeof AddType = AddType
