@@ -104,7 +104,7 @@
     "@capacitor/splash-screen": "^8.0.0",
     "@capacitor/status-bar": "^8.0.0",
     "@capawesome/capacitor-android-edge-to-edge-support": "^7.2.3",
-    "@capawesome/capacitor-file-picker": "^0.5.8",
+    "@capawesome/capacitor-file-picker": "^8.0.0",
     "@download/blockies": "1.0.3",
     "@ethereumjs/rlp": "^4.0.1",
     "@ethereumjs/tx": "^3.4.0",

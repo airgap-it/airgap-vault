@@ -1593,10 +1593,10 @@
   resolved "https://registry.npmjs.org/@capawesome/capacitor-android-edge-to-edge-support/-/capacitor-android-edge-to-edge-support-7.2.3.tgz"
   integrity sha512-WtwXeU5Clg13t3SO6JvtIfJlpO+E48tHC+vNmC519zcS6GV9URl705UOvwOOvEyh6GFxAi2dHi8lj8iqIOYCdA==
 
-"@capawesome/capacitor-file-picker@^0.5.8":
-  version "0.5.10"
-  resolved "https://registry.npmjs.org/@capawesome/capacitor-file-picker/-/capacitor-file-picker-0.5.10.tgz"
-  integrity sha512-bm0rTOjeTGx1gYKz+6IfZAsC70z3Ss7BFMXXF18Gv5QlBJFbdD5oaJGSAJl1YHMVQlMvLAdTJd6hZ1SHIG1l0Q==
+"@capawesome/capacitor-file-picker@^8.0.0":
+  version "8.0.0"
+  resolved "https://registry.npmjs.org/@capawesome/capacitor-file-picker/-/capacitor-file-picker-8.0.0.tgz"
+  integrity sha512-eA39o8phSRcA78tnmQT6T2h73pljt5g+TcxI3xdR1hlWG7nlGLM2fDfiAaQ/2IASI4TA+s+NGBW1TdOXbwQiOw==
 
 "@colors/colors@1.5.0":
   version "1.5.0"
