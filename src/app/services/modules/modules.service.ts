@@ -1,4 +1,12 @@
-import { BaseModulesService, IsolatedModuleInstalledMetadata, IsolatedModulePreviewMetadata, IsolatedProtocol, ModulesController, ProtocolService, UiEventService } from '@airgap/angular-core'
+import {
+  BaseModulesService,
+  IsolatedModuleInstalledMetadata,
+  IsolatedModulePreviewMetadata,
+  IsolatedProtocol,
+  ModulesController,
+  ProtocolService,
+  UiEventService
+} from '@airgap/angular-core'
 import { AirGapWallet } from '@airgap/coinlib-core'
 import { Inject, Injectable } from '@angular/core'
 import { FilePickerPlugin, PickFilesResult } from '@capawesome/capacitor-file-picker'
@@ -25,8 +33,8 @@ export class VaultModulesService extends BaseModulesService {
     let loader: HTMLIonLoadingElement | undefined
 
     try {
-      const { files }: PickFilesResult = await this.filePicker.pickFiles({ 
-        multiple: false,
+      const { files }: PickFilesResult = await this.filePicker.pickFiles({
+        limit: 1,
         readData: false
       })
       const { name, path } = files[0]
