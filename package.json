@@ -200,7 +200,7 @@
     "@angular/compiler": "21.1.0",
     "@angular/compiler-cli": "21.1.0",
     "@angular/language-service": "21.1.0",
-    "@capacitor/cli": "^6.0.0",
+    "@capacitor/cli": "^8.0.0",
     "@ionic/angular-toolkit": "^9.0.0",
     "@ionic/cli": "^7.1.1",
     "@types/emscripten": "^1.39.6",
