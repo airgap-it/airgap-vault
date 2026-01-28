@@ -18,6 +18,7 @@ import { GroestlcoinModule } from '@airgap/groestlcoin'
 import { ICPModule } from '@airgap/icp'
 import { MoonbeamModule } from '@airgap/moonbeam'
 import { OptimismModule } from '@airgap/optimism'
+import { BnbModule } from '@airgap/bnb'
 import { BaseModule } from '@airgap/base'
 import { PolkadotModule } from '@airgap/polkadot'
 import { TezosModule, TezosSaplingExternalMethodProvider, TezosShieldedTezProtocol } from '@airgap/tezos'
@@ -191,6 +192,7 @@ export class AppComponent implements AfterViewInit {
       new ICPModule(),
       new CoreumModule(),
       new OptimismModule(),
+      new BnbModule(),
       new BaseModule(),
       new AcurastModule(),
       new StellarModule()
