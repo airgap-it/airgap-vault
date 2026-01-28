@@ -219,7 +219,8 @@ export class IACService extends BaseIACService {
       !correctWallet &&
       (signTransactionRequest.protocol === MainProtocolSymbols.ETH ||
         signTransactionRequest.protocol === MainProtocolSymbols.OPTIMISM ||
-        signTransactionRequest.protocol === MainProtocolSymbols.BNB)
+        signTransactionRequest.protocol === MainProtocolSymbols.BNB ||
+        signTransactionRequest.protocol === MainProtocolSymbols.BASE)
     ) {
       const transaction: RawTypedEthereumTransaction = unsignedTransaction.transaction
 

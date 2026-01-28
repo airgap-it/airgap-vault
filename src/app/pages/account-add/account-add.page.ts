@@ -101,17 +101,18 @@ export class AccountAddPage {
         this.formValid = true
       }
 
-      selectedProtocols.forEach((wrapper) => {
-        wrapper.customDerivationPath = undefined
-      })
+      // Calculate next derivation path for each selected protocol
+      await Promise.all(
+        selectedProtocols.map(async (wrapper) => {
+          const nextPath = await this.secretsService.getNextDerivationPathForProtocol(wrapper.protocol, this.secret)
+          wrapper.customDerivationPath = nextPath.derivationPath
+          wrapper.isHDWallet = nextPath.isHDWallet
+        })
+      )
 
       if (selectedProtocols.length === 1) {
         this.singleSelectedProtocol = selectedProtocols[0]
-        this.singleSelectedProtocol.customDerivationPath = await this.singleSelectedProtocol.protocol.getStandardDerivationPath()
       } else {
-        if (this.singleSelectedProtocol) {
-          this.singleSelectedProtocol.customDerivationPath = undefined
-        }
         this.singleSelectedProtocol = undefined
       }
     }, 0)
@@ -119,20 +120,22 @@ export class AccountAddPage {
 
   public async toggleHDWallet() {
     // "isHDWallet" can only be toggled if one protocol is checked
-
+    // When toggled, recalculate the derivation path for the new HD/non-HD mode
     const selectedProtocols = this.protocolList.filter((protocol) => protocol.isChecked)
     if (selectedProtocols.length === 1) {
       const selectedProtocol = selectedProtocols[0]
-      const standardDerivationPath = await selectedProtocol.protocol.getStandardDerivationPath()
-      if ((await selectedProtocol.protocol.getSupportsHD()) && selectedProtocol.isHDWallet) {
-        selectedProtocol.customDerivationPath = standardDerivationPath
+      // Recalculate the derivation path with the new isHDWallet value
+      const nextPath = await this.secretsService.getNextDerivationPathForProtocol(selectedProtocol.protocol, this.secret)
+      // The toggle has already changed isHDWallet, so we use that value
+      if (selectedProtocol.isHDWallet) {
+        // HD mode - use standard path with account increment
+        const standardPath = await selectedProtocol.protocol.getStandardDerivationPath()
+        selectedProtocol.customDerivationPath = nextPath.derivationPath.includes('/0/') ? standardPath : nextPath.derivationPath
       } else {
-        selectedProtocol.customDerivationPath = `${standardDerivationPath}/0/0`
+        // Non-HD mode - use full path with address index
+        selectedProtocol.customDerivationPath = nextPath.derivationPath
       }
-    }
-
-    if (selectedProtocols.length === 1) {
-      this.singleSelectedProtocol = selectedProtocols[0]
+      this.singleSelectedProtocol = selectedProtocol
     } else {
       this.singleSelectedProtocol = undefined
     }
@@ -160,29 +163,36 @@ export class AccountAddPage {
 
   private async addWalletAndReturnToAddressPage(): Promise<void> {
     const addAccount = async () => {
+      const selectedProtocols = this.protocolList.filter((p) => p.isChecked)
+
       this.secretsService
         .addWallets(
           this.secret,
           await Promise.all(
-            this.protocolList.map(async (protocolWrapper: ProtocolWrapper) => {
+            selectedProtocols.map(async (protocolWrapper: ProtocolWrapper) => {
               const protocol = protocolWrapper.protocol
               return {
                 protocolIdentifier: await protocol.getIdentifier(),
-                isHDWallet: protocolWrapper.isChecked ? protocolWrapper.isHDWallet : await protocol.getSupportsHD(),
-                customDerivationPath:
-                  protocolWrapper.isChecked && protocolWrapper.customDerivationPath
-                    ? protocolWrapper.customDerivationPath
-                    : await protocol.getStandardDerivationPath(),
-                bip39Passphrase: protocolWrapper.isChecked ? this.bip39Passphrase : '',
-                isActive: protocolWrapper.isChecked
+                isHDWallet: protocolWrapper.isHDWallet,
+                customDerivationPath: protocolWrapper.customDerivationPath ?? (await protocol.getStandardDerivationPath()),
+                bip39Passphrase: this.bip39Passphrase,
+                isActive: true
               }
             })
           )
         )
-        .then(() => {
-          this.navigationService
-            .routeWithState('/accounts-list', { secret: this.secret }, { replaceUrl: true })
-            .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+        .then((createdWallets) => {
+          if (createdWallets.length === 1) {
+            // Navigate directly to the new account's detail page
+            this.navigationService
+              .routeWithState('/account-address', { wallet: createdWallets[0], secret: this.secret }, { replaceUrl: true })
+              .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+          } else {
+            // Multiple wallets or no wallets created, go to accounts list
+            this.navigationService
+              .routeWithState('/accounts-list', { secret: this.secret }, { replaceUrl: true })
+              .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+          }
         })
         .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
     }

@@ -155,6 +155,7 @@ export class AccountAddressPage {
         case MainProtocolSymbols.ETH:
         case MainProtocolSymbols.OPTIMISM:
         case MainProtocolSymbols.BNB:
+        case MainProtocolSymbols.BASE:
           this.syncOptions = [airgapwallet]
           if (this.wallet.isExtendedPublicKey) {
             this.syncOptions.push(metamask, imtoken, rabby)
