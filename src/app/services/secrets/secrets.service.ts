@@ -260,6 +260,83 @@ export class SecretsService {
     return walletList
   }
 
+  public async getWalletsByProtocolIdentifier(protocolIdentifier: ProtocolSymbols, secret?: MnemonicSecret): Promise<AirGapWallet[]> {
+    const wallets = secret ? secret.wallets : this.getWallets()
+    const filtered = await Promise.all(
+      wallets.map(async (wallet) => {
+        const identifier = await wallet.protocol.getIdentifier()
+        return identifier === protocolIdentifier && wallet.status === AirGapWalletStatus.ACTIVE ? wallet : undefined
+      })
+    )
+    return filtered.filter((w): w is AirGapWallet => w !== undefined)
+  }
+
+  private isBtcProtocol(protocolIdentifier: ProtocolSymbols): boolean {
+    return (
+      protocolIdentifier === MainProtocolSymbols.BTC ||
+      protocolIdentifier === MainProtocolSymbols.BTC_SEGWIT ||
+      protocolIdentifier === MainProtocolSymbols.BTC_TAPROOT
+    )
+  }
+
+  public async getNextDerivationPathForProtocol(
+    protocol: ICoinProtocol,
+    secret: MnemonicSecret
+  ): Promise<{ derivationPath: string; isHDWallet: boolean }> {
+    const protocolIdentifier = await protocol.getIdentifier()
+    const existingWallets = await this.getWalletsByProtocolIdentifier(protocolIdentifier, secret)
+    const standardPath = await protocol.getStandardDerivationPath()
+    const isBtc = this.isBtcProtocol(protocolIdentifier)
+    const supportsHD = await protocol.getSupportsHD()
+
+    if (existingWallets.length === 0) {
+      // First wallet - use standard path
+      // For BTC and HD-capable protocols, use HD wallet
+      // For non-HD protocols, use non-HD wallet
+      return { derivationPath: standardPath, isHDWallet: isBtc || supportsHD }
+    }
+
+    if (isBtc) {
+      // BTC protocols: Always HD, increment account index
+      // e.g., m/44'/0'/0' -> m/44'/0'/1'
+      const lastIndices = existingWallets.map((wallet) => {
+        const match = wallet.derivationPath.match(/(\d+)[h']?\/?$/)
+        return match ? parseInt(match[1], 10) : 0
+      })
+      const maxIndex = Math.max(...lastIndices)
+      const nextIndex = maxIndex + 1
+      const newPath = standardPath.replace(/(\d+)([h']?)(\/?)?$/, `${nextIndex}$2$3`)
+      return { derivationPath: newPath, isHDWallet: true }
+    } else if (supportsHD) {
+      // HD-capable protocols (ETH, OP, etc.): First is HD, subsequent are non-HD
+      // First wallet at m/44'/60'/0' is equivalent to m/44'/60'/0'/0/0
+      // Subsequent wallets use m/44'/60'/0'/0/1, m/44'/60'/0'/0/2, etc.
+      const addressIndices = existingWallets.map((wallet) => {
+        if (wallet.isExtendedPublicKey) {
+          // HD wallet is equivalent to /0/0
+          return 0
+        }
+        // Non-HD wallet - extract last number from path
+        const match = wallet.derivationPath.match(/\/(\d+)$/)
+        return match ? parseInt(match[1], 10) : 0
+      })
+      const maxIndex = Math.max(...addressIndices)
+      const nextIndex = maxIndex + 1
+      return { derivationPath: `${standardPath}/0/${nextIndex}`, isHDWallet: false }
+    } else {
+      // Non-HD protocols: Increment last number in path
+      // e.g., m/44h/1729h/0h/0h -> m/44h/1729h/0h/1h
+      const lastIndices = existingWallets.map((wallet) => {
+        const match = wallet.derivationPath.match(/(\d+)[h']?\/?$/)
+        return match ? parseInt(match[1], 10) : 0
+      })
+      const maxIndex = Math.max(...lastIndices)
+      const nextIndex = maxIndex + 1
+      const newPath = standardPath.replace(/(\d+)([h']?)(\/?)?$/, `${nextIndex}$2$3`)
+      return { derivationPath: newPath, isHDWallet: false }
+    }
+  }
+
   public async removeWallets(wallets: AirGapWallet[]): Promise<void[]> {
     return Promise.all(wallets.map((wallet) => this.removeWallet(wallet)))
   }
@@ -456,7 +533,7 @@ export class SecretsService {
     await this.addOrUpdateSecret(secret)
   }
 
-  public async addWallets(secret: MnemonicSecret, configs: AddWalletConifg[]): Promise<void> {
+  public async addWallets(secret: MnemonicSecret, configs: AddWalletConifg[]): Promise<AirGapWallet[]> {
     const loading: HTMLIonLoadingElement = await this.loadingCtrl.create({
       message: 'Deriving your wallet...'
     })
@@ -465,8 +542,10 @@ export class SecretsService {
     try {
       const entropy: string = await this.retrieveEntropyForSecret(secret)
 
+      const activeConfigs = configs.filter((config) => config.isActive)
+
       const createdOrUpdated: Either<AirGapWallet, AirGapWallet>[] = (
-        await Promise.all(configs.map((config: AddWalletConifg) => this.activateOrCreateWallet(entropy, config)))
+        await Promise.all(activeConfigs.map((config: AddWalletConifg) => this.activateOrCreateWallet(entropy, config)))
       ).filter((createdOrUpdated: Either<AirGapWallet, AirGapWallet> | undefined) => createdOrUpdated !== undefined)
 
       const [createdWallets, updatedWallets]: [AirGapWallet[], AirGapWallet[]] = merged(createdOrUpdated)
@@ -474,9 +553,16 @@ export class SecretsService {
       if (createdWallets.length > 0 || updatedWallets.length > 0) {
         secret.wallets.push(...createdWallets)
         await this.addOrUpdateSecret(secret)
+      } else if (activeConfigs.length > 0) {
+        this.showAlert(
+          'Account already exists',
+          'This account already exists with the same derivation path. The account was not added.'
+        ).catch(handleErrorLocal(ErrorCategory.IONIC_ALERT))
       }
 
       loading.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
+
+      return [...createdWallets, ...updatedWallets]
     } catch (error) {
       loading.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_LOADER))
 
