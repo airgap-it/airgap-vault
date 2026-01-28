@@ -298,7 +298,6 @@ export class SecretsService {
 
     if (isBtc) {
       // BTC protocols: Always HD, increment account index
-      // e.g., m/44'/0'/0' -> m/44'/0'/1'
       const lastIndices = existingWallets.map((wallet) => {
         const match = wallet.derivationPath.match(/(\d+)[h']?\/?$/)
         return match ? parseInt(match[1], 10) : 0
@@ -309,8 +308,7 @@ export class SecretsService {
       return { derivationPath: newPath, isHDWallet: true }
     } else if (supportsHD) {
       // HD-capable protocols (ETH, OP, etc.): First is HD, subsequent are non-HD
-      // First wallet at m/44'/60'/0' is equivalent to m/44'/60'/0'/0/0
-      // Subsequent wallets use m/44'/60'/0'/0/1, m/44'/60'/0'/0/2, etc.
+
       const addressIndices = existingWallets.map((wallet) => {
         if (wallet.isExtendedPublicKey) {
           // HD wallet is equivalent to /0/0
