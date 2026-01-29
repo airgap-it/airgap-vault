@@ -217,7 +217,10 @@ export class IACService extends BaseIACService {
     // ETH: MetaMask requests don't contain the public key information, we need to do the matching based on the sourceFingerprint
     if (
       !correctWallet &&
-      (signTransactionRequest.protocol === MainProtocolSymbols.ETH || signTransactionRequest.protocol === MainProtocolSymbols.OPTIMISM)
+      (signTransactionRequest.protocol === MainProtocolSymbols.ETH ||
+        signTransactionRequest.protocol === MainProtocolSymbols.OPTIMISM ||
+        signTransactionRequest.protocol === MainProtocolSymbols.BNB ||
+        signTransactionRequest.protocol === MainProtocolSymbols.BASE)
     ) {
       const transaction: RawTypedEthereumTransaction = unsignedTransaction.transaction
 
