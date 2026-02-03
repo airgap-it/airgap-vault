@@ -68,7 +68,7 @@ dependencies {
     implementation project(':capacitor-cordova-android-plugins')
 
     implementation "com.google.android.material:material:$androidxMaterialVersion"
-    implementation 'com.scottyab:rootbeer-lib:0.0.7'
+    implementation 'com.scottyab:rootbeer-lib:0.1.1'
 
     def fragmentVersion = "1.4.0"
     implementation("androidx.fragment:fragment-ktx:$fragmentVersion")
