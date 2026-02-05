@@ -48,8 +48,10 @@ RUN yarn prepare-prod-build \
     && yarn ionic build --prod \
     && yarn cap sync android \
     && echo y | sdkmanager --sdk_root=${ANDROID_SDK_ROOT} --update \
+    && echo y | sdkmanager --sdk_root=${ANDROID_SDK_ROOT} "build-tools;35.0.0" "platforms;android-35" \
     && /app/android/gradlew --project-dir /app/android clean \
     && /app/android/gradlew --project-dir /app/android build \
+    && ls -R /app/android/app/build/outputs/apk/ \
     && cp /app/android/app/build/outputs/apk/release/app-release-unsigned.apk android-release-unsigned.apk \
     && cp android-release-unsigned.apk android-debug.apk \
     && cp /app/android/app/build/outputs/apk/appium/app-appium-unsigned.apk android-appium-unsigned.apk \
