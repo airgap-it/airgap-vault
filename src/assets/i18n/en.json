@@ -598,7 +598,8 @@
       "label": "Custom Derivation Path",
       "placeholder": "Custom Derivation Path"
     },
-    "create_label": "Create"
+    "create_label": "Create",
+    "passphrase-derivation-warning": "When using a passphrase, verify the derivation path is at your desired index. The vault auto-increments the path based on existing accounts, which may affect passphrase accounts."
   },
   "wallet-share": {
     "title": "Pair Account",

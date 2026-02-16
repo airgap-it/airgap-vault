@@ -598,7 +598,8 @@
         "label": "Chemin de dérivation personnalisé",
         "placeholder": "Chemin de dérivation personnalisé"
       },
-      "create_label": "Créer"
+      "create_label": "Créer",
+      "passphrase-derivation-warning": "Lors de l'utilisation d'une phrase secrète, vérifiez que le chemin de dérivation est à l'index souhaité. Le vault incrémente automatiquement le chemin en fonction des comptes existants, ce qui peut affecter les comptes avec phrase secrète."
     },
     "wallet-share": {
       "title": "Compte de paire",
