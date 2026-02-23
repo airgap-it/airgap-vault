@@ -690,7 +690,8 @@
     "payload_label": "Message to sign. Make sure you know what you are signing.",
     "blake2b_hash": "Ledger Blake2b hash of the message",
     "heading": "This is your signed message, scan it with <span class=\"style__strong color__primary\">AirGap Wallet</span>.",
-    "sign_button": "Sign Message"
+    "sign_button": "Sign Message",
+    "copy_label": "Kodierte Nachricht kopieren"
   },
   "message-signing-response": {
     "text": "Display signed message details"
