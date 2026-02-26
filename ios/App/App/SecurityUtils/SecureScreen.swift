@@ -28,8 +28,11 @@ public final class SecureScreen {
     private weak var presentedViewController: UIViewController?
     private var willResignActiveObserver: Observer?
     private var didBecomeActiveObserver: Observer?
-    
+
     private var overlayDismissObservers: [() -> ()] = []
+
+    private var secureField: UITextField?
+    private var isSecureWindowEnabled: Bool = false
 
     let screen: UIScreen
 
@@ -39,6 +42,54 @@ public final class SecureScreen {
 
     public init(screen: UIScreen = .main) {
         self.screen = screen
+    }
+
+    // MARK: - Screenshot Prevention (Secure Window)
+
+    private func getKeyWindow() -> UIWindow? {
+        return UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap { $0.windows }
+            .first { $0.isKeyWindow }
+    }
+
+    private func setupSecureField() {
+        guard secureField == nil else { return }
+        guard let window = getKeyWindow() else { return }
+        guard let windowSuperlayer = window.layer.superlayer else { return }
+
+        let field = UITextField()
+        field.isSecureTextEntry = true
+        field.isUserInteractionEnabled = false
+        window.addSubview(field)
+        field.layoutIfNeeded()
+
+        field.layer.frame = window.bounds
+        field.layer.sublayers?.last?.frame = window.bounds
+
+        windowSuperlayer.addSublayer(field.layer)
+        field.layer.sublayers?.last?.addSublayer(window.layer)
+
+        self.secureField = field
+    }
+
+    public func setWindowSecureFlag() {
+        guard !isSecureWindowEnabled else { return }
+        isSecureWindowEnabled = true
+
+        DispatchQueue.main.async {
+            self.setupSecureField()
+            self.secureField?.isSecureTextEntry = true
+        }
+    }
+
+    public func clearWindowSecureFlag() {
+        guard isSecureWindowEnabled else { return }
+        isSecureWindowEnabled = false
+
+        DispatchQueue.main.async {
+            self.secureField?.isSecureTextEntry = false
+        }
     }
 
     public func startOverlayProtection() {
