@@ -66,6 +66,9 @@
             placeholder="BIP-39 Passphrase"
           ></ion-input>
         </ion-item>
+        <ion-note *ngIf="bip39Passphrase.length > 0" color="warning" class="ion-padding-start ion-padding-end ion-padding-bottom">
+          {{ 'wallet-select-coins.passphrase-derivation-warning' | translate }}
+        </ion-note>
         <ion-item class="ion-no-padding ion-margin-bottom">
           Reveal Passphrase
           <ion-checkbox [(ngModel)]="revealBip39Passphrase" slot="end"></ion-checkbox>
