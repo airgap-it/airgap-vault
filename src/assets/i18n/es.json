@@ -691,7 +691,8 @@
     "payload_label": "Mensaje a firmar. Asegúrate de saber lo que estás firmando.",
     "blake2b_hash": "El hash Blake2b del mensaje en Ledger.",
     "heading": "Este es tu mensaje firmado, escanéalo con <span class=\"style__strong color__primary\">AirGap Wallet</span>.",
-    "sign_button": "Firmar Mensaje"
+    "sign_button": "Firmar Mensaje",
+    "copy_label": "Copiar mensaje codificado"
   },
   "message-signing-response": {
     "text": "Mostrar detalles del mensaje firmado"

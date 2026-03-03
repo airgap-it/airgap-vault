@@ -10,3 +10,11 @@
     <pre class="ion-no-margin">{{ _messages[0].blake2bHash }}</pre>
   </ion-col>
 </ion-row>
+<ion-row class="ion-padding-top" *ngIf="_messages[0]">
+  <ion-col class="ion-no-padding">
+    <ion-button expand="block" color="secondary" (click)="copyEncodedMessage()">
+      <ion-icon name="clipboard-outline" slot="start"></ion-icon>
+      {{ 'message-signing-request.copy_label' | translate }}
+    </ion-button>
+  </ion-col>
+</ion-row>

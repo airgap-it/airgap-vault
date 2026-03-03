@@ -1,3 +1,4 @@
+import { ClipboardService } from '@airgap/angular-core'
 import { Component, Input } from '@angular/core'
 
 const fromHex = (str: string) => {
@@ -32,8 +33,11 @@ export class MessageSignRequestComponent {
     blake2bHash?: string
   }[]
 
+  private _rawMessages: { data: string; blake2bHash?: string }[] = []
+
   @Input()
   set messages(messages: { data: string; blake2bHash?: string }[]) {
+    this._rawMessages = messages
     this._messages = messages.map((message) => {
       const data = this.hexToReadable(message.data)
       return { ...message, data }
@@ -54,5 +58,11 @@ export class MessageSignRequestComponent {
     return str
   }
 
-  constructor() {}
+  constructor(private readonly clipboardService: ClipboardService) {}
+
+  public async copyEncodedMessage(): Promise<void> {
+    if (this._rawMessages?.[0]?.data) {
+      await this.clipboardService.copyAndShowToast(this._rawMessages[0].data)
+    }
+  }
 }
