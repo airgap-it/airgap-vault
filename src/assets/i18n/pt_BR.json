@@ -598,8 +598,7 @@
       "label": "Caminho de derivação personalizado",
       "placeholder": "Caminho de derivação personalizado"
     },
-    "create_label": "Criar",
-    "passphrase-derivation-warning": "Ao usar uma frase secreta, verifique se o caminho de derivação está no índice desejado. O vault incrementa automaticamente o caminho com base nas contas existentes, o que pode afetar contas com frase secreta."
+    "create_label": "Criar"
   },
   "wallet-share": {
     "title": "Conta Par",

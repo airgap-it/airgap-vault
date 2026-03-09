@@ -598,8 +598,7 @@
       "label": "自定义派生路径",
       "placeholder": "自定义派生路径"
     },
-    "create_label": "创造",
-    "passphrase-derivation-warning": "使用密码短语时，请确认派生路径位于所需的索引位置。保险库会根据现有账户自动递增路径，这可能会影响密码短语账户。"
+    "create_label": "创造"
   },
   "wallet-share": {
     "title": "配对账户",

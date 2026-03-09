@@ -101,39 +101,49 @@ export class AccountAddPage {
         this.formValid = true
       }
 
-      // Calculate next derivation path for each selected protocol
-      await Promise.all(
-        selectedProtocols.map(async (wrapper) => {
-          const nextPath = await this.secretsService.getNextDerivationPathForProtocol(wrapper.protocol, this.secret)
-          wrapper.customDerivationPath = nextPath.derivationPath
-          wrapper.isHDWallet = nextPath.isHDWallet
-        })
-      )
-
-      if (selectedProtocols.length === 1) {
-        this.singleSelectedProtocol = selectedProtocols[0]
+      if (this.isAdvancedMode) {
+        // Advanced mode: reset to standard path and native HD capability so user can edit manually
+        await Promise.all(
+          selectedProtocols.map(async (wrapper) => {
+            wrapper.customDerivationPath = undefined
+            wrapper.isHDWallet = await wrapper.protocol.getSupportsHD()
+          })
+        )
+        if (selectedProtocols.length === 1) {
+          this.singleSelectedProtocol = selectedProtocols[0]
+          this.singleSelectedProtocol.customDerivationPath = await this.singleSelectedProtocol.protocol.getStandardDerivationPath()
+        } else {
+          this.singleSelectedProtocol = undefined
+        }
       } else {
-        this.singleSelectedProtocol = undefined
+        // Non-advanced mode: auto-bump to next available derivation path
+        await Promise.all(
+          selectedProtocols.map(async (wrapper) => {
+            const nextPath = await this.secretsService.getNextDerivationPathForProtocol(wrapper.protocol, this.secret)
+            wrapper.customDerivationPath = nextPath.derivationPath
+            wrapper.isHDWallet = nextPath.isHDWallet
+          })
+        )
+
+        if (selectedProtocols.length === 1) {
+          this.singleSelectedProtocol = selectedProtocols[0]
+        } else {
+          this.singleSelectedProtocol = undefined
+        }
       }
     }, 0)
   }
 
   public async toggleHDWallet() {
     // "isHDWallet" can only be toggled if one protocol is checked
-    // When toggled, recalculate the derivation path for the new HD/non-HD mode
     const selectedProtocols = this.protocolList.filter((protocol) => protocol.isChecked)
     if (selectedProtocols.length === 1) {
       const selectedProtocol = selectedProtocols[0]
-      // Recalculate the derivation path with the new isHDWallet value
-      const nextPath = await this.secretsService.getNextDerivationPathForProtocol(selectedProtocol.protocol, this.secret)
-      // The toggle has already changed isHDWallet, so we use that value
-      if (selectedProtocol.isHDWallet) {
-        // HD mode - use standard path with account increment
-        const standardPath = await selectedProtocol.protocol.getStandardDerivationPath()
-        selectedProtocol.customDerivationPath = nextPath.derivationPath.includes('/0/') ? standardPath : nextPath.derivationPath
+      const standardDerivationPath = await selectedProtocol.protocol.getStandardDerivationPath()
+      if ((await selectedProtocol.protocol.getSupportsHD()) && selectedProtocol.isHDWallet) {
+        selectedProtocol.customDerivationPath = standardDerivationPath
       } else {
-        // Non-HD mode - use full path with address index
-        selectedProtocol.customDerivationPath = nextPath.derivationPath
+        selectedProtocol.customDerivationPath = `${standardDerivationPath}/0/0`
       }
       this.singleSelectedProtocol = selectedProtocol
     } else {
