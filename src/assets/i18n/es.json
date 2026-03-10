@@ -598,8 +598,7 @@
       "label": "Derivación customizada",
       "placeholder": "Derivación customizada"
     },
-    "create_label": "Crear",
-    "passphrase-derivation-warning": "Al usar una frase de contraseña, verifique que la ruta de derivación esté en el índice deseado. El vault incrementa automáticamente la ruta según las cuentas existentes, lo que puede afectar a las cuentas con frase de contraseña."
+    "create_label": "Crear"
   },
   "wallet-share": {
     "title": "Emparejar Cuenta",

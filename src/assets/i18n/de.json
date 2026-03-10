@@ -598,8 +598,7 @@
       "label": "Selbsterstellter Ableitungspfad",
       "placeholder": "Selbsterstellter Ableitungspfad"
     },
-    "create_label": "Erstellen",
-    "passphrase-derivation-warning": "Bei Verwendung einer Passphrase überprüfen Sie, ob der Ableitungspfad auf dem gewünschten Index liegt. Der Vault erhöht den Pfad automatisch basierend auf bestehenden Konten, was sich auf Passphrase-Konten auswirken kann."
+    "create_label": "Erstellen"
   },
   "wallet-share": {
     "title": "Konto Synchronisieren",
