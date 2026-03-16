@@ -44,7 +44,11 @@ export class SecretShowPage {
 
   public async ionViewDidEnter(): Promise<void> {
     this.deviceService.enableScreenshotProtection({ routeBack: 'secret-setup' })
-    this.lifehashData = await this.lifehashService.generateLifehash(this.secret.fingerprint)
+    const matches = this.secret.fingerprint ? this.secret.fingerprint.match(/.{1,2}/g) : null
+    const bytes = matches
+      ? new Uint8Array(matches.map((byte) => parseInt(byte, 16)))
+      : new Uint8Array()
+    this.lifehashData = await this.lifehashService.generateLifehash(bytes)
   }
 
   public ionViewWillLeave(): void {
