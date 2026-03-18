@@ -54,6 +54,12 @@ export class NavigationService {
     return this.router.navigateByUrl(route, options)
   }
 
+  public async routeWithStateAsRoot(route: string, object: State): Promise<boolean> {
+    this.state = object
+
+    return this.navCtrl.navigateRoot(route)
+  }
+
   public back(): void {
     this.location.back()
   }
