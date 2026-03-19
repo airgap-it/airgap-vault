@@ -87,13 +87,13 @@ export class DeviceService {
   }
 
   public setSecureWindow(): void {
-    if (this.platform.is('android') && this.platform.is('hybrid')) {
+    if (this.platform.is('hybrid')) {
       this.securityUtils.setWindowSecureFlag()
     }
   }
 
   public clearSecureWindow(): void {
-    if (this.platform.is('android') && this.platform.is('hybrid')) {
+    if (this.platform.is('hybrid')) {
       this.securityUtils.clearWindowSecureFlag()
     }
   }

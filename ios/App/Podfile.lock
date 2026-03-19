@@ -60,18 +60,18 @@ EXTERNAL SOURCES:
     :path: "../capacitor-cordova-ios-plugins"
 
 SPEC CHECKSUMS:
-  Capacitor: 8941aba4364ba9d1b22188569001f2ce45cc2b00
-  CapacitorApp: 9d53aec7101f7b030a950c5bdc4df8612576b279
-  CapacitorAppLauncher: ca97e232064f293cc23a0083f237af74a2976add
-  CapacitorClipboard: 80282f684154124b9019ebf401235b70b0cf4994
+  Capacitor: 7b38922425a542e0b5936c8f72ea89d876dd4df1
+  CapacitorApp: 30145f2ea2311e4f3744472119ec87d2ddf4c0a7
+  CapacitorAppLauncher: 1b35f1fc220c3053085bebc45015f079e7328b55
+  CapacitorClipboard: c1cb27fea166aab5c99bda605d3bc768cf00eabe
   CapacitorCordova: 8f2cc8d8d3619c566e9418fe8772064a94266106
-  CapacitorFilesystem: 60e59ba274c234a979e7a3be2552feaadcee4263
-  CapacitorSplashScreen: 61645214e8f955ff2b80f16a6a3648960fe4c89f
-  CapacitorStatusBar: 2e4369f99166125435641b1908d05f561eaba6f6
-  CapawesomeCapacitorFilePicker: 3c6c193300649c9c7ce49426e17582edbf7ed601
-  CordovaPlugins: 4df6135298e8f8eaba9b41aa6c093f6692f2ce8b
+  CapacitorFilesystem: 9c2cc1e89d3b8b91503b316e9f6c2915c9bf9419
+  CapacitorSplashScreen: d2d8fe9541d7bebdf735839b89edf6e762cea969
+  CapacitorStatusBar: 129c68650d3f950e080e8e7e03d69c3b361dbe52
+  CapawesomeCapacitorFilePicker: 2674b1aa1915b69786783236abeff82c36f1a381
+  CordovaPlugins: 4fc317d85bce41b61f649759129e329d756e33ee
   ZIPFoundation: d170fa8e270b2a32bef9dcdcabff5b8f1a5deced
 
 PODFILE CHECKSUM: 51db8af4d6f01d50e8e2a9025e652f730fdb53af
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

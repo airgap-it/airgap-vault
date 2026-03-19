@@ -100,7 +100,7 @@ export class SecretImportPage {
   }
 
   public ionViewDidEnter(): void {
-    this.deviceService.enableScreenshotProtection({ routeBack: 'secret-setup' })
+    this.deviceService.enableScreenshotProtection({ routeBack: 'secret-import' })
   }
 
   public ionViewWillLeave(): void {

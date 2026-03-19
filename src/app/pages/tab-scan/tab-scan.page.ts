@@ -41,9 +41,6 @@ export class TabScanPage extends ScanBasePage {
 
   async ionViewWillLeave() {
     super.ionViewWillLeave()
-    if (this.platform.is('android')) {
-      await EdgeToEdge.enable()
-    }
   }
 
   public async ionViewWillEnter(): Promise<void> {

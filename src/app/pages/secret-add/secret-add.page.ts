@@ -41,7 +41,11 @@ export class SecretAddPage {
       this.secret = this.navigationService.getState().secret
       this.isAndroid = this.platform.is('android')
 
-      this.lifehashService.generateLifehash(this.secret.fingerprint).then((data) => {
+      const matches = this.secret.fingerprint ? this.secret.fingerprint.match(/.{1,2}/g) : null
+      const bytes = matches
+        ? new Uint8Array(matches.map((byte) => parseInt(byte, 16)))
+        : new Uint8Array()
+      this.lifehashService.generateLifehash(bytes).then((data) => {
         this.lifehashData = data
       })
     }
@@ -61,7 +65,7 @@ export class SecretAddPage {
       return
     }
 
-    this.navigationService.routeWithState('/account-add', { secret: this.secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.navigationService.routeWithStateAsRoot('/account-add', { secret: this.secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public async togglePasscode(): Promise<void> {

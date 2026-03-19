@@ -5,7 +5,7 @@ import { mnemonicToSeed } from 'bip39'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { BIPSigner } from 'src/app/models/BIP39Signer'
-import { BIP85 } from 'src/app/models/BIP85'
+import { BIP85 } from 'bip85'
 import { MnemonicSecret } from 'src/app/models/secret'
 import { DeviceService } from 'src/app/services/device/device.service'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
@@ -57,7 +57,7 @@ export class Bip85ShowPage {
   }
 
   public ionViewDidEnter(): void {
-    this.deviceService.enableScreenshotProtection({ routeBack: 'tab-settings' })
+    this.deviceService.enableScreenshotProtection({ routeBack: 'bip85-show' })
   }
 
   public ionViewWillLeave(): void {
@@ -104,7 +104,7 @@ export class Bip85ShowPage {
       const bip32Node: BIP32Interface = this.bip32.fromSeed(new Uint8Array(seed))
       this.childFingerprint = Buffer.from(bip32Node.fingerprint).toString('hex')
 
-      this.lifehashData = await this.lifehashService.generateLifehash(this.childFingerprint)
+      this.lifehashData = await this.lifehashService.generateLifehash(new Uint8Array(bip32Node.fingerprint))
     } catch (error) {
       throw error
     }

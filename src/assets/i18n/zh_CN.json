@@ -690,7 +690,8 @@
     "payload_label": "需要签名的讯息。请确保您知道自己在签署什么。",
     "blake2b_hash": "Ledger Blake2b 讯息的哈希值",
     "heading": "这是您的签名讯息，请使用<span class=\"style__strong color__primary\">AirGap钱包</span>进行扫描。",
-    "sign_button": "签署讯息"
+    "sign_button": "签署讯息",
+    "copy_label": "复制编码消息"
   },
   "message-signing-response": {
     "text": "显示签署详细信息"

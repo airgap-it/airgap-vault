@@ -29,7 +29,7 @@ export class SocialRecoveryImportPage {
   }
 
   public ionViewDidEnter(): void {
-    this.deviceService.enableScreenshotProtection({ routeBack: 'secret-setup' })
+    this.deviceService.enableScreenshotProtection({ routeBack: 'social-recovery-import' })
   }
 
   public ionViewWillLeave(): void {

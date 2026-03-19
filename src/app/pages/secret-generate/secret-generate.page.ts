@@ -38,6 +38,8 @@ export class SecretGeneratePage implements OnInit {
     isFull: false
   }
 
+  private generatedSecret: MnemonicSecret | null = null
+
   constructor(
     public readonly gyroService: GyroscopeNativeService,
     public readonly entropyService: EntropyService,
@@ -125,12 +127,18 @@ export class SecretGeneratePage implements OnInit {
   }
 
   public goToSecretRulesPage(): void {
+    if (this.generatedSecret) {
+      this.navigationService.routeWithState('secret-rules', { secret: this.generatedSecret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+
+      return
+    }
+
     this.entropyService
       .getEntropyAsHex()
       .then((hashHex: string) => {
-        const secret: MnemonicSecret = new MnemonicSecret(hashHex)
+        this.generatedSecret = new MnemonicSecret(hashHex)
 
-        this.navigationService.routeWithState('secret-rules', { secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+        this.navigationService.routeWithState('secret-rules', { secret: this.generatedSecret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
       })
       .catch(handleErrorLocal(ErrorCategory.ENTROPY_COLLECTION))
   }

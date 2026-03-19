@@ -32,7 +32,7 @@ export class SocialRecoveryValidateSharePage {
   }
 
   public ionViewDidEnter(): void {
-    this.deviceService.enableScreenshotProtection({ routeBack: 'social-recovery-setup' })
+    this.deviceService.enableScreenshotProtection({ routeBack: 'social-recovery-validate-share' })
   }
 
   public ionViewWillLeave(): void {

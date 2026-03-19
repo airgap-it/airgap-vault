@@ -133,7 +133,7 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
   }
 
   public ionViewDidEnter(): void {
-    this.deviceService.enableScreenshotProtection({ routeBack: 'secret-setup' })
+    this.deviceService.enableScreenshotProtection({ routeBack: 'social-recovery-import-share-validate' })
   }
 
   public ionViewWillLeave(): void {
