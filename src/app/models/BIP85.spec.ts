@@ -1,4 +1,4 @@
-import { BIP85 } from './BIP85'
+import { BIP85 } from 'bip85'
 
 // tslint:disable:no-console
 
