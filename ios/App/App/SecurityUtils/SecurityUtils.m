@@ -9,6 +9,8 @@
 #import <Capacitor/Capacitor.h>
 
 CAP_PLUGIN(SecurityUtils, "SecurityUtils",
+           CAP_PLUGIN_METHOD(setWindowSecureFlag, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(clearWindowSecureFlag, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(waitForOverlayDismiss, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(assessDeviceIntegrity, CAPPluginReturnPromise);
            

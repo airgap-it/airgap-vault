@@ -21,7 +21,7 @@ export class SocialRecoveryShowSharePage {
   }
 
   public ionViewDidEnter(): void {
-    this.deviceService.enableScreenshotProtection({ routeBack: 'social-recovery-setup' })
+    this.deviceService.enableScreenshotProtection({ routeBack: 'social-recovery-show-share' })
     this.currentShare = this.navigationService.getState().currentShare
   }
 
