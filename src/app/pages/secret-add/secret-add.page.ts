@@ -61,7 +61,7 @@ export class SecretAddPage {
       return
     }
 
-    this.navigationService.routeWithState('/account-add', { secret: this.secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    this.navigationService.routeWithStateAsRoot('/account-add', { secret: this.secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
   public async togglePasscode(): Promise<void> {
