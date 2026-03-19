@@ -57,7 +57,7 @@ export class Bip85ShowPage {
   }
 
   public ionViewDidEnter(): void {
-    this.deviceService.enableScreenshotProtection({ routeBack: 'tab-settings' })
+    this.deviceService.enableScreenshotProtection({ routeBack: 'bip85-show' })
   }
 
   public ionViewWillLeave(): void {

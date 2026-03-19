@@ -49,12 +49,22 @@ public class SecurityUtils: CAPPlugin {
         }
     }
     
+    @objc func setWindowSecureFlag(_ call: CAPPluginCall) {
+        secureScreen.setWindowSecureFlag()
+        call.resolve()
+    }
+
+    @objc func clearWindowSecureFlag(_ call: CAPPluginCall) {
+        secureScreen.clearWindowSecureFlag()
+        call.resolve()
+    }
+
     @objc func waitForOverlayDismiss(_ call: CAPPluginCall) {
         secureScreen.waitForOverlayDismiss {
             call.resolve()
         }
     }
-    
+
     // MARK: - Device Integrity
     
     @objc func assessDeviceIntegrity(_ call: CAPPluginCall) {
