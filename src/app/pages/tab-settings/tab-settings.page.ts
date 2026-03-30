@@ -50,6 +50,10 @@ export class TabSettingsPage implements OnInit {
     this.navigationService.route('/shop').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
+  public goToSecureSetup(): void {
+    this.navigationService.route('/secure-setup').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
   public goToSecurityLevelSelfCheck(): void {
     this.navigationService.route('/security-level-self-check').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }

@@ -444,7 +444,8 @@
     "settings_label": "设置",
     "actions_label": "操作",
     "vault-interaction_label": "Vault 交互",
-    "security-level-self-check_label": "安全级别自检"
+    "security-level-self-check_label": "安全级别自检",
+    "secure-setup_label": "安全设置指南"
   },
   "vault-interaction-settings": {
     "heading": "Vault 交互",
@@ -864,5 +865,63 @@
     "secret-management_label": "秘密管理",
     "sync-all_label": "使用 AirGap 钱包同步所有账户",
     "delete_label": "删除帐户"
+  },
+  "secure-setup": {
+    "title": "安全设置指南",
+    "description": "在本指南中，我们描述了如何设置安全的离线设备。",
+    "simple": {
+      "title": "简单设置",
+      "step1": "获取一台专用设备，从现在起仅用于 AirGap Vault，不安装其他应用程序。",
+      "step2": "将设备更新到最新固件并安装所有可用更新。",
+      "step3": "执行恢复出厂设置。",
+      "step4": "设置设备并使用强密码，可选择使用生物识别保护设备。",
+      "step5": "安装 AirGap Vault。",
+      "step6": "将设备设置为飞行模式，永远不要关闭。"
+    },
+    "advanced": {
+      "title": "高级设置",
+      "step1": "获取一台专用设备，从现在起仅用于 AirGap Vault，不安装其他应用程序。",
+      "step2": "将设备更新到最新固件并安装所有可用更新。",
+      "step3": "执行恢复出厂设置。",
+      "disable_wifi": "禁用 WiFi。",
+      "disable_bluetooth": "禁用蓝牙和 NFC。",
+      "enable_airplane": "启用飞行模式。",
+      "speakers_off": "确保扬声器已关闭。通过声音传输数据是可能的，尽管容量有限。我们建议关闭它以实现真正的气隙设备。",
+      "ios": {
+        "step4": "拿起您的日常手机并创建热点。使用临时且复杂的密码。我们将使用此热点临时连接互联网以下载 AirGap Vault。",
+        "step5": "继续设置您的专用设备。当提示加入 WiFi 网络时，加入上面创建的热点。",
+        "step6": "使用您的 Apple ID 登录。理想情况下，为此手机创建一个新的 Apple ID。",
+        "step7": "设置强密码并可选择使用生物识别保护您的设备。",
+        "step8": "打开 App Store 并下载 AirGap Vault。确保下载正确的应用程序。",
+        "disable_cellular": "禁用蜂窝数据（在设置中禁用数据）。蜂窝网络会将您连接到互联网，这违背了设置冷存储设备的目的。",
+        "disconnect_hotspot": "在您的在线设备上，断开所有设备并更改移动热点的密码。"
+      },
+      "android": {
+        "step4": "在在线设备上，从 GitHub 下载 AirGap Vault 应用程序的副本，或自行编译。",
+        "step5": "通过 SD 卡或 USB 存储设备将下载的文件从在线计算机复制到离线设备。"
+      }
+    },
+    "removing": {
+      "title": "卸载 AirGap Vault",
+      "step1": "从 AirGap Vault 中删除所有密钥。",
+      "step2": "在 AirGap Vault 设置中，进入危险区域并选择擦除。",
+      "step3": "从您的设备中卸载 AirGap Vault。",
+      "ios": {
+        "step4": "前往设置并选择抹掉所有内容和设置。"
+      },
+      "android": {
+        "step4": "执行恢复出厂设置。"
+      }
+    },
+    "updating": {
+      "title": "更新 AirGap Vault",
+      "ios": {
+        "description": "在 iOS 上，设备离线时无法更新 AirGap Vault。请卸载 AirGap Vault，擦除设备，然后按照上述步骤从头开始。"
+      },
+      "android": {
+        "step1": "在在线设备上，从 GitHub 下载 AirGap Vault 应用程序的副本，或自行编译。",
+        "step2": "通过 SD 卡或 USB 存储设备将下载的文件从在线计算机复制到离线设备并替换旧安装。"
+      }
+    }
   }
 }

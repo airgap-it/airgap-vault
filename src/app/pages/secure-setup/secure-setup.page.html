@@ -1,0 +1,131 @@
+<ion-header>
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab-settings"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'secure-setup.title' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <p>{{ 'secure-setup.description' | translate }}</p>
+
+  <!-- Simple Setup (same for both platforms) -->
+  <ion-list-header>
+    <ion-label>{{ 'secure-setup.simple.title' | translate }}</ion-label>
+  </ion-list-header>
+  <ion-list lines="none" class="ion-margin-bottom">
+    <ion-item class="ion-text-wrap"><ion-label class="ion-text-wrap">{{ 'secure-setup.simple.step1' | translate }}</ion-label></ion-item>
+    <ion-item class="ion-text-wrap"><ion-label class="ion-text-wrap">{{ 'secure-setup.simple.step2' | translate }}</ion-label></ion-item>
+    <ion-item class="ion-text-wrap"><ion-label class="ion-text-wrap">{{ 'secure-setup.simple.step3' | translate }}</ion-label></ion-item>
+    <ion-item class="ion-text-wrap"><ion-label class="ion-text-wrap">{{ 'secure-setup.simple.step4' | translate }}</ion-label></ion-item>
+    <ion-item class="ion-text-wrap"><ion-label class="ion-text-wrap">{{ 'secure-setup.simple.step5' | translate }}</ion-label></ion-item>
+    <ion-item class="ion-text-wrap"><ion-label class="ion-text-wrap">{{ 'secure-setup.simple.step6' | translate }}</ion-label></ion-item>
+  </ion-list>
+
+  <!-- Advanced Setup -->
+  <ion-list-header>
+    <ion-label>{{ 'secure-setup.advanced.title' | translate }}</ion-label>
+  </ion-list-header>
+  <ion-list lines="none" class="ion-margin-bottom">
+    <ion-item class="ion-text-wrap"><ion-label class="ion-text-wrap">{{ 'secure-setup.advanced.step1' | translate }}</ion-label></ion-item>
+    <ion-item class="ion-text-wrap"><ion-label class="ion-text-wrap">{{ 'secure-setup.advanced.step2' | translate }}</ion-label></ion-item>
+    <ion-item class="ion-text-wrap"><ion-label class="ion-text-wrap">{{ 'secure-setup.advanced.step3' | translate }}</ion-label></ion-item>
+
+    <!-- iOS-specific steps -->
+    <ng-container *ngIf="isIos">
+      <ion-item class="ion-text-wrap">
+        <ion-label class="ion-text-wrap">{{ 'secure-setup.advanced.ios.step4' | translate }}</ion-label>
+      </ion-item>
+      <ion-item class="ion-text-wrap">
+        <ion-label class="ion-text-wrap">{{ 'secure-setup.advanced.ios.step5' | translate }}</ion-label>
+      </ion-item>
+      <ion-item class="ion-text-wrap">
+        <ion-label class="ion-text-wrap">{{ 'secure-setup.advanced.ios.step6' | translate }}</ion-label>
+      </ion-item>
+      <ion-item class="ion-text-wrap">
+        <ion-label class="ion-text-wrap">{{ 'secure-setup.advanced.ios.step7' | translate }}</ion-label>
+      </ion-item>
+      <ion-item class="ion-text-wrap">
+        <ion-label class="ion-text-wrap">{{ 'secure-setup.advanced.ios.step8' | translate }}</ion-label>
+      </ion-item>
+    </ng-container>
+
+    <ion-item class="ion-text-wrap">
+      <ion-label class="ion-text-wrap">{{ 'secure-setup.advanced.disable_wifi' | translate }}</ion-label>
+    </ion-item>
+
+    <!-- iOS-specific: disable cellular -->
+    <ion-item *ngIf="isIos" class="ion-text-wrap">
+      <ion-label class="ion-text-wrap">{{ 'secure-setup.advanced.ios.disable_cellular' | translate }}</ion-label>
+    </ion-item>
+
+    <ion-item class="ion-text-wrap">
+      <ion-label class="ion-text-wrap">{{ 'secure-setup.advanced.disable_bluetooth' | translate }}</ion-label>
+    </ion-item>
+    <ion-item class="ion-text-wrap">
+      <ion-label class="ion-text-wrap">{{ 'secure-setup.advanced.enable_airplane' | translate }}</ion-label>
+    </ion-item>
+
+    <!-- iOS: disconnect hotspot -->
+    <ion-item *ngIf="isIos" class="ion-text-wrap">
+      <ion-label class="ion-text-wrap">{{ 'secure-setup.advanced.ios.disconnect_hotspot' | translate }}</ion-label>
+    </ion-item>
+
+    <!-- Android: sideload steps -->
+    <ng-container *ngIf="isAndroid">
+      <ion-item class="ion-text-wrap">
+        <ion-label class="ion-text-wrap">{{ 'secure-setup.advanced.android.step4' | translate }}</ion-label>
+      </ion-item>
+      <ion-item class="ion-text-wrap">
+        <ion-label class="ion-text-wrap">{{ 'secure-setup.advanced.android.step5' | translate }}</ion-label>
+      </ion-item>
+    </ng-container>
+
+    <ion-item class="ion-text-wrap">
+      <ion-label class="ion-text-wrap">{{ 'secure-setup.advanced.speakers_off' | translate }}</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <!-- Removing AirGap Vault -->
+  <ion-list-header>
+    <ion-label>{{ 'secure-setup.removing.title' | translate }}</ion-label>
+  </ion-list-header>
+  <ion-list lines="none" class="ion-margin-bottom">
+    <ion-item class="ion-text-wrap">
+      <ion-label class="ion-text-wrap">{{ 'secure-setup.removing.step1' | translate }}</ion-label>
+    </ion-item>
+    <ion-item class="ion-text-wrap">
+      <ion-label class="ion-text-wrap">{{ 'secure-setup.removing.step2' | translate }}</ion-label>
+    </ion-item>
+    <ion-item class="ion-text-wrap">
+      <ion-label class="ion-text-wrap">{{ 'secure-setup.removing.step3' | translate }}</ion-label>
+    </ion-item>
+    <ion-item *ngIf="isIos" class="ion-text-wrap">
+      <ion-label class="ion-text-wrap">{{ 'secure-setup.removing.ios.step4' | translate }}</ion-label>
+    </ion-item>
+    <ion-item *ngIf="isAndroid" class="ion-text-wrap">
+      <ion-label class="ion-text-wrap">{{ 'secure-setup.removing.android.step4' | translate }}</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <!-- Updating AirGap Vault -->
+  <ion-list-header>
+    <ion-label>{{ 'secure-setup.updating.title' | translate }}</ion-label>
+  </ion-list-header>
+  <ion-list lines="none">
+    <ng-container *ngIf="isIos">
+      <ion-item class="ion-text-wrap">
+        <ion-label class="ion-text-wrap">{{ 'secure-setup.updating.ios.description' | translate }}</ion-label>
+      </ion-item>
+    </ng-container>
+    <ng-container *ngIf="isAndroid">
+      <ion-item class="ion-text-wrap">
+        <ion-label class="ion-text-wrap">{{ 'secure-setup.updating.android.step1' | translate }}</ion-label>
+      </ion-item>
+      <ion-item class="ion-text-wrap">
+        <ion-label class="ion-text-wrap">{{ 'secure-setup.updating.android.step2' | translate }}</ion-label>
+      </ion-item>
+    </ng-container>
+  </ion-list>
+</ion-content>

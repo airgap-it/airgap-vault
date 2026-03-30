@@ -444,7 +444,8 @@
       "settings_label": "Paramètres",
       "actions_label": "Actions",
       "vault-interaction_label": "Interaction avec le coffre-fort",
-      "security-level-self-check_label": "Auto-vérification du niveau de sécurité"
+      "security-level-self-check_label": "Auto-vérification du niveau de sécurité",
+      "secure-setup_label": "Guide de configuration securisee"
     },
     "vault-interaction-settings": {
       "heading": "Interaction avec le coffre-fort",
@@ -864,5 +865,63 @@
       "secret-management_label": "Gestion secrète",
       "sync-all_label": "Synchronisez tous les comptes avec le portefeuille AirGap",
       "delete_label": "Supprimer des comptes"
+    },
+    "secure-setup": {
+      "title": "Guide de configuration securisee",
+      "description": "Dans ce guide, nous decrivons les etapes pour configurer un appareil hors ligne securise.",
+      "simple": {
+        "title": "Configuration simple",
+        "step1": "Procurez-vous un appareil dedie, qui sera desormais UNIQUEMENT utilise pour AirGap Vault, sans autre application.",
+        "step2": "Mettez a jour l'appareil avec le dernier firmware et installez toutes les mises a jour disponibles.",
+        "step3": "Effectuez une reinitialisation d'usine.",
+        "step4": "Configurez l'appareil et utilisez un mot de passe fort, protegez optionnellement l'appareil avec la biometrie.",
+        "step5": "Installez AirGap Vault.",
+        "step6": "Mettez l'appareil en mode avion et ne le desactivez jamais."
+      },
+      "advanced": {
+        "title": "Configuration avancee",
+        "step1": "Procurez-vous un appareil dedie, qui sera desormais UNIQUEMENT utilise pour AirGap Vault, sans autre application.",
+        "step2": "Mettez a jour l'appareil avec le dernier firmware et installez toutes les mises a jour disponibles.",
+        "step3": "Effectuez une reinitialisation d'usine.",
+        "disable_wifi": "Desactivez le WiFi.",
+        "disable_bluetooth": "Desactivez le Bluetooth et le NFC.",
+        "enable_airplane": "Activez le mode avion.",
+        "speakers_off": "Assurez-vous que les haut-parleurs sont eteints. La transmission de donnees par le son est possible, bien qu'avec une capacite limitee. Nous recommandons de les eteindre pour obtenir un appareil veritablement air-gapped.",
+        "ios": {
+          "step4": "Prenez votre telephone quotidien et creez un point d'acces. Utilisez un mot de passe temporaire et complique. Nous utiliserons ce point d'acces pour nous connecter temporairement a internet et telecharger AirGap Vault.",
+          "step5": "Procedez a la configuration de votre appareil dedie. Lorsqu'on vous demande de rejoindre un reseau WiFi, rejoignez le point d'acces cree ci-dessus.",
+          "step6": "Connectez-vous avec votre Apple ID. Idealement, creez un nouvel Apple ID uniquement pour ce telephone.",
+          "step7": "Definissez un mot de passe fort et protegez optionnellement votre appareil avec la biometrie.",
+          "step8": "Ouvrez l'App Store et telechargez AirGap Vault. Assurez-vous de telecharger la bonne application.",
+          "disable_cellular": "Desactivez les donnees cellulaires (desactivez les DONNEES dans les parametres). Un reseau cellulaire vous connecte a internet, ce qui va a l'encontre de l'objectif de configurer un appareil de stockage a froid.",
+          "disconnect_hotspot": "Sur votre appareil en ligne, deconnectez tous les appareils et changez le mot de passe de votre point d'acces mobile."
+        },
+        "android": {
+          "step4": "Sur un appareil en ligne, telechargez une copie de l'application AirGap Vault depuis GitHub, ou compilez-la vous-meme.",
+          "step5": "Copiez le fichier telecharge depuis votre ordinateur en ligne vers l'appareil hors ligne via une carte SD ou une cle USB."
+        }
+      },
+      "removing": {
+        "title": "Supprimer AirGap Vault",
+        "step1": "Supprimez tous les secrets d'AirGap Vault.",
+        "step2": "Dans les parametres d'AirGap Vault, entrez dans la Zone de danger et selectionnez Effacer.",
+        "step3": "Supprimez AirGap Vault de votre appareil.",
+        "ios": {
+          "step4": "Allez dans les parametres et selectionnez Effacer tout le contenu et les parametres."
+        },
+        "android": {
+          "step4": "Effectuez une reinitialisation d'usine."
+        }
+      },
+      "updating": {
+        "title": "Mettre a jour AirGap Vault",
+        "ios": {
+          "description": "Sur iOS, il n'y a aucun moyen de mettre a jour AirGap Vault lorsque votre appareil est hors ligne. Supprimez AirGap Vault, effacez l'appareil et recommencez en suivant les etapes ci-dessus."
+        },
+        "android": {
+          "step1": "Sur un appareil en ligne, telechargez une copie de l'application AirGap Vault depuis GitHub, ou compilez-la vous-meme.",
+          "step2": "Copiez le fichier telecharge depuis votre ordinateur en ligne vers l'appareil hors ligne via une carte SD ou une cle USB et remplacez l'ancienne installation."
+        }
+      }
     }
   }

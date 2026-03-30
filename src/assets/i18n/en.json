@@ -444,7 +444,8 @@
     "settings_label": "Settings",
     "actions_label": "Actions",
     "vault-interaction_label": "Vault Interaction",
-    "security-level-self-check_label": "Security Level Self-Check"
+    "security-level-self-check_label": "Security Level Self-Check",
+    "secure-setup_label": "Secure Setup Guide"
   },
   "vault-interaction-settings": {
     "heading": "Vault Interaction",
@@ -864,5 +865,63 @@
     "secret-management_label": "Secret Management",
     "sync-all_label": "Sync All Accounts With AirGap Wallet",
     "delete_label": "Delete Accounts"
+  },
+  "secure-setup": {
+    "title": "Secure Setup Guide",
+    "description": "In this guide we describe the steps of how a secure offline device can be set up.",
+    "simple": {
+      "title": "Simple Setup",
+      "step1": "Get a dedicated device, which will from now on ONLY be used for AirGap Vault, no other applications.",
+      "step2": "Update the device to the latest firmware and install all available updates.",
+      "step3": "Do a factory reset.",
+      "step4": "Set up the device and use a strong password, optionally protect the device with biometrics.",
+      "step5": "Install AirGap Vault.",
+      "step6": "Set device into Airplane mode and never turn it back on."
+    },
+    "advanced": {
+      "title": "Advanced Setup",
+      "step1": "Get a dedicated device, which will from now on ONLY be used for AirGap Vault, no other applications.",
+      "step2": "Update the device to the latest firmware and install all available updates.",
+      "step3": "Do a factory reset.",
+      "disable_wifi": "Disable WiFi.",
+      "disable_bluetooth": "Disable Bluetooth and NFC.",
+      "enable_airplane": "Enable Airplane mode.",
+      "speakers_off": "Make sure speakers are off. Data transmission over sound is possible, albeit with limited capacity. We recommend that you turn it off to achieve a truly air-gapped device.",
+      "ios": {
+        "step4": "Take your every day phone and create a hotspot. Use a temporary and complicated password. We will use this hotspot to connect to the internet temporarily to download AirGap Vault.",
+        "step5": "Proceed setting up your dedicated device. When asked to join a WiFi network, join the hotspot created above.",
+        "step6": "Log in with your Apple ID. Ideally, create a new Apple ID just for this phone.",
+        "step7": "Set a strong password and optionally protect your device with biometrics.",
+        "step8": "Open the App Store and download AirGap Vault. Make sure you download the correct app.",
+        "disable_cellular": "Disable Cellular (disable DATA in settings). A cellular network connects you to the internet, which defeats the purpose of setting up a cold storage device.",
+        "disconnect_hotspot": "On your online device, disconnect all devices and change the password of your mobile hotspot."
+      },
+      "android": {
+        "step4": "On an online device, download a copy of the AirGap Vault application from GitHub, or build it yourself.",
+        "step5": "Copy the downloaded file from your online computer to the offline device via SD Card or USB Stick."
+      }
+    },
+    "removing": {
+      "title": "Removing AirGap Vault",
+      "step1": "Remove all secrets from AirGap Vault.",
+      "step2": "In the AirGap Vault settings, enter the Danger Zone and select Wipe.",
+      "step3": "Remove AirGap Vault from your device.",
+      "ios": {
+        "step4": "Go to settings and select Erase All Content and Settings."
+      },
+      "android": {
+        "step4": "Do a factory reset."
+      }
+    },
+    "updating": {
+      "title": "Updating AirGap Vault",
+      "ios": {
+        "description": "On iOS, there is no way to update AirGap Vault while your device is offline. Remove AirGap Vault, wipe the device, and start from scratch following the steps above."
+      },
+      "android": {
+        "step1": "On an online device, download a copy of the AirGap Vault application from GitHub, or build it yourself.",
+        "step2": "Copy the downloaded file from your online computer to the offline device via SD Card or USB Stick and replace the old installation."
+      }
+    }
   }
 }
