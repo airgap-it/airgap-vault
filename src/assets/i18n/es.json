@@ -444,7 +444,8 @@
     "settings_label": "Configuración",
     "actions_label": "Acciones",
     "vault-interaction_label": "Interacción con el Almacén",
-    "security-level-self-check_label": "Verificación del Nivel de Seguridad"
+    "security-level-self-check_label": "Verificación del Nivel de Seguridad",
+    "secure-setup_label": "Guia de configuracion segura"
   },
   "vault-interaction-settings": {
     "heading": "Interacción con el Vault",
@@ -864,5 +865,63 @@
     "secret-management_label": "Secret Management",
     "sync-all_label": "Sync All Accounts With AirGap Wallet",
     "delete_label": "Delete Accounts"
+  },
+  "secure-setup": {
+    "title": "Guia de configuracion segura",
+    "description": "En esta guia describimos los pasos para configurar un dispositivo offline seguro.",
+    "simple": {
+      "title": "Configuracion simple",
+      "step1": "Obtenga un dispositivo dedicado, que a partir de ahora SOLO se usara para AirGap Vault, sin otras aplicaciones.",
+      "step2": "Actualice el dispositivo al firmware mas reciente e instale todas las actualizaciones disponibles.",
+      "step3": "Realice un restablecimiento de fabrica.",
+      "step4": "Configure el dispositivo y use una contrasena segura, opcionalmente proteja el dispositivo con biometria.",
+      "step5": "Instale AirGap Vault.",
+      "step6": "Ponga el dispositivo en modo avion y nunca lo desactive."
+    },
+    "advanced": {
+      "title": "Configuracion avanzada",
+      "step1": "Obtenga un dispositivo dedicado, que a partir de ahora SOLO se usara para AirGap Vault, sin otras aplicaciones.",
+      "step2": "Actualice el dispositivo al firmware mas reciente e instale todas las actualizaciones disponibles.",
+      "step3": "Realice un restablecimiento de fabrica.",
+      "disable_wifi": "Desactive WiFi.",
+      "disable_bluetooth": "Desactive Bluetooth y NFC.",
+      "enable_airplane": "Active el modo avion.",
+      "speakers_off": "Asegurese de que los altavoces esten apagados. La transmision de datos por sonido es posible, aunque con capacidad limitada. Recomendamos desactivarlos para lograr un dispositivo verdaderamente air-gapped.",
+      "ios": {
+        "step4": "Tome su telefono de uso diario y cree un punto de acceso. Use una contrasena temporal y complicada. Usaremos este punto de acceso para conectarnos temporalmente a internet y descargar AirGap Vault.",
+        "step5": "Proceda a configurar su dispositivo dedicado. Cuando se le pida unirse a una red WiFi, unase al punto de acceso creado anteriormente.",
+        "step6": "Inicie sesion con su Apple ID. Idealmente, cree un nuevo Apple ID solo para este telefono.",
+        "step7": "Establezca una contrasena segura y opcionalmente proteja su dispositivo con biometria.",
+        "step8": "Abra la App Store y descargue AirGap Vault. Asegurese de descargar la aplicacion correcta.",
+        "disable_cellular": "Desactive los datos moviles (desactive DATOS en configuracion). Una red celular lo conecta a internet, lo que anula el proposito de configurar un dispositivo de almacenamiento en frio.",
+        "disconnect_hotspot": "En su dispositivo en linea, desconecte todos los dispositivos y cambie la contrasena de su punto de acceso movil."
+      },
+      "android": {
+        "step4": "En un dispositivo en linea, descargue una copia de la aplicacion AirGap Vault desde GitHub, o compilela usted mismo.",
+        "step5": "Copie el archivo descargado desde su computadora en linea al dispositivo offline mediante una tarjeta SD o una memoria USB."
+      }
+    },
+    "removing": {
+      "title": "Eliminar AirGap Vault",
+      "step1": "Elimine todos los secretos de AirGap Vault.",
+      "step2": "En la configuracion de AirGap Vault, entre en la Zona de peligro y seleccione Borrar.",
+      "step3": "Elimine AirGap Vault de su dispositivo.",
+      "ios": {
+        "step4": "Vaya a configuracion y seleccione Borrar todo el contenido y la configuracion."
+      },
+      "android": {
+        "step4": "Realice un restablecimiento de fabrica."
+      }
+    },
+    "updating": {
+      "title": "Actualizar AirGap Vault",
+      "ios": {
+        "description": "En iOS, no hay forma de actualizar AirGap Vault mientras su dispositivo esta offline. Elimine AirGap Vault, borre el dispositivo y comience de nuevo siguiendo los pasos anteriores."
+      },
+      "android": {
+        "step1": "En un dispositivo en linea, descargue una copia de la aplicacion AirGap Vault desde GitHub, o compilela usted mismo.",
+        "step2": "Copie el archivo descargado desde su computadora en linea al dispositivo offline mediante una tarjeta SD o una memoria USB y reemplace la instalacion anterior."
+      }
+    }
   }
 }

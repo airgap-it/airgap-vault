@@ -1,0 +1,12 @@
+ion-list-header {
+  ion-label {
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+}
+
+ion-list ion-item ion-label {
+  &::before {
+    content: "\2022  ";
+  }
+}
