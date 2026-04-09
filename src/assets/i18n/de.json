@@ -78,11 +78,11 @@
     "offline_text": "Dies ist ein dediziertes Offline-Gerät. Es wird niemals mit dem Internet verbunden sein."
   },
   "introduction": {
-    "title": "Der Neue Krypto-Wallet Standard",
+    "title": "Begleit-Wallet",
     "header": "Interaktion mit Ihrem {{installationType}}-Gerät",
-    "online-desc": "AirGap Vault ist von Design her nie mit einem Online-Dienst verbunden. Ihre Secrets verlassen AirGap Vault nie und sind daher vor Online-Bedrohungen geschützt. Verwenden Sie eine Begleit-App wie AirGap Wallet, um Ihren Kontostand zu überprüfen und Transaktionen durchzuführen.",
-    "offline-desc": "AirGap Vault ist von Design her nie mit einem Online-Dienst verbunden. Verwenden Sie eine Begleit-App wie AirGap Wallet, um Ihren Kontostand zu überprüfen und Transaktionen durchzuführen.",
-    "offline-companion_text": "Installieren Sie die Begleit-App auf einem Gerät mit Internetzugang und seien Sie versichert, dass nur öffentliche Informationen zwischen den beiden Apps ausgetauscht werden. Ihre Secrets verlassen nie den AirGap Vault und bleiben so vor Online-Bedrohungen geschützt.",
+    "online-desc": "AirGap Vault verbindet sich konstruktionsbedingt nie mit einem Online-Dienst. Ihre Geheimnisse verlassen AirGap Vault nie und sind daher vor Online-Bedrohungen sicher. Um Ihren Kontostand zu überprüfen und Transaktionen zu erstellen, verwenden Sie eine Begleit-Wallet wie AirGap Wallet, BlueWallet, Sparrow, MetaMask, Rabby, imToken oder eine andere kompatible Wallet-App.",
+    "offline-desc": "AirGap Vault verbindet sich konstruktionsbedingt nie mit einem Online-Dienst. Um Ihren Kontostand zu überprüfen und Transaktionen zu erstellen, verwenden Sie eine Begleit-Wallet wie AirGap Wallet, BlueWallet, Sparrow, MetaMask, Rabby, imToken oder eine andere kompatible Wallet-App.",
+    "offline-companion_text": "Installieren Sie eine Begleit-Wallet auf einem Gerät mit Internetzugang, und seien Sie versichert, dass nur öffentliche Informationen zwischen den beiden Apps geteilt werden. Ihre Geheimnisse verlassen niemals die AirGap Vault, wodurch sie vor Online-Bedrohungen geschützt sind.",
     "highest": {
       "label": "Höchste Sicherheit",
       "text": "Mit dem AirGap <b>zwei-Geräte Ansatz</b> wird der sichere Umgang mit Geheimschlüssel zugänglicher."
@@ -93,17 +93,18 @@
     },
     "vault": {
       "heading": "AirGap Vault",
-      "text": "Der Geheimschlüssel wird generiert und in der AirGap Vault App sicher aufbewahrt. <b>AirGap Vault muss installiert und mit AirGap Wallet verwendet werden.</b>"
+      "text": "Der private Schlüssel wird in der AirGap Vault App generiert und sicher gespeichert."
     },
     "wallet": {
-      "heading": "AirGap Wallet",
-      "text": "Die Wallet App kommt nur in Kontakt mit öffentlichen Informationen und ist für die Übermittlung von Transaktionen an die Blockchain zuständig."
+      "heading": "Begleit-Wallet",
+      "text": "Eine Begleit-Wallet verarbeitet nur öffentliche Informationen und ist für die Übertragung von Transaktionen an die Blockchain verantwortlich."
     },
     "communication": {
       "highest_text": "Einweg-Kommunikation mit QR Codes.",
       "medium_text": "Sichere Kommunikation mit App-Wechsel."
     },
     "wallet_install_label": "AirGap Wallet installieren",
+    "learn_more_label": "Mehr erfahren",
     "continue_label": "Loslegen",
     "skip_label": "Überspringen"
   },

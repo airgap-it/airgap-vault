@@ -40,12 +40,15 @@ export class IntroductionPage {
   }
 
   public downloadApp() {
-    // This should open App Store and not InAppBrowser
     if (this.platform.is('android')) {
       window.open('https://play.google.com/store/apps/details?id=it.airgap.wallet')
     } else if (this.platform.is('ios')) {
-      window.open('itms-apps://itunes.apple.com/app/id1420996542') // AirGap Wallet
+      window.open('itms-apps://itunes.apple.com/app/id1420996542')
     }
+  }
+
+  public learnMore() {
+    window.open('https://support.airgap.it/airgap-vault/introduction', '_blank')
   }
 
   private openUrl(url: string) {

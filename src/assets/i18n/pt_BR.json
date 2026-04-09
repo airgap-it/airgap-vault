@@ -78,11 +78,11 @@
     "offline_text": "Este é um dispositivo dedicado offline. Nunca será conectado à internet"
   },
   "introduction": {
-    "title": "O novo padrão de carteira de criptografia",
+    "title": "Carteira Companheira",
     "header": "Interação com o seu dispositivo {{installationType}}",
-    "online-desc": "Por design, o AirGap Vault nunca se conecta a nenhum serviço online. Seus segredos nunca deixam o AirGap Vault e, portanto, estão protegidos contra ameaças online. Para verificar seu saldo e realizar transações, use o aplicativo complementar, como o AirGap Wallet.",
-    "offline-desc": "Por design, o AirGap Vault nunca se conecta a nenhum serviço online. Para verificar seu saldo e realizar transações, use o aplicativo complementar, como o AirGap Wallet.",
-    "offline-companion_text": "Instale o aplicativo complementar em um dispositivo com acesso à internet e certifique-se de que apenas informações públicas sejam transmitidas entre os dois aplicativos. Seus segredos nunca deixam o Vault do AirGap, protegendo-os contra ameaças online.",
+    "online-desc": "Por design, o AirGap Vault nunca se conecta a nenhum serviço online. Seus segredos nunca saem do AirGap Vault e, portanto, estão protegidos contra ameaças online. Para verificar seu saldo e criar transações, use uma carteira companheira como AirGap Wallet, BlueWallet, Sparrow, MetaMask, Rabby, imToken ou qualquer aplicativo de carteira compatível.",
+    "offline-desc": "Por design, o AirGap Vault nunca se conecta a nenhum serviço online. Para verificar seu saldo e criar transações, use uma carteira companheira como AirGap Wallet, BlueWallet, Sparrow, MetaMask, Rabby, imToken ou qualquer aplicativo de carteira compatível.",
+    "offline-companion_text": "Instale uma carteira companheira em um dispositivo com acesso à internet, e tenha certeza de que apenas informações públicas são compartilhadas entre os dois aplicativos. Seus segredos nunca saem do AirGap Vault, mantendo-os protegidos contra ameaças online.",
     "highest": {
       "label": "Maior segurança",
       "text": "Com a <b>abordagem de dois dispositivos AirGap</b>, o manuseio seguro de chaves se torna mais acessível."
@@ -93,17 +93,18 @@
     },
     "vault": {
       "heading": "AirGap Vault",
-      "text": "A chave privada é gerada e armazenada com segurança no aplicativo AirGap Vault. <b>Você precisa instalar o AirGap Vault para usar o AirGap Wallet</b>"
+      "text": "A chave privada é gerada e armazenada com segurança no aplicativo AirGap Vault."
     },
     "wallet": {
-      "heading": "AirGap Wallet",
-      "text": "O aplicativo de carteira lida apenas com informações públicas e é responsável por transmitir transações para o blockchain."
+      "heading": "Carteira Companheira",
+      "text": "Uma carteira companheira lida apenas com informações públicas e é responsável por transmitir transações para a blockchain."
     },
     "communication": {
       "highest_text": "Comunicação unidirecional com QR Codes.",
       "medium_text": "Comunicação segura através da troca de aplicativos."
     },
-    "wallet_install_label": "Instalar o AirGap Wallet",
+    "wallet_install_label": "Instalar AirGap Wallet",
+    "learn_more_label": "Saiba mais",
     "continue_label": "Vamos",
     "skip_label": "Pular"
   },

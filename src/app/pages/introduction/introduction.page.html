@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <img [src]="installationType === 'OFFLINE' ? 'assets/img/companion-apps.svg' : 'assets/img/app-switching.svg'" />
+  <img src="assets/img/companion-apps.svg" />
   <ion-item style="margin-top: 10%;" lines="none">
     <ion-header>
       <h1>
@@ -39,8 +39,8 @@
     </p>
   </ion-item>
 
-  <ion-button *ngIf="installationType === installationTypes.ONLINE" expand="block" shape="round" color="tertiary" (click)="downloadApp()">
-    {{ 'introduction.wallet_install_label' | translate }}
+  <ion-button expand="block" shape="round" color="tertiary" (click)="learnMore()">
+    {{ 'introduction.learn_more_label' | translate }}
   </ion-button>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">

@@ -78,11 +78,11 @@
       "offline_text": "Il s'agit d'un appareil hors ligne dédié. Il ne sera jamais connecté à Internet"
     },
     "introduction": {
-      "title": "Installer le portefeuille AirGap",
+      "title": "Portefeuille Companion",
       "header": "Interagir avec votre appareil {{installationType}}",
-      "online-desc": "De par sa conception, AirGap Vault ne se connecte jamais à aucun service en ligne. Vos secrets ne quittent jamais AirGap Vault et sont donc à l'abri des menaces en ligne. Pour vérifier votre solde et créer des transactions, utilisez une application complémentaire comme AirGap Wallet",
-      "offline-desc": "De par sa conception, AirGap Vault ne se connecte jamais à aucun service en ligne. Pour vérifier votre solde et créer des transactions, utilisez une application complémentaire comme AirGap Wallet",
-      "offline-companion_text": "Installez l'application compagnon sur un appareil avec accès à Internet et soyez assuré que seules les informations publiques sont partagées entre les deux applications. Vos secrets ne quittent jamais AirGap Vault, les protégeant ainsi des menaces en ligne",
+      "online-desc": "Par conception, AirGap Vault ne se connecte jamais à aucun service en ligne. Vos secrets ne quittent jamais AirGap Vault et sont donc à l'abri des menaces en ligne. Pour vérifier votre solde et créer des transactions, utilisez un portefeuille companion tel que AirGap Wallet, BlueWallet, Sparrow, MetaMask, Rabby, imToken ou toute application de portefeuille compatible.",
+      "offline-desc": "Par conception, AirGap Vault ne se connecte jamais à aucun service en ligne. Pour vérifier votre solde et créer des transactions, utilisez un portefeuille companion tel que AirGap Wallet, BlueWallet, Sparrow, MetaMask, Rabby, imToken ou toute application de portefeuille compatible.",
+      "offline-companion_text": "Installez un portefeuille companion sur un appareil avec accès à internet, et soyez assuré que seules des informations publiques sont partagées entre les deux applications. Vos secrets ne quittent jamais AirGap Vault, les protégeant des menaces en ligne.",
       "highest": {
         "label": "Sécurité maximale",
         "text": "Avec l'<b>approche à deux appareils</b>d'AirGap, la gestion sécurisée des clés devient plus accessible."
@@ -93,17 +93,18 @@
       },
       "vault": {
         "heading": "Coffre AirGap",
-        "text": "La clé privée est générée et stockée en toute sécurité dans l'application AirGap Vault.<b>Vous devez installer AirGap Vault pour utiliser AirGap Wallet</b>"
+        "text": "La clé privée est générée et stockée en toute sécurité dans l'application AirGap Vault."
       },
       "wallet": {
-        "heading": "Portefeuille AirGap",
-        "text": "L'application portefeuille traite uniquement les informations publiques et est chargée de diffuser les transactions vers la blockchain."
+        "heading": "Portefeuille Companion",
+        "text": "Un portefeuille companion ne traite que des informations publiques et est responsable de la diffusion des transactions sur la blockchain."
       },
       "communication": {
         "highest_text": "Communication unidirectionnelle avec codes QR.",
         "medium_text": "Communication sécurisée grâce au changement d'application."
       },
-      "wallet_install_label": "Installer le portefeuille AirGap",
+      "wallet_install_label": "Installer AirGap Wallet",
+      "learn_more_label": "En savoir plus",
       "continue_label": "Continuer",
       "skip_label": "Sauter"
     },

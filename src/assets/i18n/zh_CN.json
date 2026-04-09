@@ -78,11 +78,11 @@
     "offline_text": "这是专用的离线设备。它永远不会连接到互联网"
   },
   "introduction": {
-    "title": "安装 AirGap 钱包",
+    "title": "伴侣钱包",
     "header": "与您的 {{installationType}} 设备交互",
-    "online-desc": "根据设计，AirGap Vault 永远不会与任何在线服务连接。您的机密永远不会离开 AirGap Vault，因此不会受到在线威胁。要检查您的余额并创建交易，请使用 AirGap钱包等配套应用",
-    "offline-desc": "根据设计，AirGap Vault 永远不会与任何在线服务连接。要查看余额并创建交易，请使用 AirGap钱包等配套应用",
-    "offline-companion_text": "在可以访问互联网的设备上安装配套应用，这两个应用之间只共享公开信息。您的秘密永远不会离开 AirGap Vault，从而确保免受线上威胁",
+    "online-desc": "AirGap Vault 在设计上从不连接任何在线服务。您的密钥永远不会离开 AirGap Vault，因此可以免受在线威胁。要查看余额和创建交易，请使用伴侣钱包，例如 AirGap Wallet、BlueWallet、Sparrow、MetaMask、Rabby、imToken 或任何兼容的钱包应用。",
+    "offline-desc": "AirGap Vault 在设计上从不连接任何在线服务。要查看余额和创建交易，请使用伴侣钱包，例如 AirGap Wallet、BlueWallet、Sparrow、MetaMask、Rabby、imToken 或任何兼容的钱包应用。",
+    "offline-companion_text": "在有互联网连接的设备上安装伴侣钱包，请放心，两个应用之间只共享公开信息。您的密钥永远不会离开 AirGap Vault，确保它们免受在线威胁。",
     "highest": {
       "label": "最高安全性",
       "text": "采用 AirGap<b>双设备方法</b>后，安全密钥处理变得更加容易。"
@@ -93,17 +93,18 @@
     },
     "vault": {
       "heading": "AirGap Vault",
-      "text": "私钥生成后会安全地存储在 AirGap Vault 应用中。<b>您必须安装 AirGap Vault 才能使用 AirGap 钱包"
+      "text": "私钥在 AirGap Vault 应用程序中生成并安全存储。"
     },
     "wallet": {
-      "heading": "AirGap 钱包",
-      "text": "钱包应用程序仅处理公共信息，并负责将交易广播到区块链。"
+      "heading": "伴侣钱包",
+      "text": "伴侣钱包仅处理公开信息，负责将交易广播到区块链。"
     },
     "communication": {
       "highest_text": "使用二维码进行单向通信。",
       "medium_text": "通过应用程序切换来确保通信安全。"
     },
-    "wallet_install_label": "安装 AirGap 钱包",
+    "wallet_install_label": "安装 AirGap Wallet",
+    "learn_more_label": "了解更多",
     "continue_label": "继续",
     "skip_label": "跳过"
   },
