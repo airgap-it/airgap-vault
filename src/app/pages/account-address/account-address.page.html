@@ -29,6 +29,11 @@
         <span class="selectable typography--mono" (click)="copyAddressToClipboard()">{{ wallet.receivingPublicAddress }}</span>
       </p>
       <p>
+        {{ 'wallet-address.fingerprint_label' | translate }}
+        <br />
+        <span class="selectable typography--mono">{{ wallet.masterFingerprint }}</span>
+      </p>
+      <p>
         {{ 'wallet-address.path_label' | translate }}
         <br />
         <span class="selectable typography--mono">{{ wallet.derivationPath }}</span>

@@ -553,6 +553,7 @@
   "wallet-address": {
     "title": "Адрес аккаунта",
     "address_label": "Адрес:",
+    "fingerprint_label": "Мастер-отпечаток:",
     "path_label": "Путь деривации:",
     "sync_label": "Аккаунт синхронизации",
     "done_label": "Готово",

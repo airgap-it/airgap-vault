@@ -553,6 +553,7 @@
   "wallet-address": {
     "title": "Dirección ",
     "address_label": "Dirección:",
+    "fingerprint_label": "Huella digital maestra:",
     "path_label": "Derivation Path:",
     "sync_label": "Sincronizar Cuenta",
     "done_label": "Hecho",

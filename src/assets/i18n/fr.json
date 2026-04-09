@@ -553,6 +553,7 @@
     "wallet-address": {
       "title": "Adresse du compte",
       "address_label": "Adresse:",
+      "fingerprint_label": "Empreinte maître:",
       "path_label": "Chemin de dérivation :",
       "sync_label": "Synchroniser le compte",
       "done_label": "Fait",

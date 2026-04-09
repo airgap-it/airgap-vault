@@ -553,6 +553,7 @@
   "wallet-address": {
     "title": "帐户地址",
     "address_label": "地址：",
+    "fingerprint_label": "主指纹:",
     "path_label": "导出路径：",
     "sync_label": "同步账户",
     "done_label": "完成",
