@@ -129,7 +129,7 @@
     "@zxing/ngx-scanner": "^16.0.0",
     "angular2-uuid": "^1.1.1",
     "angularx-qrcode": "^16.0.0",
-    "axios": "^0.24.0",
+    "axios": "^1.15.0",
     "bignumber.js": "^9.0.0",
     "@bitcoinerlab/secp256k1": "1.2.0",
     "bip32": "5.0.0-rc.0",
