@@ -44,7 +44,7 @@ export class TransactionComponent implements OnInit {
     const isBookenabled = await this.contactsService.isBookEnabled()
     if (isBookenabled) {
       for (let i = 0; i < this.airGapTxs.length; i++) {
-        this.airGapTxs[i].extra = { names: {} }
+        this.airGapTxs[i].extra = { ...this.airGapTxs[i].extra, names: {} }
         for (let j = 0; j < this.airGapTxs[i].from.length; j++) {
           const address = this.airGapTxs[i].from[j]
           const name = await this.contactsService.getContactName(address)
