@@ -330,6 +330,7 @@ export class IACService extends BaseIACService {
           baseWallet.status
         )
         correctWallet.addresses = baseWallet.addresses
+        correctWallet.label = baseWallet.label
       } catch (e) {
         if (e.message === 'PROTOCOL_NOT_SUPPORTED') {
           correctWallet = baseWallet
