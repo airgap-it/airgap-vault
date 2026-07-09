@@ -126,6 +126,7 @@ export class SecretsService {
                 serializedWallet.status ?? AirGapWalletStatus.ACTIVE
               )
               airGapWallet.addresses = serializedWallet.addresses
+              airGapWallet.label = serializedWallet.label
               return airGapWallet
             })
           )
