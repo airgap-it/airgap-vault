@@ -57,6 +57,17 @@
         <ion-checkbox [(ngModel)]="singleSelectedProtocol.isHDWallet" (ionChange)="toggleHDWallet()" slot="end"></ion-checkbox>
       </ion-item>
 
+      <ion-item class="ion-no-padding" lines="full">
+     <ion-label position="stacked" color="primary">
+      Nome da conta
+      </ion-label>
+
+     <ion-input
+      [(ngModel)]="accountLabel"
+      placeholder="Ex.: Carteira 10"
+     ></ion-input>
+      </ion-item>
+
       <ng-container *ngIf="isBip39PassphraseEnabled">
         <ion-item class="ion-no-padding" *ngIf="isBip39PassphraseEnabled" lines="full">
           <ion-label position="stacked" color="primary">BIP-39 Passphrase</ion-label>

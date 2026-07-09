@@ -53,6 +53,7 @@ interface AddWalletConifg {
   customDerivationPath: string
   bip39Passphrase: string
   isActive: boolean
+  label?: string
 }
 @Injectable({
   providedIn: 'root'
@@ -624,6 +625,7 @@ export class SecretsService {
 
     const addresses: string[] = await wallet.deriveAddresses(1)
     wallet.addresses = addresses
+    wallet.label = config.label
 
     return wallet
   }
