@@ -105,6 +105,7 @@ export class AppComponent implements AfterViewInit {
       await this.securityUtils.toggleAutomaticAuthentication({ automatic: true })
     }
 
+    
     if (this.platform.is('android')) {
       await EdgeToEdge.setBackgroundColor({ color: '#311B58' })
     }

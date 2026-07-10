@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core'
 import { AlertController } from '@ionic/angular'
-
+import { QrScannerService } from '@airgap/angular-core'
 import { BIPSigner } from '../../models/BIP39Signer'
 import { MnemonicSecret } from '../../models/secret'
 import { DeviceService } from '../../services/device/device.service'
@@ -39,11 +39,12 @@ export class SecretImportPage {
   @ViewChild('secretContainer', { read: ElementRef })
   public secretContainer: ElementRef<HTMLElement>
 
-  constructor(
-    private readonly deviceService: DeviceService,
-    private readonly navigationService: NavigationService,
-    private readonly alertController: AlertController
-  ) {
+constructor(
+  private readonly deviceService: DeviceService,
+  private readonly navigationService: NavigationService,
+  private readonly alertController: AlertController,
+  private readonly scanner: QrScannerService
+) {
     this.secretWordsValid = this.setWordEmitter.pipe(
       map(() => {
         const isShorterThanMaxLength = this.selectedWordIndex === -1 && this.secretWords.length < this.maxWords
@@ -164,4 +165,17 @@ export class SecretImportPage {
     }
     this.lastWordOptions = options
   }
+
+public scanSeedQR(): void {
+  this.scanner.scan(
+    (text: string) => {
+      console.log('QR:', text)
+    },
+    (error: any) => {
+      console.error(error)
+    }
+  )
+}
+
+
 }
