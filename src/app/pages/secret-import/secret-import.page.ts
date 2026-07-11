@@ -1,6 +1,13 @@
+import { Inject } from '@angular/core'
+import { Platform } from '@ionic/angular'
+import { PermissionsService, QrScannerService } from '@airgap/angular-core'
+import { SecurityUtilsPlugin } from 'src/app/capacitor-plugins/definitions'
+import { SECURITY_UTILS_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
+import { ScanBasePage } from '../scan-base/scan-base'
+
 import { Component, ElementRef, ViewChild } from '@angular/core'
 import { AlertController } from '@ionic/angular'
-import { QrScannerService } from '@airgap/angular-core'
+import { SeedQRDecoder } from 'src/app/utils/seedqr-decoder'
 import { BIPSigner } from '../../models/BIP39Signer'
 import { MnemonicSecret } from '../../models/secret'
 import { DeviceService } from '../../services/device/device.service'
@@ -18,7 +25,7 @@ type SingleWord = string
   templateUrl: './secret-import.page.html',
   styleUrls: ['./secret-import.page.scss']
 })
-export class SecretImportPage {
+export class SecretImportPage extends ScanBasePage {
   public secretWords: string[] = []
   public secretWordsValid: Observable<boolean>
   public selectedWordIndex: number = 0
@@ -40,20 +47,25 @@ export class SecretImportPage {
   public secretContainer: ElementRef<HTMLElement>
 
 constructor(
+  platform: Platform,
+  scanner: QrScannerService,
+  permissionsProvider: PermissionsService,
+  @Inject(SECURITY_UTILS_PLUGIN) securityUtils: SecurityUtilsPlugin,
   private readonly deviceService: DeviceService,
   private readonly navigationService: NavigationService,
-  private readonly alertController: AlertController,
-  private readonly scanner: QrScannerService
+  private readonly alertController: AlertController
 ) {
-    this.secretWordsValid = this.setWordEmitter.pipe(
-      map(() => {
-        const isShorterThanMaxLength = this.selectedWordIndex === -1 && this.secretWords.length < this.maxWords
-        const isEditingWord = this.selectedWordIndex !== -1
-        this.keyboardEnabled = isShorterThanMaxLength || isEditingWord
-        return this.isValid()
-      })
-    )
-  }
+  super(platform, scanner, permissionsProvider, securityUtils)
+
+  this.secretWordsValid = this.setWordEmitter.pipe(
+    map(() => {
+      const isShorterThanMaxLength = this.selectedWordIndex === -1 && this.secretWords.length < this.maxWords
+      const isEditingWord = this.selectedWordIndex !== -1
+      this.keyboardEnabled = isShorterThanMaxLength || isEditingWord
+      return this.isValid()
+    })
+  )
+}
 
   selectWord(index: number) {
     this.selectedWordIndex = index
@@ -166,16 +178,23 @@ constructor(
     this.lastWordOptions = options
   }
 
-public scanSeedQR(): void {
-  this.scanner.scan(
-    (text: string) => {
-      console.log('QR:', text)
-    },
-    (error: any) => {
-      console.error(error)
-    }
-  )
+  public async scanSeedQR(): Promise<void> {
+  await this.navigationService
+    .route('seedqr-scan')
+    .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
 }
 
+public checkScan(data: string): void {
+  console.log('QR LIDO:', data)
+
+  const words = SeedQRDecoder.decode(data)
+
+  if (words) {
+    this.secretWords = words
+    this.selectedWordIndex = -1
+    this.selectedWord = ''
+    this.setWordEmitter.next('')
+  }
+}
 
 }

@@ -215,6 +215,12 @@ const routes: Routes = [
   },
 
   {
+  path: 'seedqr-scan',
+  loadChildren: () =>
+    import('./pages/seedqr-scan/seedqr-scan.module').then((m) => m.SeedQRScanPageModule)
+  },
+
+  {
     path: 'deserialized-detail',
     loadChildren: () => import('./pages/deserialized-detail/deserialized-detail.module').then((m) => m.DeserializedDetailPageModule)
   },
