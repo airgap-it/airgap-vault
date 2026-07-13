@@ -38,8 +38,11 @@ export class SeedQRScanPage extends ScanBasePage {
   const words = SeedQRDecoder.decode(data)
 
   if (!words) {
-    return
-  }
+  console.log('QR não reconhecido como SeedQR')
+  this.stopScan()
+  this.startScan()
+  return
+}
 
   this.stopScan()
 

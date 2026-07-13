@@ -189,8 +189,8 @@ constructor(
 
   public async scanSeedQR(): Promise<void> {
   await this.navigationService
-  .routeWithState('seedqr-scan', { source: 'secret-import' })
-  .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+    .route('seedqr-scan')
+    .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
 }
 
 public checkScan(data: string): void {
