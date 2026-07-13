@@ -192,7 +192,7 @@ constructor(
     .route('seedqr-scan')
     .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
 }
-
+  
 public checkScan(data: string): void {
   console.log('QR LIDO:', data)
 

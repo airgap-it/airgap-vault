@@ -9,6 +9,7 @@ import { SecurityUtilsPlugin } from 'src/app/capacitor-plugins/definitions'
 import { SECURITY_UTILS_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
 
 import { ZXingScannerComponent } from '@zxing/ngx-scanner'
+import { BIPSigner } from '../../models/BIP39Signer'
 
 @Component({
   selector: 'airgap-seedqr-scan',
@@ -18,6 +19,8 @@ import { ZXingScannerComponent } from '@zxing/ngx-scanner'
 export class SeedQRScanPage extends ScanBasePage {
   @ViewChild('scanner')
   public zxingScanner?: ZXingScannerComponent
+
+  private readonly bipSigner = new BIPSigner()
 
   constructor(
   platform: Platform,
@@ -35,20 +38,86 @@ export class SeedQRScanPage extends ScanBasePage {
 
   public async checkScan(data: string): Promise<void> {
 
-  const words = SeedQRDecoder.decode(data)
+  console.log('DADOS RECEBIDOS:', data)
 
-  if (!words) {
-  console.log('QR não reconhecido como SeedQR')
-  this.stopScan()
-  this.startScan()
-  return
+  // Primeiro tenta Standard SeedQR
+
+let words: string[] | null = null
+
+try {
+  words = SeedQRDecoder.decode(data)
+} catch (e) {
+  console.log('STANDARD DECODER ERRO:', e)
 }
+
+if (words) {
+  console.log('STANDARD OK')
 
   this.stopScan()
 
   await this.navigationService.routeWithState('/secret-import', {
     words
   })
+
+  return
+}
+
+
+// Depois tenta CompactSeedQR
+
+try {
+  words = SeedQRDecoder.decodeCompact(data)
+} catch (e) {
+  console.log('COMPACT DECODER ERRO:', e)
+}
+
+if (words) {
+  console.log('COMPACT OK')
+
+  this.stopScan()
+
+  await this.navigationService.routeWithState('/secret-import', {
+    words
+  })
+
+  return
+}
+
+
+console.log('QR não reconhecido')
+this.stopScan()
+this.startScan()
+
+  // Se falhou, tenta CompactSeedQR
+  console.log('Tentando CompactSeedQR')
+
+  const bytes = new Uint8Array(
+    [...data].map((char) => char.charCodeAt(0))
+  )
+
+  console.log('BYTES:', bytes)
+
+  const hex = Buffer.from(bytes).toString('hex')
+
+  console.log('HEX:', hex)
+
+  try {
+    const mnemonic = this.bipSigner.entropyToMnemonic(hex)
+    const compactWords = mnemonic.split(' ')
+
+    console.log('COMPACT OK:', compactWords)
+
+    this.stopScan()
+
+    await this.navigationService.routeWithState('/secret-import', {
+      words: compactWords
+    })
+
+  } catch (e) {
+    console.log('CompactSeedQR inválido')
+    this.stopScan()
+    this.startScan()
+  }
 }
 
   public ionViewWillLeave(): void {

@@ -221,6 +221,14 @@ const routes: Routes = [
   },
 
   {
+    path: 'compactseedqr-scan',
+    loadChildren: () =>
+    import('./pages/compactseedqr-scan/compactseedqr-scan.module').then(
+      (m) => m.CompactSeedQRScanPageModule
+    )
+  },
+
+  {
     path: 'deserialized-detail',
     loadChildren: () => import('./pages/deserialized-detail/deserialized-detail.module').then((m) => m.DeserializedDetailPageModule)
   },
