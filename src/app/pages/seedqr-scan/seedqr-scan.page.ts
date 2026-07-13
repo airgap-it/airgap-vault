@@ -1,16 +1,18 @@
-import { Component, Inject, NgZone, ViewChild } from '@angular/core'
+import { Component, Inject, ViewChild } from '@angular/core'
+import { NavigationService } from 'src/app/services/navigation/navigation.service'
+import { SeedQRDecoder } from 'src/app/utils/seedqr-decoder'
 
 import { ScanBasePage } from '../scan-base/scan-base'
 import { QrScannerService, PermissionsService } from '@airgap/angular-core'
 import { Platform } from '@ionic/angular'
 import { SecurityUtilsPlugin } from 'src/app/capacitor-plugins/definitions'
 import { SECURITY_UTILS_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
-import { IACService } from 'src/app/services/iac/iac.service'
+
 import { ZXingScannerComponent } from '@zxing/ngx-scanner'
 
 @Component({
   selector: 'airgap-seedqr-scan',
-  templateUrl: './seedqr-scan.page.html',
+  templateUrl: './seedqr-scan.component.html',
   styleUrls: ['./seedqr-scan.page.scss']
 })
 export class SeedQRScanPage extends ScanBasePage {
@@ -22,30 +24,31 @@ export class SeedQRScanPage extends ScanBasePage {
   scanner: QrScannerService,
   permissionsProvider: PermissionsService,
   @Inject(SECURITY_UTILS_PLUGIN) securityUtils: SecurityUtilsPlugin,
-  private readonly iacService: IACService,
-  private readonly ngZone: NgZone
+  private readonly navigationService: NavigationService 
 ) {
   super(platform, scanner, permissionsProvider, securityUtils)
 }
 
-  public async ionViewWillEnter(): Promise<void> {
-    await super.ionViewWillEnter()
-    this.resetScannerPage()
-    this.iacService.resetHandlers()
+ public async ionViewWillEnter(): Promise<void> {
+  await super.ionViewWillEnter()
+}
+
+  public async checkScan(data: string): Promise<void> {
+
+  const words = SeedQRDecoder.decode(data)
+
+  if (!words) {
+    return
   }
 
-  private resetScannerPage(): void {
-    this.iacService.resetHandlers()
-  }
+  this.stopScan()
 
-  public async checkScan(data: string): Promise<boolean | void> {
-  this.ngZone.run(() => {
-    console.log('SeedQR recebido:', data)
+  await this.navigationService.routeWithState('/secret-import', {
+    words
   })
 }
 
   public ionViewWillLeave(): void {
-    super.ionViewWillLeave()
-    this.resetScannerPage()
-  }
+  super.ionViewWillLeave()
+}
 }

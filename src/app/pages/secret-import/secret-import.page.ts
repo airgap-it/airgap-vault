@@ -113,8 +113,17 @@ constructor(
   }
 
   public ionViewDidEnter(): void {
-    this.deviceService.enableScreenshotProtection({ routeBack: 'secret-import' })
+  const state = this.navigationService.getState()
+
+  if (state?.words) {
+    this.secretWords = state.words
+    this.selectedWordIndex = -1
+    this.selectedWord = ''
+    this.setWordEmitter.next('')
   }
+
+  this.deviceService.enableScreenshotProtection({ routeBack: 'secret-import' })
+}
 
   public ionViewWillLeave(): void {
     this.deviceService.disableScreenshotProtection()
@@ -180,8 +189,8 @@ constructor(
 
   public async scanSeedQR(): Promise<void> {
   await this.navigationService
-    .route('seedqr-scan')
-    .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  .routeWithState('seedqr-scan', { source: 'secret-import' })
+  .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
 }
 
 public checkScan(data: string): void {
