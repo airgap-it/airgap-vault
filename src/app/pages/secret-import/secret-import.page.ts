@@ -194,8 +194,7 @@ constructor(
 }
   
 public checkScan(data: string): void {
-  console.log('QR LIDO:', data)
-
+  
   const words = SeedQRDecoder.decode(data)
 
   if (words) {

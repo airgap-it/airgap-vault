@@ -1,15 +1,12 @@
 import { Component, Inject, ViewChild } from '@angular/core'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 import { SeedQRDecoder } from 'src/app/utils/seedqr-decoder'
-
 import { ScanBasePage } from '../scan-base/scan-base'
 import { QrScannerService, PermissionsService } from '@airgap/angular-core'
 import { Platform } from '@ionic/angular'
 import { SecurityUtilsPlugin } from 'src/app/capacitor-plugins/definitions'
 import { SECURITY_UTILS_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
-
 import { ZXingScannerComponent } from '@zxing/ngx-scanner'
-
 
 @Component({
   selector: 'airgap-seedqr-scan',
@@ -19,7 +16,6 @@ import { ZXingScannerComponent } from '@zxing/ngx-scanner'
 export class SeedQRScanPage extends ScanBasePage {
   @ViewChild('scanner')
   public zxingScanner?: ZXingScannerComponent
-
   
   constructor(
   platform: Platform,
@@ -42,7 +38,7 @@ export class SeedQRScanPage extends ScanBasePage {
   // Primeiro tenta Standard SeedQR
   try {
     words = SeedQRDecoder.decode(data)
-  } catch (e) {
+  } catch {
     // Ignora erro e tenta CompactSeedQR abaixo
   }
 
@@ -60,7 +56,7 @@ export class SeedQRScanPage extends ScanBasePage {
   // Depois tenta CompactSeedQR
   try {
     words = SeedQRDecoder.decodeCompact(data)
-  } catch (e) {
+  } catch {
     
   }
 
