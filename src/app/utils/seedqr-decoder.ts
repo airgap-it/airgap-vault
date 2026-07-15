@@ -42,32 +42,45 @@ export class SeedQRDecoder {
 
 
   public static decodeCompact(base64: string): string[] | null {
-    try {
-      const binary = atob(base64)
+  try {
+    const binary = atob(base64)
 
-      const bytes = Uint8Array.from(
-        binary,
-        c => c.charCodeAt(0)
-      )
+    let bytes = Uint8Array.from(
+      binary,
+      c => c.charCodeAt(0)
+    )
 
-      if (bytes.length !== 16 && bytes.length !== 32) {
-        return null
-      }
+    // ZXing - CompactSeedQR 12 palavras
+    // 41 0? + 16 bytes + EC
+    if (bytes.length === 19 && bytes[0] === 0x41) {
+      bytes = bytes.slice(2, 18)
+    }
 
-      const entropyHex = Array.from(bytes)
-        .map((b) => b.toString(16).padStart(2, '0'))
-        .join('')
+    // ZXing - CompactSeedQR 24 palavras
+    // 42 0? + 32 bytes
+    else if (bytes.length === 34 && bytes[0] === 0x42) {
+      bytes = bytes.slice(2)
+    }
 
-      const mnemonic = bip39.entropyToMnemonic(entropyHex)
-
-      if (!bip39.validateMnemonic(mnemonic)) {
-        return null
-      }
-
-      return mnemonic.split(' ')
-
-    } catch {
+    // ZBar já entrega somente os bytes
+    else if (bytes.length !== 16 && bytes.length !== 32) {
       return null
     }
+
+    const entropyHex = Array.from(bytes)
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('')
+   
+    const mnemonic = bip39.entropyToMnemonic(entropyHex)
+   
+    if (!bip39.validateMnemonic(mnemonic)) {
+      return null
+    }
+
+    return mnemonic.split(' ')
+
+  } catch {
+    return null
   }
+}
 }
