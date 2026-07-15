@@ -46,6 +46,7 @@ export class AccountAddPage {
   public isBip39PassphraseEnabled: boolean = BIP39_PASSPHRASE_ENABLED
   public revealBip39Passphrase: boolean = false
   public bip39Passphrase: string = ''
+  public accountLabel: string = ''
 
   public isAppAdvancedMode$: Observable<boolean> = this.storageService
     .subscribe(VaultStorageKey.ADVANCED_MODE_TYPE)
@@ -182,12 +183,13 @@ export class AccountAddPage {
             selectedProtocols.map(async (protocolWrapper: ProtocolWrapper) => {
               const protocol = protocolWrapper.protocol
               return {
-                protocolIdentifier: await protocol.getIdentifier(),
-                isHDWallet: protocolWrapper.isHDWallet,
-                customDerivationPath: protocolWrapper.customDerivationPath ?? (await protocol.getStandardDerivationPath()),
-                bip39Passphrase: this.bip39Passphrase,
-                isActive: true
-              }
+             protocolIdentifier: await protocol.getIdentifier(),
+             isHDWallet: protocolWrapper.isHDWallet,
+             customDerivationPath: protocolWrapper.customDerivationPath ?? (await protocol.getStandardDerivationPath()),
+             bip39Passphrase: this.bip39Passphrase,
+             isActive: true,
+             label: this.accountLabel
+            }
             })
           )
         )
