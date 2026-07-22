@@ -61,7 +61,7 @@ function toHexString(array) {
 function seedEntropy(additionalEntropyArray) {
   const secureRandomArray = new Uint8Array(ENTROPY_BYTE_SIZE)
   window.crypto.getRandomValues(secureRandomArray)
-  console.log(entropyHashHexString + toHexString(secureRandomArray) + toHexString(additionalEntropyArray))
+  
   entropyHashHexString = sha3_256(entropyHashHexString + toHexString(secureRandomArray) + toHexString(additionalEntropyArray))
   return entropyHashHexString
 }

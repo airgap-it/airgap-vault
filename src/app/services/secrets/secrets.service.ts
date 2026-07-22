@@ -62,7 +62,7 @@ export class SecretsService {
   private readonly ready: Promise<void>
   private readonly secretsList: MnemonicSecret[] = []
   private activeSecret: MnemonicSecret
-  private bip32 = BIP32Factory(ecc)
+  private readonly bip32 = BIP32Factory(ecc)
 
   private readonly activeSecret$: ReplaySubject<MnemonicSecret> = new ReplaySubject(1)
   private readonly secrets$: ReplaySubject<MnemonicSecret[]> = new ReplaySubject(1)
@@ -126,8 +126,7 @@ export class SecretsService {
                 serializedWallet.status ?? AirGapWalletStatus.ACTIVE
               )
               airGapWallet.addresses = serializedWallet.addresses
-              airGapWallet.label = serializedWallet.label
-              
+                            
               return airGapWallet
             })
           )
@@ -302,15 +301,23 @@ export class SecretsService {
     if (isBtc) {
       // BTC protocols: Always HD, increment account index
       const lastIndices = existingWallets.map((wallet) => {
-        const match = wallet.derivationPath.match(/(\d+)(?:[h'])?(?:\/)?$/)
-        return match ? parseInt(match[1], 10) : 0
-      })
+      const lastPart = wallet.derivationPath.split('/').pop() ?? ''
+const index = lastPart.replace(/[h']/g, '')
+
+return Number.parseInt(index, 10) || 0
+})
       const maxIndex = Math.max(...lastIndices)
       const nextIndex = maxIndex + 1
       const parts = standardPath.split('/')
       const last = parts.pop() ?? ''
 
-      const suffix = last.endsWith("'") ? "'" : last.endsWith('h') ? 'h' : ''
+      let suffix = ''
+
+     if (last.endsWith("'")) {
+        suffix = "'"
+     } else if (last.endsWith('h')) {
+        suffix = 'h'
+     }
 
       parts.push(`${nextIndex}${suffix}`)
 
@@ -335,15 +342,23 @@ export class SecretsService {
       // Non-HD protocols: Increment last number in path
       // e.g., m/44h/1729h/0h/0h -> m/44h/1729h/0h/1h
       const lastIndices = existingWallets.map((wallet) => {
-        const match = wallet.derivationPath.match(/(\d+)(?:[h'])?(?:\/)?$/)
-        return match ? parseInt(match[1], 10) : 0
-      })
+  const lastPart = wallet.derivationPath.split('/').pop() ?? ''
+  const index = lastPart.replace(/[h']/g, '')
+
+  return Number.parseInt(index, 10) || 0
+})
       const maxIndex = Math.max(...lastIndices)
       const nextIndex = maxIndex + 1
       const parts = standardPath.split('/')
       const last = parts.pop() ?? ''
 
-      const suffix = last.endsWith("'") ? "'" : last.endsWith('h') ? 'h' : ''
+      let suffix = '';
+
+     if (last.endsWith("'")) {
+      suffix = "'";
+      } else if (last.endsWith('h')) {
+     suffix = 'h';
+     }
 
       parts.push(`${nextIndex}${suffix}`)
 
@@ -537,13 +552,10 @@ export class SecretsService {
      
         const result = MnemonicSecret.init(secret)
        result.wallets = wallets.map((wallet: SerializedAirGapWallet) => {
-       const original = secret.wallets.find(
-       (w) => w.publicKey === wallet.publicKey
-  )
-
+       
   return {
     ...wallet,
-    label: original?.label ?? wallet.label ?? ''
+    label: ''
   } as unknown as AirGapWallet
 })
 

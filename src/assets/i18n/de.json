@@ -1,4 +1,45 @@
 {
+  "secret-seedqr": {
+  "title": "SeedQR",
+  "text": "Scan this SeedQR with a compatible wallet.",
+  "warning": "This SeedQR contains only the BIP39 recovery phrase. If you use a BIP39 passphrase, it must be stored separately and will be required to restore your wallets.",
+  "export-template": "Export Template",
+  "type": "Type",
+  "words": "Words"
+  
+},
+"secret-seedqr-template": {
+  "block": "Block",
+  "size": "Size",
+  "instruction": "Mark only the black squares shown below on the physical template.",
+  "back": "Back to grid",
+  "use-template": "Use the physical template",
+  "to-fill-seedqr": "to fill this SeedQR.",
+  "continue": "Continue", 
+  "seed-words": "Seed of {{count}} words",
+  "repository-info": "Printable SeedQR templates are included in the project repository:"
+}, 
+
+  "select-seedqr-format": {
+  "select-title": "Select SeedQR Format",
+  "description": "Choose which SeedQR format you want to export.",
+  "standard": "Standard SeedQR",
+  "standard-description": "Compatible with SeedSigner, Krux and most wallets.",
+  "compact": "Compact SeedQR",
+  "compact-description": "Smaller QR format.",
+  "continue": "Continue"
+  
+},
+
+"address-explorer": {
+  "receive": "Receive",
+  "change": "Change",
+  "title": "Address Explorer",
+  "warning-title": "Warning",
+  "warning-text": "Only use those addresses if you know what you are doing. Using the wrong one could mean funds won't show up in your balance!",
+  "sync-account-with": "You can sync this account with:"
+},
+
   "next": "Weiter",
   "account-list": {
     "delete": "Entfernen"
@@ -36,7 +77,9 @@
   },
   "advanced-mode": {
     "label": "Fortgeschrittener Modus",
-    "note_text": "<span class=\"style__strong\">Hinweis: </span> Der erweiterte Modus gewährt Ihnen Zugriff auf weitere Funktionen wie <u>BIP39-Passphrasen</u> und <u>Lifehash-Identicons</u>"
+    "note_text": "<span class=\"style__strong\">Hinweis: </span> Der erweiterte Modus gewährt Ihnen Zugriff auf weitere Funktionen wie <u>BIP39-Passphrasen</u> und <u>Lifehash-Identicons</u>",
+    "amnesic-mode_label": "Amnesic Mode",
+    "amnesic-mode_note": "When enabled, AirGap Vault will automatically reset when the application is closed. No session data will be preserved."
   },
   "distribution-onboarding": {
     "ask-permission": {
@@ -140,7 +183,12 @@
     "advanced": "Advanced Options",
     "security-level": {
       "heading": "Sicherheitsgrad",
-      "text": "Geheimschlüssel zusätzlich mit einem Passwort verschlüsseln."
+      "text": "Geheimschlüssel zusätzlich mit einem Passwort verschlüsseln.", 
+      "show-seedqr": "Show SeedQR",
+      "show-seedqr-description": "Display your recovery seed as a SeedQR code."
+      },
+      "secret-option-item": {
+      "disabled": "This setting is disabled. Import your secret again to change it."
     },
     "passcode": {
       "label": "Passwort",
@@ -277,6 +325,8 @@
     "text": "Schreiben Sie jedes Wort auf ein Stück Papier. Bedenken Sie dabei, dass alle erwähnten Regeln beachtet werden müssen.",
     "fingerprint": "Fingerprint",
     "next-step_label": "Nächster Schritt",
+    "show-recovery-phrase": "Show Recovery Phrase",
+    "hide-recovery-phrase": "Hide Recovery Phrase",
     "too-fast_alert": {
       "title": "Das war schnell!",
       "heading": "Besitzen Sie übermenschliche Kräfte?",
@@ -674,7 +724,9 @@
     "alert": {
       "header": "BIP-39 Passphrase",
       "message": "You set a BIP39 Passphrase. You will need to enter this passphrase again when you try to derive the same child key!",
-      "understand": "I understand"
+      "understand": "I understand",
+      "cancel": "Cancelar",
+      "ok": "Ok"
     }
   },
   "bip85-show": {

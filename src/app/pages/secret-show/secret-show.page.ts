@@ -5,7 +5,7 @@ import { Observable } from 'rxjs'
 import { first, map } from 'rxjs/operators'
 import { LifehashService } from 'src/app/services/lifehash/lifehash.service'
 import { AdvancedModeType, VaultStorageKey, VaultStorageService } from 'src/app/services/storage/storage.service'
-
+import { SeedQrEncoder } from 'src/app/utils/seedqr-encoder'
 import { SHOW_SECRET_MIN_TIME_IN_SECONDS } from '../../constants/constants'
 import { MnemonicSecret } from '../../models/secret'
 import { DeviceService } from '../../services/device/device.service'
@@ -22,6 +22,8 @@ export class SecretShowPage {
   public readonly startTime: Date = new Date()
 
   public lifehashData: string | undefined
+
+  public seedQrData: string = ''
 
   public isBlurred: boolean = true
   blurText =
@@ -47,6 +49,9 @@ export class SecretShowPage {
     const matches = this.secret.fingerprint ? this.secret.fingerprint.match(/.{1,2}/g) : null
     const bytes = matches ? new Uint8Array(matches.map((byte) => parseInt(byte, 16))) : new Uint8Array()
     this.lifehashData = await this.lifehashService.generateLifehash(bytes)
+
+    const mnemonic = this.secret.recoverMnemonicFromHex(this.secret.secretHex)
+    this.seedQrData = SeedQrEncoder.encodeSeedQR(mnemonic)
   }
 
   public ionViewWillLeave(): void {

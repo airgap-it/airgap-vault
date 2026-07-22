@@ -34,6 +34,7 @@ import { TranslateService } from '@ngx-translate/core'
 import { first } from 'rxjs/operators'
 import { register } from 'swiper/element/bundle'
 
+
 import { SecurityUtilsPlugin } from './capacitor-plugins/definitions'
 import { SECURITY_UTILS_PLUGIN } from './capacitor-plugins/injection-tokens'
 import { DEEPLINK_VAULT_ADD_ACCOUNT, DEEPLINK_VAULT_PREFIX } from './constants/constants'
@@ -45,6 +46,7 @@ import { VaultModulesService } from './services/modules/modules.service'
 import { NavigationService } from './services/navigation/navigation.service'
 import { SaplingNativeService } from './services/sapling-native/sapling-native.service'
 import { SecretsService } from './services/secrets/secrets.service'
+import { SecureStorageService } from './services/secure-storage/secure-storage.service'
 import { StartupChecksService } from './services/startup-checks/startup-checks.service'
 import { LanguagesType, VaultStorageKey, VaultStorageService } from './services/storage/storage.service'
 import { Router } from '@angular/router'
@@ -67,6 +69,7 @@ register()
 export class AppComponent implements AfterViewInit {
   // Sometimes the deeplink was registered before the root page was set
   // This resulted in the root page "overwriting" the deep-linked page
+  private isWiping = false
   public isInitialized: ExposedPromise<void> = exposedPromise<void>()
 
   constructor(
@@ -75,6 +78,7 @@ export class AppComponent implements AfterViewInit {
     private readonly iacService: IACService,
     private readonly translateService: TranslateService,
     private readonly storageService: VaultStorageService,
+    private readonly secureStorage: SecureStorageService,
     private readonly protocolService: ProtocolService,
     private readonly secretsService: SecretsService,
     private readonly ngZone: NgZone,
@@ -134,6 +138,28 @@ export class AppComponent implements AfterViewInit {
         }
       })
     }
+   this.app.addListener('appStateChange', async ({ isActive }) => {
+  if (!isActive) {
+    const amnesicMode = await this.storageService.get(
+      VaultStorageKey.AMNESIC_MODE
+    )
+
+    if (amnesicMode === true && !this.isWiping) {
+      this.isWiping = true
+
+      try {
+        await this.secureStorage.wipe()
+        await this.storageService.wipe()
+
+        await this.navigationService.route('/')
+        location.reload()
+      } catch (e) {
+        this.isWiping = false
+        console.error('Wipe failed', e)
+      }
+    }
+  }
+})
     this.app.addListener('appUrlOpen', async (data: URLOpenListenerEvent) => {
       await this.isInitialized.promise
       if (data.url === DEEPLINK_VAULT_PREFIX || data.url.startsWith(DEEPLINK_VAULT_ADD_ACCOUNT)) {

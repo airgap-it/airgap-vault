@@ -84,7 +84,6 @@ function createAirGapModule(module) {
 }
 
 function copyCommunityModule(module) {
-  console.log('MODULE PATH:', module.path)
   const namespace = path.basename(module.path)
   const outputDir = path.join(assetsdir, `protocol_modules/${namespace}`)
 

@@ -15,10 +15,10 @@ export class SeedQRDecoder {
       const words: string[] = []
 
       for (let i = 0; i < numWords; i++) {
-        const index = parseInt(
-          cleaned.substring(i * 4, (i * 4) + 4),
-          10
-        )
+        const index = Number.parseInt(
+       cleaned.substring(i * 4, (i * 4) + 4),
+       10
+       )
 
         if (index < 0 || index >= bip39.wordlists.EN.length) {
           return null
@@ -46,9 +46,9 @@ export class SeedQRDecoder {
     const binary = atob(base64)
 
     let bytes = Uint8Array.from(
-      binary,
-      c => c.charCodeAt(0)
-    )
+  binary,
+  c => c.codePointAt(0) ?? 0
+)
 
     // ZXing - CompactSeedQR 12 palavras
     // 41 0? + 16 bytes + EC

@@ -9,11 +9,10 @@ const unsignedTx: UnsignedTezosTransaction = {
   publicKey: '9430c2ac8fe1403c6cbbee3a98b19f3f3bbdd89d0659b3eb6e4106a5cbe41351',
   callback: 'airgap-wallet://?d='
 }
-console.log('THIS IS THE PROTOCOL', protocol)
 
 protocol
   .getTransactionDetails(unsignedTx)
   .then((airGapTxs) => {
-    console.log('airGapTxs', airGapTxs)
+  
   })
   .catch((err) => console.error(err))

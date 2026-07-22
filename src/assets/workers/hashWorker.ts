@@ -7,7 +7,6 @@ self.onmessage = function (event) {
   hash.update(hashHex)
 
   if (event.data.call === 'init') {
-    console.log('init hash...', event.data.secureRandom.length)
     hash.update(event.data.secureRandom)
   }
 
@@ -16,7 +15,6 @@ self.onmessage = function (event) {
   }
 
   if (event.data.call === 'digest') {
-    console.log('digesting hash...')
     self.postMessage({hash: hash.hex()})
   }
 

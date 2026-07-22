@@ -10,13 +10,18 @@ export class AdvancedModePage implements OnInit {
   public advancedModeType: AdvancedModeType = AdvancedModeType.UNDETERMINED
 
   advancedModeEnabled: boolean
+  amnesicModeEnabled: boolean
 
   constructor(private readonly storageService: VaultStorageService) {
-    this.storageService.get(VaultStorageKey.ADVANCED_MODE_TYPE).then((advancedMode) => {
-      this.advancedModeType = advancedMode
-      this.advancedModeEnabled = this.advancedModeType === AdvancedModeType.ADVANCED
-    })
-  }
+  this.storageService.get(VaultStorageKey.ADVANCED_MODE_TYPE).then((advancedMode) => {
+    this.advancedModeType = advancedMode
+    this.advancedModeEnabled = this.advancedModeType === AdvancedModeType.ADVANCED
+  })
+
+  this.storageService.get(VaultStorageKey.AMNESIC_MODE).then((enabled) => {
+    this.amnesicModeEnabled = enabled === true
+  })
+}
 
   ngOnInit() {}
 
@@ -29,4 +34,14 @@ export class AdvancedModePage implements OnInit {
     }
     this.storageService.set(VaultStorageKey.ADVANCED_MODE_TYPE, this.advancedModeType)
   }
+
+  public async toggleEnableAmnesicMode(event: any) {
+  this.amnesicModeEnabled = event.detail.checked
+
+  await this.storageService.set(
+    VaultStorageKey.AMNESIC_MODE,
+    this.amnesicModeEnabled
+  )
+}
+
 }

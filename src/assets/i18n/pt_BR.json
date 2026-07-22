@@ -1,4 +1,44 @@
 {
+  "secret-seedqr": {
+  "title": "SeedQR",
+  "text": "Escaneie este SeedQR com uma carteira compatível.",
+  "warning": "Esta SeedQR contém apenas a frase de recuperação BIP39. Se você utiliza uma passphrase BIP39, ela deve ser armazenada separadamente e será necessária para restaurar suas carteiras.",
+  "export-template": "Exportar Template",
+  "type": "Tipo",
+  "words": "Palavras"   
+},
+  
+"secret-seedqr-template": {
+  "block": "Bloco",
+  "size": "Tamanho",
+  "instruction": "Marque no template físico apenas os quadrados pretos exibidos abaixo.",
+  "back": "Voltar para a grade",
+  "use-template": "Utilize o template físico",
+  "to-fill-seedqr": "para preencher este SeedQR.",
+  "continue": "Continuar", 
+  "seed-words": "Seed de {{count}} palavras",
+  "repository-info": "Os templates imprimíveis do SeedQR estão incluídos no repositório do projeto:"
+},
+
+"select-seedqr-format": {
+  "select-title": "Selecione o formato SeedQR",
+  "description": "Escolha qual formato SeedQR deseja exportar.",
+  "standard": "SeedQR Standard",
+  "standard-description": "Compatível com SeedSigner, Krux e a maioria das carteiras.",
+  "compact": "SeedQR Compact",
+  "compact-description": "Formato QR menor.",
+  "continue": "Continuar"
+},
+
+"address-explorer": {
+  "receive": "Recebimento",
+  "change": "Troco",
+  "title": "Explorador de Endereços",
+  "warning-title": "Atenção",
+  "warning-text": "Utilize esses endereços apenas se souber o que está fazendo. Usar o endereço incorreto pode fazer com que os fundos não apareçam no seu saldo.",
+  "sync-account-with": "Você pode sincronizar esta conta com:"
+},
+
   "next": "Próximo",
   "account-list": {
     "delete": "Deletar"
@@ -36,7 +76,9 @@
   },
   "advanced-mode": {
     "label": "Modo Avançado",
-    "note_text": "<span class=\"style__strong\">Nota: </span> O Modo Avançado concede acesso a mais recursos, como <u>Senhas BIP39</u> e <u>Lifehash Identicons</u>"
+    "note_text": "<span class=\"style__strong\">Nota: </span> O Modo Avançado concede acesso a mais recursos, como <u>Senhas BIP39</u> e <u>Lifehash Identicons</u>",
+    "amnesic-mode_label": "Modo Amnésico",
+    "amnesic-mode_note": "Quando ativado, o AirGap Vault será redefinido automaticamente ao ser encerrado. Nenhum dado da sessão será preservado."
   },
   "distribution-onboarding": {
     "ask-permission": {
@@ -139,8 +181,15 @@
     "secret_input_label": "Nome do seu segredo",
     "advanced": "Opções avançadas",
     "security-level": {
-      "heading": "Nível de segurança",
-      "text": "Você pode criptografar seu segredo adicionalmente usando uma senha."
+    "heading": "Nível de segurança",
+    "text": "Você pode criptografar seu segredo adicionalmente usando uma senha.", 
+    "show-seedqr": "Mostrar SeedQR",
+    "show-seedqr-description": "Exibir sua semente de recuperação como um código SeedQR."
+    },
+
+    "secret-option-item": {
+    "disabled": "Esta configuração está desativada. Importe seu segredo novamente para alterá-la."
+
     },
     "passcode": {
       "label": "Senha de criptografia",
@@ -277,12 +326,15 @@
     "text": "Anote todas as palavras em um pedaço de papel, lembre-se de seguir as regras.",
     "fingerprint": "Impressão digital",
     "next-step_label": "Próxima Etapa",
+    "show-recovery-phrase": "Mostrar frase de recuperação",
+    "hide-recovery-phrase": "Ocultar frase de recuperação",
     "too-fast_alert": {
       "title": "Isso foi rápido!",
       "heading": "Tem certeza que você não é um super-humano?",
       "text": "Certifique-se de seguir todas as regras e não fazer nada além de anotar seu segredo no papel.",
       "wait_label_p1": "Por favor, espere até pelo menos",
       "wait_label_p2": "acabou."
+      
     }
   },
   "secret-validate": {
@@ -674,7 +726,9 @@
     "alert": {
       "header": "BIP-39 Passphrase",
       "message": "Você definiu uma  BIP39 Passphrase. Você precisará inserir esta senha novamente quando tentar derivar a mesma chave filha!",
-      "understand": "Eu entendo"
+      "understand": "Eu entendo",
+      "cancel": "Cancelar",
+      "ok": "Ok"
     }
   },
   "bip85-show": {

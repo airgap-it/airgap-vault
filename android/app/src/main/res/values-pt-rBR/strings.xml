@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">AirGap Vault</string>
+    <string name="title_activity_main">AirGap Vault</string>
+    <string name="package_name">it.airgap.vault</string>
+    <string name="custom_url_scheme">airgap-vault</string>
+
+    <string name="paranoia_input_alert_title">Digite sua senha de criptografia</string>
+    <string name="paranoia_input_alert_setup_message">Escolha uma senha de criptografia com pelo menos 4 caracteres.</string>
+    <string name="paranoia_input_alert_positive_button">Definir senha de criptografia</string>
+    <string name="paranoia_input_alert_unlock_button">Desbloquear</string>
+
+    <string name="password_input_alert_hint">Sua senha de criptografia</string>
+    <string name="password_input_alert_confirmation_hint">Confirme sua senha de criptografia</string>
+
+    <string name="recovery_input_alert_title">Digite sua senha de recuperação</string>
+    <string name="recovery_input_alert_setup_message">Escolha uma senha com pelo menos 4 caracteres.</string>
+    <string name="recovery_input_alert_positive_button">Definir recuperação</string>
+    <string name="recovery_input_alert_recover_message">Seu segredo está ausente. Recupere-o usando a senha de recuperação, ou importe novamente.</string>
+    <string name="recovery_input_alert_reimport_button">Importar</string>
+    <string name="recovery_input_alert_recover_button">Recuperar</string>
+
+    <string name="biometric_prompt_title">Verifique sua identidade</string>
+    <string name="biometric_prompt_subtitle">Acessando seu segredo</string>
+    <string name="biometric_prompt_description">Usado para criar contas e assinar transações.</string>
+
+</resources>

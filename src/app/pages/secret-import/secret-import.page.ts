@@ -1,12 +1,10 @@
-import { Inject } from '@angular/core'
-import { Platform } from '@ionic/angular'
 import { PermissionsService, QrScannerService } from '@airgap/angular-core'
 import { SecurityUtilsPlugin } from 'src/app/capacitor-plugins/definitions'
 import { SECURITY_UTILS_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
 import { ScanBasePage } from '../scan-base/scan-base'
 
-import { Component, ElementRef, ViewChild } from '@angular/core'
-import { AlertController } from '@ionic/angular'
+import { Inject, Component, ElementRef, ViewChild } from '@angular/core'
+import { Platform, AlertController } from '@ionic/angular'
 import { SeedQRDecoder } from 'src/app/utils/seedqr-decoder'
 import { BIPSigner } from '../../models/BIP39Signer'
 import { MnemonicSecret } from '../../models/secret'
@@ -33,7 +31,7 @@ export class SecretImportPage extends ScanBasePage {
 
   public maskWords: boolean = false
 
-  public wordList: SingleWord[] = bip39.wordlists.EN as any
+  public readonly wordList: SingleWord[] = bip39.wordlists.EN as any
 
   public lastWordOptions: string[] = []
 
@@ -41,10 +39,10 @@ export class SecretImportPage extends ScanBasePage {
 
   public keyboardEnabled: boolean = true
 
-  private maxWords: number = 24
+  private readonly maxWords: number = 24
 
   @ViewChild('secretContainer', { read: ElementRef })
-  public secretContainer: ElementRef<HTMLElement>
+  public readonly secretContainer: ElementRef<HTMLElement>
 
 constructor(
   platform: Platform,
@@ -126,8 +124,9 @@ constructor(
 }
 
   public ionViewWillLeave(): void {
-    this.deviceService.disableScreenshotProtection()
-  }
+  super.ionViewWillLeave()
+  this.deviceService.disableScreenshotProtection()
+}
 
   public isValid(): boolean {
     return BIPSigner.validateMnemonic(this.secretWords.join(' '))

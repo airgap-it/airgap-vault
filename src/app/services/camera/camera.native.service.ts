@@ -111,13 +111,12 @@ export class CameraNativeService implements IEntropyGenerator {
     return this.collectedEntropyPercentage / 6
   }
 
-  public setVideoElement(element): void {
-    console.log('only used in browser', element)
-  }
+  public setVideoElement(_element): void {
+  // Intentionally left blank.
+}
 
   public stop(): Promise<any> {
     if (!this.cameraIsRunning) {
-      console.log('CAMERA ALREADY STOPPED, ABORTING')
       this.uninjectCSS()
 
       return Promise.reject(null)
@@ -129,7 +128,6 @@ export class CameraNativeService implements IEntropyGenerator {
 
       return new Promise((resolve) => {
         setTimeout(() => {
-          console.log('CAMERA IS TAKING PHOTO, DELAYING')
           resolve(this.stop())
         }, 200)
       })
@@ -140,27 +138,23 @@ export class CameraNativeService implements IEntropyGenerator {
     }
 
     return new Promise((_resolve, reject) => {
-      this.cameraPreview.stop().then(
-        () => {
-          this.cameraIsRunning = false
-          console.log('camera stopped.')
-        },
-        (error) => {
-          console.log('camera could not be stopped.')
-          reject(error)
-        }
-      )
-    })
+  this.cameraPreview.stop().then(
+    () => {
+      this.cameraIsRunning = false
+    },
+    (error) => {
+      reject(error)
+    }
+  )
+})
+
   }
+public getEntropyUpdateObservable(): Observable<Entropy> {
+  return this.entropyObservable
+}
 
-  public getEntropyUpdateObservable(): Observable<Entropy> {
-    return this.entropyObservable
-  }
-
-  private initCamera(): Promise<void> {
-    console.log('initCamera')
-
-    return new Promise((resolve) => {
+private initCamera(): Promise<void> {
+  return new Promise((resolve) => {
       this.cameraPreview
         .start(
           Object.assign(
@@ -178,14 +172,12 @@ export class CameraNativeService implements IEntropyGenerator {
         .then(
           () => {
             if (this.disabled) {
-              console.log('not starting, disabled')
-              if (this.cameraIsRunning) {
-                this.stop().catch(handleErrorLocal(ErrorCategory.CORDOVA_PLUGIN))
-              }
-
-              return
+           if (this.cameraIsRunning) {
+           this.stop().catch(handleErrorLocal(ErrorCategory.CORDOVA_PLUGIN))
             }
-            console.log('camera started.')
+
+           return
+          }
 
             // inject css now
             this.injectCSS()

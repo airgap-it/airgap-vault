@@ -27,11 +27,11 @@ export class SeedQRScanPage extends ScanBasePage {
   super(platform, scanner, permissionsProvider, securityUtils)
 }
 
- public async ionViewWillEnter(): Promise<void> {
-  await super.ionViewWillEnter()
+ public ionViewWillEnter(): Promise<void> {
+  return super.ionViewWillEnter()
 }
 
-  public async checkScan(data: string): Promise<void> {
+  public checkScan(data: string): void {
  
   let words: string[] | null = null
 
@@ -46,9 +46,9 @@ export class SeedQRScanPage extends ScanBasePage {
    
     this.stopScan()
 
-    await this.navigationService.routeWithState('/secret-import', {
-      words
-    })
+    this.navigationService.routeWithState('/secret-import', {
+  words
+}).catch(() => {})
 
     return
   }
@@ -64,16 +64,16 @@ export class SeedQRScanPage extends ScanBasePage {
     
     this.stopScan()
 
-    await this.navigationService.routeWithState('/secret-import', {
-      words
-    })
+    this.navigationService.routeWithState('/secret-import', {
+  words
+}).catch(() => {})
 
     return
   }
   
   this.stopScan()
   this.startScan()
-}
+ }
 
   public ionViewWillLeave(): void {
   super.ionViewWillLeave()

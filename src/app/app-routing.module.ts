@@ -44,6 +44,9 @@ const routes: Routes = [
   },
   { path: 'secret-rules', loadChildren: () => import('./pages/secret-rules/secret-rules.module').then((m) => m.SecretRulesPageModule) },
   { path: 'secret-show', loadChildren: () => import('./pages/secret-show/secret-show.module').then((m) => m.SecretShowPageModule) },
+  { path: 'secret-seedqr', loadChildren: () => import('./pages/secret-seedqr/secret-seedqr.module').then((m) => m.SecretSeedqrPageModule) }, 
+  { path: 'secret-seedqr-format', loadChildren: () => import('./pages/secret-seedqr-format/secret-seedqr-format.module').then((m) => m.SecretSeedqrFormatPageModule ) },
+
   {
     path: 'secret-validate',
     loadChildren: () => import('./pages/secret-validate/secret-validate.module').then((m) => m.SecretValidatePageModule)
@@ -290,7 +293,15 @@ const routes: Routes = [
     path: 'isolated-modules-details/:intention',
     loadChildren: () =>
       import('./pages/isolated-modules-details/isolated-modules-details.module').then((m) => m.IsolatedModulesDetailsPageModule)
+  },  {
+    path: 'secret-seedqr-template',
+    loadChildren: () => import('./pages/secret-seedqr-template/secret-seedqr-template.module').then( m => m.SecretSeedqrTemplatePageModule)
+  },
+  {
+    path: 'secret-seedqr-template-view',
+    loadChildren: () => import('./pages/secret-seedqr-template-view/secret-seedqr-template-view.module').then( m => m.SecretSeedqrTemplateViewPageModule)
   }
+
 ]
 
 @NgModule({
