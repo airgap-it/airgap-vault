@@ -36,5 +36,6 @@
       [interactionData]="rawdata"
       [hideNetwork]="true"
     ></airgap-from-to>
+    <a *ngIf="airGapTx.data" (click)="toggleData(airGapTx)">{{ rawData.has(airGapTx) ? 'Revert to Raw' : 'Tap to parse data' }}</a>
   </ng-container>
 </ng-container>
