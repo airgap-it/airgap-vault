@@ -32,36 +32,22 @@ class JSAsyncResult: NSObject, Identifiable, WKScriptMessageHandler {
     private static let fieldError: String = "error"
     
     public let id: String
-    private var resultManager: ResultManager
     private let listenerRegistry: ListenerRegistry
     
     init(id: String = "\(JSAsyncResult.defaultName)\(Int(Date().timeIntervalSince1970))") {
         self.id = id
-        self.resultManager = .init()
         self.listenerRegistry = .init()
     }
     
     func createID() async -> String {
-        let id = await listenerRegistry.createID()
-        await listenerRegistry.add(forID: id) { [weak self] result in
-            let selfWeak = self
-            Task {
-                await selfWeak?.resultManager.setResult(result, forID: id)
-            }
-        }
-        
-        return id
+        await listenerRegistry.createID()
     }
     
     func awaitResultWithID(_ id: String) async throws -> Any {
         return try await withCheckedThrowingContinuation { continuation in
             Task {
-                if let result = await resultManager.result[id] {
+                await listenerRegistry.add(forID: id) { result in
                     continuation.resume(with: result)
-                } else {
-                    await listenerRegistry.add(forID: id) { result in
-                        continuation.resume(with: result)
-                    }
                 }
             }
         }
@@ -91,16 +77,9 @@ class JSAsyncResult: NSObject, Identifiable, WKScriptMessageHandler {
         }
     }
     
-    private actor ResultManager {
-        private(set) var result: [String: Result<Any, Error>] = [:]
-        
-        func setResult(_ result: Result<Any, Error>, forID id: String) {
-            self.result[id] = result
-        }
-    }
-    
     private actor ListenerRegistry {
         private(set) var listeners: [String: [Listener]] = [:]
+        private var results: [String: Result<Any, Error>] = [:]
         
         func createID() -> String {
             let id = UUID().uuidString
@@ -110,12 +89,23 @@ class JSAsyncResult: NSObject, Identifiable, WKScriptMessageHandler {
         }
         
         func add(forID id: String, _ listener: @escaping Listener) {
-            listeners[id]?.append(listener)
+            if let result = results.removeValue(forKey: id) {
+                listener(result)
+            } else if listeners[id] != nil {
+                listeners[id]?.append(listener)
+            } else {
+                listener(.failure(JSError.unknownResultID(id)))
+            }
         }
         
         func notifyAllWithID(_ id: String, with result: Result<Any, Error>) {
-            listeners[id]?.forEach { $0(result) }
-            listeners.removeValue(forKey: id)
+            guard let listeners = listeners.removeValue(forKey: id) else { return }
+
+            if listeners.isEmpty {
+                results[id] = result
+            } else {
+                listeners.forEach { $0(result) }
+            }
         }
     }
 }
@@ -123,4 +113,5 @@ class JSAsyncResult: NSObject, Identifiable, WKScriptMessageHandler {
 enum JSError: Swift.Error {
     case invalidJSON
     case fromScript(Any)
+    case unknownResultID(String)
 }
