@@ -31,11 +31,12 @@ const KNOWN_ERC20_FUNC: { [selector: string]: ERC20Method } = {
     ]
   }
 }
-const KNOWN_DECIMAL: { [token: string]: number } = { USDC: 6, USDT: 6, WETH: 18, rETH: 18 }
+const KNOWN_DECIMAL: { [token: string]: number } = { USDC: 6, USDT: 6, USDT0: 6, WETH: 18, rETH: 18 }
 const KNOWN_TO_ADDR: { [address: string]: string } = {
   '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48': 'USDC',
   '0x3c499c542cef5e3811e1192ce70d8cc03d5c3359': 'USDC (POL)',
   '0xdac17f958d2ee523a2206206994597c13d831ec7': 'USDT',
+  '0xc2132d05d31c914a87c6611c10748aeb04b58e8f': 'USDT0 (POL)',
   '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2': 'WETH',
   '0xae78736cd615f374d3085123a210448e74fc6393': 'rETH'
 }
