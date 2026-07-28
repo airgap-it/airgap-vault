@@ -108,21 +108,19 @@ export class TabSettingsPage implements OnInit {
   }
 
   public goToVaultInteraction(): void {
-    console.log('navigating to vault interaction')
-    this.navigationService.route('/vault-interaction-settings').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
-  }
+  this.navigationService.route('/vault-interaction-settings').catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+}
 
-  public pasteClipboard(): void {
-    this.clipboardService.paste().then(
-      (text: string) => {
-        console.log('pasteClipboard', text)
-        this.iacService.handleRequest(text, IACMessageTransport.PASTE).catch((err) => console.error(err))
-      },
-      (err: string) => {
-        console.error('Error: ' + err)
-      }
-    )
-  }
+public pasteClipboard(): void {
+  this.clipboardService.paste().then(
+    (text: string) => {
+      this.iacService.handleRequest(text, IACMessageTransport.PASTE).catch((err) => console.error(err))
+    },
+    (err: string) => {
+      console.error('Error: ' + err)
+    }
+  )
+}
 
   public async resetVault() {
     const alert = await this.alertCtrl.create({
@@ -153,6 +151,20 @@ export class TabSettingsPage implements OnInit {
     })
     alert.present()
   }
+
+  public async automaticResetVault() {
+  try {
+    await this.secureStorage.wipe()
+    await this.storageService.wipe()
+  } catch (e) {
+    console.error('Automatic wiping failed', e)
+    return this.resetVaultError()
+  }
+
+  this.navigationService.route('/').then(() => {
+    location.reload()
+  })
+}
 
   public async resetVaultError() {
     const alert = await this.alertCtrl.create({

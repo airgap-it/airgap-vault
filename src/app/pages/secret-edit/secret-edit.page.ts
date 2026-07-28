@@ -134,6 +134,12 @@ export class SecretEditPage {
     alert.present()
   }
 
+  public showSeedQR(): void {
+  this.navigationService
+    .routeWithState('secret-seedqr-format', { secret: this.secret })
+    .catch((err) => console.error(err))
+}
+
   public delete(): void {
     this.translateService
       .get([

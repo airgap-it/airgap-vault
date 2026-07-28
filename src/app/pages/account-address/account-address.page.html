@@ -34,13 +34,25 @@
         <span class="selectable typography--mono">{{ wallet.derivationPath }}</span>
       </p>
       <p *ngIf="isAppAdvancedMode$ | async">
-        <ion-chip color="light" *ngIf="wallet.isExtendedPublicKey">HD Wallet</ion-chip>
-        <ion-chip color="light" *ngIf="secret.fingerprint !== wallet.masterFingerprint">BIP39 passphrase</ion-chip>
-      </p>
+  <ion-chip color="light" *ngIf="wallet.isExtendedPublicKey">
+    HD Wallet
+  </ion-chip>
+
+  <ion-chip color="light" *ngIf="wallet.masterFingerprint">
+    Master Fingerprint:
+    {{ wallet.masterFingerprint }}
+  </ion-chip>
+
+  <ion-chip color="light" *ngIf="secret.fingerprint !== wallet.masterFingerprint">
+    BIP39 Passphrase
+  </ion-chip>
+</p>
     </ion-col>
   </ion-row>
 
-  <p class="ion-padding-horizontal ion-padding-bottom">You can sync this account with:</p>
+  <p class="ion-padding-horizontal ion-padding-bottom">
+  {{ 'address-explorer.sync-account-with' | translate }}
+</p>
 
   <ion-row *ngFor="let option of syncOptions" class="ion-padding-bottom">
     <ion-col size="12">

@@ -108,8 +108,6 @@ export class PlatformMock {
   }
 
   public is(): boolean {
-    console.log('MOCK IS NOT CORDOVA ')
-
     return false
   }
 

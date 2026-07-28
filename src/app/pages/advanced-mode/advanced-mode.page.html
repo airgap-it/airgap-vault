@@ -16,16 +16,36 @@
       </ion-card-header>
 
       <ion-card-content>
-        <ion-item lines="none">
-          <ion-icon name="build-outline" slot="start"></ion-icon>
-          {{'advanced-mode.label' | translate }}
-          <ion-toggle [checked]="advancedModeEnabled" (ionChange)="toggleEnableAdvancedMode($event)" slot="end"></ion-toggle>
-        </ion-item>
 
-        <ion-item lines="none">
-          <p [innerHTML]="'advanced-mode.note_text' | translate"></p>
-        </ion-item>
-      </ion-card-content>
+  <ion-item lines="none">
+    <ion-icon name="build-outline" slot="start"></ion-icon>
+    {{ 'advanced-mode.label' | translate }}
+    <ion-toggle
+      [checked]="advancedModeEnabled"
+      (ionChange)="toggleEnableAdvancedMode($event)"
+      slot="end">
+    </ion-toggle>
+  </ion-item>
+
+  <ion-item lines="none">
+    <p [innerHTML]="'advanced-mode.note_text' | translate"></p>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-icon name="eye-off-outline" slot="start"></ion-icon>
+    {{ 'advanced-mode.amnesic-mode_label' | translate }}
+    <ion-toggle
+      [checked]="amnesicModeEnabled"
+      (ionChange)="toggleEnableAmnesicMode($event)"
+      slot="end">
+    </ion-toggle>
+  </ion-item>
+
+  <ion-item lines="none">
+    <p [innerHTML]="'advanced-mode.amnesic-mode_note' | translate"></p>
+  </ion-item>
+
+</ion-card-content>
     </ion-card>
   </ion-list>
 </ion-content>

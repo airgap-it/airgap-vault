@@ -1,6 +1,11 @@
-import { Component, ElementRef, ViewChild } from '@angular/core'
-import { AlertController } from '@ionic/angular'
+import { PermissionsService, QrScannerService } from '@airgap/angular-core'
+import { SecurityUtilsPlugin } from 'src/app/capacitor-plugins/definitions'
+import { SECURITY_UTILS_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
+import { ScanBasePage } from '../scan-base/scan-base'
 
+import { Inject, Component, ElementRef, ViewChild } from '@angular/core'
+import { Platform, AlertController } from '@ionic/angular'
+import { SeedQRDecoder } from 'src/app/utils/seedqr-decoder'
 import { BIPSigner } from '../../models/BIP39Signer'
 import { MnemonicSecret } from '../../models/secret'
 import { DeviceService } from '../../services/device/device.service'
@@ -18,7 +23,7 @@ type SingleWord = string
   templateUrl: './secret-import.page.html',
   styleUrls: ['./secret-import.page.scss']
 })
-export class SecretImportPage {
+export class SecretImportPage extends ScanBasePage {
   public secretWords: string[] = []
   public secretWordsValid: Observable<boolean>
   public selectedWordIndex: number = 0
@@ -26,7 +31,7 @@ export class SecretImportPage {
 
   public maskWords: boolean = false
 
-  public wordList: SingleWord[] = bip39.wordlists.EN as any
+  public readonly wordList: SingleWord[] = bip39.wordlists.EN as any
 
   public lastWordOptions: string[] = []
 
@@ -34,25 +39,31 @@ export class SecretImportPage {
 
   public keyboardEnabled: boolean = true
 
-  private maxWords: number = 24
+  private readonly maxWords: number = 24
 
   @ViewChild('secretContainer', { read: ElementRef })
-  public secretContainer: ElementRef<HTMLElement>
+  public readonly secretContainer: ElementRef<HTMLElement>
 
-  constructor(
-    private readonly deviceService: DeviceService,
-    private readonly navigationService: NavigationService,
-    private readonly alertController: AlertController
-  ) {
-    this.secretWordsValid = this.setWordEmitter.pipe(
-      map(() => {
-        const isShorterThanMaxLength = this.selectedWordIndex === -1 && this.secretWords.length < this.maxWords
-        const isEditingWord = this.selectedWordIndex !== -1
-        this.keyboardEnabled = isShorterThanMaxLength || isEditingWord
-        return this.isValid()
-      })
-    )
-  }
+constructor(
+  platform: Platform,
+  scanner: QrScannerService,
+  permissionsProvider: PermissionsService,
+  @Inject(SECURITY_UTILS_PLUGIN) securityUtils: SecurityUtilsPlugin,
+  private readonly deviceService: DeviceService,
+  private readonly navigationService: NavigationService,
+  private readonly alertController: AlertController
+) {
+  super(platform, scanner, permissionsProvider, securityUtils)
+
+  this.secretWordsValid = this.setWordEmitter.pipe(
+    map(() => {
+      const isShorterThanMaxLength = this.selectedWordIndex === -1 && this.secretWords.length < this.maxWords
+      const isEditingWord = this.selectedWordIndex !== -1
+      this.keyboardEnabled = isShorterThanMaxLength || isEditingWord
+      return this.isValid()
+    })
+  )
+}
 
   selectWord(index: number) {
     this.selectedWordIndex = index
@@ -100,12 +111,22 @@ export class SecretImportPage {
   }
 
   public ionViewDidEnter(): void {
-    this.deviceService.enableScreenshotProtection({ routeBack: 'secret-import' })
+  const state = this.navigationService.getState()
+
+  if (state?.words) {
+    this.secretWords = state.words
+    this.selectedWordIndex = -1
+    this.selectedWord = ''
+    this.setWordEmitter.next('')
   }
 
+  this.deviceService.enableScreenshotProtection({ routeBack: 'secret-import' })
+}
+
   public ionViewWillLeave(): void {
-    this.deviceService.disableScreenshotProtection()
-  }
+  super.ionViewWillLeave()
+  this.deviceService.disableScreenshotProtection()
+}
 
   public isValid(): boolean {
     return BIPSigner.validateMnemonic(this.secretWords.join(' '))
@@ -164,4 +185,23 @@ export class SecretImportPage {
     }
     this.lastWordOptions = options
   }
+
+  public async scanSeedQR(): Promise<void> {
+  await this.navigationService
+    .route('seedqr-scan')
+    .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+}
+  
+public checkScan(data: string): void {
+  
+  const words = SeedQRDecoder.decode(data)
+
+  if (words) {
+    this.secretWords = words
+    this.selectedWordIndex = -1
+    this.selectedWord = ''
+    this.setWordEmitter.next('')
+  }
+}
+
 }

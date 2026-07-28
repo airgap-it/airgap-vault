@@ -1,0 +1,54 @@
+.seedqr-template {
+
+  text-align: center;
+  padding: 20px;
+
+}
+
+
+.qr-zone {
+
+  display: inline-block;
+  margin: 20px;
+
+}
+
+
+.row {
+
+  display: flex;
+
+}
+
+
+.module {
+
+  width: 35px;
+  height: 35px;
+  border: 1px solid #ccc;
+
+}
+
+
+.black {
+
+  background: black;
+
+}
+
+
+.buttons {
+
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+
+}
+
+
+button {
+
+  padding: 12px 20px;
+  font-size: 18px;
+
+}

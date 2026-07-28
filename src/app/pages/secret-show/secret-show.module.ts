@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms'
 import { RouterModule, Routes } from '@angular/router'
 import { IonicModule } from '@ionic/angular'
 import { TranslateModule } from '@ngx-translate/core'
+import { QRCodeModule } from 'angularx-qrcode'
 
 import { SecretShowPage } from './secret-show.page'
 // import { SecretValidatePageModule } from '../secret-validate/secret-validate.module'
@@ -16,7 +17,14 @@ const routes: Routes = [
 ]
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, RouterModule.forChild(routes), TranslateModule],
+  imports: [
+  CommonModule,
+  FormsModule,
+  IonicModule,
+  RouterModule.forChild(routes),
+  TranslateModule,
+  QRCodeModule
+],
   declarations: [SecretShowPage]
 })
 export class SecretShowPageModule {}

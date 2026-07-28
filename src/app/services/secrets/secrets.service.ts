@@ -53,6 +53,7 @@ interface AddWalletConifg {
   customDerivationPath: string
   bip39Passphrase: string
   isActive: boolean
+  label?: string
 }
 @Injectable({
   providedIn: 'root'
@@ -61,7 +62,7 @@ export class SecretsService {
   private readonly ready: Promise<void>
   private readonly secretsList: MnemonicSecret[] = []
   private activeSecret: MnemonicSecret
-  private bip32 = BIP32Factory(ecc)
+  private readonly bip32 = BIP32Factory(ecc)
 
   private readonly activeSecret$: ReplaySubject<MnemonicSecret> = new ReplaySubject(1)
   private readonly secrets$: ReplaySubject<MnemonicSecret[]> = new ReplaySubject(1)
@@ -125,6 +126,7 @@ export class SecretsService {
                 serializedWallet.status ?? AirGapWalletStatus.ACTIVE
               )
               airGapWallet.addresses = serializedWallet.addresses
+                            
               return airGapWallet
             })
           )
@@ -299,12 +301,27 @@ export class SecretsService {
     if (isBtc) {
       // BTC protocols: Always HD, increment account index
       const lastIndices = existingWallets.map((wallet) => {
-        const match = wallet.derivationPath.match(/(\d+)[h']?\/?$/)
-        return match ? parseInt(match[1], 10) : 0
-      })
+      const lastPart = wallet.derivationPath.split('/').pop() ?? ''
+const index = lastPart.replace(/[h']/g, '')
+
+return Number.parseInt(index, 10) || 0
+})
       const maxIndex = Math.max(...lastIndices)
       const nextIndex = maxIndex + 1
-      const newPath = standardPath.replace(/(\d+)([h']?)(\/?)?$/, `${nextIndex}$2$3`)
+      const parts = standardPath.split('/')
+      const last = parts.pop() ?? ''
+
+      let suffix = ''
+
+     if (last.endsWith("'")) {
+        suffix = "'"
+     } else if (last.endsWith('h')) {
+        suffix = 'h'
+     }
+
+      parts.push(`${nextIndex}${suffix}`)
+
+      const newPath = parts.join('/')
       return { derivationPath: newPath, isHDWallet: true }
     } else if (supportsHD) {
       // HD-capable protocols (ETH, OP, etc.): First is HD, subsequent are non-HD
@@ -325,12 +342,27 @@ export class SecretsService {
       // Non-HD protocols: Increment last number in path
       // e.g., m/44h/1729h/0h/0h -> m/44h/1729h/0h/1h
       const lastIndices = existingWallets.map((wallet) => {
-        const match = wallet.derivationPath.match(/(\d+)[h']?\/?$/)
-        return match ? parseInt(match[1], 10) : 0
-      })
+  const lastPart = wallet.derivationPath.split('/').pop() ?? ''
+  const index = lastPart.replace(/[h']/g, '')
+
+  return Number.parseInt(index, 10) || 0
+})
       const maxIndex = Math.max(...lastIndices)
       const nextIndex = maxIndex + 1
-      const newPath = standardPath.replace(/(\d+)([h']?)(\/?)?$/, `${nextIndex}$2$3`)
+      const parts = standardPath.split('/')
+      const last = parts.pop() ?? ''
+
+      let suffix = '';
+
+     if (last.endsWith("'")) {
+      suffix = "'";
+      } else if (last.endsWith('h')) {
+     suffix = 'h';
+     }
+
+      parts.push(`${nextIndex}${suffix}`)
+
+      const newPath = parts.join('/')
       return { derivationPath: newPath, isHDWallet: false }
     }
   }
@@ -494,8 +526,12 @@ export class SecretsService {
         if (storedSecret === undefined) {
           return secret
         }
-        const wallets: SerializedAirGapWallet[] = await Promise.all(secret.wallets.slice(0).map((wallet: AirGapWallet) => wallet.toJSON()))
-        for (let i = 0; i < storedSecret.wallets.length; ++i) {
+         
+        const wallets: SerializedAirGapWallet[] = await Promise.all(
+         secret.wallets.slice(0).map((wallet: AirGapWallet) => wallet.toJSON())
+         )
+         
+         for (let i = 0; i < storedSecret.wallets.length; ++i) {
           const serializedWallet = storedSecret.wallets[i] as unknown as SerializedAirGapWallet
 
           const filtered: (AirGapWallet | SerializedAirGapWallet | undefined)[] = await Promise.all(
@@ -513,9 +549,17 @@ export class SecretsService {
             wallets.push(serializedWallet)
           }
         }
+     
         const result = MnemonicSecret.init(secret)
-        result.wallets = wallets as unknown as AirGapWallet[]
-        return result
+       result.wallets = wallets.map((wallet: SerializedAirGapWallet) => {
+       
+  return {
+    ...wallet,
+    label: ''
+  } as unknown as AirGapWallet
+})
+
+return result
       })
     )
 
@@ -624,6 +668,7 @@ export class SecretsService {
 
     const addresses: string[] = await wallet.deriveAddresses(1)
     wallet.addresses = addresses
+    wallet.label = config.label
 
     return wallet
   }

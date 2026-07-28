@@ -1,7 +1,7 @@
 import { Component } from '@angular/core'
 import { ModalController, AlertController } from '@ionic/angular'
 import { ICoinProtocol, ProtocolSymbols } from '@airgap/coinlib-core'
-
+import { TranslateService } from '@ngx-translate/core'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
 import { SecretsService } from '../../services/secrets/secrets.service'
@@ -46,10 +46,11 @@ export class AccountAddPage {
   public isBip39PassphraseEnabled: boolean = BIP39_PASSPHRASE_ENABLED
   public revealBip39Passphrase: boolean = false
   public bip39Passphrase: string = ''
+  public accountLabel: string = ''
 
-  public isAppAdvancedMode$: Observable<boolean> = this.storageService
-    .subscribe(VaultStorageKey.ADVANCED_MODE_TYPE)
-    .pipe(map((res) => res === AdvancedModeType.ADVANCED))
+  public readonly isAppAdvancedMode$: Observable<boolean> = this.storageService
+  .subscribe(VaultStorageKey.ADVANCED_MODE_TYPE)
+  .pipe(map((res) => res === AdvancedModeType.ADVANCED))
 
   constructor(
     private readonly secretsService: SecretsService,
@@ -57,7 +58,9 @@ export class AccountAddPage {
     private readonly protocolService: ProtocolService,
     private readonly modalController: ModalController,
     private readonly navigationService: NavigationService,
+    private readonly translateService: TranslateService,
     private readonly alertController: AlertController
+    
   ) {
     const state = this.navigationService.getState()
     this.secret = state.secret
@@ -182,12 +185,13 @@ export class AccountAddPage {
             selectedProtocols.map(async (protocolWrapper: ProtocolWrapper) => {
               const protocol = protocolWrapper.protocol
               return {
-                protocolIdentifier: await protocol.getIdentifier(),
-                isHDWallet: protocolWrapper.isHDWallet,
-                customDerivationPath: protocolWrapper.customDerivationPath ?? (await protocol.getStandardDerivationPath()),
-                bip39Passphrase: this.bip39Passphrase,
-                isActive: true
-              }
+             protocolIdentifier: await protocol.getIdentifier(),
+             isHDWallet: protocolWrapper.isHDWallet,
+             customDerivationPath: protocolWrapper.customDerivationPath ?? (await protocol.getStandardDerivationPath()),
+             bip39Passphrase: this.bip39Passphrase,
+             isActive: true,
+             label: this.accountLabel
+            }
             })
           )
         )
@@ -208,30 +212,29 @@ export class AccountAddPage {
     }
 
     if (this.bip39Passphrase.length > 0) {
-      const alert = await this.alertController.create({
-        header: 'BIP-39 Passphrase',
-        message:
-          'You set a BIP-39 Passphrase. You will need to enter this passphrase again when you import your secret. If you lose your passphrase, you will lose access to your account!',
-        backdropDismiss: false,
-        inputs: [
-          {
-            name: 'understood',
-            type: 'checkbox',
-            label: 'I understand',
-            value: 'understood',
-            checked: false
-          }
-        ],
-        buttons: [
-          {
-            text: 'Cancel',
-            role: 'cancel'
-          },
-          {
-            text: 'Ok',
-            handler: async (result: string[]) => {
-              if (result.includes('understood')) {
-                addAccount()
+  const alert = await this.alertController.create({
+    header: this.translateService.instant('bip85-generate.alert.header'),
+    message: this.translateService.instant('bip85-generate.alert.message'),
+    backdropDismiss: false,
+    inputs: [
+      {
+        name: 'understood',
+        type: 'checkbox',
+        label: this.translateService.instant('bip85-generate.alert.understand'),
+        value: 'understood',
+        checked: false
+      }
+    ],
+    buttons: [
+      {
+        text: this.translateService.instant('bip85-generate.alert.cancel'),
+        role: 'cancel'
+      },
+      {
+        text: this.translateService.instant('bip85-generate.alert.ok'),
+        handler: async (result: string[]) => {
+          if (result.includes('understood')) {
+            addAccount()
               }
             }
           }

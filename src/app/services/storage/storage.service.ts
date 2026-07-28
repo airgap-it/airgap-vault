@@ -42,6 +42,7 @@ export enum VaultStorageKey {
   DISCLAIMER_ELECTRON = 'DISCLAIMER_ELECTRON',
   INTRODUCTION_INITIAL = 'INTRODUCTION_INITIAL',
   ADVANCED_MODE_TYPE = 'ADVANCED_MODE_TYPE',
+  AMNESIC_MODE = 'AMNESIC_MODE',
   INTERACTION_TYPE = 'INTERACTION_TYPE',
   LANGUAGE_TYPE = 'LANGUAGE_TYPE',
   INSTALLATION_TYPE = 'INSTALLATION_TYPE',
@@ -61,6 +62,7 @@ interface VaultStorageKeyReturnType {
   [VaultStorageKey.DISCLAIMER_ELECTRON]: boolean
   [VaultStorageKey.INTRODUCTION_INITIAL]: boolean
   [VaultStorageKey.ADVANCED_MODE_TYPE]: AdvancedModeType
+  [VaultStorageKey.AMNESIC_MODE]: boolean
   [VaultStorageKey.INTERACTION_TYPE]: InteractionType
   [VaultStorageKey.LANGUAGE_TYPE]: LanguagesType | undefined
   [VaultStorageKey.INSTALLATION_TYPE]: InstallationType
@@ -82,6 +84,7 @@ const defaultValues: VaultStorageKeyReturnDefaults = {
   [VaultStorageKey.DISCLAIMER_ELECTRON]: false,
   [VaultStorageKey.INTRODUCTION_INITIAL]: false,
   [VaultStorageKey.ADVANCED_MODE_TYPE]: AdvancedModeType.UNDETERMINED,
+  [VaultStorageKey.AMNESIC_MODE]: false,
   [VaultStorageKey.INTERACTION_TYPE]: InteractionType.UNDETERMINED,
   [VaultStorageKey.LANGUAGE_TYPE]: undefined,
   [VaultStorageKey.INSTALLATION_TYPE]: InstallationType.UNDETERMINED,

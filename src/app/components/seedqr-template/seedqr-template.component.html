@@ -1,0 +1,51 @@
+<div class="seedqr-template">
+
+  <h2>SeedQR Template</h2>
+
+  <h3>
+    Zona atual: {{ zoneLabel }}
+  </h3>
+
+
+  <div class="qr-zone">
+
+    <div 
+      class="row"
+      *ngFor="
+        let row of matrix.slice(
+          currentZone.startY,
+          currentZone.endY
+        )
+      ">
+
+      <div
+        class="module"
+        *ngFor="
+          let cell of row.slice(
+            currentZone.startX,
+            currentZone.endX
+          )
+        "
+        [class.black]="cell === 1">
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="buttons">
+
+    <button (click)="previousZone()">
+      ◀ Anterior
+    </button>
+
+
+    <button (click)="nextZone()">
+      Próximo ▶
+    </button>
+
+  </div>
+
+</div>

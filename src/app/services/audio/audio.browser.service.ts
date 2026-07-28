@@ -60,7 +60,7 @@ export class AudioBrowserService implements IEntropyGenerator {
           resolve()
         },
         (err) => {
-          console.log('error in audio.browser.service:', err)
+          console.error('error in audio.browser.service:', err)
           resolve()
         }
       )

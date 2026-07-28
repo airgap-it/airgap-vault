@@ -58,6 +58,7 @@ export class TabScanPage extends ScanBasePage {
     this.isMultiQr = false
     this.iacService.resetHandlers()
   }
+ 
 
   public async checkScan(data: string): Promise<boolean | void> {
     const sizeBefore: number = this.parts.size

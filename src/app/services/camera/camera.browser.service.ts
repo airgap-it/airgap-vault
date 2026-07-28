@@ -72,10 +72,9 @@ export class CameraBrowserService implements IEntropyGenerator {
           video.play()
           resolve()
         })
-        .catch((err) => {
-          console.log('error in camera.brower.service', err)
-          resolve()
-        })
+        .catch(() => {
+  resolve()
+})
 
       this.cameraInterval = window.setInterval(() => {
         if (video.videoWidth === 0) {
@@ -106,7 +105,7 @@ export class CameraBrowserService implements IEntropyGenerator {
         track.stop()
       })
     } catch (e) {
-      console.log(e)
+      
     }
 
     return Promise.resolve()

@@ -10,10 +10,10 @@
 <ion-content class="ion-padding">
   <ion-segment *ngIf="showChange" (ionChange)="segmentChanged($event)" value="external">
     <ion-segment-button value="external">
-      <ion-label>Receive</ion-label>
+      <ion-label>{{ 'address-explorer.receive' | translate }}</ion-label>
     </ion-segment-button>
     <ion-segment-button value="internal">
-      <ion-label>Change</ion-label>
+      <ion-label>{{ 'address-explorer.change' | translate }}</ion-label>
     </ion-segment-button>
   </ion-segment>
 
@@ -22,12 +22,12 @@
       <ion-item lines="none" [detail]="false" class="ion-margin-vertical" color="warning">
         <ion-icon name="warning" slot="start" color="dark"></ion-icon>
         <ion-label color="dark" class="ion-text-wrap">
-          <h3>
-            <strong>Warning</strong>
-          </h3>
-          <p>
-            Only use those addresses if you know what you are doing. Using the wrong one could mean funds won't show up in your balance!
-          </p>
+           <h3>
+  <strong>{{ 'address-explorer.warning-title' | translate }}</strong>
+</h3>
+<p>
+  {{ 'address-explorer.warning-text' | translate }}
+</p>
         </ion-label>
       </ion-item>
     </ion-col>
