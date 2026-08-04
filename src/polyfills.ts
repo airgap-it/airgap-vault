@@ -57,6 +57,7 @@ import 'zone.js' // Included with Angular CLI.
  */
  import * as process from 'process';
 
+;(window as any).globalThis = (window as any).globalThis || window
 ;(window as any).global = window
 ;(window as any).process = {
   ...process,
@@ -64,5 +65,34 @@ import 'zone.js' // Included with Angular CLI.
     NODE_DEBUG: false
   }
 }
+if (!Array.prototype.flat) {
+  Object.defineProperty(Array.prototype, 'flat', {
+    configurable: true,
+    value: function flat(depth: any) {
+      const d = depth === undefined ? 1 : Number(depth)
+      return d > 0
+        ? Array.prototype.reduce.call(
+            this,
+            function (acc: any, val: any) {
+              return acc.concat(Array.isArray(val) ? Array.prototype.flat.call(val, d - 1) : val)
+            },
+            []
+          )
+        : Array.prototype.slice.call(this)
+    },
+    writable: true
+  })
+}
+if (!Array.prototype.flatMap) {
+  Object.defineProperty(Array.prototype, 'flatMap', {
+    configurable: true,
+    value: function flatMap(callback: any, thisArg: any) {
+      return (Array.prototype.map.call(this, callback, thisArg) as any).flat(1)
+    },
+    writable: true
+  })
+}
 import { Buffer } from 'buffer'
 global.Buffer = Buffer
+
+
