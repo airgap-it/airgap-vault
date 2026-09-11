@@ -858,6 +858,13 @@
       }
     }
   },
+  "accessibility": {
+    "more_actions": "Weitere Aktionen",
+    "seedphrase_label": "Seed-Phrase",
+    "recovery_share_label": "Wiederherstellungsanteil",
+    "reveal_bip39_passphrase_label": "BIP-39-Passphrase anzeigen",
+    "social_recovery_help_title": "Hilfe zur sozialen Wiederherstellung"
+  },
   "accounts-list-edit-popover": {
     "title": "Einstellungen",
     "add-account_label": "Konto hinzufügen",

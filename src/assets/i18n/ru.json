@@ -858,6 +858,13 @@
       }
     }
   },
+  "accessibility": {
+    "more_actions": "Дополнительные действия",
+    "seedphrase_label": "Сид-фраза",
+    "recovery_share_label": "Доля восстановления",
+    "reveal_bip39_passphrase_label": "Показать парольную фразу BIP-39",
+    "social_recovery_help_title": "Справка по социальному восстановлению"
+  },
   "accounts-list-edit-popover": {
     "title": "Настройки",
     "add-account_label": "Добавить учётную запись",

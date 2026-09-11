@@ -1,5 +1,20 @@
 {
   "next": "Next",
+  "accessibility": {
+    "more_actions": "More actions",
+    "open_secret": "Open secret {{ label }}",
+    "select_account": "Select account {{ label }}",
+    "copy_address": "Copy account address",
+    "add_recovery_word": "Add recovery word at position {{ position }}",
+    "choose_recovery_word": "Choose recovery word for position {{ position }}",
+    "backspace": "Backspace",
+    "close": "Close",
+    "back": "Back",
+    "seedphrase_label": "Seed phrase",
+    "recovery_share_label": "Recovery share",
+    "reveal_bip39_passphrase_label": "Reveal BIP-39 passphrase",
+    "social_recovery_help_title": "Social Recovery Help"
+  },
   "account-list": {
     "delete": "Delete"
   },

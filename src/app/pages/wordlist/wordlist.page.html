@@ -3,7 +3,7 @@
     <ion-buttons *ngIf="!isModal" slot="start">
       <ion-back-button defaultHref="/tabs/tab-settings"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ 'wordlist.title' | translate }}</ion-title>
+    <ion-title data-modal-focus tabindex="-1">{{ 'wordlist.title' | translate }}</ion-title>
     <ion-buttons *ngIf="isModal" slot="end">
       <ion-button (click)="close()">
         <ion-icon name="close"></ion-icon>

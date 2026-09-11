@@ -79,10 +79,12 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
   ngOnInit() {}
 
   async help() {
-    const modal: HTMLIonModalElement = await this.modalController.create({
-      component: SocialRecoveryImportHelpPage,
-      backdropDismiss: false
-    })
+    const modal: HTMLIonModalElement = await this.modalAccessibilityService.create(
+      SocialRecoveryImportHelpPage,
+      {},
+      { backdropDismiss: false },
+      { translationKey: 'accessibility.social_recovery_help_title' }
+    )
 
     modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
@@ -227,11 +229,12 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
       } catch (error) {
         const returnedError = new Error(error)
         if (returnedError.message.includes('Invalid mnemonic') || returnedError.message.includes('Checksum error')) {
-          const modal: HTMLIonModalElement = await this.modalController.create({
-            component: SocialRecoveryImportErrorsPage,
-            componentProps: { errorTitle: returnedError.name, errorText: returnedError.message },
-            backdropDismiss: false
-          })
+          const modal: HTMLIonModalElement = await this.modalAccessibilityService.create(
+            SocialRecoveryImportErrorsPage,
+            { errorTitle: returnedError.name, errorText: returnedError.message },
+            { backdropDismiss: false },
+            { translationKey: 'secret-edit.error_alert.title' }
+          )
 
           modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
         } else {

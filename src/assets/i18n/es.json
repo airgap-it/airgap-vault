@@ -858,6 +858,13 @@
       }
     }
   },
+  "accessibility": {
+    "more_actions": "Más acciones",
+    "seedphrase_label": "Frase semilla",
+    "recovery_share_label": "Parte de recuperación",
+    "reveal_bip39_passphrase_label": "Mostrar frase de contraseña BIP-39",
+    "social_recovery_help_title": "Ayuda de recuperación social"
+  },
   "accounts-list-edit-popover": {
     "title": "Settings",
     "add-account_label": "Add Account",
