@@ -55,4 +55,5 @@
       {{ 'introduction.continue_label' | translate }}
     </ion-button>
   </ion-fab>
+  <p *ngIf="saveError" role="alert">{{ 'secret-edit.error_alert.message' | translate }}</p>
 </ion-content>

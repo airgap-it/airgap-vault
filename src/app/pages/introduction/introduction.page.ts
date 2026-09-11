@@ -13,10 +13,12 @@ declare let cordova: any
 })
 export class IntroductionPage implements AfterViewChecked {
   @ViewChild('pageHeading')
-  private pageHeading?: ElementRef<HTMLElement>
+  private readonly pageHeading?: ElementRef<HTMLElement>
 
   public installationType: InstallationType = InstallationType.UNDETERMINED
   public installationTypes: typeof InstallationType = InstallationType
+  public isInitialOnboarding: boolean = false
+  public saveError: boolean = false
   private shouldFocusPageHeading: boolean = false
 
   constructor(
@@ -43,13 +45,15 @@ export class IntroductionPage implements AfterViewChecked {
     requestAnimationFrame(() => this.pageHeading?.nativeElement.focus())
   }
 
-  public accept() {
-    this.storageService
-      .set(VaultStorageKey.INTRODUCTION_INITIAL, true)
-      .then(() => {
-        this.modalController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
-      })
-      .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
+  public async accept(): Promise<void> {
+    this.saveError = false
+    try {
+      await this.storageService.set(VaultStorageKey.INTRODUCTION_INITIAL, true)
+      await this.modalController.dismiss({ accepted: true })
+    } catch (error) {
+      this.saveError = true
+      handleErrorLocal(ErrorCategory.SECURE_STORAGE)(error as Error)
+    }
   }
 
   public downloadClient() {

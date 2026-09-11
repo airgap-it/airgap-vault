@@ -46,4 +46,5 @@
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-button shape="round" color="primary" (click)="accept()">{{ 'introduction.skip_label' | translate }}</ion-button>
   </ion-fab>
+  <p *ngIf="saveError" role="alert">{{ 'secret-edit.error_alert.message' | translate }}</p>
 </ion-content>

@@ -11,9 +11,11 @@ import { VaultStorageKey, VaultStorageService } from '../../services/storage/sto
 })
 export class DistributionOnboardingPage implements AfterViewChecked {
   @ViewChild('slideHeading')
-  private slideHeading?: ElementRef<HTMLElement>
+  private readonly slideHeading?: ElementRef<HTMLElement>
 
   public currentSlide: number = 0
+  public isInitialOnboarding: boolean = false
+  public saveError: boolean = false
   private shouldFocusSlideHeading: boolean = false
 
   constructor(private readonly modalController: ModalController, private readonly storageService: VaultStorageService) {}
@@ -36,8 +38,14 @@ export class DistributionOnboardingPage implements AfterViewChecked {
     this.shouldFocusSlideHeading = true
   }
 
-  public async accept() {
-    await this.storageService.set(VaultStorageKey.DISCLAIMER_ELECTRON, true)
-    this.modalController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+  public async accept(): Promise<void> {
+    this.saveError = false
+    try {
+      await this.storageService.set(VaultStorageKey.DISCLAIMER_ELECTRON, true)
+      await this.modalController.dismiss({ accepted: true })
+    } catch (error) {
+      this.saveError = true
+      handleErrorLocal(ErrorCategory.SECURE_STORAGE)(error as Error)
+    }
   }
 }

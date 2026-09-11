@@ -19,7 +19,7 @@ export enum Warning {
 })
 export class WarningModalPage implements AfterContentInit {
   @ViewChild('warningTitle')
-  private warningTitle?: ElementRef<HTMLElement>
+  private readonly warningTitle?: ElementRef<HTMLElement>
 
   private readonly errorType: Warning
 

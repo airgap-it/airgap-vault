@@ -24,6 +24,8 @@ export class InstallationTypePage {
    * This will be true if the page is opened as a modal from the settings page.
    */
   public isSettingsModal: boolean = false
+  public isInitialOnboarding: boolean = false
+  public saveError: boolean = false
 
   constructor(private readonly modalController: ModalController, private readonly storageService: VaultStorageService) {
     this.storageService.get(VaultStorageKey.INSTALLATION_TYPE).then((installationType) => (this.installationType = installationType))
@@ -44,12 +46,14 @@ export class InstallationTypePage {
     this.installationType = installationType
   }
 
-  public next() {
-    this.storageService
-      .set(VaultStorageKey.INSTALLATION_TYPE, this.installationType)
-      .then(() => {
-        this.modalController.dismiss({ accepted: true }).catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
-      })
-      .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
+  public async next(): Promise<void> {
+    this.saveError = false
+    try {
+      await this.storageService.set(VaultStorageKey.INSTALLATION_TYPE, this.installationType)
+      await this.modalController.dismiss({ accepted: true })
+    } catch (error) {
+      this.saveError = true
+      handleErrorLocal(ErrorCategory.SECURE_STORAGE)(error as Error)
+    }
   }
 }
