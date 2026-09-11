@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ApplicationInfo
 import android.provider.Settings
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.FrameLayout
 import androidx.biometric.BiometricManager
@@ -382,7 +383,6 @@ class SecurityUtils : Plugin() {
     }
 
     private suspend fun showAuthenticationScreen(onAuthenticated: (() -> Unit)? = null, onFailure: (() -> Boolean)? = null) {
-        val containerView = FragmentContainerView(context).apply { id = R.id.authPromptFragmentContainerView }
         val layoutParams = FrameLayout.LayoutParams(
             FrameLayout.LayoutParams.MATCH_PARENT,
             FrameLayout.LayoutParams.MATCH_PARENT,
@@ -390,14 +390,20 @@ class SecurityUtils : Plugin() {
 
         coroutineScope {
             withContext(Dispatchers.Main) {
-                bridge.webView.parent.addView(containerView, layoutParams)
+                val webViewParent = bridge.webView.parent as ViewGroup
+                // Authentication failures can immediately retry. Reuse the secure overlay so
+                // failed attempts do not leave full-screen views stacked above the WebView.
+                val containerView = webViewParent.findViewById<FragmentContainerView>(R.id.authPromptFragmentContainerView)
+                    ?: FragmentContainerView(context).apply {
+                        id = R.id.authPromptFragmentContainerView
+                        webViewParent.addView(this, layoutParams)
+                    }
 
                 val fragment = AuthPromptFragment()
 
                 activity.supportFragmentManager.commit {
                     setReorderingAllowed(true)
                     replace(containerView.id, fragment)
-                    addToBackStack(null)
                 }
 
                 withContext(Dispatchers.Default) {
@@ -418,7 +424,7 @@ class SecurityUtils : Plugin() {
                             activity.supportFragmentManager.commit {
                                 remove(fragment)
                             }
-                            bridge.webView.parent.removeView(activity.findViewById(containerView.id))
+                            (containerView.parent as? ViewGroup)?.removeView(containerView)
                         }
                     }
                 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { ModalController, AlertController } from '@ionic/angular'
+import { AlertController } from '@ionic/angular'
 import { ICoinProtocol, ProtocolSymbols } from '@airgap/coinlib-core'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
@@ -12,6 +12,7 @@ import { ProtocolService } from '@airgap/angular-core'
 import { MnemonicSecret } from 'src/app/models/secret'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
+import { ModalAccessibilityService } from '../../services/modal-accessibility/modal-accessibility.service'
 
 interface ProtocolWrapper {
   protocol: ICoinProtocol
@@ -55,7 +56,7 @@ export class AccountAddPage {
     private readonly secretsService: SecretsService,
     private readonly storageService: VaultStorageService,
     private readonly protocolService: ProtocolService,
-    private readonly modalController: ModalController,
+    private readonly modalAccessibilityService: ModalAccessibilityService,
     private readonly navigationService: NavigationService,
     private readonly alertController: AlertController
   ) {
@@ -154,9 +155,12 @@ export class AccountAddPage {
   public async addWallet(): Promise<void> {
     const value: boolean = await this.storageService.get(VaultStorageKey.DISCLAIMER_HIDE_LOCAL_AUTH_ONBOARDING)
     if (!value) {
-      const modal: HTMLIonModalElement = await this.modalController.create({
-        component: LocalAuthenticationOnboardingPage
-      })
+      const modal: HTMLIonModalElement = await this.modalAccessibilityService.create(
+        LocalAuthenticationOnboardingPage,
+        {},
+        {},
+        { translationKey: 'local-authentication-onboarding.authenticate_label' }
+      )
 
       modal
         .onDidDismiss()
