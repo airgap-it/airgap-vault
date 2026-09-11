@@ -13,6 +13,7 @@ import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.commit
+import androidx.fragment.app.commitNow
 import androidx.lifecycle.lifecycleScope
 import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
@@ -401,7 +402,7 @@ class SecurityUtils : Plugin() {
 
                 val fragment = AuthPromptFragment()
 
-                activity.supportFragmentManager.commit {
+                activity.supportFragmentManager.commitNow {
                     setReorderingAllowed(true)
                     replace(containerView.id, fragment)
                 }
@@ -420,8 +421,13 @@ class SecurityUtils : Plugin() {
                     }
 
                     if (handled) {
-                        launch(Dispatchers.Main) {
-                            activity.supportFragmentManager.commit {
+                        withContext(Dispatchers.Main) {
+                            // The overlay is not placed on the fragment back stack: Back cancels
+                            // the system biometric prompt instead of revealing protected WebView
+                            // content. Remove its fragment synchronously before its reused
+                            // container so a retry cannot race a stale transaction.
+                            activity.supportFragmentManager.commitNow {
+                                setReorderingAllowed(true)
                                 remove(fragment)
                             }
                             (containerView.parent as? ViewGroup)?.removeView(containerView)
