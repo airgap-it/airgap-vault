@@ -293,8 +293,16 @@
   },
   "secret-generate": {
     "heading": "We're generating your secret.",
-    "text": "For this we use your video, audio, touch and device acceleration to add additional entropy to your secret.",
-    "description": "Move your device around to record audio, video & device acceleration until all shields are full.",
+    "text": "We use video, audio and device motion to add entropy to your secret. Touch movement is optional.",
+    "description": "Move your device around to record audio, video and device motion until all available sources are full.",
+    "sources": {
+      "camera": "Camera entropy",
+      "microphone": "Microphone entropy",
+      "motion": "Device motion entropy",
+      "touch": "Optional touch entropy"
+    },
+    "no-source_error": "No non-touch entropy source is available. Go back and import an existing recovery phrase or enable a device permission.",
+    "ready_status": "Entropy collection complete. Continue is now available.",
     "continue_label": "Continue"
   },
   "secret-import": {
@@ -596,7 +604,7 @@
     "done_label": "Done"
   },
   "touch-entropy": {
-    "text": "Draw around with your finger."
+    "text": "Optional: draw around with your finger to contribute additional entropy."
   },
   "wallet-address": {
     "title": "Account Address",
