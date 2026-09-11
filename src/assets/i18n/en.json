@@ -158,6 +158,7 @@
   },
   "secret-setup": {
     "heading": "Secret Setup",
+    "add_label": "Add secret",
     "generate": {
       "label": "Generate",
       "text": "Create a secure secret by using additional entropy from the camera and microphone."

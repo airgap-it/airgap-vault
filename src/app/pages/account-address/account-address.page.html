@@ -6,8 +6,8 @@
     <ion-title>{{ 'wallet-address.title' | translate }}</ion-title>
 
     <ion-buttons slot="primary">
-      <ion-button (click)="presentEditPopover($event)">
-        <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
+      <ion-button (click)="presentEditPopover($event)" [attr.aria-label]="'accessibility.more_actions' | translate">
+        <ion-icon aria-hidden="true" slot="icon-only" name="ellipsis-vertical"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -26,7 +26,11 @@
       <p>
         {{ 'wallet-address.address_label' | translate }}
         <br />
-        <span class="selectable typography--mono" (click)="copyAddressToClipboard()">{{ wallet.receivingPublicAddress }}</span>
+        <span class="selectable typography--mono">{{ wallet.receivingPublicAddress }}</span>
+        <br />
+        <ion-button fill="outline" size="small" (click)="copyAddressToClipboard()">
+          {{ 'accessibility.copy_address' | translate }}
+        </ion-button>
       </p>
       <p>
         {{ 'wallet-address.path_label' | translate }}
@@ -45,7 +49,7 @@
   <ion-row *ngFor="let option of syncOptions" class="ion-padding-bottom">
     <ion-col size="12">
       <ion-button expand="block" color="light" (click)="share(option)" shape="round">
-        <img src="assets/logos/{{option.icon}}" style="width: 24px; height: 24px" />
+        <img src="assets/logos/{{option.icon}}" style="width: 24px; height: 24px" alt="" aria-hidden="true" />
         &nbsp; {{option.name}}
       </ion-button>
     </ion-col>

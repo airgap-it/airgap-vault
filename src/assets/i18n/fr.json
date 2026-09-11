@@ -1,5 +1,8 @@
 {
     "next": "Suivant",
+    "accessibility": {
+      "more_actions": "Plus d’actions"
+    },
     "account-list": {
       "delete": "Supprimer"
     },

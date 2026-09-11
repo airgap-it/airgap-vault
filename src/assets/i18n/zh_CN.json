@@ -1,5 +1,8 @@
 {
   "next": "下一个",
+  "accessibility": {
+    "more_actions": "更多操作"
+  },
   "account-list": {
     "delete": "删除"
   },
