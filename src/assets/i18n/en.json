@@ -864,7 +864,8 @@
     "delete": "Delete Word",
     "shuffle": "Shuffle Keys",
     "mask": "Mask Text",
-    "word_list": "Show Word List"
+    "word_list": "Show Word List",
+    "type_manually": "Type Manually"
   },
   "isolated-modules": {
     "loader_message": "Loading..."

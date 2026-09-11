@@ -22,4 +22,9 @@
     <ion-icon slot="start" name="list"></ion-icon>
     {{ 'keyboard.word_list' | translate }}
   </ion-item>
+
+  <ion-item button detail="false" (click)="requestTextInput()">
+    <ion-icon slot="start" name="text-outline"></ion-icon>
+    {{ 'keyboard.type_manually' | translate }}
+  </ion-item>
 </ion-list>

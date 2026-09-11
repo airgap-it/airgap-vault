@@ -1,70 +1,43 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
-import { AlertController, ModalController } from '@ionic/angular'
+import { AlertController } from '@ionic/angular'
 import { handleErrorLocal, ErrorCategory } from 'src/app/services/error-handler/error-handler.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
-import * as bip39 from 'bip39'
-import { Observable, Subject } from 'rxjs'
 import { BIPSigner } from 'src/app/models/BIP39Signer'
 import { DeviceService } from 'src/app/services/device/device.service'
-import { map } from 'rxjs/operators'
 import { MnemonicSecret } from '../../models/secret'
 import { SocialRecoveryImportShareService } from 'src/app/social-recovery-import-share/social-recovery-import-share.service'
 import { SocialRecoveryImportHelpPage } from '../social-recovery-import-help/social-recovery-import-help.page'
 import { SocialRecoveryImportErrorsPage } from '../social-recovery-import-errors/social-recovery-import-errors.page'
-
-type SingleWord = string
+import { ModalAccessibilityService } from '../../services/modal-accessibility/modal-accessibility.service'
+import { MnemonicInputPage } from '../mnemonic-input.page'
 
 @Component({
   selector: 'airgap-social-recovery-import-share-validate',
   templateUrl: './social-recovery-import-share-validate.page.html',
   styleUrls: ['./social-recovery-import-share-validate.page.scss']
 })
-export class SocialRecoveryImportShareValidatePage implements OnInit {
+export class SocialRecoveryImportShareValidatePage extends MnemonicInputPage implements OnInit {
   public currentShareNumber: number = 1
   public numberOfShares: number = 5
   private sharesMap: Map<number, { shareName: string; share: string[] }>
 
-  public secretWords: string[] = []
-  public secretWordsValid: Observable<boolean>
-  public selectedWordIndex: number = 0
-  public selectedWord: string = ''
-
-  public maskWords: boolean = false
-
-  public wordList: SingleWord[] = bip39.wordlists.EN as any
-
-  public lastWordOptions: string[] = []
-
-  public setWordEmitter: Subject<string> = new Subject()
-
-  public keyboardEnabled: boolean = true
-
-  maxWords: number = 48
-
   shareName: string = ''
 
   @ViewChild('secretContainer', { read: ElementRef })
-  public secretContainer: ElementRef<HTMLElement>
+  public readonly secretContainer: ElementRef<HTMLElement>
+
+  @ViewChild('seedphraseInput')
+  public readonly seedphraseInput: ElementRef<HTMLTextAreaElement>
 
   constructor(
-    private readonly modalController: ModalController,
-    private navigationService: NavigationService,
+    private readonly modalAccessibilityService: ModalAccessibilityService,
+    private readonly navigationService: NavigationService,
     private readonly deviceService: DeviceService,
-    private readonly alertController: AlertController,
+    private readonly pageAlertController: AlertController,
     private readonly socialRecoveryImportShareService: SocialRecoveryImportShareService
   ) {
-    this.secretWordsValid = this.setWordEmitter.pipe(
-      map(() => {
-        const isShorterThanMaxLength = this.selectedWordIndex === -1 && this.secretWords.length < this.maxWords
-        const isEditingWord = this.selectedWordIndex !== -1
-
-        this.keyboardEnabled = isShorterThanMaxLength || isEditingWord
-        const [firstHalf, secondHalf]: [string, string] = this.splitString(this.secretWords.join(' '))
-        const validBool = BIPSigner.validateMnemonic(firstHalf) && BIPSigner.validateMnemonic(secondHalf)
-        return validBool
-      })
-    )
+    super(48, pageAlertController)
   }
 
   ionViewWillEnter() {
@@ -89,51 +62,6 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
     modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 
-  selectWord(index: number) {
-    this.selectedWordIndex = index
-    this.selectedWord = this.secretWords[this.selectedWordIndex]
-
-    this.setWordEmitter.next(this.selectedWord ?? '')
-  }
-
-  wordLastSelected(word: string | undefined) {
-    if (this.secretWords.length !== this.maxWords - 1) {
-      return console.error('(wordLastSelected): secret word list is not', this.maxWords - 1, ' words long')
-    }
-    this.selectedWordIndex = this.maxWords - 1
-    this.wordSelected(word)
-  }
-
-  wordSelected(word: string | undefined) {
-    if (typeof word === 'undefined') {
-      if (this.selectedWordIndex >= 0) {
-        this.secretWords.splice(this.selectedWordIndex, 1)
-        this.selectWord(Math.max(this.selectedWordIndex - 1, 0))
-      } else if (this.selectedWordIndex === -1) {
-        this.selectWord(this.secretWords.length - 1)
-      }
-      this.getLastWord()
-      return
-    }
-
-    if (this.selectedWordIndex === -1) {
-      this.secretWords.push(word)
-    } else {
-      this.secretWords[this.selectedWordIndex] = word
-    }
-
-    this.selectedWordIndex = -1
-    this.selectedWord = ''
-
-    this.getLastWord()
-
-    this.setWordEmitter.next(this.selectedWord ?? '')
-
-    if (this.secretContainer) {
-      this.secretContainer.nativeElement.scrollTop = this.secretContainer.nativeElement.scrollHeight
-    }
-  }
-
   public ionViewDidEnter(): void {
     this.deviceService.enableScreenshotProtection({ routeBack: 'social-recovery-import-share-validate' })
   }
@@ -148,32 +76,8 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
     this.navigationService.routeWithState('secret-add', { secret }).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
   }
 
-  public async paste(text: string | undefined) {
-    const [firstHalf, secondHalf]: [string, string] = this.splitString(text)
-    const validBool = BIPSigner.validateMnemonic(firstHalf) && BIPSigner.validateMnemonic(secondHalf)
-
-    if (validBool) {
-      this.secretWords = text.split(' ')
-      this.selectedWordIndex = -1
-      this.selectedWord = ''
-      this.setWordEmitter.next(this.selectedWord ?? '')
-    } else {
-      const alert = await this.alertController.create({
-        header: 'Invalid Mnemonic',
-        message: 'The text in your clipboard is not a valid mnemonic.',
-        backdropDismiss: false,
-        buttons: [
-          {
-            text: 'Ok'
-          }
-        ]
-      })
-      alert.present()
-    }
-  }
-
   private splitString(words: string): [string, string] {
-    const wordArray = words.split(' ')
+    const wordArray = words ? words.split(' ') : []
 
     const firstHalf = wordArray.slice(0, 24).join(' ')
     const secondHalf = wordArray.slice(24).join(' ')
@@ -181,31 +85,13 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
     return [firstHalf, secondHalf]
   }
 
-  public async addNewWord() {
-    if (this.secretWords.length >= this.maxWords) {
-      return console.error('(addNewWord): secret word list too long')
+  protected isFlowValid(words: string[]): boolean {
+    if (words.length !== this.maxWords) {
+      return false
     }
 
-    this.secretWords.splice(this.selectedWordIndex + 1, 0, '')
-    this.selectedWordIndex++
-    this.setWordEmitter.next('')
-  }
-
-  public async mask(enabled: boolean) {
-    this.maskWords = enabled
-  }
-
-  public getLastWord() {
-    const options = []
-    if (this.secretWords.length === this.maxWords - 1) {
-      // The last word is 3 bits entropy and 8 bits checksum of the entropy. But because there are only 2048 words, it's fast to just try all combinations and the code is a lot easier, so we do that.
-      for (const word of bip39.wordlists.EN) {
-        if (bip39.validateMnemonic([...this.secretWords, word].join(' '))) {
-          options.push(word)
-        }
-      }
-    }
-    this.lastWordOptions = options
+    const [firstHalf, secondHalf]: [string, string] = this.splitString(words.join(' '))
+    return BIPSigner.validateMnemonic(firstHalf) && BIPSigner.validateMnemonic(secondHalf)
   }
 
   async nextState() {
@@ -238,7 +124,7 @@ export class SocialRecoveryImportShareValidatePage implements OnInit {
 
           modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
         } else {
-          const alert = await this.alertController.create({
+          const alert = await this.pageAlertController.create({
             header: returnedError.name,
             message: returnedError.message,
             backdropDismiss: false,

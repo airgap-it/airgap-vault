@@ -49,7 +49,10 @@ export class BIPSigner {
   }
 
   public static prepareMnemonic(mnemonic: string): string {
-    return mnemonic.trim().toLowerCase()
+    // Mnemonics entered through the accessible text area and pasted from the
+    // clipboard must be interpreted identically. BIP-39 words are lowercase
+    // ASCII and separators are insignificant, so retain only one space.
+    return mnemonic.trim().toLowerCase().split(/\s+/).filter((word: string) => word.length > 0).join(' ')
   }
 
   public static validateMnemonic(mnemonic: string): boolean {

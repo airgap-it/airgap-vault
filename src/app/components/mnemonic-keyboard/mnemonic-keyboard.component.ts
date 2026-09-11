@@ -1,11 +1,12 @@
 import { ClipboardService } from '@airgap/angular-core'
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
-import { ModalController, PopoverController } from '@ionic/angular'
+import { PopoverController } from '@ionic/angular'
 
 import * as bip39 from 'bip39'
 import { Observable, Subscription } from 'rxjs'
 import { WordlistPage } from 'src/app/pages/wordlist/wordlist.page'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
+import { ModalAccessibilityService } from 'src/app/services/modal-accessibility/modal-accessibility.service'
 import { KeyboardPopoverComponent } from '../keyboard-popover/keyboard-popover.component'
 
 function shuffle(arr: string): string {
@@ -51,6 +52,9 @@ export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
   public pasted: EventEmitter<string | undefined> = new EventEmitter()
 
   @Output()
+  public textInputRequested: EventEmitter<void> = new EventEmitter()
+
+  @Output()
   public addNewWord: EventEmitter<void> = new EventEmitter()
 
   _maskInput: boolean = false
@@ -68,11 +72,11 @@ export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
 
   public shuffled: boolean = false
 
-  private subscriptions: Subscription = new Subscription()
+  private readonly subscriptions: Subscription = new Subscription()
 
   constructor(
     private readonly clipboardService: ClipboardService,
-    private readonly modalController: ModalController,
+    private readonly modalAccessibilityService: ModalAccessibilityService,
     private readonly popoverCtrl: PopoverController
   ) {
     this.paintKeyboard()
@@ -191,10 +195,7 @@ export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
   }
 
   async showWordlist() {
-    const modal: HTMLIonModalElement = await this.modalController.create({
-      component: WordlistPage,
-      componentProps: { isModal: true }
-    })
+    const modal: HTMLIonModalElement = await this.modalAccessibilityService.create(WordlistPage, { isModal: true }, {}, { translationKey: 'wordlist.title' })
 
     modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
@@ -220,6 +221,9 @@ export class MnemonicKeyboardComponent implements OnInit, OnDestroy {
         },
         onToggleShuffled: (): void => {
           this.toggleShuffled()
+        },
+        onTextInputRequested: (): void => {
+          this.textInputRequested.emit()
         },
         maskWords: this._maskInput
       },

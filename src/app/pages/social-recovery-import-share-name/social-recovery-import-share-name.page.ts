@@ -26,7 +26,7 @@ export class SocialRecoveryImportShareNamePage implements OnInit {
   constructor(
     public formBuilder: FormBuilder,
     private readonly modalAccessibilityService: ModalAccessibilityService,
-    private navigationService: NavigationService // private readonly socialRecoveryImportShareService: SocialRecoveryImportShareService
+    private readonly navigationService: NavigationService // private readonly socialRecoveryImportShareService: SocialRecoveryImportShareService
   ) {
     // this.sharesMap = this.socialRecoveryImportShareService.getMap()
 
