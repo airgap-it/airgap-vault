@@ -333,6 +333,8 @@
     "title": "Recovery Phrase",
     "text": "Write down all words on a piece of paper, remember to follow the rules.",
     "fingerprint": "Fingerprint",
+    "show_label": "Show recovery phrase",
+    "hide_label": "Hide recovery phrase",
     "next-step_label": "Next Step",
     "too-fast_alert": {
       "title": "That was fast!",

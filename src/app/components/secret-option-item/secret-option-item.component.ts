@@ -18,6 +18,9 @@ export class SecretOptionItemComponent {
   @Input()
   public checkboxValue?: boolean
 
+  @Input()
+  public accessibleLabel?: string
+
   @Output()
   public action: EventEmitter<void> = new EventEmitter()
 
