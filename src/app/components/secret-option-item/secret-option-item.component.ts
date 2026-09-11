@@ -26,7 +26,17 @@ export class SecretOptionItemComponent {
 
   constructor() {}
 
-  doAction() {
+  public onItemClick(): void {
+    if (this.checkboxValue === undefined) {
+      this.doAction()
+    }
+  }
+
+  public onCheckboxChange(): void {
+    this.doAction()
+  }
+
+  private doAction(): void {
     this.action.emit()
   }
 }
