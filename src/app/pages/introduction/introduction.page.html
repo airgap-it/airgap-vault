@@ -8,7 +8,7 @@
   <img [src]="installationType === 'OFFLINE' ? 'assets/img/companion-apps.svg' : 'assets/img/app-switching.svg'" />
   <ion-item style="margin-top: 10%;" lines="none">
     <ion-header>
-      <h1>
+      <h1 #pageHeading id="introduction-page-heading" data-modal-focus tabindex="-1">
         <strong>
           <strong [innerHTML]="'introduction.header' | translate: { installationType: installationType}"></strong>
         </strong>

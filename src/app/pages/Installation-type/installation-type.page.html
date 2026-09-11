@@ -2,14 +2,8 @@
   <ion-toolbar>
     <ion-title>{{ 'installation-type.title' | translate }}</ion-title>
     <ion-buttons *ngIf="isSettingsModal" slot="end">
-      <ion-button (click)="close()" color="light">
-        <ion-icon name="close"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-
-    <ion-buttons slot="start" *ngIf="isOnboardingFlow">
-      <ion-button (click)="goToOnboardingWelcomePage()">
-        <ion-icon name="arrow-back"></ion-icon>
+      <ion-button (click)="close()" color="light" [attr.aria-label]="'accessibility.close' | translate">
+        <ion-icon aria-hidden="true" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -17,67 +11,44 @@
 
 <ion-content class="ion-padding">
   <ion-header style="margin-top: 30%; margin-bottom: 5%;">
-    <h1><strong>{{ 'installation-type.setup_label' | translate }}</strong></h1>
+    <h1 #pageHeading tabindex="-1"><strong>{{ 'installation-type.setup_label' | translate }}</strong></h1>
   </ion-header>
   <p style="margin-bottom: 5%;">
     {{ 'installation-type.setup_text' | translate }}
   </p>
-  <!-- TODO: Use better colors for "not selected" and "selected"-->
-  <ion-card
-    [color]="installationType === installationTypes.ONLINE ? 'primary' : 'tertiary'"
-    (click)="installationType = installationTypes.ONLINE"
+  <ion-radio-group
+    [(ngModel)]="installationType"
+    (ionChange)="selectInstallationType($event.detail.value)"
+    [attr.aria-label]="'installation-type.setup_label' | translate"
   >
-    <!-- TODO: Add picture -->
+    <ion-item lines="full" (click)="selectInstallationType(installationTypes.ONLINE)">
+      <ion-radio
+        slot="start"
+        [value]="installationTypes.ONLINE"
+        role="radio"
+        [attr.aria-checked]="installationType === installationTypes.ONLINE"
+        [attr.aria-label]="'installation-type.online_label' | translate"
+      ></ion-radio>
+      <ion-label class="ion-text-wrap">
+          <h2>{{ 'installation-type.online_label' | translate }}</h2>
+          <p>{{ 'installation-type.online_text' | translate }}</p>
+      </ion-label>
+    </ion-item>
 
-    <ion-card-header>
-      <ion-row>
-        <ion-col>
-          <ion-card-title>
-            {{ 'installation-type.online_label' | translate }}
-
-            <ion-icon name="wifi-outline"></ion-icon>
-            <!-- Maybe use this shield or another checkmark to indicate which card is selected.
-            <ion-icon name="shield-checkmark-outline"></ion-icon>-->
-          </ion-card-title>
-        </ion-col>
-        <ion-col size="1">
-          <ion-checkbox *ngIf="installationType === installationTypes.ONLINE" [checked]="true"></ion-checkbox>
-        </ion-col>
-      </ion-row>
-    </ion-card-header>
-
-    <ion-card-content>
-      {{ 'installation-type.online_text' | translate }}
-    </ion-card-content>
-  </ion-card>
-
-  <!-- TODO: Use better colors for "not selected" and "selected"-->
-  <ion-card
-    [color]="installationType === installationTypes.OFFLINE ? 'primary' : 'tertiary'"
-    (click)="installationType = installationTypes.OFFLINE"
-  >
-    <!-- TODO: Add picture -->
-
-    <ion-card-header>
-      <ion-row>
-        <ion-col>
-          <ion-card-title>
-            {{ 'installation-type.offline_label' | translate }}
-
-            <ion-icon name="cloud-offline-outline"></ion-icon>
-            <!-- Maybe use this shield or another checkmark to indicate which card is selected. 
-          <ion-icon name="shield-checkmark-outline"></ion-icon>-->
-          </ion-card-title>
-        </ion-col>
-        <ion-col size="1">
-          <ion-checkbox *ngIf="installationType === installationTypes.OFFLINE" [checked]="true"></ion-checkbox>
-        </ion-col>
-      </ion-row>
-    </ion-card-header>
-    <ion-card-content>
-      {{ 'installation-type.offline_text' | translate }}
-    </ion-card-content>
-  </ion-card>
+    <ion-item lines="full" (click)="selectInstallationType(installationTypes.OFFLINE)">
+      <ion-radio
+        slot="start"
+        [value]="installationTypes.OFFLINE"
+        role="radio"
+        [attr.aria-checked]="installationType === installationTypes.OFFLINE"
+        [attr.aria-label]="'installation-type.offline_label' | translate"
+      ></ion-radio>
+      <ion-label class="ion-text-wrap">
+          <h2>{{ 'installation-type.offline_label' | translate }}</h2>
+          <p>{{ 'installation-type.offline_text' | translate }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-radio-group>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-button shape="round" color="primary" [disabled]="installationType === installationTypes.UNDETERMINED" (click)="next()">

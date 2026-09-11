@@ -1,5 +1,5 @@
-import { Component, ElementRef, ViewChild } from '@angular/core'
-import { IonicSlides, ModalController } from '@ionic/angular'
+import { AfterViewChecked, Component, ElementRef, ViewChild } from '@angular/core'
+import { ModalController } from '@ionic/angular'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { VaultStorageKey, VaultStorageService } from '../../services/storage/storage.service'
@@ -9,16 +9,31 @@ import { VaultStorageKey, VaultStorageService } from '../../services/storage/sto
   templateUrl: './distribution-onboarding.page.html',
   styleUrls: ['./distribution-onboarding.page.scss']
 })
-export class DistributionOnboardingPage {
-  public readonly swiperModules = [IonicSlides]
-  
-  @ViewChild('slides', { static: true })
-  public slidesRef: ElementRef | undefined
+export class DistributionOnboardingPage implements AfterViewChecked {
+  @ViewChild('slideHeading')
+  private slideHeading?: ElementRef<HTMLElement>
+
+  public currentSlide: number = 0
+  private shouldFocusSlideHeading: boolean = false
 
   constructor(private readonly modalController: ModalController, private readonly storageService: VaultStorageService) {}
 
-  public async next() {
-    await this.slidesRef?.nativeElement.swiper.slideNext()
+  public ionViewDidEnter(): void {
+    this.shouldFocusSlideHeading = true
+  }
+
+  public ngAfterViewChecked(): void {
+    if (!this.shouldFocusSlideHeading || !this.slideHeading) {
+      return
+    }
+
+    this.shouldFocusSlideHeading = false
+    requestAnimationFrame(() => this.slideHeading?.nativeElement.focus())
+  }
+
+  public next(): void {
+    this.currentSlide = 1
+    this.shouldFocusSlideHeading = true
   }
 
   public async accept() {

@@ -1,9 +1,8 @@
-import { Component } from '@angular/core'
-import { ModalController } from '@ionic/angular'
+import { Component, ElementRef, ViewChild } from '@angular/core'
+import { IonContent, ModalController } from '@ionic/angular'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { InstallationType, VaultStorageKey, VaultStorageService } from '../../services/storage/storage.service'
-import { OnboardingWelcomePage } from '../onboarding-welcome/onboarding-welcome.page'
 
 @Component({
   selector: 'airgap-installation-type',
@@ -11,11 +10,15 @@ import { OnboardingWelcomePage } from '../onboarding-welcome/onboarding-welcome.
   styleUrls: ['./installation-type.page.scss']
 })
 export class InstallationTypePage {
+  @ViewChild('pageHeading')
+  private readonly pageHeading?: ElementRef<HTMLElement>
+
+  @ViewChild(IonContent)
+  private readonly content?: IonContent
+
   public installationType: InstallationType = InstallationType.UNDETERMINED
 
   public installationTypes: typeof InstallationType = InstallationType
-
-  public isOnboardingFlow: boolean = false
 
   /**
    * This will be true if the page is opened as a modal from the settings page.
@@ -24,28 +27,29 @@ export class InstallationTypePage {
 
   constructor(private readonly modalController: ModalController, private readonly storageService: VaultStorageService) {
     this.storageService.get(VaultStorageKey.INSTALLATION_TYPE).then((installationType) => (this.installationType = installationType))
-    this.storageService.get(VaultStorageKey.DISCLAIMER_HIDE_LOCAL_AUTH_ONBOARDING).then((value) => (this.isOnboardingFlow = !value))
+  }
+
+  public ionViewDidEnter(): void {
+    requestAnimationFrame(() => {
+      this.content?.scrollToTop(0)?.catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+      this.pageHeading?.nativeElement.focus()
+    })
   }
 
   public close() {
     this.modalController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 
+  public selectInstallationType(installationType: InstallationType): void {
+    this.installationType = installationType
+  }
+
   public next() {
     this.storageService
       .set(VaultStorageKey.INSTALLATION_TYPE, this.installationType)
       .then(() => {
-        this.modalController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
+        this.modalController.dismiss({ accepted: true }).catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
       })
       .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
-  }
-
-  public async goToOnboardingWelcomePage(): Promise<void> {
-    const modal: HTMLIonModalElement = await this.modalController.create({
-      component: OnboardingWelcomePage,
-      backdropDismiss: false
-    })
-
-    modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 }

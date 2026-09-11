@@ -1,36 +1,33 @@
 <ion-content class="ion-padding">
-  <swiper-container #slides [modules]="swiperModules">
-    <swiper-slide>
-      <ion-row class="ion-padding-vertical ion-text-left">
-        <h1 [innerHTML]="'distribution-onboarding.ask-permission.heading' | translate"></h1>
+  <section *ngIf="currentSlide === 0" aria-labelledby="distribution-slide-heading-0">
+    <ion-row class="ion-padding-vertical ion-text-left">
+      <h1 #slideHeading id="distribution-slide-heading-0" tabindex="-1" [innerHTML]="'distribution-onboarding.ask-permission.heading' | translate"></h1>
+      <p>{{ 'distribution-onboarding.ask-permission.text' | translate }}</p>
+    </ion-row>
 
-        <p>{{ 'distribution-onboarding.ask-permission.text' | translate }}</p>
-      </ion-row>
+    <ion-footer class="ion-no-border">
+      <ion-toolbar class="ion-padding" transparent>
+        <ion-row class="ion-justify-content-end">
+          <ion-button color="primary" shape="round" (click)="next()">{{ 'next' | translate }}</ion-button>
+        </ion-row>
+      </ion-toolbar>
+    </ion-footer>
+  </section>
 
-      <ion-footer class="ion-no-border">
-        <ion-toolbar class="ion-padding" transparent>
-          <ion-row class="ion-justify-content-end">
-            <ion-button color="primary" shape="round" (click)="next()">{{ 'next' | translate }}</ion-button>
-          </ion-row>
-        </ion-toolbar>
-      </ion-footer>
-    </swiper-slide>
-    <swiper-slide>
-      <ion-row class="ion-padding-vertical ion-text-left">
-        <h1 [innerHTML]="'distribution-onboarding.no-vm.heading' | translate"></h1>
+  <section *ngIf="currentSlide === 1" aria-labelledby="distribution-slide-heading-1">
+    <ion-row class="ion-padding-vertical ion-text-left">
+      <h1 #slideHeading id="distribution-slide-heading-1" tabindex="-1" [innerHTML]="'distribution-onboarding.no-vm.heading' | translate"></h1>
+      <p>{{ 'distribution-onboarding.no-vm.text' | translate }}</p>
+    </ion-row>
 
-        <p>{{ 'distribution-onboarding.no-vm.text' | translate }}</p>
-      </ion-row>
-
-      <ion-footer class="ion-no-border">
-        <ion-toolbar class="ion-padding" transparent>
-          <ion-row class="ion-justify-content-end">
-            <ion-button color="primary" shape="round" (click)="accept()">
-              {{ 'distribution-onboarding.understood_label' | translate }}
-            </ion-button>
-          </ion-row>
-        </ion-toolbar>
-      </ion-footer>
-    </swiper-slide>
-  </swiper-container>
+    <ion-footer class="ion-no-border">
+      <ion-toolbar class="ion-padding" transparent>
+        <ion-row class="ion-justify-content-end">
+          <ion-button color="primary" shape="round" (click)="accept()">
+            {{ 'distribution-onboarding.understood_label' | translate }}
+          </ion-button>
+        </ion-row>
+      </ion-toolbar>
+    </ion-footer>
+  </section>
 </ion-content>

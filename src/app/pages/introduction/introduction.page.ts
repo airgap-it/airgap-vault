@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { AfterViewChecked, Component, ElementRef, ViewChild } from '@angular/core'
 import { ModalController, Platform } from '@ionic/angular'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
@@ -11,9 +11,13 @@ declare let cordova: any
   templateUrl: './introduction.page.html',
   styleUrls: ['./introduction.page.scss']
 })
-export class IntroductionPage {
+export class IntroductionPage implements AfterViewChecked {
+  @ViewChild('pageHeading')
+  private pageHeading?: ElementRef<HTMLElement>
+
   public installationType: InstallationType = InstallationType.UNDETERMINED
   public installationTypes: typeof InstallationType = InstallationType
+  private shouldFocusPageHeading: boolean = false
 
   constructor(
     private readonly modalController: ModalController,
@@ -24,6 +28,19 @@ export class IntroductionPage {
       .get(VaultStorageKey.INSTALLATION_TYPE)
       .then((installationType) => (this.installationType = installationType))
       .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
+  }
+
+  public ionViewDidEnter(): void {
+    this.shouldFocusPageHeading = true
+  }
+
+  public ngAfterViewChecked(): void {
+    if (!this.shouldFocusPageHeading || !this.pageHeading) {
+      return
+    }
+
+    this.shouldFocusPageHeading = false
+    requestAnimationFrame(() => this.pageHeading?.nativeElement.focus())
   }
 
   public accept() {
