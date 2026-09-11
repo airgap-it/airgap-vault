@@ -1,28 +1,14 @@
-/*
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
-import { async, ComponentFixture, TestBed } from '@angular/core/testing'
-
-import { OnboardingWelcomePage } from './installation-type.page'
+import { OnboardingWelcomePage } from './onboarding-welcome.page'
 
 describe('OnboardingWelcomePage', () => {
-  let component: OnboardingWelcomePage
-  let fixture: ComponentFixture<OnboardingWelcomePage>
+  it('dismisses with acceptance only after saving the disclaimer', async () => {
+    const modalController = { dismiss: jasmine.createSpy('dismiss').and.returnValue(Promise.resolve()) }
+    const storageService = { set: jasmine.createSpy('set').and.returnValue(Promise.resolve()) }
+    const component = new OnboardingWelcomePage(modalController as any, storageService as any)
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [OnboardingWelcomePage],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }).compileComponents()
-  }))
+    await component.acceptDisclaimer()
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(OnboardingWelcomePage)
-    component = fixture.componentInstance
-    fixture.detectChanges()
-  })
-
-  it('should create', () => {
-    expect(component).toBeTruthy()
+    expect(storageService.set).toHaveBeenCalled()
+    expect(modalController.dismiss).toHaveBeenCalledWith({ accepted: true })
   })
 })
-*/

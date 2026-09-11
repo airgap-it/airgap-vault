@@ -1,18 +1,15 @@
-import { Component, AfterContentInit } from '@angular/core'
+import { Component, AfterContentInit, ElementRef, ViewChild } from '@angular/core'
 import { ModalController, NavParams } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
-import { first } from 'rxjs/operators'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { SecureStorageService } from '../../services/secure-storage/secure-storage.service'
-import { VaultStorageKey, VaultStorageService } from '../../services/storage/storage.service'
 
 export enum Warning {
   SECURE_STORAGE,
   ROOT,
   SCREENSHOT,
-  NETWORK,
-  INITIAL_DISCLAIMER
+  NETWORK
 }
 
 @Component({
@@ -21,6 +18,9 @@ export enum Warning {
   styleUrls: ['./warning-modal.page.scss']
 })
 export class WarningModalPage implements AfterContentInit {
+  @ViewChild('warningTitle')
+  private warningTitle?: ElementRef<HTMLElement>
+
   private readonly errorType: Warning
 
   public title: string
@@ -33,7 +33,6 @@ export class WarningModalPage implements AfterContentInit {
     public navParams: NavParams,
     private readonly secureStorageService: SecureStorageService,
     private readonly modalController: ModalController,
-    private readonly storageService: VaultStorageService,
     private readonly translateService: TranslateService
   ) {}
 
@@ -46,7 +45,6 @@ export class WarningModalPage implements AfterContentInit {
       this.imageUrl = './assets/img/root_detection.svg'
       this.handler = (): void => undefined
     }
-
     if (this.errorType === Warning.SCREENSHOT) {
       this.translateService.get(['warnings-modal.screenshot.title', 'warnings-modal.screenshot.description']).subscribe((values) => {
         this.title = values['warnings-modal.screenshot.title']
@@ -85,53 +83,15 @@ export class WarningModalPage implements AfterContentInit {
       this.imageUrl = './assets/img/network_connection.svg'
       this.handler = (): void => undefined
     }
+  }
 
-    if (this.errorType === Warning.INITIAL_DISCLAIMER) {
-      this.translateService
-        .get([
-          'warnings-modal.disclaimer.title',
-          'warnings-modal.disclaimer.text',
-          'warnings-modal.disclaimer.disclaimer-list.text',
-          'warnings-modal.disclaimer.disclaimer-list.item-1_text',
-          'warnings-modal.disclaimer.disclaimer-list.item-2_text',
-          'warnings-modal.disclaimer.description',
-          'warnings-modal.disclaimer.understood_label'
-        ])
-        .pipe(first())
-        .subscribe((values: string[]) => {
-          const title: string = values['warnings-modal.disclaimer.title']
-          const text: string = values['warnings-modal.disclaimer.text']
-          const listText: string = values['warnings-modal.disclaimer.disclaimer-list.text']
-          const listItem1Text: string = values['warnings-modal.disclaimer.disclaimer-list.item-1_text']
-          const listItem2Text: string = values['warnings-modal.disclaimer.disclaimer-list.item-2_text']
-          const descriptionText: string = values['warnings-modal.disclaimer.description']
-          const understoodLabel: string = values['warnings-modal.disclaimer.understood_label']
-          this.title = title
-          this.description = [
-            '<p><strong>',
-            text,
-            '</strong></p><p>',
-            listText,
-            '<ul><li>',
-            listItem1Text,
-            '</li><li>',
-            listItem2Text,
-            '</li></ul></p><p>',
-            descriptionText,
-            '</p>'
-          ].join('')
+  public ionViewDidEnter(): void {
+    this.focusWarningTitle()
+  }
 
-          this.imageUrl = undefined
-          this.buttonText = understoodLabel
-          this.handler = (): void => {
-            this.storageService
-              .set(VaultStorageKey.DISCLAIMER_INITIAL, true)
-              .then(() => {
-                this.modalController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
-              })
-              .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
-          }
-        })
-    }
+  private focusWarningTitle(): void {
+    // Ionic focuses the modal host after presentation. Defer to move focus to
+    // the real heading once the dialog content is present.
+    setTimeout(() => this.warningTitle?.nativeElement.focus())
   }
 }

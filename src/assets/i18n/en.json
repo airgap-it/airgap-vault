@@ -83,6 +83,40 @@
   "onboarding-advanced-mode": {
     "title": "Welcome to AirGap"
   },
+  "onboarding-welcome": {
+    "title": "Welcome to AirGap",
+    "close_label": "Close welcome tour",
+    "back_label": "Back",
+    "done_label": "Done",
+    "disclaimer_label": "Read disclaimer",
+    "step_status": "Step {{ current }} of {{ total }}",
+    "steps": {
+      "peace-of-mind": {
+        "heading": "Get peace of mind",
+        "description": "AirGap Vault keeps your keys safe and allows you to interact with wallets seamlessly and securely."
+      },
+      "companion-wallet": {
+        "heading": "Choose your companion wallet",
+        "description": "Connect your Vault with various wallets to enable more possibilities."
+      },
+      "offline": {
+        "heading": "Go offline for the highest security",
+        "description": "Take your private key offline to create a real air gap between Vault and Wallet. This is the strongest protection layer against hackers."
+      },
+      "backup": {
+        "heading": "Always back up your recovery phrase",
+        "description": "Recover all your accounts if something happens to your device."
+      },
+      "advanced": {
+        "heading": "Unlock powerful features",
+        "description": "Turn on Advanced Mode in Settings to use features such as BIP-39 passphrases and custom derivation paths."
+      },
+      "setup": {
+        "heading": "Let's set up AirGap Vault",
+        "description": "Read and accept the disclaimer to continue."
+      }
+    }
+  },
   "installation-type": {
     "title": "Installation Type",
     "setup_label": "What's your setup?",

@@ -1,53 +1,52 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-title>{{ 'onboarding-advanced-mode.title' | translate }}</ion-title>
+    <ion-title>{{ 'onboarding-welcome.title' | translate }}</ion-title>
+    <ion-buttons *ngIf="isSettingsModal" slot="end">
+      <ion-button (click)="close()" [attr.aria-label]="'onboarding-welcome.close_label' | translate">
+        <ion-icon aria-hidden="true" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <swiper-container [pagination]="true" [modules]="swiperModules" [initialSlide]="0">
-    <swiper-slide>
-      <img src="assets/img/onboarding-peace-of-mind.svg" />
+  <section *ngIf="!isDisclaimer" class="welcome-step" [attr.aria-labelledby]="'welcome-step-heading-' + currentStep">
+    <img [src]="steps[currentStep].image" alt="" aria-hidden="true" />
 
-      <h1>Get peace of mind</h1>
-      <p>AirGap Vault keeps your keys safe and allows you to interact with wallets seamlessly and securely.</p>
-    </swiper-slide>
-    <swiper-slide>
-      <img src="assets/img/onboarding-watch-only.svg" />
+    <h1 #stepHeading [id]="'welcome-step-heading-' + currentStep" tabindex="-1">
+      {{ steps[currentStep].heading | translate }}
+    </h1>
+    <p>{{ steps[currentStep].description | translate }}</p>
+    <output class="step-status" aria-live="polite" aria-atomic="true">
+      {{ 'onboarding-welcome.step_status' | translate: { current: currentStep + 1, total: steps.length } }}
+    </output>
+  </section>
 
-      <h1>Choose your companion wallet</h1>
-      <p>Connect your Vault with various wallets to enable more possibilities.</p>
-    </swiper-slide>
-    <swiper-slide>
-      <img src="assets/img/onboarding-offline.svg" />
-
-      <h1>Go Offline to reach highest security</h1>
-      <p>
-        Take your private key offline, to create a real air-gap between Vault and Wallet. This is the strongest protection layer against
-        hackers.
-      </p>
-    </swiper-slide>
-    <swiper-slide>
-      <img src="assets/img/onboarding-backup-seed-phrase.svg" />
-
-      <h1>Always Backup Your Seed Phrase</h1>
-      <p>Recover all your accounts in case something happens to your device.</p>
-    </swiper-slide>
-    <swiper-slide>
-      <img src="assets/img/onboarding-advanced.svg" />
-
-      <h1>Unlock powerful features</h1>
-      <p>
-        Gain access to additional features by turning on the Advanced Mode in the settings.
-        <br />
-        Such as BIP-39 passphrase, changing of derivation path and lots more
-      </p>
-    </swiper-slide>
-    <swiper-slide>
-      <img src="assets/img/onboarding-terms.svg" />
-      <h1>Let's set up AirGap Vault!</h1>
-
-      <ion-button (click)="readDisclaimer()">Read Disclaimer</ion-button>
-    </swiper-slide>
-  </swiper-container>
+  <section *ngIf="isDisclaimer" class="disclaimer" aria-labelledby="onboarding-disclaimer-heading">
+    <h1 #disclaimerHeading id="onboarding-disclaimer-heading" tabindex="-1">{{ 'warnings-modal.disclaimer.title' | translate }}</h1>
+    <p>{{ 'warnings-modal.disclaimer.text' | translate }}</p>
+    <p>{{ 'warnings-modal.disclaimer.disclaimer-list.text' | translate }}</p>
+    <ul>
+      <li>{{ 'warnings-modal.disclaimer.disclaimer-list.item-1_text' | translate }}</li>
+      <li>{{ 'warnings-modal.disclaimer.disclaimer-list.item-2_text' | translate }}</li>
+    </ul>
+    <p>{{ 'warnings-modal.disclaimer.description' | translate }}</p>
+    <p *ngIf="saveError" class="save-error" role="alert">{{ 'secret-edit.error_alert.message' | translate }}</p>
+  </section>
 </ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons class="ion-justify-content-between">
+      <ion-button *ngIf="isDisclaimer" (click)="backToWelcome()">{{ 'onboarding-welcome.back_label' | translate }}</ion-button>
+      <ion-button *ngIf="!isDisclaimer && currentStep > 0" (click)="previous()">
+        {{ 'onboarding-welcome.back_label' | translate }}
+      </ion-button>
+      <span *ngIf="currentStep === 0" aria-hidden="true"></span>
+
+      <ion-button color="primary" [disabled]="isSaving" (click)="isDisclaimer ? acceptDisclaimer() : nextStep()">
+        {{ (isDisclaimer ? 'warnings-modal.disclaimer.understood_label' : (isLastStep ? (isSettingsModal ? 'onboarding-welcome.done_label' : 'onboarding-welcome.disclaimer_label') : 'next')) | translate }}
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

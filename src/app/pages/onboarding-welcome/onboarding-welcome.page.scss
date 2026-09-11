@@ -1,33 +1,43 @@
-swiper-container {
-  height: 100%;
-  overflow-y: scroll;
+.welcome-step,
+.disclaimer {
+  text-align: center;
 }
 
-.swiper-slide {
+.welcome-step img {
   display: block;
-}
-
-.swiper-slide h2 {
-  margin-top: 2.8rem;
-}
-
-.swiper-slide img {
-  max-height: 40%;
+  max-height: 35vh;
   max-width: 60%;
-  margin: 60px 0 40px;
+  margin: 40px auto 32px;
   pointer-events: none;
 }
 
-b {
-  font-weight: 500;
-}
-
-p {
-  padding: 0 40px;
+.welcome-step p {
+  padding: 0 24px;
   font-size: 14px;
   line-height: 1.5;
 }
 
-p b {
-  color: var(--ion-text-color, #000000);
+.disclaimer p,
+.disclaimer ul {
+  padding: 0 24px;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.disclaimer h1 {
+  text-align: left;
+}
+
+.save-error {
+  color: var(--ion-color-danger);
+}
+
+.step-status {
+  text-align: center;
+}
+
+ion-footer ion-buttons {
+  display: flex;
+  width: 100%;
 }
