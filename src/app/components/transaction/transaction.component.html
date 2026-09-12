@@ -1,40 +1,28 @@
 <ng-container *ngIf="airGapTxs$ | async as airGapTxs">
   <ng-container *ngIf="aggregatedDetails$ | async as aggregatedDetails">
-    <ion-row class="ion-padding-bottom ion-text-center">
-      <ion-col size="4" class="content--align__center-center">
-        <h5>
-          {{
-            aggregatedDetails.totalAmount.toFixed()
-              | amountConverter : { protocol: protocolIdentifier$ | async, maxDigits: undefined }
-              | async
-          }}
-        </h5>
-      </ion-col>
-      <ion-col size="4" class="content--align__center-center">
-        <h5>{{ aggregatedDetails.numberOfTxs }}</h5>
-      </ion-col>
-      <ion-col size="4" class="content--align__center-center">
-        <h5>{{ aggregatedDetails.totalFees.toFixed() | feeConverter : { protocol: protocolIdentifier$ | async } | async }}</h5>
-      </ion-col>
-      <ion-col size="4">
-        <small>Amount</small>
-      </ion-col>
-      <ion-col size="4">
-        <small>Operations</small>
-      </ion-col>
-      <ion-col size="4">
-        <small>Fee</small>
-      </ion-col>
-    </ion-row>
+    <dl class="transaction-summary ion-padding-bottom">
+      <dt>Amount</dt>
+      <dd>
+        {{
+          aggregatedDetails.totalAmount.toFixed()
+            | amountConverter : { protocol: protocolIdentifier$ | async, maxDigits: undefined }
+            | async
+        }}
+      </dd>
+      <dt>Operations</dt>
+      <dd>{{ aggregatedDetails.numberOfTxs }}</dd>
+      <dt>Fee</dt>
+      <dd>{{ aggregatedDetails.totalFees.toFixed() | feeConverter : { protocol: protocolIdentifier$ | async } | async }}</dd>
+    </dl>
   </ng-container>
 
   <ng-container *ngFor="let airGapTx of airGapTxs">
     <airgap-transaction-warning [transaction]="airGapTx"></airgap-transaction-warning>
-    <airgap-from-to
+    <airgap-transaction-details
       class="ion-padding-horizontal"
       [transaction]="airGapTx"
       [interactionData]="rawdata"
       [hideNetwork]="true"
-    ></airgap-from-to>
+    ></airgap-transaction-details>
   </ng-container>
 </ng-container>
