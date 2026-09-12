@@ -8,6 +8,7 @@ import { MnemonicSecret } from '../../models/secret'
 import { AudioNativeService } from '../../services/audio/audio.native.servive'
 import { CameraNativeService } from '../../services/camera/camera.native.service'
 import { EntropyService } from '../../services/entropy/entropy.service'
+import { getEntropyCollectionState } from '../../services/entropy/entropy-policy'
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
 import { GyroscopeNativeService } from '../../services/gyroscope/gyroscope.native.service'
 import { NavigationService } from '../../services/navigation/navigation.service'
@@ -29,7 +30,7 @@ export class SecretGeneratePage implements OnInit {
   public cameraEnabled: boolean = true
   public audioEnabled: boolean = true
   public gyroEnabled: boolean = true
-  public touchEnabled: boolean = true
+  public entropySourceError: boolean = false
 
   private readonly ENTROPY_STARTUP_TIME: number = 5
   private startupTimeWaited: boolean = false
@@ -56,7 +57,7 @@ export class SecretGeneratePage implements OnInit {
     }
     setTimeout(() => {
       this.startupTimeWaited = true
-      this.checkEntropySourceStatus()
+      this.checkEntropy()
     }, this.ENTROPY_STARTUP_TIME * 1000)
   }
 
@@ -104,18 +105,17 @@ export class SecretGeneratePage implements OnInit {
     this.changeDetectorRef.detectChanges()
     this.checkEntropySourceStatus()
 
-    const enabledSources: boolean[] = [this.audioEnabled, this.cameraEnabled, this.gyroEnabled, this.touchEnabled]
-    const percentageNeeded: number = enabledSources.reduce((previous: number, isEnabled: boolean) => previous + (isEnabled ? 100 : 0), 0)
-
-    if (
-      Math.min(100, this.audioService.getCollectedEntropyPercentage()) +
-        Math.min(100, this.cameraService.getCollectedEntropyPercentage()) +
-        Math.min(100, this.gyroService.getCollectedEntropyPercentage()) +
-        Math.min(100, this.touchEntropy.getCollectedEntropyPercentage()) >=
-      percentageNeeded
-    ) {
-      this.entropy.isFull = true
+    if (!this.startupTimeWaited) {
+      return
     }
+
+    const collectionState = getEntropyCollectionState([
+      { available: this.audioEnabled, percentage: this.audioService.getCollectedEntropyPercentage() },
+      { available: this.cameraEnabled, percentage: this.cameraService.getCollectedEntropyPercentage() },
+      { available: this.gyroEnabled, percentage: this.gyroService.getCollectedEntropyPercentage() }
+    ])
+    this.entropySourceError = collectionState.hasNoAvailableSources
+    this.entropy.isFull = collectionState.isFull
   }
 
   public ionViewWillLeave(): void {

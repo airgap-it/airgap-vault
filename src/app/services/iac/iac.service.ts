@@ -20,11 +20,12 @@ import { InteractionOperationType, InteractionService } from '../interaction/int
 import { NavigationService } from '../navigation/navigation.service'
 import { SecretsService } from '../secrets/secrets.service'
 import * as bitcoinJS from 'bitcoinjs-lib'
-import { ModalController, Platform } from '@ionic/angular'
+import { Platform } from '@ionic/angular'
 import { SelectAccountPage } from 'src/app/pages/select-account/select-account.page'
 import { RawTypedEthereumTransaction } from '@airgap/ethereum/v0/types/transaction-ethereum'
 import { IACMessageType, IACMessageDefinitionObjectV3, MessageSignRequest } from '@airgap/serializer'
 import { BitcoinSegwitTransactionSignRequest } from '@airgap/bitcoin'
+import { ModalAccessibilityService } from '../modal-accessibility/modal-accessibility.service'
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +40,7 @@ export class IACService extends BaseIACService {
     private readonly navigationService: NavigationService,
     private readonly secretsService: SecretsService,
     private readonly interactionService: InteractionService,
-    private readonly modalController: ModalController,
+    private readonly modalAccessibilityService: ModalAccessibilityService,
     @Inject(APP_CONFIG) appConfig: AppConfig,
     protected readonly platform: Platform
   ) {
@@ -192,10 +193,12 @@ export class IACService extends BaseIACService {
       if (!correctWallet) {
         await new Promise(async (resolve) => {
           // Start account selection
-          const modal = await this.modalController.create({
-            component: SelectAccountPage,
-            componentProps: { type: 'psbt', symbolFilter: signTransactionRequest.protocol }
-          })
+          const modal = await this.modalAccessibilityService.create(
+            SelectAccountPage,
+            { type: 'psbt', symbolFilter: signTransactionRequest.protocol },
+            {},
+            { translationKey: 'select-account.psbt.title' }
+          )
 
           modal
             .onDidDismiss()

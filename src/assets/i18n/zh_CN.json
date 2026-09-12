@@ -858,6 +858,13 @@
       }
     }
   },
+  "accessibility": {
+    "more_actions": "更多操作",
+    "seedphrase_label": "助记词",
+    "recovery_share_label": "恢复份额",
+    "reveal_bip39_passphrase_label": "显示 BIP-39 密码短语",
+    "social_recovery_help_title": "社交恢复帮助"
+  },
   "accounts-list-edit-popover": {
     "title": "设置",
     "add-account_label": "新增帐户",

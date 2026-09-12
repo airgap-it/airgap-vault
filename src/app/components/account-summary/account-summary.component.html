@@ -1,0 +1,25 @@
+<ion-item
+  *ngIf="wallet"
+  lines="none"
+  class="ion-no-padding"
+  [button]="selectable"
+  [detail]="false"
+  [attr.aria-label]="accessibleLabel"
+  (click)="select()"
+>
+  <ion-avatar slot="start" aria-hidden="true">
+    <airgap-identicon [address]="wallet.receivingPublicAddress"></airgap-identicon>
+    <airgap-currency-symbol
+      *ngIf="protocolSymbol && protocolIdentifier"
+      [symbol]="protocolSymbol"
+      [protocolIdentifier]="protocolIdentifier"
+    ></airgap-currency-symbol>
+  </ion-avatar>
+  <ion-label>
+    <div class="account-heading">
+      <h2><span class="font--weight__med">{{ protocolName }}</span> {{ protocolSymbol }}</h2>
+      <p>{{ label }}</p>
+    </div>
+    <p class="typography--mono">{{ wallet.receivingPublicAddress }}</p>
+  </ion-label>
+</ion-item>

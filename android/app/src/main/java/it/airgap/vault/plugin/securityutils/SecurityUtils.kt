@@ -6,12 +6,14 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ApplicationInfo
 import android.provider.Settings
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.FrameLayout
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.commit
+import androidx.fragment.app.commitNow
 import androidx.lifecycle.lifecycleScope
 import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
@@ -382,7 +384,6 @@ class SecurityUtils : Plugin() {
     }
 
     private suspend fun showAuthenticationScreen(onAuthenticated: (() -> Unit)? = null, onFailure: (() -> Boolean)? = null) {
-        val containerView = FragmentContainerView(context).apply { id = R.id.authPromptFragmentContainerView }
         val layoutParams = FrameLayout.LayoutParams(
             FrameLayout.LayoutParams.MATCH_PARENT,
             FrameLayout.LayoutParams.MATCH_PARENT,
@@ -390,14 +391,20 @@ class SecurityUtils : Plugin() {
 
         coroutineScope {
             withContext(Dispatchers.Main) {
-                bridge.webView.parent.addView(containerView, layoutParams)
+                val webViewParent = bridge.webView.parent as ViewGroup
+                // Authentication failures can immediately retry. Reuse the secure overlay so
+                // failed attempts do not leave full-screen views stacked above the WebView.
+                val containerView = webViewParent.findViewById<FragmentContainerView>(R.id.authPromptFragmentContainerView)
+                    ?: FragmentContainerView(context).apply {
+                        id = R.id.authPromptFragmentContainerView
+                        webViewParent.addView(this, layoutParams)
+                    }
 
                 val fragment = AuthPromptFragment()
 
-                activity.supportFragmentManager.commit {
+                activity.supportFragmentManager.commitNow {
                     setReorderingAllowed(true)
                     replace(containerView.id, fragment)
-                    addToBackStack(null)
                 }
 
                 withContext(Dispatchers.Default) {
@@ -414,11 +421,16 @@ class SecurityUtils : Plugin() {
                     }
 
                     if (handled) {
-                        launch(Dispatchers.Main) {
-                            activity.supportFragmentManager.commit {
+                        withContext(Dispatchers.Main) {
+                            // The overlay is not placed on the fragment back stack: Back cancels
+                            // the system biometric prompt instead of revealing protected WebView
+                            // content. Remove its fragment synchronously before its reused
+                            // container so a retry cannot race a stale transaction.
+                            activity.supportFragmentManager.commitNow {
+                                setReorderingAllowed(true)
                                 remove(fragment)
                             }
-                            bridge.webView.parent.removeView(activity.findViewById(containerView.id))
+                            (containerView.parent as? ViewGroup)?.removeView(containerView)
                         }
                     }
                 }

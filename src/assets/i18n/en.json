@@ -1,5 +1,20 @@
 {
   "next": "Next",
+  "accessibility": {
+    "more_actions": "More actions",
+    "open_secret": "Open secret {{ label }}",
+    "select_account": "Select account {{ label }}",
+    "copy_address": "Copy account address",
+    "add_recovery_word": "Add recovery word at position {{ position }}",
+    "choose_recovery_word": "Choose recovery word for position {{ position }}",
+    "backspace": "Backspace",
+    "close": "Close",
+    "back": "Back",
+    "seedphrase_label": "Seed phrase",
+    "recovery_share_label": "Recovery share",
+    "reveal_bip39_passphrase_label": "Reveal BIP-39 passphrase",
+    "social_recovery_help_title": "Social Recovery Help"
+  },
   "account-list": {
     "delete": "Delete"
   },
@@ -68,6 +83,40 @@
   "onboarding-advanced-mode": {
     "title": "Welcome to AirGap"
   },
+  "onboarding-welcome": {
+    "title": "Welcome to AirGap",
+    "close_label": "Close welcome tour",
+    "back_label": "Back",
+    "done_label": "Done",
+    "disclaimer_label": "Read disclaimer",
+    "step_status": "Step {{ current }} of {{ total }}",
+    "steps": {
+      "peace-of-mind": {
+        "heading": "Get peace of mind",
+        "description": "AirGap Vault keeps your keys safe and allows you to interact with wallets seamlessly and securely."
+      },
+      "companion-wallet": {
+        "heading": "Choose your companion wallet",
+        "description": "Connect your Vault with various wallets to enable more possibilities."
+      },
+      "offline": {
+        "heading": "Go offline for the highest security",
+        "description": "Take your private key offline to create a real air gap between Vault and Wallet. This is the strongest protection layer against hackers."
+      },
+      "backup": {
+        "heading": "Always back up your recovery phrase",
+        "description": "Recover all your accounts if something happens to your device."
+      },
+      "advanced": {
+        "heading": "Unlock powerful features",
+        "description": "Turn on Advanced Mode in Settings to use features such as BIP-39 passphrases and custom derivation paths."
+      },
+      "setup": {
+        "heading": "Let's set up AirGap Vault",
+        "description": "Read and accept the disclaimer to continue."
+      }
+    }
+  },
   "installation-type": {
     "title": "Installation Type",
     "setup_label": "What's your setup?",
@@ -109,6 +158,7 @@
   },
   "secret-setup": {
     "heading": "Secret Setup",
+    "add_label": "Add secret",
     "generate": {
       "label": "Generate",
       "text": "Create a secure secret by using additional entropy from the camera and microphone."
@@ -244,8 +294,16 @@
   },
   "secret-generate": {
     "heading": "We're generating your secret.",
-    "text": "For this we use your video, audio, touch and device acceleration to add additional entropy to your secret.",
-    "description": "Move your device around to record audio, video & device acceleration until all shields are full.",
+    "text": "We use video, audio and device motion to add entropy to your secret. Touch movement is optional.",
+    "description": "Move your device around to record audio, video and device motion until all available sources are full.",
+    "sources": {
+      "camera": "Camera entropy",
+      "microphone": "Microphone entropy",
+      "motion": "Device motion entropy",
+      "touch": "Optional touch entropy"
+    },
+    "no-source_error": "No non-touch entropy source is available. Go back and import an existing recovery phrase or enable a device permission.",
+    "ready_status": "Entropy collection complete. Continue is now available.",
     "continue_label": "Continue"
   },
   "secret-import": {
@@ -276,6 +334,8 @@
     "title": "Recovery Phrase",
     "text": "Write down all words on a piece of paper, remember to follow the rules.",
     "fingerprint": "Fingerprint",
+    "show_label": "Show recovery phrase",
+    "hide_label": "Hide recovery phrase",
     "next-step_label": "Next Step",
     "too-fast_alert": {
       "title": "That was fast!",
@@ -547,7 +607,7 @@
     "done_label": "Done"
   },
   "touch-entropy": {
-    "text": "Draw around with your finger."
+    "text": "Optional: draw around with your finger to contribute additional entropy."
   },
   "wallet-address": {
     "title": "Account Address",
@@ -804,7 +864,8 @@
     "delete": "Delete Word",
     "shuffle": "Shuffle Keys",
     "mask": "Mask Text",
-    "word_list": "Show Word List"
+    "word_list": "Show Word List",
+    "type_manually": "Type Manually"
   },
   "isolated-modules": {
     "loader_message": "Loading..."

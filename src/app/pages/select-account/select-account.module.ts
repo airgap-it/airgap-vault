@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular'
 import { SelectAccountPage } from './select-account.page'
 import { RouterModule, Routes } from '@angular/router'
 import { ComponentsModule } from 'src/app/components/components.module'
+import { TranslateModule } from '@ngx-translate/core'
 
 const routes: Routes = [
   {
@@ -16,7 +17,7 @@ const routes: Routes = [
   }
 ]
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, RouterModule.forChild(routes), ComponentsModule, AirGapAngularCoreModule],
+  imports: [CommonModule, FormsModule, IonicModule, RouterModule.forChild(routes), ComponentsModule, AirGapAngularCoreModule, TranslateModule],
   declarations: [SelectAccountPage]
 })
 export class SelectAccountPageModule {}

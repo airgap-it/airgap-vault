@@ -23,6 +23,7 @@ export class AccountsListPage {
   public deleteView: boolean = false
   public wallets$: BehaviorSubject<AirGapWallet[]> = new BehaviorSubject<AirGapWallet[]>([])
   public selectedWallets: AirGapWallet[] = []
+  private readonly visibleAccountLabels: Map<AirGapWallet, string> = new Map()
   public readonly isAndroid: boolean
   public readonly AirGapWalletStatus: typeof AirGapWalletStatus = AirGapWalletStatus
 
@@ -50,22 +51,42 @@ export class AccountsListPage {
   }
 
   private async loadWallets() {
-    const comparableWallets: [string, AirGapWallet][] = await Promise.all(
+    const comparableWallets: { name: string; symbol: string; wallet: AirGapWallet }[] = await Promise.all(
       [...this.secret?.wallets].map(async (wallet: AirGapWallet) => {
-        return [await wallet.protocol.getName(), wallet] as [string, AirGapWallet]
+        const [name, symbol]: [string, string] = await Promise.all([wallet.protocol.getName(), wallet.protocol.getSymbol()])
+
+        return { name, symbol, wallet }
       })
     )
     const sortedWallets: AirGapWallet[] = comparableWallets
-      .sort((a: [string, AirGapWallet], b: [string, AirGapWallet]) => a[0].localeCompare(b[0]))
-      .map(([_, wallet]: [string, AirGapWallet]) => wallet)
+      .sort((a: { name: string }, b: { name: string }) => a.name.localeCompare(b.name))
+      .map(({ wallet }: { wallet: AirGapWallet }) => wallet)
+
+    this.visibleAccountLabels.clear()
+    comparableWallets.forEach(({ name, symbol, wallet }: { name: string; symbol: string; wallet: AirGapWallet }) => {
+      this.visibleAccountLabels.set(wallet, [name, symbol, wallet.receivingPublicAddress].join(', '))
+    })
 
     this.wallets$.next(sortedWallets)
+  }
+
+  public visibleAccountLabel(wallet: AirGapWallet): string | undefined {
+    return this.visibleAccountLabels.get(wallet)
   }
 
   public goToReceiveAddress(wallet: AirGapWallet): void {
     this.navigationService
       .routeWithState('/account-address', { wallet: wallet, secret: this.secret })
       .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+  }
+
+  public onWalletKeydown(event: KeyboardEvent, wallet: AirGapWallet): void {
+    if (event.key !== 'Enter' && event.key !== ' ' && event.key !== 'Spacebar') {
+      return
+    }
+
+    event.preventDefault()
+    this.goToReceiveAddress(wallet)
   }
 
   public async syncWallets(): Promise<void> {

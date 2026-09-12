@@ -858,7 +858,14 @@
         }
       }
     },
-    "accounts-list-edit-popover": {
+  "accessibility": {
+    "more_actions": "Plus d’actions",
+    "seedphrase_label": "Phrase de récupération",
+    "recovery_share_label": "Part de récupération",
+    "reveal_bip39_passphrase_label": "Afficher la phrase secrète BIP-39",
+    "social_recovery_help_title": "Aide à la récupération sociale"
+  },
+  "accounts-list-edit-popover": {
       "title": "Paramètres",
       "add-account_label": "Ajouter un compte",
       "secret-management_label": "Gestion secrète",

@@ -1,24 +1,18 @@
-// import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-// import { IonicModule } from '@ionic/angular';
+import { SocialRecoveryImportShareValidatePage } from './social-recovery-import-share-validate.page'
+import * as bip39 from 'bip39'
 
-// import { SocialRecoveryImportShareValidateComponent } from './social-recovery-import-share-validate.component';
+describe('SocialRecoveryImportShareValidatePage', () => {
+  function createComponent(): SocialRecoveryImportShareValidatePage {
+    return new SocialRecoveryImportShareValidatePage({} as any, {} as any, {} as any, {} as any, {} as any)
+  }
 
-// describe('SocialRecoveryImportShareValidateComponent', () => {
-//   let component: SocialRecoveryImportShareValidateComponent;
-//   let fixture: ComponentFixture<SocialRecoveryImportShareValidateComponent>;
+  it('requires two valid 24-word mnemonics for the social-recovery flow', () => {
+    const component = createComponent()
+    const mnemonic = bip39.entropyToMnemonic('0000000000000000000000000000000000000000000000000000000000000000')
+    component.secretWords = `${mnemonic} ${mnemonic}`.split(' ')
 
-//   beforeEach(waitForAsync(() => {
-//     TestBed.configureTestingModule({
-//       declarations: [ SocialRecoveryImportShareValidateComponent ],
-//       imports: [IonicModule.forRoot()]
-//     }).compileComponents();
-
-//     fixture = TestBed.createComponent(SocialRecoveryImportShareValidateComponent);
-//     component = fixture.componentInstance;
-//     fixture.detectChanges();
-//   }));
-
-//   it('should create', () => {
-//     expect(component).toBeTruthy();
-//   });
-// });
+    expect(component.isValid()).toBe(true)
+    component.secretWords = mnemonic.split(' ')
+    expect(component.isValid()).toBe(false)
+  })
+})

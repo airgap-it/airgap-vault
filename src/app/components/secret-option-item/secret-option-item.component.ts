@@ -18,12 +18,25 @@ export class SecretOptionItemComponent {
   @Input()
   public checkboxValue?: boolean
 
+  @Input()
+  public accessibleLabel?: string
+
   @Output()
   public action: EventEmitter<void> = new EventEmitter()
 
   constructor() {}
 
-  doAction() {
+  public onItemClick(): void {
+    if (this.checkboxValue === undefined) {
+      this.doAction()
+    }
+  }
+
+  public onCheckboxChange(): void {
+    this.doAction()
+  }
+
+  private doAction(): void {
     this.action.emit()
   }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { AlertController, ModalController } from '@ionic/angular'
+import { AlertController } from '@ionic/angular'
 import { Observable } from 'rxjs'
 
 import { MnemonicSecret } from '../../models/secret'
@@ -14,6 +14,7 @@ import { TranslateService } from '@ngx-translate/core'
 import { SecureStorageService } from 'src/app/services/secure-storage/secure-storage.service'
 import { VaultStorageService } from 'src/app/services/storage/storage.service'
 import { VaultEnvironmentContext, VaultEnvironmentService } from 'src/app/services/environment/vault-environment.service'
+import { ModalAccessibilityService } from '../../services/modal-accessibility/modal-accessibility.service'
 
 @Component({
   selector: 'airgap-tab-settings',
@@ -28,7 +29,7 @@ export class TabSettingsPage implements OnInit {
   constructor(
     public readonly serializerService: SerializerService,
     private readonly secretsService: SecretsService,
-    private readonly modalController: ModalController,
+    private readonly modalAccessibilityService: ModalAccessibilityService,
     private readonly iacService: IACService,
     private readonly clipboardService: ClipboardService,
     private readonly navigationService: NavigationService,
@@ -87,10 +88,12 @@ export class TabSettingsPage implements OnInit {
   }
 
   public async goToOnboarding(): Promise<void> {
-    const modal: HTMLIonModalElement = await this.modalController.create({
-      component: OnboardingWelcomePage,
-      backdropDismiss: false
-    })
+    const modal: HTMLIonModalElement = await this.modalAccessibilityService.create(
+      OnboardingWelcomePage,
+      { isSettingsModal: true },
+      { backdropDismiss: false },
+      { translationKey: 'onboarding-welcome.title', manageInitialFocus: false }
+    )
 
     modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }

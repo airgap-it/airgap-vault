@@ -1,8 +1,8 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="navigateToSecretsTab()">
-        <ion-icon name="arrow-back"></ion-icon>
+      <ion-button (click)="navigateToSecretsTab()" [attr.aria-label]="'accessibility.back' | translate">
+        <ion-icon aria-hidden="true" name="arrow-back"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-title *ngIf="secret">{{ 'tab-wallets.title' | translate }} {{ secret.label }}</ion-title>
@@ -15,8 +15,8 @@
 
     <ng-template #threeDotMenu>
       <ion-buttons slot="primary">
-        <ion-button (click)="presentEditPopover($event)">
-          <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
+        <ion-button (click)="presentEditPopover($event)" [attr.aria-label]="'accessibility.more_actions' | translate">
+          <ion-icon aria-hidden="true" slot="icon-only" name="ellipsis-vertical"></ion-icon>
         </ion-button>
       </ion-buttons>
     </ng-template>
@@ -30,19 +30,30 @@
         <ion-item-sliding>
           <ng-container *ngIf="deleteView">
             <ion-item>
-              <ion-checkbox slot="start" (ionChange)="onWalletSelected($event, wallet)"></ion-checkbox>
-              <airgap-account-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></airgap-account-item>
+              <ion-checkbox
+                slot="start"
+                (ionChange)="onWalletSelected($event, wallet)"
+                [attr.aria-label]="'accessibility.select_account' | translate: { label: visibleAccountLabel(wallet) }"
+              ></ion-checkbox>
+              <airgap-account-item [wallet]="wallet"></airgap-account-item>
             </ion-item>
           </ng-container>
 
           <ng-container *ngIf="!deleteView">
-            <airgap-account-item [wallet]="wallet" (click)="goToReceiveAddress(wallet)"></airgap-account-item>
+            <airgap-account-item
+              class="account-row"
+              role="button"
+              tabindex="0"
+              [wallet]="wallet"
+              [attr.aria-label]="visibleAccountLabel(wallet)"
+              (click)="goToReceiveAddress(wallet)"
+              (keydown)="onWalletKeydown($event, wallet)"
+            ></airgap-account-item>
           </ng-container>
           <ion-item-options side="end">
-            <ion-item-option (click)="delete(wallet)">
-              <ion-item-option>
-                <ion-icon slot="icon-only" name="trash"></ion-icon>
-              </ion-item-option>
+            <ion-item-option (click)="delete(wallet)" [attr.aria-label]="'account-list.delete' | translate">
+              <ion-icon aria-hidden="true" slot="icon-only" name="trash"></ion-icon>
+              <span class="screen-reader-only">{{ 'account-list.delete' | translate }}</span>
             </ion-item-option>
           </ion-item-options>
         </ion-item-sliding>
@@ -52,7 +63,7 @@
     <ng-container *ngIf="wallets.length === 0">
       <ion-row>
         <ion-col size="12" class="empty-list content--align__center-center">
-          <img class="empty-img" src="./assets/img/no-wallet-added-onboarding.svg" />
+          <img class="empty-img" src="./assets/img/no-wallet-added-onboarding.svg" alt="" aria-hidden="true" />
         </ion-col>
       </ion-row>
       <ion-row>
@@ -66,7 +77,7 @@
   <ng-container *ngIf="deleteView">
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
       <ion-button color="secondary" shape="round" (click)="removeWallets(); $event.stopPropagation()">
-        <ion-icon slot="start" name="trash"></ion-icon>
+        <ion-icon aria-hidden="true" slot="start" name="trash"></ion-icon>
         {{ 'tab-wallets.delete-accounts_label' | translate }}
       </ion-button>
     </ion-fab>

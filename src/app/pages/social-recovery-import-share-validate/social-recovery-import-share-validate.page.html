@@ -75,15 +75,34 @@
 
   <hr *ngIf="lastWordOptions.length > 0" />
 
-  <div class="ion-padding-horizontal">
+  <div *ngIf="!regularInputEnabled" class="ion-padding-horizontal">
     <airgap-mnemonic-keyboard
       [setWord]="setWordEmitter"
       [enabled]="keyboardEnabled && lastWordOptions.length <= 0"
       (wordSelected)="wordSelected($event)"
       (pasted)="paste($event)"
+      (textInputRequested)="enableTextInput()"
       (addNewWord)="addNewWord()"
       (maskInput)="mask($event)"
     ></airgap-mnemonic-keyboard>
+  </div>
+
+  <div *ngIf="regularInputEnabled" class="ion-padding">
+    <textarea
+      #seedphraseInput
+      class="seedphrase-input"
+      [(ngModel)]="seedphraseText"
+      (ngModelChange)="seedphraseChanged($event)"
+      autocapitalize="off"
+      autocomplete="off"
+      autocorrect="off"
+      inputmode="text"
+      spellcheck="false"
+      writingsuggestions="false"
+      rows="6"
+      placeholder="word1 word2 word3 ..."
+      [attr.aria-label]="'accessibility.recovery_share_label' | translate"
+    ></textarea>
   </div>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">

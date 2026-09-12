@@ -1,10 +1,10 @@
 import { assertNever, UIAction, UIActionStatus, UiEventService, UIResource, UIResourceStatus } from '@airgap/angular-core'
 import { AirGapWallet, IAirGapTransaction, ProtocolSymbols } from '@airgap/coinlib-core'
 import { Component, OnDestroy } from '@angular/core'
-import { ModalController } from '@ionic/angular'
 import { AlertOptions, LoadingOptions, ModalOptions, OverlayEventDetail } from '@ionic/core'
 import { Store } from '@ngrx/store'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
+import { ModalAccessibilityService } from 'src/app/services/modal-accessibility/modal-accessibility.service'
 import { Observable, Subject } from 'rxjs'
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators'
 
@@ -48,7 +48,7 @@ export class DeserializedDetailPage implements OnDestroy {
   constructor(
     private readonly store: Store<fromDeserializedDetail.State>,
     private readonly uiEventService: UiEventService,
-    private readonly modalController: ModalController,
+    private readonly modalAccessibilityService: ModalAccessibilityService,
     private readonly navigationService: NavigationService
   ) {
     const state = this.navigationService.getState()
@@ -125,7 +125,7 @@ export class DeserializedDetailPage implements OnDestroy {
     this.modalElement?.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
     if (modal?.status === UIActionStatus.PENDING) {
       const [modalOptions, onDismissAction]: [ModalOptions, ModalOnDismissAction] = this.getModalData(modal.value)
-      this.modalElement = await this.modalController.create(modalOptions)
+      this.modalElement = await this.modalAccessibilityService.createFromOptions(modalOptions, { manageInitialFocus: false })
       this.modalElement.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
 
       return this.modalElement

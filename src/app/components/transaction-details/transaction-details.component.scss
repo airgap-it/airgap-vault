@@ -1,0 +1,27 @@
+.transaction-details {
+  display: block;
+  margin-bottom: 48px;
+}
+
+.transaction-fields {
+  margin: 0;
+}
+
+dt {
+  margin-top: 16px;
+  color: var(--ion-color-medium);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+dd {
+  margin: 2px 0 0;
+  overflow-wrap: anywhere;
+}
+
+pre {
+  background-color: var(--ion-color-light);
+  padding: 8px;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}

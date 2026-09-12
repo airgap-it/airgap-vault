@@ -23,4 +23,22 @@ describe('SecretOptionItemComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy()
   })
+
+  it('emits once when a checkbox value changes', () => {
+    component.checkboxValue = false
+    const action = spyOn(component.action, 'emit')
+
+    component.onItemClick()
+    component.onCheckboxChange()
+
+    expect(action).toHaveBeenCalledTimes(1)
+  })
+
+  it('emits when a non-checkbox item is clicked', () => {
+    const action = spyOn(component.action, 'emit')
+
+    component.onItemClick()
+
+    expect(action).toHaveBeenCalledTimes(1)
+  })
 })

@@ -1,0 +1,64 @@
+<section *ngIf="transaction" class="transaction-details">
+  <dl *ngIf="displayFromTo" class="transaction-fields">
+    <ng-container *ngFor="let item of fromAddresses">
+      <dt>{{ 'from-to.from_label' | translate }}</dt>
+      <dd><span *ngIf="item.name">{{ item.name }}, </span>{{ item.address }}</dd>
+    </ng-container>
+    <ng-container *ngIf="type">
+      <dt>{{ 'from-to.type_label' | translate }}</dt>
+      <dd>{{ type }}</dd>
+    </ng-container>
+    <ng-container *ngIf="destination">
+      <dt>{{ 'from-to.destination_label' | translate }}</dt>
+      <dd>{{ destination }}</dd>
+    </ng-container>
+    <ng-container *ngFor="let item of labeled">
+      <dt>{{ item[0] | translate }}</dt>
+      <dd>{{ item[1] | translate }}</dd>
+    </ng-container>
+    <ng-container *ngIf="transaction.amount">
+      <dt>{{ 'from-to.total_amount_label' | translate }}</dt>
+      <dd>{{ transaction.amount | amountConverter : { protocol: transaction.protocolIdentifier, network: transaction.network } | async }}</dd>
+    </ng-container>
+    <ng-container *ngIf="transaction.fee">
+      <dt>{{ 'from-to.fee_label' | translate }}</dt>
+      <dd>{{ transaction.fee | feeConverter : { protocol: transaction.protocolIdentifier, network: transaction.network } | async }}</dd>
+    </ng-container>
+    <ng-container *ngIf="transaction.status">
+      <dt>{{ 'from-to.status_label' | translate }}</dt>
+      <dd class="ion-text-capitalize">{{ transaction.status }}</dd>
+    </ng-container>
+    <ng-container *ngIf="transaction.data">
+      <dt>{{ 'from-to.data_label' | translate }}</dt>
+      <dd>{{ transaction.data }}</dd>
+    </ng-container>
+    <ng-container *ngFor="let item of toAddresses">
+      <dt>{{ 'from-to.to_label' | translate }}</dt>
+      <dd><span *ngIf="item.name">{{ item.name }}, </span>{{ item.address }}</dd>
+      <ng-container *ngIf="transaction.changeAddressInfo?.[item.address] as changeInfo">
+        <dt *ngIf="changeInfo.isChangeAddress">{{ 'from-to.change-address' | translate }}</dt>
+        <dd *ngIf="changeInfo.isChangeAddress">{{ changeInfo.path || ('from-to.unknown-change-address' | translate) }}</dd>
+        <dt>{{ 'from-to.amount_label' | translate }}</dt>
+        <dd>{{ changeInfo.amount | amountConverter : { protocol: transaction.protocolIdentifier, network: transaction.network } | async }}</dd>
+      </ng-container>
+    </ng-container>
+  </dl>
+
+  <airgap-network-badge *ngIf="!hideNetwork" [network]="transaction.network"></airgap-network-badge>
+
+  <ion-item *ngIf="transaction.transactionDetails" lines="none" class="ion-no-padding">
+    <ion-toggle [checked]="displayRawData" (ionChange)="toggleRawData()" justify="space-between" labelPlacement="start">
+      {{ 'from-to.transaction-details_label' | translate }}
+    </ion-toggle>
+  </ion-item>
+  <pre *ngIf="displayRawData" class="ion-no-margin">{{ transaction.transactionDetails | json }}</pre>
+  <ion-button *ngIf="displayRawData" (click)="copyRawData()">Copy data to clipboard</ion-button>
+
+  <ion-item *ngIf="interactionData" lines="none" class="ion-no-padding">
+    <ion-toggle [checked]="displayDetails" (ionChange)="toggleDetails()" justify="space-between" labelPlacement="start">
+      {{ 'from-to.details' | translate }}
+    </ion-toggle>
+  </ion-item>
+  <pre *ngIf="displayDetails" class="ion-no-margin">{{ interactionData | json }}</pre>
+  <ion-button *ngIf="displayDetails" (click)="copyDetails()">Copy data to clipboard</ion-button>
+</section>
