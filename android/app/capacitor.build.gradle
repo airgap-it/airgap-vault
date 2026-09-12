@@ -13,6 +13,7 @@ dependencies {
     implementation project(':capacitor-app-launcher')
     implementation project(':capacitor-clipboard')
     implementation project(':capacitor-filesystem')
+    implementation project(':capacitor-haptics')
     implementation project(':capacitor-splash-screen')
     implementation project(':capacitor-status-bar')
     implementation project(':capawesome-capacitor-file-picker')

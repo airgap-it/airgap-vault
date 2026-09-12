@@ -1599,6 +1599,11 @@
   resolved "https://registry.npmjs.org/@capacitor/filesystem/-/filesystem-6.0.0.tgz"
   integrity sha512-GnC4CBfky7fvG9zSV/aQnZaGs6ZJ90AaQorr53z81ArTCqcrSUeBMuCxWmvti9HrdXLhBavyA1UOjvRGObOFjg==
 
+"@capacitor/haptics@^6.0.0":
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/@capacitor/haptics/-/haptics-6.0.3.tgz#51229f190a282bd2ad59fdff6352c69db8c5e93c"
+  integrity sha512-6yKF0+lRUZEEx1GDFWgnKHia974np7o1OgmRl/btL9cSMZh0TSDZTyDMH/qcy4AM39CfuIeLs4N4h5lwixXLuQ==
+
 "@capacitor/ios@^6.0.0":
   version "6.1.1"
   resolved "https://registry.npmjs.org/@capacitor/ios/-/ios-6.1.1.tgz"
