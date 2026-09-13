@@ -100,6 +100,7 @@
     "@capacitor/clipboard": "^6.0.0",
     "@capacitor/core": "^6.0.0",
     "@capacitor/filesystem": "^6.0.0",
+    "@capacitor/haptics": "^6.0.0",
     "@capacitor/ios": "^6.0.0",
     "@capacitor/splash-screen": "^6.0.0",
     "@capacitor/status-bar": "^6.0.0",
