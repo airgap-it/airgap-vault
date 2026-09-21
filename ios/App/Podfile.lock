@@ -18,7 +18,7 @@ PODS:
     - Capacitor
   - CordovaPlugins (6.1.1):
     - CapacitorCordova
-  - ZIPFoundation (0.9.16)
+  - ZIPFoundation (0.9.20)
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
@@ -70,7 +70,7 @@ SPEC CHECKSUMS:
   CapacitorStatusBar: 129c68650d3f950e080e8e7e03d69c3b361dbe52
   CapawesomeCapacitorFilePicker: 2674b1aa1915b69786783236abeff82c36f1a381
   CordovaPlugins: 4fc317d85bce41b61f649759129e329d756e33ee
-  ZIPFoundation: d170fa8e270b2a32bef9dcdcabff5b8f1a5deced
+  ZIPFoundation: dfd3d681c4053ff7e2f7350bc4e53b5dba3f5351
 
 PODFILE CHECKSUM: 51db8af4d6f01d50e8e2a9025e652f730fdb53af
 
