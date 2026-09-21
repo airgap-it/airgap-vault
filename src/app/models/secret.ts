@@ -1,7 +1,7 @@
 import { AirGapWallet } from '@airgap/coinlib-core'
 import { UUID } from 'angular2-uuid'
-import { BIP32Factory } from 'bip32'
-import * as ecc from '@bitcoinerlab/secp256k1'
+import { BIP32Factory } from '@airgap/coinlib-core/dependencies/src/bip32-5.0.1/src/index'
+import * as ecc from '@airgap/coinlib-core/dependencies/src/@bitcoinerlab/secp256k1-1.2.0/src/index'
 import { toBoolean } from '../utils/utils'
 
 import { BIPSigner } from './BIP39Signer'

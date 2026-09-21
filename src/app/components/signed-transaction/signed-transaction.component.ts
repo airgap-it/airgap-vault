@@ -1,7 +1,7 @@
 import { ICoinProtocolAdapter, ProtocolService, SerializerService, sumAirGapTxValues } from '@airgap/angular-core'
 import { Component, Input } from '@angular/core'
 import { IAirGapTransaction, ICoinProtocol, MainProtocolSymbols, ProtocolSymbols, SignedTransaction } from '@airgap/coinlib-core'
-import BigNumber from 'bignumber.js'
+import BigNumber from '@airgap/coinlib-core/dependencies/src/bignumber.js-9.0.0/bignumber'
 import { TokenService } from 'src/app/services/token/TokenService'
 import { SecretsService } from 'src/app/services/secrets/secrets.service'
 import { IACMessageDefinitionObjectV3 } from '@airgap/serializer'

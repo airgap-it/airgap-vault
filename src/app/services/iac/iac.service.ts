@@ -19,7 +19,7 @@ import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.
 import { InteractionOperationType, InteractionService } from '../interaction/interaction.service'
 import { NavigationService } from '../navigation/navigation.service'
 import { SecretsService } from '../secrets/secrets.service'
-import * as bitcoinJS from 'bitcoinjs-lib'
+import * as bitcoinJS from '@airgap/coinlib-core/dependencies/src/bitcoinjs-lib-6.1.7/src/index'
 import { ModalController, Platform } from '@ionic/angular'
 import { SelectAccountPage } from 'src/app/pages/select-account/select-account.page'
 import { RawTypedEthereumTransaction } from '@airgap/ethereum/v0/types/transaction-ethereum'

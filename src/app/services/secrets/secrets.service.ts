@@ -9,8 +9,8 @@ import {
 } from '@airgap/coinlib-core'
 import { Injectable } from '@angular/core'
 import { AlertController, LoadingController } from '@ionic/angular'
-import { BIP32Factory, BIP32Interface } from 'bip32'
-import * as ecc from '@bitcoinerlab/secp256k1'
+import { BIP32Factory, BIP32Interface } from '@airgap/coinlib-core/dependencies/src/bip32-5.0.1/src/index'
+import * as ecc from '@airgap/coinlib-core/dependencies/src/@bitcoinerlab/secp256k1-1.2.0/src/index'
 import * as bip39 from 'bip39'
 import { Observable, ReplaySubject } from 'rxjs'
 
@@ -20,13 +20,13 @@ import { NavigationService } from '../navigation/navigation.service'
 import { SecureStorage, SecureStorageService } from '../secure-storage/secure-storage.service'
 import { VaultStorageKey, VaultStorageService } from '../storage/storage.service'
 
-import * as bs58check from 'bs58check'
+import bs58check from '@airgap/coinlib-core/dependencies/src/bs58check-4.0.0/src/index'
 import { TranslateService } from '@ngx-translate/core'
 
 class ExtendedPublicKey {
   private readonly rawKey: Buffer
   constructor(extendedPublicKey: string) {
-    this.rawKey = bs58check.decode(extendedPublicKey).slice(4)
+    this.rawKey = Buffer.from(bs58check.decode(extendedPublicKey).slice(4))
   }
 
   toXpub() {
