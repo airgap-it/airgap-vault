@@ -1,0 +1,22 @@
+# Accepted Trivy findings. Scoped by path so equivalent findings on the shipped
+# Dockerfile are still reported. Pass with: --ignorefile /project/.trivyignore.yaml
+misconfigurations:
+  - id: DS-0002
+    paths:
+      - ".devcontainer/Dockerfile"
+    statement: >-
+      Root is the documented choice for the IDE container; devcontainer.json
+      deliberately leaves remoteUser commented out.
+  - id: DS-0029
+    paths:
+      - ".devcontainer/Dockerfile"
+    statement: >-
+      google-chrome-stable is installed specifically to pull in its recommended
+      OS libraries for Puppeteer's bundled Chromium; --no-install-recommends
+      would defeat the install.
+  - id: DS-0026
+    paths:
+      - ".devcontainer/Dockerfile"
+    statement: >-
+      No HEALTHCHECK needed for a container that hosts an IDE session rather
+      than serving traffic.

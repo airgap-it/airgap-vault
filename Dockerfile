@@ -1,8 +1,8 @@
 FROM node:20
 
 # See https://crbug.com/795759
-RUN apt-get update && apt-get install -yq libgconf-2-4 bzip2 build-essential libxtst6
-RUN apt-get install -yq git
+RUN apt-get update && apt-get install -yq --no-install-recommends libgconf-2-4 bzip2 build-essential libxtst6
+RUN apt-get install -yq --no-install-recommends git
 
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 40976EAF437D05B5
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32
@@ -53,5 +53,11 @@ RUN export NODE_ENV=production
 
 # build
 RUN yarn build:prod
+
+# serve as the unprivileged node user (uid 1000, provided by the base image)
+USER node
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD node -e "require('http').get('http://127.0.0.1:8100/', r => process.exit(r.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"
 
 CMD ["static", "-p", "8100", "-a", "0.0.0.0", "www"]
