@@ -754,11 +754,15 @@
     "description": "Las acciones en esta página están destinadas únicamente para usuarios avanzados. Por favor, tenga en cuenta las consecuencias si utiliza una de las siguientes funciones.",
     "wipe_label": "Resetear AirGap Vault",
     "wipe": {
-      "alert": {
-        "title": "Borrar Bóveda.",
-        "message": "Esta acción borrará todos tus secretos y restablecerá AirGap Vault a su configuración de fábrica.<br /><br /><b> Asegúrate de tener una copia de seguridad de todas tus frases de recuperación. </b>",
-        "cancel": "Cancelar",
-        "ok": "Ok"
+      "confirm": {
+        "title": "Wipe all secrets",
+        "description": "This deletes every secret on this device and resets AirGap Vault to its factory settings. There is no way to undo it.",
+        "backup_label": "Have you backed up all your secrets?",
+        "acknowledge_label": "I understand that I cannot recover my secrets without a backup.",
+        "input_label": "Type \"{{phrase}}\" to confirm.",
+        "phrase": "wipe all secrets",
+        "cancel_label": "Cancel",
+        "confirm_label": "Wipe all secrets"
       }
     },
     "wipe-error": {
