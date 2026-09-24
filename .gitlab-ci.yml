@@ -58,11 +58,13 @@ trivy:
     - trivy fs . --scanners misconfig,secret --offline-scan --ignorefile .trivyignore.yaml
       --skip-dirs node_modules --skip-dirs www --skip-dirs .trivycache --skip-dirs src/assets/sapling
       --exit-code 1
-    # Vulnerabilities: 27 open, every one triaged as @airgap/*-sourced or unreachable
-    # in issue #578. Reported, not gated, until those exclusions are encoded here.
+    # Vulnerabilities: the 27 open findings are triaged in #578 and encoded in
+    # .trivyignore.yaml, so anything new fails here. Each entry carries an
+    # expired_at review date; when one lapses its finding returns and this job
+    # goes red on purpose. --show-suppressed keeps them visible in the log.
     - trivy fs . --scanners vuln --offline-scan --ignorefile .trivyignore.yaml
       --skip-dirs node_modules --skip-dirs www --skip-dirs .trivycache
-      --exit-code 0
+      --show-suppressed --exit-code 1
   tags:
     - docker
 

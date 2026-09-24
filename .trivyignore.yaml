@@ -22,3 +22,184 @@ misconfigurations:
       No HEALTHCHECK needed for a container that hosts an IDE session rather
       than serving traffic, nor for the Android build image, which CI runs once
       to copy the APKs out and then discards.
+
+# ---------------------------------------------------------------------------
+# Vulnerabilities. 26 entries covering the 27 open findings (CVE-2026-2739 hits
+# two bn.js versions). Every one is triaged in issue #578: either sourced only
+# through a first-party @airgap/* package, or unreachable because the vulnerable
+# API is never called, the framework feature is not enabled, or the code is
+# build-time only and never ships to a device.
+#
+# expired_at is a review date, not a guess at when a fix lands. Once it passes,
+# Trivy stops ignoring the entry and the finding fails the pipeline again, which
+# is the intended behaviour: each of these is a statement about today's code.
+# Dates are staggered: findings with an available fix get the nearer date,
+# the Angular set is pinned to the 16 -> 19+ migration it depends on.
+# ---------------------------------------------------------------------------
+vulnerabilities:
+  # --- Reached only through @airgap/* packages; owned by their workstreams ----
+  - id: CVE-2023-26144
+    statement: >-
+      graphql 16.7.1 via @airgap/tezos. First-party code never builds a GraphQL
+      document, and the DoS needs a crafted query reaching the parser. Owned by
+      the coinlib workstream; a fix exists in 16.8.1.
+    expired_at: 2026-12-31
+  - id: CVE-2025-7783
+    statement: >-
+      form-data 3.0.1 via @airgap/tezos > graphql-request. Predictable multipart
+      boundaries matter only for requests this app never issues; the vault talks
+      to no backend. Owned by the coinlib workstream.
+    expired_at: 2026-12-31
+  - id: CVE-2026-12143
+    statement: >-
+      form-data 3.0.1 via @airgap/tezos > graphql-request. Same dead request
+      path as CVE-2025-7783. Owned by the coinlib workstream.
+    expired_at: 2026-12-31
+  - id: GHSA-x3ff-w252-2g7j
+    statement: >-
+      @stablelib/ed25519 1.0.3 via @airgap/tezos > @taquito/utils. Signature
+      malleability, no published fix. Deserves attention out of proportion to
+      its MEDIUM rating in a wallet, but the decision belongs to the coinlib
+      team; tracked in #578 rather than fixed here.
+    expired_at: 2026-12-31
+
+  # --- Vulnerable API is never called ----------------------------------------
+  - id: CVE-2024-48930
+    statement: >-
+      secp256k1 4.0.3 via @keystonehq/bc-ur-registry-eth > hdkey. The flaw is in
+      ecdh(); no consumer of this copy calls it, only sign/verify/recover. The
+      only ecdh() call sites in the tree are coinlib's vendored copies, which
+      carry no package metadata and are a separate scan blind spot (#578,
+      coverage gap 2). Re-open the moment any consumer calls ecdh: the fix is
+      in-range at 4.0.4 and free.
+    expired_at: 2026-12-31
+  - id: CVE-2026-2739
+    statement: >-
+      bn.js 4.12.0 (crypto-browserify > create-ecdh) and 5.2.2 (@airgap/substrate
+      > @polkadot/util). maskn(0) is the vulnerable call; no first-party code
+      uses bn.js directly, and every internal maskn call is Montgomery reduction
+      where the shift is positive by construction.
+    expired_at: 2026-12-31
+  - id: CVE-2026-41907
+    statement: >-
+      uuid 8.3.2 via @keystonehq/bc-ur-registry-eth. The out-of-bounds write
+      needs a caller-supplied buffer passed to v3/v5/v6. Note this differs from
+      the original #578 analysis: the direct dependency was deleted, and
+      @airgap/angular-core does import uuid on the live MetaMask sync path, but
+      it calls only parse and v4, so the vulnerable signature is still unused.
+    expired_at: 2026-12-31
+
+  # --- Build-time only; never reaches a device -------------------------------
+  - id: CVE-2020-7598
+    statement: >-
+      minimist 1.2.0, pinned exactly by cordova.plugins.diagnostic. Used only in
+      the plugin's build-time hook (scripts/logger.js parsing process.argv).
+      Nothing under www/ requires minimist; exploitation needs attacker-controlled
+      argv on a developer's build machine.
+    expired_at: 2026-12-31
+  - id: CVE-2021-44906
+    statement: >-
+      minimist 1.2.0, same build-time-only hook as CVE-2020-7598. Prototype
+      pollution reachable only through argv on a build machine.
+    expired_at: 2026-12-31
+  - id: CVE-2025-71329
+    statement: >-
+      image-size 0.5.5 via @angular-devkit/build-angular > less, a build-time CSS
+      compiler. Not reachable from any runtime dependency chain; the only images
+      less inspects are first-party stylesheet assets.
+    expired_at: 2026-12-31
+  - id: CVE-2025-71330
+    statement: >-
+      image-size 0.5.5 via less, same build-time-only path as CVE-2025-71329.
+    expired_at: 2026-12-31
+
+  # --- Angular 16.1.1: framework feature not enabled -------------------------
+  # Pinned at 16.1.1 across the @angular/* set; earliest fixes land in 19.2.x, a
+  # three-major migration with coordinated peer bumps (#578 recommendation 9).
+  # None of these is an argument for that migration - each vulnerable path is
+  # absent - but 16.x is out of support, so the migration is worth planning on
+  # its own merits. These expire together with that plan.
+  - id: CVE-2025-66035
+    statement: >-
+      XSRF token leaked to third-party hosts via protocol-relative URLs. Both
+      HttpClient call sites use relative local-asset paths (sapling params, the
+      ngx-translate loader); no cross-origin URL is ever built and there is no
+      backend to set an XSRF cookie.
+    expired_at: 2027-03-31
+  - id: CVE-2026-50170
+    statement: >-
+      HttpTransferCache caches credentialed requests. SSR-only API: no
+      provideClientHydration, no @angular/ssr, no @angular/platform-server. The
+      cache is never instantiated.
+    expired_at: 2027-03-31
+  - id: CVE-2026-54266
+    statement: >-
+      Weak 32-bit HttpTransferCache key hashing. Same SSR-only API, same absence.
+    expired_at: 2027-03-31
+  - id: CVE-2026-68945
+    statement: >-
+      Cross-request response reuse in HttpTransferCache. Same SSR-only API.
+    expired_at: 2027-03-31
+  - id: CVE-2026-88059
+    statement: >-
+      HttpTransferCache leak, reported after the #578 analysis. Same SSR-only
+      API, same absence; consistent with the exclusions already recorded there.
+    expired_at: 2027-03-31
+  - id: CVE-2026-54267
+    statement: >-
+      Client hydration DOM clobbering and response-cache poisoning. Requires
+      hydration; the app bootstraps client-side only.
+    expired_at: 2027-03-31
+  - id: CVE-2026-50171
+    statement: >-
+      DoS via malformed digitsInfo on number pipes. The app's only number pipe is
+      PercentPipe fed a number, and no call site passes digitsInfo at all.
+    expired_at: 2027-03-31
+  - id: CVE-2026-54268
+    statement: >-
+      DoS via crafted date format string. One date pipe usage in the app
+      (error-history.page.html) with a literal format; no formatDate() calls.
+    expired_at: 2027-03-31
+  - id: CVE-2026-22610
+    statement: >-
+      XSS in the Template Compiler. Needs a template compiled from untrusted
+      input; all templates are first-party and compiled AOT at build time.
+    expired_at: 2027-03-31
+  - id: CVE-2026-27970
+    statement: >-
+      XSS via compromised translation files, targeting $localize /
+      loadTranslations. @angular/localize is not a dependency; i18n is
+      @ngx-translate reading bundled first-party JSON.
+    expired_at: 2027-03-31
+  - id: CVE-2026-69151
+    statement: >-
+      XSS via internationalization event handlers, requiring Angular's own i18n
+      markup. No i18n or i18n- attributes exist in any template.
+    expired_at: 2027-03-31
+  - id: CVE-2026-50557
+    statement: >-
+      Template/attribute namespace sanitization bypass. Needs untrusted data at
+      an Angular sanitizer sink; every [innerHTML] binds a translate output or a
+      first-party value. Untrusted strings do reach Ionic's own innerHTML path
+      via innerHTMLTemplatesEnabled, but that is a separate sink outside this CVE
+      and still unreviewed (#578 recommendation 10).
+    expired_at: 2027-03-31
+  - id: CVE-2026-52725
+    statement: >-
+      XSS via dynamic component creation. No runtime createComponent,
+      ViewContainerRef or ComponentFactoryResolver use outside specs; Ionic
+      overlays receive component classes, never template strings.
+    expired_at: 2027-03-31
+  - id: CVE-2026-88057
+    statement: >-
+      Host-binding sanitization bypass, reported after the #578 analysis.
+      Application code declares no @HostBinding at all.
+    expired_at: 2027-03-31
+
+  # --- Reachable, no published fix -------------------------------------------
+  - id: CVE-2025-14505
+    statement: >-
+      elliptic 6.6.1 via crypto-browserify > browserify-sign. Reachable, unlike
+      the rest of this file, and kept only because no patched release exists.
+      Nothing to do but track upstream; the near review date is deliberate.
+    expired_at: 2026-12-31
