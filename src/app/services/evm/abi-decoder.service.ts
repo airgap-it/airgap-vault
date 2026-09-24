@@ -27,7 +27,12 @@ export class AbiDecoderService {
       const body = hex.slice(8)
       const { name, types } = parseSignature(signature)
       const bytes = hexToBytes(body)
+      state = { itemBudget: MAX_DECODED_ITEMS, extent: 0 }
       const params = decodeTuple(bytes, types, 0)
+      // Reject trailing data beyond the (32-byte padded) decoded extent: a
+      // well-formed encoding is fully consumed, so leftovers mean the signature
+      // does not really describe this calldata.
+      if (roundUp32(state.extent) < bytes.length) throw new Error('trailing data')
       return {
         selector,
         signature,
@@ -63,9 +68,42 @@ export function bytesToHex(bytes: Uint8Array): string {
   return s
 }
 
+/** Upper bound on decoded values per call, so hostile lengths/offsets cannot hang the UI. */
+const MAX_DECODED_ITEMS = 10_000
+
+/** Per-decode bookkeeping. Decoding is synchronous, so a module-level slot is safe. */
+let state = { itemBudget: MAX_DECODED_ITEMS, extent: 0 }
+
+function spendItem(): void {
+  if (--state.itemBudget < 0) throw new Error('decode budget exceeded')
+}
+
+function markExtent(end: number): void {
+  if (end > state.extent) state.extent = end
+}
+
+function roundUp32(n: number): number {
+  return Math.ceil(n / 32) * 32
+}
+
 function readWord(bytes: Uint8Array, offset: number): Uint8Array {
   if (offset + 32 > bytes.length) throw new Error('out of bounds')
+  markExtent(offset + 32)
   return bytes.slice(offset, offset + 32)
+}
+
+/** Read a length/offset word, rejecting anything that cannot fit in the calldata. */
+function readSize(bytes: Uint8Array, offset: number): number {
+  const v = wordToBigUint(readWord(bytes, offset))
+  if (v > BigInt(bytes.length)) throw new Error('size out of bounds')
+  return Number(v)
+}
+
+/** Resolve a relative offset: must be word-aligned and point at or past the enclosing head. */
+function readOffset(bytes: Uint8Array, offset: number, base: number, headSize: number): number {
+  const rel = readSize(bytes, offset)
+  if (rel % 32 !== 0 || rel < headSize) throw new Error('bad offset')
+  return base + rel
 }
 
 function wordToBigUint(word: Uint8Array): bigint {
@@ -74,14 +112,30 @@ function wordToBigUint(word: Uint8Array): bigint {
   return v
 }
 
+/**
+ * Decode an intN word, requiring canonical sign extension: the whole word read as
+ * int256 must fit in N bits, otherwise contracts may see a different value.
+ */
 function wordToBigInt(word: Uint8Array, bits: number): bigint {
   const u = wordToBigUint(word)
-  const signBit = 1n << BigInt(bits - 1)
-  if (u & signBit) {
-    const mask = (1n << BigInt(bits)) - 1n
-    return -(((~u) & mask) + 1n)
-  }
-  return u
+  const v = u >= 1n << 255n ? u - (1n << 256n) : u
+  const limit = 1n << BigInt(bits - 1)
+  if (v < -limit || v >= limit) throw new Error('non-canonical int')
+  return v
+}
+
+function isZero(bytes: Uint8Array): boolean {
+  for (let i = 0; i < bytes.length; i++) if (bytes[i] !== 0) return false
+  return true
+}
+
+/** Bytes read from `pos` with `len` checked against the calldata, not silently truncated. */
+function readBytes(data: Uint8Array, pos: number): Uint8Array {
+  const len = readSize(data, pos)
+  const end = pos + 32 + len
+  if (end > data.length) throw new Error('bytes out of bounds')
+  markExtent(end)
+  return data.slice(pos + 32, end)
 }
 
 export function parseSignature(sig: string): { name: string; types: AbiType[] } {
@@ -185,10 +239,11 @@ function isDynamic(t: AbiType): boolean {
 function decodeTuple(data: Uint8Array, types: AbiType[], baseOffset: number): DecodedParam[] {
   const out: DecodedParam[] = []
   let headPos = baseOffset
+  let headSize = 0
+  for (const t of types) headSize += headSizeOf(t)
   for (const t of types) {
     if (isDynamic(t)) {
-      const offsetWord = readWord(data, headPos)
-      const dynOffset = Number(wordToBigUint(offsetWord)) + baseOffset
+      const dynOffset = readOffset(data, headPos, baseOffset, headSize)
       const value = decodeValue(data, t, dynOffset)
       out.push({ name: null, type: t.raw, value })
       headPos += 32
@@ -202,6 +257,7 @@ function decodeTuple(data: Uint8Array, types: AbiType[], baseOffset: number): De
 }
 
 function decodeStaticAt(data: Uint8Array, t: AbiType, pos: number): { value: DecodedValue; consumed: number } {
+  spendItem()
   if (t.base === 'tuple') {
     const fields = decodeTuple(data, t.components!, pos)
     let size = 0
@@ -233,16 +289,27 @@ function staticSize(t: AbiType): number {
   return 32
 }
 
+/** Bytes a type occupies in its enclosing head: an offset word if dynamic, else its static size. */
+function headSizeOf(t: AbiType): number {
+  return isDynamic(t) ? 32 : staticSize(t)
+}
+
+// Every elementary value must be canonically encoded (zero high bits / padding).
+// A dirty word is shown differently by this decoder than a contract (e.g. ABI
+// coder v1) would interpret it, so it is rejected and the UI falls back to raw hex.
 function decodeValue(data: Uint8Array, t: AbiType, pos: number): DecodedValue {
+  spendItem()
   switch (t.base) {
     case 'address': {
       const w = readWord(data, pos)
+      if (!isZero(w.slice(0, 12))) throw new Error('non-canonical address')
       const addr = '0x' + bytesToHex(w.slice(12))
       return { kind: 'address', value: addr }
     }
     case 'uint': {
       const w = readWord(data, pos)
       const v = wordToBigUint(w)
+      if (v >> BigInt(t.size!) !== 0n) throw new Error('non-canonical uint')
       return { kind: 'uint', value: v, display: v.toString(10) }
     }
     case 'int': {
@@ -252,39 +319,38 @@ function decodeValue(data: Uint8Array, t: AbiType, pos: number): DecodedValue {
     }
     case 'bool': {
       const w = readWord(data, pos)
-      return { kind: 'bool', value: w[31] !== 0 }
+      if (!isZero(w.slice(0, 31)) || w[31] > 1) throw new Error('non-canonical bool')
+      return { kind: 'bool', value: w[31] === 1 }
     }
     case 'bytesN': {
       const w = readWord(data, pos)
+      if (!isZero(w.slice(t.size!))) throw new Error('non-canonical bytesN')
       const bytes = w.slice(0, t.size!)
       return { kind: 'bytes', value: bytes, hex: '0x' + bytesToHex(bytes) }
     }
     case 'bytes': {
-      const lenWord = readWord(data, pos)
-      const len = Number(wordToBigUint(lenWord))
-      const bytes = data.slice(pos + 32, pos + 32 + len)
+      const bytes = readBytes(data, pos)
       return { kind: 'bytes', value: bytes, hex: '0x' + bytesToHex(bytes) }
     }
     case 'string': {
-      const lenWord = readWord(data, pos)
-      const len = Number(wordToBigUint(lenWord))
-      const bytes = data.slice(pos + 32, pos + 32 + len)
+      const bytes = readBytes(data, pos)
       return { kind: 'string', value: new TextDecoder('utf-8', { fatal: false }).decode(bytes) }
     }
     case 'array': {
       let len = t.arrayLength
       let dataStart = pos
-      if (len === undefined) {
-        const lenWord = readWord(data, pos)
-        len = Number(wordToBigUint(lenWord))
-        dataStart = pos + 32
-      }
       const child = t.arrayChild!
+      if (len === undefined) {
+        len = readSize(data, pos)
+        dataStart = pos + 32
+        // Each element needs at least one head byte (zero-size elements count as
+        // one), so a length that cannot fit in the remaining calldata is bogus.
+        if (len * Math.max(1, headSizeOf(child)) > data.length - dataStart) throw new Error('array length out of bounds')
+      }
       const items: DecodedValue[] = []
       if (isDynamic(child)) {
         for (let i = 0; i < len; i++) {
-          const offWord = readWord(data, dataStart + i * 32)
-          const off = Number(wordToBigUint(offWord)) + dataStart
+          const off = readOffset(data, dataStart + i * 32, dataStart, len * 32)
           items.push(decodeValue(data, child, off))
         }
       } else {
