@@ -48,10 +48,17 @@ export class SignatureDatabaseService {
     if (idx < 0) return null
     const off = this.view.getUint32(this.indexStart + idx * 8 + 4, true)
     const blobPos = this.blobStart + off
+    if (blobPos + 4 > this.buffer.byteLength) return null
     const collisions = this.view.getUint16(blobPos, true)
     const len = this.view.getUint16(blobPos + 2, true)
+    if (blobPos + 4 + len > this.buffer.byteLength) return null
     const sigBytes = this.buffer.slice(blobPos + 4, blobPos + 4 + len)
-    const signature = new TextDecoder('utf-8').decode(sigBytes)
+    let signature: string
+    try {
+      signature = new TextDecoder('utf-8', { fatal: true }).decode(sigBytes)
+    } catch {
+      return null
+    }
     return { signature, selector: clean, collisions }
   }
 
@@ -69,6 +76,7 @@ export class SignatureDatabaseService {
       ])
       this.buffer = new Uint8Array(dbBuf)
       this.view = new DataView(this.buffer.buffer, this.buffer.byteOffset, this.buffer.byteLength)
+      if (this.buffer.byteLength < 12) throw new Error('truncated header')
       const magic = String.fromCharCode(this.buffer[0], this.buffer[1], this.buffer[2], this.buffer[3])
       if (magic !== 'A4BY') throw new Error('bad magic')
       const version = this.view.getUint32(4, true)
@@ -76,6 +84,7 @@ export class SignatureDatabaseService {
       this.count = this.view.getUint32(8, true)
       this.indexStart = 12
       this.blobStart = this.indexStart + this.count * 8
+      if (this.blobStart > this.buffer.byteLength) throw new Error('truncated index')
       this.metadata = meta
     } catch (e) {
       console.warn('SignatureDatabase: failed to load, decoder will fall back to raw hex', e)

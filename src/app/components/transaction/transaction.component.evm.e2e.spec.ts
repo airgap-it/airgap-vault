@@ -7,15 +7,16 @@
  * the runtime parser, binary search and renderer pipeline are all exercised
  * end-to-end against rendered DOM.
  */
-import { ClipboardService } from '@airgap/angular-core'
+import { ClipboardService, ProtocolService } from '@airgap/angular-core'
 import { HttpClient } from '@angular/common/http'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { IonicModule } from '@ionic/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
-import { IAirGapTransaction, MainProtocolSymbols } from '@airgap/coinlib-core'
+import { IAirGapTransaction, MainProtocolSymbols, SubProtocolSymbols } from '@airgap/coinlib-core'
 import { of } from 'rxjs'
 
 import { ContactsService } from '../../services/contacts/contacts.service'
+import { EvmTransactionRendererService } from '../../services/evm/transaction-renderer.service'
 import { EvmTransactionDisplayComponent } from '../evm-transaction-display/evm-transaction-display.component'
 import { TransactionWarningComponent } from '../transaction-warning/transaction-warning.component'
 import enJson from '../../../assets/i18n/en.json'
@@ -114,6 +115,7 @@ describe('TransactionComponent — EVM decoder (e2e)', () => {
   let component: TransactionComponent
   let fixture: ComponentFixture<TransactionComponent>
   const contactsSpy = jasmine.createSpyObj('ContactsService', ['isBookEnabled', 'getContactName'])
+  const protocolSpy = jasmine.createSpyObj('ProtocolService', ['getProtocol'])
 
   beforeEach(async () => {
     contactsSpy.isBookEnabled.and.returnValue(Promise.resolve(false))
@@ -124,7 +126,8 @@ describe('TransactionComponent — EVM decoder (e2e)', () => {
       providers: [
         { provide: HttpClient, useClass: FakeHttpClient },
         { provide: ContactsService, useValue: contactsSpy },
-        { provide: ClipboardService, useValue: jasmine.createSpyObj('ClipboardService', ['copyAndShowToast']) }
+        { provide: ClipboardService, useValue: jasmine.createSpyObj('ClipboardService', ['copyAndShowToast']) },
+        { provide: ProtocolService, useValue: protocolSpy }
       ]
     })
       // Schemas: the real TransactionComponent template uses pipes (amountConverter / feeConverter)
@@ -167,6 +170,34 @@ describe('TransactionComponent — EVM decoder (e2e)', () => {
     expect(text).toContain('Token Transfer')
     expect(text).toContain('1 USDC')
     expect(text).toContain('0xd8da6bf26964af9d7eed9e03e53415d37aa96045')
+  })
+
+  it('uses the token contract, not the recipient in `to`, for ERC-20 sub-protocols', async () => {
+    protocolSpy.getProtocol.and.returnValue(
+      Promise.resolve({ getContractAddress: () => Promise.resolve('0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48') })
+    )
+    await runWith([
+      evmTx({
+        // coinlib's ERC20 protocol reports the token recipient as `to`
+        to: '0xd8da6bf26964af9d7eed9e03e53415d37aa96045',
+        protocolIdentifier: SubProtocolSymbols.ETH_ERC20,
+        data:
+          '0xa9059cbb' +
+          '000000000000000000000000d8da6bf26964af9d7eed9e03e53415d37aa96045' +
+          '00000000000000000000000000000000000000000000000000000000000f4240'
+      })
+    ])
+    const text = (fixture.nativeElement as HTMLElement).textContent || ''
+    expect(text).toContain('1 USDC')
+    expect(text).toContain('0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48')
+  })
+
+  it('renders raw calldata with a warning when decoding throws', async () => {
+    const renderer = TestBed.inject(EvmTransactionRendererService)
+    spyOn(renderer, 'render').and.throwError('boom')
+    await runWith([evmTx({ to: '0xabcabcabcabcabcabcabcabcabcabcabcabcabca', data: '0x12345678' })])
+    const text = (fixture.nativeElement as HTMLElement).textContent || ''
+    expect(text).toContain('Could not decode')
   })
 
   it('renders an unlimited approval in warning style', async () => {

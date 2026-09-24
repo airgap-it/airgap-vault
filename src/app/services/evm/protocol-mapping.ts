@@ -32,6 +32,10 @@ export function isEvmProtocol(id: ProtocolSymbols | string | undefined): boolean
   return EVM_MAIN.includes(id) || EVM_SUB.includes(id)
 }
 
+export function isEvmSubProtocol(id: ProtocolSymbols | string | undefined): boolean {
+  return !!id && EVM_SUB.includes(id)
+}
+
 export function chainIdForProtocol(id: ProtocolSymbols | string | undefined): number | undefined {
   if (!id) return undefined
   return CHAIN_ID[id]

@@ -110,4 +110,43 @@ describe('AbiDecoderService', () => {
     expect(() => decoder.decodeWithSignature('garbage', 'foo()')).not.toThrow()
     expect(() => decoder.decodeWithSignature('0x', 'foo(uint256)')).not.toThrow()
   })
+
+  describe('rejects non-canonical or out-of-bounds encodings', () => {
+    const w = (hex: string) => hex.padStart(64, '0')
+
+    it('rejects a bool with dirty high bytes', () => {
+      expect(decoder.decodeWithSignature('0x12345678' + '01'.padEnd(64, '0'), 'f(bool)')).toBeNull()
+      expect(decoder.decodeWithSignature('0x12345678' + w('02'), 'f(bool)')).toBeNull()
+      expect(decoder.decodeWithSignature('0x12345678' + w('01'), 'f(bool)')).not.toBeNull()
+    })
+
+    it('rejects an address with dirty high bytes', () => {
+      expect(decoder.decodeWithSignature('0x12345678' + 'ff' + w('d8da6bf26964af9d7eed9e03e53415d37aa96045').slice(2), 'f(address)')).toBeNull()
+    })
+
+    it('rejects uintN / intN values outside N bits', () => {
+      expect(decoder.decodeWithSignature('0x12345678' + w('1ff'), 'f(uint8)')).toBeNull()
+      expect(decoder.decodeWithSignature('0x12345678' + w('80'), 'f(int8)')).toBeNull()
+      const minusOne = decoder.decodeWithSignature('0x12345678' + 'f'.repeat(64), 'f(int8)')
+      const v = minusOne!.params[0].value
+      expect(v.kind === 'int' && v.value).toBe(-1n)
+    })
+
+    it('rejects a bytes length beyond the calldata', () => {
+      expect(decoder.decodeWithSignature('0x12345678' + w('20') + w('2710') + w('ab'), 'f(bytes)')).toBeNull()
+    })
+
+    it('rejects a huge array of zero-size elements without hanging', () => {
+      expect(decoder.decodeWithSignature('0x12345678' + w('20') + w('ffffffffffff'), 'f(()[])')).toBeNull()
+    })
+
+    it('rejects misaligned or head-pointing offsets', () => {
+      expect(decoder.decodeWithSignature('0x12345678' + w('21') + w('00'), 'f(bytes)')).toBeNull()
+      expect(decoder.decodeWithSignature('0x12345678' + w('00') + w('00'), 'f(bytes)')).toBeNull()
+    })
+
+    it('rejects trailing data after the decoded extent', () => {
+      expect(decoder.decodeWithSignature('0x12345678' + w('01') + w('02'), 'f(uint256)')).toBeNull()
+    })
+  })
 })

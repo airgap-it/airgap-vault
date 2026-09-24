@@ -33,7 +33,8 @@ export class Erc20Renderer implements TransactionRenderer {
       : { valueKey: 'evm-decoder.amount-raw-note', valueParams: { value: amountRaw.toString() }, value: amountRaw.toString(), rawValue: amountRaw.toString() }
     return {
       type: 'erc20-transfer',
-      confidence: 'high',
+      // The selector alone proves nothing about the contract: only a curated token is 'high'.
+      confidence: token ? 'high' : 'medium',
       functionNameKey: 'evm-decoder.fn-token-transfer',
       rows: [
         { labelKey: 'evm-decoder.function-label', valueKey: 'evm-decoder.fn-token-transfer', value: 'Token Transfer', type: 'text' },
@@ -60,7 +61,7 @@ export class Erc20Renderer implements TransactionRenderer {
       : { valueKey: 'evm-decoder.amount-raw-note', valueParams: { value: amountRaw.toString() }, value: amountRaw.toString(), rawValue: amountRaw.toString() }
     return {
       type: 'erc20-approve',
-      confidence: 'high',
+      confidence: token ? 'high' : 'medium',
       functionNameKey: 'evm-decoder.fn-token-approval',
       rows: [
         { labelKey: 'evm-decoder.function-label', valueKey: 'evm-decoder.fn-token-approval', value: 'Token Approval', type: 'text' },
