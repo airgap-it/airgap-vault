@@ -17,6 +17,8 @@ misconfigurations:
   - id: DS-0026
     paths:
       - ".devcontainer/Dockerfile"
+      - "build/android/Dockerfile"
     statement: >-
       No HEALTHCHECK needed for a container that hosts an IDE session rather
-      than serving traffic.
+      than serving traffic, nor for the Android build image, which CI runs once
+      to copy the APKs out and then discards.
