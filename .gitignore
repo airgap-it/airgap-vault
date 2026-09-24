@@ -48,3 +48,5 @@ scripts/.duckdb_tmp/
 scripts/signatures.curated.ndjson
 
 scripts/stubs/*.js
+
+.trivycache/
