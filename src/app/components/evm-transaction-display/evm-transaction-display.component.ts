@@ -1,3 +1,4 @@
+import { ClipboardService } from '@airgap/angular-core'
 import { Component, Input } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
 
@@ -13,7 +14,7 @@ export class EvmTransactionDisplayComponent {
   @Input() public result!: RenderResult
   @Input() public dbDate?: string
 
-  constructor(private readonly translate: TranslateService) {}
+  constructor(private readonly translate: TranslateService, private readonly clipboardService: ClipboardService) {}
 
   public confidenceLabelKey(): string {
     switch (this.result?.confidence) {
@@ -78,5 +79,29 @@ export class EvmTransactionDisplayComponent {
     } catch {
       return null
     }
+  }
+
+  // ---- Long address / hex values ---------------------------------------------
+  // Shown on one horizontally scrollable line by default; a tap toggles a wrapped
+  // view so long blobs (e.g. undecoded calldata) can be reviewed without scrolling.
+  // Display-only, not persisted.
+  private readonly expanded = new Set<DisplayRow>()
+
+  /** Address/hex rows that show their literal value (not a translated placeholder). */
+  public isExpandable(row: DisplayRow): boolean {
+    return (row.type === 'address' || row.type === 'hex') && !row.valueKey
+  }
+
+  public isExpanded(row: DisplayRow): boolean {
+    return this.expanded.has(row)
+  }
+
+  public toggleExpanded(row: DisplayRow): void {
+    if (!this.isExpandable(row)) return
+    if (!this.expanded.delete(row)) this.expanded.add(row)
+  }
+
+  public async copyValue(row: DisplayRow): Promise<void> {
+    await this.clipboardService.copyAndShowToast(row.value)
   }
 }

@@ -33,6 +33,8 @@
     "fn-unknown": "Unknown",
     "amount-unlimited": "Unlimited",
     "amount-raw-note": "{{ value }} (raw — token decimals unknown)",
+    "copy": "Copy",
+    "tap-to-expand": "Tap to show the full value wrapped",
     "decimals-apply": "Decimals",
     "decimals-raw": "raw",
     "assuming-decimals": "assuming {{ decimals }} decimals",

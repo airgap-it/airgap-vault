@@ -7,6 +7,7 @@
  * the runtime parser, binary search and renderer pipeline are all exercised
  * end-to-end against rendered DOM.
  */
+import { ClipboardService } from '@airgap/angular-core'
 import { HttpClient } from '@angular/common/http'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { IonicModule } from '@ionic/angular'
@@ -122,7 +123,8 @@ describe('TransactionComponent — EVM decoder (e2e)', () => {
       imports: [IonicModule.forRoot({ innerHTMLTemplatesEnabled: true }), TranslateModule.forRoot()],
       providers: [
         { provide: HttpClient, useClass: FakeHttpClient },
-        { provide: ContactsService, useValue: contactsSpy }
+        { provide: ContactsService, useValue: contactsSpy },
+        { provide: ClipboardService, useValue: jasmine.createSpyObj('ClipboardService', ['copyAndShowToast']) }
       ]
     })
       // Schemas: the real TransactionComponent template uses pipes (amountConverter / feeConverter)
