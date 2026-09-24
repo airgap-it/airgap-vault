@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ 'danger-zone.wipe.confirm.title' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <p class="ion-padding-horizontal ion-text-wrap">{{ 'danger-zone.wipe.confirm.description' | translate }}</p>
+
+  <ion-list>
+    <ion-item>
+      <ion-label class="ion-text-wrap">{{ 'danger-zone.wipe.confirm.backup_label' | translate }}</ion-label>
+      <ion-checkbox slot="end" [(ngModel)]="hasBackup"></ion-checkbox>
+    </ion-item>
+    <ion-item>
+      <ion-label class="ion-text-wrap">{{ 'danger-zone.wipe.confirm.acknowledge_label' | translate }}</ion-label>
+      <ion-checkbox slot="end" [(ngModel)]="acknowledgesLoss"></ion-checkbox>
+    </ion-item>
+    <ion-item mode="md">
+      <ion-label class="ion-no-margin ion-text-wrap" position="stacked">
+        {{ 'danger-zone.wipe.confirm.input_label' | translate: { phrase: confirmationPhrase } }}
+      </ion-label>
+      <ion-input
+        type="text"
+        autocapitalize="off"
+        autocorrect="off"
+        spellcheck="false"
+        [placeholder]="confirmationPhrase"
+        [(ngModel)]="typedPhrase"
+      ></ion-input>
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-button expand="block" fill="outline" (click)="cancel()">
+            {{ 'danger-zone.wipe.confirm.cancel_label' | translate }}
+          </ion-button>
+        </ion-col>
+        <ion-col>
+          <ion-button expand="block" color="danger" [disabled]="!canWipe" (click)="confirm()">
+            {{ 'danger-zone.wipe.confirm.confirm_label' | translate }}
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>

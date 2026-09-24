@@ -754,11 +754,15 @@
     "description": "Действия на этой странице предназначены только для опытных пользователей. Пожалуйста, помните о последствиях, если вы используете одну из следующих функций.",
     "wipe_label": "Сброс хранилища AirGap",
     "wipe": {
-      "alert": {
-        "title": "Стереть хранилище",
-        "message": "Это действие удалит все ваши секретные фразы и сбросит хранилище AirGap к заводским настройкам. <br /><br /><b>Убедитесь, что у вас есть резервная копия всех ваших фраз восстановления.",
-        "cancel": "Отменить",
-        "ok": "Ок"
+      "confirm": {
+        "title": "Wipe all secrets",
+        "description": "This deletes every secret on this device and resets AirGap Vault to its factory settings. There is no way to undo it.",
+        "backup_label": "Have you backed up all your secrets?",
+        "acknowledge_label": "I understand that I cannot recover my secrets without a backup.",
+        "input_label": "Type \"{{phrase}}\" to confirm.",
+        "phrase": "wipe all secrets",
+        "cancel_label": "Cancel",
+        "confirm_label": "Wipe all secrets"
       }
     },
     "wipe-error": {
