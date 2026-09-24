@@ -754,11 +754,15 @@
     "description": "As ações nesta página destinam-se apenas a usuários avançados. Esteja ciente das consequências se você usar um dos seguintes recursos.",
     "wipe_label": "Redefinir AirGap Vault",
     "wipe": {
-      "alert": {
-        "title": "Limpar Vault",
-        "message": "Esta ação excluirá todos os seus segredos e redefinirá o AirGap Vault para as configurações de fábrica. <br /><br /><b>Certifique-se de ter um backup de todas as suas frases de recuperação.</b>",
-        "cancel": "Cancelar",
-        "ok": "Ok"
+      "confirm": {
+        "title": "Wipe all secrets",
+        "description": "This deletes every secret on this device and resets AirGap Vault to its factory settings. There is no way to undo it.",
+        "backup_label": "Have you backed up all your secrets?",
+        "acknowledge_label": "I understand that I cannot recover my secrets without a backup.",
+        "input_label": "Type \"{{phrase}}\" to confirm.",
+        "phrase": "wipe all secrets",
+        "cancel_label": "Cancel",
+        "confirm_label": "Wipe all secrets"
       }
     },
     "wipe-error": {

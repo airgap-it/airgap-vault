@@ -754,11 +754,15 @@
       "description": "Les actions de cette page sont uniquement destinées aux utilisateurs avancés. Veuillez être conscient des conséquences si vous utilisez l'une des fonctionnalités suivantes.",
       "wipe_label": "Réinitialiser le coffre-fort AirGap",
       "wipe": {
-        "alert": {
-          "title": "Effacer le coffre-fort",
-          "message": "Cette action supprimera tous vos secrets et réinitialisera AirGap Vault aux paramètres d'usine.<br /><br /> <b>Assurez-vous d'avoir une sauvegarde de toutes vos phrases de récupération.</b>",
-          "cancel": "Annuler",
-          "ok": "D'accord"
+        "confirm": {
+          "title": "Wipe all secrets",
+          "description": "This deletes every secret on this device and resets AirGap Vault to its factory settings. There is no way to undo it.",
+          "backup_label": "Have you backed up all your secrets?",
+          "acknowledge_label": "I understand that I cannot recover my secrets without a backup.",
+          "input_label": "Type \"{{phrase}}\" to confirm.",
+          "phrase": "wipe all secrets",
+          "cancel_label": "Cancel",
+          "confirm_label": "Wipe all secrets"
         }
       },
       "wipe-error": {
