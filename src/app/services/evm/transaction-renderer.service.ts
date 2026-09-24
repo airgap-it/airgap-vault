@@ -101,6 +101,11 @@ export class EvmTransactionRendererService {
     return result
   }
 
+  /** Raw-calldata view with the "could not decode" warning, for when decoding itself fails. */
+  public renderRaw(tx: EvmTransactionInput): RenderResult {
+    return this.flagUnknownTarget(tx, this.rawHex.render(tx))
+  }
+
   /**
    * Attach curated well-known names (USDC, Uniswap V2: Router 2, …) to every
    * `address` row across the whole result tree. Single pass over all renderers'
