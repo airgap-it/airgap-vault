@@ -754,11 +754,15 @@
     "description": "本页上的操作仅供高级用户使用。如果您使用以下功能之一，请注意后果。",
     "wipe_label": "重置 AirGap Vault",
     "wipe": {
-      "alert": {
-        "title": "清除VAULT",
-        "message": "此操作将删除您的所有秘密并将 AirGap Vault 重置为出厂设置。<br /><br /><b>请确保您已备份所有恢复短语。</b>",
-        "cancel": "取消",
-        "ok": "好的"
+      "confirm": {
+        "title": "Wipe all secrets",
+        "description": "This deletes every secret on this device and resets AirGap Vault to its factory settings. There is no way to undo it.",
+        "backup_label": "Have you backed up all your secrets?",
+        "acknowledge_label": "I understand that I cannot recover my secrets without a backup.",
+        "input_label": "Type \"{{phrase}}\" to confirm.",
+        "phrase": "wipe all secrets",
+        "cancel_label": "Cancel",
+        "confirm_label": "Wipe all secrets"
       }
     },
     "wipe-error": {

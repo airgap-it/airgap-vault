@@ -14,6 +14,7 @@ import { TranslateService } from '@ngx-translate/core'
 import { SecureStorageService } from 'src/app/services/secure-storage/secure-storage.service'
 import { VaultStorageService } from 'src/app/services/storage/storage.service'
 import { VaultEnvironmentContext, VaultEnvironmentService } from 'src/app/services/environment/vault-environment.service'
+import { WipeConfirmComponent } from 'src/app/components/wipe-confirm/wipe-confirm.component'
 
 @Component({
   selector: 'airgap-tab-settings',
@@ -129,33 +130,29 @@ export class TabSettingsPage implements OnInit {
   }
 
   public async resetVault() {
-    const alert = await this.alertCtrl.create({
-      header: this.translateService.instant('danger-zone.wipe.alert.title'),
-      message: this.translateService.instant('danger-zone.wipe.alert.message'),
-      buttons: [
-        {
-          text: this.translateService.instant('danger-zone.wipe.alert.cancel'),
-          role: 'cancel'
-        },
-        {
-          text: this.translateService.instant('danger-zone.wipe.alert.ok'),
-          handler: async () => {
-            try {
-              await this.secureStorage.wipe()
-              await this.storageService.wipe()
-            } catch (e) {
-              console.error('Wiping failed', e)
-              return this.resetVaultError()
-            }
-
-            this.navigationService.route('/').then(() => {
-              location.reload()
-            })
-          }
-        }
-      ]
+    const modal: HTMLIonModalElement = await this.modalController.create({
+      component: WipeConfirmComponent,
+      backdropDismiss: false
     })
-    alert.present()
+
+    await modal.present()
+
+    const { role } = await modal.onDidDismiss()
+    if (role !== 'confirm') {
+      return
+    }
+
+    try {
+      await this.secureStorage.wipe()
+      await this.storageService.wipe()
+    } catch (e) {
+      console.error('Wiping failed', e)
+      return this.resetVaultError()
+    }
+
+    this.navigationService.route('/').then(() => {
+      location.reload()
+    })
   }
 
   public async resetVaultError() {
