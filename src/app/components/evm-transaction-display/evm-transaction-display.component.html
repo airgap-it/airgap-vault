@@ -14,7 +14,28 @@
       >
         <p class="evm-decoded__label">{{ renderLabel(row) }}</p>
         <p class="evm-decoded__name" *ngIf="row.addressName">{{ row.addressName }}</p>
-        <h3 [class]="'evm-decoded__value evm-decoded__value--' + row.type">{{ renderValue(row) }}</h3>
+        <div class="evm-decoded__value-row" *ngIf="isExpandable(row); else plainValue">
+          <h3
+            [class]="'evm-decoded__value evm-decoded__value--' + row.type"
+            [class.evm-decoded__value--expanded]="isExpanded(row)"
+            [attr.aria-label]="'evm-decoder.tap-to-expand' | translate"
+            (click)="toggleExpanded(row)"
+          >
+            {{ renderValue(row) }}
+          </h3>
+          <ion-button
+            fill="clear"
+            size="small"
+            class="evm-decoded__copy"
+            [attr.aria-label]="'evm-decoder.copy' | translate"
+            (click)="copyValue(row)"
+          >
+            <ion-icon slot="icon-only" name="copy-outline"></ion-icon>
+          </ion-button>
+        </div>
+        <ng-template #plainValue>
+          <h3 [class]="'evm-decoded__value evm-decoded__value--' + row.type">{{ renderValue(row) }}</h3>
+        </ng-template>
         <div class="evm-decoded__decimals" *ngIf="isScalable(row)">
           <button type="button" class="evm-decoded__decimals-btn" (click)="cycleDecimals(row)">
             {{ 'evm-decoder.decimals-apply' | translate }}:

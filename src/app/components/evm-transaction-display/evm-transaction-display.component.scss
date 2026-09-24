@@ -1,3 +1,24 @@
+// Single line that scrolls horizontally (drag on touch) instead of being cut off by
+// Ionic's default ion-label ellipsis, so long labels and values can be read in full.
+@mixin horizontal-scroll {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+  text-overflow: clip;
+  -webkit-overflow-scrolling: touch;
+
+  // Thin scroll affordance so it is visible there is more to the right
+  // (Blink/Android WebView renders it; iOS shows an overlay bar while scrolling).
+  &::-webkit-scrollbar {
+    height: 3px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--ion-color-medium, #92949c);
+    border-radius: 2px;
+  }
+}
+
 .evm-decoded {
   margin: 0.5rem 0 1rem;
 
@@ -41,6 +62,7 @@
   }
 
   &__label {
+    @include horizontal-scroll;
     font-size: 0.75rem;
     opacity: 0.7;
   }
@@ -58,36 +80,46 @@
     font-family: inherit;
     word-break: break-all;
 
-    // Addresses and hex/byte blobs are monospace and can be long: render them on
-    // a single line that scrolls horizontally (drag on touch) instead of being cut
-    // off by Ionic's default ion-label ellipsis, so the full value can be reviewed
-    // against an external reference before signing.
+    // Addresses and hex/byte blobs are monospace and can be long: one scrollable
+    // line by default, so the full value can be reviewed against an external
+    // reference before signing. A tap switches to a wrapped view (--expanded).
     &--address,
     &--hex {
-      display: block;
-      max-width: 100%;
-      overflow-x: auto;
-      white-space: nowrap;
-      text-overflow: clip;
-      -webkit-overflow-scrolling: touch;
+      @include horizontal-scroll;
       font-family: 'Courier New', monospace;
       font-size: 0.85rem;
+      cursor: pointer;
+    }
 
-      // Thin scroll affordance so it is visible there is more to the right
-      // (Blink/Android WebView renders it; iOS shows an overlay bar while scrolling).
-      &::-webkit-scrollbar {
-        height: 3px;
-      }
-      &::-webkit-scrollbar-thumb {
-        background: var(--ion-color-medium, #92949c);
-        border-radius: 2px;
-      }
+    &--expanded {
+      white-space: normal;
+      word-break: break-all;
+      overflow-x: visible;
     }
 
     &--warning {
       color: var(--ion-color-danger, #eb445a);
       font-weight: 600;
     }
+  }
+
+  &__value-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.25rem;
+
+    .evm-decoded__value {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+
+  &__copy {
+    flex: none;
+    margin: 0;
+    --padding-start: 0.25rem;
+    --padding-end: 0.25rem;
+    color: var(--ion-color-medium, #92949c);
   }
 
   // Display-only manual decimals selector for raw amounts (token decimals unknown).
