@@ -45,6 +45,7 @@ RUN sed -i -e "s/versionCode 1/versionCode $BUILD_NR/g" /app/android/app/build.g
 RUN yarn prepare-prod-build \
     && yarn apply-diagnostic-modules \
     && yarn jetifier \
+    && yarn build:signatures \
     && yarn ionic build --prod \
     && yarn cap sync android \
     && echo y | sdkmanager --sdk_root=${ANDROID_SDK_ROOT} --update \

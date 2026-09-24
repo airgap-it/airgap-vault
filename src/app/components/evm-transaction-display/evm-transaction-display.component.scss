@@ -1,0 +1,180 @@
+// Single line that scrolls horizontally (drag on touch) instead of being cut off by
+// Ionic's default ion-label ellipsis, so long labels and values can be read in full.
+@mixin horizontal-scroll {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+  text-overflow: clip;
+  -webkit-overflow-scrolling: touch;
+
+  // Thin scroll affordance so it is visible there is more to the right
+  // (Blink/Android WebView renders it; iOS shows an overlay bar while scrolling).
+  &::-webkit-scrollbar {
+    height: 3px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--ion-color-medium, #92949c);
+    border-radius: 2px;
+  }
+}
+
+.evm-decoded {
+  margin: 0.5rem 0 1rem;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  &__fn {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  &__badge {
+    text-transform: uppercase;
+    font-size: 0.65rem;
+    letter-spacing: 0.05em;
+
+    &--high {
+      --background: var(--ion-color-success, #2dd36f);
+      --color: #fff;
+    }
+    &--medium {
+      --background: var(--ion-color-warning, #ffc409);
+      --color: #000;
+    }
+    &--low {
+      --background: var(--ion-color-warning, #ff8c00);
+      --color: #000;
+    }
+    &--unknown {
+      --background: var(--ion-color-danger, #eb445a);
+      --color: #fff;
+    }
+  }
+
+  &__rows {
+    background: transparent;
+  }
+
+  &__label {
+    @include horizontal-scroll;
+    font-size: 0.75rem;
+    opacity: 0.7;
+  }
+
+  // Resolved well-known name (USDC, Uniswap V2: Router 2, …) shown above the raw
+  // address. A hint only — the full address still renders below it.
+  &__name {
+    margin: 0 0 0.1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ion-color-primary, #3880ff);
+  }
+
+  &__value {
+    font-family: inherit;
+    word-break: break-all;
+
+    // Addresses and hex/byte blobs are monospace and can be long: one scrollable
+    // line by default, so the full value can be reviewed against an external
+    // reference before signing. A tap switches to a wrapped view (--expanded).
+    &--address,
+    &--hex {
+      @include horizontal-scroll;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    &--expanded {
+      white-space: normal;
+      word-break: break-all;
+      overflow-x: visible;
+    }
+
+    &--warning {
+      color: var(--ion-color-danger, #eb445a);
+      font-weight: 600;
+    }
+  }
+
+  &__value-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.25rem;
+
+    .evm-decoded__value {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+
+  &__copy {
+    flex: none;
+    margin: 0;
+    --padding-start: 0.25rem;
+    --padding-end: 0.25rem;
+    color: var(--ion-color-medium, #92949c);
+  }
+
+  // Display-only manual decimals selector for raw amounts (token decimals unknown).
+  &__decimals {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.15rem;
+  }
+  &__decimals-btn {
+    font-size: 0.7rem;
+    padding: 0.1rem 0.45rem;
+    border: 1px solid var(--ion-color-medium, #92949c);
+    border-radius: 0.6rem;
+    background: transparent;
+    color: var(--ion-color-medium, #92949c);
+  }
+  &__scaled {
+    font-size: 0.85rem;
+    font-weight: 600;
+
+    small {
+      font-weight: 400;
+      opacity: 0.7;
+    }
+  }
+
+  &__nested-row {
+    border-left: 2px solid var(--ion-color-medium, #92949c);
+  }
+
+  &__warning {
+    margin: 0.5rem 0;
+    ion-icon {
+      margin-right: 0.5rem;
+      vertical-align: middle;
+    }
+  }
+
+  &__nested {
+    margin-top: 0.75rem;
+    padding-left: 0.75rem;
+    border-left: 2px solid var(--ion-color-medium, #92949c);
+
+    h4 {
+      margin: 0.5rem 0;
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+  }
+
+  &__meta {
+    display: block;
+    margin-top: 0.5rem;
+    opacity: 0.6;
+  }
+}

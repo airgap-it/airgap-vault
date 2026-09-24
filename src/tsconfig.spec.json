@@ -3,7 +3,9 @@
   "compilerOptions": {
     "outDir": "../out-tsc/spec",
     "types": ["jasmine", "node"],
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true
   },
   "files": ["test.ts", "zone-flags.ts", "polyfills.ts"],
   "include": ["**/*.spec.ts", "**/*.d.ts"]
