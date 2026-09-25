@@ -1,0 +1,2 @@
+# Phase-1 signature-DB refresh (scripts/refresh-signatures-sourcify.py)
+duckdb>=1.1

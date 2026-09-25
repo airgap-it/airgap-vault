@@ -18,6 +18,10 @@
         <!-- JUnit start -->
         <junit.jupiter.version>5.6.2</junit.jupiter.version>
         <!-- JUnit end -->
+
+        <!-- log4j start -->
+        <log4j.version>2.25.5</log4j.version>
+        <!-- log4j end -->
     </properties>
 
     <dependencies>
@@ -31,9 +35,14 @@
 
         <!-- log4j start -->
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
         </dependency>
         <!-- log4j end -->
 
@@ -70,7 +79,7 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.5</version>
+            <version>2.20.0</version>
         </dependency>
         <!-- TakeScreenshot end -->
 

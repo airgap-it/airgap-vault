@@ -1,7 +1,7 @@
 import { AirGapWallet, AirGapWalletStatus } from '@airgap/coinlib-core'
 import { Injectable } from '@angular/core'
-import { BIP32Factory, BIP32Interface } from 'bip32'
-import * as ecc from '@bitcoinerlab/secp256k1'
+import { BIP32Factory, BIP32Interface } from '@airgap/coinlib-core/dependencies/src/bip32-5.0.1/src/index'
+import * as ecc from '@airgap/coinlib-core/dependencies/src/@bitcoinerlab/secp256k1-1.2.0/src/index'
 import { entropyToMnemonic, mnemonicToSeed } from 'bip39'
 
 import { MnemonicSecret } from '../../models/secret'

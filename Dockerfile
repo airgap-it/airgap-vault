@@ -1,8 +1,8 @@
 FROM node:20
 
 # See https://crbug.com/795759
-RUN apt-get update && apt-get install -yq libgconf-2-4 bzip2 build-essential libxtst6
-RUN apt-get install -yq git
+RUN apt-get update && apt-get install -yq --no-install-recommends libgconf-2-4 bzip2 build-essential libxtst6
+RUN apt-get install -yq --no-install-recommends git
 
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 40976EAF437D05B5
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32
@@ -23,35 +23,49 @@ RUN apt-get update && apt-get install -y wget --no-install-recommends \
   && apt-get purge --auto-remove -y curl \
   && rm -rf /src/*.deb
 
-# create app directory
-RUN mkdir /app
+# install static webserver (as root: writes to /usr/local)
+RUN yarn global add node-static
+
+# Create the app directory owned by the unprivileged user and build everything as that
+# user. The image is also run non-root by CI (yarn test-ci / yarn lint-ci write .angular/cache,
+# src/coverage and lintReport.json under /app), so /app must belong to that user, not root.
+RUN mkdir /app && chown node:node /app \
+  && mkdir -p /home/node/.cache/yarn && chown -R node:node /home/node
 WORKDIR /app
+USER node
+
+# USER changes neither HOME nor yarn's cache location: HOME would stay /root, and yarn's
+# default cache sits under the root-owned /usr/local/share/.cache created by the global
+# install above. Without both of these yarn fails with "hasn't been able to find a cache
+# folder it can use".
+ENV HOME=/home/node
+ENV YARN_CACHE_FOLDER=/home/node/.cache/yarn
 
 # Install app dependencies, using wildcard if package-lock exists
-COPY install-build-deps.js /app
-COPY install-test-deps.js /app
-COPY package.json /app
-COPY yarn.lock /app
-COPY apply-diagnostic-modules.js /app
-COPY patch-dependency-versions.js /app
-COPY fix-qrscanner-gradle.js /app
-COPY copy-builtin-modules.js /app
+COPY --chown=node:node install-build-deps.js /app
+COPY --chown=node:node install-test-deps.js /app
+COPY --chown=node:node package.json /app
+COPY --chown=node:node yarn.lock /app
+COPY --chown=node:node apply-diagnostic-modules.js /app
+COPY --chown=node:node patch-dependency-versions.js /app
+COPY --chown=node:node fix-qrscanner-gradle.js /app
+COPY --chown=node:node copy-builtin-modules.js /app
 
 RUN yarn install-test-dependencies
 
 # install dependencies
 RUN yarn install
 
-# install static webserver
-RUN yarn global add node-static
-
 # Bundle app source
-COPY . /app
+COPY --chown=node:node . /app
 
 # set to production
 RUN export NODE_ENV=production
 
 # build
 RUN yarn build:prod
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD node -e "require('http').get('http://127.0.0.1:8100/', r => process.exit(r.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"
 
 CMD ["static", "-p", "8100", "-a", "0.0.0.0", "www"]

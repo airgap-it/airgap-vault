@@ -54,6 +54,12 @@
       ],
       "zlib": [
         "./node_modules/browserify-zlib"
+      ],
+      "elliptic": [
+        "./node_modules/@airgap/coinlib-core/dependencies/src/elliptic-6.6.1/lib/elliptic"
+      ],
+      "bs58check": [
+        "./node_modules/@airgap/coinlib-core/dependencies/src/bs58check-2.1.2/index"
       ]
     },
     "useDefineForClassFields": false

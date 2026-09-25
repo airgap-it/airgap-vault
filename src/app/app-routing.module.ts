@@ -50,6 +50,10 @@ const routes: Routes = [
   },
   { path: 'secret-edit', loadChildren: () => import('./pages/secret-edit/secret-edit.module').then((m) => m.SecretEditPageModule) },
   { path: 'about', loadChildren: () => import('./pages/about/about.module').then((m) => m.AboutPageModule) },
+  {
+    path: 'secure-setup',
+    loadChildren: () => import('./pages/secure-setup/secure-setup.module').then((m) => m.SecureSetupPageModule)
+  },
   { path: 'shop', loadChildren: () => import('./pages/shop/shop.module').then((m) => m.ShopPageModule) },
   { path: 'advanced-mode', loadChildren: () => import('./pages/advanced-mode/advanced-mode.module').then((m) => m.AdvancedModePageModule) },
   {

@@ -1,0 +1,79 @@
+<div class="evm-decoded" *ngIf="result">
+  <div class="evm-decoded__header">
+    <ion-badge [class]="'evm-decoded__badge evm-decoded__badge--' + result.confidence">
+      {{ confidenceLabelKey() | translate }}
+    </ion-badge>
+    <span class="evm-decoded__fn">{{ functionName() }}</span>
+  </div>
+
+  <ion-list lines="full" class="evm-decoded__rows">
+    <ion-item *ngFor="let row of result.rows">
+      <ion-label
+        [style.padding-left.rem]="(row.depth || 0) * 0.9"
+        [class.evm-decoded__nested-row]="(row.depth || 0) > 0"
+      >
+        <p class="evm-decoded__label">{{ renderLabel(row) }}</p>
+        <p class="evm-decoded__name" *ngIf="row.addressName">{{ row.addressName }}</p>
+        <div class="evm-decoded__value-row" *ngIf="isExpandable(row); else plainValue">
+          <h3
+            [class]="'evm-decoded__value evm-decoded__value--' + row.type"
+            [class.evm-decoded__value--expanded]="isExpanded(row)"
+            [attr.aria-label]="'evm-decoder.tap-to-expand' | translate"
+            (click)="toggleExpanded(row)"
+          >
+            {{ renderValue(row) }}
+          </h3>
+          <ion-button
+            fill="clear"
+            size="small"
+            class="evm-decoded__copy"
+            [attr.aria-label]="'evm-decoder.copy' | translate"
+            (click)="copyValue(row)"
+          >
+            <ion-icon slot="icon-only" name="copy-outline"></ion-icon>
+          </ion-button>
+        </div>
+        <ng-template #plainValue>
+          <h3 [class]="'evm-decoded__value evm-decoded__value--' + row.type">{{ renderValue(row) }}</h3>
+        </ng-template>
+        <div class="evm-decoded__decimals" *ngIf="isScalable(row)">
+          <button type="button" class="evm-decoded__decimals-btn" (click)="cycleDecimals(row)">
+            {{ 'evm-decoder.decimals-apply' | translate }}:
+            {{ currentDecimals(row) === null ? ('evm-decoder.decimals-raw' | translate) : currentDecimals(row) }}
+          </button>
+          <span class="evm-decoded__scaled" *ngIf="scaledValue(row) as scaled">
+            = {{ scaled }}
+            <small>({{ 'evm-decoder.assuming-decimals' | translate: { decimals: currentDecimals(row) } }})</small>
+          </span>
+        </div>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-card color="danger" *ngIf="result.targetUnknown" class="evm-decoded__warning">
+    <ion-card-content>
+      <ion-icon name="warning-outline"></ion-icon>
+      {{ 'evm-decoder.target-unknown-warning' | translate }}
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card color="warning" *ngIf="result.warningKey" class="evm-decoded__warning">
+    <ion-card-content>
+      <ion-icon name="warning-outline"></ion-icon>
+      {{ result.warningKey | translate: result.warningParams }}
+    </ion-card-content>
+  </ion-card>
+
+  <div class="evm-decoded__nested" *ngIf="result.nested && result.nested.length">
+    <h4>{{ 'evm-decoder.inner-calls' | translate }}</h4>
+    <airgap-evm-transaction-display
+      *ngFor="let inner of result.nested"
+      [result]="inner"
+      [dbDate]="dbDate"
+    ></airgap-evm-transaction-display>
+  </div>
+
+  <small class="evm-decoded__meta" *ngIf="dbDate">
+    {{ 'evm-decoder.db-date-label' | translate }}: {{ dbDate }}
+  </small>
+</div>

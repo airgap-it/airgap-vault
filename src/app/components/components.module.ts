@@ -28,6 +28,8 @@ import { InteractionSelectionComponent } from './interaction-selection/interacti
 import { MnemonicKeyboardComponent } from './mnemonic-keyboard/mnemonic-keyboard.component'
 import { ProgressIndicatorComponent } from './progress-indicator/progress-indicator.component'
 import { AddAddressComponent } from './add-address/add-address.component'
+import { EvmTransactionDisplayComponent } from './evm-transaction-display/evm-transaction-display.component'
+import { WipeConfirmComponent } from './wipe-confirm/wipe-confirm.component'
 
 @NgModule({
   declarations: [
@@ -49,7 +51,9 @@ import { AddAddressComponent } from './add-address/add-address.component'
     InteractionSelectionComponent,
     MnemonicKeyboardComponent,
     ProgressIndicatorComponent,
-    AddAddressComponent
+    AddAddressComponent,
+    EvmTransactionDisplayComponent,
+    WipeConfirmComponent
   ],
   imports: [
     IonicModule,
@@ -81,7 +85,9 @@ import { AddAddressComponent } from './add-address/add-address.component'
     InteractionSelectionComponent,
     MnemonicKeyboardComponent,
     ProgressIndicatorComponent,
-    AddAddressComponent
+    AddAddressComponent,
+    EvmTransactionDisplayComponent,
+    WipeConfirmComponent
   ]
 })
 export class ComponentsModule {}

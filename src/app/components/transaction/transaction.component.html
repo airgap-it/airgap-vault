@@ -28,8 +28,16 @@
     </ion-row>
   </ng-container>
 
-  <ng-container *ngFor="let airGapTx of airGapTxs">
+  <ng-container *ngFor="let airGapTx of airGapTxs; let i = index">
     <airgap-transaction-warning [transaction]="airGapTx"></airgap-transaction-warning>
+    <ng-container *ngIf="evmResults$ | async as evmResults">
+      <airgap-evm-transaction-display
+        *ngIf="evmResults[i] as decoded"
+        class="ion-padding-horizontal"
+        [result]="decoded"
+        [dbDate]="dbDate$ | async"
+      ></airgap-evm-transaction-display>
+    </ng-container>
     <airgap-from-to
       class="ion-padding-horizontal"
       [transaction]="airGapTx"

@@ -32,8 +32,23 @@ public class Zip: CAPPlugin {
     }
     
     private func unzip(from sourceURL: URL, to destinationURL: URL) throws {
+        try validateEntryPaths(of: sourceURL, against: destinationURL)
         try FileManager.default.createDirectory(at: destinationURL, withIntermediateDirectories: true)
         try FileManager.default.unzipItem(at: sourceURL, to: destinationURL)
+    }
+
+    /// Rejects archives containing entries that would be written outside `destinationURL`
+    /// (e.g. `../` components or absolute paths). Defends the extraction sink independently
+    /// of the ZIPFoundation version (CVE-2023-39138).
+    private func validateEntryPaths(of sourceURL: URL, against destinationURL: URL) throws {
+        let archive = try Archive(url: sourceURL, accessMode: .read)
+        let root = destinationURL.standardizedFileURL.path
+        for entry in archive {
+            let target = destinationURL.appendingPathComponent(entry.path).standardizedFileURL.path
+            guard target == root || target.hasPrefix(root.hasSuffix("/") ? root : root + "/") else {
+                throw Error.pathTraversal(entry.path)
+            }
+        }
     }
     
     private func getFileURL(at path: String, locatedIn directory: Directory?) -> URL? {
@@ -57,6 +72,7 @@ public class Zip: CAPPlugin {
     
     private enum Error: Swift.Error {
         case invalidPath(String)
+        case pathTraversal(String)
     }
 }
 

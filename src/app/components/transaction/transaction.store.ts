@@ -2,7 +2,7 @@ import { sumAirGapTxValues } from '@airgap/angular-core'
 import { IAirGapTransaction, ProtocolSymbols } from '@airgap/coinlib-core'
 import { Injectable } from '@angular/core'
 import { ComponentStore } from '@ngrx/component-store'
-import BigNumber from 'bignumber.js'
+import BigNumber from '@airgap/coinlib-core/dependencies/src/bignumber.js-9.0.0/bignumber'
 
 export interface AggregatedDetails {
   numberOfTxs: number

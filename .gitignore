@@ -37,3 +37,16 @@ Thumbs.db
 UserInterfaceState.xcuserstate
 
 src/assets/protocol_modules/
+
+src/assets/evm/signatures.db
+src/assets/evm/signatures.meta.json
+
+# Phase-1 (Sourcify refresh) local artifacts — the committed source of truth is
+# scripts/signatures.curated.ndjson.gz, not these.
+scripts/.venv/
+scripts/.duckdb_tmp/
+scripts/signatures.curated.ndjson
+
+scripts/stubs/*.js
+
+.trivycache/

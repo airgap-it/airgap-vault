@@ -1,5 +1,50 @@
 {
   "next": "Next",
+  "evm-decoder": {
+    "confidence-high": "Verified standard",
+    "confidence-medium": "Database match",
+    "confidence-low": "Ambiguous match",
+    "confidence-unknown": "Could not decode",
+    "collision-warning": "Multiple function signatures ({{ count }}) match this selector. The most likely interpretation is shown, but verify the raw calldata.",
+    "database-note": "Decoded via the local signature database. The signature is not a known standard — verify before signing.",
+    "unknown-warning": "This transaction could not be decoded. This does not mean it is invalid. Review the raw calldata carefully before signing.",
+    "approval-warning": "This grants the spender permission to transfer tokens on your behalf. Verify the spender address carefully.",
+    "multicall-warning": "This transaction contains multiple inner calls. Review each one carefully — a single multicall can hide a malicious operation.",
+    "transferfrom-ambiguous-warning": "Selector 0x23b872dd is used by both ERC-20 transferFrom and ERC-721 transferFrom. The third parameter is either a token amount (ERC-20) or a token ID (ERC-721). Verify the contract before signing.",
+    "multicall-depth-warning": "Refusing to decode multicall nested deeper than the safety limit. Review raw calldata.",
+    "raw-calldata-label": "Raw calldata",
+    "function-label": "Function",
+    "contract-label": "Contract",
+    "to-label": "To",
+    "from-label": "From",
+    "amount-label": "Amount",
+    "amount-or-token-id-label": "Amount or Token ID",
+    "spender-label": "Spender",
+    "token-id-label": "Token ID",
+    "db-date-label": "Signature database",
+    "inner-calls": "Inner calls",
+    "fn-token-transfer": "Token Transfer",
+    "fn-token-approval": "Token Approval",
+    "fn-nft-transfer": "NFT Transfer (safe)",
+    "fn-transferfrom-ambiguous": "transferFrom (ERC-20 or ERC-721)",
+    "fn-multicall": "Multicall ({{ count }} calls)",
+    "fn-multicall-depth": "Multicall — nested too deep (max {{ max }})",
+    "fn-plain-transfer": "Plain value transfer (no calldata)",
+    "fn-unknown": "Unknown",
+    "amount-unlimited": "Unlimited",
+    "amount-raw-note": "{{ value }} (raw — token decimals unknown)",
+    "copy": "Copy",
+    "tap-to-expand": "Tap to show the full value wrapped",
+    "decimals-apply": "Decimals",
+    "decimals-raw": "raw",
+    "assuming-decimals": "assuming {{ decimals }} decimals",
+    "array-items": "{{ count }} items",
+    "tuple-fields": "{{ count }} fields",
+    "array-truncated": "… and {{ count }} more",
+    "bytes-decoded-below": "↓ decoded below",
+    "target-unknown": "Unknown — decided at execution time",
+    "target-unknown-warning": "This call was recovered from a bytes parameter. The contract it executes against is chosen at execution time and cannot be determined here — it is NOT the contract shown above it. Amounts are therefore shown in raw base units, with no token symbol."
+  },
   "account-list": {
     "delete": "Delete"
   },
@@ -444,7 +489,8 @@
     "settings_label": "Settings",
     "actions_label": "Actions",
     "vault-interaction_label": "Vault Interaction",
-    "security-level-self-check_label": "Security Level Self-Check"
+    "security-level-self-check_label": "Security Level Self-Check",
+    "secure-setup_label": "Secure Setup Guide"
   },
   "vault-interaction-settings": {
     "heading": "Vault Interaction",
@@ -753,11 +799,15 @@
     "description": "The actions on this page are only intended for advanced users. Please be aware of the consequences if you use one of the following features.",
     "wipe_label": "Reset AirGap Vault",
     "wipe": {
-      "alert": {
-        "title": "Wipe Vault",
-        "message": "This action will delete all your secrets and reset AirGap Vault to the factory settings.<br /><br /><b>Make sure you have a backup of all your recovery phrases.</b>",
-        "cancel": "Cancel",
-        "ok": "Ok"
+      "confirm": {
+        "title": "Wipe all secrets",
+        "description": "This deletes every secret on this device and resets AirGap Vault to its factory settings. There is no way to undo it.",
+        "backup_label": "Have you backed up all your secrets?",
+        "acknowledge_label": "I understand that I cannot recover my secrets without a backup.",
+        "input_label": "Type \"{{phrase}}\" to confirm.",
+        "phrase": "wipe all secrets",
+        "cancel_label": "Cancel",
+        "confirm_label": "Wipe all secrets"
       }
     },
     "wipe-error": {
@@ -864,5 +914,63 @@
     "secret-management_label": "Secret Management",
     "sync-all_label": "Sync All Accounts With AirGap Wallet",
     "delete_label": "Delete Accounts"
+  },
+  "secure-setup": {
+    "title": "Secure Setup Guide",
+    "description": "In this guide we describe the steps of how a secure offline device can be set up.",
+    "simple": {
+      "title": "Simple Setup",
+      "step1": "Get a dedicated device, which will from now on ONLY be used for AirGap Vault, no other applications.",
+      "step2": "Update the device to the latest firmware and install all available updates.",
+      "step3": "Do a factory reset.",
+      "step4": "Set up the device and use a strong password, optionally protect the device with biometrics.",
+      "step5": "Install AirGap Vault.",
+      "step6": "Set device into Airplane mode and never turn it back on."
+    },
+    "advanced": {
+      "title": "Advanced Setup",
+      "step1": "Get a dedicated device, which will from now on ONLY be used for AirGap Vault, no other applications.",
+      "step2": "Update the device to the latest firmware and install all available updates.",
+      "step3": "Do a factory reset.",
+      "disable_wifi": "Disable WiFi.",
+      "disable_bluetooth": "Disable Bluetooth and NFC.",
+      "enable_airplane": "Enable Airplane mode.",
+      "speakers_off": "Make sure speakers are off. Data transmission over sound is possible, albeit with limited capacity. We recommend that you turn it off to achieve a truly air-gapped device.",
+      "ios": {
+        "step4": "Take your every day phone and create a hotspot. Use a temporary and complicated password. We will use this hotspot to connect to the internet temporarily to download AirGap Vault.",
+        "step5": "Proceed setting up your dedicated device. When asked to join a WiFi network, join the hotspot created above.",
+        "step6": "Log in with your Apple ID. Ideally, create a new Apple ID just for this phone.",
+        "step7": "Set a strong password and optionally protect your device with biometrics.",
+        "step8": "Open the App Store and download AirGap Vault. Make sure you download the correct app.",
+        "disable_cellular": "Disable Cellular (disable DATA in settings). A cellular network connects you to the internet, which defeats the purpose of setting up a cold storage device.",
+        "disconnect_hotspot": "On your online device, disconnect all devices and change the password of your mobile hotspot."
+      },
+      "android": {
+        "step4": "On an online device, download a copy of the AirGap Vault application from GitHub, or build it yourself.",
+        "step5": "Copy the downloaded file from your online computer to the offline device via SD Card or USB Stick."
+      }
+    },
+    "removing": {
+      "title": "Removing AirGap Vault",
+      "step1": "Remove all secrets from AirGap Vault.",
+      "step2": "In the AirGap Vault settings, enter the Danger Zone and select Wipe.",
+      "step3": "Remove AirGap Vault from your device.",
+      "ios": {
+        "step4": "Go to settings and select Erase All Content and Settings."
+      },
+      "android": {
+        "step4": "Do a factory reset."
+      }
+    },
+    "updating": {
+      "title": "Updating AirGap Vault",
+      "ios": {
+        "description": "On iOS, there is no way to update AirGap Vault while your device is offline. Remove AirGap Vault, wipe the device, and start from scratch following the steps above."
+      },
+      "android": {
+        "step1": "On an online device, download a copy of the AirGap Vault application from GitHub, or build it yourself.",
+        "step2": "Copy the downloaded file from your online computer to the offline device via SD Card or USB Stick and replace the old installation."
+      }
+    }
   }
 }

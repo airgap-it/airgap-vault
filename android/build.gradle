@@ -25,6 +25,11 @@ allprojects {
         mavenCentral()
         maven { url 'https://jitpack.io' }
     }
+    // Lock resolved dependency versions so they are reproducible and scannable
+    // (Trivy reads gradle.lockfile). Refresh with: ./gradlew dependencies --write-locks
+    dependencyLocking {
+        lockAllConfigurations()
+    }
     afterEvaluate {
         if (getPlugins().hasPlugin('android') ||
             getPlugins().hasPlugin('android-library')) {
