@@ -25,7 +25,7 @@ misconfigurations:
 
 # ---------------------------------------------------------------------------
 # Vulnerabilities. 26 entries covering the 27 open findings (CVE-2026-2739 hits
-# two bn.js versions). Every one is triaged in issue #578: either sourced only
+# two bn.js versions). Every one is triaged: either sourced only
 # through a first-party @airgap/* package, or unreachable because the vulnerable
 # API is never called, the framework feature is not enabled, or the code is
 # build-time only and never ships to a device.
@@ -60,7 +60,7 @@ vulnerabilities:
       @stablelib/ed25519 1.0.3 via @airgap/tezos > @taquito/utils. Signature
       malleability, no published fix. Deserves attention out of proportion to
       its MEDIUM rating in a wallet, but the decision belongs to the coinlib
-      team; tracked in #578 rather than fixed here.
+      team; tracked there rather than fixed here.
     expired_at: 2026-12-31
 
   # --- Vulnerable API is never called ----------------------------------------
@@ -69,8 +69,8 @@ vulnerabilities:
       secp256k1 4.0.3 via @keystonehq/bc-ur-registry-eth > hdkey. The flaw is in
       ecdh(); no consumer of this copy calls it, only sign/verify/recover. The
       only ecdh() call sites in the tree are coinlib's vendored copies, which
-      carry no package metadata and are a separate scan blind spot (#578,
-      coverage gap 2). Re-open the moment any consumer calls ecdh: the fix is
+      carry no package metadata and are a separate scan blind spot of
+      their own. Re-open the moment any consumer calls ecdh: the fix is
       in-range at 4.0.4 and free.
     expired_at: 2026-12-31
   - id: CVE-2026-2739
@@ -84,7 +84,7 @@ vulnerabilities:
     statement: >-
       uuid 8.3.2 via @keystonehq/bc-ur-registry-eth. The out-of-bounds write
       needs a caller-supplied buffer passed to v3/v5/v6. Note this differs from
-      the original #578 analysis: the direct dependency was deleted, and
+      the original triage: the direct dependency was deleted, and
       @airgap/angular-core does import uuid on the live MetaMask sync path, but
       it calls only parse and v4, so the vulnerable signature is still unused.
     expired_at: 2026-12-31
@@ -115,7 +115,7 @@ vulnerabilities:
 
   # --- Angular 16.1.1: framework feature not enabled -------------------------
   # Pinned at 16.1.1 across the @angular/* set; earliest fixes land in 19.2.x, a
-  # three-major migration with coordinated peer bumps (#578 recommendation 9).
+  # three-major migration with coordinated peer bumps.
   # None of these is an argument for that migration - each vulnerable path is
   # absent - but 16.x is out of support, so the migration is worth planning on
   # its own merits. These expire together with that plan.
@@ -142,7 +142,7 @@ vulnerabilities:
     expired_at: 2027-03-31
   - id: CVE-2026-88059
     statement: >-
-      HttpTransferCache leak, reported after the #578 analysis. Same SSR-only
+      HttpTransferCache leak, reported after the original triage. Same SSR-only
       API, same absence; consistent with the exclusions already recorded there.
     expired_at: 2027-03-31
   - id: CVE-2026-54267
@@ -182,7 +182,7 @@ vulnerabilities:
       an Angular sanitizer sink; every [innerHTML] binds a translate output or a
       first-party value. Untrusted strings do reach Ionic's own innerHTML path
       via innerHTMLTemplatesEnabled, but that is a separate sink outside this CVE
-      and still unreviewed (#578 recommendation 10).
+      and still unreviewed.
     expired_at: 2027-03-31
   - id: CVE-2026-52725
     statement: >-
@@ -192,7 +192,7 @@ vulnerabilities:
     expired_at: 2027-03-31
   - id: CVE-2026-88057
     statement: >-
-      Host-binding sanitization bypass, reported after the #578 analysis.
+      Host-binding sanitization bypass, reported after the original triage.
       Application code declares no @HostBinding at all.
     expired_at: 2027-03-31
 
