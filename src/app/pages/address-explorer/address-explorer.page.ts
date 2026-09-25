@@ -1,15 +1,15 @@
 import { AirGapMarketWallet, MainProtocolSymbols } from '@airgap/coinlib-core'
 import { Component, OnInit } from '@angular/core'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
-import { BIP32Factory } from 'bip32'
-import * as ecc from '@bitcoinerlab/secp256k1'
-import * as bs58check from 'bs58check'
+import { BIP32Factory } from '@airgap/coinlib-core/dependencies/src/bip32-5.0.1/src/index'
+import * as ecc from '@airgap/coinlib-core/dependencies/src/@bitcoinerlab/secp256k1-1.2.0/src/index'
+import bs58check from '@airgap/coinlib-core/dependencies/src/bs58check-4.0.0/src/index'
 
 // https://github.com/satoshilabs/slips/blob/master/slip-0132.md
 class ExtendedPublicKey {
   private readonly rawKey: Buffer
   constructor(extendedPublicKey: string) {
-    this.rawKey = bs58check.decode(extendedPublicKey).slice(4)
+    this.rawKey = Buffer.from(bs58check.decode(extendedPublicKey).slice(4))
   }
 
   toXpub() {

@@ -38,6 +38,36 @@ unit:
       - lcov.info
       - lintReport.json
 
+trivy:
+  stage: test
+  image:
+    name: aquasec/trivy:0.74.0
+    entrypoint: ['']
+  variables:
+    TRIVY_CACHE_DIR: .trivycache/
+  cache:
+    key: trivy
+    paths:
+      - .trivycache/
+  # --offline-scan: the pom analyzer resolves uitest/ transitives against Maven
+  # Central on every run, which answers 429 and aborts the scan as FATAL.
+  # --ignorefile: .trivyignore.yaml is not auto-detected, only plain .trivyignore.
+  # Sapling params are multi-MB binaries; skipping them keeps the secret scan quick.
+  script:
+    # Misconfigurations and secrets are at zero, so any regression fails the pipeline.
+    - trivy fs . --scanners misconfig,secret --offline-scan --ignorefile .trivyignore.yaml
+      --skip-dirs node_modules --skip-dirs www --skip-dirs .trivycache --skip-dirs src/assets/sapling
+      --exit-code 1
+    # Vulnerabilities: the 27 open findings are triaged and encoded in
+    # .trivyignore.yaml, so anything new fails here. Each entry carries an
+    # expired_at review date; when one lapses its finding returns and this job
+    # goes red on purpose. --show-suppressed keeps them visible in the log.
+    - trivy fs . --scanners vuln --offline-scan --ignorefile .trivyignore.yaml
+      --skip-dirs node_modules --skip-dirs www --skip-dirs .trivycache
+      --show-suppressed --exit-code 1
+  tags:
+    - docker
+
 build_android:
   stage: native_build
   when: manual

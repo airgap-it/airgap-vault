@@ -1,9 +1,10 @@
 package Helpers;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Log {
-    private static Logger Log = Logger.getLogger(Log.class.getName());
+    private static Logger Log = LogManager.getLogger(Log.class);
 
     public static void startLog(String testClassName) {
         Log.info("Test is Starting...");

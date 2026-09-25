@@ -1,6 +1,6 @@
 FROM beevelop/ionic:v2021.06.1
 
-RUN apt-get update -y && apt-get install -y \
+RUN apt-get update -y && apt-get install -y --no-install-recommends \
     bzip2 \
     build-essential  \
     pkg-config  \
@@ -58,4 +58,9 @@ RUN yarn prepare-prod-build \
     && zipalign -p -f -v 4 android-debug.apk android-debug-aligned.apk \
     && apksigner sign --ks ./build/android/debug.keystore --ks-key-alias androiddebugkey --ks-pass pass:android --key-pass pass:android android-debug-aligned.apk \
     && zipalign -p -f -v 4 android-appium.apk android-appium-aligned.apk \
-    && apksigner sign --ks ./build/android/debug.keystore --ks-key-alias androiddebugkey --ks-pass pass:android --key-pass pass:android android-appium-aligned.apk \
+    && apksigner sign --ks ./build/android/debug.keystore --ks-key-alias androiddebugkey --ks-pass pass:android --key-pass pass:android android-appium-aligned.apk
+
+# Every step above runs as root at build time. CI only ever runs this image as
+# `docker run ... echo "container ran."` before `docker cp` extracts the APKs,
+# so dropping to an unprivileged user here costs nothing (Trivy DS-0002).
+USER nobody
