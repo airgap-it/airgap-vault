@@ -298,13 +298,28 @@ export class SecretsService {
 
     if (isBtc) {
       // BTC protocols: Always HD, increment account index
-      const lastIndices = existingWallets.map((wallet) => {
-        const match = wallet.derivationPath.match(/(\d+)[h']?\/?$/)
-        return match ? parseInt(match[1], 10) : 0
+        const lastIndices = existingWallets.map((wallet) => {
+        const lastPart = wallet.derivationPath.split('/').pop() ?? ''
+        const index = lastPart.replace(/[h']/g, '')
+
+        return Number(index) || 0
       })
       const maxIndex = Math.max(...lastIndices)
       const nextIndex = maxIndex + 1
-      const newPath = standardPath.replace(/(\d+)([h']?)(\/?)?$/, `${nextIndex}$2$3`)
+      const parts = standardPath.split('/')
+      const last = parts.pop() ?? ''
+
+      let suffix = ''
+
+      if (last.endsWith("'")) {
+      suffix = "'"
+      } else if (last.endsWith('h')) {
+      suffix = 'h'
+     }
+
+      parts.push(`${nextIndex}${suffix}`)
+
+      const newPath = parts.join('/')
       return { derivationPath: newPath, isHDWallet: true }
     } else if (supportsHD) {
       // HD-capable protocols (ETH, OP, etc.): First is HD, subsequent are non-HD
@@ -315,8 +330,10 @@ export class SecretsService {
           return 0
         }
         // Non-HD wallet - extract last number from path
-        const match = wallet.derivationPath.match(/\/(\d+)$/)
-        return match ? parseInt(match[1], 10) : 0
+        const lastPart = wallet.derivationPath.split('/').pop() ?? ''
+        const index = lastPart.replace(/[h']/g, '')
+
+        return Number(index) || 0
       })
       const maxIndex = Math.max(...addressIndices)
       const nextIndex = maxIndex + 1
@@ -325,12 +342,25 @@ export class SecretsService {
       // Non-HD protocols: Increment last number in path
       // e.g., m/44h/1729h/0h/0h -> m/44h/1729h/0h/1h
       const lastIndices = existingWallets.map((wallet) => {
-        const match = wallet.derivationPath.match(/(\d+)[h']?\/?$/)
+        const match = wallet.derivationPath.match(/(\d+)(?:[h'])?(?:\/)?$/)
         return match ? parseInt(match[1], 10) : 0
       })
       const maxIndex = Math.max(...lastIndices)
       const nextIndex = maxIndex + 1
-      const newPath = standardPath.replace(/(\d+)([h']?)(\/?)?$/, `${nextIndex}$2$3`)
+      const parts = standardPath.split('/')
+      const last = parts.pop() ?? ''
+
+      let suffix = ''
+
+      if (last.endsWith("'")) {
+      suffix = "'"
+      } else if (last.endsWith('h')) {
+      suffix = 'h'
+     }
+
+      parts.push(`${nextIndex}${suffix}`)
+
+      const newPath = parts.join('/')
       return { derivationPath: newPath, isHDWallet: false }
     }
   }
