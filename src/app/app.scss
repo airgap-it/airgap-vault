@@ -129,3 +129,12 @@ pre {
 .transparent {
   --background: none transparent !important;
 }
+
+airgap-account-item ion-label div {
+  display: block !important;
+}
+
+airgap-account-item ion-label div p {
+  text-align: left;
+  margin-left: 0;
+}
