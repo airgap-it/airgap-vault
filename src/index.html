@@ -39,6 +39,50 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
+    <!-- Polyfills for older WebViews (e.g. Chrome < 71 / Chrome 68) -->
+    <script>
+      if (typeof globalThis === 'undefined') {
+        window.globalThis = window;
+      }
+      if (!Array.prototype.flat) {
+        Object.defineProperty(Array.prototype, 'flat', {
+          configurable: true,
+          value: function flat(depth) {
+            var d = depth === undefined ? 1 : Number(depth);
+            return d > 0
+              ? Array.prototype.reduce.call(this, function (acc, val) {
+                  return acc.concat(Array.isArray(val) ? Array.prototype.flat.call(val, d - 1) : val);
+                }, [])
+              : Array.prototype.slice.call(this);
+          },
+          writable: true
+        });
+      }
+      if (!Array.prototype.flatMap) {
+        Object.defineProperty(Array.prototype, 'flatMap', {
+          configurable: true,
+          value: function flatMap(callback, thisArg) {
+            return Array.prototype.map.call(this, callback, thisArg).flat(1);
+          },
+          writable: true
+        });
+      }
+      if (!Object.fromEntries) {
+        Object.fromEntries = function (entries) {
+          if (!entries || !entries[Symbol.iterator]) {
+            throw new TypeError('Object.fromEntries requires an iterable object');
+          }
+          var obj = {};
+          for (var pair of entries) {
+            if (Object(pair) !== pair) {
+              throw new TypeError('iterable progress failed');
+            }
+            obj[pair[0]] = pair[1];
+          }
+          return obj;
+        };
+      }
+    </script>
     <!-- check if app has loaded after x seconds. If not, error alert is shown. -->
     <script src="assets/js/error-check.js"></script>
   </head>

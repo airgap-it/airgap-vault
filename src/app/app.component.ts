@@ -95,18 +95,26 @@ export class AppComponent implements AfterViewInit {
   }
 
   public async initializeApp(): Promise<void> {
-    await Promise.all([this.platform.ready(), this.initializeTranslations(), this.initializeProtocols()])
+    await this.platform.ready()
 
     if (this.platform.is('hybrid')) {
       this.statusBar.setStyle({ style: Style.Dark })
       this.statusBar.setBackgroundColor({ color: '#311B58' })
-      this.splashScreen.hide()
+      this.splashScreen.hide().catch((err) => console.warn('splashScreen.hide error', err))
+    }
 
+    try {
+      await Promise.all([this.initializeTranslations(), this.initializeProtocols()])
+    } catch (err) {
+      console.error('Initialization error', err)
+    }
+
+    if (this.platform.is('hybrid')) {
       await this.securityUtils.toggleAutomaticAuthentication({ automatic: true })
     }
 
     if (this.platform.is('android')) {
-      await EdgeToEdge.setBackgroundColor({ color: '#311B58' })
+      await EdgeToEdge.setBackgroundColor({ color: '#311B58' }).catch((err) => console.warn('EdgeToEdge error', err))
     }
 
     this.initChecks()

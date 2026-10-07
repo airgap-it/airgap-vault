@@ -11,7 +11,7 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "downlevelIteration": true,
-    "target": "ES2022",
+    "target": "ES2018",
     "typeRoots": [
       "node_modules/@types"
     ],
