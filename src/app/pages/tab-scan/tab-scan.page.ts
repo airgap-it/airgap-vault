@@ -6,6 +6,7 @@ import { ZXingScannerComponent } from '@zxing/ngx-scanner'
 import { SecurityUtilsPlugin } from 'src/app/capacitor-plugins/definitions'
 import { SECURITY_UTILS_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
 import { IACService } from 'src/app/services/iac/iac.service'
+import { ScanFeedbackService } from 'src/app/services/scan-feedback/scan-feedback.service'
 // import { NavigationService } from 'src/app/services/navigation/navigation.service'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
@@ -34,9 +35,10 @@ export class TabScanPage extends ScanBasePage {
     permissionsProvider: PermissionsService,
     @Inject(SECURITY_UTILS_PLUGIN) securityUtils: SecurityUtilsPlugin,
     private readonly iacService: IACService,
-    private readonly ngZone: NgZone // private readonly navigationService: NavigationService
+    private readonly ngZone: NgZone, // private readonly navigationService: NavigationService
+    scanFeedbackService: ScanFeedbackService
   ) {
-    super(platform, scanner, permissionsProvider, securityUtils)
+    super(platform, scanner, permissionsProvider, securityUtils, scanFeedbackService)
   }
 
   async ionViewWillLeave() {
@@ -69,6 +71,8 @@ export class TabScanPage extends ScanBasePage {
 
       return undefined
     }
+
+    this.notifyFrameAccepted()
 
     this.ngZone.run(() => {
       this.iacService

@@ -1,4 +1,5 @@
 import { InjectionToken } from '@angular/core'
+import { HapticsPlugin } from '@capacitor/haptics'
 import { FilePickerPlugin } from '@capawesome/capacitor-file-picker'
 import { CameraPreviewPlugin, EnvironmentPlugin, SaplingNativePlugin, SecurityUtilsPlugin } from './definitions'
 
@@ -7,3 +8,4 @@ export const SAPLING_PLUGIN = new InjectionToken<SaplingNativePlugin>('SaplingPl
 export const SECURITY_UTILS_PLUGIN = new InjectionToken<SecurityUtilsPlugin>('SecurityUtilsPlugin')
 export const FILE_PICKER_PLUGIN = new InjectionToken<FilePickerPlugin>('FilePickerPlugin')
 export const ENVIRONMENT_PLUGIN = new InjectionToken<EnvironmentPlugin>('EnvironmentPlugin')
+export const HAPTICS_PLUGIN = new InjectionToken<HapticsPlugin>('HapticsPlugin')

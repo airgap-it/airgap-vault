@@ -10,6 +10,7 @@ import { ZXingScannerComponent } from '@zxing/ngx-scanner'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 import { AddType } from 'src/app/services/contacts/contacts.service'
 import { handleErrorLocal, ErrorCategory } from 'src/app/services/error-handler/error-handler.service'
+import { ScanFeedbackService } from 'src/app/services/scan-feedback/scan-feedback.service'
 
 @Component({
   selector: 'airgap-contact-scan',
@@ -27,9 +28,10 @@ export class ContactBookScanPage extends ScanBasePage {
     @Inject(SECURITY_UTILS_PLUGIN) securityUtils: SecurityUtilsPlugin,
     private readonly iacService: IACService,
     private readonly ngZone: NgZone,
-    private readonly navigationService: NavigationService
+    private readonly navigationService: NavigationService,
+    scanFeedbackService: ScanFeedbackService
   ) {
-    super(platform, scanner, permissionsProvider, securityUtils)
+    super(platform, scanner, permissionsProvider, securityUtils, scanFeedbackService)
   }
 
   public async ionViewWillEnter(): Promise<void> {
@@ -44,6 +46,7 @@ export class ContactBookScanPage extends ScanBasePage {
 
   public async checkScan(data: string): Promise<boolean | void> {
     if (data.length > 0) {
+      this.notifyFrameAccepted()
       const name  = await this.navigationService.getState().name ?? ''
       this.ngZone.run(async () => {
         this.resetScannerPage()

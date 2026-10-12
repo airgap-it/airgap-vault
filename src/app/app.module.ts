@@ -38,6 +38,7 @@ import { RouteReuseStrategy } from '@angular/router'
 import { App } from '@capacitor/app'
 import { AppLauncher } from '@capacitor/app-launcher'
 import { Clipboard } from '@capacitor/clipboard'
+import { Haptics } from '@capacitor/haptics'
 import { SplashScreen } from '@capacitor/splash-screen'
 import { StatusBar } from '@capacitor/status-bar'
 import { FilePicker } from '@capawesome/capacitor-file-picker'
@@ -59,6 +60,7 @@ import {
   CAMERA_PREVIEW_PLUGIN,
   ENVIRONMENT_PLUGIN,
   FILE_PICKER_PLUGIN,
+  HAPTICS_PLUGIN,
   SAPLING_PLUGIN,
   SECURITY_UTILS_PLUGIN
 } from './capacitor-plugins/injection-tokens'
@@ -149,6 +151,7 @@ export function createTranslateLoader(http: HttpClient): AirGapTranslateLoader {
     { provide: CAMERA_PREVIEW_PLUGIN, useValue: CameraPreview },
     { provide: CLIPBOARD_PLUGIN, useValue: Clipboard },
     { provide: FILESYSTEM_PLUGIN, useValue: Filesystem },
+    { provide: HAPTICS_PLUGIN, useValue: Haptics },
     { provide: SAPLING_PLUGIN, useValue: SaplingNative },
     { provide: SECURITY_UTILS_PLUGIN, useValue: SecurityUtils },
     { provide: SPLASH_SCREEN_PLUGIN, useValue: SplashScreen },
