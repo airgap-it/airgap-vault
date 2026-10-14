@@ -47,7 +47,7 @@
   "devDependencies": {
     "electron": "^8.0.0",
     "electron-builder": "22.6.1",
-    "electron-rebuild": "^1.11.0",
+    "electron-rebuild": "^3.2.9",
     "node-abi": "^2.18.0"
   }
 }
