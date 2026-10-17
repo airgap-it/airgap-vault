@@ -57,7 +57,7 @@ const communityModules = [{ path: path.join(rootdir, 'node_modules/@airgap-commu
 
 function createAirGapModule(module) {
   const packageJson = require(`./${path.join(module.path, 'package.json')}`)
-  const namespace = module.path.split('/').slice(-1)[0]
+  const namespace = path.basename(module.path)
   const outputDir = path.join(assetsdir, `protocol_modules/${namespace}`)
   const outputFile = 'index.browserify.js'
 
@@ -84,7 +84,7 @@ function createAirGapModule(module) {
 }
 
 function copyCommunityModule(module) {
-  const namespace = module.path.split('/').slice(-1)[0]
+  const namespace = path.basename(module.path)
   const outputDir = path.join(assetsdir, `protocol_modules/${namespace}`)
 
   fs.mkdirSync(outputDir, { recursive: true })
