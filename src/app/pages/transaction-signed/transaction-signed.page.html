@@ -13,11 +13,12 @@
   <ion-row class="ion-justify-content-center ion-padding-top">
     <airgap-iac-qr
       *ngIf="interactionUrl && qrType === 0"
+      aria-hidden="true"
       [level]="'L'"
       [messageDefinitionObjects]="interactionUrl"
       [size]="300"
     ></airgap-iac-qr>
-    <airgap-qr *ngIf="signedTxs && qrType === 1" [level]="'L'" [qrdata]="signedTxs" [size]="300"></airgap-qr>
+    <airgap-qr *ngIf="signedTxs && qrType === 1" aria-hidden="true" [level]="'L'" [qrdata]="signedTxs" [size]="300"></airgap-qr>
   </ion-row>
 
   <ng-container *ngIf="messageSignResponse">

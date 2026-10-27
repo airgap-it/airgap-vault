@@ -8,5 +8,58 @@
 </ion-header>
 
 <ion-content>
-  <airgap-qr-settings></airgap-qr-settings>
+  <ion-list lines="none">
+    <ion-item>
+      <ion-toggle [(ngModel)]="serializerService.useV3" justify="space-between" labelPlacement="start">
+        {{ 'qr-settings.enable-new-serializer_label' | translate }}
+      </ion-toggle>
+    </ion-item>
+
+    <!-- Native ranges let Android WebView handle TalkBack's adjustment actions. -->
+    <div class="qr-setting">
+      <label for="qr-display-time">
+        {{ 'qr-settings.page-time_label' | translate }} ({{ serializerService.displayTimePerChunk }} ms)
+      </label>
+      <input id="qr-display-time" type="range" min="50" max="500" step="25" [(ngModel)]="serializerService.displayTimePerChunk" />
+      <div class="range-bounds" aria-hidden="true">
+        <span>50 ms</span>
+        <span>500 ms</span>
+      </div>
+    </div>
+
+    <div class="qr-setting">
+      <label for="qr-single-chunk-size">
+        {{ 'qr-settings.single-page-size_label' | translate }} ({{ serializerService.singleChunkSize }} bytes)
+      </label>
+      <input id="qr-single-chunk-size" type="range" min="100" max="2000" step="50" [(ngModel)]="serializerService.singleChunkSize" />
+      <div class="range-bounds" aria-hidden="true">
+        <span>100 bytes</span>
+        <span>2000 bytes</span>
+      </div>
+    </div>
+
+    <div class="qr-setting">
+      <label for="qr-multi-chunk-size">
+        {{ 'qr-settings.multi-page-size_label' | translate }} ({{ serializerService.multiChunkSize }} bytes)
+      </label>
+      <!-- The default is 250 bytes; allow that half-step until the next adjustment. -->
+      <input
+        id="qr-multi-chunk-size"
+        type="range"
+        min="20"
+        max="1000"
+        [step]="serializerService.multiChunkSize % 20 === 0 ? 20 : 10"
+        [(ngModel)]="serializerService.multiChunkSize"
+      />
+      <div class="range-bounds" aria-hidden="true">
+        <span>20 bytes</span>
+        <span>1000 bytes</span>
+      </div>
+    </div>
+
+    <ion-button color="secondary" (click)="resetSettings()" shape="round">
+      <ion-icon slot="start" name="add" aria-hidden="true"></ion-icon>
+      {{ 'qr-settings.reset' | translate }}
+    </ion-button>
+  </ion-list>
 </ion-content>

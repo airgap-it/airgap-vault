@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core'
-import { ModalController } from '@ionic/angular'
 import { Observable } from 'rxjs'
 import { first } from 'rxjs/operators'
 import { VaultEnvironmentContext, VaultEnvironmentService } from 'src/app/services/environment/vault-environment.service'
+import { ModalAccessibilityService } from '../../services/modal-accessibility/modal-accessibility.service'
 
 import { MnemonicSecret } from '../../models/secret'
 import { DeviceService } from '../../services/device/device.service'
@@ -27,7 +27,7 @@ export class SecretSetupPage implements OnInit {
   constructor(
     private readonly navigationService: NavigationService,
     private readonly secretsService: SecretsService,
-    private readonly modalController: ModalController,
+    private readonly modalAccessibilityService: ModalAccessibilityService,
     private readonly deviceService: DeviceService,
     private readonly storageService: VaultStorageService,
     private readonly environmentService: VaultEnvironmentService
@@ -80,19 +80,23 @@ export class SecretSetupPage implements OnInit {
   }
 
   public async goToOnboardingWelcomePage(): Promise<void> {
-    const modal: HTMLIonModalElement = await this.modalController.create({
-      component: OnboardingWelcomePage,
-      backdropDismiss: false
-    })
+    const modal: HTMLIonModalElement = await this.modalAccessibilityService.create(
+      OnboardingWelcomePage,
+      {},
+      { backdropDismiss: false },
+      { translationKey: 'onboarding-welcome.title', manageInitialFocus: false }
+    )
 
     modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
 
   public async goToInstallationTypePage(): Promise<void> {
-    const modal: HTMLIonModalElement = await this.modalController.create({
-      component: InstallationTypePage,
-      backdropDismiss: false
-    })
+    const modal: HTMLIonModalElement = await this.modalAccessibilityService.create(
+      InstallationTypePage,
+      {},
+      { backdropDismiss: false },
+      { translationKey: 'installation-type.title', manageInitialFocus: false }
+    )
 
     modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }

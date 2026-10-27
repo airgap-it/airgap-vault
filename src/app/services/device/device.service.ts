@@ -1,11 +1,12 @@
 import { Injectable, NgZone, Inject } from '@angular/core'
-import { ModalController, Platform } from '@ionic/angular'
+import { Platform } from '@ionic/angular'
 import { ComponentRef, ModalOptions } from '@ionic/core'
 import { PluginListenerHandle } from '@capacitor/core'
 
 import { Warning, WarningModalPage } from '../../pages/warning-modal/warning-modal.page'
 import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.service'
 import { NavigationService } from '../navigation/navigation.service'
+import { ModalAccessibilityService } from '../modal-accessibility/modal-accessibility.service'
 import { SECURITY_UTILS_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
 import { SecurityUtilsPlugin } from 'src/app/capacitor-plugins/definitions'
 
@@ -19,7 +20,7 @@ export class DeviceService {
   constructor(
     private readonly ngZone: NgZone,
     private readonly platform: Platform,
-    private readonly modalController: ModalController,
+    private readonly modalAccessibilityService: ModalAccessibilityService,
     protected readonly navigationService: NavigationService,
     @Inject(SECURITY_UTILS_PLUGIN) private readonly securityUtils: SecurityUtilsPlugin
   ) {}
@@ -47,11 +48,7 @@ export class DeviceService {
   }
 
   private async presentModal(page: ComponentRef, properties: ModalOptions['componentProps'], callback: Function): Promise<void> {
-    const modal: HTMLIonModalElement = await this.modalController.create({
-      component: page,
-      componentProps: properties,
-      backdropDismiss: false
-    })
+    const modal: HTMLIonModalElement = await this.modalAccessibilityService.create(page, properties, { backdropDismiss: false })
 
     modal
       .onDidDismiss()

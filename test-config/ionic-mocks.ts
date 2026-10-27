@@ -18,7 +18,8 @@ export class ModalControllerMock {
   public create: jasmine.Spy = jasmine.createSpy('create').and.returnValue(
     Promise.resolve({
       present: jasmine.createSpy('present').and.returnValue(Promise.resolve()),
-      onDidDismiss: jasmine.createSpy('onDidDismiss').and.returnValue(Promise.resolve())
+      onDidDismiss: jasmine.createSpy('onDidDismiss').and.returnValue(Promise.resolve()),
+      addEventListener: jasmine.createSpy('addEventListener')
     })
   )
   public dismiss: jasmine.Spy = jasmine.createSpy('dismiss').and.returnValue(Promise.resolve())

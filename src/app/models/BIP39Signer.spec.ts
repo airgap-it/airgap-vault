@@ -1,5 +1,11 @@
 import { BIPSigner } from './BIP39Signer'
 
+describe('BIPSigner mnemonic normalization', () => {
+  it('normalizes casing and repeated whitespace before validation', () => {
+    expect(BIPSigner.prepareMnemonic('  ABANDON\n ABANDON\tABANDON  ')).toBe('abandon abandon abandon')
+  })
+})
+
 // tslint:disable:no-console
 
 describe('BIP-39: Signer', () => {

@@ -11,15 +11,15 @@
         </ion-button>
       </ion-col>
       <ion-col *ngIf="hiddenSuggestions > 0">
-        <ion-button shape="round" size="small" [color]="'tertiary'" class="typography--mono lowercase">
+        <ion-text class="typography--mono lowercase">
           {{ hiddenSuggestions }} more
-        </ion-button>
+        </ion-text>
       </ion-col>
     </ion-row>
     <!-- TODO: If we don't have a "placeholder" here, the keyboard goes up and down while typing, which is bad -->
-    <ion-button *ngIf="suggestions.length === 0" shape="round" size="small" [color]="'secondary'" class="typography--mono lowercase">
+    <ion-text *ngIf="suggestions.length === 0" class="typography--mono lowercase">
       no suggestions
-    </ion-button>
+    </ion-text>
   </ion-row>
 
   <div class="content--align__center-center" *ngFor="let row of rows">
@@ -31,9 +31,10 @@
       class="typography--mono lowercase"
       [disabled]="!letter.enabled"
       (click)="selectLetter(letter.letter)"
+      [attr.aria-label]="letter.letter === '{backspace}' ? ('accessibility.backspace' | translate) : letter.letter"
     >
       <ng-container *ngIf="letter.letter === '{backspace}'">
-        <ion-icon name="backspace-outline"></ion-icon>
+        <ion-icon aria-hidden="true" name="backspace-outline"></ion-icon>
       </ng-container>
       <ng-container *ngIf="letter.letter !== '{backspace}'">
         <span [innerHTML]="letter.letter"></span>
@@ -44,10 +45,10 @@
 
 <div class="content--align__center-center actions--container">
   <ion-button (click)="paste()">
-    <ion-icon name="clipboard-outline"></ion-icon>
+    <ion-icon aria-hidden="true" name="clipboard-outline"></ion-icon>
     {{ 'keyboard.paste' | translate }}
   </ion-button>
-  <ion-button (click)="presentPopover($event)">
-    <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
+  <ion-button (click)="presentPopover($event)" [attr.aria-label]="'accessibility.more_actions' | translate">
+    <ion-icon aria-hidden="true" slot="icon-only" name="ellipsis-vertical"></ion-icon>
   </ion-button>
 </div>

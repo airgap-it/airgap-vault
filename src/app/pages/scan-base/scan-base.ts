@@ -5,6 +5,7 @@ import { ZXingScannerComponent } from '@zxing/ngx-scanner'
 import { Observable, ReplaySubject } from 'rxjs'
 import { SecurityUtilsPlugin } from 'src/app/capacitor-plugins/definitions'
 import { SECURITY_UTILS_PLUGIN } from 'src/app/capacitor-plugins/injection-tokens'
+import { ScanFeedbackService } from 'src/app/services/scan-feedback/scan-feedback.service'
 
 export class ScanBasePage {
   public zxingScanner?: ZXingScannerComponent
@@ -24,7 +25,8 @@ export class ScanBasePage {
     protected platform: Platform,
     protected scanner: QrScannerService,
     protected permissionsProvider: PermissionsService,
-    @Inject(SECURITY_UTILS_PLUGIN) private readonly securityUtils: SecurityUtilsPlugin
+    @Inject(SECURITY_UTILS_PLUGIN) private readonly securityUtils: SecurityUtilsPlugin,
+    private readonly scanFeedbackService: ScanFeedbackService
   ) {
     this.isMobile = this.platform.is('hybrid')
     this.isElectron = this.platform.is('electron')
@@ -88,6 +90,10 @@ export class ScanBasePage {
 
   public checkScan(resultString: string): void {
     console.error(`The checkScan method needs to be overwritten. Ignoring text ${resultString}`)
+  }
+
+  protected notifyFrameAccepted(): void {
+    this.scanFeedbackService.notifyFrameAccepted()
   }
 
   private startScanMobile() {

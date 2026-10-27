@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
-import { ModalController } from '@ionic/angular'
 import { handleErrorLocal, ErrorCategory } from 'src/app/services/error-handler/error-handler.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 import { SocialRecoveryImportHelpPage } from '../social-recovery-import-help/social-recovery-import-help.page'
+import { ModalAccessibilityService } from '../../services/modal-accessibility/modal-accessibility.service'
 // import { SocialRecoveryImportShareService } from 'src/app/social-recovery-import-share/social-recovery-import-share.service'
 
 @Component({
@@ -25,8 +25,8 @@ export class SocialRecoveryImportShareNamePage implements OnInit {
 
   constructor(
     public formBuilder: FormBuilder,
-    private readonly modalController: ModalController,
-    private navigationService: NavigationService // private readonly socialRecoveryImportShareService: SocialRecoveryImportShareService
+    private readonly modalAccessibilityService: ModalAccessibilityService,
+    private readonly navigationService: NavigationService // private readonly socialRecoveryImportShareService: SocialRecoveryImportShareService
   ) {
     // this.sharesMap = this.socialRecoveryImportShareService.getMap()
 
@@ -52,10 +52,12 @@ export class SocialRecoveryImportShareNamePage implements OnInit {
   ngOnInit() {}
 
   async help() {
-    const modal: HTMLIonModalElement = await this.modalController.create({
-      component: SocialRecoveryImportHelpPage,
-      backdropDismiss: false
-    })
+    const modal: HTMLIonModalElement = await this.modalAccessibilityService.create(
+      SocialRecoveryImportHelpPage,
+      {},
+      { backdropDismiss: false },
+      { translationKey: 'accessibility.social_recovery_help_title' }
+    )
 
     modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }

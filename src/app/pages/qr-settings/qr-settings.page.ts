@@ -1,3 +1,4 @@
+import { SerializerService } from '@airgap/angular-core'
 import { Component } from '@angular/core'
 
 @Component({
@@ -6,5 +7,9 @@ import { Component } from '@angular/core'
   styleUrls: ['./qr-settings.page.scss']
 })
 export class QrSettingsPage {
-  constructor() {}
+  constructor(public readonly serializerService: SerializerService) {}
+
+  public async resetSettings(): Promise<void> {
+    await this.serializerService.resetSettings()
+  }
 }

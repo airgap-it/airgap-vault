@@ -1,8 +1,26 @@
-<airgap-account-selection
-  [title]="title"
-  [heading]="heading"
-  [placeholder]="placeholder"
-  [wallets]="wallets"
-  (walletSetEmitter)="setWallet($event)"
-  (dismissEmitter)="dismiss()"
-></airgap-account-selection>
+<ion-header class="ion-no-border">
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()" fill="clear" color="primary" [attr.aria-label]="'accessibility.close' | translate">
+        <ion-icon name="close" slot="icon-only" aria-hidden="true"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title color="primary">{{ title }}</ion-title>
+  </ion-toolbar>
+  <ion-toolbar color="secondary">
+    <ion-searchbar [placeholder]="placeholder" (ionInput)="filterWallets($event)"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <h3 data-modal-focus class="ion-padding" [innerHTML]="heading"></h3>
+  <ion-list class="ion-padding" *ngIf="wallets">
+    <airgap-account-summary
+      *ngFor="let wallet of filteredWallets"
+      [wallet]="wallet"
+      [label]="wallet.label"
+      [selectable]="true"
+      (selected)="setWallet($event)"
+    ></airgap-account-summary>
+  </ion-list>
+</ion-content>

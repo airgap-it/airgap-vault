@@ -1,7 +1,7 @@
 <!-- TODO Tim: translate -->
 <ion-header>
   <ion-toolbar>
-    <ion-title>Error</ion-title>
+    <ion-title>{{ 'secret-edit.error_alert.title' | translate }}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="close()">
         <ion-icon name="close"></ion-icon>
@@ -30,7 +30,7 @@
       />
       <path d="M256 367.91a20 20 0 1120-20 20 20 0 01-20 20z" />
     </svg>
-    <h1>{{ errorTitle }}</h1>
+    <h1 data-modal-focus tabindex="-1">{{ errorTitle }}</h1>
     <p>{{ errorText }}</p>
     <p>Unfortunately, there was an error while attempting to recover your secret using your social shares.</p>
     <p>

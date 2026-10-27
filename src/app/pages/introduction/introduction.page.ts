@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { AfterViewChecked, Component, ElementRef, ViewChild } from '@angular/core'
 import { ModalController, Platform } from '@ionic/angular'
 
 import { ErrorCategory, handleErrorLocal } from '../../services/error-handler/error-handler.service'
@@ -11,9 +11,15 @@ declare let cordova: any
   templateUrl: './introduction.page.html',
   styleUrls: ['./introduction.page.scss']
 })
-export class IntroductionPage {
+export class IntroductionPage implements AfterViewChecked {
+  @ViewChild('pageHeading')
+  private readonly pageHeading?: ElementRef<HTMLElement>
+
   public installationType: InstallationType = InstallationType.UNDETERMINED
   public installationTypes: typeof InstallationType = InstallationType
+  public isInitialOnboarding: boolean = false
+  public saveError: boolean = false
+  private shouldFocusPageHeading: boolean = false
 
   constructor(
     private readonly modalController: ModalController,
@@ -26,13 +32,28 @@ export class IntroductionPage {
       .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
   }
 
-  public accept() {
-    this.storageService
-      .set(VaultStorageKey.INTRODUCTION_INITIAL, true)
-      .then(() => {
-        this.modalController.dismiss().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
-      })
-      .catch(handleErrorLocal(ErrorCategory.SECURE_STORAGE))
+  public ionViewDidEnter(): void {
+    this.shouldFocusPageHeading = true
+  }
+
+  public ngAfterViewChecked(): void {
+    if (!this.shouldFocusPageHeading || !this.pageHeading) {
+      return
+    }
+
+    this.shouldFocusPageHeading = false
+    requestAnimationFrame(() => this.pageHeading?.nativeElement.focus())
+  }
+
+  public async accept(): Promise<void> {
+    this.saveError = false
+    try {
+      await this.storageService.set(VaultStorageKey.INTRODUCTION_INITIAL, true)
+      await this.modalController.dismiss({ accepted: true })
+    } catch (error) {
+      this.saveError = true
+      handleErrorLocal(ErrorCategory.SECURE_STORAGE)(error as Error)
+    }
   }
 
   public downloadClient() {

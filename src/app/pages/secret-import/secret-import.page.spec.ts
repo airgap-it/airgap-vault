@@ -1,28 +1,14 @@
-/*
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
-import { async, ComponentFixture, TestBed } from '@angular/core/testing'
-
 import { SecretImportPage } from './secret-import.page'
 
 describe('SecretImportPage', () => {
-  let component: SecretImportPage
-  let fixture: ComponentFixture<SecretImportPage>
+  function createComponent(): SecretImportPage {
+    return new SecretImportPage({} as any, {} as any, {} as any)
+  }
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [SecretImportPage],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }).compileComponents()
-  }))
+  it('validates a complete BIP39 mnemonic for the secret-import flow', () => {
+    const component = createComponent()
+    component.secretWords = 'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about'.split(' ')
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(SecretImportPage)
-    component = fixture.componentInstance
-    fixture.detectChanges()
-  })
-
-  it('should create', () => {
-    expect(component).toBeTruthy()
+    expect(component.isValid()).toBe(true)
   })
 })
-*/

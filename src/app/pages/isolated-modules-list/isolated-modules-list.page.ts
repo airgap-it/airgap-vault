@@ -3,6 +3,7 @@ import { Component, Inject, OnInit } from '@angular/core'
 import { ModalController, ViewWillEnter, ViewWillLeave } from '@ionic/angular'
 import { ErrorCategory, handleErrorLocal } from 'src/app/services/error-handler/error-handler.service'
 import { VaultModulesService } from 'src/app/services/modules/modules.service'
+import { ModalAccessibilityService } from 'src/app/services/modal-accessibility/modal-accessibility.service'
 import { NavigationService } from 'src/app/services/navigation/navigation.service'
 import { VaultStorageKey, VaultStorageService } from 'src/app/services/storage/storage.service'
 import { IsolatedModulesDetailsMode } from '../isolated-modules-details/isolated-modules.details.types'
@@ -17,6 +18,7 @@ export class IsolatedModulesListPage implements OnInit, ViewWillEnter, ViewWillL
   constructor(
     @Inject(ISOLATED_MODULES_LIST_PAGE_FACADE) public readonly facade: IsolatedModulesListPageFacade,
     private readonly modalController: ModalController,
+    private readonly modalAccessibilityService: ModalAccessibilityService,
     private readonly uiEventService: UiEventService,
     private readonly storageService: VaultStorageService,
     private readonly navigationService: NavigationService,
@@ -77,10 +79,12 @@ export class IsolatedModulesListPage implements OnInit, ViewWillEnter, ViewWillL
   }
 
   private async goToOnboardingPage(): Promise<void> {
-    const modal: HTMLIonModalElement = await this.modalController.create({
-      component: IsolatedModulesOnboardingPage,
-      backdropDismiss: false
-    })
+    const modal: HTMLIonModalElement = await this.modalAccessibilityService.create(
+      IsolatedModulesOnboardingPage,
+      {},
+      { backdropDismiss: false },
+      { translationKey: 'isolated-modules-onboarding.title' }
+    )
 
     modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }

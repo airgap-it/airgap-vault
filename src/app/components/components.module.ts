@@ -30,6 +30,8 @@ import { ProgressIndicatorComponent } from './progress-indicator/progress-indica
 import { AddAddressComponent } from './add-address/add-address.component'
 import { EvmTransactionDisplayComponent } from './evm-transaction-display/evm-transaction-display.component'
 import { WipeConfirmComponent } from './wipe-confirm/wipe-confirm.component'
+import { AccountSummaryComponent } from './account-summary/account-summary.component'
+import { TransactionDetailsComponent } from './transaction-details/transaction-details.component'
 
 @NgModule({
   declarations: [
@@ -53,7 +55,9 @@ import { WipeConfirmComponent } from './wipe-confirm/wipe-confirm.component'
     ProgressIndicatorComponent,
     AddAddressComponent,
     EvmTransactionDisplayComponent,
-    WipeConfirmComponent
+    WipeConfirmComponent,
+    AccountSummaryComponent,
+    TransactionDetailsComponent
   ],
   imports: [
     IonicModule,
@@ -87,7 +91,9 @@ import { WipeConfirmComponent } from './wipe-confirm/wipe-confirm.component'
     ProgressIndicatorComponent,
     AddAddressComponent,
     EvmTransactionDisplayComponent,
-    WipeConfirmComponent
+    WipeConfirmComponent,
+    AccountSummaryComponent,
+    TransactionDetailsComponent
   ]
 })
 export class ComponentsModule {}

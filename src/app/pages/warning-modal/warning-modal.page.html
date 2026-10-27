@@ -1,15 +1,21 @@
 <ion-header transparent class="ion-no-border">
   <ion-toolbar transparent>
-    <ion-title>{{ title }}</ion-title>
+    <ion-title #warningTitle data-modal-focus tabindex="-1">{{ title }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-row class="ion-padding-horizontal" [innerHtml]="description"></ion-row>
+  <div class="ion-padding-horizontal">
+    <p>{{ description }}</p>
+  </div>
 
-  <ion-row class="ion-justify-content-center" *ngIf="imageUrl"><img class="warning-img" [src]="imageUrl" /></ion-row>
-
-  <ion-fab *ngIf="buttonText" vertical="bottom" horizontal="end" slot="fixed">
-    <ion-button default (click)="handler()" color="primary" shape="round" item-right>{{ buttonText }}</ion-button>
-  </ion-fab>
+  <ion-row class="ion-justify-content-center" *ngIf="imageUrl">
+    <img class="warning-img" [src]="imageUrl" alt="" aria-hidden="true" />
+  </ion-row>
 </ion-content>
+
+<ion-footer *ngIf="buttonText" class="ion-no-border">
+  <ion-toolbar class="ion-padding-horizontal">
+    <ion-button expand="block" (click)="handler()" color="primary" shape="round">{{ buttonText }}</ion-button>
+  </ion-toolbar>
+</ion-footer>

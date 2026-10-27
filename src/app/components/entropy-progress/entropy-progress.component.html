@@ -1,1 +1,8 @@
-<div>{{ progressInPercent }}%</div>
+<progress
+  [attr.aria-label]="label"
+  max="100"
+  [value]="progressInPercent"
+  [attr.aria-valuetext]="progressInPercent + '%'"
+>
+  {{ progressInPercent }}%
+</progress>

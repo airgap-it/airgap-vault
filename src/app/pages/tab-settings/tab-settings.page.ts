@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { AlertController, ModalController } from '@ionic/angular'
+import { AlertController } from '@ionic/angular'
 import { Observable } from 'rxjs'
 
 import { MnemonicSecret } from '../../models/secret'
@@ -15,6 +15,7 @@ import { SecureStorageService } from 'src/app/services/secure-storage/secure-sto
 import { VaultStorageService } from 'src/app/services/storage/storage.service'
 import { VaultEnvironmentContext, VaultEnvironmentService } from 'src/app/services/environment/vault-environment.service'
 import { WipeConfirmComponent } from 'src/app/components/wipe-confirm/wipe-confirm.component'
+import { ModalAccessibilityService } from '../../services/modal-accessibility/modal-accessibility.service'
 
 @Component({
   selector: 'airgap-tab-settings',
@@ -29,7 +30,7 @@ export class TabSettingsPage implements OnInit {
   constructor(
     public readonly serializerService: SerializerService,
     private readonly secretsService: SecretsService,
-    private readonly modalController: ModalController,
+    private readonly modalAccessibilityService: ModalAccessibilityService,
     private readonly iacService: IACService,
     private readonly clipboardService: ClipboardService,
     private readonly navigationService: NavigationService,
@@ -92,10 +93,12 @@ export class TabSettingsPage implements OnInit {
   }
 
   public async goToOnboarding(): Promise<void> {
-    const modal: HTMLIonModalElement = await this.modalController.create({
-      component: OnboardingWelcomePage,
-      backdropDismiss: false
-    })
+    const modal: HTMLIonModalElement = await this.modalAccessibilityService.create(
+      OnboardingWelcomePage,
+      { isSettingsModal: true },
+      { backdropDismiss: false },
+      { translationKey: 'onboarding-welcome.title', manageInitialFocus: false }
+    )
 
     modal.present().catch(handleErrorLocal(ErrorCategory.IONIC_MODAL))
   }
@@ -130,10 +133,12 @@ export class TabSettingsPage implements OnInit {
   }
 
   public async resetVault() {
-    const modal: HTMLIonModalElement = await this.modalController.create({
-      component: WipeConfirmComponent,
-      backdropDismiss: false
-    })
+    const modal: HTMLIonModalElement = await this.modalAccessibilityService.create(
+      WipeConfirmComponent,
+      {},
+      { backdropDismiss: false },
+      { translationKey: 'danger-zone.wipe.confirm.title' }
+    )
 
     await modal.present()
 

@@ -12,6 +12,7 @@ export class KeyboardPopoverComponent implements OnInit {
   private readonly onScramble: Function
   private readonly onShowWordlist: Function
   private readonly onToggleShuffled: Function
+  private readonly onTextInputRequested: Function
 
   public maskWords: boolean = false
 
@@ -50,6 +51,13 @@ export class KeyboardPopoverComponent implements OnInit {
   toggleShuffled() {
     if (this.onToggleShuffled) {
       this.onToggleShuffled()
+      this.onClick()
+    }
+  }
+
+  public requestTextInput(): void {
+    if (this.onTextInputRequested) {
+      this.onTextInputRequested()
       this.onClick()
     }
   }

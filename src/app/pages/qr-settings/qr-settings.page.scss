@@ -1,0 +1,20 @@
+.qr-setting {
+  padding: 12px 16px;
+
+  label {
+    display: block;
+  }
+
+  input[type='range'] {
+    display: block;
+    width: 100%;
+    min-height: 44px;
+    margin: 8px 0 0;
+    accent-color: var(--ion-color-secondary);
+  }
+}
+
+.range-bounds {
+  display: flex;
+  justify-content: space-between;
+}

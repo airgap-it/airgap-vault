@@ -1,0 +1,17 @@
+.transaction-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 0;
+  text-align: center;
+}
+
+.transaction-summary dt {
+  grid-row: 2;
+  font-size: 0.8rem;
+}
+
+.transaction-summary dd {
+  grid-row: 1;
+  margin: 0;
+  font-weight: 600;
+}

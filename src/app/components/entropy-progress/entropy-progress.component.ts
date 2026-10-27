@@ -7,6 +7,9 @@ import { Component, Input, OnChanges } from '@angular/core'
 })
 export class EntropyProgressComponent implements OnChanges {
   @Input()
+  public label: string = ''
+
+  @Input()
   public maxValue: number = 1
 
   @Input()
@@ -15,6 +18,6 @@ export class EntropyProgressComponent implements OnChanges {
   public progressInPercent: number = 0
 
   public ngOnChanges(): void {
-    this.progressInPercent = this.value > this.maxValue ? 100 : Math.floor((this.value / this.maxValue) * 100)
+    this.progressInPercent = Math.max(0, this.value > this.maxValue ? 100 : Math.floor((this.value / this.maxValue) * 100))
   }
 }

@@ -18,6 +18,7 @@ export class SelectAccountPage {
   public placeholder: string
 
   public wallets: AirGapWallet[]
+  public filteredWallets: AirGapWallet[] = []
   public symbolFilter: MainProtocolSymbols | undefined
 
   constructor(
@@ -49,7 +50,16 @@ export class SelectAccountPage {
       )
 
       this.wallets = flattened(wallets).filter((wallet: AirGapWallet | undefined) => wallet !== undefined)
+      this.filteredWallets = [...this.wallets]
     })
+  }
+
+  public filterWallets(event: Event): void {
+    const value: unknown = event.target && 'value' in event.target ? (event.target as HTMLInputElement).value : undefined
+    const query = typeof value === 'string' ? value.trim().toLocaleLowerCase() : ''
+    this.filteredWallets = query
+      ? this.wallets.filter((wallet: AirGapWallet) => wallet.label?.trim().toLocaleLowerCase().startsWith(query))
+      : [...this.wallets]
   }
 
   public async setWallet(wallet: AirGapWallet) {

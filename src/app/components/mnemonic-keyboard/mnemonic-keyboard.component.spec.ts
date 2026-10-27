@@ -1,26 +1,19 @@
-// import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
-// import { IonicModule } from '@ionic/angular'
+import { MnemonicKeyboardComponent } from './mnemonic-keyboard.component'
 
-// import { MnemonicKeyboardComponent } from './mnemonic-keyboard.component'
+describe('MnemonicKeyboardComponent', () => {
+  it('emits a text-input request from the popover callback', async () => {
+    const popoverController = { create: jasmine.createSpy('create') }
+    const component = new MnemonicKeyboardComponent({} as any, {} as any, popoverController as any)
+    const emit = spyOn(component.textInputRequested, 'emit')
+    let popoverOptions: any
+    popoverController.create.and.callFake((options: any) => {
+      popoverOptions = options
+      return Promise.resolve({ present: () => Promise.resolve() })
+    })
 
-// describe('MnemonicKeyboardComponent', () => {
-//   let component: MnemonicKeyboardComponent
-//   let fixture: ComponentFixture<MnemonicKeyboardComponent>
+    await component.presentPopover(new Event('click'))
+    popoverOptions.componentProps.onTextInputRequested()
 
-//   beforeEach(
-//     waitForAsync(() => {
-//       TestBed.configureTestingModule({
-//         declarations: [MnemonicKeyboardComponent],
-//         imports: [IonicModule.forRoot()]
-//       }).compileComponents()
-
-//       fixture = TestBed.createComponent(MnemonicKeyboardComponent)
-//       component = fixture.componentInstance
-//       fixture.detectChanges()
-//     })
-//   )
-
-//   it('should create', () => {
-//     expect(component).toBeTruthy()
-//   })
-// })
+    expect(emit).toHaveBeenCalled()
+  })
+})

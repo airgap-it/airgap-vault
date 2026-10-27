@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core'
-import { ModalController } from '@ionic/angular'
 import { ComponentRef, ModalOptions } from '@ionic/core'
 import { first } from 'rxjs/operators'
 import { InstallationTypePage } from 'src/app/pages/Installation-type/installation-type.page'
@@ -14,12 +13,24 @@ import { ErrorCategory, handleErrorLocal } from '../error-handler/error-handler.
 import { SecureStorageService } from '../secure-storage/secure-storage.service'
 import { InstallationType, InteractionType, VaultStorageKey, VaultStorageService } from '../storage/storage.service'
 import { InteractionSelectionSettingsPage } from 'src/app/pages/interaction-selection-settings/interaction-selection-settings.page'
+import { ModalAccessibilityService } from '../modal-accessibility/modal-accessibility.service'
 
 export interface Check {
   name: string
   successOutcome: boolean
   check(): Promise<boolean>
   failureConsequence(): Promise<void>
+}
+
+interface StartupModalMetadata {
+  /**
+   * Startup onboarding steps are required: their persisted completion state is
+   * the condition that allows the following check to run.
+   */
+  required?: boolean
+  translationKey?: string
+  /** The onboarding page announces changes in its own content. */
+  manageInitialFocus?: boolean
 }
 
 @Injectable({
@@ -31,7 +42,7 @@ export class StartupChecksService {
   constructor(
     private readonly secureStorageService: SecureStorageService,
     private readonly deviceService: DeviceService,
-    private readonly modalController: ModalController,
+    private readonly modalAccessibilityService: ModalAccessibilityService,
     private readonly storageService: VaultStorageService,
     private readonly environmentService: VaultEnvironmentService
   ) {
@@ -41,7 +52,9 @@ export class StartupChecksService {
         successOutcome: false,
         check: (): Promise<boolean> => this.deviceService.checkForRoot(),
         failureConsequence: async (): Promise<void> => {
-          await this.presentModal(WarningModalPage, { errorType: Warning.ROOT }).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
+          await this.presentModal(WarningModalPage, { errorType: Warning.ROOT }, {
+            translationKey: 'warnings-modal.root.title'
+          }).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
         }
       },
       {
@@ -53,7 +66,9 @@ export class StartupChecksService {
           return Boolean(result.value).valueOf()
         },
         failureConsequence: async (): Promise<void> => {
-          await this.presentModal(WarningModalPage, { errorType: Warning.SECURE_STORAGE }).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
+          await this.presentModal(WarningModalPage, { errorType: Warning.SECURE_STORAGE }, {
+            translationKey: 'warnings-modal.secure-storage.title'
+          }).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
         }
       },
       {
@@ -61,7 +76,11 @@ export class StartupChecksService {
         successOutcome: true,
         check: (): Promise<boolean> => this.storageService.get(VaultStorageKey.DISCLAIMER_INITIAL),
         failureConsequence: async (): Promise<void> => {
-          await this.presentModal(OnboardingWelcomePage, {}).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
+          await this.presentModal(OnboardingWelcomePage, { isInitialOnboarding: true }, {
+            required: true,
+            translationKey: 'onboarding-welcome.title',
+            manageInitialFocus: false
+          }).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
         }
       },
       {
@@ -75,7 +94,11 @@ export class StartupChecksService {
             await this.storageService.set(VaultStorageKey.INSTALLATION_TYPE, InstallationType.OFFLINE)
             await this.storageService.set(VaultStorageKey.INTERACTION_TYPE, InteractionType.QR_CODE)
           } else {
-            await this.presentModal(InstallationTypePage, {}).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
+            await this.presentModal(InstallationTypePage, { isInitialOnboarding: true }, {
+              required: true,
+              translationKey: 'installation-type.title',
+              manageInitialFocus: false
+            }).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
           }
         }
       },
@@ -116,7 +139,11 @@ export class StartupChecksService {
           return res
         },
         failureConsequence: async (): Promise<void> => {
-          await this.presentModal(IntroductionPage, {}).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
+          await this.presentModal(IntroductionPage, { isInitialOnboarding: true }, {
+            required: true,
+            translationKey: 'introduction.title',
+            manageInitialFocus: false
+          }).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
         }
       },
       {
@@ -129,19 +156,39 @@ export class StartupChecksService {
           return !isElectron || hasShownDisclaimer
         },
         failureConsequence: async (): Promise<void> => {
-          await this.presentModal(DistributionOnboardingPage, {}).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
+          await this.presentModal(DistributionOnboardingPage, { isInitialOnboarding: true }, {
+            required: true,
+            translationKey: 'distribution-onboarding.ask-permission.heading',
+            manageInitialFocus: false
+          }).catch(handleErrorLocal(ErrorCategory.INIT_CHECK))
         }
       }
     ]
   }
 
-  public async presentModal(page: ComponentRef, properties: ModalOptions['componentProps']): Promise<void> {
+  public async presentModal(
+    page: ComponentRef,
+    properties: ModalOptions['componentProps'],
+    metadata: StartupModalMetadata = {}
+  ): Promise<void> {
     return new Promise(async (resolve) => {
-      const modal: HTMLIonModalElement = await this.modalController.create({
-        component: page,
-        componentProps: properties,
-        backdropDismiss: false
-      })
+      const modal: HTMLIonModalElement = await this.modalAccessibilityService.create(
+        page,
+        properties,
+        {
+          backdropDismiss: false,
+          ...(metadata.required
+            ? {
+                canDismiss: async (data?: { accepted?: boolean }) =>
+                  data?.accepted === true
+              }
+            : {})
+        },
+        {
+          manageInitialFocus: metadata.manageInitialFocus,
+          translationKey: metadata.translationKey
+        }
+      )
 
       modal
         .present()
