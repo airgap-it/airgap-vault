@@ -1511,9 +1511,9 @@
     to-fast-properties "^2.0.0"
 
 "@capacitor/android@^6.0.0":
-  version "6.1.1"
-  resolved "https://registry.npmjs.org/@capacitor/android/-/android-6.1.1.tgz"
-  integrity sha512-rhO/nH6NJizGV5KizoIoGxCmkos3HnyUzI9TNv8IVy/C8h6lPM5Gt9cxGclb6k0OBTtgv6iJVo654+m4kzv0Qg==
+  version "6.2.2"
+  resolved "https://registry.yarnpkg.com/@capacitor/android/-/android-6.2.2.tgz#4e1f6053301615279f863ffba1331703b865aa52"
+  integrity sha512-JjIu1ryNE16PQTp51rb4NEygxP7cSCDMmUqx4f5f12xscKdGKTjO9bkEP3TroLnTa/J6p2QopIhRbrd3E/7DrA==
 
 "@capacitor/app-launcher@^6.0.0":
   version "6.0.1"
@@ -1526,13 +1526,12 @@
   integrity sha512-X5UGd90Jh5p9rmoPyMqFyFWqOypdJgVJhYcM5X1YyDVJJGzmJ5MuYv1+ajj5DW9Qyh+5a3th9WYptdGby8jidA==
 
 "@capacitor/cli@^6.0.0":
-  version "6.1.1"
-  resolved "https://registry.npmjs.org/@capacitor/cli/-/cli-6.1.1.tgz"
-  integrity sha512-rsRqEadfnBSUX90RZj59oXvi30bpSusLMfIcgbOIArOloTgfaaWr9R471F6m3gGWF7BhNoskJpZcCgSUsfywwA==
+  version "6.2.2"
+  resolved "https://registry.yarnpkg.com/@capacitor/cli/-/cli-6.2.2.tgz#d065109820418cbaf76f994dff79b5b606440a3f"
+  integrity sha512-5wEYSHBzRKJKZnhD2sVJAP0t0kUT7o2/vlgEGzFE3t2w+inL9qMDN7zxg6pvqveJiPNZT2k93ZvJDdRKIn/w1w==
   dependencies:
     "@ionic/cli-framework-output" "^2.2.5"
     "@ionic/utils-fs" "^3.1.6"
-    "@ionic/utils-process" "^2.1.11"
     "@ionic/utils-subprocess" "2.1.11"
     "@ionic/utils-terminal" "^2.3.3"
     commander "^9.3.0"
@@ -1555,9 +1554,9 @@
   integrity sha512-NjcGr2jncSZy9NM9grePo8zz0hhBYYBYZV71xXjLvJhVY4PSdZD/Sj+4jm0pvlOKSK8vAXYyF6VcWT4/Kh/xmw==
 
 "@capacitor/core@^6.0.0":
-  version "6.1.1"
-  resolved "https://registry.npmjs.org/@capacitor/core/-/core-6.1.1.tgz"
-  integrity sha512-b1s4WDMy3Y1/owTG2/XNGCI6G5SDpF2NT1JMAgcShue13fiAuHA+Ans7Wfei6McvR0KdopAE6tMHmDAfL5PM8Q==
+  version "6.2.2"
+  resolved "https://registry.yarnpkg.com/@capacitor/core/-/core-6.2.2.tgz#62b40a5102310f3ccb451c7e81fc00dc2b95b260"
+  integrity sha512-qEI3DcwJEPzhW+hVGKH8m4jbujtkdUiGkpMLHmpR8epACU7wEsV6NF8pCHzpsMYjc80oK7Cmpcw+MIienv/YRw==
   dependencies:
     tslib "^2.1.0"
 
@@ -1567,9 +1566,9 @@
   integrity sha512-GnC4CBfky7fvG9zSV/aQnZaGs6ZJ90AaQorr53z81ArTCqcrSUeBMuCxWmvti9HrdXLhBavyA1UOjvRGObOFjg==
 
 "@capacitor/ios@^6.0.0":
-  version "6.1.1"
-  resolved "https://registry.npmjs.org/@capacitor/ios/-/ios-6.1.1.tgz"
-  integrity sha512-he6+Fhj6x1dSnOzM98xaPvioOU8MNO+qpodCJwnHE3mIRonTpFutXJK8DP8fnNhjDPk2km9VafLSfOeiZXNv3Q==
+  version "6.2.2"
+  resolved "https://registry.yarnpkg.com/@capacitor/ios/-/ios-6.2.2.tgz#5d1462bf83adf1509385b282d856f12a6783fbdc"
+  integrity sha512-dc9upo3L5wSUVJBJnd7oRGGsiwB2rMe7ZF2bti8hvDVCAZeYMzzw8iqxuUc6cvGBhH2/LsORMBO51/vEQhdmHg==
 
 "@capacitor/splash-screen@^6.0.0":
   version "6.0.1"
@@ -1962,7 +1961,7 @@
     tree-kill "^1.2.2"
     tslib "^2.0.1"
 
-"@ionic/utils-process@2.1.11", "@ionic/utils-process@^2.1.11":
+"@ionic/utils-process@2.1.11":
   version "2.1.11"
   resolved "https://registry.npmjs.org/@ionic/utils-process/-/utils-process-2.1.11.tgz"
   integrity sha512-Uavxn+x8j3rDlZEk1X7YnaN6wCgbCwYQOeIjv/m94i1dzslqWhqIHEqxEyeE8HsT5Negboagg7GtQiABy+BLbA==
@@ -7143,15 +7142,10 @@ module-deps@^6.2.3:
     through2 "^2.0.0"
     xtend "^4.0.0"
 
-moment@^2.24.0:
+moment@^2.24.0, moment@^2.27.0:
   version "2.31.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.31.0.tgz#6e19184e8005a9dfc61c9351263d4d6ea2ace7aa"
   integrity sha512-0acOTfMiWOheYS4eoWb80yYMb/JLvVv9SHbs2PehaDzfUG0Bw855SKyk0IKTnPGa5+U2bmi3W68l1+sGLX/pvw==
-
-moment@^2.27.0:
-  version "2.29.4"
-  resolved "https://registry.npmjs.org/moment/-/moment-2.29.4.tgz"
-  integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==
 
 mrmime@1.0.1:
   version "1.0.1"
@@ -7792,9 +7786,9 @@ path-type@^4.0.0:
   integrity sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==
 
 pbkdf2@^3.0.17, pbkdf2@^3.0.3:
-  version "3.1.6"
-  resolved "https://registry.yarnpkg.com/pbkdf2/-/pbkdf2-3.1.6.tgz#935cb1d99e491880cb48cb070bb539a6901e57d6"
-  integrity sha512-BT6eelPB1EyGHo8pC0o9Bl6k6SYVhKO1jEbd3lcTrtr7XHdjP8BW1YpfCV3G9Kwkxgattk+S5q2/RvuttCsS1g==
+  version "3.1.7"
+  resolved "https://registry.yarnpkg.com/pbkdf2/-/pbkdf2-3.1.7.tgz#8c707645f9291f232ba84e24231819eae30402b1"
+  integrity sha512-nS4mvFgVwUrecPTRdpdseM2fwpdfnX0/HibA8DgBRQtihUAzHQYJFU2l+OlEtiXtpqkrMvCPDwyXMUnASDt6Qw==
   dependencies:
     create-hash "^1.2.0"
     create-hmac "^1.1.7"

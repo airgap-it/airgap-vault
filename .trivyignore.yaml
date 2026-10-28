@@ -24,7 +24,7 @@ misconfigurations:
       to copy the APKs out and then discards.
 
 # ---------------------------------------------------------------------------
-# Vulnerabilities. 26 entries covering the 27 open findings (CVE-2026-2739 hits
+# Vulnerabilities. 29 entries covering the 30 open findings (CVE-2026-2739 hits
 # two bn.js versions). Every one is triaged: either sourced only
 # through a first-party @airgap/* package, or unreachable because the vulnerable
 # API is never called, the framework feature is not enabled, or the code is
@@ -194,6 +194,26 @@ vulnerabilities:
     statement: >-
       Host-binding sanitization bypass, reported after the original triage.
       Application code declares no @HostBinding at all.
+    expired_at: 2027-03-31
+  - id: CVE-2026-111753
+    statement: >-
+      Incomplete fix for CVE-2025-66035: XSRF token leaked via URLs the
+      interceptor's regex misreads as relative. The interceptor only attaches
+      the token to mutating requests, and every HttpClient call is a GET of a
+      relative bundled asset (ngx-translate loader, EVM signature DB); there is
+      still no backend to set an XSRF cookie. Fixed only in 20.3.34+.
+    expired_at: 2027-03-31
+  - id: CVE-2026-101896
+    statement: >-
+      Router DoS via numeric matrix parameters, server-side rendering on Node
+      only. Same absence as the HttpTransferCache set: no @angular/ssr, no
+      @angular/platform-server; the router only parses in-app navigation in the
+      WebView. Fixed only in 20.3.32+.
+    expired_at: 2027-03-31
+  - id: CVE-2026-111752
+    statement: >-
+      Router DoS via unmatched empty-path outlet segments, again SSR-only on
+      Node. Same absence as CVE-2026-101896. Fixed only in 20.3.33+.
     expired_at: 2027-03-31
 
   # --- Reachable, no published fix -------------------------------------------
