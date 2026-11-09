@@ -115,7 +115,9 @@ jobs:
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-        run: '"$RUNNER_TEMP/netlify/node_modules/.bin/netlify" deploy --dir=www --alias="$GITHUB_SHA" --message="$GITHUB_SHA"'
+        # --no-build: www comes from the web job; without it the CLI runs the build command
+        # configured in the Netlify UI, which this checkout-less job cannot.
+        run: '"$RUNNER_TEMP/netlify/node_modules/.bin/netlify" deploy --no-build --dir=www --alias="$GITHUB_SHA" --message="$GITHUB_SHA"'
 
   android:
     name: 🤖 Build Android
