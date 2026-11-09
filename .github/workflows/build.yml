@@ -38,8 +38,15 @@ jobs:
 
       # Same as the GitLab unit job: the test toolchain lives in package.json#testDependencies,
       # which is swapped into devDependencies, so the lockfile cannot be frozen here.
+      # --ignore-scripts: no dependency lifecycle script runs. The repo's own postinstall
+      # (jetifier, diagnostic modules, patches) is then run explicitly.
+      # Karma needs the Chromium that puppeteer's own install script would download.
       - name: 🔧 Install dependencies
-        run: yarn install-test-dependencies && yarn install --non-interactive
+        run: |
+          yarn install-test-dependencies
+          yarn install --non-interactive --ignore-scripts
+          yarn run postinstall
+          node node_modules/puppeteer/install.js
 
       - name: 🧪 Test
         run: yarn test-ci
@@ -72,8 +79,10 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
+      # --ignore-scripts: no dependency lifecycle script runs. The repo's own postinstall
+      # (jetifier, diagnostic modules, patches) is then run explicitly.
       - name: 🔧 Install dependencies
-        run: yarn install --frozen-lockfile --non-interactive
+        run: yarn install --frozen-lockfile --non-interactive --ignore-scripts && yarn run postinstall
 
       - name: 🏗️ Build
         run: yarn prepare-prod-build && yarn build:prod
@@ -143,8 +152,10 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
 
       # Capacitor's native plugin sources are resolved from node_modules.
+      # --ignore-scripts: no dependency lifecycle script runs. The repo's own postinstall
+      # (jetifier, diagnostic modules, patches) is then run explicitly.
       - name: 🔧 Install dependencies
-        run: yarn install --frozen-lockfile --non-interactive
+        run: yarn install --frozen-lockfile --non-interactive --ignore-scripts && yarn run postinstall
 
       - name: ⬇️ Download www
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
