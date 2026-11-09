@@ -1,311 +1,175 @@
 name: Build
 
-on: [push, workflow_dispatch]
+on:
+  push:
+  workflow_dispatch:
+
+# Least privilege: every job only reads the repository. Jobs that need more must ask for it.
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
-  node_version: 14.x
-  electron_folder: ./electron
+  # Keep in sync with the Dockerfile (node:24) and the GitLab iOS job (nvm 24).
+  NODE_VERSION: '24'
+  # Keep in sync with build/android/Dockerfile (openjdk-21).
+  JAVA_VERSION: '21'
+  NETLIFY_CLI_VERSION: '27.16.2'
 
 jobs:
-  environment:
-    name: 🌱 Load Environment
-    runs-on: macos-latest
-
-    outputs:
-      package_version: ${{ steps.load_package_version.outputs.package_version }}
-      package_name: ${{ steps.load_package_name.outputs.package_name }}
-      app_name: ${{ steps.load_app_name.outputs.app_name }}
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: ⚙️ Node.js version used - ${{ env.node_version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ env.node_version }}
-
-      - id: load_package_version
-        name: 🌱 Set package version in environment
-        run: echo "::set-output name=package_version::$(node -p -e "require('./package.json').version")"
-
-      - id: load_package_name
-        name: 🌱 Set package name in environment
-        run: echo "::set-output name=package_name::$(node -p -e "require('./package.json').name")"
-
-      - id: load_app_name
-        name: 🌱 Set app name in environment
-        run: echo "::set-output name=app_name::$(node -p -e "require('./capacitor.config.json').appName")"
-
   test:
-    name: 🧪 Test
-    runs-on: ${{ matrix.os }}
-    needs: environment
-
-    strategy:
-      matrix:
-        os: ['ubuntu-latest']
+    name: 🧪 Test & Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
-      - uses: actions/checkout@v2
-
-      - name: 🔧 Installation of dependencies
-        run: yarn run install-test-dependencies && yarn install # This is only for tests, so no frozen lockfile needed
-
-      - name: 🧪 Test CI
-        run: yarn run test-ci
-
-      - name: 🧪 Lint CI
-        run: yarn run lint-ci
-
-      - name: 📦 Upload Artifact
-        uses: actions/upload-artifact@v2
+      - name: ⬇️ Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          name: '${{ runner.os }} - Lint Report'
-          path: ./lintReport.json
+          persist-credentials: false
 
-  prebuild:
-    name: 🔧 Pre Build
-    runs-on: ${{ matrix.os }}
-    needs: environment
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
 
-    strategy:
-      matrix:
-        os: ['ubuntu-latest']
+      # Same as the GitLab unit job: the test toolchain lives in package.json#testDependencies,
+      # which is swapped into devDependencies, so the lockfile cannot be frozen here.
+      - name: 🔧 Install dependencies
+        run: yarn install-test-dependencies && yarn install --non-interactive
+
+      - name: 🧪 Test
+        run: yarn test-ci
+
+      - name: 🧹 Lint
+        run: yarn lint-ci
+
+      - name: 📦 Upload lint report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: lint-report
+          path: lintReport.json
+          if-no-files-found: ignore
+          retention-days: 14
+
+  web:
+    name: 🏗️ Build Web
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
-      - uses: actions/checkout@v2
-
-      - name: 🔧 Installation of dependencies
-        run: yarn run install-build-dependencies && yarn install --frozen-lockfile
-
-      - name: 🔧 Installation of electron dependencies
-        working-directory: ${{ env.electron_folder }}
-        run: yarn install --frozen-lockfile
-
-      - name: 🌀 Updating android version
-        run: sed -i -e 's/versionName "0.0.0"/versionName "${{ needs.environment.outputs.package_version }}"/g' android/app/build.gradle
-
-      - name: 🌀 Updating electron version
-        working-directory: ${{ env.electron_folder }}
-        run: npm version ${{ needs.environment.outputs.package_version }}
-
-      - name: 🧠 Caching prebuild
-        uses: actions/cache@v2
-        id: prebuild-cache
+      - name: ⬇️ Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          path: ./*
-          key: prebuild-${{ runner.os }}-${{ github.sha }}
+          persist-credentials: false
 
-  build_electron:
-    name: 🏗️ Build to Electron And Sync
-    runs-on: ${{ matrix.os }}
-    needs: [environment, prebuild]
-
-    strategy:
-      matrix:
-        os: ['ubuntu-latest']
-
-    steps:
-      - name: 🧠 Using prebuild cache
-        uses: actions/cache@v2
-        id: prebuild-cache
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          path: ./*
-          key: prebuild-${{ runner.os }}-${{ github.sha }}
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: 🔧 Install dependencies
+        run: yarn install --frozen-lockfile --non-interactive
 
       - name: 🏗️ Build
-        run: yarn run build:electron:prod
+        run: yarn prepare-prod-build && yarn build:prod
 
-      - name: 🔄 Copy to Electron
-        run: npx cap sync electron
-
-      - name: 🧠 Caching build
-        uses: actions/cache@v2
-        id: build-electron-cache
+      - name: 📦 Upload www
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          path: ./*
-          key: electron-${{ runner.os }}-${{ github.sha }}
+          name: www
+          path: www
+          if-no-files-found: error
+          retention-days: 7
 
-  build_ionic:
-    name: 🏗️ Build Ionic
+  deploy_preview:
+    name: 🚀 Netlify Preview
     runs-on: ubuntu-latest
-    needs: [environment, prebuild]
+    timeout-minutes: 15
+    needs: web
+    # Forks have neither the secrets nor any business deploying.
+    if: ${{ github.repository == 'airgap-it/airgap-vault' }}
 
     steps:
-      - name: 🧠 Using prebuild cache
-        uses: actions/cache@v2
-        id: prebuild-cache
+      - name: ⬇️ Download www
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
-          path: ./*
-          key: prebuild-${{ runner.os }}-${{ github.sha }}
+          name: www
+          path: www
 
-      - name: 🔧 Prepare prod build
-        run: yarn run prepare-prod-build
-
-      - name: 🔧 Apply diagnostic modules
-        run: yarn run apply-diagnostic-modules
-
-      - name: 🏗️ Build
-        run: npx ionic build --prod
-
-      - name: 🔄 Copy to iOS
-        run: npx cap sync ios
-
-      - name: 🔄 Copy to Android
-        run: npx cap sync android
-
-      - name: 🧠 Caching build
-        uses: actions/cache@v2
-        id: build-ionic-cache
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          path: ./*
-          key: ionic-${{ runner.os }}-${{ github.sha }}
+          node-version: ${{ env.NODE_VERSION }}
 
-  # Desktop
+      # Installed in its own step, without the Netlify token in the environment,
+      # so no install script of the CLI's dependency tree ever sees it.
+      - name: 🔧 Install Netlify CLI
+        run: npm install --no-save --no-audit --no-fund --prefix "$RUNNER_TEMP/netlify" "netlify-cli@$NETLIFY_CLI_VERSION"
 
-  build_windows:
-    name: 🏗️ Build to Windows
+      - name: 🚀 Deploy draft
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        run: '"$RUNNER_TEMP/netlify/node_modules/.bin/netlify" deploy --dir=www --alias="$GITHUB_SHA" --message="$GITHUB_SHA"'
+
+  android:
+    name: 🤖 Build Android
     runs-on: ubuntu-latest
-    needs: [environment, build_electron]
+    timeout-minutes: 60
+    needs: web
 
     steps:
-      - name: 🧠 Using build cache
-        uses: actions/cache@v2
-        id: build-electron-cache
+      - name: ⬇️ Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          path: ./*
-          key: electron-${{ runner.os }}-${{ github.sha }}
+          persist-credentials: false
 
-      - name: 🍷 Setup Wine
-        run: |
-          sudo dpkg --add-architecture i386
-          sudo apt update
-          wget -qO- https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
-          sudo apt install software-properties-common
-          sudo apt-add-repository 'deb http://dl.winehq.org/wine-builds/ubuntu/ bionic main'
-          wget -qO- https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/xUbuntu_18.04/Release.key | sudo apt-key add -
-          sudo sh -c 'echo "deb https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/xUbuntu_18.04/ ./" > /etc/apt/sources.list.d/obs.list'
-          sudo apt update
-          sudo apt-get install --install-recommends winehq-stable
-
-      - name: 🏗️ Build Windows
-        working-directory: ${{ env.electron_folder }}
-        run: yarn run build:windows
-
-      - name: 📦 Upload Artifact
-        uses: actions/upload-artifact@v2
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          name: '${{ needs.environment.outputs.app_name }} Windows ${{ needs.environment.outputs.package_version }}'
-          path: |
-            ${{ env.electron_folder }}/build/${{ needs.environment.outputs.package_name }}-${{ needs.environment.outputs.package_version }}.exe
-            ${{ env.electron_folder }}/build/${{ needs.environment.outputs.package_name }}-${{ needs.environment.outputs.package_version }}.exe.blockmap
-  build_mac:
-    name: 🏗️ Build to MacOS
-    runs-on: macos-latest
-    needs: [environment, build_electron]
-
-    steps:
-      - name: 🧠 Using build cache
-        uses: actions/cache@v2
-        id: build-electron-cache
-        with:
-          path: ./*
-          key: electron-Linux-${{ github.sha }}
-
-      - name: 🏗️ Build Mac
-        working-directory: ${{ env.electron_folder }}
-        run: yarn run build:mac
-
-      - name: 📦 Upload Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: '${{ needs.environment.outputs.app_name }} MacOS ${{ needs.environment.outputs.package_version }}'
-          path: |
-            ${{ env.electron_folder }}/build/${{ needs.environment.outputs.package_name }}-${{ needs.environment.outputs.package_version }}.dmg
-            ${{ env.electron_folder }}/build/${{ needs.environment.outputs.package_name }}-${{ needs.environment.outputs.package_version }}.dmg.blockmap
-            ${{ env.electron_folder }}/build/${{ needs.environment.outputs.package_name }}-${{ needs.environment.outputs.package_version }}.zip
-  build_linux:
-    name: 🏗️ Build to Linux
-    runs-on: ubuntu-latest
-    needs: [environment, build_electron]
-
-    steps:
-      - name: 🧠 Using build cache
-        uses: actions/cache@v2
-        id: build-electron-cache
-        with:
-          path: ./*
-          key: electron-${{ runner.os }}-${{ github.sha }}
-
-      - name: 🏗️ Build Linux
-        working-directory: ${{ env.electron_folder }}
-        run: yarn run build:linux
-
-      - name: 📦 Upload Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: '${{ needs.environment.outputs.app_name }} Linux ${{ needs.environment.outputs.package_version }}'
-          path: ${{ env.electron_folder }}/build/${{ needs.environment.outputs.package_name }}-${{ needs.environment.outputs.package_version }}.AppImage
-
-  # Mobile
-
-  build_android:
-    name: 🏗️ Build to Android
-    runs-on: ubuntu-latest
-    needs: [environment, build_ionic]
-
-    steps:
-      - name: 🧠 Using build cache
-        uses: actions/cache@v2
-        id: build-angular-cache
-        with:
-          path: ./*
-          key: ionic-${{ runner.os }}-${{ github.sha }}
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: ⚙️ Setup Java
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
         with:
-          java-version: '11'
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
 
-      - name: 🔨 Clean Project
-        run: android/gradlew --project-dir android clean build
+      # Capacitor's native plugin sources are resolved from node_modules.
+      - name: 🔧 Install dependencies
+        run: yarn install --frozen-lockfile --non-interactive
 
-      - name: 🗂️ Move APK
-        run: mv android/app/build/outputs/apk/release/app-release-unsigned.apk ${{ needs.environment.outputs.package_name }}-release-unsigned-${{ needs.environment.outputs.package_version }}.apk
-
-      - name: 🗂️ Copy APK
-        run: cp ${{ needs.environment.outputs.package_name }}-release-unsigned-${{ needs.environment.outputs.package_version }}.apk ${{ needs.environment.outputs.package_name }}-debug-${{ needs.environment.outputs.package_version }}.apk
-
-      - name: 🔐 Sign
-        run: jarsigner -verbose -keystore ./build/android/debug.keystore -storepass android -keypass android ${{ needs.environment.outputs.package_name }}-debug-${{ needs.environment.outputs.package_version }}.apk androiddebugkey
-
-      - name: 📦 Upload Artifact
-        uses: actions/upload-artifact@v2
+      - name: ⬇️ Download www
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
-          name: '${{ needs.environment.outputs.app_name }} Android ${{ needs.environment.outputs.package_version }}'
-          path: |
-            ${{ needs.environment.outputs.package_name }}-release-unsigned-${{ needs.environment.outputs.package_version }}.apk
-            ${{ needs.environment.outputs.package_name }}-debug-${{ needs.environment.outputs.package_version }}.apk
-  build_ios:
-    name: 🏗️ Build to iOS
-    runs-on: macos-latest
-    needs: [environment, build_ionic]
+          name: www
+          path: www
 
-    steps:
-      - name: 🧠 Using build cache
-        uses: actions/cache@v2
-        id: build-angular-cache
+      - name: 🔄 Sync Android
+        run: npx cap sync android
+
+      - name: 🔨 Build
+        working-directory: android
+        run: ./gradlew clean build
+
+      - name: 🔐 Sign debug APK
+        run: |
+          build_tools="$(find "$ANDROID_HOME/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)"
+          mkdir -p apk
+          cp android/app/build/outputs/apk/release/app-release-unsigned.apk apk/airgap-vault-release-unsigned.apk
+          "$build_tools/zipalign" -p -f 4 apk/airgap-vault-release-unsigned.apk apk/airgap-vault-debug.apk
+          "$build_tools/apksigner" sign --ks build/android/debug.keystore --ks-key-alias androiddebugkey \
+            --ks-pass pass:android --key-pass pass:android apk/airgap-vault-debug.apk
+
+      - name: 📦 Upload APKs
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          path: ./*
-          key: ionic-Linux-${{ github.sha }}
-      # - name: 🔨 Xcode Task
-      #   run: xcodebuild -workspace ios/App/App.xcworkspace -scheme "App" -destination generic/platform=iOS -configuration Release archive -archivePath ios/App.xcarchive MARKETING_VERSION=${{ needs.environment.outputs.package_version }} CURRENT_PROJECT_VERSION=${{ needs.environment.outputs.package_version }} -allowProvisioningUpdates
-      # - name: 🔨 Xcode Task
-      #   run: xcodebuild -exportArchive -archivePath ios/App.xcarchive -exportOptionsPlist exportOptions.plist -exportPath ios/ -allowProvisioningUpdates
-      # - name: 📦 Upload Artifact
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: '${{ needs.environment.outputs.app_name }} iOS ${{ needs.environment.outputs.package_version }}'
-      #     path: |
-      #       ios/App.ipa
-      #       ios/App.xcarchive
+          name: android-apk
+          path: apk/*.apk
+          if-no-files-found: error
+          retention-days: 14
